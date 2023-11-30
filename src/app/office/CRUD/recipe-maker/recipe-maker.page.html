@@ -1,0 +1,47 @@
+
+
+    <ion-item lines="none">
+      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)">
+      </ion-searchbar>
+      <img src="assets/icon/add-circle.svg" id="add-ing" (click)="addIng()">
+    </ion-item>
+    <ion-item *ngFor="let ing of ingredients; let i = index" class="fur-name" (click)="selectIngredient(ing)">
+      <span>{{ing.name}}</span>
+    </ion-item>
+    <ion-title class="ion-text-center subtitle"  *ngIf="productIngredients.length">Rețetă produs</ion-title>
+    <ion-item class="content-container header" *ngIf="productIngredients.length" lines="none">
+      <ion-label class="name">Nume</ion-label>
+      <div class="sep"></div>
+      <ion-label class="cant">Cantitate / Preț</ion-label>
+      <ion-label class="sell-price">Valoare</ion-label>
+    </ion-item>
+    <ion-item  *ngFor="let ing of productIngredients; let i = index" class="content-container input2" lines="none">
+      <ion-label class="name">{{ing.name}}</ion-label>
+      <ion-button color="medium" fill="clear" class="trash" (click)="deleteIng(i)">
+        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/><path d="M192 112V72h0a23.93 23.93 0 0124-24h80a23.93 23.93 0 0124 24h0v40M256 176v224M184 176l8 224M328 176l-8 224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
+      </ion-button>
+      <ion-label class="cant">{{ing.qty + ' '+ ing.um + ' ' + 'X' + ' ' + ing.price}} Lei</ion-label>
+      <ion-label class="price">{{round(ing.price * ing.qty)}} Lei</ion-label>
+    </ion-item>
+    <ion-item lines="none" *ngIf="productIngredients.length" class="content-container total">
+      <ion-label class="total">Total Rețetă</ion-label>
+      <ion-label class="total-price">{{round(recipeTotal)}} Lei</ion-label>
+    </ion-item>
+    <ion-title class="ion-text-center subtitle"  *ngIf="toppings.length">Toppings</ion-title>
+    <ion-item class="content-container header"  *ngIf="toppings.length" lines="none">
+      <ion-label class="name">Nume</ion-label>
+      <div class="sep"></div>
+      <ion-label class="cant">Cantitate</ion-label>
+      <ion-label class="val">Valoare</ion-label>
+      <ion-label class="sell-price">Vanzare</ion-label>
+    </ion-item>
+    <ion-item  *ngFor="let top of toppings; let i = index;" class="content-container input" lines="none">
+      <ion-label class="name">{{top.name}}</ion-label>
+      <ion-button color="medium" fill="clear" class="trash" (click)="deleteTop(i)">
+        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/><path d="M192 112V72h0a23.93 23.93 0 0124-24h80a23.93 23.93 0 0124 24h0v40M256 176v224M184 176l8 224M328 176l-8 224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
+      </ion-button>
+      <ion-label class="cant">{{top.qty + ' '+ top.um}}</ion-label>
+      <ion-label class="val"> {{round(top.ingPrice * top.qty)}} Lei</ion-label>
+      <ion-label class="sell-price">{{top.price}} Lei</ion-label>
+    </ion-item>
+

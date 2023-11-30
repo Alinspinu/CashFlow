@@ -7,14 +7,14 @@ export const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'tables',
         loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+          import('../tables/tables.page').then((m) => m.TablesPage),
       },
       {
-        path: 'tab2',
-        loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+        path: 'office',
+        loadChildren: () =>
+          import('../office/office.routes').then((m) => m.routes),
       },
       {
         path: 'tab3',
@@ -22,15 +22,31 @@ export const routes: Routes = [
           import('../tab3/tab3.page').then((m) => m.Tab3Page),
       },
       {
+        path: 'add-product',
+        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage)
+      },
+      {
+        path: 'add-nir',
+        loadComponent: () => import('../office/CRUD/nir/nir.page').then( m => m.NirPage)
+      },
+      {
+        path: 'add-suplier',
+        loadComponent: () => import('../office/CRUD/suplier/suplier.page').then( m => m.SuplierPage)
+      },
+      {
+        path: 'add-product/:id',
+        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage)
+      },
+      {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/tables',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/tables',
     pathMatch: 'full',
   },
 ];

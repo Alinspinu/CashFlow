@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Adaugă Categorie</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        Închide
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveCategory()" color="primary" [disabled]="!catForm.valid">
+        Salvează
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row class="ion-padding">
+      <ion-col size-lg="6" offset-lg="3">
+        <form [formGroup]="catForm">
+          <ion-item lines="none" class="input">
+            <ion-input mode="ios" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
+          </ion-item>
+          <ion-item lines="none" class="input">
+            <ion-input  mode="ios" type="number" label="Poziție" labelPlacement="floating" fill="outline" formControlName="order"></ion-input>
+          </ion-item>
+        <ion-item lines="none" class="input" *ngIf="!newMainCat">
+          <ion-select label="Categorie Parinte" formControlName="mainCat">
+            <ion-select-option *ngFor="let cat of mainCats" [value]="cat.name">{{cat.name}}</ion-select-option>
+          </ion-select>
+          <img src="assets/icon/add-circle.svg" id="add-cat" (click)="addMainCat()">
+        </ion-item>
+      <app-image-picker (imagePick)="onImagePicked($event)"></app-image-picker>
+    </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button size="medium" expand="block" (click)="saveCategory()" [disabled]="!catForm.valid">
+    Salvează Categoria
+  </ion-button>
+</ion-footer>

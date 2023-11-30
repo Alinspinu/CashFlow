@@ -1,0 +1,21 @@
+
+ion-content{
+  --background: var(--ion-color-light);
+}
+
+
+.table{
+  width: 80px;
+  height: 80px;
+  border: 1px solid var(--ion-color-light-contrast);
+  border-radius: 8px;
+  margin-top: 30px;
+  text-align: center;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+
+.table-row{
+  padding: 0  10px 0 30px;
+}

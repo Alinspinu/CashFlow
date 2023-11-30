@@ -1,0 +1,70 @@
+.input{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.1rem 0 0.1rem 0.2rem;
+}
+
+img{
+  height: 25px;
+  cursor: pointer
+}
+
+.header{
+  font-size: 17px;
+  font-weight: 500;
+}
+
+ion-item[slot="fixed"]{
+  top: 9%;
+  width: 100%;
+  opacity: 60%;
+  // --backgound: transparent;
+}
+
+#all{
+  font-weight: 500;
+}
+
+.content-container{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  text-align: center;
+  .name{
+    flex: 10%;
+    text-align: start !important;
+  }
+  .mainCat{
+    flex:5%;
+  }
+  .cat{
+    flex: 7%;
+  }
+  .price-prod{
+    flex: 5%;
+  }
+  .dep{
+    flex: 5%;
+  }
+  .sale-price{
+    flex: 5%
+  }
+}
+
+.sub-container{
+  margin-left: 2rem;
+  ion-item{
+    ion-label{
+      font-size: 13px;
+    }
+  }
+}
+
+.product{
+  cursor: pointer;
+}
+
+.product:hover{
+  --background: var(--ion-color-medium);
+}

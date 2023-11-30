@@ -1,0 +1,79 @@
+.header{
+  font-size: 17px !important;
+  margin-left: 0.5rem;
+}
+img{
+  height: 25px;
+  cursor: pointer
+}
+
+.input{
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 1rem 0 0.5rem 0.5rem;
+}
+.input2{
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 1rem 0 0.5rem 0.5rem;
+}
+
+.ionicon{
+  height: 25px;
+
+}
+.trash{
+  margin-right: 6%;
+}
+
+
+.sep{
+  width: 10px;
+  margin-right: 8%;
+}
+
+
+.fur-name{
+  cursor: pointer;
+  --background: var(--ion-color-warning-shade);
+  border-radius: 8px;
+  margin: 4px;
+  span{
+    color: var(--ion-color-warning-contrast);
+  }
+}
+
+.total{
+  font-size: 19px;
+  margin-left: 0.5rem;
+}
+
+.content-container{
+  display: flex;
+  flex-direction: row;
+  font-weight: 400;
+  font-size: 16px;
+  .name{
+    margin-left: 0.6rem;
+    flex: 30%;
+  };
+  .price{
+    text-align: end;
+  };
+  .total{
+    margin-left: 0.6rem;
+    flex: 40%;
+    // font-size: 17px;
+    font-weight: 500;
+  };
+  .total-price{
+    text-align: end;
+    // font-size: 18px;
+    font-weight: 600;
+  };
+  .sell-price{
+    text-align: end;
+    // font-size: 18px;
+    font-weight: 600;
+  }
+}

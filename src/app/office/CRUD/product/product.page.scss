@@ -1,0 +1,86 @@
+.fur-name{
+  cursor: pointer;
+  --background: var(--ion-color-warning-shade);
+  border-radius: 8px;
+  margin: 4px;
+  // margin-left: 1.1rem;
+  span{
+    color: var(--ion-color-warning-contrast);
+  }
+}
+
+img{
+  height: 25px;
+  cursor: pointer
+}
+
+
+
+.ionicon{
+  margin-left: 5%;
+  height: 25px;
+  cursor: pointer
+}
+
+// ion-grid{
+// margin-top: 2rem;
+// }
+
+.subtitle{
+  margin: 1.5rem 0;
+  font-size: 18px;
+}
+
+.input{
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 1rem 0 0.5rem 0.5rem;
+}
+.input2{
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 1rem 0 0.5rem 0.5rem;
+}
+
+.header{
+  font-size: 17px !important;
+  margin-left: 0.5rem;
+}
+
+.total{
+  font-size: 19px;
+  margin-left: 0.5rem;
+}
+
+.content-container{
+  display: flex;
+  flex-direction: row;
+  font-weight: 400;
+  font-size: 16px;
+  .name{
+    margin-left: 0.2rem;
+    flex: 30%;
+  };
+  .price{
+    text-align: end;
+  };
+  .button{
+    --margin-left: auto;
+  };
+  .sell-price{
+    text-align: end;
+    font-weight: 600;
+  }
+  .index{
+    max-width: 10px;
+  }
+}
+
+
+.sub-product-container{
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  padding: 0.4rem;
+  margin: 0 0.5rem 0.5rem 0.5rem;
+}
+

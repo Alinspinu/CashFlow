@@ -1,0 +1,11 @@
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let table of tables" size-lg="1">
+        <div class="table" (click)="openTable(table.index)">{{table.index}}</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

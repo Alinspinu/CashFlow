@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Adaugă Ingredient</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        Închide
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+<ion-grid>
+  <ion-row class="ion-padding">
+    <ion-col>
+      <form [formGroup]="ingredientForm">
+        <ion-item lines="none" class="input">
+          <ion-input mode="ios" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-input  mode="ios" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input">
+            <ion-select label="Cotă TVA %" placeholder="%" formControlName="tva">
+              <ion-select-option value="19">19%</ion-select-option>
+              <ion-select-option value="9">9%</ion-select-option>
+              <ion-select-option value="5">5%</ion-select-option>
+              <ion-select-option value="0">0%</ion-select-option>
+            </ion-select>
+        </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-select label="Gestiune" placeholder="Gestiune" formControlName="gestiune">
+          <ion-select-option value="magazie">Magazie</ion-select-option>
+          <ion-select-option value="bucatarie">Bucătărie</ion-select-option>
+          <ion-select-option value="bar">Bar</ion-select-option>
+        </ion-select>
+    </ion-item>
+    <ion-button size="medium" expand="block" (click)="saveIng()" [disabled]="!ingredientForm.valid">
+      Save Ingredient
+    </ion-button>
+  </form>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>

@@ -1,0 +1,137 @@
+<ion-header [translucent]="true">
+
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+    <ion-col size="2">
+      <ion-title class="ion-text-center">Adaugă Ingredient</ion-title>
+      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută ingredient"  (ionInput)="searchIngredient($event)"></ion-searchbar>
+      <ion-item *ngFor="let ing of ingredients; let i = index" class="fur-name">
+        <span  (click)="selectIngredient(ing)">{{ing.name}}</span>
+      </ion-item>
+      <form [formGroup]="ingredientForm">
+      <ion-item lines="none" class="input">
+        <ion-input mode="ios" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input  mode="ios" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input mode="ios" type="number" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty"></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input  mode="ios" type="number" label="Pret/UM/Fara TVA" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+          <ion-select label="Cotă TVA %" placeholder="%" formControlName="tva">
+            <ion-select-option value="19">19%</ion-select-option>
+            <ion-select-option value="9">9%</ion-select-option>
+            <ion-select-option value="5">5%</ion-select-option>
+            <ion-select-option value="0">0%</ion-select-option>
+          </ion-select>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input  mode="ios" type="number" label="Valoare" labelPlacement="floating" fill="outline" formControlName="value"></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input  mode="ios" type="number" label="Valoare TVA" labelPlacement="floating" fill="outline" formControlName="tvaValue"></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input  mode="ios" type="number" label="Total" labelPlacement="floating" fill="outline" formControlName="total"></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-select label="Departament" placeholder="Materie Prima" formControlName="dep">
+          <ion-select-option value="materie">Materie Primă</ion-select-option>
+          <ion-select-option value="marfa">Marfă</ion-select-option>
+          <ion-select-option value="consumabil">Consumabile</ion-select-option>
+        </ion-select>
+    </ion-item>
+    <ion-item lines="none" class="input">
+      <ion-select label="Gestiune" placeholder="Gestiune" formControlName="gestiune">
+        <ion-select-option value="magazie">Magazie</ion-select-option>
+        <ion-select-option value="bucatarie">Bucătărie</ion-select-option>
+        <ion-select-option value="bar">Bar</ion-select-option>
+      </ion-select>
+  </ion-item>
+  <ion-item lines="none" class="input">
+    <ion-input  mode="ios" type="number" label="Preț de vânzare" labelPlacement="floating" fill="outline" formControlName="sellPrice"></ion-input>
+  </ion-item>
+  <ion-button size="medium" expand="block" (click)="addToNir()" [disabled]="!ingredientForm.valid">
+    Add
+  </ion-button>
+</form>
+    </ion-col>
+    <ion-col size="10">
+      <ion-title class="ion-text-center">Adaugă Nir</ion-title>
+      <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor"  (ionInput)="searchSuplier($event)"></ion-searchbar>
+      <ion-list>
+        <ion-item *ngFor="let suplier of supliers; let i = index" class="fur-name" (click)="selectSuplier(suplier)">
+          <span>{{suplier.name}}</span>
+        </ion-item>
+      </ion-list>
+      <form [formGroup]="nirForm">
+        <ion-item lines="none" class="nirForm">
+          <ion-label class="furz-name" *ngIf="suplier">{{suplier.name}}</ion-label>
+          <ion-label class="fur-cif" *ngIf="suplier">{{suplier.vatNumber.toUpperCase()}}</ion-label>
+          <ion-input mode="ios" type="text" label="Nr Doc" class="nr-doc" labelPlacement="floating" fill="outline" formControlName="nrDoc"></ion-input>
+            <span>Dată</span>
+            <ion-datetime-button datetime="datetime" id="data"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime id="datetime" presentation="date" formControlName="date" [showDefaultButtons]="true"></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+          <ion-item lines="none" *ngIf="nirIngredients.length" class="content-container">
+            <ion-label class="header name">Nume</ion-label>
+            <ion-label class="header um">UM</ion-label>
+            <ion-label class="header cant">Cant</ion-label>
+            <ion-label class="header p-um">Preț/Um</ion-label>
+            <ion-label class="header val">Valoare</ion-label>
+            <ion-label class="header tva">Cota TVA</ion-label>
+            <ion-label class="header val-tva">Valoare TVA</ion-label>
+            <ion-label class="header tot">Total</ion-label>
+            <ion-label class="header dep">Departament</ion-label>
+            <ion-label class="header gst">Gestiune</ion-label>
+            <ion-label class="header p-v">Preț Vanzare</ion-label>
+          </ion-item>
+          <!-- <div class="line"></div> -->
+          <ion-item lines="none" *ngFor="let ing of nirIngredients" class="content-container input">
+            <ion-label class="content name">{{ing.name}}</ion-label>
+            <ion-label class="content um">{{ing.um}}</ion-label>
+            <ion-label class="content cant">{{ing.qty}}</ion-label>
+            <ion-label class="content p-um">{{ing.price}} Lei</ion-label>
+            <ion-label class="content val">{{ing.value}} Lei</ion-label>
+            <ion-label class="content tva">{{ing.tva}}%</ion-label>
+            <ion-label class="content val-tva">{{ing.tvaValue}}</ion-label>
+            <ion-label class="content tot">{{ing.total}} Lei</ion-label>
+            <ion-label class="content dep">{{ing.dep}}</ion-label>
+            <ion-label class="content gst">{{ing.gestiune}}</ion-label>
+            <ion-label class="content p-v">{{ing.sellPrice}} Lei</ion-label>
+          </ion-item>
+          <!-- <div class="line"></div> -->
+          <ion-item lines="none">
+            <ion-label class="footer name">Total</ion-label>
+            <ion-label class="footer"></ion-label>
+            <ion-label class="footer"></ion-label>
+            <ion-label class="footer"></ion-label>
+            <ion-label class="footer">{{val}} Lei</ion-label>
+            <ion-label class="footer"></ion-label>
+            <ion-label class="footer">{{valTva}} Lei</ion-label>
+            <ion-label class="footer">{{valTotal}} Lei</ion-label>
+            <ion-label class="footer"></ion-label>
+            <ion-label class="footer"></ion-label>
+            <ion-label class="footer">{{valVanzare}} lei</ion-label>
+
+          </ion-item>
+          <ion-button expand="block" (click)="saveNir()" size="medium" [disabled]="!nirForm.valid">
+            Salvează NIR
+          </ion-button>
+        </form>
+    </ion-col>
+  </ion-row>
+  </ion-grid>
+
+</ion-content>

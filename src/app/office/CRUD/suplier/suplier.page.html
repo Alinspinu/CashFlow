@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+
+    <ion-title class="ion-text-center">Adaugă Furnizor!</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" offset="3">
+        <form [formGroup]="suplierForm">
+          <ion-item>
+           <ion-input mode="ios" type="text" label="Denumire Firmă" labelPlacement="floating" formControlName="bussinessName"></ion-input>
+          </ion-item>
+           <ion-item>
+            <ion-input mode="ios" type="text" label="Nume Locatie" labelPlacement="floating" formControlName="name"></ion-input>
+           </ion-item>
+           <ion-item>
+            <ion-input mode="ios" type="text" label="CIF" labelPlacement="floating" formControlName="vatNumber"></ion-input>
+            <ion-buttons slot="end">
+              <ion-button (click)="searchSuplier()"color="primary">Search</ion-button>
+            </ion-buttons>
+           </ion-item>
+           <ion-item>
+            <ion-input mode="ios" type="text" label="Nr înregistrare" labelPlacement="floating" formControlName="register"></ion-input>
+           </ion-item>
+           <ion-item >
+            <ion-textarea mode="ios" type="text" label="Adresa" labelPlacement="floating" formControlName="address"></ion-textarea>
+           </ion-item>
+           <ion-item >
+            <ion-input mode="ios" type="text" label="Bancă" labelPlacement="floating" formControlName="bank"></ion-input>
+           </ion-item>
+           <ion-item >
+            <ion-input mode="ios" type="text" label="Cont" labelPlacement="floating" formControlName="account"></ion-input>
+           </ion-item>
+           <ion-radio-group value="start" formControlName="VAT">
+            <ion-item>
+              <ion-radio value="yes" justify="start" labelPlacement="end">Plătitor de TVA</ion-radio>
+              <ion-radio value="no" justify="start" labelPlacement="end">Neplătitor de TVA</ion-radio>
+            </ion-item>
+          </ion-radio-group>
+           <ion-button size="medium" color="primary" expand="block" (click)="addSuplier()">ADD Furnizor</ion-button>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

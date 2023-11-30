@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        Close
+      </ion-button>
+    </ion-buttons>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <ion-title class="ion-text-center">Adaugă Sub Produs</ion-title>
+        </ion-col>
+        <ion-col size="9">
+          <ion-title class="ion-text-center">Adaugă Ingredient / Topping</ion-title>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4">
+        <form [formGroup]="form">
+        <ion-item lines="none" class="input">
+          <ion-input mode="ios" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-input mode="ios" type="text" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-input  mode="ios" type="number" label="Preț" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-input  mode="ios" type="number" label="Poziție" labelPlacement="floating" fill="outline" formControlName="order"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input">
+            <ion-select label="TVA la vanzare" placeholder="TVA" formControlName="tva">
+              <ion-select-option value="19">19%</ion-select-option>
+              <ion-select-option value="9">9%</ion-select-option>
+              <ion-select-option value="5">5%</ion-select-option>
+              <ion-select-option value="0">0%</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-textarea  mode="ios" type="text" label="Descriere" labelPlacement="floating" fill="outline" formControlName="description"></ion-textarea>
+        </ion-item>
+      </form>
+
+
+      </ion-col>
+      <ion-col size="8">
+        <app-recipe-maker (ingsSend)="onIngRecive($event)" (toppSend)="onTopRecive($event)" [ings]="productIngredients" [top]="toppings"></app-recipe-maker>
+      </ion-col>
+      </ion-row>
+      </ion-grid>
+
+</ion-content>
+<ion-footer>
+  <ion-button expand="block" color="primary" size="large" (click)="addToProduct()" [disabled]="!form.valid">Salvează Sub Produs</ion-button>
+</ion-footer>

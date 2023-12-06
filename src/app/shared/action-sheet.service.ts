@@ -7,6 +7,12 @@ import { PickQtyPage } from '../modals/pick-qty/pick-qty.page';
 import { IngredientPage } from '../office/CRUD/ingredient/ingredient.page';
 import { SubProductPage } from '../office/CRUD/sub-product/sub-product.page';
 import { CategoryPage } from '../office/CRUD/category/category.page';
+import { AuthPage } from '../auth/auth.page';
+import { RegisterPage } from '../auth/register/register.page';
+import { PaymentPage } from '../modals/payment/payment.page';
+import { CustomerCheckPage } from '../modals/customer-check/customer-check.page';
+import { CashbackPage } from '../modals/cashback/cashback.page';
+import { DiscountPage } from '../modals/discount/discount.page';
 
 
 
@@ -17,14 +23,13 @@ export class ActionSheetService {
 
   constructor(private modalCtrl: ModalController, private alertController: AlertController) { }
 
-
-
   async openModal(
     component: typeof PickOptionPage |
                typeof SuplierPage |
                typeof IngredientPage |
                typeof SubProductPage |
-               typeof CategoryPage,
+               typeof CategoryPage |
+               typeof PaymentPage,
     options: any,
     sub: boolean
                ) {
@@ -32,6 +37,22 @@ export class ActionSheetService {
       component: component,
       componentProps: {options: options, sub: sub},
       cssClass: 'crud-modal'
+    });
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    return data
+  }
+
+  async openPayment(
+    component: typeof PaymentPage |
+               typeof CustomerCheckPage |
+               typeof CashbackPage |
+               typeof DiscountPage,
+    options: any
+  ){
+    const modal = await this.modalCtrl.create({
+      component: component,
+      componentProps: {options: options},
     });
     modal.present();
     const { data } = await modal.onDidDismiss();
@@ -84,6 +105,7 @@ export class ActionSheetService {
     }
   }
 
+
   async chooseExtra(options: string[]) {
     const inputs = options.map(option => {
       return {
@@ -118,10 +140,10 @@ export class ActionSheetService {
     }
   }
 
+
   async addMainCat() {
     const alert = await this.alertController.create({
       header: 'Alege Nume',
-      message: `Adaugă Categorie Părinte`,
       buttons: [
         {
           text: 'Nu Muțumesc!',
@@ -149,9 +171,45 @@ export class ActionSheetService {
     }
   }
 
+  async openAuth(
+    component: typeof AuthPage |
+               typeof RegisterPage
+                ) {
+    const modal = await this.modalCtrl.create({
+      component: component,
+      backdropDismiss: false,
+      keyboardClose: false,
+    });
+
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    return data
+  };
 
 
-
+  async deleteAlert(message: string){
+    const alert = await this.alertController.create({
+      header: 'Șterge!',
+      message: message,
+      buttons: [
+        {
+          text: 'Renunță',
+          role: 'cancel'
+        },
+        {
+          text: 'Șterge',
+          role: 'confirm',
+        },
+      ],
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === 'confirm'){
+      return true
+    } else {
+      return false
+    }
+  }
 
 
 };

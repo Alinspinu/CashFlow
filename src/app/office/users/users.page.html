@@ -1,0 +1,45 @@
+
+
+<ion-content [fullscreen]="true">
+  <ion-item lines="none" class="header content-container" slot="fixed">
+    <ion-label class="name">Nume</ion-label>
+    <ion-label class="email">Email</ion-label>
+    <ion-label class="tel">Telefon</ion-label>
+    <ion-label class="cashBack">Cash Back</ion-label>
+    <ion-label class="orders">Comenzi</ion-label>
+    <ion-label class="status">Status</ion-label>
+  </ion-item>
+  <ion-grid>
+    <ion-row style="margin-bottom:40px;">
+      <ion-col size-lg="6">
+        <ion-item lines="none">
+          <ion-searchbar mode="ios" [(ngModel)]="userSearch"  placeholder="Caută Utilizatori"  (ionInput)="searchProduct($event)">
+          </ion-searchbar>
+        </ion-item>
+      </ion-col>
+      <ion-col size-lg="3" size-md="6">
+        <ion-item lines="none" class="input">
+          <ion-select placeholder="Alege Utilizatori" (ionChange)="onSelectUser($event)">
+            <ion-select-option value="">Toți</ion-select-option>
+            <ion-select-option value="users">Clienți</ion-select-option>
+            <ion-select-option value="employees">Angajați</ion-select-option>
+          </ion-select>
+        </ion-item>
+        </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let user of users">
+      <ion-col>
+        <ion-item lines="none" class="content-container input user" (click)="goUserPage(user._id)">
+          <ion-label class="name">{{user.name}}</ion-label>
+          <ion-label class="email">{{user.email}}</ion-label>
+          <ion-label class="tel">{{user.telephone}}</ion-label>
+          <ion-label class="cashBack">{{user.cashBack}}</ion-label>
+          <ion-label class="orders">{{user.orders.length}}</ion-label>
+          <ion-label class="status">{{user.status}}</ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

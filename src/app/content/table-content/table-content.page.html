@@ -1,15 +1,38 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tables" *ngIf="showMainCats">
-      </ion-back-button>
-      <ion-button (click)="goBack()" *ngIf="!showMainCats">
-        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" class="icon"></ion-icon>
+      <ion-button routerLink="/tabs/tables" class="back-button">
+        <ion-icon src="../../../assets/icon/close-outline.svg"  class="icon"></ion-icon>
+      </ion-button>
+      <ion-button (click)="home()" *ngIf="showProd" class="back-button">
+        <ion-icon src="../../../assets/icon/home-outline.svg"  class="icon"></ion-icon>
+      </ion-button>
+      <ion-button (click)="goBack()" *ngIf="!showMainCats" class="back-button">
+        <ion-icon src="../../../assets/icon/arrow-back-outline.svg"  class="icon"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">
+    <ion-title class="ion-text-center" slot="start">
      Masa {{tableNumber}}
     </ion-title>
+    <ion-buttons slot="end" class="horizontal-scroll">
+      <ion-button class="ion-text-end" *ngFor="let bill of table.bills; let i = index;"  [ngClass]="{ 'active-button': bill.show }">
+        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }"  *ngIf="!bill.setName" class='ion-no-padding ion-no-margin'>
+          <ion-icon src="../../../assets/icon/create-outline.svg" class="icon" (click)="editOrderName(i)"></ion-icon>
+        </ion-item>
+        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }" (click)="showOrder(i)" *ngIf="!bill.setName">
+          <ion-label [id]="'orderName-' + i">{{bill.name === 'COMANDA' ? bill.name + ' ' + (i+1) : bill.name}}</ion-label>
+        </ion-item>
+        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }"  *ngIf="bill.setName" class='ion-no-padding ion-no-margin'>
+          <ion-input type="text" placeholder="Alege nume" *ngIf="bill.setName" [(ngModel)]="orderName" #addNameInput>
+          </ion-input>
+          <ion-icon slot="end" src="../../../assets/icon/arrow-forward-circle-outline.svg" class="icon"*ngIf="bill.setName" (click)="setName(i)"></ion-icon>
+        </ion-item>
+      </ion-button>
+      <ion-button (click)="newOrder()" *ngIf="table.bills.length">
+        <ion-icon src="../../../assets/icon/add-outline.svg" class="icon"></ion-icon>
+        COMANDĂ NOUĂ
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -46,11 +69,22 @@
     </ion-col>
     <ion-col size-lg="7" size-md="12">
       <ion-grid class="bill">
+        <ion-row>
+          <ion-toolbar *ngIf="billToshow && billToshow.products.length">
+            <ion-buttons slot="end">
+              <ion-button class="client-button" (click)="addCustomer()">
+                <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
+                ADAUGĂ CLIENT
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+
+        </ion-row>
         <ion-row class="bill-header-row" *ngIf="billProducts.length">
           <ion-col size="12" class="ion-text-center ">
             <ion-item class="product-item bill-header" lines="none">
-                <span class="prod-name">Nume</span>
-                <span class="prod-price">Pret</span>
+                <span class="prod-name" id="name">Nume</span>
+                <span class="prod-price" id="pret">Pret</span>
                 <div style="width:15px"></div>
                 <span class="prod-qty">Qty</span>
                 <div style="width:25px"></div>
@@ -78,26 +112,40 @@
             </ion-item>
           </ion-col>
         </ion-row>
-        <ion-row class="bill-total-row" *ngIf="bill && bill.products.length">
-          <ion-col size="10">
-            <span class="total-text">TOTAL</span>
-          </ion-col>
-          <ion-col size="2" class="ion-text-center">
-            <span class="total-lei">{{bill.total}} Lei</span>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="bill && bill.products.length">
-          <ion-col size="4" offset="4">
-            <ion-button size="mediun" color="secondary" (click)="sendOrder()">
-              Trimite Comanda
-            </ion-button>
-          </ion-col>
-          <ion-col size="4">
-            <ion-button size="mediun" color="primary" (click)="sendBill()">
-              Nota de plată
-            </ion-button>
-          </ion-col>
-        </ion-row>
+        <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
+          <ion-row class="bill-total-row">
+            <ion-col size="10">
+              <span class="total-text">TOTAL</span>
+            </ion-col>
+            <ion-col size="2" class="ion-text-center">
+              <span class="total-lei">{{billToshow.total}} Lei</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <ion-button size="large" expand="block" color="primary" (click)="useCashBack()">
+               FOLOSEȘTE CASHBACK
+              </ion-button>
+            </ion-col>
+            <ion-col size="6" [offset]="discountOffset">
+              <ion-button size="large" expand="block" color="secondary" (click)="addDiscount()">
+               ADAUGĂ REDUCERE
+              </ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button size="large" expand="block" color="secondary" (click)="sendOrder()">
+                Trimite Comanda
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button size="large" expand="block" color="primary" (click)="payment()">
+                Nota de plată
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </div>
       </ion-grid>
     </ion-col>
   </ion-row>

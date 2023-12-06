@@ -1,0 +1,26 @@
+// .input{
+//   border: 0.5px solid var(--ion-color-medium);
+//   border-radius: 8px;
+//   margin: 1rem 0 0.5rem 0.5rem;
+//   width: 100%;
+// }
+
+
+.item{
+  .input{
+    border: 0.5px solid var(--ion-color-medium);
+    border-radius: 8px;
+    margin: 1rem 0 0.5rem 0.5rem;
+    width: 100%;
+    ion-input{
+      font-size: 22px;
+      height: 65px;
+      font-weight: 500;
+    }
+  }
+  ion-button{
+    margin-left: 8px;
+    height: 60px;
+    width: 220px;
+  }
+}

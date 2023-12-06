@@ -14,16 +14,15 @@ import { environment } from "src/environments/environment";
 export class TablesService{
 
 
-  public emptyTable: Table = {_id: '', bills: [], index: 0}
 
   private tableState!: BehaviorSubject<Table[]>;
   public tableSend$!: Observable<Table[]>;
-  tables: Table[] = [this.emptyTable];
+  tables: Table[] = [this.emptyTable()];
 
   constructor(
     private http: HttpClient,
   ){
-    this.tableState = new BehaviorSubject<Table[]>([this.emptyTable]);
+    this.tableState = new BehaviorSubject<Table[]>([this.emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
   }
 
@@ -37,14 +36,52 @@ getTables(){
 }
 
 
+editTable(tableIndex: number, name: string){
+  console.log(tableIndex)
+  const table = this.tables[tableIndex-1];
+  console.log(table)
+  return this.http.put<{message: string, table: Table}>(`${environment.BASE_LOCAL_URL}table`,{name: name, tableId: table._id})
+  .pipe(take(1), tap(response => {
+    if(response){
+      console.log(response)
+      const table = this.tables[response.table.index-1]
+      table.name = response.table.name
+      this.tableState.next([...this.tables])
+    }
+  }))
+}
+
+addTable(name: string){
+  return this.http.post<{message: string, table: Table}>(`${environment.BASE_LOCAL_URL}table`, {name: name})
+    .pipe(take(1), tap(response => {
+    if(response){
+      this.tables.push(response.table)
+      this.tableState.next([...this.tables])
+    }
+  }))
+}
 
 
-addToBill(product: BillProduct, masa: number){
+deleteTable(tableId: string, index: number){
+  return this.http.delete<{message: string}>(`${environment.BASE_LOCAL_URL}table?tableId=${tableId}`)
+  .pipe(take(1), tap(response => {
+    if(response){
+      const indexToDelete = this.tables.findIndex(obj => obj.index === index)
+      this.tables.splice(indexToDelete, 1)
+      this.tableState.next([...this.tables])
+    }
+  }))
+}
+
+
+
+
+addToBill(product: BillProduct, masa: number, billIndex: number){
 const table = this.tables.find((doc) => doc.index === masa)
 if(table){
   let bill: Bill = this.emptyBill()
   if(table.bills.length){
-    bill = table.bills[0]
+    bill = table.bills[billIndex]
     bill.productCount++
     const existingProduct = bill.products.find(p =>(p.name === product.name) && this.arraysAreEqual(p.toppings, product.toppings));
     if (existingProduct) {
@@ -94,10 +131,18 @@ addOne(masa: number, billProdIndex: number){
   }
 }
 
+addNewBill(masa: number){
+  let bill: Bill = this.emptyBill()
+  const table = this.tables.find((doc) => doc.index === masa)
+  if(table){
+    table.bills.push(bill)
+  }
+
+}
+
 saveTablesLocal(tableIndex:number, billId: string, billIndex: number){
   const table = this.tables[tableIndex-1];
-  console.log(this.tables)
-  console.log(table, tableIndex)
+  console.log(tableIndex)
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
   bill.masaRest = table._id;
@@ -111,13 +156,18 @@ saveTablesLocal(tableIndex:number, billId: string, billIndex: number){
  }))
 }
 
+emptyTable(){
+  const emptyTable: Table = {_id: '', bills: [], index: 0, name: ''}
+  return emptyTable
+}
+
 
 emptyBill(){
    const emptyBill = {
     _id: '',
     production: true,
     index: 0,
-    masaRest: this.emptyTable,
+    masaRest: this.emptyTable(),
     masa: 0,
     productCount: 0,
     tips: 0,
@@ -135,6 +185,9 @@ emptyBill(){
     cif: '',
     userName: '',
     userTel: '',
+    show: false,
+    setName: false,
+    name: 'COMANDA',
     products: []
   }
   return emptyBill

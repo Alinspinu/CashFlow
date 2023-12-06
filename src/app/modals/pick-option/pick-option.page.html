@@ -22,7 +22,7 @@
       <ion-col size="8" offset="2">
         <ion-list>
           <ion-radio-group value="end" [(ngModel)]="selectedOption">
-            <ion-item *ngFor="let option of options">
+            <ion-item *ngFor="let option of options" lines="none" class="input">
               <ion-radio [value]="option" justify="start" labelPlacement="end">{{option}}</ion-radio>
             </ion-item>
           </ion-radio-group>
@@ -30,8 +30,8 @@
       </ion-col>
     </ion-row>
     <ion-row class="button-row">
-      <ion-col size="2" offset="9">
-        <ion-button color="primary" size="large"(click)="pick()">Alege</ion-button>
+      <ion-col size="8" offset="2">
+        <ion-button color="primary" expand="block" size="large"(click)="pick()">Alege</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -39,18 +39,18 @@
     <ion-row class="option-row">
       <ion-col size="8" offset="2">
         <ion-list>
-            <ion-item *ngFor="let option of options">
+            <ion-item *ngFor="let option of options" lines="none" class="input">
               <ion-checkbox [value]="option"  justify="start" labelPlacement="end" (ionChange)="onCheckboxChange(option)">{{option}}</ion-checkbox>
             </ion-item>
         </ion-list>
       </ion-col>
     </ion-row>
     <ion-row class="button-row">
-      <ion-col size="2" offset="6">
-        <ion-button color="danger" size="large"(click)="back()">Renunță</ion-button>
+      <ion-col size="4" offset="2">
+        <ion-button color="danger" expand="block" size="large"(click)="back()">Renunță</ion-button>
       </ion-col>
-      <ion-col size="2"  offset="1">
-        <ion-button color="primary" size="large"(click)="pick()">Alege</ion-button>
+      <ion-col size="4">
+        <ion-button color="primary" expand="block" size="large"(click)="pick()">Alege</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

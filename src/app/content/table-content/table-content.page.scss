@@ -18,6 +18,16 @@ span, ion-title, ion-card-subtitle, ion-label{
 }
 
 
+.back-button{
+  --background: var(--ion-color-primary);
+  height: 70px;
+  width: 100px;
+  --color: white;
+}
+
+.client-button{
+  --background: var(--ion-color-tertiary);
+}
 
 
 .input{
@@ -41,6 +51,26 @@ span, ion-title, ion-card-subtitle, ion-label{
   font-size: 23px;
 }
 
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent content from wrapping to the next line */
+  scrollbar-width: thin; /* Optional: Customize scrollbar width (Firefox) */
+  scrollbar-color: #ccc #f0f0f0; /* Optional: Customize scrollbar colors (Firefox) */
+}
+
+
+// #name{
+//  flex: 60%!important;
+// }
+
+.active-button {
+  background-color: var(--ion-color-primary-shade); /* Change to your desired color */
+  --background: var(--ion-color-primary-shade); /* Change to your desired color */
+  color: #fff; /* Change to your desired text color */
+  /* Add any other styles you need for the active button */
+}
+
 .product-item{
   display: flex;
   flex-direction: row;
@@ -60,7 +90,6 @@ span, ion-title, ion-card-subtitle, ion-label{
 
   }
   .prod-qty{
-
     flex: 8%;
     text-align: center;
   }

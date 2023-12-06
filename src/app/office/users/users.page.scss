@@ -1,0 +1,49 @@
+.input{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.1rem 0 0.1rem 0.2rem;
+}
+
+
+.header{
+  font-size: 17px;
+  font-weight: 500;
+}
+
+ion-item[slot="fixed"]{
+  top: 9%;
+  width: 100%;
+  opacity: 60%;
+}
+
+.content-container{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  text-align: center;
+  .name{
+    flex: 10%;
+    text-align: start !important;
+  }
+  .email{
+    flex:10%;
+  }
+  .tel{
+    flex: 7%;
+  }
+  .cashBack{
+    flex: 5%;
+  }
+  .orders{
+    flex: 5%;
+  }
+}
+
+.user{
+  cursor: pointer;
+}
+
+.user:hover{
+  --background: var(--ion-color-medium);
+}

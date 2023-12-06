@@ -1,11 +1,49 @@
 
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="logout()" class="back-button">
+        <ion-icon src="../../assets/icon/log-out-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="addTable()">
+        <ion-icon src="../../assets/icon/add-outline.svg"></ion-icon>
+        ADAUGĂ MASĂ
+      </ion-button>
+      <ion-button (click)="activateEditMode()">
+        <ion-icon [src]="this.editMode ? '../../assets/icon/checkmark-outline.svg' : '../../assets/icon/create-outline.svg'"></ion-icon>
+      {{this.editMode ? 'TERMINAT': 'MODIFICĂ'}}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let table of tables" size-lg="1">
-        <div class="table" (click)="openTable(table.index)">{{table.index}}</div>
+      <ion-col *ngFor="let table of tables" size-lg="1" class="table-wrapper">
+        <ion-icon *ngIf="editMode" src="../../assets/icon/create-outline.svg" (click)="editTable(table.index)" class="edit"></ion-icon>
+        <ion-icon *ngIf="editMode" src="../../assets/icon/trash-outline.svg" (click)="deleteTable(table)" class="delete"></ion-icon>
+        <div class="badge" *ngIf="table.bills.length">
+          <span *ngIf="table.bills.length" class="badge-content">{{table.bills.length}}</span>
+        </div>
+        <div class="table ion-activatable" [ngClass]="{ 'bussy': table.bills.length > 0}"  (click)="openTable(table.index)">
+          <span class="index">
+           {{table.name ? table.name : table.index}}
+          </span>
+          <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>
 
 </ion-content>
+
+
+
+
+ <!-- <ion-item (click)="openTable(table.index)" lines="none" [ngClass]="{ 'bussy': table.bills.length > 0}" class="table">
+  <ion-badge *ngIf="table.bills.length" color="danger">{{table.bills.length}}</ion-badge>
+  <ion-label slot="start">{{table.index}}</ion-label>
+</ion-item> -->

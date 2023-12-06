@@ -20,6 +20,10 @@ export const routes: Routes = [
         loadComponent: () => import('./cash-register/cash-register.page').then( m => m.CashRegisterPage)
       },
       {
+        path: 'users',
+        loadComponent: () => import('./users/users.page').then( m => m.UsersPage)
+      },
+      {
         path: '',
         redirectTo: '/tabs/office/products',
         pathMatch: 'full',
@@ -31,4 +35,5 @@ export const routes: Routes = [
     redirectTo: '/tabs/office/products',
     pathMatch: 'full',
   },
+
 ];

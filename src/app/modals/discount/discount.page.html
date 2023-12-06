@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">ADAUGA REDUCERE</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-item lines="none" class="input">
+        <ion-input type="number" label="Valorică" labelPlacement="floating" placeholder="00"></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input type="number" label="Procentuală %" labelPlacement="floating" placeholder="%"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+    <ion-button size="large" expand="block" color="danger">RENUNȚĂ</ion-button>
+  </ion-col>
+    <ion-col>
+      <ion-button size="large" expand="block" color="primary">ADAUGĂ</ion-button>
+      </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>

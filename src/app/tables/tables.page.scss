@@ -1,18 +1,83 @@
 
 ion-content{
-  --background: var(--ion-color-light);
+  --background: var(--ion-color-light-shade);
+  font-family: RobBold;
 }
 
 
-.table{
-  width: 80px;
-  height: 80px;
-  border: 1px solid var(--ion-color-light-contrast);
-  border-radius: 8px;
-  margin-top: 30px;
-  text-align: center;
-  font-size: 30px;
-  cursor: pointer;
+
+.back-button{
+  --background: var(--ion-color-danger);
+  height: 50px;
+  width: 70px;
+  --color: white;
+}
+
+
+.table-wrapper{
+  margin-top: 20px;
+  .table{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    background-color: var(--ion-color-tertiary);
+    border-radius: 8px;
+    font-size: 30px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    .index{
+
+    }
+    .table:active {
+      color: green !important;
+    }
+  }
+
+  .custom-ripple{
+    color: rgba(0, 0, 0, 0.8)
+  }
+
+  .badge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--ion-color-danger);
+    color: var(--ion-color-light);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    font-size: 14px;
+    text-align: center;
+    position: relative;
+    left: 80%;
+    top: 5%;
+    bottom: 0;
+  }
+
+  .edit{
+    font-size: 30px;
+    color: rgb(32, 160, 239);
+    cursor: pointer
+  }
+
+  .delete{
+    font-size: 30px;
+    color: var(--ion-color-danger);
+    margin-left: 30%;
+    cursor: pointer;
+  }
+
+}
+
+
+.bussy{
+  background-color: var(--ion-color-primary) !important;
 }
 
 

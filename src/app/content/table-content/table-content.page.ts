@@ -1,29 +1,37 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { IonicModule, IonLabel } from '@ionic/angular';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ContentService } from '../content.service';
 import { Category, Product } from '../category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
-import { Bill, BillProduct } from 'src/app/tables/table.model';
+import { Bill, BillProduct, Table } from 'src/app/tables/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
 import { Subscription } from 'rxjs';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
+import { IonInput } from '@ionic/angular/standalone';
+import { PaymentPage } from 'src/app/modals/payment/payment.page';
+import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
+import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
+import { DiscountPage } from 'src/app/modals/discount/discount.page';
 
 @Component({
   selector: 'app-table-content',
   templateUrl: './table-content.page.html',
   styleUrls: ['./table-content.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, RouterModule]
 })
 export class TableContentPage implements OnInit, OnDestroy {
 
+  @ViewChild('addNameInput') nameInput!: IonInput;
+
+  discountOffset: string = '0'
+
   tabSub!: Subscription;
-  allCats: Category[] = []
-  tableNumber: number = 0;
+  allCats: Category[] = [];
   mainCats: {[key: string]: Category[]} = {};
   categoriesToShow!: Category[];
   productsToShow!: Product[];
@@ -31,14 +39,18 @@ export class TableContentPage implements OnInit, OnDestroy {
   showCats: boolean = false;
   showProd: boolean = false;
 
-  billProducts: BillProduct[] = []
-  billTotal: number = 0
+  orderName: string = ""
 
-  billId!: string
-  billIndex!: number
+  table: Table = this.tableSrv.emptyTable();
+  tableNumber: number = 0;
+
+  billProducts: BillProduct[] = [];
+  billTotal: number = 0;
+  billId!: string;
+  billIndex: number = 0;
 
 
-  bill!: Bill
+  billToshow!: Bill
 
   billProd: BillProduct = {
    _id: '',
@@ -52,6 +64,7 @@ export class TableContentPage implements OnInit, OnDestroy {
    sub: false,
    toppings: [],
    payToGo: false,
+   newEntry: true
   }
 
 
@@ -67,8 +80,9 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getTableNumber()
     this.getData()
     this.getBill()
+    // console.log(this.mainCats)
+    // console.log()
   }
-
 
   ngOnDestroy(): void {
     if(this.tabSub){
@@ -77,15 +91,60 @@ export class TableContentPage implements OnInit, OnDestroy {
   }
 
 
+  editOrderName(orderIndex: number){
+    this.table.bills[orderIndex].setName = true
+    this.orderName = ''
+    setTimeout(() => {
+      if(this.nameInput){
+        this.nameInput.setFocus()
+      }
+    }, 200)
+  }
+
+  setName(orderIndex: number){
+    const bill = this.table.bills[orderIndex]
+      bill.setName = false;
+      bill.name = this.orderName
+  }
+
+  showOrder(orderIndex: number){
+    this.hideAllBils(this.table)
+    this.billToshow = this.table.bills[orderIndex]
+    this.billProducts = [...this.billToshow.products]
+    this.billIndex = orderIndex
+    this.billToshow.masaRest.index = this.tableNumber
+    this.billToshow.show = true
+  }
+
+  newOrder(){
+    this.tableSrv.addNewBill(this.tableNumber)
+    this.showOrder(+this.table.bills.length-1)
+  }
+
+
   sendOrder(){
-    this.bill._id.length ? this.billId = this.bill._id : this.billId = 'new'
-    const tableIndex = this.bill.masaRest.index
-    console.log(this.bill)
+    console.log(this.billToshow)
+    this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new'
+    const tableIndex = this.billToshow.masaRest.index
     this.tableSrv.saveTablesLocal(tableIndex, this.billId, this.billIndex).subscribe()
   }
 
-  sendBill(){
+ async addCustomer(){
+    const clientInfo = await this.actionSheet.openPayment(CustomerCheckPage, '')
+  }
 
+  async payment(){
+    const paymentInfo = await this.actionSheet.openPayment(PaymentPage, {total: 23.66})
+    console.log(paymentInfo)
+  }
+
+
+  async useCashBack(){
+    const cashBackValue = await this.actionSheet.openPayment(CashbackPage, 12)
+  }
+
+  async addDiscount(){
+    const discountValue = await this.actionSheet.openPayment(DiscountPage, '')
   }
 
 
@@ -98,13 +157,17 @@ export class TableContentPage implements OnInit, OnDestroy {
   }
 
   getBill(){
-   this.tabSub = this.tableSrv.tableSend$.subscribe(response => {
-    if(response[this.tableNumber-1]){
-      this.bill = response[this.tableNumber-1].bills[0]
-      console.log(this.bill)
-      this.billIndex = 0
-     if(this.bill){
-       this.billProducts = [...this.bill.products]
+    this.tabSub = this.tableSrv.tableSend$.subscribe(response => {
+      if(response){
+      const table = response.find(obj => obj.index === this.tableNumber)
+      if(table){
+        this.table = table;
+      }
+      this.billToshow = this.table.bills[this.billIndex]
+     if(this.billToshow){
+      this.hideAllBils(this.table)
+      this.billToshow.show = true
+       this.billProducts = [...this.billToshow.products]
      }
     }
     })
@@ -170,8 +233,9 @@ export class TableContentPage implements OnInit, OnDestroy {
         toppings: extraNames,
         mainCat: '',
         payToGo: false,
+        newEntry: true
       };
-      this.tableSrv.addToBill(cartProduct, this.tableNumber)
+      this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex )
   }
 
 
@@ -179,13 +243,14 @@ export class TableContentPage implements OnInit, OnDestroy {
   getData(){
     this.contSrv.categorySend$.subscribe(response => {
       if(response.length > 1){
+        console.log(response)
         this.allCats = [...response]
-        console.log(this.allCats)
         let tempMainCats: any = []
         for (const document of this.allCats) {
           const category = document.mainCat;
-          if (tempMainCats && !tempMainCats[category]) {
+          if (!tempMainCats[category]) {
             tempMainCats[category] = [];
+            tempMainCats[category].push(document);
           } else{
             tempMainCats[category].push(document);
           }
@@ -221,6 +286,12 @@ export class TableContentPage implements OnInit, OnDestroy {
     }
   }
 
+  home(){
+    this.showCats = false;
+    this.showMainCats = true;
+    this.showProd = false
+  }
+
   modifyImageURL(url: string): string {
     const parts = url.split('/v1');
     const baseURL = parts[0];
@@ -246,4 +317,13 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   arraysAreEqual = (arr1: {}[], arr2: {}[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 
+
+  hideAllBils(table: Table){
+    table.bills.forEach(bill => {
+      bill.show = false
+    })
+  }
+
 }
+
+

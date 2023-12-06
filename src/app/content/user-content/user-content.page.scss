@@ -1,0 +1,35 @@
+.back-button{
+  --background: var(--ion-color-primary);
+  height: 70px;
+  width: 100px;
+  --color: white;
+  ion-icon{
+    font-size: 28px;
+  }
+}
+
+.icons{
+  font-size: 28px;
+}
+
+ion-buttons[slot='end']{
+  ion-button{
+    margin-left: 40px;
+  }
+}
+
+.general-info-container{
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.input{
+  height: 45px;
+  // border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.4rem 0 0.4rem 0.2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+
+}
+

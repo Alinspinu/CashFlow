@@ -10,6 +10,7 @@ export const routes: Routes = [
         path: 'tables',
         loadComponent: () =>
           import('../tables/tables.page').then((m) => m.TablesPage),
+          // canLoad: [AuthGuard]
       },
       {
         path: 'office',
@@ -36,6 +37,10 @@ export const routes: Routes = [
       {
         path: 'add-product/:id',
         loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage)
+      },
+      {
+        path: 'user-content/:id',
+        loadComponent: () => import('../content/user-content/user-content.page').then( m => m.UserContentPage)
       },
       {
         path: '',

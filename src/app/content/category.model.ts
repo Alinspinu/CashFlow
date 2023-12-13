@@ -1,3 +1,4 @@
+import { Ing, Topping } from "../tables/table.model";
 
 export class Category{
   constructor(
@@ -38,13 +39,8 @@ export class Product {
     salts: number,
     protein: number,
   },
-  public toppings: {
-    name: string,
-    price: number,
-    coffee: boolean,
-    qty: string,
-    um: string
-  }[],
+  public toppings: Topping[],
+  public ings: Ing[],
   public ingredients:{quantity: number, ingredient: Ingredient}[],
   public paring: Product[]
   ){};
@@ -92,7 +88,6 @@ export class billProduct{
      public toppings: string[],
      public payToGo: boolean,
     ){}
-
 }
 
 

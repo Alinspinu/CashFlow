@@ -1,6 +1,7 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">CashBack</ion-title>
+  <ion-toolbar *ngIf="data">
+    <ion-title class="ion-text-center">Cash Back disponibil: {{data.cashBack}} Lei</ion-title>
+    <ion-title class="ion-text-center">Valoare Notă: {{data.total}} Lei</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,17 +9,22 @@
 <ion-grid>
   <ion-row>
     <ion-col>
-      <ion-item lines="none" class="input">
-        <ion-input type="number" label="Valoare" labelPlacement="floating" placeholder="00"></ion-input>
+      <ion-item lines="none">
+        <ion-button size="large" class="maxim" color="primary"(click)="maxim()">MAXIM</ion-button>
+        <form [formGroup]="cashBackForm">
+        <ion-item lines="none" class="input">
+          <ion-input type="number" label="Valoare" labelPlacement="floating" placeholder="00" formControlName="val"></ion-input>
+        </ion-item>
+        </form>
       </ion-item>
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col>
-    <ion-button size="large" expand="block" color="danger">RENUNȚĂ</ion-button>
+    <ion-button size="large" expand="block" color="danger"(click)="dismiss()">RENUNȚĂ</ion-button>
   </ion-col>
     <ion-col>
-      <ion-button size="large" expand="block" color="primary">FOLOSEȘTE</ion-button>
+      <ion-button size="large" expand="block" color="primary" (click)="useCashBack()"[disabled]="!cashBackForm.valid">FOLOSEȘTE</ion-button>
       </ion-col>
   </ion-row>
 </ion-grid>

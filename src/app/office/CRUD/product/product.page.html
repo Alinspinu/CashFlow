@@ -73,7 +73,7 @@
 
       </ion-col>
       <ion-col size="6">
-        <app-recipe-maker (ingsSend)="onIngRecive($event)" (toppSend)="onTopRecive($event)"></app-recipe-maker>
+        <app-recipe-maker (ingsSend)="onIngRecive($event)" (toppSend)="onTopRecive($event)" [top]="topToEdit" [ings]="ingsToEdit"></app-recipe-maker>
       </ion-col>
       <ion-col size="3">
 

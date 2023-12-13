@@ -27,7 +27,7 @@ export class ProductService{
 
   editProduct(product: any, toppings: string, ings: string, sub: string) {
     console.log('hit service')
-    return this.http.put(`${environment.BASE_LOCAL_URL}api-true/product?ings=${ings}&toppings=${toppings}&sub=${sub}`, product)
+    return this.http.put<{message: string, product: any}>(`${environment.BASE_LOCAL_URL}api-true/product?ings=${ings}&toppings=${toppings}&sub=${sub}`, product)
   }
 
   getCategories(input: any){

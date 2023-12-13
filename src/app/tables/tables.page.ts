@@ -38,7 +38,6 @@ ngOnInit(): void {
 getTables(){
   this.tableServ.tableSend$.subscribe(response => {
     this.tables = response
-    console.log(this.tables)
   })
 }
 

@@ -1,3 +1,5 @@
+import { NonNullableFormBuilder } from "@angular/forms";
+
 export class Table{
   constructor(
     public name: string,
@@ -26,11 +28,18 @@ export class Bill{
     public pickUp: boolean,
     public completetime: number,
     public paymentMethod: string,
+    public payment: {
+        cash: number,
+        card: number,
+        viva: number,
+        voucher: number,
+    },
     public cashBack: number,
     public payOnSite: boolean,
     public payOnline: boolean,
     public userName: string,
     public userTel: string,
+    public user: string,
     public cif: string,
     public show: boolean,
     public setName: boolean,
@@ -53,8 +62,27 @@ export class BillProduct{
    public mainCat: string,
    public newEntry: boolean,
    public sub: boolean,
-   public toppings: string[],
+   public toppings: Topping[],
+   public ings: Ing[],
    public payToGo: boolean,
   ){}
 
+}
+
+export class Topping {
+  constructor(
+    public name: string,
+    public price: number,
+    public qty: number,
+    public ingPrice: number,
+    public um: string
+  ){}
+}
+
+export class Ing{
+  constructor(
+    public name: String,
+    public qty: Number,
+    public price: number
+  ){}
 }

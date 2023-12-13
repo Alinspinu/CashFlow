@@ -39,6 +39,9 @@ export class ProductPage implements OnInit {
 
   productIngredients: any = [];
 
+  topToEdit!: any;
+  ingsToEdit!: any;
+
   constructor(
     @Inject(ContentService) private contentSrv: ContentService,
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
@@ -54,12 +57,13 @@ export class ProductPage implements OnInit {
   getProductToEdit(){
     this.route.paramMap.subscribe(params => {
       const id = params.get('id')
-       if(id && id !== '1'){
+      if(id && id !== '1'){
         this.prodSrv.getProduct(id).subscribe(response => {
           if(response){
             this.product = response;
-            console.log(this.product)
             this.editMode = true
+            this.topToEdit = this.product.toppings;
+            this.ingsToEdit = this.product.ings;
             this.subProducts = this.product.subProducts;
             this.toppings = this.product.toppings;
             this.form.get('name')?.setValue(this.product.name)
@@ -206,10 +210,10 @@ export class ProductPage implements OnInit {
       const ings = JSON.stringify(this.productIngredients)
       const sub = JSON.stringify(this.subProducts)
       const tempSubs = JSON.stringify(this.tempSubArray)
-      console.log(this.editMode)
       if(this.editMode){
-        console.log('hit comp')
-        this.prodSrv.editProduct(productData, toppings, ings, sub).subscribe()
+        this.prodSrv.editProduct(productData, toppings, ings, sub).subscribe(response => {
+          console.log(response)
+        })
       } else {
         this.prodSrv.seaveProduct(productData, toppings, ings).subscribe(response => {
           console.log(response)

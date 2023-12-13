@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -17,7 +17,7 @@ import { CategoryPage } from '../category/category.page';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class RecipeMakerPage implements OnInit {
+export class RecipeMakerPage implements OnInit, OnChanges {
 
   @Input() top: any
   @Input() ings: any
@@ -40,7 +40,17 @@ export class RecipeMakerPage implements OnInit {
     private toastCtrl: ToastController
   ) { }
 
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['top']) {
+      if(changes['top'].currentValue !== undefined){
+        this.toppings = changes['top'].currentValue
+      }
+    } else if (changes['ings']) {
+      if(changes['ings'].currentValue !== undefined) {
+        this.productIngredients = changes['ings'].currentValue
+      }
+    }
+  }
 
   ngOnInit() {
     this.setDataToEdit()
@@ -55,7 +65,6 @@ export class RecipeMakerPage implements OnInit {
   }
 
   setDataToEdit(){
-    console.log(this.top, this.ings)
     if(this.top){
       this.toppings = this.top
     }

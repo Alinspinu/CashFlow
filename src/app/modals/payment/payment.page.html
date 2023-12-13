@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="ion-text-center">29.99</ion-title>
+    <ion-title class="ion-text-center">{{total}} LEI</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,44 +8,51 @@
 <ion-grid>
   <ion-row>
     <ion-col>
+      <form [formGroup]="paymentForm">
       <ion-item lines="none" class="item">
+        <ion-button color="primary" size="large"  class="button" (click)="cash()">CASH</ion-button>
         <ion-item lines="none" class="input">
-          <ion-input type="number" label="Numerar" labelPlacement="floating" placeholder="00"></ion-input>
+          <ion-input type="number" label="Numerar" labelPlacement="floating" placeholder="00" formControlName="cash"></ion-input>
         </ion-item>
-        <ion-button color="secondary" size="large">CASH</ion-button>
+        <ion-button color="danger" size="large" class="close" (click)="reset('cash')">X</ion-button>
       </ion-item>
       <ion-item lines="none" class="item">
-      <ion-item lines="none" class="input">
-        <ion-input type="number" label="Card Bancar" labelPlacement="floating" placeholder="00"></ion-input>
-      </ion-item>
-      <ion-button color="secondary" size="large">CARD</ion-button>
-      </ion-item>
-      <ion-item lines="none" class="item">
-      <ion-item lines="none" class="input">
-        <ion-input type="number" label="Viva Wallet" labelPlacement="floating" placeholder="00"></ion-input>
-      </ion-item>
-      <ion-button color="secondary" size="large">VIVA</ion-button>
+        <ion-button color="primary" size="large" class="button" (click)="card()">CARD</ion-button>
+        <ion-item lines="none" class="input">
+          <ion-input type="number" label="Card Bancar" labelPlacement="floating" placeholder="00" formControlName="card" ></ion-input>
+        </ion-item>
+        <ion-button color="danger" size="large" class="close" (click)="reset('card')">X</ion-button>
       </ion-item>
       <ion-item lines="none" class="item">
-      <ion-item lines="none" class="input">
-        <ion-input type="number" label="Voucher" labelPlacement="floating" placeholder="00"></ion-input>
-      </ion-item>
-      <ion-button color="secondary" size="large">VOUCHER</ion-button>
+        <ion-button color="primary" size="large" class="button" (click)="viva()">VIVA</ion-button>
+        <ion-item lines="none" class="input">
+          <ion-input type="number" label="Viva Wallet" labelPlacement="floating" placeholder="00" formControlName="viva"></ion-input>
+        </ion-item>
+        <ion-button color="danger" size="large" class="close" (click)="reset('viva')">X</ion-button>
       </ion-item>
       <ion-item lines="none" class="item">
-      <ion-item lines="none" class="input">
-        <ion-input type="text" label="Cod Fiscal" labelPlacement="floating" placeholder="ex.RO123232"></ion-input>
+        <ion-button color="primary" size="large" class="button" (click)="voucher()">VOUCHER</ion-button>
+        <ion-item lines="none" class="input">
+          <ion-input type="number" label="Voucher" labelPlacement="floating" placeholder="00" formControlName="voucher"></ion-input>
+        </ion-item>
+        <ion-button color="danger" size="large" class="close" (click)="reset('voucher')">X</ion-button>
       </ion-item>
-      <ion-button color="secondary" size="large">RO</ion-button>
+      <ion-item lines="none" class="item">
+        <ion-button color="primary" size="large" class="button" (click)="cif()">RO</ion-button>
+        <ion-item lines="none" class="input">
+          <ion-input type="text" label="Cod Fiscal" labelPlacement="floating" placeholder="ex.RO123232" formControlName="cif" #cifInp></ion-input>
+        </ion-item>
+        <ion-button color="danger" size="large" class="close" (click)="reset('cif')">X</ion-button>
       </ion-item>
+    </form>
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col>
-    <ion-button size="large" expand="block" color="danger">Renunță</ion-button>
+    <ion-button size="large" expand="block" color="danger"(click)="cancel()">Renunță</ion-button>
   </ion-col>
     <ion-col>
-      <ion-button size="large" expand="block" color="primary">Încasează</ion-button>
+      <ion-button size="large" expand="block" color="primary" (click)="cashIn()">Încasează</ion-button>
       </ion-col>
   </ion-row>
 </ion-grid>

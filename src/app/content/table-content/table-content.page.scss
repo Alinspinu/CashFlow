@@ -101,6 +101,26 @@ span, ion-title, ion-card-subtitle, ion-label{
 
 }
 
+.client-wrapper{
+  display: flex;
+  flex-direction: row;
+  --background: var(--ion-color-primary) ;
+  border-radius: 4px;
+  .client-name{
+    flex: 10%;
+    font-size: 23px;
+    color: white;
+  }
+  .clent-email{
+    flex: 20%;
+  }
+  .client-cashBack{
+    flex: 40%;
+    font-size: 23px;
+    color: white;
+  }
+}
+
 
 
 .bill{
@@ -109,9 +129,13 @@ span, ion-title, ion-card-subtitle, ion-label{
   flex-direction: column;
 }
 
-// .bill-total-row{
-//   margin-top: auto;
-// }
+
+.red-text{
+  font-size: 22;
+}
+.red-lei{
+  font-size: 20;
+}
 
 .total-lei{
   font-size: 24px;

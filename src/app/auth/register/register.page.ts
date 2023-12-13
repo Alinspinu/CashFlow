@@ -41,16 +41,10 @@ export class RegisterPage implements OnInit {
   register: boolean = false;
   showFoodPrice: boolean = false;
   showCoffeePrice: boolean = false;
-  question!: string;
-  showQuestion: boolean = false
-  hideSurveyButton: boolean = false;
-  survey: Survey = {food: [], foodPrice: [], coffee: [], coffeePrice: []}
+  survey: any = []
 
 
-  foodPrice: string[] = ['Sub 30 lei', 'Între 30 și 60 lei', 'Peste 60 lei'];
-  coffeePrice: string[] = ['Sub 10 lei', 'Între 10 și 20 lei', 'Peste 30 lei'];
-  foodAnswers: string[] = [ 'Mâncare Românească','Mâncare Orientala', 'Mâncare Asiatica', 'Mâncare Italiană', 'Sandwich', 'Mic Dejun', 'Patiserie', 'Cofetarie', 'Pizza', 'Burgeri', 'Lacto-vegetarian' ,'Vegan', 'Organic',];
-  coffeeAnswers: string[] = ['Cu Zahăr', 'Cu Lapte', 'Fără Zahăr', 'Espresso', 'La Filtru', 'Cu Arome', 'Ice Coffee', 'Ibric'];
+
 
   constructor(
   private authService: AuthService,
@@ -118,12 +112,6 @@ export class RegisterPage implements OnInit {
   };
 
   onSubmit(){
-   Preferences.get({key: 'cart'}).then(res => {
-    if(res.value){
-      this.cart = res.value;
-    };
-   });
-
     const name = this.form.value.name;
     const password = this.form.value.password;
     const email = this.form.value.email;
@@ -138,10 +126,10 @@ export class RegisterPage implements OnInit {
           id: res.id,
         })
         Preferences.set({key: 'tempUserData', value: data });
-        this.router.navigate(['/email-sent']);
+        this.router.navigate(['/tabs/tables']);
         triggerEscapeKeyPress();
       } else if(res.message === 'This email allrady exist'){
-        this.router.navigate(['/tabs/cart']);
+        this.router.navigate(['/tabs/tables']);
         showToast(this.toastCtrl, res.message, 3000);
         this.modalCtrl.dismiss()
       } else if(res.message === 'Error sending email'){
@@ -184,62 +172,4 @@ export class RegisterPage implements OnInit {
 
 };
 
-openSurvey(mode: string){
-  if(mode === 'survey'){
-    this.showQuestion = true
-    this.showFood = true
-    this.question = 'Ce fel de mâncare îți place? (1/4)'
-    this.hideSurveyButton = true
-  } else if(mode === 'food'){
-    console.log("ceva")
-    this.showFoodPrice = true
-    this.question = 'Câti bani ai cheltui pentru o masă? (2/4)'
-    this.showFood = false
-  } else if(mode === 'food-price'){
-    this.showCoffee = true
-    this.showFoodPrice = false
-    this.question = 'Cum îți place să bei cafeaua? (3/4)'
-  } else if(mode === 'coffee'){
-    this.showCoffee = false;
-    this.showCoffeePrice = true;
-    this.question = 'Câți bani ai cheltui pentru o cafea? (4/4)'
-  } else if(mode === 'coffee-price'){
-    this.register = true
-    this.showCoffeePrice = false
-    this.question = 'Mulțumim frumos pentru timpul acordat!'
-  }
-}
-
-
-onChange(event: any, answer: string, mode: string){
-  if(mode === 'food'){
-    if(event.detail.checked){
-      this.survey.food.push(answer)
-    } else {
-      const index = this.survey.food.findIndex(str => str = answer)
-      this.survey.food.splice(index, 1)
-    }
-  } else if(mode === 'food-price') {
-    if(event.detail.checked){
-      this.survey.foodPrice.push(answer)
-    } else {
-      const index = this.survey.food.findIndex(str => str = answer)
-      this.survey.foodPrice.splice(index, 1)
-    }
-  } else if(mode === 'coffee'){
-    if(event.detail.checked){
-      this.survey.coffee.push(answer)
-    } else {
-      const index = this.survey.food.findIndex(str => str = answer)
-      this.survey.coffee.splice(index, 1)
-    }
-  } else if(mode = 'coffee-price'){
-    if(event.detail.checked){
-      this.survey.coffeePrice.push(answer)
-    } else {
-      const index = this.survey.food.findIndex(str => str = answer)
-      this.survey.coffeePrice.splice(index, 1)
-    }
-  }
-}
 };

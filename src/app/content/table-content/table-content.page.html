@@ -71,10 +71,15 @@
       <ion-grid class="bill">
         <ion-row>
           <ion-toolbar *ngIf="billToshow && billToshow.products.length">
+            <ion-item lines="none" class="client-wrapper" *ngIf="client">
+              <ion-label class="client-name">Nume:  {{client.name | capitalize}}</ion-label>
+              <!-- <ion-label class="client-email">{{client.email}}</ion-label> -->
+              <ion-label class="client-cashBack">{{client.cashBack}} Lei Cash Back</ion-label>
+            </ion-item>
             <ion-buttons slot="end">
-              <ion-button class="client-button" (click)="addCustomer()">
-                <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
-                ADAUGĂ CLIENT
+              <ion-button class="client-button" (click)="addCustomer(clientMode)">
+                <ion-icon [src]=" clientMode ? '../../../assets/icon/add-outline.svg': '../../../assets/icon/trash-outline.svg'"></ion-icon>
+                {{clientMode ? 'ADAUGĂ CLIENT' : "ȘTERGE CLIENT"}}
               </ion-button>
             </ion-buttons>
           </ion-toolbar>
@@ -101,7 +106,7 @@
               <div class="prod-name">
                 <ion-label>{{product.name}}</ion-label>
                 <div class="toppings-wrapper" *ngIf="product.toppings.length">
-                  <span *ngFor="let topping of product.toppings">+{{topping}}</span>
+                  <span *ngFor="let topping of product.toppings">+{{topping.name}}</span>
                 </div>
               </div>
                 <ion-label class="prod-price">{{product.price}}</ion-label>
@@ -113,6 +118,22 @@
           </ion-col>
         </ion-row>
         <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
+          <ion-row class="bill-discount-row" *ngIf="discountValue !== 0">
+            <ion-col size="10">
+              <span class="red-text">REDUCERE</span>
+            </ion-col>
+            <ion-col size="2" class="ion-text-center">
+              <span class="red-lei">- {{discountValue}} Lei</span>
+            </ion-col>
+          </ion-row>
+          <ion-row class="bill-discount-row" *ngIf="billCashBack">
+            <ion-col size="10">
+              <span class="red-text">CASH BACK</span>
+            </ion-col>
+            <ion-col size="2" class="ion-text-center">
+              <span class="red-lei">- {{billCashBack}} Lei</span>
+            </ion-col>
+          </ion-row>
           <ion-row class="bill-total-row">
             <ion-col size="10">
               <span class="total-text">TOTAL</span>
@@ -121,15 +142,16 @@
               <span class="total-lei">{{billToshow.total}} Lei</span>
             </ion-col>
           </ion-row>
+
           <ion-row>
-            <ion-col size="6">
-              <ion-button size="large" expand="block" color="primary" (click)="useCashBack()">
-               FOLOSEȘTE CASHBACK
+            <ion-col size="6" *ngIf="client">
+              <ion-button size="large" expand="block" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)">
+               {{ cashBackMode ? 'FOLOSEȘTE CASHBACK' : 'ELIMINĂ CASH BACK'}}
               </ion-button>
             </ion-col>
             <ion-col size="6" [offset]="discountOffset">
-              <ion-button size="large" expand="block" color="secondary" (click)="addDiscount()">
-               ADAUGĂ REDUCERE
+              <ion-button size="large" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount(discountMode)">
+               {{ discountMode ? 'ADAUGĂ REDUCERE' : 'ELIMINĂ REDUCEREA'}}
               </ion-button>
             </ion-col>
           </ion-row>

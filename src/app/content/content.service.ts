@@ -44,6 +44,7 @@ export class ContentService{
     allergens: [],
     paring: [],
     toppings: [],
+    ings: []
   }
   private categoryState!: BehaviorSubject<Category[]>;
   public categorySend$!: Observable<Category[]>;

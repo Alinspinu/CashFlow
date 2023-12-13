@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, take, tap } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
-import { Bill, BillProduct, Table } from "./table.model";
+import { Bill, BillProduct, Table, Topping } from "./table.model";
 import { environment } from "src/environments/environment";
 
 
@@ -142,8 +142,8 @@ addNewBill(masa: number){
 
 saveTablesLocal(tableIndex:number, billId: string, billIndex: number){
   const table = this.tables[tableIndex-1];
-  console.log(tableIndex)
   const bill = this.tables[tableIndex-1].bills[billIndex];
+  console.log(bill)
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true
@@ -179,6 +179,12 @@ emptyBill(){
     pickUp: false,
     completetime: 0,
     paymentMethod: '',
+    payment: {
+      card: 0,
+      cash: 0,
+      viva: 0,
+      voucher: 0,
+    },
     cashBack: 0,
     payOnSite: false,
     payOnline: false,
@@ -188,11 +194,12 @@ emptyBill(){
     show: false,
     setName: false,
     name: 'COMANDA',
-    products: []
+    products: [],
+    user: '',
   }
   return emptyBill
 }
 
-arraysAreEqual = (arr1: string[], arr2: string[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+arraysAreEqual = (arr1: Topping[], arr2: Topping[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 
 }

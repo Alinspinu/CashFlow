@@ -7,7 +7,7 @@ import { ContentService } from '../content.service';
 import { Category, Product } from '../category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
-import { Bill, BillProduct, Table } from 'src/app/tables/table.model';
+import { Bill, BillProduct, Ing, Table, Topping } from 'src/app/tables/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
 import { Subscription } from 'rxjs';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
@@ -16,19 +16,23 @@ import { PaymentPage } from 'src/app/modals/payment/payment.page';
 import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
 import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
 import { DiscountPage } from 'src/app/modals/discount/discount.page';
+import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 
 @Component({
   selector: 'app-table-content',
   templateUrl: './table-content.page.html',
   styleUrls: ['./table-content.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule]
+  imports: [IonicModule, CommonModule, FormsModule, RouterModule, CapitalizePipe]
 })
 export class TableContentPage implements OnInit, OnDestroy {
 
   @ViewChild('addNameInput') nameInput!: IonInput;
 
-  discountOffset: string = '0'
+  discountOffset: string = '6'
+
+  discountValue: number = 0;
+  discountMode: boolean = true
 
   tabSub!: Subscription;
   allCats: Category[] = [];
@@ -44,11 +48,16 @@ export class TableContentPage implements OnInit, OnDestroy {
   table: Table = this.tableSrv.emptyTable();
   tableNumber: number = 0;
 
+  billCashBack!: number | null
+  cashBackMode: boolean = true
+
   billProducts: BillProduct[] = [];
   billTotal: number = 0;
   billId!: string;
   billIndex: number = 0;
 
+  client!: any
+  clientMode: boolean = true
 
   billToshow!: Bill
 
@@ -64,7 +73,8 @@ export class TableContentPage implements OnInit, OnDestroy {
    sub: false,
    toppings: [],
    payToGo: false,
-   newEntry: true
+   newEntry: true,
+   ings: []
   }
 
 
@@ -80,8 +90,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getTableNumber()
     this.getData()
     this.getBill()
-    // console.log(this.mainCats)
-    // console.log()
+    // console.log(this.billToshow)
   }
 
   ngOnDestroy(): void {
@@ -123,28 +132,76 @@ export class TableContentPage implements OnInit, OnDestroy {
 
 
   sendOrder(){
-    console.log(this.billToshow)
     this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new'
     const tableIndex = this.billToshow.masaRest.index
     this.tableSrv.saveTablesLocal(tableIndex, this.billId, this.billIndex).subscribe()
   }
 
- async addCustomer(){
+ async addCustomer(clientMode: boolean){
+  if(clientMode){
     const clientInfo = await this.actionSheet.openPayment(CustomerCheckPage, '')
+    this.client = clientInfo
+    this.clientMode = false
+    this.discountOffset = '0'
+    this.billToshow.userName = this.client.name
+    this.billToshow.userTel = this.client.telephone
+    this.billToshow.user = this.client._id
+  } else {
+    if(this.billCashBack){
+      this.billToshow.total = this.billToshow.total + this.billCashBack
+      this.billCashBack = null
+      this.cashBackMode = true
+    }
+    this.client = null
+    this.clientMode = true;
+    this.discountOffset = '6'
+  }
+
   }
 
   async payment(){
-    const paymentInfo = await this.actionSheet.openPayment(PaymentPage, {total: 23.66})
-    console.log(paymentInfo)
+    const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow.total)
+      if(paymentInfo){
+        this.billToshow.payment.card = paymentInfo.card;
+        this.billToshow.payment.cash = paymentInfo.cash;
+        this.billToshow.payment.voucher = paymentInfo.voucher;
+        this.billToshow.payment.viva = paymentInfo.viva;
+        this.billToshow.cif = paymentInfo.cif;
+        console.log(this.billToshow)
+      }
   }
 
 
-  async useCashBack(){
-    const cashBackValue = await this.actionSheet.openPayment(CashbackPage, 12)
+  async useCashBack(mode: boolean){
+    if(mode){
+      const data = { cashBack: this.client.cashBack, total: this.billToshow.total}
+      const cashBackValue = await this.actionSheet.openPayment(CashbackPage, data)
+      if(cashBackValue){
+        this.billToshow.cashBack = cashBackValue;
+        this.billCashBack = cashBackValue;
+        this.billToshow.total  = this.billToshow.total - cashBackValue
+        this.cashBackMode = false
+      }
+    }else {
+      this.billToshow.total = this.billToshow.cashBack + this.billToshow.total
+      this.cashBackMode = true
+      this.billCashBack = null
+    }
   }
 
-  async addDiscount(){
-    const discountValue = await this.actionSheet.openPayment(DiscountPage, '')
+  async addDiscount(mode: boolean){
+    if(mode){
+      const discountValue = await this.actionSheet.openPayment(DiscountPage, this.billToshow.total)
+      if(discountValue){
+        this.billToshow.total = this.billToshow.total - discountValue;
+        this.discountValue = discountValue;
+        this.discountMode = false;
+      }
+    } else {
+      this.billToshow.total = this.billToshow.total + this.discountValue
+      this.discountValue = 0
+      this.discountMode = true
+    }
   }
 
 
@@ -179,45 +236,31 @@ export class TableContentPage implements OnInit, OnDestroy {
   async addToBill(product: Product){
     let price: number = product.price;
     let cartProdName: string = product.name;
-    let subProducts: string[] = []
+    let ings: Ing[] = product.ings
     if(product.subProducts.length){
-      product.subProducts.forEach(el => {
-        if(el.available){
-          subProducts.push(`${el.name} - ${el.price} Lei`)
-        }
-      })
-    }
-    if(subProducts.length){
-      const result = await this.actionSheet.openModal(PickOptionPage, subProducts, true)
+      const result = await this.actionSheet.openModal(PickOptionPage, product.subProducts, true)
       if(result){
-        const subProd = result.split('-')
-        const subProdName = subProd[0];
-        price  = parseFloat(subProd[1].slice(0, -2))
-        cartProdName = product.name + '-' + subProdName;
+        ings = result.ings
+        price  = result.price
+        cartProdName = product.name + '-' + result.name;
       } else {
        return triggerEscapeKeyPress()
       }
     }
-    let options: string[] = []
+    let options: Topping[] = []
     let optionPrice: number = 0;
-    let extraNames: string[] = [];
+    let pickedToppings: Topping[] = [];
     if(product.toppings.length){
       const itemsToSort = [...product.toppings]
-      const sortedTopings = itemsToSort.sort((a, b) => a.price - b.price)
-      sortedTopings.forEach(el => {
-        let price: string = 'Lei'
-        el.price === 1 ? price = 'Leu' : price = 'Lei'
-        options.push(`${el.name} +${el.price} ${price}`)
-      })
+      options = itemsToSort.sort((a, b) => a.price - b.price)
     }
     if(options.length){
       const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
         if(extra) {
-          extra.forEach((el: string) => {
-            const extraName = el.split('+')
-            extraNames.push(extraName[0])
-            optionPrice += parseFloat(extraName[1].slice(0,-2))
-          })
+           pickedToppings = extra
+           pickedToppings.forEach(el => {
+            optionPrice += el.price
+           })
         }
       }
       const totalPrice = price + optionPrice
@@ -230,10 +273,11 @@ export class TableContentPage implements OnInit, OnDestroy {
         imgPath: product.image.path,
         category: product.category._id,
         sub: false,
-        toppings: extraNames,
+        toppings: pickedToppings,
         mainCat: '',
         payToGo: false,
-        newEntry: true
+        newEntry: true,
+        ings: ings
       };
       this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex )
   }
@@ -243,7 +287,6 @@ export class TableContentPage implements OnInit, OnDestroy {
   getData(){
     this.contSrv.categorySend$.subscribe(response => {
       if(response.length > 1){
-        console.log(response)
         this.allCats = [...response]
         let tempMainCats: any = []
         for (const document of this.allCats) {
@@ -307,7 +350,6 @@ export class TableContentPage implements OnInit, OnDestroy {
       if(id){
         this.tableNumber = parseFloat(id);
       }
-      console.log(this.tableNumber)
     })
   }
 

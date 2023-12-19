@@ -1,4 +1,4 @@
-import { Suplier } from "../suplier/suplier.model";
+import { Suplier } from "./suplier.model";
 
 export class NirIngredient {
   constructor(
@@ -24,3 +24,19 @@ export class Nir{
     public ingredients: NirIngredient[]
   ){}
 }
+
+export class InvIngredient {
+  constructor(
+    public name: string,
+    public price: number,
+    public um: string,
+    public qty: number,
+    public tvaPrice: number,
+    public tva: number,
+    public dep: string,
+    public gestiune: string,
+    public locatie: string,
+  ){}
+}
+
+

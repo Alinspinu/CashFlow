@@ -19,7 +19,7 @@ export class UsersService{
   ){}
 
   getUsers(filter: string, searchInput: string){
-    return this.http.post<{}[]>(`${environment.BASE_LOCAL_URL}users?search=${searchInput}`, {filter: filter})
+    return this.http.post<{}[]>(`${environment.BASE_URL}users?search=${searchInput}`, {filter: filter})
   }
 
   editUser(user: any){
@@ -27,7 +27,7 @@ export class UsersService{
   }
 
   getUser(userId: string){
-    return this.http.post(`${environment.BASE_LOCAL_URL}users/user`, {userId: userId})
+    return this.http.post(`${environment.BASE_URL}users/user`, {userId: userId})
   }
 
 }

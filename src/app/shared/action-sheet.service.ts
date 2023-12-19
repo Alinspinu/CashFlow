@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
-import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
 import { PickOptionPage } from '../modals/pick-option/pick-option.page';
 import { SuplierPage } from '../office/CRUD/suplier/suplier.page';
 import { PickQtyPage } from '../modals/pick-qty/pick-qty.page';
@@ -29,7 +28,8 @@ export class ActionSheetService {
                typeof IngredientPage |
                typeof SubProductPage |
                typeof CategoryPage |
-               typeof PaymentPage,
+               typeof PaymentPage |
+               typeof SuplierPage,
     options: any,
     sub: boolean
                ) {
@@ -209,6 +209,199 @@ export class ActionSheetService {
       return true
     } else {
       return false
+    }
+  }
+
+
+
+
+  async deleteBillProduct(options: string[]) {
+    const inputs = options.map(option => {
+      return {
+          label: option + ' Buc',
+          type: 'radio' as const,
+          value: option,
+          cssClass: 'option'
+      };
+  });
+    const alert = await this.alertController.create({
+      header: 'Sterge produs',
+      message: `Alege cantitatea`,
+      buttons: [
+        {
+          text: 'Cu întoarcere în stoc',
+          role: 'confirm-1',
+          cssClass: 'inStoc'
+        },
+        {
+          text: 'Fara întoarcere în stoc',
+          role: 'confirm-2',
+          cssClass: 'outStoc',
+        },
+        {
+          text: 'Renunța',
+          role: 'cancel',
+          cssClass: 'cancel'
+        },
+      ],
+      inputs: inputs,
+      cssClass: 'deleteAlert'
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm-1" && result.data.values){
+      return { qty: result.data.values, upload: true }
+    } else if(result.role === "confirm-2" && result.data.values) {
+      return { qty: result.data.values, upload: false }
+    } else {
+      return null
+    }
+  }
+
+
+
+  async mergeOreders(options: {name: string, data: {id: string, billIndex: number}}[]) {
+    const inputs = options.map(option => {
+      return {
+          label: option.name,
+          type: 'checkbox' as const,
+          value: option.data,
+          // cssClass: 'option'
+      };
+  });
+    const alert = await this.alertController.create({
+      header: 'Unește comenzile',
+      message: `Alege comenzile`,
+      buttons: [
+        {
+          text: 'UNEȘTE',
+          role: 'confirm',
+        },
+        {
+          text: 'RENUNȚĂ',
+          role: 'cancel',
+        },
+      ],
+      inputs: inputs,
+      // cssClass: 'deleteAlert'
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm" && result.data.values){
+      return  result.data.values
+    } else {
+      return null
+    }
+  }
+
+
+  async deleteBill() {
+    const alert = await this.alertController.create({
+      header: 'ȘTERGE COMANDA',
+      message: `Esi sigur?`,
+      buttons: [
+        {
+          text: 'CONFIRMA',
+          role: 'confirm',
+        },
+        {
+          text: 'RENUNTA',
+          role: 'cancel',
+          cssClass: 'cancel'
+        },
+      ],
+      inputs: [
+        {
+          label: "Cu întoarcere în stoc",
+          type: "radio",
+          value: "yes"
+        },
+        {
+          label: "Fără întoarcere în stoc",
+          type: "radio",
+          value: "no"
+        },
+
+      ]
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm" && result.data.values === 'yes'){
+      return { upload: true }
+    } else if (result.role === "confirm" && result.data.values === 'no'){
+      return { upload: false }
+    }else {
+      return null
+    }
+  }
+
+
+
+  async breakBillProduct(options: number[]) {
+    const inputs = options.map(option => {
+      return {
+          label: option + ' Buc',
+          type: 'radio' as const,
+          value: option,
+          cssClass: 'option'
+      };
+  });
+    const alert = await this.alertController.create({
+      header: 'SEPARĂ PRODUSE',
+      message: `Alege cantitatea`,
+      buttons: [
+        {
+          text: 'ALEGE',
+          role: 'confirm',
+        },
+        {
+          text: 'RENUNȚA',
+          role: 'cancel',
+          cssClass: 'cancel'
+        },
+      ],
+      inputs: inputs,
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm" && result.data.values){
+      return result.data.values
+    } else {
+      return null
+    }
+  }
+
+
+  async mergeOredersProducts(options: {name: string,  billIndex: number}[]) {
+    const inputs = options.map(option => {
+      return {
+          label: option.name,
+          type: 'checkbox' as const,
+          value: option,
+      };
+  });
+    const alert = await this.alertController.create({
+      header: 'SEPARĂ',
+      message: `Alege comanda`,
+      buttons: [
+        {
+          text: 'CONFIRM',
+          role: 'confirm',
+        },
+        {
+          text: 'RENUNȚĂ',
+          role: 'cancel',
+        },
+      ],
+      inputs: inputs,
+      // cssClass: 'deleteAlert'
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm" && result.data.values){
+      return  result.data.values[0].billIndex
+    } else {
+      return null
     }
   }
 

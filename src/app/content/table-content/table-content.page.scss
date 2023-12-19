@@ -36,15 +36,18 @@ span, ion-title, ion-card-subtitle, ion-label{
   margin: 1rem 0 0.5rem 0.5rem;
 }
 
-
-
-.container{
+.contents-container{
+  display: flex;
+  flex-direction: row;
   height: 100vh;
 }
 
 .icon{
   font-size: 24px;
 
+}
+.bill{
+  width: 100%;
 }
 
 .bill-header{
@@ -90,7 +93,7 @@ span, ion-title, ion-card-subtitle, ion-label{
 
   }
   .prod-qty{
-    flex: 8%;
+    flex: 20%;
     text-align: center;
   }
 
@@ -98,26 +101,43 @@ span, ion-title, ion-card-subtitle, ion-label{
     flex: 20%;
     text-align: end;
   }
+  .trash{
+    height: 30px;
+  }
 
+}
+
+.grey{
+  --background: var(--ion-color-medium-tint);
+  border: none!important;
 }
 
 .client-wrapper{
   display: flex;
   flex-direction: row;
-  --background: var(--ion-color-primary) ;
   border-radius: 4px;
+  justify-content: space-between;
+  text-align: center;
   .client-name{
-    flex: 10%;
-    font-size: 23px;
-    color: white;
+    width: 250px;
+    // flex: 20%;
+    font-size: 18px !important;
   }
-  .clent-email{
-    flex: 20%;
+  .client-email{
+    width: 250px;
+    // flex: 20%;
+    font-size: 18px !important;
+  }
+  .client-phone{
+    width: 250px;
+    // flex: 20%;
+    font-size: 18px !important;
   }
   .client-cashBack{
-    flex: 40%;
-    font-size: 23px;
-    color: white;
+    width: 300px;
+    margin-left: auto;
+    // flex: 40%;
+    font-size: 18px !important;
   }
 }
 

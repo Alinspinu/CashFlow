@@ -43,10 +43,10 @@
       <ion-col>
         <ion-item class="content-container product input" (click)="productEdit(product._id)" lines="none">
           <ion-label class="name">{{product.name}}</ion-label>
-          <ion-label class="mainCat">{{product.mainCat}}</ion-label>
+          <ion-label class="mainCat">{{product.mainCat | capitalize}}</ion-label>
           <ion-label class="cat">{{product.category.name}}</ion-label>
-          <ion-label class="dep">dep</ion-label>
-          <ion-label class="tva">Tva %</ion-label>
+          <ion-label class="dep">{{product.dep ? product.dep : "dep" }}</ion-label>
+          <ion-label class="tva">{{product.tva ? product.tva : "Tva"}} %</ion-label>
           <ion-label class="price-prod">{{product.subProducts.length ? '' : 'pret prod' }}</ion-label>
           <ion-label class="sale-price">{{product.subProducts.length ? '' : product.price }}</ion-label>
           <ion-label class="price">{{product.subProducts.length ? '' : "adaos"}}</ion-label>

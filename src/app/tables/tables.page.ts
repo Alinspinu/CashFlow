@@ -5,7 +5,7 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
 import { ActionSheetService } from '../shared/action-sheet.service';
 import { showToast } from '../shared/utils/toast-controller';
-import { Table } from './table.model';
+import { Table } from '../models/table.model';
 import { TablesService } from './tables.service';
 
 

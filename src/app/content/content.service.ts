@@ -2,7 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Preferences } from "@capacitor/preferences";
 import { BehaviorSubject, from, map, Observable, take, tap } from "rxjs";
-import {Category, Product} from "./category.model"
+import { environment } from "src/environments/environment";
+import {Category, Product} from "../models/category.model"
 
 
 @Injectable({providedIn: 'root'})
@@ -10,9 +11,6 @@ import {Category, Product} from "./category.model"
 
 
 export class ContentService{
-
-  baseUrl: string = 'http://localhost:8080/';
-  newUrl: string = 'https://flow-api-394209.lm.r.appspot.com/';
 
   public emptyCategory: Category = {_id: '', mainCat: '', name: '', product: [], image: {path: '', filename:''}, order: 0}
   public emptyProduct: Product = {
@@ -44,7 +42,8 @@ export class ContentService{
     allergens: [],
     paring: [],
     toppings: [],
-    ings: []
+    ings: [],
+    printer: 'main'
   }
   private categoryState!: BehaviorSubject<Category[]>;
   public categorySend$!: Observable<Category[]>;
@@ -65,7 +64,7 @@ export class ContentService{
           this.categoryState.next([...this.category])
         }
       })
-      return this.http.get<Category[]>(`${this.baseUrl}api-true/get-cats`).pipe(take(1), tap(res => {
+      return this.http.get<Category[]>(`${environment.BASE_URL}cat/get-cats`).pipe(take(1), tap(res => {
         this.category = this.sortData(res)
         this.categoryState.next([...this.category]);
         Preferences.set({key: 'categories', value: JSON.stringify(this.category)})

@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {environment} from '../../../../environments/environment'
-import { Suplier } from "./suplier.model";
+import { Suplier } from "../../../models/suplier.model";
 
 
 
@@ -20,7 +20,8 @@ export class SuplierService{
   }
 
   saveSuplier(suplier: Suplier, personal: boolean){
-    return this.http.post<any>(`${environment.BASE_LOCAL_URL}office/save-suplier?personal=${personal}`, {suplier: suplier})
+    console.log('hit http')
+    return this.http.post<any>(`${environment.BASE_URL}suplier/save-suplier?personal=${personal}`, {suplier: suplier})
   }
 
 }

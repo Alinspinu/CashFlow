@@ -54,6 +54,27 @@ body ion-alert.extraAlert{
 
 }
 
+body ion-alert.deleteAlert{
+  --max-width: none!important;
+  --width: 500px!important;
+  .alert-button-group-vertical{
+    flex-direction: row !important;
+    justify-content: center;
+  }
+  .inStoc{
+    width: 150px !important;
+    text-align: start !important;
+  }
+  .outStoc{
+    text-align: start !important;
+    width: 150px !important;
+  }
+  .cancel{
+    text-align: start !important;
+    width: 100px !important;
+  }
+}
+
 .crud-modal{
   --width: 80%;
   --max-width: none;

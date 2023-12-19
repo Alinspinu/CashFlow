@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
-import { Suplier } from './suplier.model';
+import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
+import { Suplier } from '../../../models/suplier.model';
 import { SuplierService } from './suplier.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 
@@ -18,22 +18,29 @@ export class SuplierPage implements OnInit {
   suplierForm!: FormGroup
   suplier!: Suplier
 
+  personal!: boolean
+
   constructor(
    @Inject(SuplierService) private suplierSrv: SuplierService,
    private toastCtrl: ToastController,
+   private modalCtrl: ModalController,
+   private navPar: NavParams
   ) {}
 
   ngOnInit() {
     this.setUpForm()
+    this.getMode()
 
   }
 
+  getMode(){
+    this.personal = this.navPar.get('sub')
+  }
 
   setUpForm(){
     this.suplierForm = new FormGroup({
       name: new FormControl(null, {
         updateOn: 'change',
-        validators: [Validators.required]
       }),
       bussinessName: new FormControl(null, {
         updateOn: 'change',
@@ -86,6 +93,7 @@ export class SuplierPage implements OnInit {
 
   addSuplier(){
     if(this.suplierForm.valid){
+      console.log('click')
       const suplier: Suplier = {
         name: this.suplierForm.value.name,
         bussinessName: this.suplierForm.value.bussinessName,
@@ -96,10 +104,11 @@ export class SuplierPage implements OnInit {
         account: this.suplierForm.value.account ? this.suplierForm.value.account : '',
         VAT: this.suplierForm.value.VAT === 'yes'? true : false,
       }
-      this.suplierSrv.saveSuplier(suplier, false).subscribe((response: any) => {
+      this.suplierSrv.saveSuplier(suplier, this.personal).subscribe((response: any) => {
         if(response){
           showToast(this.toastCtrl, response.message, 400)
           this.suplierForm.reset()
+          this.modalCtrl.dismiss(response.suplier)
         }
       }, (err: any) =>{
         console.log(err)

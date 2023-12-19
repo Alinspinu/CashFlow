@@ -15,10 +15,10 @@ export class CustomerCheckService{
   ){}
 
   searchCustomer(customerId: string){
-    return this.http.get<{message: string, customer: Customer}>(`${environment.BASE_LOCAL_URL}auth/customer?id=${customerId}`)
+    return this.http.get<{message: string, customer: any}>(`${environment.BASE_URL}users/customer?id=${customerId}`)
   }
 
   createCustomer(name: string, email: string){
-    return this.http.post<{message: string, customer: Customer}>(`${environment.BASE_LOCAL_URL}auth/customer`, {name: name, email: email})
+    return this.http.post<{message: string, customer: any}>(`${environment.BASE_URL}users/customer`, {name: name, email: email})
   }
 }

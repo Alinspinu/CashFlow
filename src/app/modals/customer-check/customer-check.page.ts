@@ -6,7 +6,7 @@ import { CustomerCheckService } from './customer-check.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 
  export interface Customer{
-  _id: string
+  userId: string
   name: string,
   email: string,
   telephone: string,
@@ -22,7 +22,8 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 })
 export class CustomerCheckPage implements OnInit {
 
-  searchCustomerForm!: FormGroup
+  searchCustomerForm!: FormGroup;
+  addCustomerForm!: FormGroup;
 
   addClientMode: boolean = false
   foundClient: boolean = false
@@ -36,16 +37,17 @@ export class CustomerCheckPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.setUpForm()
+    this.setUpSearchForm()
+    this.setUpAddForm()
   }
 
   dismissModal(){
     this.modalCtrl.dismiss(null)
   }
 
-  setUpForm(){
-    this.searchCustomerForm = new FormGroup({
-      customerId: new FormControl(null, {
+  setUpAddForm(){
+    this.addCustomerForm = new FormGroup({
+      email: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
@@ -53,7 +55,13 @@ export class CustomerCheckPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      email: new FormControl(null, {
+    })
+  }
+
+
+  setUpSearchForm(){
+    this.searchCustomerForm = new FormGroup({
+      customerId: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
@@ -86,19 +94,24 @@ setMode(){
 }
 
 addClient(){
-  const email = this.searchCustomerForm.value.email
-  const name = this.searchCustomerForm.value.name
-  this.customerSrv.createCustomer(name, email).subscribe(res => {
-    if(res.message === "All good"){
-        showToast(this.toastCtrl, `Un email a fost trimis la ${email} pentru a completa înregistrarea!`, 5000)
-        this.customer = res.customer
-        this.modalCtrl.dismiss(this.customer)
-    } else if(res.message === 'This email allrady exist'){
-      showToast(this.toastCtrl, 'Acest email există deja în baza de date!' , 5000)
-      this.customer = res.customer
-      this.addClientMode = false
-    }
-  })
+  if(this.addCustomerForm.valid){
+    const email = this.addCustomerForm.value.email
+    const name = this.addCustomerForm.value.name
+      this.customerSrv.createCustomer(name, email).subscribe(res => {
+        if(res.message === "All good"){
+            showToast(this.toastCtrl, `Un email a fost trimis la ${email} pentru a completa înregistrarea!`, 5000)
+            this.customer = res.customer
+            this.customer.userId = res.customer._id
+            this.modalCtrl.dismiss(this.customer)
+        } else if(res.message === 'This email allrady exist'){
+          showToast(this.toastCtrl, 'Acest email există deja în baza de date!' , 5000)
+          console.log(res)
+          this.customer = res.customer
+          this.customer.userId = res.customer._id
+          this.addClientMode = false
+        }
+      })
+  }
 
 }
 

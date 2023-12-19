@@ -18,7 +18,7 @@
 
 <ion-content [fullscreen]="true">
 <ion-grid>
-  <form [formGroup]="searchCustomerForm">
+  <form [formGroup]="addCustomerForm">
   <ion-row>
     <ion-col>
       <ion-item lines="none" class="input" *ngIf="addClientMode">
@@ -29,6 +29,8 @@
       </ion-item>
     </ion-col>
   </ion-row>
+</form>
+<form [formGroup]="searchCustomerForm">
   <ion-row>
     <ion-col>
       <ion-item lines="none" class="input" *ngIf="!addClientMode && !customer">
@@ -39,12 +41,12 @@
 </form>
   <ion-row>
     <ion-col *ngIf="!customer && addClientMode">
-      <ion-button size="large" expand="block" color="primary" (click)="addClient()">ADAUGĂ</ion-button>
+      <ion-button size="large" expand="block" color="primary" (click)="addClient()" [disabled]="!addCustomerForm.valid" >ADAUGĂ</ion-button>
       </ion-col>
   </ion-row>
   <ion-row>
     <ion-col *ngIf="!addClientMode && !customer">
-      <ion-button size="large" expand="block" color="tertiary" (click)="searchCustomer()">CAUTĂ</ion-button>
+      <ion-button size="large" expand="block" color="tertiary" (click)="searchCustomer()" [disabled]="!searchCustomerForm.valid">CAUTĂ</ion-button>
     </ion-col>
   </ion-row>
   <ion-row *ngIf="customer && !addClientMode">

@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import {  BehaviorSubject, from, map, tap } from "rxjs";
 import  {jwtDecode } from 'jwt-decode'
 import { Preferences } from "@capacitor/preferences";
+import {environment} from "../../environments/environment"
 import User from "./user.model";
 
 
@@ -20,9 +21,6 @@ user: {
 @Injectable({providedIn: 'root'})
 
 export class AuthService{
-  baseUrl: string = 'http://localhost:8080/auth/';
-  baseUrlHeroku: string = 'https://www.cafetish.com/api/';
-  newUrl: string = 'https://flow-api-394209.lm.r.appspot.com/auth/';
   activeLogoutTimer!: any;
 
 
@@ -71,7 +69,7 @@ export class AuthService{
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<any>(`${this.newUrl}login`,{email, password}, httpOptions)
+    return this.http.post<any>(`${environment.BASE_URL}login`,{email, password}, httpOptions)
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   }
 
@@ -81,20 +79,20 @@ export class AuthService{
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<{message: string, id: string}>(`${this.newUrl}register`,{name, email, password, confirmPassword, firstCart, survey, tel}, httpOptions);
+    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL}register`,{name, email, password, confirmPassword, firstCart, survey, tel}, httpOptions);
   };
 
   verifyToken(token: string){
-    return this.http.post<any>(`${this.newUrl}verify-token`, {token: token})
+    return this.http.post<any>(`${environment.BASE_URL}verify-token`, {token: token})
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   };
 
   sendResetEmail(email: string){
-   return this.http.post<AuthResData>(`${this.newUrl}send-reset-email`, {email});
+   return this.http.post<AuthResData>(`${environment.BASE_URL}send-reset-email`, {email});
   };
 
   resetPassword(token: string, password: string, confirmPassword: string){
-    return this.http.post(`${this.newUrl}reset-password`, {token, password, confirmPassword})
+    return this.http.post(`${environment.BASE_URL}reset-password`, {token, password, confirmPassword})
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   }
 

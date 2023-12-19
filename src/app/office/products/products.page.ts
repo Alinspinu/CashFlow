@@ -6,7 +6,7 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { ContentService } from 'src/app/content/content.service';
 import { ProductsService } from './products.service';
 import { Router } from '@angular/router';
-import { Product } from 'src/app/content/category.model';
+import { Product } from 'src/app/models/category.model';
 import { ActionSheet } from '@capacitor/action-sheet';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { CategoryPage } from '../CRUD/category/category.page';

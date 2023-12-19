@@ -35,142 +35,172 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<ion-header *ngIf="client">
+  <ion-toolbar color="secondary">
+    <ion-item lines="none" class="client-wrapper" color="secondary">
+      <span class="client-name">Nume:  {{client.name | capitalize}}</span>
+      <span class="client-email">Email: {{client.email}}</span>
+      <span class="client-phone">Telefon: {{client.telephone}}</span>
+      <span class="client-cashBack">Cash Back: {{client.cashBack}} Lei</span>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content [fullscreen]="true">
+<div class="contents-container">
+
+
+<ion-content [fullscreen]="false">
 <ion-grid>
-  <ion-row class="container">
-    <ion-col size-lg="5" size-md="12">
-      <ion-grid>
-        <ion-row *ngIf="showMainCats">
-            <ion-col size="6" *ngFor="let mainCat of getObjectKeys(mainCats)">
-              <ion-card (click)="showCategories(mainCat)">
-                <img alt="main category image" src="https://ionicframework.com/docs/img/demos/card-media.png" />
-                <ion-title  class="title">{{mainCat}}</ion-title>
-              </ion-card>
-            </ion-col>
-        </ion-row>
-         <ion-row *ngIf="showCats">
-            <ion-col size="4" *ngFor="let cat of categoriesToShow; let i = index">
-              <ion-card (click)="showProducts(i, cat.mainCat)">
-                <img alt="category image" [src]="cat.image.path" />
-                <ion-card-subtitle class="small-title">{{cat.name}}</ion-card-subtitle>
-              </ion-card>
-            </ion-col>
+          <ion-row *ngIf="showMainCats">
+              <ion-col size="6" *ngFor="let mainCat of getObjectKeys(mainCats)">
+                <ion-card (click)="showCategories(mainCat)">
+                  <img alt="main category image" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+                  <ion-title  class="title">{{mainCat}}</ion-title>
+                </ion-card>
+              </ion-col>
           </ion-row>
-          <ion-row *ngIf="showProd">
-            <ion-col size="4" *ngFor="let product of productsToShow">
-              <ion-card (click)="addToBill(product)">
-                  <img alt="image" class="prod-img" [src]="modifyImageURL(product.image.path)" />
-                <ion-card-subtitle class="small-title">{{product.name}}</ion-card-subtitle>
-              </ion-card>
-            </ion-col>
-         </ion-row>
-      </ion-grid>
-    </ion-col>
-    <ion-col size-lg="7" size-md="12">
-      <ion-grid class="bill">
-        <ion-row>
-          <ion-toolbar *ngIf="billToshow && billToshow.products.length">
-            <ion-item lines="none" class="client-wrapper" *ngIf="client">
-              <ion-label class="client-name">Nume:  {{client.name | capitalize}}</ion-label>
-              <!-- <ion-label class="client-email">{{client.email}}</ion-label> -->
-              <ion-label class="client-cashBack">{{client.cashBack}} Lei Cash Back</ion-label>
-            </ion-item>
-            <ion-buttons slot="end">
-              <ion-button class="client-button" (click)="addCustomer(clientMode)">
-                <ion-icon [src]=" clientMode ? '../../../assets/icon/add-outline.svg': '../../../assets/icon/trash-outline.svg'"></ion-icon>
-                {{clientMode ? 'ADAUGĂ CLIENT' : "ȘTERGE CLIENT"}}
+           <ion-row *ngIf="showCats">
+              <ion-col size="4" *ngFor="let cat of categoriesToShow; let i = index">
+                <ion-card (click)="showProducts(i, cat.mainCat)">
+                  <img alt="category image" [src]="cat.image.path" />
+                  <ion-card-subtitle class="small-title">{{cat.name}}</ion-card-subtitle>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="showProd">
+              <ion-col size="4" *ngFor="let product of productsToShow">
+                <ion-card (click)="addToBill(product)">
+                    <img alt="image" class="prod-img" [src]="modifyImageURL(product.image.path)" />
+                  <ion-card-subtitle class="small-title">{{product.name}}</ion-card-subtitle>
+                </ion-card>
+              </ion-col>
+           </ion-row>
+        </ion-grid>
+  </ion-content>
+
+<ion-content [fullscreen]="false">
+<ion-row>
+  <ion-col>
+    <ion-grid class="bill">
+      <ion-row>
+        <ion-col>
+
+        </ion-col>
+      </ion-row>
+      <!-- <ion-row class="bill-header-row" *ngIf="billProducts.length">
+        <ion-col size="12" class="ion-text-center ">
+          <ion-item class="product-item bill-header" lines="none">
+              <span class="prod-name" id="name">Nume</span>
+              <span class="prod-price" id="pret">Pret</span>
+              <div style="width:15px"></div>
+              <span class="prod-qty">Qty</span>
+              <div style="width:25px"></div>
+              <span class="prod-total">Total</span>
+          </ion-item>
+        </ion-col>
+      </ion-row> -->
+      <ion-row class="bill-content-row">
+        <ion-col size="12">
+          <ion-item class="product-item input" lines="none" *ngFor="let product of billProducts; let i = index" [ngClass]="{'grey': !product.sentToPrint}">
+            <ion-buttons slot="end" *ngIf="!product.sentToPrint">
+              <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings)">
+                <ion-icon color="danger" src="../../../assets/icon/trash-outline.svg"></ion-icon>
               </ion-button>
             </ion-buttons>
-          </ion-toolbar>
-
-        </ion-row>
-        <ion-row class="bill-header-row" *ngIf="billProducts.length">
-          <ion-col size="12" class="ion-text-center ">
-            <ion-item class="product-item bill-header" lines="none">
-                <span class="prod-name" id="name">Nume</span>
-                <span class="prod-price" id="pret">Pret</span>
-                <div style="width:15px"></div>
-                <span class="prod-qty">Qty</span>
-                <div style="width:25px"></div>
-                <span class="prod-total">Total</span>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-        <ion-row class="bill-content-row">
-          <ion-col size="12">
-            <ion-item class="product-item input" lines="none" *ngFor="let product of billProducts; let i = index">
-              <ion-thumbnail slot="start">
-                <img alt="image" [src]="modifyImageURL(product.imgPath)"/>
-              </ion-thumbnail>
-              <div class="prod-name">
-                <ion-label>{{product.name}}</ion-label>
-                <div class="toppings-wrapper" *ngIf="product.toppings.length">
-                  <span *ngFor="let topping of product.toppings">+{{topping.name}}</span>
-                </div>
+            <ion-thumbnail slot="start">
+              <img alt="image" [src]="modifyImageURL(product.imgPath)"/>
+            </ion-thumbnail>
+            <div class="prod-name" >
+              <span>{{product.name}}</span>
+              <div class="toppings-wrapper" *ngIf="product.toppings.length">
+                <span *ngFor="let topping of product.toppings">+{{topping.name}}</span>
               </div>
-                <ion-label class="prod-price">{{product.price}}</ion-label>
-                <ion-button size="medium" color="secondary" (click)="redProd(i)">-</ion-button>
-                <ion-label class="prod-qty">{{product.quantity}}</ion-label>
-                <ion-button size="medium" color="secondary"(click)="addProd(i)">+</ion-button>
-                <ion-label class="prod-total">{{product.total}} Lei</ion-label>
-            </ion-item>
+            </div>
+            <ion-buttons *ngIf="breakMode">
+              <ion-button (click)="break(i)" size="large" color="tertiary">
+                <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+              <span class="prod-price">{{product.price}} Lei</span>
+              <ion-button size="medium" color="secondary" (click)="redProd(i)" *ngIf="product.sentToPrint">-</ion-button>
+              <span class="prod-qty">{{product.quantity}} Buc</span>
+              <ion-button size="medium" color="secondary"(click)="addProd(i)" *ngIf="product.sentToPrint">+</ion-button>
+              <span class="prod-total">{{product.total}} Lei</span>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-col>
+</ion-row>
+</ion-content>
+
+</div>
+
+<ion-footer>
+  <ion-row>
+    <ion-col>
+      <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
+        <ion-row class="bill-discount-row" *ngIf="discountValue !== 0">
+          <ion-col size="10">
+            <span class="red-text">REDUCERE</span>
+          </ion-col>
+          <ion-col size="2" class="ion-text-center">
+            <span class="red-lei">- {{discountValue}} Lei</span>
           </ion-col>
         </ion-row>
-        <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
-          <ion-row class="bill-discount-row" *ngIf="discountValue !== 0">
-            <ion-col size="10">
-              <span class="red-text">REDUCERE</span>
-            </ion-col>
-            <ion-col size="2" class="ion-text-center">
-              <span class="red-lei">- {{discountValue}} Lei</span>
-            </ion-col>
-          </ion-row>
-          <ion-row class="bill-discount-row" *ngIf="billCashBack">
-            <ion-col size="10">
-              <span class="red-text">CASH BACK</span>
-            </ion-col>
-            <ion-col size="2" class="ion-text-center">
-              <span class="red-lei">- {{billCashBack}} Lei</span>
-            </ion-col>
-          </ion-row>
-          <ion-row class="bill-total-row">
-            <ion-col size="10">
-              <span class="total-text">TOTAL</span>
-            </ion-col>
-            <ion-col size="2" class="ion-text-center">
-              <span class="total-lei">{{billToshow.total}} Lei</span>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col size="6" *ngIf="client">
-              <ion-button size="large" expand="block" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)">
-               {{ cashBackMode ? 'FOLOSEȘTE CASHBACK' : 'ELIMINĂ CASH BACK'}}
-              </ion-button>
-            </ion-col>
-            <ion-col size="6" [offset]="discountOffset">
-              <ion-button size="large" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount(discountMode)">
-               {{ discountMode ? 'ADAUGĂ REDUCERE' : 'ELIMINĂ REDUCEREA'}}
-              </ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <ion-button size="large" expand="block" color="secondary" (click)="sendOrder()">
-                Trimite Comanda
-              </ion-button>
-            </ion-col>
-            <ion-col>
-              <ion-button size="large" expand="block" color="primary" (click)="payment()">
-                Nota de plată
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </div>
-      </ion-grid>
+        <ion-row class="bill-discount-row" *ngIf="billCashBack">
+          <ion-col size="10">
+            <span class="red-text">CASH BACK</span>
+          </ion-col>
+          <ion-col size="2" class="ion-text-center">
+            <span class="red-lei">- {{billCashBack}} Lei</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bill-total-row">
+          <ion-col size="10">
+            <span class="total-text">TOTAL</span>
+          </ion-col>
+          <ion-col size="2" class="ion-text-center">
+            <span class="total-lei">{{billToshow.total}} Lei</span>
+          </ion-col>
+        </ion-row>
+      </div>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" size="large" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
+              <ion-icon src="../../../assets/icon/hug.svg"></ion-icon>
+              UNEȘTE COMENZI
+            </ion-button>
+            <ion-button expand="block" size="large" (click)="breakOrder()" [disabled]="disableAction">
+              <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
+              SEPARĂ COMANDA
+            </ion-button>
+            <ion-button expand="block" size="large" color="danger" (click)="deleteOrder()" [disabled]="disableDelete">
+              <ion-icon src="../../../assets/icon/trash-outline.svg"></ion-icon>
+              ȘTERGE COMANDA
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button class="client-button" (click)="addCustomer(clientMode)" expand="block" size="large">
+              <ion-icon [src]=" clientMode ? '../../../assets/icon/add-outline.svg': '../../../assets/icon/trash-outline.svg'"></ion-icon>
+              {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE CLIENT"}}
+            </ion-button>
+            <ion-button size="large" expand="block" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)" *ngIf="client">
+              {{ cashBackMode ? 'FOLOSEȘTE CASHBACK' : 'ELIMINĂ CASH BACK'}}
+             </ion-button>
+             <ion-button size="large" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount(discountMode)">
+              {{ discountMode ? 'ADAUGĂ REDUCERE' : 'ELIMINĂ REDUCEREA'}}
+             </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button size="large" expand="block" color="secondary" (click)="sendOrder()">
+              Trimite Comanda
+            </ion-button>
+            <ion-button size="large" expand="block" color="primary" (click)="payment()">
+              Nota de plată
+            </ion-button>
+          </ion-col>
+        </ion-row>
     </ion-col>
   </ion-row>
-</ion-grid>
-
-</ion-content>
+</ion-footer>

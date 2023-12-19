@@ -37,9 +37,12 @@ export class Bill{
     public cashBack: number,
     public payOnSite: boolean,
     public payOnline: boolean,
-    public userName: string,
-    public userTel: string,
-    public user: string,
+    public clientInfo: {
+      name: string,
+      telephone: string,
+      userId: string,
+      cashBack: number,
+    },
     public cif: string,
     public show: boolean,
     public setName: boolean,
@@ -65,6 +68,8 @@ export class BillProduct{
    public toppings: Topping[],
    public ings: Ing[],
    public payToGo: boolean,
+   public printer: string,
+   public sentToPrint: boolean,
   ){}
 
 }

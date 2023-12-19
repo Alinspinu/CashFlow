@@ -1,4 +1,4 @@
-import { Ing, Topping } from "../tables/table.model";
+import { Ing, Topping } from "./table.model";
 
 export class Category{
   constructor(
@@ -29,6 +29,7 @@ export class Product {
   public available: boolean,
   public tva: string,
   public mainCat: string,
+  public printer: string,
   public longDescription: string,
   public allergens: {name: string, _id: string}[],
   public additives: {name: string, _id: string}[],
@@ -74,20 +75,5 @@ export class Ingredient{
 }
 
 
-export class billProduct{
-    constructor(
-     public _id: string,
-     public name: string,
-     public price: number,
-     public quantity: number,
-     public total: number,
-     public imgPath: string,
-     public category: string,
-     public mainCat: string,
-     public sub: boolean,
-     public toppings: string[],
-     public payToGo: boolean,
-    ){}
-}
 
 

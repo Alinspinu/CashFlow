@@ -10,9 +10,10 @@ import { ContentService } from 'src/app/content/content.service';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { RecipeMakerPage } from '../recipe-maker/recipe-maker.page';
 import { SubProductPage } from '../sub-product/sub-product.page';
-import { ActivatedRoute } from '@angular/router';
-import { Product } from 'src/app/content/category.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Product } from 'src/app/models/category.model';
 import { CategoryPage } from '../category/category.page';
+import { showToast } from 'src/app/shared/utils/toast-controller';
 
 
 @Component({
@@ -47,12 +48,15 @@ export class ProductPage implements OnInit {
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
     @Inject(ProductService) private prodSrv: ProductService,
     private route: ActivatedRoute,
+    private toastCtrl: ToastController,
+    private router: Router,
   ) { }
 
   ngOnInit() {
+    this.getProductToEdit()
     this.setupForm()
     this.getCategories()
-    this.getProductToEdit()
+    console.log(this.ingsToEdit)
   }
   getProductToEdit(){
     this.route.paramMap.subscribe(params => {
@@ -60,6 +64,7 @@ export class ProductPage implements OnInit {
       if(id && id !== '1'){
         this.prodSrv.getProduct(id).subscribe(response => {
           if(response){
+            console.log(response)
             this.product = response;
             this.editMode = true
             this.topToEdit = this.product.toppings;
@@ -75,6 +80,7 @@ export class ProductPage implements OnInit {
             this.form.get('order')?.setValue(this.product.order)
             this.form.get('dep')?.setValue(this.product.dep)
             this.form.get('tva')?.setValue(this.product.tva)
+            this.form.get('printer')?.setValue(this.product.printer)
           }
         })
        }
@@ -115,6 +121,7 @@ export class ProductPage implements OnInit {
 
   onTopRecive(ev: any){
     this.toppings = ev
+    console.log(this.toppings)
   }
 
   onIngRecive(ev: any){
@@ -167,6 +174,10 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
+      printer: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
       description: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
@@ -206,17 +217,19 @@ export class ProductPage implements OnInit {
       productData.append('dep', this.form.value.dep)
       productData.append('tva', this.form.value.tva)
       productData.append('image', this.form.value.image)
+      productData.append('printer', this.form.value.printer)
       const toppings = JSON.stringify(this.toppings)
       const ings = JSON.stringify(this.productIngredients)
       const sub = JSON.stringify(this.subProducts)
       const tempSubs = JSON.stringify(this.tempSubArray)
       if(this.editMode){
-        this.prodSrv.editProduct(productData, toppings, ings, sub).subscribe(response => {
-          console.log(response)
+        console.log(ings)
+        this.prodSrv.editProduct(productData, toppings, ings, sub, this.product._id).subscribe(response => {
+          showToast(this.toastCtrl, response.message, 5000);
+          this.router.navigateByUrl('/tabs/office/products')
         })
       } else {
         this.prodSrv.seaveProduct(productData, toppings, ings).subscribe(response => {
-          console.log(response)
           const product = response.product
           if(product){
             this.tempSubArray.map((obj:any) => {

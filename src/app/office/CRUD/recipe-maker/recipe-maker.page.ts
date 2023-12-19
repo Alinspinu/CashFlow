@@ -7,7 +7,7 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { PickQtyPage } from 'src/app/modals/pick-qty/pick-qty.page';
 import { IngredientPage } from '../ingredient/ingredient.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { CategoryPage } from '../category/category.page';
+import { InvIngredient } from 'src/app/models/nir.model';
 
 
 @Component({
@@ -26,11 +26,11 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   @Output() toppSend = new EventEmitter();
 
   form!: FormGroup
-  ingredients: any = [];
+  ingredients: InvIngredient[] = [];
   ingredientSearch!:any ;
 
   toppings: any = [];
-  productIngredients: any = [];
+  productIngredients: InvIngredient[] = [];
 
   recipeTotal: number = 0;
 
@@ -53,7 +53,9 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.setDataToEdit()
+    setTimeout(()=>{
+      this.setDataToEdit()
+    }, 1000)
   }
 
   deleteTop(index: number){
@@ -77,6 +79,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     const input = ev.detail.value;
     this.prodSrv.getIngredients(input).subscribe(response => {
       this.ingredients = response
+      console.log(response)
       if(input === ''){
         this.ingredients = []
       }
@@ -85,7 +88,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
 
 
-  async selectIngredient(ing: {um: string, name: string, qty: number, price: number}){
+  async selectIngredient(ing: InvIngredient){
     const data = await this.actionSrv.pickQty(PickQtyPage, {um: ing.um, name: ing.name});
     if(data){
       if(data.mode === 'topping'){

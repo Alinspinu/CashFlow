@@ -65,7 +65,10 @@
     </ion-col>
     <ion-col size="10">
       <ion-title class="ion-text-center">Adaugă Nir</ion-title>
-      <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor"  (ionInput)="searchSuplier($event)"></ion-searchbar>
+      <ion-item lines="none">
+        <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor"  (ionInput)="searchSuplier($event)"></ion-searchbar>
+        <img src="assets/icon/add-circle.svg" id="add-cat" (click)="addSuplier()">
+      </ion-item>
       <ion-list>
         <ion-item *ngFor="let suplier of supliers; let i = index" class="fur-name" (click)="selectSuplier(suplier)">
           <span>{{suplier.name}}</span>

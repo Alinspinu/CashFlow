@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { Product } from "src/app/content/category.model";
+import { Product } from "src/app/models/category.model";
 import {environment} from '../../../environments/environment'
 import { ProductService } from "../CRUD/product/product.service";
 
@@ -21,7 +21,7 @@ export class ProductsService{
 
 
   getProducts(filter: any, searchInput: string){
-    return this.http.post<Product[]>(`${environment.BASE_LOCAL_URL}office/get-products?search=${searchInput}`, {filter: filter})
+    return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products?search=${searchInput}`, {filter: filter})
   }
 
   saveCat(cat: any){

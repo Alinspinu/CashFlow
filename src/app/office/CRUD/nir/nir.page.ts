@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import {Preferences} from "@capacitor/preferences"
-import { Nir, NirIngredient } from './nir.model';
+import { Nir, NirIngredient } from '../../../models/nir.model';
 import { NirService } from './nir.service';
 import { round } from 'src/app/shared/utils/functions';
+import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { SuplierPage } from '../suplier/suplier.page';
 
 @Component({
   selector: 'app-nir',
@@ -35,13 +37,21 @@ valVanzare: number = 0;
 
 
   constructor(
-    @Inject(NirService) private nirSrv: NirService
+    @Inject(NirService) private nirSrv: NirService,
+    @Inject(ActionSheetService) private actionSht: ActionSheetService
   ) { }
 
   ngOnInit() {
     this.setupIngForm()
     this.setupNirForm()
     this.getIngs()
+  }
+
+
+ async addSuplier(){
+    const suplier = await this.actionSht.openModal(SuplierPage, '', false)
+    this.suplier = suplier
+    console.log(suplier)
   }
 
 
@@ -192,6 +202,7 @@ valVanzare: number = 0;
     const input = ev.detail.value;
     this.nirSrv.getIngredients(input).subscribe(response => {
       this.ingredients = response
+      console.log(response)
       if(input === ''){
         this.ingredients = []
       }

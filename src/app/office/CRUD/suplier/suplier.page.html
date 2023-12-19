@@ -9,12 +9,12 @@
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row>
-      <ion-col size="6" offset="3">
+      <ion-col>
         <form [formGroup]="suplierForm">
           <ion-item>
            <ion-input mode="ios" type="text" label="Denumire Firmă" labelPlacement="floating" formControlName="bussinessName"></ion-input>
           </ion-item>
-           <ion-item>
+           <ion-item *ngIf="personal">
             <ion-input mode="ios" type="text" label="Nume Locatie" labelPlacement="floating" formControlName="name"></ion-input>
            </ion-item>
            <ion-item>
@@ -41,7 +41,7 @@
               <ion-radio value="no" justify="start" labelPlacement="end">Neplătitor de TVA</ion-radio>
             </ion-item>
           </ion-radio-group>
-           <ion-button size="medium" color="primary" expand="block" (click)="addSuplier()">ADD Furnizor</ion-button>
+           <ion-button size="medium" color="primary" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid">Adaugă Furnizor</ion-button>
         </form>
       </ion-col>
     </ion-row>

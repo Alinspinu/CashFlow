@@ -27,8 +27,6 @@ export class RegisterPage implements OnInit {
 
   checkedTerms: boolean = false;
   enableRegister: boolean = false;
-  baseUrl: string = 'http://localhost:8080/api/';
-  newUrl: string = 'https://flow-api-394209.lm.r.appspot.com/api-true/';
   isLoading = false;
   form!: FormGroup;
   showPassword = false;

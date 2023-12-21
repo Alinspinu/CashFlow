@@ -32,6 +32,14 @@ const routes: Routes = [
     path: 'cashback',
     loadComponent: () => import('./modals/cashback/cashback.page').then( m => m.CashbackPage)
   },
+  {
+    path: 'add-employee-data',
+    loadComponent: () => import('./modals/add-employee-data/add-employee-data.page').then( m => m.AddEmployeeDataPage)
+  },
+  {
+    path: 'order-view',
+    loadComponent: () => import('./modals/order-view/order-view.page').then( m => m.OrderViewPage)
+  },
   // {
   //   path: 'pick-option',
   //   loadComponent: () => import('./modals/pick-option/pick-option.page').then( m => m.PickOptionPage)

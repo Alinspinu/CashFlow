@@ -5,6 +5,7 @@ import  {jwtDecode } from 'jwt-decode'
 import { Preferences } from "@capacitor/preferences";
 import {environment} from "../../environments/environment"
 import User from "./user.model";
+import { emptyUser } from "../shared/utils/empty-models";
 
 
 
@@ -24,7 +25,7 @@ export class AuthService{
   activeLogoutTimer!: any;
 
 
-  private user = new BehaviorSubject<User>(this.emptyUser());
+  private user = new BehaviorSubject<User>(emptyUser());
 
   get user$() {
       return from(Preferences.get({key: 'authData'})).pipe(map(data => {
@@ -39,6 +40,7 @@ export class AuthService{
             tokenExpirationDate: any,
             status: string,
             telephone: string,
+            employee: {position: string, name: string}
           };
           const tokenDate = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
           if(tokenDate <= 0){
@@ -69,7 +71,7 @@ export class AuthService{
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<any>(`${environment.BASE_URL}login`,{email, password}, httpOptions)
+    return this.http.post<any>(`${environment.BASE_URL}auth/login`,{email, password}, httpOptions)
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   }
 
@@ -79,20 +81,20 @@ export class AuthService{
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL}register`,{name, email, password, confirmPassword, firstCart, survey, tel}, httpOptions);
+    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL}auth/register`,{name, email, password, confirmPassword, firstCart, survey, tel}, httpOptions);
   };
 
   verifyToken(token: string){
-    return this.http.post<any>(`${environment.BASE_URL}verify-token`, {token: token})
+    return this.http.post<any>(`${environment.BASE_URL}auth/verify-token`, {token: token})
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   };
 
   sendResetEmail(email: string){
-   return this.http.post<AuthResData>(`${environment.BASE_URL}send-reset-email`, {email});
+   return this.http.post<AuthResData>(`${environment.BASE_URL}auth/send-reset-email`, {email});
   };
 
   resetPassword(token: string, password: string, confirmPassword: string){
-    return this.http.post(`${environment.BASE_URL}reset-password`, {token, password, confirmPassword})
+    return this.http.post(`${environment.BASE_URL}auth/reset-password`, {token, password, confirmPassword})
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   }
 
@@ -110,7 +112,8 @@ export class AuthService{
         email: userData.email,
         tokenExpirationDate: expirationDate,
         status: userData.status,
-        telephone: userData.telephone
+        telephone: userData.telephone,
+        employee: userData.employee
       });
       const tokenDate = new Date(expirationDate).getTime() - new Date().getTime();
       this.aoutoLogout(tokenDate);
@@ -140,20 +143,7 @@ export class AuthService{
     }, duration);
   };
 
-emptyUser(){
-  const user = {
-    _id: '',
-    name:'',
-    token:'',
-    cashBack: -1,
-    admin: 0,
-    email:'',
-    tokenExpirationDate: '',
-    status: '',
-    telephone: '',
-  };
-    return user
-}
+
 
 
 };

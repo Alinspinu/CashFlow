@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Adaugă date angajat</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 22px;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="auth-wrapper">
+  <ion-grid>
+    <form [formGroup]="form">
+  <ion-row>
+    <ion-col>
+      <ion-item lines="none" class="input">
+        <ion-input label="Nume Complet" labelPlacement="floating"  type="text" name="name" size=1 formControlName="fullName">
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input label="CNP" labelPlacement="floating"  type="text" name="cnp" formControlName="cnp">
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input label="Serie CI" labelPlacement="floating"  type="text" name="serial" formControlName="ciSerial">
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input label="Număr CI" labelPlacement="floating"  type="number" name="number" formControlName="ciNumber">
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-textarea label="Adresa" labelPlacement="floating"  type="text" name="adresa" formControlName="address">
+        </ion-textarea>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input label="Functie" labelPlacement="floating"  type="text" name="position"  formControlName="position">
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-select label="Acces aplicatie" placeholder="Level" formControlName="access">
+          <ion-select-option value="1">Level 1</ion-select-option>
+          <ion-select-option value="2">Level 2</ion-select-option>
+          <ion-select-option value="3">Level 3</ion-select-option>
+        </ion-select>
+    </ion-item>
+      </ion-col>
+  </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">
+          <ion-label>
+            ADAUGĂ
+          </ion-label>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+    </ion-grid>
+  </ion-content>

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { UsersService } from './users.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -13,18 +14,39 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class UsersPage implements OnInit {
+export class UsersPage implements OnInit, OnDestroy {
 
   userSearch: string = ''
   users: any = []
 
+  private unsubscribe$ = new Subject<void>();
+
   constructor(
     private usersSrv: UsersService,
-    private router: Router
-      ) { }
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+      ) {
+        this.router.events
+        .pipe(
+          filter(event => event instanceof NavigationEnd),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe(() => {
+          if (this.activatedRoute.snapshot.routeConfig?.path === 'users') {
+            this.getUsers('', '')
+          }
+        });
+
+      }
+
+    ngOnDestroy() {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
+
 
   ngOnInit() {
-    this.getUsers('', '')
+    // this.getUsers('', '')
   }
 
   onSelectUser(ev: CustomEvent){

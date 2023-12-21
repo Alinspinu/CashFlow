@@ -1,13 +1,13 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonContent, IonicModule, ToastController } from '@ionic/angular';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ContentService } from '../content.service';
 import { Category, Product } from '../../models/category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
-import { Bill, BillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
+import { Bill, BillProduct, deletetBillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
 import { Subscription } from 'rxjs';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
@@ -17,6 +17,10 @@ import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.
 import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
 import { DiscountPage } from 'src/app/modals/discount/discount.page';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
+import { AuthService } from 'src/app/auth/auth.service';
+import User from 'src/app/auth/user.model';
+import { environment } from 'src/environments/environment';
+import { emptyDeletetBillProduct, emptyTable } from 'src/app/shared/utils/empty-models';
 
 @Component({
   selector: 'app-table-content',
@@ -28,6 +32,9 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 export class TableContentPage implements OnInit, OnDestroy {
 
   @ViewChild('addNameInput') nameInput!: IonInput;
+  @ViewChild('billContent') content!: IonContent;
+
+
 
   discountValue: number = 0;
   discountMode: boolean = true
@@ -43,7 +50,7 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   orderName: string = ""
 
-  table: Table = this.tableSrv.emptyTable();
+  table: Table = emptyTable();
   tableNumber: number = 0;
 
   billCashBack!: number | null
@@ -64,23 +71,8 @@ export class TableContentPage implements OnInit, OnDestroy {
   disableMerge: boolean = true
   disableDelete: boolean = true
 
-  billProd: BillProduct = {
-   _id: '',
-   name: '',
-   price: 0,
-   quantity: 0,
-   total: 0,
-   imgPath: '',
-   category: '',
-   mainCat: '',
-   sub: false,
-   toppings: [],
-   payToGo: false,
-   newEntry: true,
-   ings: [],
-   printer: 'main',
-   sentToPrint: true
-  }
+  userSub!: Subscription;
+  user!: User;
 
   constructor(
     private route: ActivatedRoute,
@@ -88,6 +80,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private tableSrv: TablesService,
     private toastCtrl: ToastController,
+    private authSrv: AuthService
     ) { }
 
 
@@ -95,13 +88,15 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getTableNumber();
     this.getData();
     this.getBill();
+    this.getUser();
   }
-
-
 
   ngOnDestroy(): void {
     if(this.tabSub){
       this.tabSub.unsubscribe();
+    }
+    if(this.userSub){
+      this.userSub.unsubscribe()
     }
   }
 
@@ -135,7 +130,6 @@ export class TableContentPage implements OnInit, OnDestroy {
     })
   }
 
-
   getBill(){
     this.tabSub = this.tableSrv.tableSend$.subscribe(response => {
       if(response){
@@ -158,6 +152,18 @@ export class TableContentPage implements OnInit, OnDestroy {
      }
     }
     })
+  }
+
+  getUser(){
+  this.userSub = this.authSrv.user$.subscribe(response => {
+    if(response){
+      response.subscribe(user => {
+        if(user){
+          this.user = user;
+        }
+      })
+    }
+  })
   }
 
 
@@ -264,16 +270,16 @@ async addToBill(product: Product){
     options = itemsToSort.sort((a, b) => a.price - b.price)
   }
   if(options.length){
-    const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
-      if(extra) {
-         pickedToppings = extra
-         pickedToppings.forEach(el => {
-          optionPrice += el.price
-         })
-      }
+      const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
+        if(extra) {
+           pickedToppings = extra
+           pickedToppings.forEach(el => {
+            optionPrice += el.price
+           })
+    }
     }
     const totalPrice = price + optionPrice
-    const cartProduct = {
+    const cartProduct: BillProduct = {
       name: cartProdName,
       price: totalPrice,
       quantity: 1,
@@ -288,12 +294,18 @@ async addToBill(product: Product){
       newEntry: true,
       ings: ings,
       printer: product.printer,
-      sentToPrint: true
+      sentToPrint: true,
+      imgUrl: product.image.path
     };
     this.disableBrakeButton()
     this.disableDeleteOrderButton()
-    this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex )
-}
+    this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex)
+    if(this.billToshow.products.length > 5){
+      setTimeout(()=>{
+        this.content.scrollToBottom(300);
+      }, 200)
+    }
+  }
 
   addProd(billProIndex: number){
     this.tableSrv.addOne(this.tableNumber, billProIndex, this.billIndex)
@@ -304,24 +316,47 @@ async addToBill(product: Product){
   }
 
 
-  async openDeleteAlert(qty: number, index: number, ings: any){
+  async openDeleteAlert(qty: number, index: number, ings: any, product: BillProduct){
     let numberArr: string [] = []
+    let delProd: deletetBillProduct = emptyDeletetBillProduct()
     for(let i=1; i<=qty; i++){
       numberArr.push(i.toString())
     }
-    const choise = await this.actionSheet.deleteBillProduct(numberArr)
-    if(choise){
-      const buc = parseFloat(choise.qty)
-      for(let i=0; i<buc; i++){
-        this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
-        this.disableBrakeButton()
-      }
-      if(choise.upload){
-        this.tableSrv.uploadIngs(ings, qty).subscribe(response => {
-          if(response) {
-            showToast(this.toastCtrl, response.message, 4000)
+    const result = await this.actionSheet.deleteBillProduct(numberArr)
+    if(result){
+      const buc = parseFloat(result.qty);
+      const reason = await this.actionSheet.reasonAlert();
+        if(reason) {
+          for(let i=0; i<buc; i++){
+            this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
+            this.disableBrakeButton()
           }
-        })
+          delProd.billProduct = product
+          delProd.reason = reason;
+          delProd.employee = this.user.employee
+          delProd.locatie = environment.LOCATIE
+          delProd.billProduct.quantity = buc
+          delProd.billProduct.total = buc * delProd.billProduct.price
+          result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
+          this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
+            if(result.upload){
+              if(product.toppings.length){
+                 for(let topping of product.toppings){
+                  if(topping.name === "Lapte Vegetal"){
+                    this.tableSrv.uploadIngs([topping], buc).subscribe()
+                  }
+                 }
+              }
+              this.tableSrv.uploadIngs(ings, buc).subscribe(response => {
+                if(response) {
+                  showToast(this.toastCtrl, response.message, 4000)
+                }
+              })
+            }
+          })
+
+      } else {
+        showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
       }
       this.sendOrder()
 
@@ -419,10 +454,43 @@ async useCashBack(mode: boolean){
     let data = []
     if(this.billProducts && this.billProducts.length && !this.billProducts[0].sentToPrint){
       const choise = await this.actionSheet.deleteBill()
-      if(choise && choise.upload){
-          this.billProducts.forEach(el => {
-            this.tableSrv.uploadIngs(el.ings, el.quantity).subscribe()
+      if(choise){
+        const reason = await this.actionSheet.reasonAlert();
+        if(reason) {
+          this.billProducts.forEach((el: BillProduct) => {
+          let delProd: deletetBillProduct = emptyDeletetBillProduct()
+          const buc = el.quantity;
+          delProd.billProduct = el
+          delProd.reason = reason;
+          delProd.employee = this.user.employee
+          delProd.locatie = environment.LOCATIE
+          delProd.billProduct.quantity = buc
+          delProd.billProduct.total = buc * delProd.billProduct.price
+          choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
+          this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
+            if(choise.upload){
+              if(el.toppings.length){
+                 for(let topping of el.toppings){
+                  if(topping.name === "Lapte Vegetal"){
+                    this.tableSrv.uploadIngs([topping], buc).subscribe()
+                  }
+                 }
+              }
+              this.tableSrv.uploadIngs(el.ings, buc).subscribe(response => {
+                if(response) {
+                  showToast(this.toastCtrl, response.message, 3000)
+                }
+              })
+            }
           })
+        })
+
+
+
+        } else {
+          showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+        }
+
           data.push({id: this.billToshow._id})
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.tableSrv.deleteOrders(data).subscribe()
@@ -541,6 +609,10 @@ modifyImageURL(url: string): string {
 
 arraysAreEqual = (arr1: {}[], arr2: {}[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 
+
+
 }
+
+
 
 

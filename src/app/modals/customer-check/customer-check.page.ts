@@ -105,7 +105,6 @@ addClient(){
             this.modalCtrl.dismiss(this.customer)
         } else if(res.message === 'This email allrady exist'){
           showToast(this.toastCtrl, 'Acest email există deja în baza de date!' , 5000)
-          console.log(res)
           this.customer = res.customer
           this.customer.userId = res.customer._id
           this.addClientMode = false

@@ -33,3 +33,35 @@ align-items: center;
 
 }
 
+.order-wrapper{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.4rem 0 0.4rem 0.2rem;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  .nr{
+   width: 60px;
+   }
+   .date{
+    flex: 20%;
+   }
+   .prodLen{
+    flex: 10%;
+   }
+   .total{
+    flex: 10%;
+   }
+   .cashBack{
+    flex: 10%;
+   }
+   .discount{
+    flex: 10%;
+   }
+}
+
+.order-wrapper:hover{
+  --background: var(--ion-color-medium);
+}
+

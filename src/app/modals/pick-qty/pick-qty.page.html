@@ -16,7 +16,7 @@
       </ion-select>
     </ion-item>
     <ion-item lines="none" class="input">
-      <ion-input [label]="'Alege cantitatea' + ' ' + '/' + ' ' + (ingredient.um | capitalize)" labelPlacement="floating" type="number" [(ngModel)]="qty"></ion-input>
+      <ion-input [label]="'Alege cantitatea' + ' ' + '/' + ' ' + (ingredient.um | capitalize)" labelPlacement="floating" type="number" [(ngModel)]="qty" #ingInputQty></ion-input>
     </ion-item>
     <ion-item *ngIf="mode === 'topping'" lines="none" class="input">
       <ion-input label="Alege preț vanzare topping" labelPlacement="floating" type="number" [(ngModel)]="toppingPrice"></ion-input>

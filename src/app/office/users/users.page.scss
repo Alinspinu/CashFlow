@@ -22,6 +22,16 @@ ion-item[slot="fixed"]{
   flex-direction: row;
   align-items: flex-end;
   text-align: center;
+  .index{
+    width: 30px !important;
+    text-align: start !important;
+    margin: 10px 0 10px 0;
+  }
+  .index-h{
+    width: 40px !important;
+    text-align: start !important;
+    margin: 10px 0 10px 5px;
+  }
   .name{
     flex: 10%;
     text-align: start !important;

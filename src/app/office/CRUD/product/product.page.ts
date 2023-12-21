@@ -43,6 +43,8 @@ export class ProductPage implements OnInit {
   topToEdit!: any;
   ingsToEdit!: any;
 
+  isTva: boolean = true
+
   constructor(
     @Inject(ContentService) private contentSrv: ContentService,
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
@@ -56,7 +58,7 @@ export class ProductPage implements OnInit {
     this.getProductToEdit()
     this.setupForm()
     this.getCategories()
-    console.log(this.ingsToEdit)
+    this.setTvaValidators()
   }
   getProductToEdit(){
     this.route.paramMap.subscribe(params => {
@@ -85,6 +87,11 @@ export class ProductPage implements OnInit {
         })
        }
     })
+  }
+
+  setTvaValidators(){
+    const tvaControl = this.form.get('tva')
+    this.isTva ? tvaControl?.setValidators([Validators.required]) : tvaControl?.clearValidators()
   }
 
   async addCat(){
@@ -121,10 +128,10 @@ export class ProductPage implements OnInit {
 
   onTopRecive(ev: any){
     this.toppings = ev
-    console.log(this.toppings)
   }
 
   onIngRecive(ev: any){
+    console.log(ev)
     this.productIngredients = ev
   }
 
@@ -150,6 +157,7 @@ export class ProductPage implements OnInit {
 
   async onSubEdit(index: number){
     const subToEdit = this.subProducts[index]
+    console.log(subToEdit)
     const editedSub = await this.actSheet.openModal(SubProductPage, subToEdit, false)
     if(editedSub){
       this.subProducts[index] = editedSub
@@ -223,7 +231,6 @@ export class ProductPage implements OnInit {
       const sub = JSON.stringify(this.subProducts)
       const tempSubs = JSON.stringify(this.tempSubArray)
       if(this.editMode){
-        console.log(ings)
         this.prodSrv.editProduct(productData, toppings, ings, sub, this.product._id).subscribe(response => {
           showToast(this.toastCtrl, response.message, 5000);
           this.router.navigateByUrl('/tabs/office/products')

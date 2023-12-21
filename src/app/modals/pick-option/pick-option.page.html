@@ -42,7 +42,7 @@
       <ion-col size="8" offset="2">
         <ion-list>
             <ion-item *ngFor="let option of options" lines="none" class="input">
-              <ion-checkbox [value]="option"  justify="start" labelPlacement="end" (ionChange)="onCheckboxChange(option)">{{option.name}} + {{option.price}} Lei</ion-checkbox>
+              <ion-checkbox [value]="option"  justify="start" labelPlacement="end" (ionChange)="onCheckboxChange(option)">{{option.name}}{{ option.price > 0 ? ' + ' + option.price + ' Lei' : '' }}</ion-checkbox>
             </ion-item>
         </ion-list>
       </ion-col>

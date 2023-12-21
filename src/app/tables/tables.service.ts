@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, take, tap } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
+import { emptyBill, emptyTable } from "../shared/utils/empty-models";
 
 
 
@@ -15,12 +16,12 @@ export class TablesService{
 
   private tableState!: BehaviorSubject<Table[]>;
   public tableSend$!: Observable<Table[]>;
-  tables: Table[] = [this.emptyTable()];
+  tables: Table[] = [emptyTable()];
 
   constructor(
     private http: HttpClient,
   ){
-    this.tableState = new BehaviorSubject<Table[]>([this.emptyTable()]);
+    this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
   }
 
@@ -32,7 +33,7 @@ getBillIndex(tableIndex: number, billId: string){
 }
 
 addNewBill(masa: number, name: string){
-  let bill: Bill = this.emptyBill()
+  let bill: Bill = emptyBill()
   bill.name = name
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
@@ -44,7 +45,7 @@ addNewBill(masa: number, name: string){
 }
 
 mergeBills(masa: number, data: {billIndex: number, id: string}[]){
-  let mergedBills: Bill = this.emptyBill()
+  let mergedBills: Bill = emptyBill()
   let productsToMerge: any = []
   let total = 0
   let table = this.tables.find(doc => doc.index === masa)
@@ -92,7 +93,7 @@ removeBill(masa: number, billIndex: number){
 addToBill(product: BillProduct, masa: number, billIndex: number){
 const table = this.tables.find((doc) => doc.index === masa)
 if(table){
-  let bill: Bill = this.emptyBill()
+  let bill: Bill = emptyBill()
   if(table.bills.length){
     bill = table.bills[billIndex]
     bill.productCount++
@@ -118,6 +119,7 @@ if(table){
 }
 
  redOne(masa: number, billProdIndex: number, billIdex: number){
+  console.log(billIdex)
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     const bill = table.bills[billIdex]
@@ -149,7 +151,7 @@ addOne(masa: number, billProdIndex: number, billindex: number){
 addCustomer(customer: any, masa: number, billIndex: number){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
-    let bill: Bill = this.emptyBill()
+    let bill: Bill = emptyBill()
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = customer;
@@ -161,10 +163,10 @@ addCustomer(customer: any, masa: number, billIndex: number){
 redCustomer(masa: number, billIndex: number, billId: string){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
-    let bill: Bill = this.emptyBill()
+    let bill: Bill = emptyBill()
     if(table.bills.length){
       bill = table.bills[billIndex]
-      bill.clientInfo = this.emptyBill().clientInfo
+      bill.clientInfo = emptyBill().clientInfo
       this.saveTablesLocal(masa, billId, billIndex).subscribe()
   }
 }
@@ -225,6 +227,7 @@ saveTablesLocal(tableIndex:number, billId: string, billIndex: number){
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
+  console.log(bill)
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
@@ -245,55 +248,14 @@ deleteOrders(data: any[]){
   return this.http.put<{message: string}>(`${environment.BASE_URL}orders/bill`, {data: data})
 }
 
+registerDeletetProduct(product: any){
+  return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product})
+}
+
 
 //********************EMPTY MODELS**************************** */
 
-emptyTable(){
-  const emptyTable: Table = {_id: '', bills: [], index: 0, name: ''}
-  return emptyTable
-}
 
-
-emptyBill(){
-   const emptyBill = {
-    _id: '',
-    production: true,
-    index: 0,
-    masaRest: this.emptyTable(),
-    masa: 0,
-    productCount: 0,
-    tips: 0,
-    totalProducts: 0,
-    total: 0,
-    discount: 0,
-    status: 'open',
-    toGo: false,
-    pickUp: false,
-    completetime: 0,
-    paymentMethod: '',
-    payment: {
-      card: 0,
-      cash: 0,
-      viva: 0,
-      voucher: 0,
-    },
-    clientInfo: {
-      name: '',
-      telephone: '',
-      userId: '',
-      cashBack: 0,
-    },
-    cashBack: 0,
-    payOnSite: false,
-    payOnline: false,
-    cif: '',
-    show: false,
-    setName: false,
-    name: 'COMANDA',
-    products: [],
-  }
-  return emptyBill
-}
 
 arraysAreEqual = (arr1: Topping[], arr2: Topping[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 

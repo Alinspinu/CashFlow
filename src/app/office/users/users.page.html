@@ -2,6 +2,7 @@
 
 <ion-content [fullscreen]="true">
   <ion-item lines="none" class="header content-container" slot="fixed">
+    <span class="index-h">Nr.</span>
     <ion-label class="name">Nume</ion-label>
     <ion-label class="email">Email</ion-label>
     <ion-label class="tel">Telefon</ion-label>
@@ -27,9 +28,10 @@
         </ion-item>
         </ion-col>
     </ion-row>
-    <ion-row *ngFor="let user of users">
+    <ion-row *ngFor="let user of users; let i = index;">
       <ion-col>
         <ion-item lines="none" class="content-container input user" (click)="goUserPage(user._id)">
+          <span class="index">{{i+1}}.</span>
           <ion-label class="name">{{user.name}}</ion-label>
           <ion-label class="email">{{user.email}}</ion-label>
           <ion-label class="tel">{{user.telephone}}</ion-label>

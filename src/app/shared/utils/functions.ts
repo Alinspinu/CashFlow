@@ -16,3 +16,19 @@ export function modifyImageURL(url: string): string {
   const cropUrl = baseURL + cropParameters + '/v1' + parts[1];
   return cropUrl;
 }
+
+export function formatedDateToShow(date: any){
+  if(date){
+    const inputDate = new Date(date);
+    const hours = inputDate.getHours().toLocaleString();
+    const minutes = inputDate.getMinutes().toLocaleString();
+    const hour = hours.padStart(2, "0") + ":" + minutes.padStart(2, "0");
+    const monthNames = [
+      "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie",
+      "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"
+    ];
+    return `${inputDate.getDate().toString().padStart(2, '0')}-${monthNames[inputDate.getMonth()]}-${inputDate.getFullYear()} ora ${hour} `
+  } else {
+    return 'xx'
+  }
+  }

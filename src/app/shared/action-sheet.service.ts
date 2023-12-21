@@ -12,6 +12,8 @@ import { PaymentPage } from '../modals/payment/payment.page';
 import { CustomerCheckPage } from '../modals/customer-check/customer-check.page';
 import { CashbackPage } from '../modals/cashback/cashback.page';
 import { DiscountPage } from '../modals/discount/discount.page';
+import { AddEmployeeDataPage } from '../modals/add-employee-data/add-employee-data.page';
+import { OrderViewPage } from '../modals/order-view/order-view.page';
 
 
 
@@ -29,7 +31,8 @@ export class ActionSheetService {
                typeof SubProductPage |
                typeof CategoryPage |
                typeof PaymentPage |
-               typeof SuplierPage,
+               typeof SuplierPage |
+               typeof AddEmployeeDataPage,
     options: any,
     sub: boolean
                ) {
@@ -47,7 +50,9 @@ export class ActionSheetService {
     component: typeof PaymentPage |
                typeof CustomerCheckPage |
                typeof CashbackPage |
-               typeof DiscountPage,
+               typeof DiscountPage |
+               typeof AddEmployeeDataPage |
+               typeof OrderViewPage,
     options: any
   ){
     const modal = await this.modalCtrl.create({
@@ -213,15 +218,47 @@ export class ActionSheetService {
   }
 
 
+async reasonAlert(){
+  const alert = await this.alertController.create({
+    header: 'MOTIVUL ȘTERGERII',
+    message: `Scrie motivul pentru care produsul este șters!`,
+    buttons: [
+      {
+        text: 'CONFIRMĂ',
+        role: 'confirm',
+      },
+      {
+        text: 'RENUNȚĂ',
+        role: 'cancel',
+      },
+    ],
+    inputs: [
+      {
+      name: 'reason',
+      type: 'text',
+      placeholder: 'Scrie motivul'
 
+    },
+  ],
+    cssClass: 'deleteAlert'
+  });
+  await alert.present();
+  const result = await alert.onDidDismiss();
+  if(result.role === 'confirm' && result.data.values) {
+    return result.data.values.reason
+  } else {
+    return null
+  }
+}
 
   async deleteBillProduct(options: string[]) {
-    const inputs = options.map(option => {
+    const inputs = options.map((option, index) => {
       return {
           label: option + ' Buc',
           type: 'radio' as const,
           value: option,
-          cssClass: 'option'
+          cssClass: 'option',
+          checked: index === 0,
       };
   });
     const alert = await this.alertController.create({

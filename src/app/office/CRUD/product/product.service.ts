@@ -27,7 +27,6 @@ export class ProductService{
   }
 
   editProduct(product: any, toppings: string, ings: string, sub: string, id: string) {
-    console.log('')
     return this.http.put<{message: string, product: any}>(`${environment.BASE_URL}product/product?ings=${ings}&toppings=${toppings}&sub=${sub}&id=${id}`, product)
   }
 

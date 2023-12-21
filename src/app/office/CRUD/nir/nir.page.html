@@ -22,9 +22,9 @@
         <ion-input mode="ios" type="number" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input">
-        <ion-input  mode="ios" type="number" label="Pret/UM/Fara TVA" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
+        <ion-input  mode="ios" type="number" [label]="isTva ? 'Pret/UM/Fara TVA': 'Pret'" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
       </ion-item>
-      <ion-item lines="none" class="input">
+      <ion-item lines="none" class="input" *ngIf="isTva">
           <ion-select label="Cotă TVA %" placeholder="%" formControlName="tva">
             <ion-select-option value="19">19%</ion-select-option>
             <ion-select-option value="9">9%</ion-select-option>
@@ -32,10 +32,10 @@
             <ion-select-option value="0">0%</ion-select-option>
           </ion-select>
       </ion-item>
-      <ion-item lines="none" class="input">
+      <ion-item lines="none" class="input" *ngIf="isTva">
         <ion-input  mode="ios" type="number" label="Valoare" labelPlacement="floating" fill="outline" formControlName="value"></ion-input>
       </ion-item>
-      <ion-item lines="none" class="input">
+      <ion-item lines="none" class="input" *ngIf="isTva">
         <ion-input  mode="ios" type="number" label="Valoare TVA" labelPlacement="floating" fill="outline" formControlName="tvaValue"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input">

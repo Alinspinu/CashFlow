@@ -28,6 +28,8 @@ export class SubProductPage implements OnInit {
   toppings: any = [];
   productIngredients: any = [];
 
+  isTva: boolean = true;
+
   constructor(
     private modalCtrl: ModalController,
     private navParmas: NavParams
@@ -36,10 +38,17 @@ export class SubProductPage implements OnInit {
   ngOnInit() {
     this.getSubToEdit()
     this.setupForm()
+    this.setTvaValidators()
+  }
+
+  setTvaValidators(){
+    const tvaControl = this.form.get('tva')
+    this.isTva ? tvaControl?.setValidators([Validators.required]) : tvaControl?.clearValidators()
   }
 
   getSubToEdit(){
    this.sub =  this.navParmas.get('options')
+   console.log(this.sub)
    if(this.sub.name){
      if(this.sub.name.length){
       this.editMode = true
@@ -65,7 +74,7 @@ export class SubProductPage implements OnInit {
         ings: this.productIngredients,
         toppings: this.toppings,
         product: '',
-        _id: ''
+        _id: '',
       }
       if(this.editMode){
        subProduct.product = this.sub.product
@@ -118,7 +127,7 @@ export class SubProductPage implements OnInit {
   }
 
   onIngRecive(ev: any){
-    this.productIngredients = ev
+    this.productIngredients = ev;
   }
 
 }

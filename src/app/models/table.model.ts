@@ -1,4 +1,4 @@
-import { NonNullableFormBuilder } from "@angular/forms";
+
 
 export class Table{
   constructor(
@@ -8,8 +8,6 @@ export class Table{
     public bills: Bill[]
   ){}
 }
-
-
 
 export class Bill{
   constructor(
@@ -52,7 +50,6 @@ export class Bill{
 }
 
 
-
 export class BillProduct{
   constructor(
    public _id: string,
@@ -68,11 +65,12 @@ export class BillProduct{
    public toppings: Topping[],
    public ings: Ing[],
    public payToGo: boolean,
+   public imgUrl: string,
    public printer: string,
    public sentToPrint: boolean,
   ){}
-
 }
+
 
 export class Topping {
   constructor(
@@ -89,5 +87,18 @@ export class Ing{
     public name: String,
     public qty: Number,
     public price: number
+  ){}
+}
+
+export class deletetBillProduct{
+  constructor(
+   public billProduct: BillProduct,
+   public employee: {
+    name: string,
+    position: string,
+   },
+   public reason: string,
+   public locatie: string,
+   public inv: string,
   ){}
 }

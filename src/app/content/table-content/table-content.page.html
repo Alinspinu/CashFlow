@@ -78,7 +78,7 @@
         </ion-grid>
   </ion-content>
 
-<ion-content [fullscreen]="false">
+<ion-content [fullscreen]="false" #billContent>
 <ion-row>
   <ion-col>
     <ion-grid class="bill">
@@ -87,23 +87,11 @@
 
         </ion-col>
       </ion-row>
-      <!-- <ion-row class="bill-header-row" *ngIf="billProducts.length">
-        <ion-col size="12" class="ion-text-center ">
-          <ion-item class="product-item bill-header" lines="none">
-              <span class="prod-name" id="name">Nume</span>
-              <span class="prod-price" id="pret">Pret</span>
-              <div style="width:15px"></div>
-              <span class="prod-qty">Qty</span>
-              <div style="width:25px"></div>
-              <span class="prod-total">Total</span>
-          </ion-item>
-        </ion-col>
-      </ion-row> -->
       <ion-row class="bill-content-row">
         <ion-col size="12">
           <ion-item class="product-item input" lines="none" *ngFor="let product of billProducts; let i = index" [ngClass]="{'grey': !product.sentToPrint}">
             <ion-buttons slot="end" *ngIf="!product.sentToPrint">
-              <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings)">
+              <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings, product)">
                 <ion-icon color="danger" src="../../../assets/icon/trash-outline.svg"></ion-icon>
               </ion-button>
             </ion-buttons>

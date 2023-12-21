@@ -1,0 +1,61 @@
+<!-- <ion-header [translucent]="true">
+
+</ion-header> -->
+
+<ion-content [fullscreen]="true">
+  <ion-toolbar>
+    <ion-button size="large" color="primary" (click)="close()">
+     <ion-icon src="../../../assets/icon/close-outline.svg"></ion-icon>
+    </ion-button>
+   </ion-toolbar>
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-card *ngIf="order">
+        <ion-card-header>
+          <ion-card-title>{{formatDate(order.createdAt)}}</ion-card-title>
+          <ion-card-subtitle>Nr. {{order.index}} </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item lines="none" color="tertiary" class="input" *ngFor="let product of order.products">
+              <ion-thumbnail slot="start">
+                <img alt="Product Image" [src]="product.imgUrl" />
+              </ion-thumbnail>
+              <div class="prod-info-wrapper">
+                <span class="name">{{product.name}}</span>
+                <span class="qty">{{product.quantity}} Buc</span>
+                <span class="price">{{product.price * product.quantity}} Lei</span>
+              </div>
+            </ion-item>
+            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.cashBack > 0">
+              <div class="total-wrapper">
+                <span class="total-text">VALOARE PRODUSE</span>
+                <span class="total">{{order.cashBack + order.total+ order.discount}} Lei</span>
+              </div>
+            </ion-item>
+            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.cashBack > 0">
+              <div class="total-wrapper">
+                <span class="total-text">CASH BACK</span>
+                <span class="total"> - {{order.cashBack}} Lei</span>
+              </div>
+            </ion-item>
+            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.discount > 0">
+              <div class="total-wrapper">
+                <span class="total-text">DISCOUNT</span>
+                <span class="total"> - {{order.discount}} Lei</span>
+              </div>
+            </ion-item>
+            <ion-item lines="none" color="tertiary" class="input">
+              <div class="total-wrapper">
+                <span class="total-text">TOTAL</span>
+                <span class="total">{{order.total}} Lei</span>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>

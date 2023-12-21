@@ -55,7 +55,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   ngOnInit() {
     setTimeout(()=>{
       this.setDataToEdit()
-    }, 1000)
+    }, 200)
   }
 
   deleteTop(index: number){
@@ -69,9 +69,11 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   setDataToEdit(){
     if(this.top){
       this.toppings = this.top
+      console.log(this.top)
     }
     if(this.ings){
       this.productIngredients = this.ings
+      console.log(this.ings)
     }
   }
 
@@ -79,7 +81,6 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     const input = ev.detail.value;
     this.prodSrv.getIngredients(input).subscribe(response => {
       this.ingredients = response
-      console.log(response)
       if(input === ''){
         this.ingredients = []
       }

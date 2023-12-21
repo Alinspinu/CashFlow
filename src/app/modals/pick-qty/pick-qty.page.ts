@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
+import { IonInput } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-pick-qty',
@@ -14,6 +15,8 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 })
 export class PickQtyPage implements OnInit {
 
+  @ViewChild('ingInputQty') ingQty!: IonInput
+
   ingredient: {um: string, name: string} = {um: '', name: ''}
   qty!: number
   mode: string = 'ingredient'
@@ -23,6 +26,11 @@ export class PickQtyPage implements OnInit {
     private navParams: NavParams,
     private modalCtrl: ModalController
   ) { }
+
+  ionViewDidEnter() {
+    console.log(this.ingQty)
+    this.ingQty.setFocus();
+  }
 
   ngOnInit() {
     this.ingredient = this.navParams.get('ing')

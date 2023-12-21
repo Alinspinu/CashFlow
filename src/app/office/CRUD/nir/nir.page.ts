@@ -35,6 +35,8 @@ valTva: number = 0;
 valTotal: number = 0;
 valVanzare: number = 0;
 
+isTva: boolean = true
+
 
   constructor(
     @Inject(NirService) private nirSrv: NirService,
@@ -45,6 +47,16 @@ valVanzare: number = 0;
     this.setupIngForm()
     this.setupNirForm()
     this.getIngs()
+    this.setTvaValidators()
+  }
+
+  setTvaValidators(){
+    const tvaControl = this.ingredientForm.get('tva')
+    const tvaValueControl = this.ingredientForm.get('tvaValue')
+    const ValueControl = this.ingredientForm.get('value')
+    this.isTva ? tvaControl?.setValidators([Validators.required]) : tvaControl?.clearValidators()
+    this.isTva ? tvaValueControl?.setValidators([Validators.required]) : tvaValueControl?.clearValidators()
+    this.isTva ? ValueControl?.setValidators([Validators.required]) : ValueControl?.clearValidators()
   }
 
 
@@ -141,7 +153,6 @@ valVanzare: number = 0;
       valueControl.setValue(value, { emitEvent: false });
       tvaValueControl.setValue(round(tvaValue), { emitEvent: false })
       totalControl.setValue(tvaValue+value, { emitEvent: false })
-
     }
   };
 

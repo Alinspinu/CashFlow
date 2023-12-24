@@ -28,7 +28,7 @@ export const routes: Routes = [
       },
       {
         path: 'add-nir',
-        loadComponent: () => import('../office/CRUD/nir/nir.page').then( m => m.NirPage)
+        loadComponent: () => import('../office/nir/nir.page').then( m => m.NirPage)
       },
       {
         path: 'add-suplier',

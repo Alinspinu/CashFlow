@@ -18,11 +18,10 @@ export class ProductService{
     return this.http.get<Product>(`${environment.BASE_URL}product/get-product?id=${id}`)
   }
 
-  getIngredients(input: any){
-    return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients?prod=true`, {search: input})
-  }
 
-  seaveProduct(product: any, toppings: string, ings: string){
+
+
+  saveProduct(product: any, toppings: string, ings: string){
     return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?ings=${ings}&toppings=${toppings}`, product)
   }
 
@@ -34,9 +33,6 @@ export class ProductService{
   //   return this.http.post(`${environment.BASE_URL}product/seearch-category`, {search: input})
   // }
 
-  saveIng(ing: any){
-    return this.http.post<{message: string}>(`${environment.BASE_URL}ing/save-ingredient`, {ing: ing})
-  }
 
   deleteSubProduct(id: string){
     return this.http.delete(`${environment.BASE_URL}sub/sub-product?id=${id}`)

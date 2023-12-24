@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import {environment} from '../../../../environments/environment'
-import { Suplier } from "../../../models/suplier.model";
-import { Nir } from "../../../models/nir.model";
+import {environment} from '../../../environments/environment'
+import { Suplier } from "../../models/suplier.model";
+import { Nir } from "../../models/nir.model";
 
 
 
@@ -27,6 +27,6 @@ export class NirService{
   }
 
   getIngredients(input: any){
-    return this.http.post(`${environment.BASE_URL}office/search-ingredients`, {search: input})
+    return this.http.post(`${environment.BASE_URL}ing/search-ingredients`, {search: input})
   }
 }

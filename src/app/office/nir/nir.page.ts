@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import {Preferences} from "@capacitor/preferences"
-import { Nir, NirIngredient } from '../../../models/nir.model';
+import { Nir, NirIngredient } from '../../models/nir.model';
 import { NirService } from './nir.service';
 import { round } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { SuplierPage } from '../suplier/suplier.page';
+import { SuplierPage } from '../CRUD/suplier/suplier.page';
 
 @Component({
   selector: 'app-nir',

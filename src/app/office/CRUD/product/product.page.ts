@@ -43,6 +43,8 @@ export class ProductPage implements OnInit {
   topToEdit!: any;
   ingsToEdit!: any;
 
+  hideIng: boolean = false
+
   isTva: boolean = true
 
   constructor(
@@ -66,7 +68,7 @@ export class ProductPage implements OnInit {
       if(id && id !== '1'){
         this.prodSrv.getProduct(id).subscribe(response => {
           if(response){
-            console.log(response)
+            response.subProducts.length ? this.hideIng = true : this.hideIng = false
             this.product = response;
             this.editMode = true
             this.topToEdit = this.product.toppings;
@@ -98,7 +100,6 @@ export class ProductPage implements OnInit {
     const response = await this.actSheet.openModal(CategoryPage, null, false)
     if(response){
       this.prodSrv.saveCategory(response).subscribe(response => {
-       console.log(response)
       })
     }
 
@@ -131,8 +132,8 @@ export class ProductPage implements OnInit {
   }
 
   onIngRecive(ev: any){
-    console.log(ev)
     this.productIngredients = ev
+    console.log(ev)
   }
 
   deleteSub(index: number, id: string){
@@ -157,7 +158,6 @@ export class ProductPage implements OnInit {
 
   async onSubEdit(index: number){
     const subToEdit = this.subProducts[index]
-    console.log(subToEdit)
     const editedSub = await this.actSheet.openModal(SubProductPage, subToEdit, false)
     if(editedSub){
       this.subProducts[index] = editedSub
@@ -231,12 +231,13 @@ export class ProductPage implements OnInit {
       const sub = JSON.stringify(this.subProducts)
       const tempSubs = JSON.stringify(this.tempSubArray)
       if(this.editMode){
+        console.log(toppings)
         this.prodSrv.editProduct(productData, toppings, ings, sub, this.product._id).subscribe(response => {
-          showToast(this.toastCtrl, response.message, 5000);
+          showToast(this.toastCtrl, response.message, 3000);
           this.router.navigateByUrl('/tabs/office/products')
         })
       } else {
-        this.prodSrv.seaveProduct(productData, toppings, ings).subscribe(response => {
+        this.prodSrv.saveProduct(productData, toppings, ings).subscribe(response => {
           const product = response.product
           if(product){
             this.tempSubArray.map((obj:any) => {
@@ -262,7 +263,6 @@ export class ProductPage implements OnInit {
           imageData.replace(/^data:image\/(png|jpe?g|gif|webp);base64,/, ''),
           'image/jpeg'
           );
-          console.log()
       } catch (error) {
         console.log(error);
       };

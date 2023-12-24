@@ -3,14 +3,25 @@
   margin-left: 0.5rem;
 }
 img{
-  height: 25px;
+  height: 35px;
   cursor: pointer
+}
+img:active{
+  background-color: rgb(239, 239, 239);
+  border-radius: 4px;
+  padding: 3px;
 }
 
 .input{
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   margin: 1rem 0 0.5rem 0.5rem;
+}
+.input1{
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 1rem 0 0.5rem 0.5rem;
+  padding-left: 12px!important;
 }
 .input2{
   border: 0.5px solid var(--ion-color-medium);
@@ -33,7 +44,7 @@ img{
 }
 
 
-.fur-name{
+.ing-name{
   cursor: pointer;
   --background: var(--ion-color-warning-shade);
   border-radius: 8px;
@@ -41,6 +52,10 @@ img{
   span{
     color: var(--ion-color-warning-contrast);
   }
+}
+
+.prod-ing{
+  --background: var(--ion-color-danger)
 }
 
 .total{
@@ -57,8 +72,13 @@ img{
     margin-left: 0.6rem;
     flex: 30%;
   };
+  .cant{
+    flex: 18%;
+  };
   .price{
+    flex: 18%;
     text-align: end;
+    font-weight: 600;
   };
   .total{
     margin-left: 0.6rem;
@@ -71,9 +91,7 @@ img{
     // font-size: 18px;
     font-weight: 600;
   };
-  .sell-price{
-    text-align: end;
-    // font-size: 18px;
-    font-weight: 600;
+  .val{
+    flex: 10%;
   }
 }

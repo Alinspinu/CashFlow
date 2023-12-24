@@ -24,6 +24,10 @@ export const routes: Routes = [
         loadComponent: () => import('./users/users.page').then( m => m.UsersPage)
       },
       {
+        path: 'nir',
+        loadComponent: () => import('../office/nir/nir.page').then( m => m.NirPage)
+      },
+      {
         path: '',
         redirectTo: '/tabs/office/products',
         pathMatch: 'full',

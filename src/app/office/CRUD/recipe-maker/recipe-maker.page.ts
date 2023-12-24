@@ -7,7 +7,9 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { PickQtyPage } from 'src/app/modals/pick-qty/pick-qty.page';
 import { IngredientPage } from '../ingredient/ingredient.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { InvIngredient } from 'src/app/models/nir.model';
+import { RecipeMakerService } from './recipe-maker.service';
+import { ProductIngredient } from 'src/app/models/table.model';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -21,22 +23,33 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
   @Input() top: any
   @Input() ings: any
+  @Input() hideIng: boolean = false
+  @Input() hideTop: boolean = false
 
   @Output() ingsSend = new EventEmitter();
   @Output() toppSend = new EventEmitter();
 
   form!: FormGroup
-  ingredients: InvIngredient[] = [];
+  ingredients: any[]  = [];
   ingredientSearch!:any ;
 
+  productIngredientMode: boolean = false;
   toppings: any = [];
-  productIngredients: InvIngredient[] = [];
+
+  displayIngs: any[] = [];
+  ingredientsToSend: any[] = []
+
+  productIngName: string = '';
+  productIngUm: string = '';
+  productIngQty: string = '';
 
   recipeTotal: number = 0;
+
 
   constructor(
     @Inject(ProductService) private prodSrv: ProductService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
+    private recipeService: RecipeMakerService,
     private toastCtrl: ToastController
   ) { }
 
@@ -47,15 +60,52 @@ export class RecipeMakerPage implements OnInit, OnChanges {
       }
     } else if (changes['ings']) {
       if(changes['ings'].currentValue !== undefined) {
-        this.productIngredients = changes['ings'].currentValue
+        this.displayIngs = changes['ings'].currentValue
       }
     }
   }
 
   ngOnInit() {
+    console.log('ings', this.hideIng)
+    console.log('topping', this.hideTop)
     setTimeout(()=>{
       this.setDataToEdit()
-    }, 200)
+    }, 900)
+  }
+
+
+  switchMode(){
+    this.productIngredientMode = !this.productIngredientMode
+  }
+
+
+
+  saveProdIng(){
+    if(this.productIngredientMode){
+      this.displayIngs.forEach(el => {
+        el.qty = el.qty / +this.productIngQty
+      })
+      const prodIng: ProductIngredient = {
+        name: this.productIngName,
+        um: this.productIngUm,
+        qty: 1,
+        ings: this.displayIngs,
+        locatie: environment.LOCATIE,
+        price: this.round(this.recipeTotal / +this.productIngQty)
+      }
+      this.productIngQty = '1'
+      this.recipeTotal = +prodIng.price
+      this.recipeService.saveProductIngredient(prodIng).subscribe(response => {
+        if(response){
+          showToast(this.toastCtrl, response.message, 3000)
+          this.displayIngs = []
+          this.productIngredientMode = false,
+          this.productIngName = '';
+          this.productIngQty = '';
+          this.productIngUm = '';
+        }
+      })
+    }
   }
 
   deleteTop(index: number){
@@ -63,23 +113,21 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   }
 
   deleteIng(index: number){
-    this.productIngredients.splice(index, 1)
+    this.displayIngs.splice(index, 1)
   }
 
   setDataToEdit(){
     if(this.top){
       this.toppings = this.top
-      console.log(this.top)
     }
     if(this.ings){
-      this.productIngredients = this.ings
-      console.log(this.ings)
+      this.displayIngs = this.ings
     }
   }
 
   searchIngredient(ev: any){
     const input = ev.detail.value;
-    this.prodSrv.getIngredients(input).subscribe(response => {
+    this.recipeService.getIngredients(input).subscribe(response => {
       this.ingredients = response
       if(input === ''){
         this.ingredients = []
@@ -89,16 +137,21 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
 
 
-  async selectIngredient(ing: InvIngredient){
-    const data = await this.actionSrv.pickQty(PickQtyPage, {um: ing.um, name: ing.name});
+  async selectIngredient(ing: any){
+    const data = await this.actionSrv.pickQty(PickQtyPage, {um: ing.um, name: ing.name, hideTop: this.hideTop, hideIng: this.hideIng });
     if(data){
       if(data.mode === 'topping'){
+        let ings = []
+        if(ing.ings){
+          ings = ing.ings
+        }
         const topping = {
           name: ing.name,
           qty: data.qty,
           um: ing.um,
           price: data.price,
-          ingPrice: ing.price
+          ingPrice: ing.price,
+          ings: ings,
         }
         this.toppings.push(topping)
         this.toppSend.emit(this.toppings)
@@ -106,8 +159,8 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         this.ingredientSearch = '';
       } else if(data.mode === 'ingredient'){
         ing.qty = +data.qty;
-        this.productIngredients.push(ing);
-        this.ingsSend.emit(this.productIngredients)
+        this.displayIngs.push(ing);
+        this.ingsSend.emit(this.displayIngs)
         this.calcrRecipeTotal(ing);
         this.ingredients = [];
         this.ingredientSearch = '';
@@ -118,7 +171,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   async addIng(){
    const ing = await this.actionSrv.openModal(IngredientPage, [], false)
    if(ing){
-     this.prodSrv.saveIng(ing).subscribe(response => {
+     this.recipeService.saveIng(ing).subscribe(response => {
       showToast(this.toastCtrl, response.message, 4000)
      })
    }
@@ -130,7 +183,9 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 }
 
 calcrRecipeTotal(ing: any){
-    this.recipeTotal = this.recipeTotal+ (ing.price * ing.qty)
+    this.recipeTotal = this.recipeTotal + (ing.price * ing.qty)
 }
+
+
 
 }

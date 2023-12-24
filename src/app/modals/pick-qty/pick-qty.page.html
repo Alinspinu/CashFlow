@@ -11,8 +11,8 @@
   <ion-list class="list">
     <ion-item lines="none" class="input">
       <ion-select [(ngModel)]="mode" label="Salvează ca..">
-        <ion-select-option value="ingredient">Ingredient în rețetă</ion-select-option>
-        <ion-select-option value="topping">Topping extra</ion-select-option>
+        <ion-select-option value="ingredient" *ngIf="!ingredient.hideIng">Ingredient în rețetă</ion-select-option>
+        <ion-select-option value="topping" *ngIf="!ingredient.hideTop">Topping extra</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item lines="none" class="input">

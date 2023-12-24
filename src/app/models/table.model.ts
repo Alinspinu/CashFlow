@@ -86,7 +86,8 @@ export class Ing{
   constructor(
     public name: String,
     public qty: Number,
-    public price: number
+    public price: number,
+    public um: string
   ){}
 }
 
@@ -100,5 +101,17 @@ export class deletetBillProduct{
    public reason: string,
    public locatie: string,
    public inv: string,
+  ){}
+}
+
+
+export class ProductIngredient{
+  constructor(
+    public name: string,
+    public um: string,
+    public qty: number,
+    public ings: Ing[],
+    public price: Number,
+    public locatie: string,
   ){}
 }

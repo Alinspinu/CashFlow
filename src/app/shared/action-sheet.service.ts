@@ -67,7 +67,7 @@ export class ActionSheetService {
 
   async pickQty(
     component: typeof PickQtyPage,
-    ing: {um: string, name: string}
+    ing: {um: string, name: string, hideTop: boolean, hideIng: boolean}
   ){
     const modal = await this.modalCtrl.create({
       component: component,

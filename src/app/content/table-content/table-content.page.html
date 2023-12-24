@@ -47,8 +47,6 @@
 </ion-header>
 
 <div class="contents-container">
-
-
 <ion-content [fullscreen]="false">
 <ion-grid>
           <ion-row *ngIf="showMainCats">
@@ -77,7 +75,6 @@
            </ion-row>
         </ion-grid>
   </ion-content>
-
 <ion-content [fullscreen]="false" #billContent>
 <ion-row>
   <ion-col>
@@ -98,10 +95,10 @@
             <ion-thumbnail slot="start">
               <img alt="image" [src]="modifyImageURL(product.imgPath)"/>
             </ion-thumbnail>
-            <div class="prod-name" >
+            <div class="prod-name">
               <span>{{product.name}}</span>
               <div class="toppings-wrapper" *ngIf="product.toppings.length">
-                <span *ngFor="let topping of product.toppings">+{{topping.name}}</span>
+                <span *ngFor="let topping of product.toppings">+{{topping.name.split('/')[0]}}</span>
               </div>
             </div>
             <ion-buttons *ngIf="breakMode">

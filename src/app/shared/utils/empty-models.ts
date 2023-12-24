@@ -1,5 +1,5 @@
 import User from "src/app/auth/user.model";
-import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
+import { Bill, BillProduct, deletetBillProduct, ProductIngredient, Table } from "src/app/models/table.model";
 
 export function emptyUser(){
   const user: User = {
@@ -96,4 +96,16 @@ export function emptyBill(){
     products: [],
   }
   return emptyBill
+}
+
+export function emptyProIng(){
+  const emptyProdIng: ProductIngredient = {
+    name: '',
+    um: '',
+    qty: 0,
+    ings: [],
+    locatie: '',
+    price: 0,
+  }
+  return emptyProdIng
 }

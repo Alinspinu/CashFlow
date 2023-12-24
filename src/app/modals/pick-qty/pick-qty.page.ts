@@ -17,7 +17,7 @@ export class PickQtyPage implements OnInit {
 
   @ViewChild('ingInputQty') ingQty!: IonInput
 
-  ingredient: {um: string, name: string} = {um: '', name: ''}
+  ingredient: {um: string, name: string, hideTop: boolean, hideIng: boolean} = {um: '', name: '', hideTop: false, hideIng: false}
   qty!: number
   mode: string = 'ingredient'
   toppingPrice!: number
@@ -28,12 +28,16 @@ export class PickQtyPage implements OnInit {
   ) { }
 
   ionViewDidEnter() {
-    console.log(this.ingQty)
     this.ingQty.setFocus();
   }
 
   ngOnInit() {
     this.ingredient = this.navParams.get('ing')
+   if( this.ingredient.hideIng){
+      this.mode = 'topping'
+    } else {
+      this.mode = 'ingredient'
+    }
   }
 
   dismissModal(){

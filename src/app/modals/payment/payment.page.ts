@@ -22,6 +22,7 @@ export class PaymentPage implements OnInit {
   tempTotal!: number
   order!: Bill
   button: string = 'ÎNCASEAZĂ'
+  disableCancelButton: boolean = false
 
   paymentForm!: FormGroup
 
@@ -70,15 +71,14 @@ export class PaymentPage implements OnInit {
 
 
   cancel(){
-    this.modalCtrl.dismiss(null)
+    if(!this.disableCancelButton){
+      this.modalCtrl.dismiss(null)
+    }
   }
 
-  cashIn(){
+ async cashIn(){
     const posSum = this.paymentForm.value.viva
    if(this.checkTotal()){
-    if(posSum && posSum > 0){
-      this.checkPos(posSum)
-    }
     const pay = {
       cash: this.paymentForm.value.cash,
       card: this.paymentForm.value.card,
@@ -87,8 +87,29 @@ export class PaymentPage implements OnInit {
       cif: this.paymentForm.value.cif,
       online: this.paymentForm.value.online
     }
-    this.modalCtrl.dismiss(pay)
-   } else {
+    if(posSum && posSum > 0){
+      this.disableCancelButton = true
+      this.paySrv.checkPos(posSum).subscribe(response => {
+        if(response){
+          if(response.payment){
+            showToast(this.toastCtrl, response.message, 2000)
+            this.disableCancelButton = false
+            return this.modalCtrl.dismiss(pay)
+          } else {
+            showToast(this.toastCtrl, response.message, 2000)
+            this.disableCancelButton = false
+            return 
+          }
+        } else {
+          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000)
+          this.disableCancelButton = false
+          return 
+        }
+      })
+    } else {
+      this.modalCtrl.dismiss(pay)
+    }
+} else {
     showToast(this.toastCtrl, "Valoare încasată trebuie sa fie egală cu nota de plată!", 5000)
    }
   }
@@ -177,10 +198,19 @@ export class PaymentPage implements OnInit {
       }
     }
 
-    checkPos(sum: number){
+   checkPos(sum: number){
       this.paySrv.checkPos(sum).subscribe(response => {
         if(response){
-          console.log(response)
+          if(response.payment){
+            showToast(this.toastCtrl, response.message, 2000)
+            return true
+          } else {
+            showToast(this.toastCtrl, response.message, 2000)
+            return false
+          }
+        } else {
+          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000)
+          return false
         }
       })
     }

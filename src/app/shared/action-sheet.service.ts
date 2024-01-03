@@ -62,7 +62,9 @@ export class ActionSheetService {
     const modal = await this.modalCtrl.create({
       component: component,
       componentProps: {options: options},
-      cssClass: 'billModal'
+      backdropDismiss: false,
+      cssClass: 'billModal',
+
     });
     modal.present();
     const { data } = await modal.onDidDismiss();

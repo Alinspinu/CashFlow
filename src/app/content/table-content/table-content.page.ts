@@ -405,6 +405,7 @@ async payment(){
       this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
         if(response){
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+          this.billToshow.discount = 0
           this.billProducts = []
           this.home()
         }

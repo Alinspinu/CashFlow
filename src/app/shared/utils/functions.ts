@@ -32,3 +32,19 @@ export function formatedDateToShow(date: any){
     return 'xx'
   }
   }
+
+
+  export function getPaymentMethod(paymentObject: any){
+      let paymentMethod: {method: string, value: number}[] = []
+      Object.keys(paymentObject).forEach(key => {
+        if(paymentObject[key] && paymentObject[key] > 0){
+          let data = {
+            method: key,
+            value: paymentObject[key]
+          }
+          paymentMethod.push(data)
+        }
+      });
+      return paymentMethod
+
+  }

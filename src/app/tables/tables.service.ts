@@ -5,6 +5,7 @@ import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../shared/utils/empty-models";
+import {AuthService} from "../auth/auth.service"
 
 
 
@@ -18,8 +19,11 @@ export class TablesService{
   public tableSend$!: Observable<Table[]>;
   tables: Table[] = [emptyTable()];
 
+  user!: any;
+
   constructor(
     private http: HttpClient,
+    private authSrv: AuthService
   ){
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
@@ -44,7 +48,7 @@ addNewBill(masa: number, name: string){
   }
 }
 
-mergeBills(masa: number, data: {billIndex: number, id: string}[]){
+mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any){
   let mergedBills: Bill = emptyBill()
   let productsToMerge: any = []
   let total = 0
@@ -66,14 +70,14 @@ mergeBills(masa: number, data: {billIndex: number, id: string}[]){
     mergedBills.total = total;
     table.bills.push(mergedBills);
     let newIndex = bills.findIndex(obj => obj.name === 'UNITE')
-    this.saveTablesLocal(masa, 'new', newIndex).subscribe()
+    this.saveTablesLocal(masa, 'new', newIndex, employee).subscribe()
   }
 }
 
-manageSplitBills(tableIndex: number, billIndex: number){
+manageSplitBills(tableIndex: number, billIndex: number, employee: any){
   let bill = this.tables[tableIndex-1].bills[billIndex]
   bill._id.length ? bill._id = bill._id : bill._id = 'new'
-  this.saveTablesLocal(tableIndex, bill._id, billIndex).subscribe()
+  this.saveTablesLocal(tableIndex, bill._id, billIndex, employee).subscribe()
 }
 
 removeBill(masa: number, billIndex: number){
@@ -146,6 +150,17 @@ addOne(masa: number, billProdIndex: number, billindex: number){
   }
 }
 
+
+addComment(masa: number, billProdIndex: number, billIndex: number, comment: string){
+  const table = this.tables.find((doc) => doc.index === masa)
+  if(table){
+    const bill = table.bills[billIndex]
+    const product =  bill.products[billProdIndex]
+    product.comment = comment
+    this.tableState.next([...this.tables])
+  }
+}
+
 //*********************CLIENTS**************************** */
 
 addCustomer(customer: any, masa: number, billIndex: number){
@@ -160,19 +175,17 @@ addCustomer(customer: any, masa: number, billIndex: number){
 }
 }
 
-redCustomer(masa: number, billIndex: number, billId: string){
+redCustomer(masa: number, billIndex: number, billId: string, employee: any){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     let bill: Bill = emptyBill()
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = emptyBill().clientInfo
-      this.saveTablesLocal(masa, billId, billIndex).subscribe()
+      this.saveTablesLocal(masa, billId, billIndex, employee).subscribe()
   }
 }
 }
-
-
 
 
 //**********************HTTP REQ******************* */
@@ -221,13 +234,13 @@ deleteTable(tableId: string, index: number){
   }))
 }
 
-saveTablesLocal(tableIndex:number, billId: string, billIndex: number){
+saveTablesLocal(tableIndex:number, billId: string, billIndex: number, employee: any){
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
-  console.log(bill)
+  bill.employee = employee
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
@@ -250,6 +263,10 @@ deleteOrders(data: any[]){
 
 registerDeletetProduct(product: any){
   return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product})
+}
+
+sendBillToPrint(bill: Bill){
+  return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
 }
 
 

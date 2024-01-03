@@ -40,7 +40,7 @@ export class AuthService{
             tokenExpirationDate: any,
             status: string,
             telephone: string,
-            employee: {position: string, name: string}
+            employee: {position: string, fullName: string, user: string}
           };
           const tokenDate = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
           if(tokenDate <= 0){
@@ -113,7 +113,12 @@ export class AuthService{
         tokenExpirationDate: expirationDate,
         status: userData.status,
         telephone: userData.telephone,
-        employee: userData.employee
+        employee: {
+          fullName: userData.employee.fullName,
+          position: userData.employee.position,
+          access: userData.employee.access,
+          user: decodedToken.userId
+        }
       });
       const tokenDate = new Date(expirationDate).getTime() - new Date().getTime();
       this.aoutoLogout(tokenDate);
@@ -142,8 +147,5 @@ export class AuthService{
       this.logout();
     }, duration);
   };
-
-
-
 
 };

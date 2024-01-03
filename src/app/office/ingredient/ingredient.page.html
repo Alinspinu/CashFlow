@@ -1,0 +1,44 @@
+
+<ion-content [fullscreen]="true">
+  <ion-item lines="none" class="header content-container" slot="fixed">
+    <span class="name">Nume</span>
+    <span class="gestiune">Gestiune</span>
+    <span class="um">UM</span>
+    <span class="qty">Cantitate Inv</span>
+    <ion-icon  class="edit"></ion-icon>
+    <ion-icon  class="delete"></ion-icon>
+  </ion-item>
+  <ion-grid>
+<app-recipe-maker
+(ingsSend)="onIngRecive($event)"
+(toppSend)="onTopRecive($event)"
+(search)="searchRecive($event)"
+[ingPage]="true"
+[hideIng]="false">
+[top]="topToEdit"
+[ings]="ingsToEdit"
+</app-recipe-maker>
+<div style="margin-top:40px;">
+  <ion-row *ngFor="let ing of ingredients">
+    <ion-col>
+      <ion-item class="content-container product input" lines="none">
+        <span class="name">{{ing.name}}</span>
+        <span class="gestiune">{{ing.gestiune}}</span>
+        <span class="um">{{ing.um}}</span>
+        <span class="qty">{{ing.ings.length ? 1 : ing.qty}}</span>
+        <ion-icon  src="../../assets/icon/create-outline.svg" (click)="ingEdit(ing)" class="edit"></ion-icon>
+        <ion-icon  src="../../assets/icon/trash-outline.svg" (click)="deleteIng(ing._id, ing.name)" class="delete"></ion-icon>
+      </ion-item>
+      <div *ngIf="ing.ings.length" class="sub-container">
+        <ion-item *ngFor="let ingr of ing.ings" lines="none" class="content-container" (click)="ingEdit(ing._id)">
+          <span class="name">{{ingr.ing.name}}</span>
+          <span class="gestiune">{{ingr.ing.gestiune}}</span>
+          <span class="um">{{ingr.ing.um}}</span>
+          <span class="qty">{{ingr.qty}}</span>
+        </ion-item>
+      </div>
+    </ion-col>
+  </ion-row>
+</div>
+  </ion-grid>
+</ion-content>

@@ -31,11 +31,7 @@
         </ion-list>
       </ion-col>
     </ion-row>
-    <ion-row class="button-row">
-      <ion-col size="8" offset="2">
-        <ion-button color="primary" expand="block" size="large"(click)="pick()" [disabled]="!selectedOption">Alege</ion-button>
-      </ion-col>
-    </ion-row>
+
   </ion-grid>
   <ion-grid class="option-grid" *ngIf="!sub">
     <ion-row class="option-row">
@@ -47,13 +43,23 @@
         </ion-list>
       </ion-col>
     </ion-row>
-    <ion-row class="button-row">
-      <ion-col size="4" offset="2">
-        <ion-button color="danger" expand="block" size="large"(click)="back()">Renunță</ion-button>
-      </ion-col>
-      <ion-col size="4">
-        <ion-button color="primary" expand="block" size="large"(click)="pick()">Alege</ion-button>
-      </ion-col>
-    </ion-row>
   </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row class="button-row" *ngIf="sub">
+      <ion-col size="8" offset="2">
+        <ion-button color="primary" expand="block" size="large"(click)="pick()" [disabled]="!selectedOption">Alege</ion-button>
+      </ion-col>
+    </ion-row>
+  <ion-row class="button-row" *ngIf="!sub">
+    <ion-col size="4" offset="2">
+      <ion-button color="danger" expand="block" size="large"(click)="back()">Renunță</ion-button>
+    </ion-col>
+    <ion-col size="4">
+      <ion-button color="primary" expand="block" size="large"(click)="pick()">Alege</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-footer>

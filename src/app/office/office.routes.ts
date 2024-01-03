@@ -12,6 +12,10 @@ export const routes: Routes = [
           import('../office/products/products.page').then((m) => m.ProductsPage),
       },
       {
+        path: 'ingredient',
+        loadComponent: () => import('./ingredient/ingredient.page').then( m => m.IngredientPage)
+      },
+      {
         path: 'live-stoc',
         loadComponent: () => import('./live-stoc/live-stoc.page').then( m => m.LiveStocPage)
       },
@@ -38,6 +42,10 @@ export const routes: Routes = [
     path: '',
     redirectTo: '/tabs/office/products',
     pathMatch: 'full',
+  },
+  {
+    path: 'product-ingredient',
+    loadComponent: () => import('./CRUD/product-ingredient/product-ingredient.page').then( m => m.ProductIngredientPage)
   },
 
 ];

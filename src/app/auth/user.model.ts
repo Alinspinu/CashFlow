@@ -9,7 +9,7 @@ export default class User {
     public status: string,
     public email: string,
     public tokenExpirationDate: string,
-    public employee: {name: string, position: string}
+    public employee: {fullName: string, position: string, user: string}
   ){}
   };
 

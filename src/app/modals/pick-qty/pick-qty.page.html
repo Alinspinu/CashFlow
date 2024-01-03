@@ -7,21 +7,25 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content (keyup.enter)="saveData()">
   <ion-list class="list">
     <ion-item lines="none" class="input">
       <ion-select [(ngModel)]="mode" label="Salvează ca..">
-        <ion-select-option value="ingredient" *ngIf="!ingredient.hideIng">Ingredient în rețetă</ion-select-option>
-        <ion-select-option value="topping" *ngIf="!ingredient.hideTop">Topping extra</ion-select-option>
+        <ion-select-option value="ingredient" >Ingredient în rețetă</ion-select-option>
+        <ion-select-option value="topping" >Topping extra</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item lines="none" class="input">
       <ion-input [label]="'Alege cantitatea' + ' ' + '/' + ' ' + (ingredient.um | capitalize)" labelPlacement="floating" type="number" [(ngModel)]="qty" #ingInputQty></ion-input>
     </ion-item>
     <ion-item *ngIf="mode === 'topping'" lines="none" class="input">
-      <ion-input label="Alege preț vanzare topping" labelPlacement="floating" type="number" [(ngModel)]="toppingPrice"></ion-input>
+      <ion-input label="Alege preț vanzare topping" labelPlacement="floating" type="number" [(ngModel)]="toppingPrice" ></ion-input>
     </ion-item>
-    <ion-button id="submit" expand="block" (click)="saveData()">Adaugă</ion-button>
+
   </ion-list>
 </ion-content>
+
+<ion-footer>
+  <ion-button id="submit" size="large" expand="block" (click)="saveData()">Adaugă</ion-button>
+</ion-footer>
 

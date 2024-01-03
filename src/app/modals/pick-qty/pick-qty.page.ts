@@ -40,6 +40,11 @@ export class PickQtyPage implements OnInit {
     }
   }
 
+  enterPress(event: any){
+    console.log(event)
+    console.log('Enter key pressed in modal');
+  }
+
   dismissModal(){
     this.modalCtrl.dismiss(null)
   }

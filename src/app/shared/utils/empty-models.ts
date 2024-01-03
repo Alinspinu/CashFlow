@@ -1,5 +1,5 @@
 import User from "src/app/auth/user.model";
-import { Bill, BillProduct, deletetBillProduct, ProductIngredient, Table } from "src/app/models/table.model";
+import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 
 export function emptyUser(){
   const user: User = {
@@ -12,10 +12,12 @@ export function emptyUser(){
     tokenExpirationDate: '',
     status: '',
     telephone: '',
-    employee: {name: '', position: ''}
+    employee: {fullName: '', position: '', user: ''}
   };
     return user
 }
+
+
 
 export function  emptyBillProduct(){
   const billProduct: BillProduct = {
@@ -35,6 +37,8 @@ export function  emptyBillProduct(){
     printer: 'main',
     sentToPrint: true,
     imgUrl: '',
+    comment: '',
+    tva: '',
   }
   return billProduct
  }
@@ -43,7 +47,7 @@ export function  emptyBillProduct(){
   const deletetBillProduct: deletetBillProduct = {
     billProduct: emptyBillProduct(),
     reason: '',
-    employee: {name: '', position: ''},
+    employee: {fullName: '', position: '', user: ''},
     locatie: '',
     inv: '',
   }
@@ -79,12 +83,19 @@ export function emptyBill(){
       cash: 0,
       viva: 0,
       voucher: 0,
+      online: 0,
     },
     clientInfo: {
       name: '',
       telephone: '',
       userId: '',
       cashBack: 0,
+    },
+    employee: {
+      access: 0,
+      fullName: '',
+      position: '',
+      user: '',
     },
     cashBack: 0,
     payOnSite: false,
@@ -94,18 +105,8 @@ export function emptyBill(){
     setName: false,
     name: 'COMANDA',
     products: [],
+    createdAt: '',
   }
   return emptyBill
 }
 
-export function emptyProIng(){
-  const emptyProdIng: ProductIngredient = {
-    name: '',
-    um: '',
-    qty: 0,
-    ings: [],
-    locatie: '',
-    price: 0,
-  }
-  return emptyProdIng
-}

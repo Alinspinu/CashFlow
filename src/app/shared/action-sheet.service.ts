@@ -3,7 +3,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { PickOptionPage } from '../modals/pick-option/pick-option.page';
 import { SuplierPage } from '../office/CRUD/suplier/suplier.page';
 import { PickQtyPage } from '../modals/pick-qty/pick-qty.page';
-import { IngredientPage } from '../office/CRUD/ingredient/ingredient.page';
+import { AddIngredientPage } from '../office/CRUD/add-ingredient/add-ingredient.page';
 import { SubProductPage } from '../office/CRUD/sub-product/sub-product.page';
 import { CategoryPage } from '../office/CRUD/category/category.page';
 import { AuthPage } from '../auth/auth.page';
@@ -14,6 +14,8 @@ import { CashbackPage } from '../modals/cashback/cashback.page';
 import { DiscountPage } from '../modals/discount/discount.page';
 import { AddEmployeeDataPage } from '../modals/add-employee-data/add-employee-data.page';
 import { OrderViewPage } from '../modals/order-view/order-view.page';
+import { ProductIngredientPage } from '../office/CRUD/product-ingredient/product-ingredient.page';
+import { CashInOutPage } from '../modals/cash-in-out/cash-in-out.page';
 
 
 
@@ -27,12 +29,13 @@ export class ActionSheetService {
   async openModal(
     component: typeof PickOptionPage |
                typeof SuplierPage |
-               typeof IngredientPage |
+               typeof AddIngredientPage |
                typeof SubProductPage |
                typeof CategoryPage |
                typeof PaymentPage |
                typeof SuplierPage |
-               typeof AddEmployeeDataPage,
+               typeof AddEmployeeDataPage |
+               typeof ProductIngredientPage,
     options: any,
     sub: boolean
                ) {
@@ -52,7 +55,8 @@ export class ActionSheetService {
                typeof CashbackPage |
                typeof DiscountPage |
                typeof AddEmployeeDataPage |
-               typeof OrderViewPage,
+               typeof OrderViewPage |
+               typeof CashInOutPage,
     options: any
   ){
     const modal = await this.modalCtrl.create({
@@ -193,9 +197,9 @@ export class ActionSheetService {
   };
 
 
-  async deleteAlert(message: string){
+  async deleteAlert(message: string, title: string){
     const alert = await this.alertController.create({
-      header: 'Șterge!',
+      header: title,
       message: message,
       buttons: [
         {
@@ -203,7 +207,7 @@ export class ActionSheetService {
           role: 'cancel'
         },
         {
-          text: 'Șterge',
+          text: 'Confirm',
           role: 'confirm',
         },
       ],
@@ -218,10 +222,10 @@ export class ActionSheetService {
   }
 
 
-async reasonAlert(){
+async reasonAlert(title: string, message: string, label: string){
   const alert = await this.alertController.create({
-    header: 'MOTIVUL ȘTERGERII',
-    message: `Scrie motivul pentru care produsul este șters!`,
+    header: title,
+    message: message,
     buttons: [
       {
         text: 'CONFIRMĂ',
@@ -236,7 +240,7 @@ async reasonAlert(){
       {
       name: 'reason',
       type: 'text',
-      placeholder: 'Scrie motivul'
+      placeholder: label
 
     },
   ],

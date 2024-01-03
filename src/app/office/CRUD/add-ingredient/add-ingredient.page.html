@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="ion-text-center">Adaugă Ingredient</ion-title>
+    <ion-title class="ion-text-center">{{title}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
         Închide
@@ -35,11 +35,15 @@
           <ion-select-option value="bar">Bar</ion-select-option>
         </ion-select>
     </ion-item>
-    <ion-button size="medium" expand="block" (click)="saveIng()" [disabled]="!ingredientForm.valid">
-      Save Ingredient
-    </ion-button>
+
   </form>
     </ion-col>
   </ion-row>
 </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-button size="large" expand="block" (click)="saveIng()" [disabled]="!ingredientForm.valid">
+    Save Ingredient
+  </ion-button>
+</ion-footer>

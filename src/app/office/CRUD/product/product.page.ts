@@ -62,6 +62,7 @@ export class ProductPage implements OnInit {
     this.getCategories()
     this.setTvaValidators()
   }
+
   getProductToEdit(){
     this.route.paramMap.subscribe(params => {
       const id = params.get('id')
@@ -70,6 +71,7 @@ export class ProductPage implements OnInit {
           if(response){
             response.subProducts.length ? this.hideIng = true : this.hideIng = false
             this.product = response;
+            console.log(response)
             this.editMode = true
             this.topToEdit = this.product.toppings;
             this.ingsToEdit = this.product.ings;
@@ -83,7 +85,7 @@ export class ProductPage implements OnInit {
             this.form.get('qty')?.setValue(this.product.qty)
             this.form.get('order')?.setValue(this.product.order)
             this.form.get('dep')?.setValue(this.product.dep)
-            this.form.get('tva')?.setValue(this.product.tva)
+            this.form.get('tva')?.setValue(this.product.tva ? this.product.tva.toString() : '')
             this.form.get('printer')?.setValue(this.product.printer)
           }
         })
@@ -102,7 +104,6 @@ export class ProductPage implements OnInit {
       this.prodSrv.saveCategory(response).subscribe(response => {
       })
     }
-
    }
 
 
@@ -133,7 +134,6 @@ export class ProductPage implements OnInit {
 
   onIngRecive(ev: any){
     this.productIngredients = ev
-    console.log(ev)
   }
 
   deleteSub(index: number, id: string){
@@ -215,29 +215,32 @@ export class ProductPage implements OnInit {
  async saveProduct(){
     if(this.form.valid){
       const productData = new FormData()
-      productData.append('name', this.form.value.name)
-      productData.append('price', this.form.value.price)
-      productData.append('category', this.form.value.cat)
-      productData.append('mainCat', this.form.value.mainCat)
-      productData.append('description', this.form.value.description)
-      productData.append('qty', this.form.value.qty)
-      productData.append('order', this.form.value.order)
-      productData.append('dep', this.form.value.dep)
-      productData.append('tva', this.form.value.tva)
-      productData.append('image', this.form.value.image)
-      productData.append('printer', this.form.value.printer)
-      const toppings = JSON.stringify(this.toppings)
-      const ings = JSON.stringify(this.productIngredients)
-      const sub = JSON.stringify(this.subProducts)
-      const tempSubs = JSON.stringify(this.tempSubArray)
+      const toppings = JSON.stringify(this.toppings);
+      const ings = JSON.stringify(this.productIngredients);
+      const sub = JSON.stringify(this.subProducts);
+      const tempSubs = JSON.stringify(this.tempSubArray);
+      productData.append('name', this.form.value.name);
+      productData.append('price', this.form.value.price);
+      productData.append('category', this.form.value.cat);
+      productData.append('mainCat', this.form.value.mainCat);
+      productData.append('description', this.form.value.description);
+      productData.append('qty', this.form.value.qty);
+      productData.append('order', this.form.value.order);
+      productData.append('dep', this.form.value.dep);
+      productData.append('tva', this.form.value.tva);
+      productData.append('image', this.form.value.image);
+      productData.append('printer', this.form.value.printer);
+      productData.append('toppings', toppings);
+      productData.append('ings', ings);
+      productData.append('sub', sub);
+      console.log(ings)
       if(this.editMode){
-        console.log(toppings)
-        this.prodSrv.editProduct(productData, toppings, ings, sub, this.product._id).subscribe(response => {
+        this.prodSrv.editProduct(productData, this.product._id).subscribe(response => {
           showToast(this.toastCtrl, response.message, 3000);
           this.router.navigateByUrl('/tabs/office/products')
         })
       } else {
-        this.prodSrv.saveProduct(productData, toppings, ings).subscribe(response => {
+        this.prodSrv.saveProduct(productData).subscribe(response => {
           const product = response.product
           if(product){
             this.tempSubArray.map((obj:any) => {

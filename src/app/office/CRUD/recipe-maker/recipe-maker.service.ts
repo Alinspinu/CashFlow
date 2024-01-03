@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { InvIngredient } from "src/app/models/nir.model";
-import { ProductIngredient } from "src/app/models/table.model";
 import {environment} from '../../../../environments/environment'
 
 
@@ -30,17 +29,17 @@ deleteIng(id: string){
   return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)
 }
 
-saveProductIngredient(productIngredient: ProductIngredient){
-    return this.http.post<{message: string}>(`${environment.BASE_URL}ing/product-ing`, {productIngredient: productIngredient})
-}
+// saveProductIngredient(productIngredient: ProductIngredient){
+//     return this.http.post<{message: string}>(`${environment.BASE_URL}ing/product-ing`, {productIngredient: productIngredient})
+// }
 
-editProductIngredient(productIngredient: ProductIngredient, id: string) {
-  return this.http.put<{message: string}>(`${environment.BASE_URL}ing/product-ing?id=${id}`, {newProdIng: productIngredient})
-}
+// editProductIngredient(productIngredient: ProductIngredient, id: string) {
+//   return this.http.put<{message: string}>(`${environment.BASE_URL}ing/product-ing?id=${id}`, {newProdIng: productIngredient})
+// }
 
-deleteProductIngredinet(id: string){
-  return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/product-ing?id=${id}`)
-}
+// deleteProductIngredinet(id: string){
+//   return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/product-ing?id=${id}`)
+// }
 
 
 

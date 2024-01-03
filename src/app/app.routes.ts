@@ -60,10 +60,14 @@ const routes: Routes = [
   //   path: 'pick-qty',
   //   loadComponent: () => import('./modals/pick-qty/pick-qty.page').then( m => m.PickQtyPage)
   // },
-  // {
-  //   path: 'sub-product',
-  //   loadComponent: () => import('./office/CRUD/sub-product/sub-product.page').then( m => m.SubProductPage)
-  // },
+  {
+    path: 'sub-product',
+    loadComponent: () => import('./office/CRUD/sub-product/sub-product.page').then( m => m.SubProductPage)
+  },
+  {
+    path: 'cash-in-out',
+    loadComponent: () => import('./modals/cash-in-out/cash-in-out.page').then( m => m.CashInOutPage)
+  }
   // {
   //   path: 'products',
   //   loadComponent: () => import('./office/products/products.page').then( m => m.ProductsPage)

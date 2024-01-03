@@ -5,7 +5,6 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from 'src/app/office/users/users.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { ActionSheet } from '@capacitor/action-sheet';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { AddEmployeeDataPage } from 'src/app/modals/add-employee-data/add-employee-data.page';
 import { formatedDateToShow } from 'src/app/shared/utils/functions';

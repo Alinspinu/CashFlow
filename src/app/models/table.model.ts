@@ -31,6 +31,13 @@ export class Bill{
         card: number,
         viva: number,
         voucher: number,
+        online: number,
+    },
+    public employee: {
+      access: number,
+      fullName: string,
+      position: string,
+      user: string,
     },
     public cashBack: number,
     public payOnSite: boolean,
@@ -45,7 +52,8 @@ export class Bill{
     public show: boolean,
     public setName: boolean,
     public name: string,
-    public products: BillProduct[]
+    public products: BillProduct[],
+    public createdAt: any,
   ){}
 }
 
@@ -68,6 +76,8 @@ export class BillProduct{
    public imgUrl: string,
    public printer: string,
    public sentToPrint: boolean,
+   public comment: string,
+   public tva: string,
   ){}
 }
 
@@ -78,16 +88,15 @@ export class Topping {
     public price: number,
     public qty: number,
     public ingPrice: number,
-    public um: string
+    public um: string,
+    public ing: Ing
   ){}
 }
 
 export class Ing{
   constructor(
-    public name: String,
-    public qty: Number,
-    public price: number,
-    public um: string
+    public qty: number,
+    public ing: string,
   ){}
 }
 
@@ -95,8 +104,9 @@ export class deletetBillProduct{
   constructor(
    public billProduct: BillProduct,
    public employee: {
-    name: string,
+    fullName: string,
     position: string,
+    user: string,
    },
    public reason: string,
    public locatie: string,
@@ -104,14 +114,3 @@ export class deletetBillProduct{
   ){}
 }
 
-
-export class ProductIngredient{
-  constructor(
-    public name: string,
-    public um: string,
-    public qty: number,
-    public ings: Ing[],
-    public price: Number,
-    public locatie: string,
-  ){}
-}

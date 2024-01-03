@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams} from '@ionic/angular';
@@ -26,7 +26,8 @@ export class SubProductPage implements OnInit {
   }
 
   toppings: any = [];
-  productIngredients: any = [];
+  productIngredientss: any = [];
+  ingredientsToSend: any = []
 
   isTva: boolean = true;
 
@@ -48,14 +49,13 @@ export class SubProductPage implements OnInit {
 
   getSubToEdit(){
    this.sub =  this.navParmas.get('options')
-   console.log(this.sub)
    if(this.sub.name){
      if(this.sub.name.length){
       this.editMode = true
      }
    }
    this.toppings = this.sub.toppings
-   this.productIngredients = this.sub.ings;
+   this.productIngredientss = this.sub.ings;
   }
 
   onClose(){
@@ -71,7 +71,7 @@ export class SubProductPage implements OnInit {
         order: this.form.value.order,
         tva: this.form.value.tva,
         description: this.form.value.description,
-        ings: this.productIngredients,
+        ings: this.ingredientsToSend,
         toppings: this.toppings,
         product: '',
         _id: '',
@@ -127,7 +127,7 @@ export class SubProductPage implements OnInit {
   }
 
   onIngRecive(ev: any){
-    this.productIngredients = ev;
+    this.ingredientsToSend = ev;
   }
 
 }

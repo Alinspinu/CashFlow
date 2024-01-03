@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button routerLink="/tabs/tables" class="back-button">
-        <ion-icon src="../../../assets/icon/close-outline.svg"  class="icon"></ion-icon>
+        <ion-icon src="../../../assets/icon/close-outline.svg" (click)="home()"  class="icon"></ion-icon>
       </ion-button>
       <ion-button (click)="home()" *ngIf="showProd" class="back-button">
         <ion-icon src="../../../assets/icon/home-outline.svg"  class="icon"></ion-icon>
@@ -86,19 +86,22 @@
       </ion-row>
       <ion-row class="bill-content-row">
         <ion-col size="12">
-          <ion-item class="product-item input" lines="none" *ngFor="let product of billProducts; let i = index" [ngClass]="{'grey': !product.sentToPrint}">
+          <ion-item class="product-item input" lines="none"  *ngFor="let product of billProducts; let i = index" [ngClass]="{'grey': !product.sentToPrint}">
             <ion-buttons slot="end" *ngIf="!product.sentToPrint">
               <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings, product)">
                 <ion-icon color="danger" src="../../../assets/icon/trash-outline.svg"></ion-icon>
               </ion-button>
             </ion-buttons>
-            <ion-thumbnail slot="start">
+            <ion-thumbnail slot="start" (click)="openComments(i, product.sentToPrint)">
               <img alt="image" [src]="modifyImageURL(product.imgPath)"/>
             </ion-thumbnail>
-            <div class="prod-name">
+            <div class="prod-name" (click)="openComments(i, product.sentToPrint)">
               <span>{{product.name}}</span>
               <div class="toppings-wrapper" *ngIf="product.toppings.length">
                 <span *ngFor="let topping of product.toppings">+{{topping.name.split('/')[0]}}</span>
+              </div>
+              <div class="toppings-wrapper" *ngIf="product.comment.length">
+                <span>-{{product.comment}}</span>
               </div>
             </div>
             <ion-buttons *ngIf="breakMode">

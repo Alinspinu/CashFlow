@@ -30,6 +30,15 @@
         </ion-item>
         <ion-button color="danger" size="large" class="close" (click)="reset('viva')">X</ion-button>
       </ion-item>
+
+      <ion-item lines="none" class="item">
+        <ion-button color="primary" size="large" class="button" (click)="online()">ONLINE</ion-button>
+        <ion-item lines="none" class="input">
+          <ion-input type="number" label="Plată Online" labelPlacement="floating" placeholder="00" formControlName="online"></ion-input>
+        </ion-item>
+        <ion-button color="danger" size="large" class="close" (click)="reset('online')">X</ion-button>
+      </ion-item>
+
       <ion-item lines="none" class="item">
         <ion-button color="primary" size="large" class="button" (click)="voucher()">VOUCHER</ion-button>
         <ion-item lines="none" class="input">
@@ -47,13 +56,18 @@
     </form>
     </ion-col>
   </ion-row>
-  <ion-row>
-    <ion-col>
-    <ion-button size="large" expand="block" color="danger"(click)="cancel()">Renunță</ion-button>
-  </ion-col>
-    <ion-col>
-      <ion-button size="large" expand="block" color="primary" (click)="cashIn()">Încasează</ion-button>
-      </ion-col>
-  </ion-row>
 </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+      <ion-button size="large" expand="block" color="danger"(click)="cancel()">Renunță</ion-button>
+    </ion-col>
+      <ion-col>
+        <ion-button size="large" expand="block" color="primary" (click)="cashIn()">{{button}}</ion-button>
+        </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

@@ -29,6 +29,16 @@ img:active{
   margin: 1rem 0 0.5rem 0.5rem;
 }
 
+.select{
+  width: 900px !important;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  height: 60px !important;
+  margin: 1rem 0 0.5rem 0.5rem;
+  padding-left: 12px!important;
+  padding-right: 12px!important;
+}
+
 
 .ing-info-wrapper {
   margin-left: 20px;
@@ -48,18 +58,6 @@ img:active{
     margin-left: 8px;
   }
 }
-
-
-.select{
-  width: 700px !important;
-  border: 0.5px solid var(--ion-color-medium);
-  border-radius: 8px;
-  height: 60px !important;
-  margin: 1rem 0 0.5rem 0.5rem;
-  padding-left: 12px!important;
-  padding-right: 12px!important;
-}
-
 .name{
   font-weight: 500;
   font-size: 18px;

@@ -19,14 +19,12 @@ export class ProductService{
   }
 
 
-
-
-  saveProduct(product: any, toppings: string, ings: string){
-    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?ings=${ings}&toppings=${toppings}`, product)
+  saveProduct(product: any){
+    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add`, product)
   }
 
-  editProduct(product: any, toppings: string, ings: string, sub: string, id: string) {
-    return this.http.put<{message: string, product: any}>(`${environment.BASE_URL}product/product?ings=${ings}&toppings=${toppings}&sub=${sub}&id=${id}`, product)
+  editProduct(product: any, id: string) {
+    return this.http.put<{message: string, product: any}>(`${environment.BASE_URL}product/product?id=${id}`, product)
   }
 
   // getCategories(input: any){

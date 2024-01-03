@@ -18,6 +18,8 @@ export class PickOptionPage implements OnInit {
   selectedO: string[] = []
   sub!: any
 
+  toppingLabel: string[] = []
+
 
   constructor(
   private navPar: NavParams,
@@ -28,8 +30,11 @@ export class PickOptionPage implements OnInit {
     this.getOptions()
   }
 
+
+
   getOptions(){
     this.options = this.navPar.get('options');
+
     this.sub = this.navPar.get('sub')
   }
 

@@ -52,7 +52,14 @@
 
       </ion-col>
       <ion-col size="8">
-        <app-recipe-maker (ingsSend)="onIngRecive($event)" (toppSend)="onTopRecive($event)" [ings]="productIngredients" [top]="toppings" [hideTop]="true"></app-recipe-maker>
+        <app-recipe-maker
+        [ingPage]="false"
+        [hideTop]="true"
+        (ingsSend)="onIngRecive($event)"
+        (toppSend)="onTopRecive($event)"
+        [ings]="productIngredientss"
+        [top]="toppings"
+        ></app-recipe-maker>
       </ion-col>
       </ion-row>
       </ion-grid>

@@ -4,6 +4,8 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { IonInput } from '@ionic/angular/standalone';
+import { PaymentService } from './payment.service';
+import { Bill } from 'src/app/models/table.model';
 
 @Component({
   selector: 'app-payment',
@@ -16,9 +18,10 @@ export class PaymentPage implements OnInit {
 
   @ViewChild('cifInp') cifInp!: IonInput
 
-  entryTotal!: number
   total!: number
   tempTotal!: number
+  order!: Bill
+  button: string = 'ÎNCASEAZĂ'
 
   paymentForm!: FormGroup
 
@@ -27,12 +30,17 @@ export class PaymentPage implements OnInit {
     private navPar: NavParams,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
+    private paySrv: PaymentService
   ) { }
 
 
   ngOnInit() {
-    this.entryTotal = this.navPar.get('options');
-    this.total = this.entryTotal
+    this.order = this.navPar.get('options');
+    this.total = this.order.total
+    console.log(this.order)
+    if(this.order.status === "done"){
+      this.button = "SCHIMBĂ METODA DE PLATĂ"
+    }
     this.setUpForm()
   }
 
@@ -53,21 +61,31 @@ export class PaymentPage implements OnInit {
       cif: new FormControl(null, {
         updateOn: 'change',
       }),
+      online: new FormControl(null, {
+        updateOn: 'change',
+      }),
     });
   }
+
+
 
   cancel(){
     this.modalCtrl.dismiss(null)
   }
 
   cashIn(){
+    const posSum = this.paymentForm.value.viva
    if(this.checkTotal()){
+    if(posSum && posSum > 0){
+      this.checkPos(posSum)
+    }
     const pay = {
       cash: this.paymentForm.value.cash,
       card: this.paymentForm.value.card,
-      viva: this.paymentForm.value.viva,
+      viva: posSum,
       voucher: this.paymentForm.value.voucher,
       cif: this.paymentForm.value.cif,
+      online: this.paymentForm.value.online
     }
     this.modalCtrl.dismiss(pay)
    } else {
@@ -102,6 +120,14 @@ export class PaymentPage implements OnInit {
     const input  = this.paymentForm.get('voucher')
     if(input){
       const value = this.total - this.checkInputs('voucher')
+      input.setValue(value)
+    }
+  }
+
+  online(){
+    const input = this.paymentForm.get('online')
+    if(input) {
+      const value = this.total - this.checkInputs('online')
       input.setValue(value)
     }
   }
@@ -149,6 +175,14 @@ export class PaymentPage implements OnInit {
       } else {
         return true
       }
+    }
+
+    checkPos(sum: number){
+      this.paySrv.checkPos(sum).subscribe(response => {
+        if(response){
+          console.log(response)
+        }
+      })
     }
 
 

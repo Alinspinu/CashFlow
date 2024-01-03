@@ -1,0 +1,77 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title *ngIf="user">{{user.employee.fullName}}</ion-title>
+    <ion-title slot="end">{{today()}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<div class="contents-container">
+  <ion-content [fullscreen]="true" class="cash-info">
+    <ion-title class="title" *ngIf="userTotal > 0">
+      Încsări
+    </ion-title>
+    <div class="col">
+      <div class="cash-info-wrappr">
+        <ion-item lines="none" class="input" *ngIf="userCash > 0">
+          Cash: {{userCash}} Lei
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="userCard > 0">
+          Card: {{userCard}} Lei
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="userViva > 0">
+          Viva Wallet: {{userViva}} Lei
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="userVoucher > 0">
+          Voucher: {{userVoucher}} Lei
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="userOnline > 0">
+          Plata Online: {{userOnline}} Lei
+        </ion-item>
+        <ion-item lines="none" class="input bold" *ngIf="userTotal > 0">
+          Total: {{userTotal}} Lei
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="cashIn > 0">
+          Bani Adăugați: {{cashIn}} Lei
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="cashOut > 0">
+          Bani Scoși: {{cashOut}} Lei
+        </ion-item>
+      </div>
+      <div class="button-wrapper">
+        <ion-button expand="block" size="large" color="secondary" (click)="reports('x')">
+          <ion-icon src="../../../assets/icon/business.svg"></ion-icon>
+         RAPORT X
+        </ion-button>
+        <ion-button expand="block" size="large" (click)="reports('z')">
+          <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
+          RAPORT Z
+        </ion-button>
+        <ion-button expand="block" size="large" color="success" (click)="inAndOut('in')">
+          <ion-icon src="../../../assets/icon/add-circle-outline.svg"></ion-icon>
+         ADAUGA BANI IN CASA
+        </ion-button>
+        <ion-button expand="block" size="large" color="danger" (click)="inAndOut('out')">
+          <ion-icon src="../../../assets/icon/remove-circle-outline.svg"></ion-icon>
+        SCOATE BANI DIN CASA
+        </ion-button>
+      </div>
+    </div>
+  </ion-content>
+  <div class="separator"></div>
+<ion-content [fullscreen]="true" class="orders">
+
+    <ion-title class="title">
+      Comenzi
+    </ion-title>
+
+  <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="openBill(order)">
+    <span>Nr.{{i+1}} </span>
+    <span> Salvată la - {{orderTime(order.createdAt)}}</span>
+    <span>Metoda de plată - {{showPaymentMethod(order.payment)}}</span>
+    <span *ngIf="order.clientInfo.name.length">Client: {{order.clientInfo.name}}</span>
+  </ion-item>
+</ion-content>
+</div>
+
+

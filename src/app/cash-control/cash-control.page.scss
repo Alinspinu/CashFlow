@@ -1,0 +1,56 @@
+.contents-container{
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  .cash-info{
+    flex: 30%;
+  }
+  .separator{
+    width: 40px;
+  }
+  .orders{
+    flex: 70%;
+    margin-left: 30px;
+    cursor: pointer;
+    .input:hover{
+      --background: var(--ion-color-medium);
+    }
+  }
+}
+
+.title{
+  text-align: center;
+  font-size: 28px;
+  margin-top: 12px;
+}
+
+
+
+.input{
+  height: 48px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  font-size: 24px;
+  margin: 0.7rem 0 0.1rem 0.2rem;
+  span{
+    margin: 8px;
+  }
+}
+
+.bold{
+  font-weight: 500;
+}
+
+.col{
+  display: flex;
+  flex-direction: column;
+  .button-wrapper{
+    margin-top: auto;
+    ion-button{
+      margin-top: 12px;
+      ion-icon{
+        margin-right: 20px;
+      }
+    }
+  }
+}

@@ -18,17 +18,13 @@ export const routes: Routes = [
           import('../office/office.routes').then((m) => m.routes),
       },
       {
-        path: 'tab3',
+        path: 'reports',
         loadComponent: () =>
-          import('../tab3/tab3.page').then((m) => m.Tab3Page),
+          import('../reports/reports.page').then((m) => m.ReportsPage),
       },
       {
         path: 'add-product',
         loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage)
-      },
-      {
-        path: 'add-nir',
-        loadComponent: () => import('../office/nir/nir.page').then( m => m.NirPage)
       },
       {
         path: 'add-suplier',
@@ -41,6 +37,10 @@ export const routes: Routes = [
       {
         path: 'user-content/:id',
         loadComponent: () => import('../content/user-content/user-content.page').then( m => m.UserContentPage)
+      },
+      {
+        path: 'cash-control',
+        loadComponent: () => import('../cash-control/cash-control.page').then( m => m.CashControlPage)
       },
       {
         path: '',

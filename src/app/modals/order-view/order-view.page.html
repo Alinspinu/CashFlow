@@ -46,6 +46,12 @@
                 <span class="total"> - {{order.discount}} Lei</span>
               </div>
             </ion-item>
+            <ion-item lines="none" color="tertiary" class="input" *ngFor="let pay of paymentMethod">
+              <div class="total-wrapper">
+                <span class="total-text">{{pay.method | capitalize}}</span>
+                <span class="total">{{pay.value}} Lei</span>
+              </div>
+            </ion-item>
             <ion-item lines="none" color="tertiary" class="input">
               <div class="total-wrapper">
                 <span class="total-text">TOTAL</span>
@@ -59,3 +65,8 @@
   </ion-row>
 </ion-grid>
 </ion-content>
+
+<ion-footer *ngIf="order.status === 'done'">
+  <ion-button color="secondary" size="large" expand="block"(click)="reprint()">RRTIPĂREȘTE NOTA FISCALA</ion-button>
+  <ion-button color="primary" size="large" expand="block"(click)="changePaymentMethod()">SHIMBĂ METODA DE PLATĂ</ion-button>
+</ion-footer>

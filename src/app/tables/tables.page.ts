@@ -85,7 +85,7 @@ getTables(){
 
  async deleteTable(table: Table){
    const  message = table.name ? table.name : table.index
-    const confirm = await this.actionSheet.deleteAlert(`Ești sigur ca vrei să ștergi masa ${message}`)
+    const confirm = await this.actionSheet.deleteAlert(`Ești sigur ca vrei să ștergi masa ${message}`, "Sterge")
     if(confirm){
       this.tableServ.deleteTable(table._id, table.index).subscribe(response => {
         showToast(this.toastCtrl, response.message, 4000)

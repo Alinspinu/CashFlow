@@ -115,6 +115,32 @@
               <ion-button size="medium" color="secondary"(click)="addProd(i)" *ngIf="product.sentToPrint">+</ion-button>
               <span class="prod-total">{{product.total}} Lei</span>
           </ion-item>
+          <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
+            <ion-row class="bill-discount-row" *ngIf="discountValue !== 0">
+              <ion-col size="10">
+                <span class="red-text">REDUCERE</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-center">
+                <span class="red-lei">- {{discountValue}} Lei</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="bill-discount-row" *ngIf="billCashBack">
+              <ion-col size="10">
+                <span class="red-text">CASH BACK</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-center">
+                <span class="red-lei">- {{billCashBack}} Lei</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="bill-total-row">
+              <ion-col size="10">
+                <span class="total-text">TOTAL</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-center">
+                <span class="total-lei">{{billToshow.total}} Lei</span>
+              </ion-col>
+            </ion-row>
+          </div>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -127,56 +153,30 @@
 <ion-footer>
   <ion-row>
     <ion-col>
-      <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
-        <ion-row class="bill-discount-row" *ngIf="discountValue !== 0">
-          <ion-col size="10">
-            <span class="red-text">REDUCERE</span>
-          </ion-col>
-          <ion-col size="2" class="ion-text-center">
-            <span class="red-lei">- {{discountValue}} Lei</span>
-          </ion-col>
-        </ion-row>
-        <ion-row class="bill-discount-row" *ngIf="billCashBack">
-          <ion-col size="10">
-            <span class="red-text">CASH BACK</span>
-          </ion-col>
-          <ion-col size="2" class="ion-text-center">
-            <span class="red-lei">- {{billCashBack}} Lei</span>
-          </ion-col>
-        </ion-row>
-        <ion-row class="bill-total-row">
-          <ion-col size="10">
-            <span class="total-text">TOTAL</span>
-          </ion-col>
-          <ion-col size="2" class="ion-text-center">
-            <span class="total-lei">{{billToshow.total}} Lei</span>
-          </ion-col>
-        </ion-row>
-      </div>
-        <ion-row>
+        <ion-row class="ion-no-margin ion-no-padding">
           <ion-col>
-            <ion-button expand="block" size="large" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
+            <ion-button expand="block" size="medium" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
               <ion-icon src="../../../assets/icon/hug.svg"></ion-icon>
               UNEȘTE COMENZI
             </ion-button>
-            <ion-button expand="block" size="large" (click)="breakOrder()" [disabled]="disableAction">
+            <ion-button expand="block" size="medium" (click)="breakOrder()" [disabled]="disableAction">
               <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
               SEPARĂ COMANDA
             </ion-button>
-            <ion-button expand="block" size="large" color="danger" (click)="deleteOrder()" [disabled]="disableDelete">
+            <ion-button expand="block" size="medium" color="danger" (click)="deleteOrder()" [disabled]="disableDelete">
               <ion-icon src="../../../assets/icon/trash-outline.svg"></ion-icon>
               ȘTERGE COMANDA
             </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button class="client-button" (click)="addCustomer(clientMode)" expand="block" size="large">
+            <ion-button class="client-button" (click)="addCustomer(clientMode)" expand="block" size="medium">
               <ion-icon [src]=" clientMode ? '../../../assets/icon/add-outline.svg': '../../../assets/icon/trash-outline.svg'"></ion-icon>
               {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE CLIENT"}}
             </ion-button>
-            <ion-button size="large" expand="block" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)" *ngIf="client">
+            <ion-button size="medium" expand="block" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)" *ngIf="client">
               {{ cashBackMode ? 'FOLOSEȘTE CASHBACK' : 'ELIMINĂ CASH BACK'}}
              </ion-button>
-             <ion-button size="large" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount(discountMode)">
+             <ion-button size="medium" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount(discountMode)">
               {{ discountMode ? 'ADAUGĂ REDUCERE' : 'ELIMINĂ REDUCEREA'}}
              </ion-button>
           </ion-col>

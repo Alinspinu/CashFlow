@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Adaugă Intrare</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" type="submit" [disabled]="!form.valid || !date" [strong]="true">Confirm
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form">
+    <ion-row>
+      <ion-col size-s>
+        <ion-item lines="none" class="input">
+          <ion-select aria-label="entry" label="Tip de intrare" labelPlacement="floating" formControlName="typeOfEntry">
+            <ion-select-option value="income">Încasare</ion-select-option>
+            <ion-select-option value="expense">Cheltuială</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item lines="none" class="input date" (click)="openDateModal()">
+          <ion-label slot="start">{{date ? formatDate(date) :'Alege ziua'}}</ion-label>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-input mode="ios" type="text" fill="outline" label="Descriere" labelPlacement="floating" placeholder="Ex. Plata .. ch nr.." formControlName="description"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input">
+          <ion-input mode="ios" type="number" fill="outline" label="Sumă" labelPlacement="floating" placeholder="Lei" formControlName="price"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-button (click)="confirm()" type="submit" [disabled]="!form.valid || !date" [strong]="true" expand="block" size="large">ADAUGĂ INTRARE
+  </ion-button>
+</ion-footer>

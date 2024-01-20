@@ -1,0 +1,118 @@
+
+
+ion-card-title{
+  font-family: NoirProLight !important;
+  text-align: end;
+  // color: var(--ion-color-primary-contrast) !important;
+}
+
+h5{
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+
+
+ion-title{
+  font-family: NoirProSemi !important;
+  --color: var(--ion-color-primary-contrast) !important;
+}
+
+ion-toolbar{
+  --background: #f4ede6;
+}
+ion-content {
+  --background: var(--ion-color-tertiary) !important;
+}
+
+.trash{
+  height: 30px !important;
+  color: var(--ion-color-primary) !important;
+}
+
+// .day{
+//   background: var(--ion-color-secondary);
+// }
+
+
+.entry{
+  display: flex;
+  flex-direction: row;
+}
+.description{
+  font-family: NoirProLight !important;
+  flex: 50%;
+  margin: 5px;
+}
+
+.tip{
+  font-family: NoirProSemi !important;
+  text-align: start;
+  margin: 5px;
+  flex: 20%;
+  color: var(--ion-color-success-shade);
+}
+.amount{
+  font-family: NoirProSemi !important;
+  text-align: end;
+  flex: 20%;
+  margin: 5px;
+  color: var(--ion-color-success-shade);
+}
+
+.trash{
+  text-align: end;
+  flex: 10%;
+  cursor: pointer;
+}
+
+.red{
+  color: var(--ion-color-danger-shade)
+}
+
+.date{
+  font-family: NoirProSemi !important;
+  font-size: 14px;
+  color: rgb(76, 74, 74);
+}
+
+.cash{
+  text-align: end;
+  font-family: NoirProSemi !important;
+  font-size: 20px;
+  color: rgb(76, 74, 74);
+}
+
+
+@media(max-width: 300px) {
+    ion-label{
+      font-size: 13px !important;
+    }
+}
+
+.icon-start{
+  height: 18px;
+  margin-left: 4px;
+}
+
+.icon-end{
+  height: 19px;
+  margin-left: 4px;
+}
+.add{
+  height: 35px;
+}
+
+.input{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.1rem 0 0.1rem 0.2rem;
+}
+.display-date{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  padding: 10px;
+  margin: 0.1rem 0 0.1rem 0.2rem;
+}

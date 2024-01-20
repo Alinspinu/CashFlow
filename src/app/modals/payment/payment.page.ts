@@ -6,6 +6,7 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentService } from './payment.service';
 import { Bill } from 'src/app/models/table.model';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-payment',
@@ -23,6 +24,8 @@ export class PaymentPage implements OnInit {
   order!: Bill
   button: string = 'ÎNCASEAZĂ'
   disableCancelButton: boolean = false
+  disablePayButtons: boolean = false
+  disableOnline: boolean = false
 
   paymentForm!: FormGroup
 
@@ -39,6 +42,14 @@ export class PaymentPage implements OnInit {
     this.order = this.navPar.get('options');
     this.total = this.order.total
     console.log(this.order)
+    if(this.order.payment.online > 0 && this.order.total === 0){
+      this.total = this.order.payment.online
+    }
+    if(this.order.payment.online > 0 && this.order.total > 0){
+      this.total = this.order.total + this.order.payment.online
+    }
+
+
     if(this.order.status === "done"){
       this.button = "SCHIMBĂ METODA DE PLATĂ"
     }
@@ -65,7 +76,22 @@ export class PaymentPage implements OnInit {
       online: new FormControl(null, {
         updateOn: 'change',
       }),
-    });
+    })
+    this.paymentForm.get('online')?.disable()
+    if(this.order.payment.online > 0 && this.order.total === 0){
+      this.paymentForm.get('online')?.setValue(this.order.payment.online)
+      this.paymentForm.get('cash')?.disable()
+      // this.paymentForm.get('card')?.disable()
+      this.paymentForm.get('viva')?.disable()
+      // this.paymentForm.get('voucher')?.disable()
+      this.disablePayButtons = true
+    }
+    if(this.order.payment.online > 0 && this.order.total > 0){
+      this.paymentForm.get('online')?.setValue(this.order.payment.online)
+      this.paymentForm.get('online')?.disable()
+      this.disableOnline = true
+    }
+
   }
 
 
@@ -98,12 +124,12 @@ export class PaymentPage implements OnInit {
           } else {
             showToast(this.toastCtrl, response.message, 2000)
             this.disableCancelButton = false
-            return 
+            return
           }
         } else {
           showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000)
           this.disableCancelButton = false
-          return 
+          return
         }
       })
     } else {

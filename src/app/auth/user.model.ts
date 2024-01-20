@@ -8,8 +8,9 @@ export default class User {
     public admin: number,
     public status: string,
     public email: string,
+    public locatie: string,
     public tokenExpirationDate: string,
-    public employee: {fullName: string, position: string, user: string}
+    public employee: {fullName: string, position: string, user: string, access: number},
   ){}
   };
 

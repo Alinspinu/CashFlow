@@ -26,6 +26,7 @@ export class Bill{
     public pickUp: boolean,
     public completetime: number,
     public paymentMethod: string,
+    public onlineOrder: boolean,
     public payment: {
         cash: number,
         card: number,
@@ -47,6 +48,15 @@ export class Bill{
       telephone: string,
       userId: string,
       cashBack: number,
+      discount: {
+        general: number,
+        category: {
+          precent: number,
+          cat: string,
+          name: string,
+          _id: string,
+        }[]
+      }
     },
     public cif: string,
     public show: boolean,
@@ -54,6 +64,7 @@ export class Bill{
     public name: string,
     public products: BillProduct[],
     public createdAt: any,
+    public locatie: string,
   ){}
 }
 
@@ -69,6 +80,7 @@ export class BillProduct{
    public category: string,
    public mainCat: string,
    public newEntry: boolean,
+   public discount: number,
    public sub: boolean,
    public toppings: Topping[],
    public ings: Ing[],
@@ -78,6 +90,8 @@ export class BillProduct{
    public sentToPrint: boolean,
    public comment: string,
    public tva: string,
+   public dep: string,
+   public toppingsToSend: Topping[]
   ){}
 }
 
@@ -89,7 +103,7 @@ export class Topping {
     public qty: number,
     public ingPrice: number,
     public um: string,
-    public ing: Ing
+    public ing: string
   ){}
 }
 

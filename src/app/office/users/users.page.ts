@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { UsersService } from './users.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { Preferences } from '@capacitor/preferences';
+import User from 'src/app/auth/user.model';
 
 
 @Component({
@@ -18,6 +20,7 @@ export class UsersPage implements OnInit, OnDestroy {
 
   userSearch: string = ''
   users: any = []
+  user!: User
 
   private unsubscribe$ = new Subject<void>();
 
@@ -45,8 +48,20 @@ export class UsersPage implements OnInit, OnDestroy {
     }
 
 
+getUser(){
+  Preferences.get({key: 'authData'}).then(data  => {
+    if(data.value) {
+     this.user = JSON.parse(data.value)
+     console.log(this.user)
+    } else{
+      this.router.navigateByUrl('/auth')
+    }
+  })
+}
+
+
   ngOnInit() {
-    // this.getUsers('', '')
+   this.getUser()
   }
 
   onSelectUser(ev: CustomEvent){
@@ -58,9 +73,11 @@ export class UsersPage implements OnInit, OnDestroy {
   }
 
   getUsers(filter:string, search: string){
-    this.usersSrv.getUsers(filter, search).subscribe(response => {
-      this.users = response
-    } )
+    setTimeout(() => {
+      this.usersSrv.getUsers(filter, search, this.user.locatie).subscribe(response => {
+        this.users = response
+      } )
+    }, 200)
   }
 
   goUserPage(userId: string){

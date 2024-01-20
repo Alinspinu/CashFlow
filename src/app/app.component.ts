@@ -1,5 +1,8 @@
 
 import { Component,  OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
+import User from './auth/user.model';
 import { ContentService } from './content/content.service';
 import { TablesService } from './tables/tables.service';
 
@@ -11,15 +14,29 @@ import { TablesService } from './tables/tables.service';
 })
 export class AppComponent implements OnInit {
 
+  user!: User
+
   constructor(
     private contService: ContentService,
-    private tablesService: TablesService
+    private tablesService: TablesService,
+    private router: Router,
     ) {}
 
 
+    getUser(){
+      Preferences.get({key: 'authData'}).then(data  => {
+        if(data.value) {
+         this.user = JSON.parse(data.value)
+         this.contService.getData(this.user.locatie).subscribe()
+         this.tablesService.getTables(this.user.locatie)
+        } else{
+          this.router.navigateByUrl('/auth')
+        }
+      })
+    }
+
   ngOnInit(): void {
-    this.contService.getData().subscribe()
-    this.tablesService.getTables()
+   this.getUser()
   }
 
 

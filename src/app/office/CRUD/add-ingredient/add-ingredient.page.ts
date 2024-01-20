@@ -45,11 +45,21 @@ export class AddIngredientPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
+      price: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
+      qty: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
     });
     if(this.ing){
       this.ingredientForm.get('name')?.setValue(this.ing.name);
       this.ingredientForm.get('um')?.setValue(this.ing.um);
       this.ingredientForm.get('tva')?.setValue(this.ing.tva.toString());
+      this.ingredientForm.get('price')?.setValue(this.ing.price);
+      this.ingredientForm.get('qty')?.setValue(this.ing.qty);
       this.ingredientForm.get('gestiune')?.setValidators([])
       this.ingredientForm.get('gestiune')?.updateValueAndValidity()
     }
@@ -69,7 +79,9 @@ saveIng(){
       name: this.ingredientForm.value.name,
       um: this.ingredientForm.value.um,
       tva: +this.ingredientForm.value.tva,
-      gestiune: this.ingredientForm.value.gestiune ? this.ingredientForm.value.gestiune : this.ing.gestiune
+      gestiune: this.ingredientForm.value.gestiune ? this.ingredientForm.value.gestiune : this.ing.gestiune,
+      qty: this.ingredientForm.value.qty,
+      price: this.ingredientForm.value.price,
     }
     this.modalCtr.dismiss(ingTosave)
   }

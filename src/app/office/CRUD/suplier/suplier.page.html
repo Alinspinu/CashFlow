@@ -1,49 +1,101 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
 
-    <ion-title class="ion-text-center">Adaugă Furnizor!</ion-title>
+    <ion-title class="ion-text-center">{{mode ? 'Înregistrare' : 'Adaugă Furnizor!'}}</ion-title>
 
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <form [formGroup]="suplierForm">
   <ion-grid>
     <ion-row>
-      <ion-col>
-        <form [formGroup]="suplierForm">
-          <ion-item>
-           <ion-input mode="ios" type="text" label="Denumire Firmă" labelPlacement="floating" formControlName="bussinessName"></ion-input>
-          </ion-item>
-           <ion-item *ngIf="personal">
-            <ion-input mode="ios" type="text" label="Nume Locatie" labelPlacement="floating" formControlName="name"></ion-input>
-           </ion-item>
-           <ion-item>
-            <ion-input mode="ios" type="text" label="CIF" labelPlacement="floating" formControlName="vatNumber"></ion-input>
-            <ion-buttons slot="end">
-              <ion-button (click)="searchSuplier()"color="primary">Search</ion-button>
-            </ion-buttons>
-           </ion-item>
-           <ion-item>
-            <ion-input mode="ios" type="text" label="Nr înregistrare" labelPlacement="floating" formControlName="register"></ion-input>
-           </ion-item>
-           <ion-item >
-            <ion-textarea mode="ios" type="text" label="Adresa" labelPlacement="floating" formControlName="address"></ion-textarea>
-           </ion-item>
-           <ion-item >
-            <ion-input mode="ios" type="text" label="Bancă" labelPlacement="floating" formControlName="bank"></ion-input>
-           </ion-item>
-           <ion-item >
-            <ion-input mode="ios" type="text" label="Cont" labelPlacement="floating" formControlName="account"></ion-input>
-           </ion-item>
-           <ion-radio-group value="start" formControlName="VAT">
-            <ion-item>
-              <ion-radio value="yes" justify="start" labelPlacement="end">Plătitor de TVA</ion-radio>
-              <ion-radio value="no" justify="start" labelPlacement="end">Neplătitor de TVA</ion-radio>
-            </ion-item>
-          </ion-radio-group>
-           <ion-button size="medium" color="primary" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid">Adaugă Furnizor</ion-button>
+            <ion-col [size]="size">
+              <ion-title  class="ion-margin ion-text-center">Detalii Companie</ion-title>
+                <ion-item lines="none" class="input">
+                  <ion-input mode="ios" type="text" label="CUI Complanie" labelPlacement="floating" formControlName="vatNumber" placeholder="Ex. RO12343219"></ion-input>
+                  <ion-buttons slot="end">
+                    <ion-button (click)="searchSuplier()"color="primary">
+                      <ion-icon src="../../../../assets/icon/search-outline.svg"></ion-icon>
+                    </ion-button>
+                  </ion-buttons>
+                  </ion-item>
+                  <ion-item lines="none" class="input">
+                  <ion-input mode="ios" type="text" label="Denumire Firmă" labelPlacement="floating" formControlName="bussinessName" placeholder="SC CEVA FRUMOS S.R.L."></ion-input>
+                  </ion-item>
+                  <ion-item lines="none" class="input">
+                    <ion-input mode="ios" type="text" label="Nr înregistrare" labelPlacement="floating" formControlName="register" placeholder="Ex. J32/234/2024"></ion-input>
+                  </ion-item>
+                  <ion-item  lines="none" class="input">
+                    <ion-textarea mode="ios" type="text" label="Adresa" labelPlacement="floating" formControlName="address" placeholder="Ex. Str... Nr... bl... Oras.. Loc.."></ion-textarea>
+                  </ion-item>
+                  <ion-item  lines="none" class="input">
+                    <ion-input mode="ios" type="text" label="Bancă" labelPlacement="floating" formControlName="bank" placeholder="Ex. Transilvana, ING, etc..."></ion-input>
+                  </ion-item>
+                  <ion-item  lines="none" class="input">
+                    <ion-input mode="ios" type="text" label="Cont" labelPlacement="floating" formControlName="account" placeholder="IBAN..."></ion-input>
+                  </ion-item>
+                  <ion-radio-group value="start" formControlName="VAT">
+                    <ion-item lines="none" class="input">
+                      <ion-radio value="yes" justify="start" labelPlacement="end">Plătitor de TVA</ion-radio>
+                      <ion-radio value="no" justify="start" labelPlacement="end">Neplătitor de TVA</ion-radio>
+                    </ion-item>
+                  </ion-radio-group>
+                  <ion-item *ngIf="mode" lines="none" class="input">
+                    <ion-input mode="ios" type="text" label="Nume Locatie" labelPlacement="floating" formControlName="name" placeholder="Ex. Cafenea, Magazin, Nume Brand..."></ion-input>
+                  </ion-item>
+                </ion-col>
+              <ion-col size="6" *ngIf="mode">
+                  <ion-title class="ion-margin ion-text-center">Detalii Utilizator Principal</ion-title>
+                  <ion-item lines="none" class="input">
+                    <ion-input label="Nume și prenume" labelPlacement="floating" placeholder="Ex. Ana Marian"  type="text" name="name" formControlName="ownerName">
+                    </ion-input>
+              </ion-item>
+              <ion-item lines="none" class="input">
+                <ion-input label="Email" labelPlacement="floating"  type="email" placeholder="Ex anamarian@gmail.com" name="email" email formControlName="ownerEmail">
+                </ion-input>
+              </ion-item>
+              <ion-note *ngIf="!suplierForm.get('email')?.valid && suplierForm.get('email')?.touched" color="primary">Invalid email</ion-note>
+              <ion-item lines="none" class="input">
+                <ion-input label="Telefon" placeholder="Ex. 076393939" labelPlacement="floating"  type="text" name="tel"  formControlName="tel">
+                </ion-input>
+              </ion-item>
+              <ion-item lines="none" class="input">
+                <ion-input
+                label="Parolă"
+                labelPlacement="floating"
+                placeholder="Minim 6 caractere"
+                type="password"
+                formControlName="password"
+                name="password"
+                minlength="6" required
+                [type]="getInputType()"
+                ></ion-input>
+                <ion-icon [src]="iconSrc" slot="end" (click)="togglePassword()"></ion-icon>
+              </ion-item>
+              <ion-item lines="none" class="input">
+                  <ion-input
+                  label="Confirmă parola"
+                  labelPlacement="floating"
+                  type="password"
+                  placeholder="Minim 6 caractere"
+                  formControlName="confirmPassword"
+                  name="confirmPassword"
+                  minlength="6" required
+                  [type]="getInputType()"
+                  #confirmPassword
+                  ></ion-input>
+                  <ion-icon [src]="iconSrc" slot="end" (click)="togglePassword()"></ion-icon>
+                </ion-item>
+                <ion-note *ngIf="suplierForm.hasError('match_error')" color="primary">
+                  Passwords don't match
+                </ion-note>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </form>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+      </ion-content>
+
+        <ion-footer [translucent]="false">
+            <ion-button size="large" color="primary" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid">{{mode ? 'Înregistrare': 'Adaugă Furnizor'}}</ion-button>
+</ion-footer>

@@ -13,8 +13,8 @@ export class IngredientService{
   ){}
 
 
-  getIngredients(searchQuery: string){
-    return this.http.post(`${environment.BASE_URL}ing/search-ingredients`, {search: searchQuery})
+  getIngredients(searchQuery: string, filter: any, loc: string){
+    return this.http.post(`${environment.BASE_URL}ing/search-ingredients`, {filter: filter, search: searchQuery, loc: loc})
   }
 
   deleteIngredient(id: string){
@@ -23,5 +23,11 @@ export class IngredientService{
 
   editIngredient(id: string, ing: any){
     return this.http.put<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`, {newIng: ing})
+  }
+
+  printIngredientsList(filter: any, loc: string){
+    console.log(loc)
+    return this.http.post(`${environment.BASE_URL}ing/print-ing-list`, {filter: filter,  loc: loc}, {responseType: 'blob'})
+
   }
 }

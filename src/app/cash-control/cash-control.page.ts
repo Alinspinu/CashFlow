@@ -8,9 +8,12 @@ import { ActionSheetService } from '../shared/action-sheet.service';
 import { CashInOutPage } from '../modals/cash-in-out/cash-in-out.page';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
-import { formatedDateToShow } from '../shared/utils/functions';
+import { formatedDateToShow, round } from '../shared/utils/functions';
 import { Bill } from '../models/table.model';
-import { OrderViewPage } from '../modals/order-view/order-view.page';
+import { Preferences } from '@capacitor/preferences';
+import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
+import { ContentService } from '../content/content.service';
+import { Category } from '../models/category.model';
 
 @Component({
   selector: 'app-cash-control',
@@ -35,15 +38,16 @@ export class CashControlPage implements OnInit, OnDestroy {
 
   cashIn: number = 0;
   cashOut: number = 0;
+  allCats: Category[] = []
 
-
-
+  catSubs!: Subscription
 
 
   constructor(
     private cashSrv: CashControlService,
     private toastCtrl: ToastController,
     private authSrv: AuthService,
+    private contSrv: ContentService,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
   ) { }
 
@@ -51,15 +55,29 @@ export class CashControlPage implements OnInit, OnDestroy {
     if(this.userSub){
       this.userSub.unsubscribe()
     }
+    if(this.catSubs){
+      this.catSubs.unsubscribe()
+    }
   }
 
   ngOnInit() {
+    this.getCashInandOut()
     this.getUser()
+    this.getData()
+  }
+
+
+  getData(){
+  this.catSubs = this.contSrv.categorySend$.subscribe(response => {
+      if(response.length > 1){
+        this.allCats = [...response]
+      }
+    })
   }
 
 
   async openBill(bill: Bill){
-    const result = await this.actionSheet.openPayment(OrderViewPage, bill)
+    const result = await this.actionSheet.openPayment(OrderAppViewPage, bill)
     if( result && result.message === 'changePayment'){
       this.cashSrv.changePaymnetMethod(result.order).subscribe(response => {
         if(response) {
@@ -99,19 +117,19 @@ export class CashControlPage implements OnInit, OnDestroy {
     if(this.orders){
       this.orders.forEach((order: Bill) => {
         if(order.payment.cash){
-          this.userCash += order.payment.cash
+          this.userCash = round(this.userCash + order.payment.cash)
         }
         if(order.payment.card){
-          this.userCard += order.payment.card
+          this.userCard = round(this.userCard + order.payment.card)
         }
         if(order.payment.viva){
-          this.userViva += order.payment.viva
+          this.userViva = round(this.userViva + order.payment.viva)
         }
         if(order.payment.voucher) {
-          this.userVoucher += order.payment.voucher
+          this.userVoucher = round(this.userVoucher + order.payment.voucher)
         }
         if(order.payment.online){
-          this.userOnline += order.payment.online
+          this.userOnline = round( this.userOnline + order.payment.online)
         }
       })
       this.calcTotal()
@@ -165,9 +183,20 @@ export class CashControlPage implements OnInit, OnDestroy {
     return method
  }
 
+
 reports(value: string){
+  this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
+    console.log(response)
+    if(response){
+      Preferences.remove({key: 'cashInAndOut'})
+    }
+  })
   this.cashSrv.raport(value).subscribe(response => {
     if(response){
+      if(value === 'z'){
+        this.cashIn = 0
+        this.cashOut = 0
+      }
       showToast(this.toastCtrl, response.message, 3000)
     }
   }, error => {
@@ -177,6 +206,28 @@ reports(value: string){
   })
 }
 
+
+setZeroDiscount(cats: Category[]){
+  let dataToSend: any = []
+  cats.forEach(cat => {
+    cat.product.forEach(product => {
+      console.log(product.discount)
+      if(product.discount > 0){
+        const data = {
+          precent: 0,
+          productId: product._id,
+          name: product.name
+        }
+          dataToSend.push(data)
+      }
+    })
+  })
+  console.log(dataToSend)
+  return dataToSend
+}
+
+
+
 async inAndOut(value: string){
  const response = await this.actionSheet.openPayment(CashInOutPage, value)
  if(response){
@@ -185,12 +236,15 @@ async inAndOut(value: string){
      sum: response.value
    }
    if(value === 'in'){
-    this.cashIn = this.cashIn + data.sum
+    this.cashIn += data.sum
    } else {
-    this.cashOut = this.cashOut + data.sum
+    this.cashOut += data.sum
    }
-   this.cashSrv.caahInAndOut(data).subscribe(response => {
+
+   this.cashSrv.cashInAndOut(data).subscribe(response => {
     if(response){
+      const sums = {in: this.cashIn, out: this.cashOut}
+      Preferences.set({key: 'cashInAndOut', value: JSON.stringify(sums)})
       showToast(this.toastCtrl, response.message, 3000)
     }
    }, error => {
@@ -199,6 +253,17 @@ async inAndOut(value: string){
     }
    })
  }
+}
+
+
+getCashInandOut(){
+  Preferences.get({key: 'cashInAndOut'}).then(data => {
+    if(data.value){
+      const sums = JSON.parse(data.value)
+      this.cashIn =  sums.in
+      this.cashOut =  sums.out
+    }
+ })
 }
 
 }

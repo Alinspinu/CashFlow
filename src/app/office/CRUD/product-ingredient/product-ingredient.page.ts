@@ -9,6 +9,8 @@ import { AddIngredientPage } from '../add-ingredient/add-ingredient.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { environment } from 'src/environments/environment';
 import { RecipeMakerService } from '../recipe-maker/recipe-maker.service';
+import { Preferences } from '@capacitor/preferences';
+import User from 'src/app/auth/user.model';
 
 
 @Component({
@@ -38,7 +40,7 @@ export class ProductIngredientPage implements OnInit {
 
   recipeTotal: number = 0;
 
-
+  user!: User
   productId!: string
 
 
@@ -51,11 +53,19 @@ export class ProductIngredientPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getUser()
     setTimeout(()=>{
       this.getProdIng()
     }, 100)
   }
 
+  getUser(){
+    Preferences.get({key: 'authData'}).then(data => {
+      if(data.value){
+        this.user = JSON.parse(data.value)
+      }
+    })
+  }
 
   getProdIng(){
       const product = this.navParams.get('options')
@@ -98,7 +108,7 @@ export class ProductIngredientPage implements OnInit {
         um: this.productIngUm,
         qty: 1,
         ings: this.ingredientsToSend,
-        locatie: environment.LOCATIE,
+        locatie: this.user.locatie,
         gestiune: this.productIngGest,
         price: this.round(this.recipeTotal / +this.productIngQty),
         productIngredient: true,
@@ -126,7 +136,7 @@ export class ProductIngredientPage implements OnInit {
 
   searchIngredient(ev: any){
     const input = ev.detail.value;
-      this.recipeService.getIngredients(input).subscribe(response => {
+      this.recipeService.getIngredients(input, this.user.locatie).subscribe(response => {
         this.ingredients = response
         if(input === ''){
           this.ingredients = []
@@ -152,7 +162,7 @@ export class ProductIngredientPage implements OnInit {
   async addIng(){
    const ing = await this.actionSrv.openModal(AddIngredientPage, [], false)
    if(ing){
-     this.recipeService.saveIng(ing).subscribe(response => {
+     this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
       showToast(this.toastCtrl, response.message, 4000)
      })
    }

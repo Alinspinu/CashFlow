@@ -10,10 +10,10 @@
 
 <ion-content [fullscreen]="true" class="auth-wrapper">
   <div class="header">
-    <h4 class="subtitle">Register</h4>
+    <h4 class="subtitle">Înregistrare</h4>
   </div>
+  <form [formGroup]="form">
   <ion-grid>
-    <form [formGroup]="form">
   <ion-row>
     <ion-col>
       <ion-item lines="none">
@@ -60,15 +60,19 @@
       </ion-col>
   </ion-row>
 
-    <ion-row [ngClass]="{'hide': !register}">
+    <!-- <ion-row [ngClass]="{'hide': !register}">
       <ion-col>
-        <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!enableRegister">
-          <ion-label>
-            Register
-          </ion-label>
-        </ion-button>
       </ion-col>
-    </ion-row>
-  </form>
-    </ion-grid>
-  </ion-content>
+    </ion-row> -->
+  </ion-grid>
+</form>
+</ion-content>
+
+<ion-footer>
+    <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block" [disabled]="!enableRegister">
+      <ion-label>
+       Înregistrează-te
+      </ion-label>
+    </ion-button>
+
+  </ion-footer>

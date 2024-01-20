@@ -14,68 +14,21 @@ const routes: Routes = [
   {
     path: 'table-content/:id',
     loadComponent: () => import('./content/table-content/table-content.page').then( m => m.TableContentPage),
-    // canLoad: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
-    path: 'payment',
-    loadComponent: () => import('./modals/payment/payment.page').then( m => m.PaymentPage)
+    path: 'add-client-discount',
+    loadComponent: () => import('./modals/add-client-discount/add-client-discount.page').then( m => m.AddClientDiscountPage)
   },
   {
-    path: 'customer-check',
-    loadComponent: () => import('./modals/customer-check/customer-check.page').then( m => m.CustomerCheckPage)
+    path: 'tips',
+    loadComponent: () => import('./modals/tips/tips.page').then( m => m.TipsPage)
   },
   {
-    path: 'discount',
-    loadComponent: () => import('./modals/discount/discount.page').then( m => m.DiscountPage)
+    path: 'add-product-discount',
+    loadComponent: () => import('./modals/add-product-discount/add-product-discount.page').then( m => m.AddProductDiscountPage)
   },
-  {
-    path: 'cashback',
-    loadComponent: () => import('./modals/cashback/cashback.page').then( m => m.CashbackPage)
-  },
-  {
-    path: 'add-employee-data',
-    loadComponent: () => import('./modals/add-employee-data/add-employee-data.page').then( m => m.AddEmployeeDataPage)
-  },
-  {
-    path: 'order-view',
-    loadComponent: () => import('./modals/order-view/order-view.page').then( m => m.OrderViewPage)
-  },
-  // {
-  //   path: 'pick-option',
-  //   loadComponent: () => import('./modals/pick-option/pick-option.page').then( m => m.PickOptionPage)
-  // },
-  // {
-  //   path: 'add-product',
-  //   loadComponent: () => import('./office/CRUD//product/product.page').then( m => m.ProductPage)
-  // },
-  // {
-  //   path: 'add-ingredient',
-  //   loadComponent: () => import('./office/CRUD//ingredient/ingredient.page').then( m => m.IngredientPage)
-  // },
-  // {
-  //   path: 'add-category',
-  //   loadComponent: () => import('./office/CRUD/category/category.page').then( m => m.CategoryPage)
-  // },
-  // {
-  //   path: 'pick-qty',
-  //   loadComponent: () => import('./modals/pick-qty/pick-qty.page').then( m => m.PickQtyPage)
-  // },
-  {
-    path: 'sub-product',
-    loadComponent: () => import('./office/CRUD/sub-product/sub-product.page').then( m => m.SubProductPage)
-  },
-  {
-    path: 'cash-in-out',
-    loadComponent: () => import('./modals/cash-in-out/cash-in-out.page').then( m => m.CashInOutPage)
-  }
-  // {
-  //   path: 'products',
-  //   loadComponent: () => import('./office/products/products.page').then( m => m.ProductsPage)
-  // },
-  // {
-  //   path: 'user-content/:id',
-  //   loadComponent: () => import('./content/user-content/user-content.page').then( m => m.UserContentPage)
-  // },
+
 ];
 
 

@@ -43,7 +43,9 @@ export class Product {
   public toppings: Topping[],
   public ings: Ing[],
   public ingredients:{quantity: number, ingredient: Ingredient}[],
-  public paring: Product[]
+  public paring: Product[],
+  public showSub: boolean,
+  public discount: number,
   ){};
 };
 
@@ -56,6 +58,7 @@ export class SubProduct{
     public quantity: number,
     public product: Product,
     public available: boolean,
+    public ings: Ing[],
   ){};
 };
 

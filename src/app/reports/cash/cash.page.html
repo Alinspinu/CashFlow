@@ -1,0 +1,115 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="selectDate('start')">
+        SART DATE
+        <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
+      </ion-button>
+      <ion-button (click)="selectDate('end')">
+        END DATE
+        <ion-icon src="../../../assets/icon/calendar.svg" class="icon-end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="search()" [disabled]="!startDate || !endDate">
+        CATUTĂ
+        <ion-icon src="../../../assets/icon/search-outline.svg" class="icon-start"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <span *ngIf="today.length" class="show-date">{{startDate ? formatDate(startDate) : ''}}</span>
+  <span *ngIf="today.length" class="show-date">{{endDate ?  formatDate(endDate): ''}}</span>
+</ion-header>
+<ion-content [fullscreen]="true">
+<ion-grid>
+  <ion-row>
+    <ion-col size-lg="6" offset-lg="3">
+      <div class="sum-wrapper">
+        <span class="label">Încasări</span>
+        <span class="total">{{total}} Lei</span>
+        <span class="data">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size-lg="6" offset-lg="3" *ngIf="paymentMethods.length">
+      <div class="method-container">
+        <span class="title">Metode de plată</span>
+        <div class="method" *ngFor="let paymentMeth of paymentMethods; let i = index;" (click)="openBills(paymentMeth.name)">
+          <span class="index">{{i+1}}.</span>
+          <span class="label">{{paymentMeth.name}}</span>
+          <span class="proc">{{paymentMeth.procent}}%</span>
+          <span class="sum">{{paymentMeth.value}} Lei</span>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
+    <div class="method-container">
+      <span class="title">Departamente</span>
+      <div *ngFor="let dep of departaments; let i = index;">
+        <div class="method" (click)="showData(dep)">
+          <span class="index">{{i+1}}.</span>
+          <span class="label">{{dep.name | capitalize}}</span>
+          <span class="proc">{{dep.procent}}%</span>
+          <span class="sum">{{dep.total}} Lei</span>
+        </div>
+        <div *ngIf="dep.showType">
+          <div class="type" *ngFor="let type of dep.dep; let z = index">
+            <span class="label">{{type.name | capitalize}}</span>
+            <span class="proc">{{type.procent}}%</span>
+            <span class="sum">{{type.total}} Lei</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3" *ngIf="hours.length">
+    <div class="method-container">
+      <span class="title">Vanzare pe Ore</span>
+      <div class="method"  *ngFor="let hour of hours; let i = index;">
+        <span class="label">{{hour.hour}}:01 - {{hour.hour +1}}:00</span>
+        <span class="proc">{{hour.procent}}%</span>
+        <span class="sum">{{hour.total}} Lei</span>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3" *ngIf="users.length">
+    <div class="method-container">
+      <span class="title">Utilizatori</span>
+      <div class="method" *ngFor="let user of users; let i = index;">
+        <span class="index">{{i+1}}</span>
+        <span class="label">{{user.name}}</span>
+        <span class="proc">{{user.procent}}%</span>
+        <span class="sum">{{user.total}} Lei</span>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
+    <div class="method-container" *ngFor="let dep of departaments">
+      <span class="title">Top 10 produse {{dep.name}}</span>
+      <div class="method" *ngFor="let product of dep.products.slice(0, 10); let i = index;">
+        <span class="index">{{i+1}}.</span>
+        <span class="label">{{product.name}}</span>
+        <span class="proc">{{product.qty}} buc</span>
+        <span class="sum">{{product.price * product.qty}} Lei</span>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>
+</ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button size="large" (click)="showOrders()" color="tertiary">
+    NOTE DE PLATĂ
+  </ion-button>
+</ion-footer>

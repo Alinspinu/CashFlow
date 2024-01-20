@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EnvironmentInjector, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
@@ -15,5 +15,6 @@ import { IonicModule } from '@ionic/angular';
 
 
 export class ReportsPage {
+  public environmentInjector = inject(EnvironmentInjector);
   constructor() {}
 }

@@ -1,0 +1,45 @@
+
+ion-card{
+  font-family: NoirProLight !important;
+}
+
+.input{
+  height: 100%;
+  // border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.4rem 0 0.4rem 0.2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+
+}
+
+
+.prod-info-wrapper{
+  font-family: NoirProLight;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  .name{
+
+  }
+  .qty{
+    width: 100px;
+  }
+  .price{
+    width: 100px;
+  }
+}
+
+.icon{
+  color: white
+}
+
+.total-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  .client{
+    font-family: NoirProSemi !important;
+  }
+}

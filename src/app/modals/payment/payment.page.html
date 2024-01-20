@@ -10,48 +10,48 @@
     <ion-col>
       <form [formGroup]="paymentForm">
       <ion-item lines="none" class="item">
-        <ion-button color="primary" size="large"  class="button" (click)="cash()">CASH</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('cash')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Numerar" labelPlacement="floating" placeholder="00" formControlName="cash"></ion-input>
         </ion-item>
-        <ion-button color="danger" size="large" class="close" (click)="reset('cash')">X</ion-button>
+        <ion-button color="tertiary" size="large"  class="button" (click)="cash()" [disabled]="disablePayButtons">CASH</ion-button>
       </ion-item>
-      <ion-item lines="none" class="item">
-        <ion-button color="primary" size="large" class="button" (click)="card()">CARD</ion-button>
+      <!-- <ion-item lines="none" class="item">
+        <ion-button color="light" size="large" class="close" (click)="reset('card')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Card Bancar" labelPlacement="floating" placeholder="00" formControlName="card" ></ion-input>
         </ion-item>
-        <ion-button color="danger" size="large" class="close" (click)="reset('card')">X</ion-button>
-      </ion-item>
+        <ion-button color="tertiary" size="large" class="button" (click)="card()"[disabled]="disablePayButtons">CARD</ion-button>
+      </ion-item> -->
       <ion-item lines="none" class="item">
-        <ion-button color="primary" size="large" class="button" (click)="viva()">VIVA</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('viva')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Viva Wallet" labelPlacement="floating" placeholder="00" formControlName="viva"></ion-input>
         </ion-item>
-        <ion-button color="danger" size="large" class="close" (click)="reset('viva')">X</ion-button>
+        <ion-button color="tertiary" size="large" class="button" (click)="viva()"[disabled]="disablePayButtons">VIVA</ion-button>
       </ion-item>
 
       <ion-item lines="none" class="item">
-        <ion-button color="primary" size="large" class="button" (click)="online()">ONLINE</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('online')"[disabled]="true">X</ion-button>
         <ion-item lines="none" class="input">
-          <ion-input type="number" label="Plată Online" labelPlacement="floating" placeholder="00" formControlName="online"></ion-input>
+          <ion-input type="number" label="Plată Online" labelPlacement="floating" placeholder="00" formControlName="online" [disabled]="true"></ion-input>
         </ion-item>
-        <ion-button color="danger" size="large" class="close" (click)="reset('online')">X</ion-button>
+        <ion-button color="tertiary" size="large" class="button" (click)="online()"[disabled]="true">ONLINE</ion-button>
       </ion-item>
 
-      <ion-item lines="none" class="item">
-        <ion-button color="primary" size="large" class="button" (click)="voucher()">VOUCHER</ion-button>
+      <!-- <ion-item lines="none" class="item">
+        <ion-button color="light" size="large" class="close" (click)="reset('voucher')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Voucher" labelPlacement="floating" placeholder="00" formControlName="voucher"></ion-input>
         </ion-item>
-        <ion-button color="danger" size="large" class="close" (click)="reset('voucher')">X</ion-button>
-      </ion-item>
+        <ion-button color="tertiary" size="large" class="button" (click)="voucher()"[disabled]="disablePayButtons">VOUCHER</ion-button>
+      </ion-item> -->
       <ion-item lines="none" class="item">
-        <ion-button color="primary" size="large" class="button" (click)="cif()">RO</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('cif')">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="text" label="Cod Fiscal" labelPlacement="floating" placeholder="ex.RO123232" formControlName="cif" #cifInp></ion-input>
         </ion-item>
-        <ion-button color="danger" size="large" class="close" (click)="reset('cif')">X</ion-button>
+        <ion-button color="tertiary" size="large" class="button" (click)="cif()">RO</ion-button>
       </ion-item>
     </form>
     </ion-col>
@@ -63,8 +63,8 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-      <ion-button size="large" expand="block" color="danger"(click)="cancel()" [disabled]="disableCancelButton">Renunță</ion-button>
-    </ion-col>
+        <ion-button size="large" expand="block" color="danger"(click)="cancel()" [disabled]="disableCancelButton">Renunță</ion-button>
+      </ion-col>
       <ion-col>
         <ion-button size="large" expand="block" color="primary" (click)="cashIn()">{{button}}</ion-button>
         </ion-col>

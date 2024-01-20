@@ -56,6 +56,7 @@ export class SubProductPage implements OnInit {
    }
    this.toppings = this.sub.toppings
    this.productIngredientss = this.sub.ings;
+   console.log(this.productIngredientss)
   }
 
   onClose(){

@@ -52,6 +52,9 @@ export class AddEmployeeDataPage implements OnInit {
       access: new FormControl(null, {
         updateOn: 'change',
       }),
+      generalDiscount: new FormControl(null, {
+        updateOn: 'change',
+      }),
     });
     if(this.data){
       this.form.get('fullName')?.setValue(this.data.fullName);
@@ -61,6 +64,7 @@ export class AddEmployeeDataPage implements OnInit {
       this.form.get('address')?.setValue(this.data.address);
       this.form.get('position')?.setValue(this.data.position);
       this.form.get('access')?.setValue(this.data.access.toString());
+      this.form.get('generalDiscount')?.setValue(this.data.discount.general);
     }
   }
 

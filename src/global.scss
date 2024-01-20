@@ -44,6 +44,18 @@
   font-family: 'RobThin';    //This is what we are going to call
   src: url('./assets/fonts/RobotoSlab-Thin.ttf');
 }
+@font-face {
+  font-family: 'NoirProSemi';    //This is what we are going to call
+  src: url('./assets/fonts/NoirPro-SemiBold.woff2');
+}
+@font-face {
+  font-family: 'NoirProReg';    //This is what we are going to call
+  src: url('./assets/fonts/NoirPro-Regular.woff2');
+}
+@font-face {
+  font-family: 'NoirProLight';    //This is what we are going to call
+  src: url('./assets/fonts/NoirPro-Light.woff2');
+}
 
 body ion-alert.extraAlert{
   .alert-input{
@@ -83,4 +95,19 @@ body ion-alert.deleteAlert{
 
   .billModal{
     --height: 95%;
+    --min-width: none !important;
+    --width: 60% !important;
+  }
+
+  body ion-alert.discountAlert {
+    --max-width: none!important;
+    --width: 400px!important;
+    .custom-input {
+      height: 55px;
+      background-color: var(--ion-color-tertiary);
+      font-size: 20px;
+      border: 0.5px solid black;
+      border-radius: 8px;
+      padding: 12px;
+    }
   }

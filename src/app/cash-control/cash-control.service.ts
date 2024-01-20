@@ -17,7 +17,7 @@ raport(value: string){
   return this.http.get<{message: string}>(`${environment.BASE_URL}pay/reports?value=${value}`)
 }
 
-caahInAndOut(data: any){
+cashInAndOut(data: any){
   return this.http.post<{message: string}>(`${environment.BASE_URL}pay/in-and-out`, {data: data})
 }
 
@@ -31,6 +31,10 @@ changePaymnetMethod(bill: Bill){
 
 reprintBill(bill: Bill){
   return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
+}
+
+removeProductDiscount(data: any){
+  return this.http.post(`${environment.BASE_URL}product/disc-prod`, {data: data})
 }
 
 }

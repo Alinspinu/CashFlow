@@ -1,3 +1,5 @@
+import { Preferences } from "@capacitor/preferences";
+import User from "src/app/auth/user.model";
 
 
 export function round(num: number): number {
@@ -47,4 +49,16 @@ export function formatedDateToShow(date: any){
       });
       return paymentMethod
 
+  }
+
+ export function getUserFromLocalStorage(){
+   return Preferences.get({key: 'authData'}).then(data  => {
+      let user: User
+      if(data.value) {
+       user = JSON.parse(data.value)
+      return user
+      } else{
+       return null
+      }
+    })
   }

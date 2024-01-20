@@ -36,7 +36,7 @@ export class RegisterPage implements OnInit {
   cart: string = '';
   showFood: boolean = false;
   showCoffee: boolean = false;
-  register: boolean = false;
+  register: boolean = true;
   showFoodPrice: boolean = false;
   showCoffeePrice: boolean = false;
   survey: any = []

@@ -1,0 +1,73 @@
+
+ion-content{
+  --background: var(--ion-color-tertiary);
+}
+
+.icon-start{
+  height: 18px;
+  margin-left: 4px;
+}
+
+.icon-end{
+  height: 19px;
+  margin-left: 4px;
+}
+.add{
+  height: 35px;
+}
+
+.nir-entry{
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  .nr{
+    flex: 2%;
+  }
+  .date{
+    text-align: center;
+    flex: 20%;
+  }
+  .suplier{
+    text-align: center;
+    flex: 20%;
+  }
+  .docNumber{
+    text-align: center;
+    flex: 20%;
+  }
+}
+
+// .input:hover{
+//   --background: var(--ion-color-medium);
+// }
+
+.data{
+  flex: 8%;
+  text-align: center;
+}
+
+.input{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+}
+
+.display-date{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  padding: 10px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+}
+
+.start{
+  margin-left: 12px;
+}
+
+ion-item[slot="fixed"]{
+  top: 10%;
+  width: 100%;
+  opacity: 60%;
+  // --backgound: transparent;
+}

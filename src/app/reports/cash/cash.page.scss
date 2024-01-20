@@ -1,0 +1,133 @@
+ion-content {
+  --background: var(--ion-color-tertiary) !important;
+  font-family: NoirProRegular !important;
+}
+
+.show-date{
+  font-size: 12px;
+  font-family: NoirProRegular !important;
+}
+
+.sum-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-top: 5%;
+  margin-bottom: 8px;
+  span{
+    color: var(--ion-color-primary);
+  }
+  .total{
+    font-family: NoirPro !important;
+    font-size: 30px;
+    align-self: center;
+  }
+  .label{
+    font-family: NoirProRegular !important;
+    font-size: 20px;
+    align-self: center;
+    margin-bottom: 8px;
+  }
+  .data{
+    font-family: NoirProRegular !important;
+    font-size: 14px;
+    align-self: center;
+    margin-top: 4px;
+  }
+}
+
+.method-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 5%;
+  border-radius: 6px 6px 0 0;
+  width: 100%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 5px rgba(0, 0, 0, 0.15);
+  background-color: var(--ion-color-secondary);
+  .title {
+    text-align: center;
+    color: white;
+    font-family: NoirProRegular !important;
+    font-size: 26px;
+    margin: 8px 0 4px 0;
+    padding: 8px;
+  }
+  .method{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+    color: white;
+    border-bottom: 0.8px solid white;
+    justify-content: space-between;
+    align-items: center;
+    .index{
+      font-family: NoirProRegular !important;
+      font-size: 22px;
+      margin-right: 4px;
+      align-self: flex-start;
+    }
+    .label{
+      font-family: NoirProRegular !important;
+      font-size: 22px;
+      flex: 40%;
+    }
+    .proc{
+      font-family: NoirProRegular !important;
+      font-size: 16px;
+      flex: 20%;
+      text-align: center;
+    }
+    .sum{
+      font-family: NoirPro !important;
+      font-size: 22px;
+      flex: 40%;
+      text-align: end;
+    }
+  }
+  .type{
+    display: flex;
+    flex-direction: row;
+    padding: 5px 30px 5px 60px;
+    color: rgb(255, 252, 162);
+    justify-content: space-between;
+    border-bottom: 0.8px solid white;
+    align-items: center;
+    .index{
+      font-family: NoirProRegular !important;
+      font-size: 18px;
+      margin-right: 4px;
+      align-self: flex-start;
+    }
+    .label{
+      font-family: NoirProRegular !important;
+      font-size: 18px;
+      flex: 40%;
+    }
+    .proc{
+      font-family: NoirProRegular !important;
+      font-size: 14px;
+      flex: 20%;
+      text-align: center;
+    }
+    .sum{
+      font-family: NoirPro !important;
+      font-size: 18px;
+      flex: 40%;
+      text-align: end;
+    }
+  }
+}
+
+.icon-start{
+  height: 18px;
+  margin-left: 4px;
+}
+
+.icon-end{
+  height: 19px;
+  margin-left: 4px;
+}
+

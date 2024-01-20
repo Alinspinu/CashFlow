@@ -23,12 +23,17 @@
                 <img alt="Product Image" [src]="product.imgUrl" />
               </ion-thumbnail>
               <div class="prod-info-wrapper">
-                <span class="name">{{product.name}}</span>
-                <span class="qty">{{product.quantity}} Buc</span>
-                <span class="price">{{product.price * product.quantity}} Lei</span>
+                <div class="prod-info">
+                  <span class="name">{{product.name}}</span>
+                  <span class="qty">{{product.quantity}} Buc</span>
+                  <span class="price">{{product.price * product.quantity}} Lei</span>
+                </div>
+                <div class="prod-toppings" *ngIf="product.toppings.length">
+                  <span class="topping" *ngFor="let top of product.toppings">+ {{top.name}}</span>
+                </div>
               </div>
             </ion-item>
-            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.cashBack > 0">
+            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.cashBack > 0 || order.discount > 0">
               <div class="total-wrapper">
                 <span class="total-text">VALOARE PRODUSE</span>
                 <span class="total">{{order.cashBack + order.total+ order.discount}} Lei</span>

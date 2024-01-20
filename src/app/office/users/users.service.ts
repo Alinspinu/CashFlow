@@ -18,12 +18,12 @@ export class UsersService{
     private http: HttpClient
   ){}
 
-  getUsers(filter: string, searchInput: string){
-    return this.http.post<{}[]>(`${environment.BASE_URL}users?search=${searchInput}`, {filter: filter})
+  getUsers(filter: string, searchInput: string, locatie: string){
+    return this.http.post<{}[]>(`${environment.BASE_URL}users?search=${searchInput}&loc=${locatie}`, {filter: filter})
   }
 
   editUser(user: any, id: string){
-    return this.http.put<{message: string}>(`${environment.BASE_URL}users/user?id=${id}`, {employee: user})
+    return this.http.put<{message: string}>(`${environment.BASE_URL}users/user?id=${id}`, {update: {employee: user}})
   }
   deleteUser(id: string){
     return this.http.delete<{message: string}>(`${environment.BASE_URL}users/ed-user?id=${id}`)
@@ -31,6 +31,10 @@ export class UsersService{
 
   getUser(userId: string){
     return this.http.post(`${environment.BASE_URL}users/user`, {userId: userId})
+  }
+
+  setUserDiscount(userId: string, discount: any){
+    return this.http.put<{message: string}>(`${environment.BASE_URL}users/user?id=${userId}`, {update: {discount: {general: discount.general, category: discount.category}, cashBackProcent: discount.cashBackProcent}})
   }
 
 }

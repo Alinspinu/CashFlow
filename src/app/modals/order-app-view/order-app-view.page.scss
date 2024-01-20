@@ -1,0 +1,48 @@
+.input{
+  height: 100%;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.4rem 0 0.4rem 0.2rem;
+  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+
+}
+
+
+.prod-info-wrapper{
+  display: flex;
+  flex-direction: column;
+  .prod-info {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    width: 100% !important;
+    .name{
+      flex: 60%;
+      width: 300px;
+    }
+    .qty{
+      flex: 20%;
+    }
+    .price{
+      flex: 20%;
+      margin-left: auto;
+    }
+  }
+
+  .prod-toppings{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-content: space-around;
+    .topping{
+      color: rgb(69, 69, 69)
+    }
+  }
+}
+
+.total-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}

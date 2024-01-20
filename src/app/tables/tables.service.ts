@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, take, tap } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
-import { emptyBill, emptyTable } from "../shared/utils/empty-models";
+import { emptyBill, emptyTable } from "../models/empty-models";
 import {AuthService} from "../auth/auth.service"
 
 
@@ -48,7 +48,7 @@ addNewBill(masa: number, name: string){
   }
 }
 
-mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any){
+mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any, locatie: string){
   let mergedBills: Bill = emptyBill()
   let productsToMerge: any = []
   let total = 0
@@ -70,14 +70,14 @@ mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any)
     mergedBills.total = total;
     table.bills.push(mergedBills);
     let newIndex = bills.findIndex(obj => obj.name === 'UNITE')
-    this.saveTablesLocal(masa, 'new', newIndex, employee).subscribe()
+    this.saveOrder(masa, 'new', newIndex, employee, locatie).subscribe()
   }
 }
 
-manageSplitBills(tableIndex: number, billIndex: number, employee: any){
+manageSplitBills(tableIndex: number, billIndex: number, employee: any, locatie: string){
   let bill = this.tables[tableIndex-1].bills[billIndex]
   bill._id.length ? bill._id = bill._id : bill._id = 'new'
-  this.saveTablesLocal(tableIndex, bill._id, billIndex, employee).subscribe()
+  this.saveOrder(tableIndex, bill._id, billIndex, employee, locatie).subscribe()
 }
 
 removeBill(masa: number, billIndex: number){
@@ -101,20 +101,24 @@ if(table){
   if(table.bills.length){
     bill = table.bills[billIndex]
     bill.productCount++
-    const existingProduct = bill.products.find(p =>(p.name === product.name) && this.arraysAreEqual(p.toppings, product.toppings) && p.sentToPrint);
-    if (existingProduct) {
-      existingProduct.quantity = product.quantity + existingProduct.quantity;
-      existingProduct.total = (existingProduct.quantity) * existingProduct.price;
-      bill.total = bill.total + existingProduct.price
-    } else {
+    // const existingProduct = bill.products.find(p =>(p.name === product.name) && this.arraysAreEqual(p.toppings, product.toppings) && p.sentToPrint);
+    // if (existingProduct) {
+    //   existingProduct.quantity = product.quantity + existingProduct.quantity;
+    //   existingProduct.total = (existingProduct.quantity) * existingProduct.price;
+    //   bill.total = bill.total + existingProduct.price
+    // } else {
+      // }
+      product.quantity = 1
+      console.log(product)
       bill.products.push(product)
+      console.log(bill)
       bill.total = bill.total + product.price
-    }
     this.tableState.next([...this.tables])
   } else {
     bill.masaRest.index = masa;
     bill.productCount++
     bill.total= bill.total + product.price
+    product.quantity = 1
     bill.products.push(product)
     table.bills.push(bill)
     this.tableState.next([...this.tables])
@@ -175,14 +179,14 @@ addCustomer(customer: any, masa: number, billIndex: number){
 }
 }
 
-redCustomer(masa: number, billIndex: number, billId: string, employee: any){
+redCustomer(masa: number, billIndex: number, billId: string, employee: any, locatie: string){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     let bill: Bill = emptyBill()
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = emptyBill().clientInfo
-      this.saveTablesLocal(masa, billId, billIndex, employee).subscribe()
+      this.saveOrder(masa, billId, billIndex, employee, locatie).subscribe()
   }
 }
 }
@@ -191,8 +195,8 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any){
 //**********************HTTP REQ******************* */
 
 
-getTables(){
-  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables`).subscribe(response => {
+getTables(locatie: string){
+  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}`).subscribe(response => {
     if(response){
       this.tables = response
       this.tableState.next([...this.tables])
@@ -200,8 +204,8 @@ getTables(){
   })
 }
 
-addTable(name: string){
-  return this.http.post<{message: string, table: Table}>(`${environment.BASE_URL}table`, {name: name})
+addTable(name: string, locatie: string){
+  return this.http.post<{message: string, table: Table}>(`${environment.BASE_URL}table?loc=${locatie}`, {name: name})
     .pipe(take(1), tap(response => {
     if(response){
       this.tables.push(response.table)
@@ -212,9 +216,11 @@ addTable(name: string){
 
 editTable(tableIndex: number, name: string){
   const table = this.tables[tableIndex-1];
+  console.log("before", table, "name", name)
   return this.http.put<{message: string, table: Table}>(`${environment.BASE_URL}table`,{name: name, tableId: table._id})
   .pipe(take(1), tap(response => {
     if(response){
+      console.log("after server",response)
       const table = this.tables[response.table.index-1]
       table.name = response.table.name
       this.tableState.next([...this.tables])
@@ -234,13 +240,15 @@ deleteTable(tableId: string, index: number){
   }))
 }
 
-saveTablesLocal(tableIndex:number, billId: string, billIndex: number, employee: any){
+saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
   bill.employee = employee
+  bill.locatie = locatie
+  bill.onlineOrder = false
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
@@ -248,13 +256,14 @@ saveTablesLocal(tableIndex:number, billId: string, billIndex: number, employee: 
     bill._id = res.billId;
     bill.index = res.index;
     bill.products = res.products
+    bill.products.forEach(product => product.sentToPrint = false)
     bill.masaRest = res.masa
     this.tableState.next([...this.tables])
  }));
 };
 
-uploadIngs(ings: any, quantity: number){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings`, {ings, quantity})
+uploadIngs(ings: any, quantity: number, locatie: string){
+  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity})
 }
 
 deleteOrders(data: any[]){

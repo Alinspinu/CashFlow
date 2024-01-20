@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="sum ion-text-center">{{total}} LEI</ion-title>
+    <ion-title class="sum ion-text-center">{{title}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,10 +10,13 @@
   <ion-row class="input-row">
     <ion-col>
       <ion-item lines="none" class="input">
-        <ion-input type="number" label="Valorică" labelPlacement="floating" placeholder="00" (ionInput)="onValChange($event)" formControlName="val"></ion-input>
+        <ion-input type="number" [label]="valLabel" labelPlacement="floating" placeholder="00" (ionInput)="onValChange($event)" formControlName="val"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input">
-        <ion-input type="number" label="Procentuală %" labelPlacement="floating" placeholder="%" (ionInput)="onProcentChange($event)"  formControlName="procent"></ion-input>
+        <ion-input type="number" label="Reducere procentuală %" labelPlacement="floating" placeholder="%" (ionInput)="onProcentChange($event)"  formControlName="procent"></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input" *ngIf="tva">
+        <ion-input type="number" label="Alege cota TVA" labelPlacement="floating" placeholder="19% 9% 5% 0%"  formControlName="tva"></ion-input>
       </ion-item>
     </ion-col>
   </ion-row>

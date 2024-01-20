@@ -8,7 +8,8 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { AddEmployeeDataPage } from 'src/app/modals/add-employee-data/add-employee-data.page';
 import { formatedDateToShow } from 'src/app/shared/utils/functions';
-import { OrderViewPage } from 'src/app/modals/order-view/order-view.page';
+import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
+import { AddClientDiscountPage } from 'src/app/modals/add-client-discount/add-client-discount.page';
 
 @Component({
   selector: 'app-user-content',
@@ -52,8 +53,19 @@ export class UserContentPage implements OnInit {
   }
 
   showOrder(order: any){
-    this.actSrv.openPayment(OrderViewPage, order)
+    this.actSrv.openPayment(OrderAppViewPage, order)
   }
+
+  async addDiscount(){
+  const data = await this.actSrv.openPayment(AddClientDiscountPage, {user: true, data: this.user})
+    if(data){
+      this.userSrv.setUserDiscount(this.userId, data).subscribe(response => {
+        if(response) {
+          showToast(this.toastCtrl, response.message, 2000)
+        }
+      })
+      }
+}
 
   getUserId(){
     this.route.paramMap.subscribe(params => {

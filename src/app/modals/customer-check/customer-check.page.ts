@@ -4,6 +4,9 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { CustomerCheckService } from './customer-check.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
+import User from 'src/app/auth/user.model';
+import { Preferences } from '@capacitor/preferences';
+import { Router } from '@angular/router';
 
  export interface Customer{
   userId: string
@@ -29,20 +32,34 @@ export class CustomerCheckPage implements OnInit {
   foundClient: boolean = false
   search: boolean = true
   customer!: Customer
+  user!: User
 
   constructor(
    @Inject(CustomerCheckService) private customerSrv: CustomerCheckService,
    private toastCtrl: ToastController,
    private modalCtrl: ModalController,
+   private router: Router
   ) { }
 
   ngOnInit() {
+    this.getUser()
     this.setUpSearchForm()
     this.setUpAddForm()
   }
 
   dismissModal(){
     this.modalCtrl.dismiss(null)
+  }
+
+  getUser(){
+    Preferences.get({key:'authData'}).then(data => {
+      if(data.value){
+        this.user = JSON.parse(data.value)
+        console.log(this.user)
+      } else {
+        this.router.navigateByUrl('/auth')
+      }
+    })
   }
 
   setUpAddForm(){
@@ -54,6 +71,9 @@ export class CustomerCheckPage implements OnInit {
       name: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
+      }),
+      cardCode: new FormControl(null, {
+        updateOn: 'change',
       }),
     })
   }
@@ -97,15 +117,18 @@ addClient(){
   if(this.addCustomerForm.valid){
     const email = this.addCustomerForm.value.email
     const name = this.addCustomerForm.value.name
-      this.customerSrv.createCustomer(name, email).subscribe(res => {
+    const cardIndex = this.addCustomerForm.value.cardCode ? this.addCustomerForm.value.cardCode : 0
+      this.customerSrv.createCustomer(name, email, cardIndex, this.user.locatie).subscribe(res => {
         if(res.message === "All good"){
             showToast(this.toastCtrl, `Un email a fost trimis la ${email} pentru a completa înregistrarea!`, 5000)
             this.customer = res.customer
             this.customer.userId = res.customer._id
             this.modalCtrl.dismiss(this.customer)
-        } else if(res.message === 'This email allrady exist'){
-          showToast(this.toastCtrl, 'Acest email există deja în baza de date!' , 5000)
-          this.customer = res.customer
+            console.log(this.customer)
+          } else if(res.message === 'Acest email există deja în baza de date!' || res.message === "Utilizatorului i s-a adaugat cadrul la cont"){
+            showToast(this.toastCtrl, res.message , 3000)
+            this.customer = res.customer
+            console.log(this.customer)
           this.customer.userId = res.customer._id
           this.addClientMode = false
         }

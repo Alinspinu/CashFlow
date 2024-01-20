@@ -1,3 +1,4 @@
+
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 
@@ -12,7 +13,8 @@ export function emptyUser(){
     tokenExpirationDate: '',
     status: '',
     telephone: '',
-    employee: {fullName: '', position: '', user: ''}
+    locatie: '',
+    employee: {fullName: '', position: '', user: '', access: 0}
   };
     return user
 }
@@ -39,6 +41,9 @@ export function  emptyBillProduct(){
     imgUrl: '',
     comment: '',
     tva: '',
+    discount: 0,
+    dep: '',
+    toppingsToSend: []
   }
   return billProduct
  }
@@ -78,6 +83,7 @@ export function emptyBill(){
     pickUp: false,
     completetime: 0,
     paymentMethod: '',
+    onlineOrder: false,
     payment: {
       card: 0,
       cash: 0,
@@ -90,6 +96,10 @@ export function emptyBill(){
       telephone: '',
       userId: '',
       cashBack: 0,
+      discount: {
+        general: 0,
+        category: [],
+      }
     },
     employee: {
       access: 0,
@@ -106,6 +116,7 @@ export function emptyBill(){
     name: 'COMANDA',
     products: [],
     createdAt: '',
+    locatie: '',
   }
   return emptyBill
 }

@@ -1,3 +1,8 @@
+
+ion-content{
+  --background: var(--ion-color-tertiary);
+}
+
 .input{
   height: 45px;
   border: 0.5px solid var(--ion-color-medium);
@@ -15,6 +20,11 @@ img{
   font-weight: 500;
 }
 
+.arrow {
+  height: 18px;
+  padding: 10px;
+}
+
 .edit{
  color: var(--ion-color-primary);
  margin: 10px;
@@ -26,7 +36,7 @@ img{
 }
 
 ion-item[slot="fixed"]{
-  top: 8%;
+  top: 11%;
   width: 100%;
   opacity: 60%;
   // --backgound: transparent;
@@ -50,6 +60,12 @@ ion-item[slot="fixed"]{
   }
   .gestiune{
     flex:5%;
+  }
+  .um{
+    flex: 5%;
+  }
+  .price{
+    flex: 5%;
   }
   .qty{
     flex: 7%;

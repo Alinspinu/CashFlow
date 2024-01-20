@@ -8,9 +8,9 @@ import { PickQtyPage } from 'src/app/modals/pick-qty/pick-qty.page';
 import { AddIngredientPage } from '../add-ingredient/add-ingredient.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { RecipeMakerService } from './recipe-maker.service';
-import { environment } from 'src/environments/environment';
-import { ActivatedRoute } from '@angular/router';
 import { IonSearchbar } from '@ionic/angular/standalone';
+import User from 'src/app/auth/user.model';
+import { Preferences } from '@capacitor/preferences';
 
 
 @Component({
@@ -49,8 +49,11 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   productIngUm: string = '';
   productIngQty: string = '';
   productIngGest: string = 'magazie'
+  color: string = ""
 
   recipeTotal: number = 0;
+
+  user!: User
 
 
   constructor(
@@ -74,9 +77,18 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.getUser()
     setTimeout(()=>{
       this.setDataToEdit()
     }, 1100)
+  }
+
+  getUser(){
+    Preferences.get({key: 'authData'}).then(data => {
+      if(data.value){
+        this.user = JSON.parse(data.value)
+      }
+    })
   }
 
 
@@ -99,14 +111,14 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         um: this.productIngUm,
         qty: 1,
         ings: this.ingredientsToSend,
-        locatie: environment.LOCATIE,
+        locatie: this.user.locatie,
         price: this.round(this.recipeTotal / +this.productIngQty),
         productIngredient: true,
         gestiune: this.productIngGest
       }
       this.productIngQty = '1'
       this.recipeTotal = +prodIng.price
-      this.recipeService.saveIng(prodIng).subscribe(response => {
+      this.recipeService.saveIng(prodIng, this.user.locatie).subscribe(response => {
         if(response){
           showToast(this.toastCtrl, response.message, 3000)
           this.displayIngs = [];
@@ -129,10 +141,12 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   deleteIng(index: number){
     this.displayIngs.splice(index, 1)
     this.ingredientsToSend.splice(index, 1)
+    this.calcrRecipeTotal(this.displayIngs)
     this.ingsSend.emit(this.ingredientsToSend)
   }
 
   setDataToEdit(){
+    this.ingPage ? this.color = "tertiary": this.color = ''
     if(this.top && this.top.length){
       this.toppings = this.top
       this.toppSend.emit(this.toppings)
@@ -146,8 +160,8 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         }
         this.ingredientsToSend.push(ing)
         this.ingsSend.emit(this.ingredientsToSend)
-        this.calcrRecipeTotal(el)
       })
+      this.calcrRecipeTotal(this.displayIngs)
     }
   }
 
@@ -158,7 +172,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   searchIngredient(ev: any){
     const input = ev.detail.value;
     if(!this.ingPage){
-      this.recipeService.getIngredients(input).subscribe(response => {
+      this.recipeService.getIngredients(input, this.user.locatie).subscribe(response => {
         this.ingredients = response
         if(input === ''){
           this.ingredients = []
@@ -194,7 +208,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         this.displayIngs.push(ingToShow);
         this.ingredientsToSend.push(ingToSend)
         this.ingsSend.emit(this.ingredientsToSend)
-        this.calcrRecipeTotal(ingToShow);
+        this.calcrRecipeTotal(this.displayIngs);
         this.ingredients = [];
         this.ingredientSearch = '';
       }
@@ -204,7 +218,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   async addIng(){
    const ing = await this.actionSrv.openModal(AddIngredientPage, [], false)
    if(ing){
-     this.recipeService.saveIng(ing).subscribe(response => {
+     this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
       showToast(this.toastCtrl, response.message, 4000)
      })
    }
@@ -215,9 +229,17 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     return Math.round((num + Number.EPSILON) * 100) / 100;
 }
 
-calcrRecipeTotal(ing: any){
-    this.recipeTotal = this.recipeTotal + (ing.ing.price * ing.qty)
+calcrRecipeTotal(ings: any){
+  this.recipeTotal = 0
+  ings.forEach((ing: any) => {
+    const price = ing.ing.price
+    const tva = ing.ing.tva / 100
+    const priceWithTva = price + price * tva
+    this.recipeTotal = this.recipeTotal + (priceWithTva * ing.qty)
+  })
 }
+
+
 
 
 

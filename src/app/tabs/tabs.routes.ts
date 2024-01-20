@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from '../auth/auth-guard';
 import { TabsPage } from './tabs.page';
 
 export const routes: Routes = [
@@ -10,7 +11,7 @@ export const routes: Routes = [
         path: 'tables',
         loadComponent: () =>
           import('../tables/tables.page').then((m) => m.TablesPage),
-          // canLoad: [AuthGuard]
+          canActivate: [AuthGuard]
       },
       {
         path: 'office',
@@ -19,28 +20,39 @@ export const routes: Routes = [
       },
       {
         path: 'reports',
+        loadChildren: () =>
+          import('../reports/reports.routes').then((m) => m.routes),
+      },
+      {
+        path: 'reports',
         loadComponent: () =>
           import('../reports/reports.page').then((m) => m.ReportsPage),
+          canActivate: [AuthGuard]
       },
       {
         path: 'add-product',
-        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage)
+        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage),
+        canActivate: [AuthGuard]
       },
       {
-        path: 'add-suplier',
-        loadComponent: () => import('../office/CRUD/suplier/suplier.page').then( m => m.SuplierPage)
+        path: 'add-suplier/:value',
+        loadComponent: () => import('../office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
+        canActivate: [AuthGuard]
       },
       {
         path: 'add-product/:id',
-        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage)
+        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage),
+        canActivate: [AuthGuard]
       },
       {
         path: 'user-content/:id',
-        loadComponent: () => import('../content/user-content/user-content.page').then( m => m.UserContentPage)
+        loadComponent: () => import('../content/user-content/user-content.page').then( m => m.UserContentPage),
+        canActivate: [AuthGuard]
       },
       {
         path: 'cash-control',
-        loadComponent: () => import('../cash-control/cash-control.page').then( m => m.CashControlPage)
+        loadComponent: () => import('../cash-control/cash-control.page').then( m => m.CashControlPage),
+        canActivate: [AuthGuard]
       },
       {
         path: '',

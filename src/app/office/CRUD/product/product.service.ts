@@ -19,8 +19,8 @@ export class ProductService{
   }
 
 
-  saveProduct(product: any){
-    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add`, product)
+  saveProduct(product: any, loc: string){
+    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?loc=${loc}`, product)
   }
 
   editProduct(product: any, id: string) {
@@ -36,12 +36,12 @@ export class ProductService{
     return this.http.delete(`${environment.BASE_URL}sub/sub-product?id=${id}`)
   }
 
-  saveSubProduct(sub: SubProduct){
-    return this.http.post<{message: string, subProduct: any}>(`${environment.BASE_URL}sub/sub-prod-add`, sub)
+  saveSubProduct(sub: SubProduct, loc: string){
+    return this.http.post<{message: string, subProduct: any}>(`${environment.BASE_URL}sub/sub-prod-add?loc=${loc}`, sub)
   }
 
-  saveCategory(category: any) {
-    return this.http.post(`${environment.BASE_URL}api-true/cat-add`, category)
+  saveCategory(category: any, loc: string) {
+    return this.http.post(`${environment.BASE_URL}cat/cat-add?loc=${loc}`, category)
   }
 
 }

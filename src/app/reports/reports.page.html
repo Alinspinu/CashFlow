@@ -1,16 +1,21 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-tabs>
+  <ion-tab-bar slot="top">
 
-</ion-content>
+    <ion-tab-button tab="live-stoc" href="/register/live-stoc">
+      <ion-icon aria-hidden="true" src="../../assets/icon/tools.svg"></ion-icon>
+      <ion-label>Live Stoc</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="cash" href="/register/cash">
+      <ion-icon aria-hidden="true" src="../../assets/icon/business.svg"></ion-icon>
+      <ion-label>Cash</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="products" href="/register/products">
+      <ion-icon aria-hidden="true" src="../../assets/icon/food.svg"></ion-icon>
+      <ion-label>Produse</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</ion-tabs>

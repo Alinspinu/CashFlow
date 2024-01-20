@@ -2,25 +2,26 @@ import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonicModule, ToastController } from '@ionic/angular';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ContentService } from '../content.service';
 import { Category, Product } from '../../models/category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
 import { Bill, BillProduct, deletetBillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
-import { Subscription } from 'rxjs';
+import {  Subscription } from 'rxjs';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
 import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
 import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
-import { DiscountPage } from 'src/app/modals/discount/discount.page';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { AuthService } from 'src/app/auth/auth.service';
 import User from 'src/app/auth/user.model';
-import { environment } from 'src/environments/environment';
-import { emptyDeletetBillProduct, emptyTable } from 'src/app/shared/utils/empty-models';
+import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
+import { round } from 'src/app/shared/utils/functions';
+import { TipsPage } from 'src/app/modals/tips/tips.page';
+import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
 
 @Component({
   selector: 'app-table-content',
@@ -52,8 +53,6 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   table: Table = emptyTable();
   tableNumber: number = 0;
-
-  billCashBack!: number | null
   cashBackMode: boolean = true
 
   billProducts: BillProduct[] = [];
@@ -76,21 +75,23 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   comment: string = ''
 
+
   constructor(
     private route: ActivatedRoute,
     private contSrv: ContentService,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private tableSrv: TablesService,
     private toastCtrl: ToastController,
-    private authSrv: AuthService
+    private authSrv: AuthService,
+    private router: Router,
     ) { }
 
 
   ngOnInit() {
+    this.getUser();
     this.getTableNumber();
     this.getData();
     this.getBill();
-    this.getUser();
   }
 
   ngOnDestroy(): void {
@@ -112,6 +113,7 @@ export class TableContentPage implements OnInit, OnDestroy {
       }
     })
   }
+
 
   getData(){
     this.contSrv.categorySend$.subscribe(response => {
@@ -142,6 +144,11 @@ export class TableContentPage implements OnInit, OnDestroy {
         this.disableDeleteOrderButton()
       }
       this.billToshow = this.table.bills[this.billIndex]
+      if(this.billToshow && this.billToshow.payOnline){
+        this.billToshow.payment.online= this.billToshow.total
+        this.billToshow.total = 0
+        this.billToshow.payOnline = false
+      }
       this.disableBrakeButton()
       if(this.billToshow && this.billToshow.clientInfo.name.length){
         this.client = this.billToshow.clientInfo
@@ -229,6 +236,11 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.client = this.billToshow.clientInfo.name.length ? this.billToshow.clientInfo : null
     this.billProducts = [...this.billToshow.products]
     this.billIndex = orderIndex
+    if(this.billToshow.payOnline){
+      this.billToshow.payment.online = this.billToshow.total
+      this.billToshow.total = 0
+      this.billToshow.payOnline = false
+    }
     // this.billToshow.masaRest.index = this.tableNumber
     this.billToshow.show = true
     this.disableBrakeButton()
@@ -264,43 +276,28 @@ async addToBill(product: Product){
      return triggerEscapeKeyPress()
     }
   }
-  let options: Topping[] = []
-  let optionPrice: number = 0;
-  let pickedToppings: Topping[] = [];
-  if(product.toppings.length){
-    const itemsToSort = [...product.toppings]
-    options = itemsToSort.sort((a, b) => a.price - b.price)
-  }
-  if(options.length){
-      const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
-        if(extra) {
-           pickedToppings = extra
-           pickedToppings.forEach(el => {
-            optionPrice += el.price
-           })
-    }
-    }
-
-    const totalPrice = price + optionPrice
     const cartProduct: BillProduct = {
       name: cartProdName,
-      price: totalPrice,
+      price: price,
       quantity: 1,
       _id: product._id,
-      total: totalPrice,
+      total: price,
       imgPath: product.image.path,
       category: product.category._id,
       sub: false,
-      toppings: pickedToppings,
-      mainCat: '',
+      toppings: [],
+      mainCat: product.mainCat,
       payToGo: false,
       newEntry: true,
+      discount: round(price *  product.discount / 100),
       ings: ings,
+      dep: product.dep,
       printer: product.printer,
       sentToPrint: true,
       imgUrl: product.image.path,
       comment: this.comment,
       tva: product.tva,
+      toppingsToSend: product.toppings
     };
     this.disableBrakeButton()
     this.disableDeleteOrderButton()
@@ -321,15 +318,49 @@ async addToBill(product: Product){
   }
 
 
-  async openComments(productIndex: number, print: boolean){
-    if(print) {
-      const title = "Detalii"
-      const message = "Adaugă extra detalii"
-      const label = "Scriere comentariu"
-      const result = await this.actionSheet.reasonAlert(title, message, label)
-      if(result) {
-        this.tableSrv.addComment(this.tableNumber, productIndex, this.billIndex, result)
+
+  async openComments(product: BillProduct, index: number){
+    console.log(product)
+    if(product.sentToPrint){
+    if(product.toppings.length){
+      let price: number = 0
+      product.toppings.forEach(top => {
+        price += top.price
+      })
+      product.price -= price
+      product.total = product.price * product.quantity
+      this.billToshow.total -= (price * product.quantity)
+      product.toppings = []
+      this.tableSrv.addComment(this.tableNumber, index, this.billIndex, '')
+    }
+      let options: Topping[] = []
+      let optionPrice: number = 0;
+      let pickedToppings: Topping[] = [];
+      if(product.toppingsToSend.length){
+        const itemsToSort = [...product.toppingsToSend]
+        options = itemsToSort.sort((a, b) => a.price - b.price)
+      } else {
+        const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: 's'}
+        options.push(fakeTopping)
       }
+      if(options.length){
+          const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
+            if(extra && extra.toppings) {
+               pickedToppings = extra.toppings
+               pickedToppings.forEach(el => {
+                optionPrice += el.price
+               })
+               const totalPrice = product.price + optionPrice
+               product.price = totalPrice
+               product.total = totalPrice * product.quantity
+               product.discount = round(totalPrice * (product.discount * 100 / product.price) /100)
+               product.toppings = pickedToppings
+               this.billToshow.total += (optionPrice * product.quantity)
+            }
+            if(extra && extra.comment){
+              this.tableSrv.addComment(this.tableNumber, index, this.billIndex, extra.comment)
+            }
+        }
     }
     }
 
@@ -355,16 +386,16 @@ async addToBill(product: Product){
           delProd.billProduct = product
           delProd.reason = reason;
           delProd.employee = this.user.employee
-          delProd.locatie = environment.LOCATIE
+          delProd.locatie = this.user.locatie
           delProd.billProduct.quantity = buc
           delProd.billProduct.total = buc * delProd.billProduct.price
           result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
           this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
             if(result.upload){
               if(product.toppings.length){
-                this.tableSrv.uploadIngs(product.toppings, buc).subscribe()
+                this.tableSrv.uploadIngs(product.toppings, buc, this.user.locatie).subscribe()
               }
-              this.tableSrv.uploadIngs(ings, buc).subscribe(response => {
+              this.tableSrv.uploadIngs(ings, buc, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 4000)
                 }
@@ -375,7 +406,7 @@ async addToBill(product: Product){
       } else {
         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
       }
-      this.sendOrder()
+      this.sendOrder(false)
 
     }
   }
@@ -383,19 +414,46 @@ async addToBill(product: Product){
 //***********************************BUTTONS LOGIC************************** */
 
 
-sendOrder(){
+
+async addTips(){
+  const tipsValue = await this.actionSheet.openAuth(TipsPage)
+  if(tipsValue){
+    if(this.billToshow.tips > 0){
+      this.billToshow.total =   this.billToshow.total - this.billToshow.tips
+      this.billToshow.tips = tipsValue
+      this.billToshow.total  =   this.billToshow.total  + tipsValue
+    } else {
+      this.billToshow.tips = tipsValue
+      this.billToshow.total =   this.billToshow.total  + tipsValue
+  }
+}
+}
+
+
+sendOrder(out: boolean){
   this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
   const tableIndex = this.tableNumber
-  this.tableSrv.saveTablesLocal(tableIndex, this.billId, this.billIndex, this.user.employee).subscribe(res => {
+  this.billToshow.locatie = this.user.locatie
+  if(this.billToshow.discount)
+  console.log('before function')
+  this.calcBillDiscount(this.billToshow)
+  this.home()
+  this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
+    if(res){
+      if(out){
+        this.router.navigateByUrl('/tabs/tables')
+      }
+    }
   }
   );
 }
 
 
 async payment(){
-  this.sendOrder()
+  this.sendOrder(false)
   const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
     if(paymentInfo){
+      console.log(this.billToshow)
       this.billToshow.payment.card = paymentInfo.card;
       this.billToshow.payment.cash = paymentInfo.cash;
       this.billToshow.payment.voucher = paymentInfo.voucher;
@@ -404,16 +462,18 @@ async payment(){
       this.billToshow.payment.online  = paymentInfo.online
       this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
         if(response){
-          this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.billToshow.discount = 0
+          console.log(response)
+          this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.billProducts = []
-          this.home()
+          this.billToshow = emptyBill()
+          this.billToshow.cashBack = 0
+          this.client = null
+          this.router.navigateByUrl("/tabs/tables")
         }
       })
     }
 }
-
-
 
 async addCustomer(clientMode: boolean){
 if(clientMode){
@@ -424,37 +484,108 @@ if(clientMode){
     this.billToshow.clientInfo = this.client
     this.billToshow.name = this.client.name
     this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-    this.sendOrder()
+    this.sendOrder(false)
   }
 } else {
-  if(this.billCashBack){
-    this.billToshow.total = this.billToshow.total + this.billCashBack
-    this.billCashBack = null
+  if(this.billToshow.cashBack > 0){
+    this.billToshow.total = this.billToshow.total + this.billToshow.cashBack
+    this.billToshow.cashBack = 0
     this.cashBackMode = true
   }
+  if(this.billToshow){
+    this.billToshow.products.forEach(el => {
+      el.discount = 0
+    })
+    this.billToshow.total = round(this.billToshow.total + this.billToshow.discount);
+    this.billToshow.discount = 0
+    this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
+  }
+  // this.discountValue = 0
   this.client = null
-  this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
-  this.tableSrv.redCustomer(this.tableNumber, this.billIndex, this.billId, this.user.employee)
+  this.tableSrv.redCustomer(this.tableNumber, this.billIndex, this.billId, this.user.employee, this.user.locatie)
   this.clientMode = true;
 }
 
 }
 
+calcBillDiscount(bill: Bill){
+  console.log('function-test')
+  const discountGeneralProcent = bill.clientInfo.discount.general / 100
+  const categoryDiscounts = bill.clientInfo.discount.category
+  bill.products.forEach(product => {
+    categoryDiscounts.forEach(disc => {
+    if(product.discount === 0 ){
+        if(product.category === disc.cat){
+          const productDiscountProcent = disc.precent / 100
+          if(discountGeneralProcent < productDiscountProcent){
+            product.discount = round(product.quantity * product.price * productDiscountProcent)
+          } else if(disc.precent === 0){
+            product.discount = 0
+            console.log(disc.name)
+          }else{
+            product.discount = round(product.quantity * product.price * discountGeneralProcent)
+          }
+        }
+      }
+    })
+    const index = categoryDiscounts.findIndex(el => el.cat === product.category)
+    if(index === -1 && discountGeneralProcent > 0) {
+    product.discount = round(product.quantity * product.price * discountGeneralProcent)
+    }
+  })
 
-async addDiscount(mode: boolean){
-  if(mode){
-    const discountValue = await this.actionSheet.openPayment(DiscountPage, this.billToshow.total)
-    if(discountValue){
-      this.billToshow.discount = discountValue
-      this.billToshow.total = this.billToshow.total - discountValue;
-      this.discountValue = discountValue;
-      this.discountMode = false;
+  this.discountValue = this.calcDiscountTotal(bill.products)
+  if(this.discountValue !== this.billToshow.discount) {
+    if(this.discountValue > this.billToshow.discount){
+      const dif = this.discountValue - this.billToshow.discount
+      this.billToshow.total = round(this.billToshow.total - dif)
+      this.billToshow.discount = this.discountValue
     }
   } else {
-    this.billToshow.discount = 0
-    this.billToshow.total = this.billToshow.total + this.discountValue
-    this.discountValue = 0
-    this.discountMode = true
+  }
+}
+
+calcDiscountTotal(products: BillProduct[]){
+  let discount = 0
+  products.forEach(el => {
+      discount += el.discount
+  })
+  return discount
+}
+
+calcProductTotal(products: BillProduct[]){
+  let total = 0
+  products.forEach(el => {
+      total += +el.total
+  })
+  return total
+}
+
+
+async addDiscount(){
+  let dataToSend: any = []
+  this.allCats.forEach(cat => {
+    cat.product.forEach(product => {
+      if(product.discount > 0){
+        const data = {
+          precent: product.discount,
+          productId: product._id,
+          name: product.name
+        }
+          dataToSend.push(data)
+      }
+    })
+  })
+  const products = await this.actionSheet.openPayment(AddProductDiscountPage, dataToSend)
+  if(products) {
+    this.contSrv.setProdDisc(products).subscribe(response => {
+      if(response){
+        this.contSrv.editProductDiscount(products)
+        showToast(this.toastCtrl, response.message, 3000)
+      }
+    }, err => {
+      showToast(this.toastCtrl, err.message, 3000)
+    })
   }
 }
 
@@ -464,14 +595,13 @@ async useCashBack(mode: boolean){
     const cashBackValue = await this.actionSheet.openPayment(CashbackPage, data)
     if(cashBackValue){
       this.billToshow.cashBack = cashBackValue;
-      this.billCashBack = cashBackValue;
       this.billToshow.total  = this.billToshow.total - cashBackValue
       this.cashBackMode = false
     }
   }else {
     this.billToshow.total = this.billToshow.cashBack + this.billToshow.total
     this.cashBackMode = true
-    this.billCashBack = null
+    this.billToshow.cashBack = 0
   }
 }
 
@@ -492,16 +622,16 @@ async useCashBack(mode: boolean){
           delProd.billProduct = el
           delProd.reason = reason;
           delProd.employee = this.user.employee
-          delProd.locatie = environment.LOCATIE
+          delProd.locatie = this.user.locatie
           delProd.billProduct.quantity = buc
           delProd.billProduct.total = buc * delProd.billProduct.price
           choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
           this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
             if(choise.upload){
               if(el.toppings.length){
-                this.tableSrv.uploadIngs(el.toppings, buc).subscribe()
+                this.tableSrv.uploadIngs(el.toppings, buc, this.user.locatie).subscribe()
               }
-              this.tableSrv.uploadIngs(el.ings, buc).subscribe(response => {
+              this.tableSrv.uploadIngs(el.ings, buc, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 3000)
                 }
@@ -511,12 +641,15 @@ async useCashBack(mode: boolean){
         })
         } else {
           showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+          return
         }
 
           data.push({id: this.billToshow._id})
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.tableSrv.deleteOrders(data).subscribe()
           this.billProducts = []
+          this.client = null
+          this.clientMode = true
         }
     } else {
       this.tableSrv.removeBill(this.tableNumber, this.billIndex)
@@ -539,18 +672,20 @@ async useCashBack(mode: boolean){
        billIndex.push(i)
       })
       let options = name.map((val, index) =>({name: val, data: {id: id[index], billIndex: billIndex[index]}}))
+      console.log(options)
       const orders = await this.actionSheet.mergeOreders(options)
-      this.tableSrv.mergeBills(this.tableNumber, orders, this.user.employee)
-      this.tableSrv.deleteOrders(orders).subscribe()
-      let index = bills.findIndex(obj => obj.name === 'UNITE')
-      this.showOrder(index)
+      if(orders){
+        this.tableSrv.mergeBills(this.tableNumber, orders, this.user.employee, this.user.locatie)
+        this.tableSrv.deleteOrders(orders).subscribe()
+        let index = bills.findIndex(obj => obj.name === 'UNITE')
+        this.showOrder(index)
+      }
     }
   }
 
-
-
   breakOrder(){
     this.breakMode = !this.breakMode
+
   }
 
  async break(index: number){
@@ -559,6 +694,7 @@ async useCashBack(mode: boolean){
     for(let i=1; i<=product.quantity; i++){
       qty.push(i)
     }
+    console.log('first')
     const qtyChioise = await this.actionSheet.breakBillProduct(qty)
     if(qtyChioise){
       this.tableSrv.addNewBill(this.tableNumber, 'COMANDĂ NOUĂ')
@@ -573,14 +709,37 @@ async useCashBack(mode: boolean){
         })
         let options = name.map((val, index) =>({name: val, billIndex: billIndex[index]}))
         const newBillIndex = await this.actionSheet.mergeOredersProducts(options)
+        const cartProduct: BillProduct = {
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          _id: product._id,
+          total: product.price,
+          imgPath: product.imgPath,
+          category: product.category,
+          sub: false,
+          toppings: [],
+          mainCat: product.mainCat,
+          payToGo: false,
+          newEntry: true,
+          discount: round(product.price *  product.discount / 100),
+          ings: product.ings,
+          dep: product.dep,
+          printer: product.printer,
+          sentToPrint: true,
+          imgUrl: product.imgUrl,
+          comment: product.comment,
+          tva: product.tva,
+          toppingsToSend: product.toppings
+        };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){
-            this.tableSrv.addToBill(product, this.tableNumber, newBillIndex)
+            this.tableSrv.addToBill(cartProduct,this.tableNumber, newBillIndex)
             this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
           }
           this.showOrder(newBillIndex);
-          this.tableSrv.manageSplitBills(this.tableNumber, oldBillIndex, this.user.employee)
-          this.tableSrv.manageSplitBills(this.tableNumber, newBillIndex, this.user.employee)
+          this.tableSrv.manageSplitBills(this.tableNumber, oldBillIndex, this.user.employee, this.user.locatie)
+          this.tableSrv.manageSplitBills(this.tableNumber, newBillIndex, this.user.employee, this.user.locatie)
         } else {
           this.tableSrv.removeBill(this.tableNumber, -1)
         }
@@ -592,7 +751,6 @@ async useCashBack(mode: boolean){
   disableBrakeButton(){
     if(this.billToshow && this.billToshow.products){
       if(this.billToshow.products.length){
-        console.log('something')
         this.billToshow.products.forEach((el,i) => {
           if(el.quantity > 1 && !el.sentToPrint || i > 0 && !el.sentToPrint) {
             this.disableAction = false
@@ -630,8 +788,6 @@ modifyImageURL(url: string): string {
 }
 
 arraysAreEqual = (arr1: {}[], arr2: {}[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
-
-
 
 }
 

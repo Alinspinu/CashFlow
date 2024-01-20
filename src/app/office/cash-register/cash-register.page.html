@@ -1,4 +1,60 @@
-
 <ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col col="12">
+        <ion-item lines="none" color="tertiary">
+          <ion-buttons slot="start">
+            <ion-button class="input" (click)="openDateModal('start')">
+              DE LA
+              <img src="../../../assets/png/date-in.png" class="icon-start" alt="date-in-logo">
+            </ion-button>
+            <span class="display-date">{{startDate ? formatDate(startDate) : "..."}}</span>
+            <ion-button class="input" (click)="openDateModal('end')">
+              PÂNĂ LA
+              <img src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo">
+            </ion-button>
+            <span class="display-date">{{endDate ? formatDate(endDate) : "..."}}</span>
+            <ion-button class="input" style="margin-left: 90px;" (click)="export()" [disabled]="!startDate || !endDate">
+              Export Xcel
+              <img src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo">
+            </ion-button>
+          </ion-buttons>
+          <ion-buttons slot="end">
+            <ion-button class="input" (click)="addEntry()">
+              ADAUGĂ INTRARE
+              <img src="assets/icon/add-circle.svg" class="add">
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card *ngFor="let day of documents; let z = index" class="day">
+    <ion-card-header>
+      <span class="cash">Cash in  {{round(day.cashIn)}} Lei</span>
+      <span class="date">DATA  {{formatDate(day.date)}}</span>
+    </ion-card-header>
+    <ion-card-content class="ion-no-padding">
+      <ion-list>
+        <ion-item *ngFor="let entry of day.entry; let i = index" class="entry" class="ion-no-margin ion-no-padding">
+          <ion-label class="description">{{entry.description | capitalize}}</ion-label>
+          <ion-label class="tip" [class.red]="entry.tip === 'expense'">{{entry.tip === 'expense' ? 'out' : 'in'}}</ion-label>
+          <ion-label class="amount" [class.red]="entry.tip === 'expense'">{{entry.amount}}</ion-label>
+          <ion-buttons slot="end">
+            <ion-button (click)="deleteEntry(entry._id, i, z)">
+              <ion-icon src="../../assets/icon/trash-outline.svg" class="trash"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <ion-card-header>
+      <span class="cash">Cash left  {{round(day.cashOut)}} Lei</span>
+    </ion-card-header>
+  </ion-card>
 
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingText="Loading more data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
+

@@ -20,8 +20,9 @@ export class Nir{
   constructor(
     public suplier: string,
     public nrDoc: number,
-    public date: string,
-    public ingredients: NirIngredient[]
+    public documentDate: string,
+    public ingredients: NirIngredient[],
+    public discount: {tva: number, value: number, procent: number}[]
   ){}
 }
 

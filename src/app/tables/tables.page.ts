@@ -7,6 +7,8 @@ import { ActionSheetService } from '../shared/action-sheet.service';
 import { showToast } from '../shared/utils/toast-controller';
 import { Table } from '../models/table.model';
 import { TablesService } from './tables.service';
+import User from '../auth/user.model';
+import { Preferences } from '@capacitor/preferences';
 
 
 @Component({
@@ -22,6 +24,7 @@ export class TablesPage implements OnInit {
   tables!: Table[]
 
   editMode: boolean = false
+  user!: User
 
   constructor(
     private router: Router,
@@ -32,12 +35,24 @@ export class TablesPage implements OnInit {
     ) {}
 
 ngOnInit(): void {
+  this.getUser()
   this.getTables()
 }
 
 getTables(){
   this.tableServ.tableSend$.subscribe(response => {
     this.tables = response
+  })
+}
+
+getUser(){
+  Preferences.get({key: 'authData'}).then(data  => {
+    if(data.value) {
+     this.user = JSON.parse(data.value)
+     this.getTables()
+    } else{
+      this.router.navigateByUrl('/auth')
+    }
   })
 }
 
@@ -52,7 +67,7 @@ getTables(){
        if(response){
        name = response[0]
        }
-      this.tableServ.addTable(name).subscribe(response => {
+      this.tableServ.addTable(name, this.user.locatie).subscribe(response => {
         if(response){
           showToast(this.toastCtrl, response.message, 4000)
         }
@@ -69,6 +84,7 @@ getTables(){
 
    async editTable(tableIndex: number){
     await this.actionSheet.addMainCat().then(response => {
+      console.log(response)
       if(response){
         this.tableServ.editTable(tableIndex, response[0]).subscribe(response => {
           if(response){

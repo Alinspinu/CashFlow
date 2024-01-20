@@ -1,0 +1,64 @@
+.input{
+  cursor: pointer;
+  height: 40px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.4rem 0 0.4rem 0.2rem;
+  font-family: NoirProLight !important;
+  display: flex;
+  flex-direction: row;
+  span{
+    margin: 10px 5px 10px 5px;
+  }
+  .nr{
+    flex: 5%
+  }
+  .data{
+    flex: 30%;
+  }
+  .discount{
+    flex: 25%;
+    // margin-left: 50px;
+    text-align: center;
+  }
+  .total{
+    flex: 40%;
+    font-family: NoirProSemi !important;
+    text-align: end;
+  }
+
+}
+
+.header{
+  height: 40px;
+  border-radius: 8px;
+  margin: 0.4rem 0 0.4rem 0.2rem;
+  font-family: NoirProLight !important;
+  display: flex;
+  flex-direction: row;
+  span{
+    margin: 10px 5px 10px 5px;
+  }
+  .nr{
+    flex: 5%
+  }
+  .data{
+    flex: 30%;
+  }
+  .discount{
+    flex: 25%;
+    // margin-left: 50px;
+    text-align: center;
+  }
+  .total{
+    flex: 40%;
+    font-family: NoirProSemi !important;
+    text-align: end;
+  }
+}
+
+
+
+.icon{
+  color: white;
+}

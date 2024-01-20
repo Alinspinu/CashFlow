@@ -1,0 +1,13 @@
+
+<ion-content [fullscreen]="true">
+  <ion-datetime
+  presentation="date-time"
+  [showDefaultButtons]="true"
+  [(ngModel)]="selectedDate"
+  locale="ro-RO"
+  [min]="date"
+  (ionCancel)="onCancel()"
+  (ionChange)="onDateChange($event)">
+  </ion-datetime>
+
+</ion-content>

@@ -13,9 +13,16 @@ import { CustomerCheckPage } from '../modals/customer-check/customer-check.page'
 import { CashbackPage } from '../modals/cashback/cashback.page';
 import { DiscountPage } from '../modals/discount/discount.page';
 import { AddEmployeeDataPage } from '../modals/add-employee-data/add-employee-data.page';
-import { OrderViewPage } from '../modals/order-view/order-view.page';
+import { OrderViewPage } from '../reports/cash/order-view/order-view.page';
 import { ProductIngredientPage } from '../office/CRUD/product-ingredient/product-ingredient.page';
 import { CashInOutPage } from '../modals/cash-in-out/cash-in-out.page';
+import { DatePickerPage } from '../modals/date-picker/date-picker.page';
+import { AddEntryPage } from '../modals/add-entry/add-entry.page';
+import { AddClientDiscountPage } from '../modals/add-client-discount/add-client-discount.page';
+import { OrdersViewPage } from '../reports/cash/orders-view/orders-view.page';
+import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
+import { TipsPage } from '../modals/tips/tips.page';
+import { AddProductDiscountPage } from '../modals/add-product-discount/add-product-discount.page';
 
 
 
@@ -56,7 +63,11 @@ export class ActionSheetService {
                typeof DiscountPage |
                typeof AddEmployeeDataPage |
                typeof OrderViewPage |
-               typeof CashInOutPage,
+               typeof CashInOutPage |
+               typeof AddClientDiscountPage |
+               typeof AddProductDiscountPage |
+               typeof OrdersViewPage |
+               typeof OrderAppViewPage,
     options: any
   ){
     const modal = await this.modalCtrl.create({
@@ -85,28 +96,52 @@ export class ActionSheetService {
   }
 
 
+  async openAuth(
+    component: typeof AuthPage |
+               typeof RegisterPage |
+               typeof DatePickerPage |
+               typeof AddEntryPage |
+               typeof TipsPage,
+                ) {
+    const modal = await this.modalCtrl.create({
+      component: component,
+      backdropDismiss: false,
+      keyboardClose: false,
+    });
+
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    return data
+  };
 
 
-  async chooseSubProduct(options: string[]) {
-    const inputs = options.map(option => {
-      return {
-          label: option,
-          type: 'radio' as const,
-          value: option,
-          cssClass: 'option'
-      };
-  });
+
+
+
+
+  async pickDiscountValue() {
     const alert = await this.alertController.create({
-      header: 'Alege',
-      message: `Alege o opțiune`,
+      header: 'Procent Discount %',
       buttons: [
         {
-          text: 'Alege',
+          text: 'Renunță',
+          role: 'cancel',
+        },
+        {
+          text: 'Adaugă',
           role: 'confirm',
         },
       ],
-      inputs: inputs,
-      cssClass: 'extraAlert'
+      inputs:[
+        {
+        name: 'discount',
+        type: 'number',
+        placeholder: 'Ex. 10 pentru 10%',
+        cssClass: 'custom-input',
+
+      },
+    ],
+      cssClass: 'discountAlert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -118,39 +153,6 @@ export class ActionSheetService {
   }
 
 
-  async chooseExtra(options: string[]) {
-    const inputs = options.map(option => {
-      return {
-          label: option,
-          type: 'checkbox' as const,
-          value: option,
-
-      };
-  });
-    const alert = await this.alertController.create({
-      header: 'Extra',
-      message: `Adaugă extra`,
-      buttons: [
-        {
-          text: 'Nu Muțumesc!',
-          role: 'cancel'
-        },
-        {
-          text: 'Adaugă',
-          role: 'confirm',
-        },
-      ],
-      inputs: inputs,
-      cssClass: 'extraAlert'
-    });
-    await alert.present();
-    const result = await alert.onDidDismiss();
-    if(result.role === 'confirm'){
-      return result.data.values
-    } else {
-      return null
-    }
-  }
 
 
   async addMainCat() {
@@ -183,20 +185,6 @@ export class ActionSheetService {
     }
   }
 
-  async openAuth(
-    component: typeof AuthPage |
-               typeof RegisterPage
-                ) {
-    const modal = await this.modalCtrl.create({
-      component: component,
-      backdropDismiss: false,
-      keyboardClose: false,
-    });
-
-    modal.present();
-    const { data } = await modal.onDidDismiss();
-    return data
-  };
 
 
   async deleteAlert(message: string, title: string){
@@ -230,12 +218,12 @@ async reasonAlert(title: string, message: string, label: string){
     message: message,
     buttons: [
       {
-        text: 'CONFIRMĂ',
-        role: 'confirm',
-      },
-      {
         text: 'RENUNȚĂ',
         role: 'cancel',
+      },
+      {
+        text: 'CONFIRMĂ',
+        role: 'confirm',
       },
     ],
     inputs: [
@@ -272,6 +260,11 @@ async reasonAlert(title: string, message: string, label: string){
       message: `Alege cantitatea`,
       buttons: [
         {
+          text: 'Renunța',
+          role: 'cancel',
+          cssClass: 'cancel'
+        },
+        {
           text: 'Cu întoarcere în stoc',
           role: 'confirm-1',
           cssClass: 'inStoc'
@@ -280,11 +273,6 @@ async reasonAlert(title: string, message: string, label: string){
           text: 'Fara întoarcere în stoc',
           role: 'confirm-2',
           cssClass: 'outStoc',
-        },
-        {
-          text: 'Renunța',
-          role: 'cancel',
-          cssClass: 'cancel'
         },
       ],
       inputs: inputs,
@@ -317,12 +305,12 @@ async reasonAlert(title: string, message: string, label: string){
       message: `Alege comenzile`,
       buttons: [
         {
-          text: 'UNEȘTE',
-          role: 'confirm',
-        },
-        {
           text: 'RENUNȚĂ',
           role: 'cancel',
+        },
+        {
+          text: 'UNEȘTE',
+          role: 'confirm',
         },
       ],
       inputs: inputs,
@@ -344,13 +332,13 @@ async reasonAlert(title: string, message: string, label: string){
       message: `Esi sigur?`,
       buttons: [
         {
-          text: 'CONFIRMA',
-          role: 'confirm',
-        },
-        {
           text: 'RENUNTA',
           role: 'cancel',
           cssClass: 'cancel'
+        },
+        {
+          text: 'CONFIRMA',
+          role: 'confirm',
         },
       ],
       inputs: [
@@ -365,7 +353,8 @@ async reasonAlert(title: string, message: string, label: string){
           value: "no"
         },
 
-      ]
+      ],
+      cssClass: 'extraAlert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -443,6 +432,74 @@ async reasonAlert(title: string, message: string, label: string){
     const result = await alert.onDidDismiss();
     if(result.role === "confirm" && result.data.values){
       return  result.data.values[0].billIndex
+    } else {
+      return null
+    }
+  }
+
+
+
+  async chooseSubProduct(options: string[]) {
+    const inputs = options.map(option => {
+      return {
+          label: option,
+          type: 'radio' as const,
+          value: option,
+          cssClass: 'option'
+      };
+  });
+    const alert = await this.alertController.create({
+      header: 'Alege',
+      message: `Alege o opțiune`,
+      buttons: [
+        {
+          text: 'Alege',
+          role: 'confirm',
+        },
+      ],
+      inputs: inputs,
+      cssClass: 'extraAlert'
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm"){
+      return result.data.values
+    } else {
+      return null
+    }
+  }
+
+
+
+  async chooseExtra(options: string[]) {
+    const inputs = options.map(option => {
+      return {
+          label: option,
+          type: 'checkbox' as const,
+          value: option,
+
+      };
+  });
+    const alert = await this.alertController.create({
+      header: 'Extra',
+      message: `Adaugă extra`,
+      buttons: [
+        {
+          text: 'Nu Muțumesc!',
+          role: 'cancel'
+        },
+        {
+          text: 'Adaugă',
+          role: 'confirm',
+        },
+      ],
+      inputs: inputs,
+      cssClass: 'extraAlert'
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === 'confirm'){
+      return result.data.values
     } else {
       return null
     }

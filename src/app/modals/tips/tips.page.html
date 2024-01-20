@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="sum ion-text-center">Adaugă Bacsis</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+<ion-grid>
+  <ion-row class="input-row">
+    <ion-col>
+      <ion-item lines="none" class="input">
+        <ion-input type="number" label='Bacsis' labelPlacement="floating" placeholder="00"  [(ngModel)]="tipsValue"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+      <ion-button size="large" expand="block" color="danger" (click)="close()">RENUNȚĂ</ion-button>
+    </ion-col>
+      <ion-col>
+        <ion-button size="large" expand="block" color="primary"(click)="addTips()" [disabled]="!tipsValue">ADAUGĂ BACSIS</ion-button>
+        </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

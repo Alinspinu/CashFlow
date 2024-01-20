@@ -14,6 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/category.model';
 import { CategoryPage } from '../category/category.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
+import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
+import User from 'src/app/auth/user.model';
 
 
 @Component({
@@ -44,7 +46,7 @@ export class ProductPage implements OnInit {
   ingsToEdit!: any;
 
   hideIng: boolean = false
-
+  user!: User
   isTva: boolean = true
 
   constructor(
@@ -57,10 +59,21 @@ export class ProductPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getUser()
     this.getProductToEdit()
     this.setupForm()
     this.getCategories()
     this.setTvaValidators()
+  }
+
+  getUser(){
+    getUserFromLocalStorage().then(user => {
+      if(user){
+        this.user = user
+      } else {
+        this.router.navigateByUrl('/auth')
+      }
+    })
   }
 
   getProductToEdit(){
@@ -101,7 +114,8 @@ export class ProductPage implements OnInit {
   async addCat(){
     const response = await this.actSheet.openModal(CategoryPage, null, false)
     if(response){
-      this.prodSrv.saveCategory(response).subscribe(response => {
+      this.prodSrv.saveCategory(response, this.user.locatie).subscribe(response => {
+        console.log(response)
       })
     }
    }
@@ -147,7 +161,7 @@ export class ProductPage implements OnInit {
     const subProduct = await this.actSheet.openModal(SubProductPage,[],false)
     if(subProduct && this.editMode){
       subProduct.product = this.product._id
-      this.prodSrv.saveSubProduct(subProduct).subscribe(response => {
+      this.prodSrv.saveSubProduct(subProduct, this.user.locatie).subscribe(response => {
         this.subProducts.push(response.subProduct)
       })
     } else if(subProduct && !this.editMode){
@@ -215,10 +229,11 @@ export class ProductPage implements OnInit {
  async saveProduct(){
     if(this.form.valid){
       const productData = new FormData()
-      const toppings = JSON.stringify(this.toppings);
-      const ings = JSON.stringify(this.productIngredients);
+      const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
+      const ings = this.toppings.length ? JSON.stringify(this.productIngredients) : 'skip';
       const sub = JSON.stringify(this.subProducts);
       const tempSubs = JSON.stringify(this.tempSubArray);
+      console.log(toppings)
       productData.append('name', this.form.value.name);
       productData.append('price', this.form.value.price);
       productData.append('category', this.form.value.cat);
@@ -230,26 +245,31 @@ export class ProductPage implements OnInit {
       productData.append('tva', this.form.value.tva);
       productData.append('image', this.form.value.image);
       productData.append('printer', this.form.value.printer);
-      productData.append('toppings', toppings);
-      productData.append('ings', ings);
+      if(toppings !== 'skip'){
+        productData.append('toppings', toppings);
+      }
+      if(ings !== 'skip'){
+        productData.append('ings', ings);
+      }
       productData.append('sub', sub);
-      console.log(ings)
       if(this.editMode){
         this.prodSrv.editProduct(productData, this.product._id).subscribe(response => {
           showToast(this.toastCtrl, response.message, 3000);
           this.router.navigateByUrl('/tabs/office/products')
         })
       } else {
-        this.prodSrv.saveProduct(productData).subscribe(response => {
+        this.prodSrv.saveProduct(productData, this.user.locatie).subscribe(response => {
           const product = response.product
+          console.log(response)
           if(product){
             this.tempSubArray.map((obj:any) => {
               obj.product = product._id;
               return obj;
             })
             for(let sub of this.tempSubArray){
-               this.prodSrv.saveSubProduct(sub).subscribe()
+               this.prodSrv.saveSubProduct(sub, this.user.locatie).subscribe()
             }
+            this.router.navigateByUrl('/tabs/office/products')
           }
         })
       }

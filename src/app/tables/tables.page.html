@@ -29,9 +29,10 @@
           <span *ngIf="table.bills.length" class="badge-content">{{table.bills.length}}</span>
         </div>
         <div class="table ion-activatable" [ngClass]="{ 'bussy': table.bills.length > 0}"  (click)="openTable(table.index)">
-          <span class="index">
-           {{table.name ? table.name : table.index}}
+          <span class="index" *ngIf="!table.name">
+           {{table.index}}
           </span>
+          <span class="name" *ngIf="table.name">{{table.name}}</span>
           <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
         </div>
       </ion-col>

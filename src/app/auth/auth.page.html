@@ -1,13 +1,5 @@
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="triggerEscape()">
-        <ion-icon name="arrow-back-outline" style="font-size: 22px;"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+
 
  <ion-content class="auth-wrapper">
    <div class="header">
@@ -47,16 +39,6 @@
             </ion-col>
           </ion-row>
         </form>
-        <ion-row>
-          <ion-col size-xs="6" offset-xs="3" class="ion-text-center ion-margin">
-            <span class="or">Or</span>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size-xs="6" offset-xs="3" class="ion-text-center">
-            <span (click)="onRegister()" class="register">Register</span>
-          </ion-col>
-        </ion-row>
         <ion-row *ngIf="resetPasswordMode">
           <ion-col class="ion-text-center">
             <ion-item lines="none">

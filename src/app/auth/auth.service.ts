@@ -5,7 +5,7 @@ import  {jwtDecode } from 'jwt-decode'
 import { Preferences } from "@capacitor/preferences";
 import {environment} from "../../environments/environment"
 import User from "./user.model";
-import { emptyUser } from "../shared/utils/empty-models";
+import { emptyUser } from "../models/empty-models";
 
 
 
@@ -40,7 +40,8 @@ export class AuthService{
             tokenExpirationDate: any,
             status: string,
             telephone: string,
-            employee: {position: string, fullName: string, user: string}
+            locatie: string,
+            employee: {position: string, fullName: string, user: string, access: number}
           };
           const tokenDate = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
           if(tokenDate <= 0){
@@ -99,6 +100,7 @@ export class AuthService{
   }
 
   private setAndStoreUserData(userData: any){
+    console.log(userData)
     if(userData.message){
     } else {
       const decodedToken: any = jwtDecode(userData.token);
@@ -113,6 +115,7 @@ export class AuthService{
         tokenExpirationDate: expirationDate,
         status: userData.status,
         telephone: userData.telephone,
+        locatie: userData.locatie,
         employee: {
           fullName: userData.employee.fullName,
           position: userData.employee.position,

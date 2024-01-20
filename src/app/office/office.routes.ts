@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from '../auth/auth-guard';
 import { OfficePage } from '../office/office.page';
 
 export const routes: Routes = [
@@ -10,26 +11,32 @@ export const routes: Routes = [
         path: 'products',
         loadComponent: () =>
           import('../office/products/products.page').then((m) => m.ProductsPage),
+          canActivate: [AuthGuard]
       },
       {
         path: 'ingredient',
-        loadComponent: () => import('./ingredient/ingredient.page').then( m => m.IngredientPage)
-      },
-      {
-        path: 'live-stoc',
-        loadComponent: () => import('./live-stoc/live-stoc.page').then( m => m.LiveStocPage)
+        loadComponent: () => import('./ingredient/ingredient.page').then( m => m.IngredientPage),
+        canActivate: [AuthGuard]
       },
       {
         path: 'cash-register',
-        loadComponent: () => import('./cash-register/cash-register.page').then( m => m.CashRegisterPage)
+        loadComponent: () => import('./cash-register/cash-register.page').then( m => m.CashRegisterPage),
+        canActivate: [AuthGuard]
       },
       {
         path: 'users',
-        loadComponent: () => import('./users/users.page').then( m => m.UsersPage)
+        loadComponent: () => import('./users/users.page').then( m => m.UsersPage),
+        canActivate: [AuthGuard]
       },
       {
-        path: 'nir',
-        loadComponent: () => import('../office/nir/nir.page').then( m => m.NirPage)
+        path: 'nirs',
+        loadComponent: () => import('./nirs/nirs.page').then( m => m.NirsPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'nir/:id',
+        loadComponent: () => import('./CRUD//nir/nir.page').then( m => m.NirPage),
+        canActivate: [AuthGuard]
       },
       {
         path: '',
@@ -47,5 +54,4 @@ export const routes: Routes = [
     path: 'product-ingredient',
     loadComponent: () => import('./CRUD/product-ingredient/product-ingredient.page').then( m => m.ProductIngredientPage)
   },
-
 ];

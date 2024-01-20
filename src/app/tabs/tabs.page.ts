@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EnvironmentInjector, inject } from '@angular/core';
+import { Component, EnvironmentInjector, inject, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { AuthService } from '../auth/auth.service';
+import User from '../auth/user.model';
+import { getUserFromLocalStorage } from '../shared/utils/functions';
 
 
 @Component({
@@ -10,9 +13,18 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [CommonModule, IonicModule],
 })
-export class TabsPage {
+export class TabsPage implements OnInit{
   public environmentInjector = inject(EnvironmentInjector);
 
-  constructor() {
-  }
+  user!: User | null
+
+  constructor(
+    private authSrv: AuthService
+  ) {}
+
+ngOnInit(): void {
+  getUserFromLocalStorage().then(user => {
+    this.user = user
+  })
+}
 }

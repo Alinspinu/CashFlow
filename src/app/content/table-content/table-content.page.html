@@ -1,5 +1,9 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar [class.dynamic-header-active]="dynamicColorChange">
+    <div class="accept-button-wrapper">
+      <ion-title  class="ion-text-center" style="flex: 70%; font-size: 23px;" *ngIf="onlineOrder">Comandă Online</ion-title>
+      <ion-button [class.dynamic-header-active]="dynamicColorChange" size="medium" style="flex: 30%;" (click)="acceptOrder()" *ngIf="onlineOrder">ACCEPTĂ</ion-button>
+    </div>
     <ion-buttons slot="start">
       <ion-button routerLink="/tabs/tables" class="back-button">
         <ion-icon src="../../../assets/icon/close-outline.svg" (click)="home()"  class="icon"></ion-icon>

@@ -1,11 +1,16 @@
 
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar [class.dynamic-header-active]="dynamicColorChange">
     <ion-buttons slot="start">
       <ion-button (click)="logout()" class="back-button">
         <ion-icon src="../../assets/icon/log-out-outline.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <div class="accept-button-wrapper">
+      <ion-title  class="ion-text-center" style="flex: 70%; font-size: 23px;" *ngIf="onlineOrder">Comandă Online</ion-title>
+      <ion-button [class.dynamic-header-active]="dynamicColorChange" size="medium" style="flex: 30%;" (click)="acceptOrder()" *ngIf="onlineOrder">ACCEPTĂ</ion-button>
+    </div>
+
     <ion-buttons slot="end">
       <ion-button (click)="addTable()">
         <ion-icon src="../../assets/icon/add-outline.svg"></ion-icon>

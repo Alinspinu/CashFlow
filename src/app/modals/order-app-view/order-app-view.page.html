@@ -71,6 +71,43 @@
 </ion-grid>
 </ion-content>
 
+<ion-footer *ngIf="order && order.pending">
+  <ion-grid>
+    <ion-row class="ion-no-padding ion-no-margin">
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('10')" class="ion-no-padding ion-no-margin">10 Minute</ion-button>
+      </ion-col>
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('15')" class="ion-no-padding ion-no-margin">15 Minute</ion-button>
+      </ion-col>
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('20')" class="ion-no-padding ion-no-margin">20 Minute</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding ion-no-margin">
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('25')" class="ion-no-padding ion-no-margin">25 Minute</ion-button>
+      </ion-col>
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('30')" class="ion-no-padding ion-no-margin">30 Minute</ion-button>
+      </ion-col>
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('35')" class="ion-no-padding ion-no-margin">35 Minute</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding ion-no-margin">
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('40')" class="ion-no-padding ion-no-margin">40 Minute</ion-button>
+      </ion-col>
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('45')" class="ion-no-padding ion-no-margin">45 Minute</ion-button>
+      </ion-col>
+      <ion-col class="ion-no-padding ion-no-margin">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('50')" class="ion-no-padding ion-no-margin">50 Minute</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
 <ion-footer *ngIf="order.status === 'done'">
   <ion-button color="secondary" size="large" expand="block"(click)="reprint()">RRTIPĂREȘTE NOTA FISCALA</ion-button>
   <ion-button color="primary" size="large" expand="block"(click)="changePaymentMethod()">SHIMBĂ METODA DE PLATĂ</ion-button>

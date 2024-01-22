@@ -22,6 +22,8 @@ import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/e
 import { round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
+import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
+import { AudioService } from 'src/app/shared/audio.service';
 
 @Component({
   selector: 'app-table-content',
@@ -35,6 +37,11 @@ export class TableContentPage implements OnInit, OnDestroy {
   @ViewChild('addNameInput') nameInput!: IonInput;
   @ViewChild('billContent') content!: IonContent;
 
+
+  order!: Bill
+  onlineOrder: boolean = false
+  dynamicColorChange = false
+  colorToggleInterval: any;
 
 
   discountValue: number = 0;
@@ -71,6 +78,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   disableDelete: boolean = true
 
   userSub!: Subscription;
+  tableSub!: Subscription;
   user!: User;
 
   comment: string = ''
@@ -84,6 +92,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController,
     private authSrv: AuthService,
     private router: Router,
+    private audio: AudioService,
     ) { }
 
 
@@ -101,6 +110,10 @@ export class TableContentPage implements OnInit, OnDestroy {
     if(this.userSub){
       this.userSub.unsubscribe()
     }
+    if(this.tableSub){
+      this.tableSub.unsubscribe()
+    }
+    this.tableSrv.stopSse()
   }
 
   //***************************NG-ON-INIT************************** */
@@ -149,6 +162,10 @@ export class TableContentPage implements OnInit, OnDestroy {
         this.billToshow.total = 0
         this.billToshow.payOnline = false
       }
+      if(this.billToshow && this.billToshow.clientInfo.name.length) {
+        this.billToshow.name = this.billToshow.clientInfo.name
+      }
+
       this.disableBrakeButton()
       if(this.billToshow && this.billToshow.clientInfo.name.length){
         this.client = this.billToshow.clientInfo
@@ -169,13 +186,12 @@ export class TableContentPage implements OnInit, OnDestroy {
       response.subscribe(user => {
         if(user){
           this.user = user;
+
         }
       })
     }
   })
   }
-
-
 
   //*******************MENU NAVIGATION********************************* */
 
@@ -213,6 +229,49 @@ export class TableContentPage implements OnInit, OnDestroy {
 
 
 // ***********************ORDERS CONTROLS*********************
+
+
+
+incommingOrders(){
+  console.log('hit the incomming message function')
+ this.tableSub = this.tableSrv.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
+   console.log(response)
+    if(response){
+      const data = JSON.parse(response.data)
+      if(data.message === 'New Order'){
+        this.order = data.doc
+        // if (!this.audio.isCurrentlyPlaying()) {
+        //   this.audio.play();
+        // }
+        this.onlineOrder = true
+        this.colorToggleInterval = setInterval(() => {
+          this.dynamicColorChange = !this.dynamicColorChange;
+        }, 500);
+      }
+    }
+   })
+  }
+
+  stopDynamicHeader() {
+    clearInterval(this.colorToggleInterval);
+    this.dynamicColorChange = false;
+  }
+
+  async acceptOrder(){
+    // this.audio.stop()
+    this.onlineOrder = false
+    this.stopDynamicHeader()
+    const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
+    if(result){
+      const time = +result * 60 * 1000
+      this.tableSrv.setOrderTime(this.order._id, time).subscribe(response => {
+        console.log(response)
+      })
+    }
+  }
+
+
+// ***********************INCOMMING ORDERS*********************
 
   editOrderName(orderIndex: number){
     this.table.bills[orderIndex].setName = true
@@ -302,7 +361,7 @@ async addToBill(product: Product){
     this.disableBrakeButton()
     this.disableDeleteOrderButton()
     this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex)
-    if(this.billToshow.products.length > 5){
+    if(this.billToshow && this.billToshow.products.length > 5){
       setTimeout(()=>{
         this.content.scrollToBottom(300);
       }, 200)
@@ -726,7 +785,7 @@ async useCashBack(mode: boolean){
           ings: product.ings,
           dep: product.dep,
           printer: product.printer,
-          sentToPrint: true,
+          sentToPrint: false,
           imgUrl: product.imgUrl,
           comment: product.comment,
           tva: product.tva,

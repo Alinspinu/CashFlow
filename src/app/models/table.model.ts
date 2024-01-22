@@ -65,6 +65,7 @@ export class Bill{
     public products: BillProduct[],
     public createdAt: any,
     public locatie: string,
+    public pending: boolean
   ){}
 }
 

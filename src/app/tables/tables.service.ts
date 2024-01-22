@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { BehaviorSubject, Observable, take, tap } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
@@ -23,12 +23,14 @@ export class TablesService{
 
   constructor(
     private http: HttpClient,
-    private authSrv: AuthService
+    private authSrv: AuthService,
+    private ngZone: NgZone
   ){
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
   }
 
+  private eventSource!: EventSource
 
 //******************************ORDERS************************* */
 
@@ -195,14 +197,44 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
 //**********************HTTP REQ******************* */
 
 
-getTables(locatie: string){
-  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}`).subscribe(response => {
+getTables(locatie: string, id: string){
+  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
       this.tableState.next([...this.tables])
     }
   })
 }
+
+getOrderMessage (locatie: string, id: string): Observable<MessageEvent>{
+  this.eventSource = new EventSource(`${environment.BASE_URL}table/get-order-message`)
+    return new Observable((observer) => {
+      this.eventSource.onmessage = (event) => {
+        this.ngZone.run(() => {
+        const data = JSON.parse(event.data)
+        if(data && data.message === "New Order"){
+          console.log('hit inside event')
+        this.getTables(locatie, id)
+        observer.next(event);
+        }
+        });
+      };
+
+      this.eventSource.onerror = (error) => {
+        this.ngZone.run(() => {
+          observer.error(error);
+        });
+      };
+    });
+}
+
+
+stopSse() {
+if (this.eventSource) {
+  this.eventSource.close();
+}
+}
+
 
 addTable(name: string, locatie: string){
   return this.http.post<{message: string, table: Table}>(`${environment.BASE_URL}table?loc=${locatie}`, {name: name})
@@ -216,11 +248,9 @@ addTable(name: string, locatie: string){
 
 editTable(tableIndex: number, name: string){
   const table = this.tables[tableIndex-1];
-  console.log("before", table, "name", name)
   return this.http.put<{message: string, table: Table}>(`${environment.BASE_URL}table`,{name: name, tableId: table._id})
   .pipe(take(1), tap(response => {
     if(response){
-      console.log("after server",response)
       const table = this.tables[response.table.index-1]
       table.name = response.table.name
       this.tableState.next([...this.tables])
@@ -249,6 +279,7 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
   bill.employee = employee
   bill.locatie = locatie
   bill.onlineOrder = false
+  bill.pending = false
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
@@ -278,6 +309,9 @@ sendBillToPrint(bill: Bill){
   return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
 }
 
+setOrderTime(orderId: string, time: number){
+  return this.http.get(`${environment.BASE_URL}orders/set-order-time?orderId=${orderId}&time=${time}`)
+}
 
 //********************EMPTY MODELS**************************** */
 

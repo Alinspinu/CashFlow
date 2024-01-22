@@ -18,6 +18,7 @@ export class OrderAppViewPage implements OnInit {
 
   order!: any
   paymentMethod: any[] = []
+  onlineOrder: boolean = false
 
   constructor(
     private navPar: NavParams,
@@ -33,9 +34,12 @@ export class OrderAppViewPage implements OnInit {
     return formatedDateToShow(date)
   }
 
+  sendTime(time: string){
+    this.modalCtrl.dismiss(time)
+  }
+
   ngOnInit() {
     this.order = this.navPar.get('options');
-    console.log(this.order)
     const result = getPaymentMethod(this.order.payment)
     this.paymentMethod = result
   }

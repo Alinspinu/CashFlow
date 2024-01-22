@@ -6,6 +6,18 @@ ion-content{
 
 
 
+.dynamic-header-active {
+  // background-color: var(--ion-color-danger);
+  --background: var(--ion-color-danger);
+  --color:white;
+}
+
+.accept-button-wrapper{
+  display: flex;
+  flex-direction: row;
+}
+
+
 .back-button{
   --background: var(--ion-color-danger);
   height: 50px;

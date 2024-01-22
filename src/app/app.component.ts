@@ -28,7 +28,8 @@ export class AppComponent implements OnInit {
         if(data.value) {
          this.user = JSON.parse(data.value)
          this.contService.getData(this.user.locatie).subscribe()
-         this.tablesService.getTables(this.user.locatie)
+         this.tablesService.getTables(this.user.locatie, this.user._id)
+         this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{
           this.router.navigateByUrl('/auth')
         }

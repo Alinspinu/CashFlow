@@ -30,7 +30,6 @@ export class RegisterPage implements OnInit {
   isLoading = false;
   form!: FormGroup;
   showPassword = false;
-  iconName: string = 'eye-off-outline';
   passwordControl!: AbstractControl | any;
   confirmPasswordControl!: AbstractControl | any;
   cart: string = '';
@@ -40,7 +39,7 @@ export class RegisterPage implements OnInit {
   showFoodPrice: boolean = false;
   showCoffeePrice: boolean = false;
   survey: any = []
-
+  iconSrc: string = 'assets/icon/eye-outline.svg'
 
 
 
@@ -102,7 +101,7 @@ export class RegisterPage implements OnInit {
 
   togglePassword(){
     this.showPassword = !this.showPassword;
-    this.iconName = this.showPassword ? 'eye-outline' : 'eye-off-outline';
+    this.iconSrc = this.showPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg';
   };
 
   getInputType() {

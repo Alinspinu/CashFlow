@@ -84,6 +84,7 @@ export function emptyBill(){
     completetime: 0,
     paymentMethod: '',
     onlineOrder: false,
+    pending: true,
     payment: {
       card: 0,
       cash: 0,

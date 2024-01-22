@@ -9,6 +9,8 @@ import { Preferences } from '@capacitor/preferences';
 import { showToast, triggerEscapeKeyPress } from '../shared/utils/toast-controller';
 import { ActionSheetService } from '../shared/action-sheet.service';
 import { RegisterPage } from './register/register.page';
+import { TablesService } from '../tables/tables.service';
+import { jwtDecode } from 'jwt-decode';
 
 
 export interface AuthResData {
@@ -30,18 +32,20 @@ export class AuthPage implements OnInit {
   isLoading = false;
   form!: FormGroup;
   showPassword = false;
-  iconName: string = 'eye-off-outline';
   tab!: string;
   resetPassword: boolean = false;
   resetPasswordMode: boolean = false;
   emailValue!: string;
   validEmail: boolean = false;
 
+  iconSrc: string = 'assets/icon/eye-outline.svg'
+
   constructor(
     private router: Router,
     private authService: AuthService,
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
+    private tableSrv: TablesService,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
   ) { }
 
@@ -58,7 +62,7 @@ export class AuthPage implements OnInit {
 
   togglePassword(){
     this.showPassword = !this.showPassword;
-    this.iconName = this.showPassword ? 'eye-outline' : 'eye-off-outline';
+    this.iconSrc = this.showPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg';
   }
 
   getInputType() {
@@ -98,8 +102,10 @@ export class AuthPage implements OnInit {
         });
         Preferences.set({key: 'tempUserData', value: data });
         this.router.navigateByUrl('/tabs/tables');
-        // triggerEscapeKeyPress();
       } else {
+        console.log(res)
+        const id: any = jwtDecode(res.token);
+        this.tableSrv.getTables(res.locatie, id.userId)
         this.router.navigateByUrl(`/tabs/tables`);
       }
     }, error => {

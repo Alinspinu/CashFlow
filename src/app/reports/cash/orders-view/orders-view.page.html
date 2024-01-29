@@ -10,14 +10,14 @@
       <ion-item lines="none" class="header">
         <span class="nr">Nr.</span>
         <span class="data">Data</span>
-        <span class="discount">Discount %</span>
+        <span class="discount">Disc %</span>
         <span class="total">Incasat</span>
       </ion-item>
     </ion-col>
   </ion-row>
 <ion-row>
   <ion-col *ngIf="orders && orders.length">
-    <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="showOrder(order)">
+    <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="showOrder(order)" [ngClass]="{'open': order.status === 'open'}">
       <span class="nr">{{i+1}}.</span>
       <span class="data">{{formatDate(order.createdAt)}}</span>
       <span class="discount"> {{order.discount}} Lei</span>

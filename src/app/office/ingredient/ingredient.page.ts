@@ -75,7 +75,6 @@ export class IngredientPage implements OnInit {
   showIngs(index: number){
     const ingredient = this.ingredients[index]
     ingredient.showIngs = !ingredient.showIngs
-    console.log(ingredient)
   }
 
   onSelectGestiune(event: any){
@@ -100,6 +99,10 @@ export class IngredientPage implements OnInit {
   onTopRecive(ev: any){
 
   }
+
+updateProductIng(){
+  this.ingSrv.uodateProductIngredientPrices(this.user.locatie).subscribe()
+}
 
 
 

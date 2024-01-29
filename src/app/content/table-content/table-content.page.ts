@@ -157,6 +157,9 @@ export class TableContentPage implements OnInit, OnDestroy {
         this.disableDeleteOrderButton()
       }
       this.billToshow = this.table.bills[this.billIndex]
+      if(this.billToshow){
+        this.calcBillDiscount(this.billToshow)
+      }
       if(this.billToshow && this.billToshow.payOnline){
         this.billToshow.payment.online= this.billToshow.total
         this.billToshow.total = 0
@@ -303,10 +306,11 @@ incommingOrders(){
     // this.billToshow.masaRest.index = this.tableNumber
     this.billToshow.show = true
     this.disableBrakeButton()
+    this.calcBillDiscount(this.billToshow)
   }
 
   newOrder(){
-    this.tableSrv.addNewBill(this.tableNumber, 'COMANDĂ')
+    this.tableSrv.addNewBill(this.tableNumber, 'COMANDĂ', true)
     this.disableMergeButton()
     this.showOrder(+this.table.bills.length-1)
   }
@@ -356,7 +360,10 @@ async addToBill(product: Product){
       imgUrl: product.image.path,
       comment: this.comment,
       tva: product.tva,
-      toppingsToSend: product.toppings
+      toppingsToSend: product.toppings,
+      sentToPrintOnline: true,
+      qty: product.qty,
+      cantitate: product.qty
     };
     this.disableBrakeButton()
     this.disableDeleteOrderButton()
@@ -493,8 +500,6 @@ sendOrder(out: boolean){
   this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
   const tableIndex = this.tableNumber
   this.billToshow.locatie = this.user.locatie
-  if(this.billToshow.discount)
-  console.log('before function')
   this.calcBillDiscount(this.billToshow)
   this.home()
   this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
@@ -568,7 +573,7 @@ if(clientMode){
 }
 
 calcBillDiscount(bill: Bill){
-  console.log('function-test')
+  console.log('hit the orders')
   const discountGeneralProcent = bill.clientInfo.discount.general / 100
   const categoryDiscounts = bill.clientInfo.discount.category
   bill.products.forEach(product => {
@@ -599,8 +604,13 @@ calcBillDiscount(bill: Bill){
       const dif = this.discountValue - this.billToshow.discount
       this.billToshow.total = round(this.billToshow.total - dif)
       this.billToshow.discount = this.discountValue
+    } else {
+      const dif = this.billToshow.discount - this.discountValue
+      this.billToshow.total = round(this.billToshow.total + dif)
+      this.billToshow.discount = this.discountValue
     }
   } else {
+
   }
 }
 
@@ -709,6 +719,7 @@ async useCashBack(mode: boolean){
           this.billProducts = []
           this.client = null
           this.clientMode = true
+          this.billToshow = emptyBill()
         }
     } else {
       this.tableSrv.removeBill(this.tableNumber, this.billIndex)
@@ -731,7 +742,6 @@ async useCashBack(mode: boolean){
        billIndex.push(i)
       })
       let options = name.map((val, index) =>({name: val, data: {id: id[index], billIndex: billIndex[index]}}))
-      console.log(options)
       const orders = await this.actionSheet.mergeOreders(options)
       if(orders){
         this.tableSrv.mergeBills(this.tableNumber, orders, this.user.employee, this.user.locatie)
@@ -749,6 +759,7 @@ async useCashBack(mode: boolean){
 
  async break(index: number){
     const product =  this.billToshow.products[index]
+    console.log(product)
     let qty: number[] = []
     for(let i=1; i<=product.quantity; i++){
       qty.push(i)
@@ -756,7 +767,7 @@ async useCashBack(mode: boolean){
     console.log('first')
     const qtyChioise = await this.actionSheet.breakBillProduct(qty)
     if(qtyChioise){
-      this.tableSrv.addNewBill(this.tableNumber, 'COMANDĂ NOUĂ')
+      this.tableSrv.addNewBill(this.tableNumber, 'COMANDĂ NOUĂ', false)
       const oldBillIndex = this.tableSrv.getBillIndex(this.tableNumber-1, this.billToshow._id)
       const bills = this.table.bills;
       if(bills.length > 1){
@@ -781,7 +792,7 @@ async useCashBack(mode: boolean){
           mainCat: product.mainCat,
           payToGo: false,
           newEntry: true,
-          discount: round(product.price *  product.discount / 100),
+          discount: product.discount,
           ings: product.ings,
           dep: product.dep,
           printer: product.printer,
@@ -789,7 +800,10 @@ async useCashBack(mode: boolean){
           imgUrl: product.imgUrl,
           comment: product.comment,
           tva: product.tva,
-          toppingsToSend: product.toppings
+          toppingsToSend: product.toppings,
+          sentToPrintOnline: true,
+          qty: product.qty,
+          cantitate: product.qty
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){

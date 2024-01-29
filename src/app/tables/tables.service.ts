@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, NgZone } from "@angular/core";
 import { BehaviorSubject, Observable, take, tap } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
@@ -38,13 +38,13 @@ getBillIndex(tableIndex: number, billId: string){
   return this.tables[tableIndex].bills.findIndex(obj => obj._id === billId)
 }
 
-addNewBill(masa: number, name: string){
+addNewBill(masa: number, name: string, newOrder: boolean){
   let bill: Bill = emptyBill()
   bill.name = name
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     const index = table.bills.findIndex(obj => obj.name === "COMANDĂ NOUĂ")
-    if(index === -1){
+    if(index === -1 || newOrder){
       table.bills.push(bill)
     }
   }
@@ -103,18 +103,10 @@ if(table){
   if(table.bills.length){
     bill = table.bills[billIndex]
     bill.productCount++
-    // const existingProduct = bill.products.find(p =>(p.name === product.name) && this.arraysAreEqual(p.toppings, product.toppings) && p.sentToPrint);
-    // if (existingProduct) {
-    //   existingProduct.quantity = product.quantity + existingProduct.quantity;
-    //   existingProduct.total = (existingProduct.quantity) * existingProduct.price;
-    //   bill.total = bill.total + existingProduct.price
-    // } else {
-      // }
-      product.quantity = 1
-      console.log(product)
-      bill.products.push(product)
-      console.log(bill)
+    product.quantity = 1
+    bill.products.push(product)
       bill.total = bill.total + product.price
+      console.log(this.tables)
     this.tableState.next([...this.tables])
   } else {
     bill.masaRest.index = masa;
@@ -123,6 +115,7 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
     table.bills.push(bill)
+    console.log(this.tables)
     this.tableState.next([...this.tables])
   }
 }
@@ -197,10 +190,13 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
 //**********************HTTP REQ******************* */
 
 
+
 getTables(locatie: string, id: string){
+  const headers = new HttpHeaders().set("ngrok-skip-browser-warning", "69420");
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
+      console.log(this.tables[53].bills)
       this.tableState.next([...this.tables])
     }
   })
@@ -279,7 +275,8 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
   bill.employee = employee
   bill.locatie = locatie
   bill.onlineOrder = false
-  bill.pending = false
+  bill.pending = true
+  bill.prepStatus = 'open'
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
@@ -287,7 +284,10 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
     bill._id = res.billId;
     bill.index = res.index;
     bill.products = res.products
-    bill.products.forEach(product => product.sentToPrint = false)
+    bill.products.forEach(product => {
+      product.sentToPrint = false
+      product.sentToPrintOnline = false
+    })
     bill.masaRest = res.masa
     this.tableState.next([...this.tables])
  }));

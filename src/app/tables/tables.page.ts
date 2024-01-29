@@ -71,7 +71,7 @@ getUser(){
   Preferences.get({key: 'authData'}).then(data  => {
     if(data.value) {
      this.user = JSON.parse(data.value)
-     this.incommingOrders()
+    //  this.incommingOrders()
      this.getTables()
     } else{
       this.router.navigateByUrl('/auth')

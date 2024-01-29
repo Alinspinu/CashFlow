@@ -27,6 +27,7 @@ export class Bill{
     public completetime: number,
     public paymentMethod: string,
     public onlineOrder: boolean,
+    public prepStatus: string,
     public payment: {
         cash: number,
         card: number,
@@ -92,7 +93,10 @@ export class BillProduct{
    public comment: string,
    public tva: string,
    public dep: string,
-   public toppingsToSend: Topping[]
+   public toppingsToSend: Topping[],
+   public sentToPrintOnline: boolean,
+   public qty: string,
+   public cantitate: string,
   ){}
 }
 

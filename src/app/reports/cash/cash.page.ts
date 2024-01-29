@@ -3,17 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-;
+import { DatePickerPage } from '../../modals/date-picker/date-picker.page';
 import { CashService } from './cash.service';
 import { formatedDateToShow, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
-
+import { Bill, BillProduct } from '../../models/table.model';
+import { CapitalizePipe } from '../../shared/utils/capitalize.pipe'
 import { OrdersViewPage } from './orders-view/orders-view.page';
-import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
-import { Bill, BillProduct } from 'src/app/models/table.model';
-import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
+import { DelProdViewPage } from './del-prod-view/del-prod-view.page';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
-
 
 
  interface paymentMethod {
@@ -71,9 +69,11 @@ export class CashPage implements OnInit {
     private router: Router,
   ) { }
 
-  startDate!: string
-  endDate!: string
+  advance: boolean = false
+  startDate!: string | undefined
+  endDate!: string | undefined
   today: string = this.formatDate(new Date(Date.now()).toString()).split('ora')[0]
+  day!: string | undefined
 
   bills: Bill[] = []
   discountBills: Bill [] = []
@@ -88,25 +88,24 @@ export class CashPage implements OnInit {
   total: number = 0;
   cashBack: number = 0
   discounts: number = 0
+  totalIncasat: number = 0;
+  totalNoTax: number = 0;
 
+  openTotal: number = 0
   cash: number = 0
   card: number = 0
   vivaWallet: number = 0
   voucher: number = 0
+  tvaValue: number = 0
   payOnline: number = 0
-
+  isLoading = true
+  delProducts: any = []
   user!: User
 
 
   ngOnInit() {
-    this.getUser()
-
-  }
-
-
-  getUser(){
     getUserFromLocalStorage().then(user => {
-      if(user) {
+      if(user){
         this.user = user
         this.getOrders()
       } else {
@@ -115,19 +114,75 @@ export class CashPage implements OnInit {
     })
   }
 
+
   search(){
     this.today = ''
     this.getOrders()
+    this.advance = false
   }
 
 getOrders(){
-  this.cashSrv.getOrders(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
-    if(response.length){
+  this.isLoading = true
+  this.cashSrv.getOrders(this.startDate, this.endDate, this.day, this.user.locatie).subscribe(response => {
+    if(response){
       this.resetValues()
-      this.bills = response
+      this.bills = response.orders
+      this.delProducts = response.delProducts
+      this.isLoading = false
       this.calcTotals()
+      this.calcTva()
     }
   })
+}
+
+calcTva(){
+  let discountBills: Bill[] = []
+  let fullBills: Bill[] = []
+  this.bills.forEach(bill => {
+    if(bill.discount > 0 || bill.cashBack > 0 && bill.status === 'done'){
+      discountBills.push(bill)
+    }
+    if(bill.discount === 0 && bill.cashBack === 0 && bill.status === 'done') {
+      fullBills.push(bill)
+    }
+  })
+  let tvaDiscountBills = 0
+  let tvaFullBills = 0
+  discountBills.forEach(bill => {
+    const discountProcent = (bill.discount + bill.cashBack) * 100 / bill.total;
+    bill.products.forEach(product => {
+      if(product.quantity > 0 && product.tva && product.quantity * product.price > product.discount){
+        const productPrice = product.price * product.quantity
+        const discountValue = productPrice * discountProcent / 100
+        const productRealPrice = productPrice - discountValue
+        const tvaValue = productRealPrice * +product.tva / 100
+        tvaDiscountBills += round(tvaValue)
+      }
+    })
+  })
+  fullBills.forEach(bill => {
+    bill.products.forEach(product => {
+      if(product.quantity > 0 && product.tva && product.quantity * product.price > product.discount){
+        const tvaValue = product.price * product.quantity * +product.tva / 100
+        tvaFullBills += round(tvaValue)
+      }
+    })
+  })
+  this.tvaValue = round(tvaDiscountBills + tvaFullBills)
+  this.totalIncasat = round(this.vivaWallet+this.cash)
+  this.totalNoTax = round(this.totalIncasat - this.tvaValue)
+}
+
+ async showDeletedProducts(){
+    await this.actionSheet.openPayment(DelProdViewPage, this.delProducts)
+}
+
+refresh(){
+  window.location.reload()
+}
+
+advSearch(){
+  this.advance = true
 }
 
 resetValues(){
@@ -153,33 +208,36 @@ calcTotals(){
     bill.products.forEach(prod => {
       this.billProducts.push(prod)
     })
-     this.cashBack += bill.cashBack
-     this.discounts += bill.discount
+     this.cashBack = round( this.cashBack +  bill.cashBack)
+     this.discounts = round(this.discounts + bill.discount)
      this.total += (bill.total + bill.discount)
 
      if(bill.payment.cash){
-       this.cash += bill.payment.cash
+       this.cash =  round(this.cash + bill.payment.cash)
      }
      if(bill.payment.card){
-       this.card += bill.payment.card
+       this.card = round(this.card + bill.payment.card)
      }
      if(bill.payment.viva){
-       this.vivaWallet += bill.payment.viva
+       this.vivaWallet = round(this.vivaWallet + bill.payment.viva)
      }
      if(bill.payment.voucher) {
-       this.voucher += bill.payment.voucher
+       this.voucher = round(this.voucher + bill.payment.voucher)
      }
      if(bill.payment.online){
-       this.payOnline += bill.payment.online
+       this.payOnline = round(this.payOnline + bill.payment.online)
      }
    }
+
    if(bill.discount > 0){
     this.discountBills.push(bill)
    }
    if(bill.cashBack > 0){
     this.cashBackBills.push(bill)
    }
-   console.log(this.bills)
+   if(bill.status === "open"){
+    this.openTotal += (bill.total - bill.discount)
+   }
   })
   this.calcProcents()
   this.calcHours()
@@ -192,6 +250,9 @@ if(method === 'Discount') {
 }
 if(method === 'CashBack'){
   this.actionSheet.openPayment(OrdersViewPage, this.cashBackBills)
+}
+if(method === "Note deschise"){
+  this.showOpenOrders()
 }
 }
 
@@ -206,6 +267,16 @@ showOrders(){
   this.actionSheet.openPayment(OrdersViewPage, billsToSend)
 }
 
+showOpenOrders(){
+  let billsToShow: any [] = []
+  this.bills.forEach(el => {
+    if(el.status === 'open'){
+      billsToShow.push(el)
+    }
+  })
+  this.actionSheet.openPayment(OrdersViewPage, billsToShow)
+}
+
 
 calcHours(){
   this.bills.forEach(bill => {
@@ -213,7 +284,7 @@ calcHours(){
       const hours = new Date(bill.createdAt).getHours()
       const exsitingHour = this.hours.find(p => (p.hour === hours))
       if(exsitingHour){
-        exsitingHour.total = exsitingHour.total + bill.total
+        exsitingHour.total = round(exsitingHour.total + bill.total)
         exsitingHour.procent = round(exsitingHour.total * 100 / this.total)
       } else {
         const hour: hour = {
@@ -233,7 +304,7 @@ calcUsers(){
     if(bill.production){
       const existingUser = this.users.find(p => (p.name === bill.employee.fullName))
       if(existingUser){
-        existingUser.total = existingUser.total + bill.total
+        existingUser.total = round(existingUser.total + bill.total)
         existingUser.procent = round(existingUser.total * 100 / this.total)
       } else {
         const user: user = {
@@ -301,13 +372,20 @@ calcProcents(){
     this.paymentMethods.push(payOnlineMethod)
   }
   if(this.total > 0 && this.discounts > 0){
-    console.log(this.discounts)
     const discountMethod: paymentMethod = {
       name: 'Discount',
       value: this.discounts,
       procent: round(this.discounts * 100 / this.total)
     }
     this.paymentMethods.push(discountMethod)
+  }
+  if(this.total > 0 && this.openTotal > 0){
+    const openTableMethod: paymentMethod = {
+      name: "Note deschise",
+      value: this.openTotal,
+      procent: round(this.openTotal * 100 / this.total)
+    }
+    this.paymentMethods.push(openTableMethod)
   }
    this.paymentMethods.sort((a,b) => b.procent - a.procent)
    this.createDeps()
@@ -418,16 +496,33 @@ showData(dep: departament){
     if(startDate){
       this.startDate = startDate
     }
-  } else {
+  }
+  if(mode === "end"){
     const endDate = await this.actionSheet.openAuth(DatePickerPage)
     if(endDate){
       this.endDate = endDate
+      this.day = undefined
+      if(this.startDate){
+        this.advance = false
+        this.today = ''
+        this.getOrders()
+      }
+    }
+  }
+  if(mode === 'day'){
+    const day = await this.actionSheet.openAuth(DatePickerPage)
+    if(day){
+      console.log(day)
+      this.day = day
+      this.endDate = undefined
+      this.startDate = undefined
+      this.getOrders()
     }
   }
   }
 
-  formatDate(date: string){
-    return formatedDateToShow(date)
+  formatDate(date: string | undefined){
+    return formatedDateToShow(date).split(' ora')[0]
   }
 
 }

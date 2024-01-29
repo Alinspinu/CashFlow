@@ -23,6 +23,7 @@ import { OrdersViewPage } from '../reports/cash/orders-view/orders-view.page';
 import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { TipsPage } from '../modals/tips/tips.page';
 import { AddProductDiscountPage } from '../modals/add-product-discount/add-product-discount.page';
+import { DelProdViewPage } from '../reports/cash/del-prod-view/del-prod-view.page';
 
 
 
@@ -67,7 +68,8 @@ export class ActionSheetService {
                typeof AddClientDiscountPage |
                typeof AddProductDiscountPage |
                typeof OrdersViewPage |
-               typeof OrderAppViewPage,
+               typeof OrderAppViewPage |
+               typeof DelProdViewPage,
     options: any
   ){
     const modal = await this.modalCtrl.create({

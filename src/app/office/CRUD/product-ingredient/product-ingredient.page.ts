@@ -69,6 +69,7 @@ export class ProductIngredientPage implements OnInit {
 
   getProdIng(){
       const product = this.navParams.get('options')
+      console.log(product)
       if(product){
         this.productIngredientMode = true;
         this.productIngName = product.name;
@@ -83,6 +84,7 @@ export class ProductIngredientPage implements OnInit {
             ing: el.ing._id
           }
           this.ingredientsToSend.push(ing)
+          this.recipeTotal += (el.qty * el.ing.price)
         })
       }
 

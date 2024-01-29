@@ -26,8 +26,12 @@ export class IngredientService{
   }
 
   printIngredientsList(filter: any, loc: string){
-    console.log(loc)
     return this.http.post(`${environment.BASE_URL}ing/print-ing-list`, {filter: filter,  loc: loc}, {responseType: 'blob'})
 
+  }
+
+
+  uodateProductIngredientPrices(locatie: string){
+    return this.http.post(`${environment.BASE_URL}product/update-pro-ing-price`, {loc: locatie})
   }
 }

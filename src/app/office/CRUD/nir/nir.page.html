@@ -29,7 +29,7 @@
         <ion-input  mode="ios" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input">
-        <ion-input mode="ios" type="number" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty" #qtyInput></ion-input>
+        <ion-input mode="ios" type="number" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty" #qtyInput (keydown)="onQtyTab($event)"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input">
         <ion-input  mode="ios" type="number" [label]="isTva ? 'Pret/UM/Fara TVA': 'Pret'" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
@@ -43,7 +43,7 @@
           </ion-select>
       </ion-item>
       <ion-item lines="none" class="input" *ngIf="isTva">
-        <ion-input  mode="ios" type="number" label="Valoare" labelPlacement="floating" fill="outline" formControlName="value"></ion-input>
+        <ion-input  mode="ios" type="number" label="Valoare" labelPlacement="floating" fill="outline" formControlName="value" (keydown)="onValTab($event)"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input" *ngIf="isTva">
         <ion-input  mode="ios" type="number" label="Valoare TVA" labelPlacement="floating" fill="outline" formControlName="tvaValue"></ion-input>

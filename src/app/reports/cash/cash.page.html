@@ -1,34 +1,58 @@
 
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="advance">
       <ion-button (click)="selectDate('start')">
-        SART DATE
+        SART DAY
         <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
       </ion-button>
       <ion-button (click)="selectDate('end')">
-        END DATE
+        END DAY
         <ion-icon src="../../../assets/icon/calendar.svg" class="icon-end"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-buttons slot="start" *ngIf="!advance">
+      <ion-button (click)="selectDate('day')">
+        DAY
+        <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-button size="small" (click)="refresh()">
+      REFRESH
+    </ion-button>
     <ion-buttons slot="end">
-      <ion-button (click)="search()" [disabled]="!startDate || !endDate">
+      <ion-button (click)="search()" [disabled]="!startDate || !endDate" *ngIf="advance">
         CATUTĂ
         <ion-icon src="../../../assets/icon/search-outline.svg" class="icon-start"></ion-icon>
+      </ion-button>
+      <ion-button (click)="advSearch()" *ngIf="!advance">
+        CAUTARE AVANSATA
+        <ion-icon src="../../../assets/icon/search-outline.svg" class="icon-end"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
   <span *ngIf="today.length" class="show-date">{{startDate ? formatDate(startDate) : ''}}</span>
   <span *ngIf="today.length" class="show-date">{{endDate ?  formatDate(endDate): ''}}</span>
 </ion-header>
-<ion-content [fullscreen]="true">
+
+<!-- <ion-content [fullscreen]="true" *ngIf="isLoading">
+
+  <app-logo-page></app-logo-page>
+</ion-content> -->
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
 <ion-grid>
   <ion-row>
     <ion-col size-lg="6" offset-lg="3">
       <div class="sum-wrapper">
-        <span class="label">Încasări</span>
-        <span class="total">{{total}} Lei</span>
-        <span class="data">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
+        <span class="label tot">Încasări</span>
+        <span class="total tot">{{total}} Lei</span>
+        <span class="note tot">(Total cu mese deschise și discount)</span>
+        <span class="incasat">{{totalIncasat}} Lei</span>
+        <span class="note incasat">(Total fară mese deschise și fară discount)</span>
+        <span class="vat">{{totalNoTax}} Lei</span>
+        <span class="note vat">(Total fără mese deschise și fără TVA)</span>
+        <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
+        <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
       </div>
     </ion-col>
   </ion-row>
@@ -109,7 +133,20 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button size="large" (click)="showOrders()" color="tertiary">
-    NOTE DE PLATĂ
-  </ion-button>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button size="mediun" (click)="showOrders()" color="tertiary">
+          NOTE DE PLATĂ
+          <ion-badge color="secondary" style="margin-left: 8px;">{{bills.length}}</ion-badge>
+        </ion-button>
+      </ion-col>
+      <ion-col size="6" class="ion-text-end">
+        <ion-button size="medium" (click)="showDeletedProducts()" color="tertiary">
+          PRODUSE STERSE
+          <ion-badge color="secondary" style="margin-left: 8px;">{{delProducts.length}}</ion-badge>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-footer>

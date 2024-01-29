@@ -2,21 +2,18 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
-import { Bill } from '../../../models/table.model';
-import { formatedDateToShow } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { OrderViewPage } from '../order-view/order-view.page';
+import { formatedDateToShow } from 'src/app/shared/utils/functions';
 
 @Component({
-  selector: 'app-orders-view',
-  templateUrl: './orders-view.page.html',
-  styleUrls: ['./orders-view.page.scss'],
+  selector: 'app-del-prod-view',
+  templateUrl: './del-prod-view.page.html',
+  styleUrls: ['./del-prod-view.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class OrdersViewPage implements OnInit {
-
-  orders: Bill[] = []
+export class DelProdViewPage implements OnInit {
+  products: any[] = []
 
   constructor(
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
@@ -25,16 +22,15 @@ export class OrdersViewPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.orders = this.navPar.get('options')
-    console.log(this.orders)
+    this.products = this.navPar.get('data')
   }
 
   close(){
     this.modalCtrl.dismiss(null)
   }
 
-  showOrder(order: Bill){
-    this.actSrv.openPayment(OrderViewPage, order)
+  showOrder(product: any ){
+    // this.actSrv.openModal(OrderViewPage, order)
   }
 
   formatDate(date:any) {

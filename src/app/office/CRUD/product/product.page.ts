@@ -84,7 +84,6 @@ export class ProductPage implements OnInit {
           if(response){
             response.subProducts.length ? this.hideIng = true : this.hideIng = false
             this.product = response;
-            console.log(response)
             this.editMode = true
             this.topToEdit = this.product.toppings;
             this.ingsToEdit = this.product.ings;
@@ -230,7 +229,8 @@ export class ProductPage implements OnInit {
     if(this.form.valid){
       const productData = new FormData()
       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
-      const ings = this.toppings.length ? JSON.stringify(this.productIngredients) : 'skip';
+      const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
+      console.log(ings)
       const sub = JSON.stringify(this.subProducts);
       const tempSubs = JSON.stringify(this.tempSubArray);
       console.log(toppings)
@@ -270,6 +270,10 @@ export class ProductPage implements OnInit {
                this.prodSrv.saveSubProduct(sub, this.user.locatie).subscribe()
             }
             this.router.navigateByUrl('/tabs/office/products')
+            this.form.reset()
+            this.toppings = []
+            this.productIngredients = []
+            this.subProducts = []
           }
         })
       }

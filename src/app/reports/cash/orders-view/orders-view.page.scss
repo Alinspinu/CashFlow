@@ -11,10 +11,10 @@
     margin: 10px 5px 10px 5px;
   }
   .nr{
-    flex: 5%
+    flex: 2%
   }
   .data{
-    flex: 30%;
+    flex: 48%;
   }
   .discount{
     flex: 25%;
@@ -22,17 +22,21 @@
     text-align: center;
   }
   .total{
-    flex: 40%;
-    font-family: NoirProSemi !important;
+    flex: 25%;
+    font-family: NoirPro !important;
     text-align: end;
   }
 
 }
 
+.open{
+  --background: var(--ion-color-danger);
+}
+
 .header{
   height: 40px;
   border-radius: 8px;
-  margin: 0.4rem 0 0.4rem 0.2rem;
+  margin: 0.4rem 0 0 0.2rem;
   font-family: NoirProLight !important;
   display: flex;
   flex-direction: row;
@@ -40,10 +44,10 @@
     margin: 10px 5px 10px 5px;
   }
   .nr{
-    flex: 5%
+    flex: 2%
   }
   .data{
-    flex: 30%;
+    flex: 48%;
   }
   .discount{
     flex: 25%;
@@ -51,8 +55,8 @@
     text-align: center;
   }
   .total{
-    flex: 40%;
-    font-family: NoirProSemi !important;
+    flex: 25%;
+    font-family: NoirPro !important;
     text-align: end;
   }
 }

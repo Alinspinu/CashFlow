@@ -43,7 +43,10 @@ export function  emptyBillProduct(){
     tva: '',
     discount: 0,
     dep: '',
-    toppingsToSend: []
+    toppingsToSend: [],
+    sentToPrintOnline: true,
+    qty: '',
+    cantitate: '',
   }
   return billProduct
  }
@@ -118,6 +121,7 @@ export function emptyBill(){
     products: [],
     createdAt: '',
     locatie: '',
+    prepStatus: 'open'
   }
   return emptyBill
 }

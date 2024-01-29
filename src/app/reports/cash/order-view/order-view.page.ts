@@ -7,6 +7,7 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 
 
+
 @Component({
   selector: 'app-order-view',
   templateUrl: './order-view.page.html',
@@ -34,6 +35,7 @@ export class OrderViewPage implements OnInit {
 
   ngOnInit() {
     this.order = this.navPar.get('options');
+    console.log(this.order)
     const result = getPaymentMethod(this.order.payment)
     this.paymentMethod = result
   }

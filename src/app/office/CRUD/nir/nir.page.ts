@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NirsService } from '../../nirs/nirs.service';
 import User from 'src/app/auth/user.model';
 
+
 @Component({
   selector: 'app-nir',
   templateUrl: './nir.page.html',
@@ -178,45 +179,41 @@ user!: User;
 
 
     });
-
-    this.ingredientForm.get('qty')?.valueChanges.subscribe(this.updateValueField);
-    this.ingredientForm.get('price')?.valueChanges.subscribe(this.updateValueField);
-    this.ingredientForm.get('value')?.valueChanges.subscribe(this.updateValueField);
-    this.ingredientForm.get('tva')?.valueChanges.subscribe(this.updateValueField);
   };
 
 
-  private updateValueField = () => {
-    const qtyControl = this.ingredientForm.get('qty');
-    const priceControl = this.ingredientForm.get('price')
-    const valueControl = this.ingredientForm.get('value');
-    const tvaControl = this.ingredientForm.get('tva');
-    const tvaValueControl = this.ingredientForm.get('tvaValue');
-    const totalControl = this.ingredientForm.get('total');
-    if (qtyControl && priceControl && valueControl && tvaValueControl && tvaControl && totalControl) {
-      const qty = qtyControl.value || 0;
-      const tva = +tvaControl.value || 0;
-      const price = (valueControl.value && qty)? this.roundFor(valueControl.value / qty) || priceControl.value || 0: priceControl.value || 0
-      const value = ((qty*price) === 0 || (qty*price) === null) ? valueControl.value : this.roundFor(qty*price);
-      const tvaValue = value * (tva/100)
-      valueControl.setValue(value, { emitEvent: false });
-      tvaValueControl.setValue(round(tvaValue), { emitEvent: false })
-      totalControl.setValue(round(tvaValue+value), { emitEvent: false })
-      priceControl.setValue(price, { emitEvent: false });
+  onQtyTab(ev: KeyboardEvent){
+    if (ev.key === 'Tab') {
+      const qtyControl = this.ingredientForm.get('qty');
+      const priceControl = this.ingredientForm.get('price')
+      const valueControl = this.ingredientForm.get('value');
+      if(qtyControl && priceControl && valueControl){
+        const qty = qtyControl.value
+        const price = priceControl.value
+        valueControl.setValue(round(qty*price))
+      }
     }
-  };
+  }
 
-  private updatePriceField = () => {
-    const qtyControl = this.ingredientForm.get('qty');
-    const priceControl = this.ingredientForm.get('price')
-    const valueControl = this.ingredientForm.get('value');
-    if (qtyControl && valueControl && priceControl) {
-      const qty = qtyControl.value || 0;
-      const value = valueControl.value
-      const price =  (value / qty) || priceControl.value || 0;
+
+  onValTab(ev: KeyboardEvent){
+    if (ev.key === 'Tab') {
+      const qtyControl = this.ingredientForm.get('qty');
+      const priceControl = this.ingredientForm.get('price')
+      const valueControl = this.ingredientForm.get('value');
+      const tvaControl = this.ingredientForm.get('tva');
+      const tvaValueControl = this.ingredientForm.get('tvaValue');
+      const totalControl = this.ingredientForm.get('total');
+      if(qtyControl && priceControl && valueControl && tvaControl){
+        const qty = qtyControl.value
+        const value = valueControl.value
+        const tva = tvaControl.value
+        priceControl.setValue(round(value/qty))
+        tvaValueControl?.setValue(round(value * tva / 100))
+        totalControl?.setValue(round(value + (value * tva / 100)))
+      }
     }
-  };
-
+  }
 
 
   async openDiscount(){
@@ -332,6 +329,7 @@ user!: User;
         this.nirSrv.deleteNir(this.nirId).subscribe(response => {
           if(response && response.message){
             this.nirSrv.saveNir(this.nir, this.user.locatie).subscribe(response => {
+            this.reserNirData()
               showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
               this.router.navigateByUrl('/tabs/office/nirs')
             })
@@ -343,11 +341,23 @@ user!: User;
         this.nir.suplier = this.suplier._id
         this.nir.ingredients = this.nirIngredients
         this.nirSrv.saveNir(this.nir, this.user.locatie).subscribe(response=> {
+          this.reserNirData()
           this.router.navigateByUrl('/tabs/office/nirs')
           showToast(this.toastCtrl, response.message, 2000)
         })
       }
     }
+  }
+
+  reserNirData(){
+    this.nir =  {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [] }
+    this.nirIngredients = []
+    this.val = 0
+    this.suplier = undefined
+    this.valTotal = 0
+    this.valTva = 0
+    this.valVanzare = 0
+    this.nirForm.reset()
   }
 
   getIngs(){

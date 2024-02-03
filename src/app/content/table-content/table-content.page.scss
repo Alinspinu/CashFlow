@@ -1,7 +1,7 @@
 
 
-span, ion-title, ion-card-subtitle, ion-label{
-  font-family: RobMedium, sans-serif !important;
+span, ion-title, ion-card-subtitle, ion-label, ion-button{
+  font-family: NoirProSemi, sans-serif !important;
 }
 
 .dynamic-header-active {
@@ -18,20 +18,20 @@ span, ion-title, ion-card-subtitle, ion-label{
 .title{
   text-transform: uppercase;
   text-align: center;
-  font-size: 20px;
+  font-size: 28px;
   color: var(--ion-color-dark);
 }
 .small-title{
   text-transform: uppercase;
   text-align: center;
-  font-size: 16px;
+  font-size: 20px;
   color: var(--ion-color-dark);
 }
 
 .product-title{
   text-transform: uppercase;
   text-align: center;
-  font-size: 12px;
+  font-size: 18px;
   color: var(--ion-color-dark);
 }
 
@@ -101,11 +101,15 @@ span, ion-title, ion-card-subtitle, ion-label{
   cursor: pointer;
   .prod-name{
     flex: 50%;
+    #p-name{
+      font-family: NoirProSemi !important;
+    }
     .toppings-wrapper{
       margin-left: 10%;
       span{
         font-weight: 400;
         font-size: 14px;
+        font-family: NoirProReg !important;
       }
     }
   }

@@ -7,7 +7,7 @@
     <ion-row>
     <ion-col size="3">
       <ion-title class="ion-text-center">Adaugă Ingredient</ion-title>
-      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută ingredient"  (ionInput)="searchIngredient($event)" (keyup.enter)="setIng()"></ion-searchbar>
+      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută ingredient"  (ionInput)="searchIngredient($event)" (keyup.enter)="setIng()" #searchBar></ion-searchbar>
       <!-- <ion-item *ngFor="let ing of ingredients; let i = index" class="fur-name" (click)="selectIngredient(ing)">
         <span>{{ing.name}}</span>
       </ion-item> -->
@@ -29,7 +29,8 @@
         <ion-input  mode="ios" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input">
-        <ion-input mode="ios" type="number" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty" #qtyInput (keydown)="onQtyTab($event)"></ion-input>
+        <ion-input mode="ios" [type]="qtyInputType" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty" #qtyInput (keydown)="onQtyTab($event)" (keyup.enter)="qtyInputType === 'text' ? evalQty() : null" ></ion-input>
+        <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="qtyCalcColor" (click)="switchCalcMode('qty')"></ion-icon>
       </ion-item>
       <ion-item lines="none" class="input">
         <ion-input  mode="ios" type="number" [label]="isTva ? 'Pret/UM/Fara TVA': 'Pret'" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
@@ -43,15 +44,16 @@
           </ion-select>
       </ion-item>
       <ion-item lines="none" class="input" *ngIf="isTva">
-        <ion-input  mode="ios" type="number" label="Valoare" labelPlacement="floating" fill="outline" formControlName="value" (keydown)="onValTab($event)"></ion-input>
+        <ion-input  mode="ios" [type]="valInputType" label="Valoare" labelPlacement="floating" fill="outline" formControlName="value" (keydown)="onValTab($event)" (keyup.enter)="valInputType === 'text' ? evalValue() : null"></ion-input>
+        <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="valCalcColor" (click)="switchCalcMode('value')"></ion-icon>
       </ion-item>
       <ion-item lines="none" class="input" *ngIf="isTva">
-        <ion-input  mode="ios" type="number" label="Valoare TVA" labelPlacement="floating" fill="outline" formControlName="tvaValue"></ion-input>
+        <ion-input  mode="ios" type="number" label="Valoare TVA" labelPlacement="floating" fill="outline" formControlName="tvaValue" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input">
-        <ion-input  mode="ios" type="number" label="Total" labelPlacement="floating" fill="outline" formControlName="total"></ion-input>
+        <ion-input  mode="ios" type="number" label="Total" labelPlacement="floating" fill="outline" formControlName="total" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
       </ion-item>
-      <ion-item lines="none" class="input">
+      <ion-item lines="none" class="input" (keyup.enter)="ingredientForm.valid ? addToNir(): null">
         <ion-select label="Departament" placeholder="Materie Prima" formControlName="dep">
           <ion-select-option value="materie">Materie Primă</ion-select-option>
           <ion-select-option value="marfa">Marfă</ion-select-option>
@@ -59,14 +61,14 @@
         </ion-select>
     </ion-item>
     <ion-item lines="none" class="input">
-      <ion-select label="Gestiune" placeholder="Gestiune" formControlName="gestiune">
+      <ion-select label="Gestiune" placeholder="Gestiune" formControlName="gestiune" (keyup.enter)="ingredientForm.valid ? addToNir(): null">
         <ion-select-option value="magazie">Magazie</ion-select-option>
         <ion-select-option value="bucatarie">Bucătărie</ion-select-option>
         <ion-select-option value="bar">Bar</ion-select-option>
       </ion-select>
   </ion-item>
   <ion-item lines="none" class="input">
-    <ion-input  mode="ios" type="number" label="Preț de vânzare" labelPlacement="floating" fill="outline" formControlName="sellPrice"></ion-input>
+    <ion-input  mode="ios" type="number" label="Preț de vânzare" labelPlacement="floating" fill="outline" formControlName="sellPrice" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
   </ion-item>
   <ion-button size="medium" expand="block" (click)="addToNir()" [disabled]="!ingredientForm.valid">
     Add
@@ -153,7 +155,7 @@
 
           </ion-item>
 
-          <ion-button expand="block" (click)="saveNir()" size="large" [disabled]="!nirForm.valid">
+          <ion-button expand="block" (click)="saveNir()" size="large" [disabled]="!nirIngredients.length">
             Salvează NIR
           </ion-button>
         </form>

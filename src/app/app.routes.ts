@@ -17,16 +17,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'add-client-discount',
-    loadComponent: () => import('./modals/add-client-discount/add-client-discount.page').then( m => m.AddClientDiscountPage)
-  },
-  {
-    path: 'tips',
-    loadComponent: () => import('./modals/tips/tips.page').then( m => m.TipsPage)
-  },
-  {
-    path: 'add-product-discount',
-    loadComponent: () => import('./modals/add-product-discount/add-product-discount.page').then( m => m.AddProductDiscountPage)
+    path: 'register-locatie/:value',
+    loadComponent: () => import('./office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
   },
 
 ];

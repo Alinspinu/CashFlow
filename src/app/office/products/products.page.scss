@@ -3,6 +3,18 @@ ion-content{
   --background: var(--ion-color-tertiary);
 }
 
+ion-searchbar{
+  font-family: NoirProReg !important;
+}
+
+ion-select{
+  font-family: NoirProReg !important;
+}
+
+ion-label{
+  font-family: NoirProReg !important;
+}
+
 .input{
   height: 45px;
   border: 0.5px solid var(--ion-color-medium);
@@ -32,6 +44,7 @@ ion-item[slot="fixed"]{
   top: 11%;
   width: 100%;
   opacity: 60%;
+  font-family: NoirProReg !important;
   // --backgound: transparent;
 }
 

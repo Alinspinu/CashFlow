@@ -3,6 +3,10 @@ ion-content{
   --background: var(--ion-color-tertiary);
 }
 
+span{
+  font-family: NoirProReg !important;
+}
+
 .icon-start{
   height: 18px;
   margin-left: 4px;
@@ -51,6 +55,7 @@ ion-content{
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
 }
 
 .display-date{

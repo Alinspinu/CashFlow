@@ -12,6 +12,7 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
+import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 
 @Component({
   selector: 'app-ingredient',
@@ -34,7 +35,8 @@ export class IngredientPage implements OnInit {
   productIngredients!: any;
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingTypes: string[] = ["simplu", "compus"]
-  filter: {gestiune: string, type: string} = {gestiune: '', type: ''}
+  ingDep: string[] = ["materie", "marfa", 'consumabile']
+  filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
 
 
   constructor(
@@ -72,6 +74,24 @@ export class IngredientPage implements OnInit {
     })
   }
 
+  async calcConsum(){
+    const startDate = await this.actionSh.openAuth(DatePickerPage)
+    if(startDate){
+      const endDate = await this.actionSh.openAuth(DatePickerPage)
+      if(endDate){
+        this.ingSrv.printConsum(this.filter, this.user.locatie, startDate, endDate).subscribe(response => {
+          const url = window.URL.createObjectURL(response);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Consum materii prime.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        })
+      }
+    }
+  }
+
   showIngs(index: number){
     const ingredient = this.ingredients[index]
     ingredient.showIngs = !ingredient.showIngs
@@ -85,7 +105,11 @@ export class IngredientPage implements OnInit {
   onSelectType(event: any) {
     this.filter.type = event.detail.value
     this.getIngredients()
-    console.log(this.ingredients[1])
+  }
+
+  onSelectDep(event: any){
+    this.filter.dep = event.detail.value
+    this.getIngredients()
   }
 
   getIngredients(){

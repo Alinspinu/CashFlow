@@ -1,11 +1,15 @@
 ion-content {
   --background: var(--ion-color-tertiary) !important;
-  font-family: NoirProRegular !important;
+  font-family: NoirProReg !important;
 }
 
 .show-date{
   font-size: 12px;
-  font-family: NoirProRegular !important;
+  font-family: NoirProReg !important;
+}
+
+ion-button{
+  font-family: NoirProSemi !important;
 }
 
 .sum-wrapper {
@@ -19,12 +23,12 @@ ion-content {
     color: var(--ion-color-primary);
   }
   .total{
-    font-family: NoirPro !important;
+    font-family: NoirProSemi !important;
     font-size: 30px;
     align-self: center;
   }
   .label{
-    font-family: NoirProRegular !important;
+    font-family: NoirProReg !important;
     font-size: 30px;
     align-self: center;
     margin-bottom: 8px;
@@ -44,13 +48,13 @@ ion-content {
     align-self: center;
   }
   .note{
-    font-family: NoirProRegular !important;
+    font-family: NoirProReg !important;
     font-size: 10px;
     align-self: center;
     margin-bottom: 8px;
   }
   .data{
-    font-family: NoirProRegular !important;
+    font-family: NoirProReg !important;
     font-size: 14px;
     align-self: center;
     margin-top: 4px;
@@ -70,7 +74,7 @@ ion-content {
   .title {
     text-align: center;
     color: white;
-    font-family: NoirProRegular !important;
+    font-family: NoirProReg !important;
     font-size: 26px;
     margin: 8px 0 4px 0;
     padding: 8px;
@@ -85,24 +89,24 @@ ion-content {
     justify-content: space-between;
     align-items: center;
     .index{
-      font-family: NoirProRegular !important;
+      font-family: NoirProReg !important;
       font-size: 22px;
       margin-right: 4px;
       align-self: flex-start;
     }
     .label{
-      font-family: NoirProRegular !important;
+      font-family: NoirProReg !important;
       font-size: 22px;
       flex: 40%;
     }
     .proc{
-      font-family: NoirProRegular !important;
+      font-family: NoirProReg !important;
       font-size: 16px;
       flex: 20%;
       text-align: center;
     }
     .sum{
-      font-family: NoirPro !important;
+      font-family: NoirProSemi !important;
       font-size: 22px;
       flex: 40%;
       text-align: end;
@@ -117,24 +121,24 @@ ion-content {
     border-bottom: 0.8px solid white;
     align-items: center;
     .index{
-      font-family: NoirProRegular !important;
+      font-family: NoirProReg !important;
       font-size: 18px;
       margin-right: 4px;
       align-self: flex-start;
     }
     .label{
-      font-family: NoirProRegular !important;
+      font-family: NoirProReg !important;
       font-size: 18px;
       flex: 40%;
     }
     .proc{
-      font-family: NoirProRegular !important;
+      font-family: NoirProReg !important;
       font-size: 14px;
       flex: 20%;
       text-align: center;
     }
     .sum{
-      font-family: NoirPro !important;
+      font-family: NoirProSemi !important;
       font-size: 18px;
       flex: 40%;
       text-align: end;

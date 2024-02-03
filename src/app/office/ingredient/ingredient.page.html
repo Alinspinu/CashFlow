@@ -4,6 +4,7 @@
     <span class="name">Nume</span>
     <span class="compus">Compus</span>
     <span class="gestiune">Gestiune</span>
+    <span class="dep">Dep</span>
     <span class="um">UM</span>
     <span class="price">Pret de intare cu TVA</span>
     <span class="qty">Cantitate Inv</span>
@@ -24,19 +25,27 @@
           [ings]="ingsToEdit"
           </app-recipe-maker>
         </ion-col>
-        <ion-col size="3">
+        <ion-col size="2">
           <ion-item lines="none" class="input">
             <ion-select placeholder="Alege Gestiunea" (ionChange)="onSelectGestiune($event)">
-              <ion-select-option value="">Toate</ion-select-option>
-              <ion-select-option *ngFor="let gest of gestiuni" [value]="gest">{{gest | capitalize}}</ion-select-option>
+              <ion-select-option  class="font" value="">Toate</ion-select-option>
+              <ion-select-option  class="font"*ngFor="let gest of gestiuni" [value]="gest">{{gest | capitalize}}</ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="3">
+        <ion-col size="2">
           <ion-item lines="none" class="input">
             <ion-select placeholder="Alege tipul de ingrediet" (ionChange)="onSelectType($event)">
-              <ion-select-option value="">Toate</ion-select-option>
-              <ion-select-option *ngFor="let type of ingTypes" [value]="type">{{type | capitalize}}</ion-select-option>
+              <ion-select-option class="font" value="">Toate</ion-select-option>
+              <ion-select-option  class="font"*ngFor="let type of ingTypes" [value]="type">{{type | capitalize}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="2">
+          <ion-item lines="none" class="input">
+            <ion-select placeholder="Alege departamentul" (ionChange)="onSelectDep($event)">
+              <ion-select-option class="font" value="">Toate</ion-select-option>
+              <ion-select-option  class="font"*ngFor="let type of ingDep" [value]="type">{{type | capitalize}}</ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
@@ -48,6 +57,10 @@
             </ion-button>
             <ion-button class="input" (click)=" updateProductIng()">
               Up
+              <img src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo">
+            </ion-button>
+            <ion-button class="input" (click)=" calcConsum()">
+              CONSUM
               <img src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo">
             </ion-button>
           </ion-buttons>
@@ -63,6 +76,7 @@
         <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="ing.ings.length" class="arrow"></ion-icon>
         <ion-icon  *ngIf="!ing.ings.length" class="arrow"></ion-icon>
         <span class="gestiune">{{ing.gestiune}}</span>
+        <span class="dep">{{ing.dep}}</span>
         <span class="um">{{ing.um}}</span>
         <span class="price">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
         <span class="qty">{{ing.ings.length ? 1 : ing.qty}}</span>
@@ -73,6 +87,7 @@
         <ion-item *ngFor="let ingr of ing.ings" lines="none" class="content-container" (click)="ingEdit(ing._id)" color="tertiary">
           <span class="name">{{ingr.ing.name}}</span>
           <span class="gestiune">{{ingr.ing.gestiune}}</span>
+          <span class="dep">{{ingr.ing.dep}}</span>
           <span class="um">{{ingr.ing.um}}</span>
           <span class="price">{{ingr.ing.ings.length ? calcProductIngredientPrice(ingr.ing.ings) : roundInHtml(ingr.ing.price + (ingr.ing.price * ingr.ing.tva / 100))}} Lei</span>
           <span class="qty">{{ingr.qty}}</span>

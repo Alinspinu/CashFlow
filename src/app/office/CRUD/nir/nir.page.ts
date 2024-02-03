@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, NavParams, ToastController } from '@ionic/angular';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { IonicModule, IonSearchbar, NavParams, ToastController } from '@ionic/angular';
 import {Preferences} from "@capacitor/preferences"
 import { Nir, NirIngredient } from '../../../models/nir.model';
 import { NirService } from './nir.service';
@@ -26,6 +26,7 @@ import User from 'src/app/auth/user.model';
 export class NirPage implements OnInit {
 
   @ViewChild('qtyInput', { static: false }) qtyInput!: IonInput;
+  @ViewChild('searchBar', {static: false}) searchBar!: IonSearchbar
 
 nirIngredients: NirIngredient[] = []
 ingredients: any = [];
@@ -48,7 +49,11 @@ nirId!: string
 
 isTva: boolean = true
 user!: User;
-
+qtyCalcColor!: string
+valCalcColor!: string
+qtyInputType: string = 'number'
+valInputType: string = 'number'
+inputType: string = 'number'
 
   constructor(
     @Inject(NirService) private nirSrv: NirService,
@@ -82,7 +87,6 @@ user!: User;
     const id = this.route.snapshot.paramMap.get('id')
     if(id && id !== "new") {
       this.nirSrv.getNir(id).subscribe(response => {
-        console.log(response)
         if(response) {
           this.nirId = id
           this.nir = response.nir
@@ -106,7 +110,7 @@ user!: User;
 
 
  async addSuplier(){
-    const suplier = await this.actionSht.openModal(SuplierPage, '', false)
+    const suplier = await this.actionSht.openModal(SuplierPage, true, false)
     this.suplier = suplier
   }
 
@@ -115,11 +119,9 @@ user!: User;
     this.nirForm = new FormGroup({
       nrDoc: new FormControl(null,{
         updateOn:'change',
-        validators: [Validators.required]
       }),
       date: new FormControl(null,{
         updateOn:'change',
-        validators: [Validators.required]
       }),
     })
     setTimeout(()=> {
@@ -130,6 +132,55 @@ user!: User;
     }, 200)
   }
 
+  switchCalcMode(id: string){
+    if(id === 'value'){
+      if(this.valCalcColor === 'primary'){
+        this.evalValue()
+      } else {
+        this.valCalcColor = 'primary';
+        this.valInputType = 'text'
+      }
+    }
+    if(id === 'qty'){
+      if(this.qtyCalcColor === 'primary'){
+        this.evalQty()
+      } else {
+        this.qtyCalcColor = 'primary';
+        this.qtyInputType = 'text'
+      }
+    }
+
+
+  }
+  evalValue(){
+    let input = this.ingredientForm.get('value')
+    if(input){
+      this.evalExpresssion(input)
+      this.valCalcColor = ''
+      this.valInputType = 'number'
+    }
+  }
+
+  evalQty(){
+    let input = this.ingredientForm.get('qty')
+    if(input){
+      this.evalExpresssion(input)
+      this.qtyCalcColor = ''
+      this.qtyInputType = 'number'
+    }
+  }
+
+
+  evalExpresssion(input: AbstractControl){
+      const inputValue = input.value
+      try{
+        const result = eval(inputValue)
+        input.setValue(round(+result))
+      } catch(err){
+        console.log(err)
+        showToast(this.toastCtrl, 'Eroare la calcul', 2000)
+      }
+  }
 
   setupIngForm() {
     this.ingredientForm = new FormGroup({
@@ -188,13 +239,15 @@ user!: User;
       const priceControl = this.ingredientForm.get('price')
       const valueControl = this.ingredientForm.get('value');
       if(qtyControl && priceControl && valueControl){
-        const qty = qtyControl.value
-        const price = priceControl.value
-        valueControl.setValue(round(qty*price))
+          const qty = +qtyControl.value
+          const price = priceControl.value
+          valueControl.setValue(round(qty*price))
       }
     }
+    if( ev.key === 'c'){
+      this.switchCalcMode('qty')
+    }
   }
-
 
   onValTab(ev: KeyboardEvent){
     if (ev.key === 'Tab') {
@@ -205,13 +258,17 @@ user!: User;
       const tvaValueControl = this.ingredientForm.get('tvaValue');
       const totalControl = this.ingredientForm.get('total');
       if(qtyControl && priceControl && valueControl && tvaControl){
-        const qty = qtyControl.value
-        const value = valueControl.value
-        const tva = tvaControl.value
-        priceControl.setValue(round(value/qty))
-        tvaValueControl?.setValue(round(value * tva / 100))
-        totalControl?.setValue(round(value + (value * tva / 100)))
+          const qty = +qtyControl.value
+          const value = +valueControl.value
+          const tva = +tvaControl.value
+          console.log(qty, value, tva)
+          priceControl.setValue(round(value/qty))
+          tvaValueControl?.setValue(round(value * tva / 100))
+          totalControl?.setValue(round(value + (value * tva / 100)))
       }
+    }
+    if( ev.key === 'c'){
+      this.switchCalcMode('value')
     }
   }
 
@@ -277,8 +334,8 @@ user!: User;
     if(this.ingredientForm.valid){
       this.nirIngredients.push(ingredient)
       this.ingredientForm.reset()
+      this.searchBar.setFocus()
       this.clacTotals(this.nirIngredients, -1)
-      this.ingredientForm.reset()
     }
   }
 

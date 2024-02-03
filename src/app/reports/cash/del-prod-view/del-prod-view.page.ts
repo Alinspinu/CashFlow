@@ -22,7 +22,7 @@ export class DelProdViewPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.products = this.navPar.get('data')
+    this.products = this.navPar.get('options')
   }
 
   close(){

@@ -3,8 +3,18 @@
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   margin: 0.1rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
 }
 
+ion-label{
+  font-family: NoirProReg !important;
+}
+ion-select{
+  font-family: NoirProReg !important;
+}
+ion-searchbar{
+  font-family: NoirProReg !important;
+}
 
 .header{
   font-size: 17px;
@@ -15,6 +25,7 @@ ion-item[slot="fixed"]{
   top: 9%;
   width: 100%;
   opacity: 60%;
+  font-family: NoirProReg !important;
 }
 
 .content-container{

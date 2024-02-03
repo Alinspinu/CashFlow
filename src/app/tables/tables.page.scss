@@ -1,7 +1,14 @@
 
 ion-content{
   --background: var(--ion-color-light-shade);
-  font-family: RobBold;
+  font-family: NoirProSemi;
+}
+
+ion-button{
+  font-family: NoirProReg !important;
+}
+ion-title{
+  font-family: NoirProReg !important;
 }
 
 

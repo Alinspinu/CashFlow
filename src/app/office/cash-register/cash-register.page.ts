@@ -42,7 +42,6 @@ export class CashRegisterPage implements OnInit {
 
   ngOnInit() {
     this.getUser()
-    console.log(this.user)
   }
 
   getUser(){
@@ -65,7 +64,7 @@ export class CashRegisterPage implements OnInit {
   }
 
   async addEntry(){
-    const data = await this.actionSheet.openAuth(AddEntryPage)
+    const data = await this.actionSheet.openPayment(AddEntryPage, this.user.locatie)
     if(data){
       const dayIndex = this.documents.findIndex(el => el.date === data.date)
       this.documents[dayIndex] = data

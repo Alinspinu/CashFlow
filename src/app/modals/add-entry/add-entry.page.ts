@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -29,18 +29,22 @@ export class AddEntryPage implements OnInit {
   form!: FormGroup;
   coffee: boolean = false
   date!:any
+  locatie!: string
 
 
   constructor(
     private modalCtrl: ModalController,
     private http: HttpClient,
+    private navPar: NavParams,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
   ) { }
 
 
   ngOnInit() {
+   this.locatie = this.navPar.get('options')
    this.setForm()
   }
+
 
 
   cancel(){
@@ -73,6 +77,9 @@ export class AddEntryPage implements OnInit {
     }
 
   }
+  formatDate(date: any){
+    return formatedDateToShow(date).split('ora')[0]
+  }
 
 
 
@@ -83,6 +90,7 @@ export class AddEntryPage implements OnInit {
         date: this.date,
         description: this.form.value.description,
         amount: this.form.value.price,
+        locatie: this.locatie
       }
       this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
         this.modalCtrl.dismiss(response)
@@ -90,9 +98,6 @@ export class AddEntryPage implements OnInit {
     }
   }
 
-  formatDate(date: any){
-    return formatedDateToShow(date).split('ora')[0]
-  }
 
 
 }

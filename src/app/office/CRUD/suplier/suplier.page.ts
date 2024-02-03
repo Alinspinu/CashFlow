@@ -150,6 +150,7 @@ export class SuplierPage implements OnInit {
 
   getMode(){
     const mode = this.route.snapshot.paramMap.get('value')
+    console.log(mode)
     if(mode){
       this.mode = mode
       this.size = '6'
@@ -190,12 +191,14 @@ export class SuplierPage implements OnInit {
       this.suplierSrv.saveSuplier(suplier, this.mode, this.user.locatie).subscribe((response: any) => {
         if(response){
           if(this.mode ){
+            console.log(response)
             const user = {
               name: this.suplierForm.value.ownerName,
-              email: this.suplierForm.value.email,
-              telephone: this.suplierForm.value.email,
+              email: this.suplierForm.value.ownerEmail,
+              telephone: this.suplierForm.value.tel,
               admin: 1,
               locatie: response.id,
+              status: 'active',
               employee: {
                 fullName: this.suplierForm.value.ownerName,
                 position: "Administrator",
@@ -206,6 +209,7 @@ export class SuplierPage implements OnInit {
               password: this.suplierForm.value.password,
               confirmPassword: this.suplierForm.value.confirmPassword
             }
+            console.log(user)
             this.suplierSrv.saveAdmin(user, second).subscribe(response => {
               if(response){
                 showToast(this.toastCtrl, response.message, 2000)

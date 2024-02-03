@@ -1,3 +1,15 @@
+
+ span{
+  font-family: NoirProReg !important;
+}
+ion-button{
+  font-family: NoirProSemi !important;
+}
+
+ion-title{
+  font-family: NoirProReg !important;
+}
+
 .contents-container{
   display: flex;
   flex-direction: row;
@@ -32,13 +44,14 @@
   border-radius: 8px;
   font-size: 24px;
   margin: 0.7rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
   span{
     margin: 8px;
   }
 }
 
 .bold{
-  font-weight: 500;
+  font-family: NoirProSemi !important;
 }
 
 .col{

@@ -30,6 +30,13 @@
         <ion-select-option value="bar">Bar</ion-select-option>
       </ion-select>
     </div>
+    <div class="select">
+      <ion-select label="Departament" labelPlacement="floating" placeholder="Departament" [(ngModel)]="productIngDep">
+        <ion-select-option value="marfa">Marfa</ion-select-option>
+        <ion-select-option value="materie">Materie</ion-select-option>
+        <ion-select-option value="consumabile">Consumabile</ion-select-option>
+      </ion-select>
+    </div>
   </ion-item>
   <h3 class="ion-text-center subtitle"  *ngIf="displayIngs.length">Rețetă produs</h3>
   <ion-item class="content-container header" *ngIf="displayIngs.length" lines="none">

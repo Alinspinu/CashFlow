@@ -30,8 +30,8 @@
       <ion-col *ngFor="let table of tables" size-lg="1" class="table-wrapper">
         <ion-icon *ngIf="editMode" src="../../assets/icon/create-outline.svg" (click)="editTable(table.index)" class="edit"></ion-icon>
         <ion-icon *ngIf="editMode" src="../../assets/icon/trash-outline.svg" (click)="deleteTable(table)" class="delete"></ion-icon>
-        <div class="badge" *ngIf="table.bills.length">
-          <span *ngIf="table.bills.length" class="badge-content">{{table.bills.length}}</span>
+        <div class="badge" *ngIf="table && table.bills && table.bills.length">
+          <span *ngIf="table && table.bills && table.bills.length" class="badge-content">{{table.bills.length}}</span>
         </div>
         <div class="table ion-activatable" [ngClass]="{ 'bussy': table.bills.length > 0}"  (click)="openTable(table.index)">
           <span class="index" *ngIf="!table.name">

@@ -196,7 +196,7 @@ getTables(locatie: string, id: string){
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
-      console.log(this.tables[53].bills)
+      console.log(response)
       this.tableState.next([...this.tables])
     }
   })
@@ -306,6 +306,7 @@ registerDeletetProduct(product: any){
 }
 
 sendBillToPrint(bill: Bill){
+  console.log(bill)
   return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
 }
 

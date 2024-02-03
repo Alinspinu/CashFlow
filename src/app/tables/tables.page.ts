@@ -64,6 +64,7 @@ ngOnDestroy(): void {
 getTables(){
  this.tableSubs = this.tableServ.tableSend$.subscribe(response => {
     this.tables = response
+  console.log(response)
   })
 }
 

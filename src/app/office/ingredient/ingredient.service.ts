@@ -30,6 +30,10 @@ export class IngredientService{
 
   }
 
+  printConsum(filter: any, loc: string, startDate: string, endDate: string){
+    return this.http.post(`${environment.BASE_URL}ing/print-consum`, {filter: filter, startDate: startDate, endDate: endDate, loc: loc}, {responseType: 'blob'})
+  }
+
 
   uodateProductIngredientPrices(locatie: string){
     return this.http.post(`${environment.BASE_URL}product/update-pro-ing-price`, {loc: locatie})

@@ -30,6 +30,12 @@ export const routes: Routes = [
           canActivate: [AuthGuard]
       },
       {
+        path: 'config',
+        loadComponent: () =>
+          import('../config/config.page').then((m) => m.ConfigPage),
+          canActivate: [AuthGuard]
+      },
+      {
         path: 'add-product',
         loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage),
         canActivate: [AuthGuard]
@@ -65,5 +71,9 @@ export const routes: Routes = [
     path: '',
     redirectTo: '/tabs/tables',
     pathMatch: 'full',
+  },
+  {
+    path: 'config',
+    loadComponent: () => import('../config/config.page').then( m => m.ConfigPage)
   },
 ];

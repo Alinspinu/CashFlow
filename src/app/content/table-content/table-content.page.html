@@ -100,7 +100,7 @@
               <img alt="image" [src]="modifyImageURL(product.imgPath)"/>
             </ion-thumbnail>
             <div class="prod-name" (click)="openComments(product, i)">
-              <span>{{product.name}}</span>
+              <span id="p-name">{{product.name}}</span>
               <div class="toppings-wrapper" *ngIf="product.toppings.length">
                 <span *ngFor="let topping of product.toppings">+{{topping.name.split('/')[0]}}</span>
               </div>

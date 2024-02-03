@@ -69,6 +69,7 @@ export class ActionSheetService {
                typeof AddProductDiscountPage |
                typeof OrdersViewPage |
                typeof OrderAppViewPage |
+               typeof AddEntryPage |
                typeof DelProdViewPage,
     options: any
   ){
@@ -102,7 +103,6 @@ export class ActionSheetService {
     component: typeof AuthPage |
                typeof RegisterPage |
                typeof DatePickerPage |
-               typeof AddEntryPage |
                typeof TipsPage,
                 ) {
     const modal = await this.modalCtrl.create({

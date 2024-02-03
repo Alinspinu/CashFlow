@@ -2,18 +2,31 @@
 ion-content{
   --background: var(--ion-color-tertiary);
 }
+ion-select{
+  font-family: NoirProReg !important;
+}
+
+.font{
+  font-family: NoirProReg !important;
+}
+
+span{
+  font-family: NoirProReg !important;
+}
 
 .input{
   height: 45px;
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   margin: 0.1rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
 }
 
 img{
   height: 25px;
   cursor: pointer
 }
+
 
 .header{
   font-size: 17px;
@@ -39,6 +52,7 @@ ion-item[slot="fixed"]{
   top: 11%;
   width: 100%;
   opacity: 60%;
+  font-family: NoirProReg !important;
   // --backgound: transparent;
 }
 
@@ -62,7 +76,10 @@ ion-item[slot="fixed"]{
     flex:5%;
   }
   .um{
-    flex: 5%;
+    flex: 3%;
+  }
+  .dep{
+    flex: 3%;
   }
   .price{
     flex: 5%;

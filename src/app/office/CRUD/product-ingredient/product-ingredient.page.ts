@@ -37,6 +37,7 @@ export class ProductIngredientPage implements OnInit {
   productIngUm: string = '';
   productIngQty: string = '';
   productIngGest: string = 'magazie'
+  productIngDep!: string
 
   recipeTotal: number = 0;
 
@@ -78,6 +79,7 @@ export class ProductIngredientPage implements OnInit {
         this.productIngGest = product.gestiune;
         this.displayIngs = product.ings
         this.productId = product._id
+        this.productIngDep = product.dep
         this.displayIngs.forEach(el => {
           const ing = {
             qty: el.qty,
@@ -112,6 +114,7 @@ export class ProductIngredientPage implements OnInit {
         ings: this.ingredientsToSend,
         locatie: this.user.locatie,
         gestiune: this.productIngGest,
+        dep: this.productIngDep,
         price: this.round(this.recipeTotal / +this.productIngQty),
         productIngredient: true,
       }

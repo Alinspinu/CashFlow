@@ -10,7 +10,7 @@
     <ion-grid>
         <form [formGroup]="form">
         <ion-row *ngIf="!resetPasswordMode">
-          <ion-col size="6" offset="3">
+          <ion-col size-lg="6" offset-lg="3">
               <ion-item lines="none">
                 <ion-input label="Email" labelPlacement="floating"  type="email" name="email" formControlName="email">
                 </ion-input>
@@ -30,7 +30,7 @@
           </ion-col>
         </ion-row>
           <ion-row *ngIf="!resetPasswordMode">
-            <ion-col size="6" offset="3">
+            <ion-col size-lg="6" offset-lg="3">
               <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid">
                 <ion-label style="color:white;">
                   Login
@@ -40,7 +40,7 @@
           </ion-row>
         </form>
         <ion-row *ngIf="resetPasswordMode">
-          <ion-col class="ion-text-center">
+          <ion-col class="ion-text-center" size-lg="6" offset-lg="3">
             <ion-item lines="none">
               <ion-input label="Email" labelPlacement="floating"  type="text" [(ngModel)]="emailValue" (input)="validateEmail()" >
               </ion-input>
@@ -48,12 +48,12 @@
           </ion-col>
         </ion-row>
         <ion-row *ngIf="resetPasswordMode">
-          <ion-col>
+          <ion-col size-lg="6" offset-lg="3">
             <ion-note class="note">Introdu adersa de mail folosită!</ion-note>
           </ion-col>
         </ion-row>
         <ion-row *ngIf="resetPasswordMode">
-          <ion-col>
+          <ion-col size-lg="6" offset-lg="3">
             <ion-button color="danger" (click)="sendNewPassword()" class="ion-padding" size="medium" expand="full" [disabled]="!validEmail">
               <ion-label>
                 Resetează
@@ -62,7 +62,7 @@
           </ion-col>
         </ion-row>
         <ion-row *ngIf="resetPassword && !resetPasswordMode">
-          <ion-col>
+          <ion-col size-lg="6" offset-lg="3">
             <ion-button color="danger" (click)="onResetPassword()" class="ion-padding" size="small" expand="full">
               <ion-label>
                 Resetează parola!

@@ -15,6 +15,7 @@ export const environment = {
   // LOCATIE: '655e2e7c5a3d53943c6b7c53',
 
   BASE_URL: 'http://localhost:8080/',
+  BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/',
   // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/'
 
 

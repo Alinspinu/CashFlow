@@ -193,7 +193,7 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
 
 getTables(locatie: string, id: string){
   const headers = new HttpHeaders().set("ngrok-skip-browser-warning", "69420");
-  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
+  this.http.get<Table[]>(`${environment.BASE_URL_CLOUD}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
       console.log(response)
@@ -306,7 +306,6 @@ registerDeletetProduct(product: any){
 }
 
 sendBillToPrint(bill: Bill){
-  console.log(bill)
   return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
 }
 

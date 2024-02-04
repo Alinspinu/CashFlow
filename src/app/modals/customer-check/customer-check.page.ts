@@ -105,6 +105,7 @@ searchCustomer(){
 
 addCustomerToBill(){
   if(this.customer){
+    console.log(this.customer)
     this.modalCtrl.dismiss(this.customer)
   }
 }

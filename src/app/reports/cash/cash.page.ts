@@ -128,6 +128,7 @@ getOrders(){
       this.resetValues()
       this.bills = response.orders
       this.delProducts = response.delProducts
+      console.log(this.bills)
       this.isLoading = false
       this.calcTotals()
       this.calcTva()
@@ -169,7 +170,7 @@ calcTva(){
     })
   })
   this.tvaValue = round(tvaDiscountBills + tvaFullBills)
-  this.totalIncasat = round(this.vivaWallet+this.cash)
+  this.totalIncasat = round(this.card+this.cash)
   this.totalNoTax = round(this.totalIncasat - this.tvaValue)
 }
 
@@ -217,12 +218,6 @@ calcTotals(){
      }
      if(bill.payment.card){
        this.card = round(this.card + bill.payment.card)
-     }
-     if(bill.payment.viva){
-       this.vivaWallet = round(this.vivaWallet + bill.payment.viva)
-     }
-     if(bill.payment.voucher) {
-       this.voucher = round(this.voucher + bill.payment.voucher)
      }
      if(bill.payment.online){
        this.payOnline = round(this.payOnline + bill.payment.online)

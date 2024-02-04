@@ -34,7 +34,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   userViva: number = 0;
   userVoucher: number = 0;
   userOnline: number = 0;
-  userTotal: number = 0;
+  userTotal: number = 0
   userUnreg: number = 0
 
   cashIn: number = 0;
@@ -110,6 +110,7 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.cashSrv.getUserOrders(this.user._id).subscribe(response => {
       if(response) {
         this.orders = response
+        console.log(this.orders, this.user)
         this.calcCashIn()
       }
     })
@@ -128,14 +129,20 @@ export class CashControlPage implements OnInit, OnDestroy {
   calcCashIn(){
     if(this.orders){
       this.orders.forEach((order: Bill) => {
-        if(order.payment.cash && !order.dont){
+        if(order.payment.cash){
           this.userCash = round(this.userCash + order.payment.cash)
         }
         if(order.payment.card){
           this.userCard = round(this.userCard + order.payment.card)
         }
-        if(order.payment.cash && order.dont){ 
-          this.userUnreg = round(this.userUnreg + order.payment.cash)
+        if(order.payment.viva){
+          this.userViva = round(this.userViva + order.payment.viva)
+        }
+        if(order.payment.voucher) {
+          this.userVoucher = round(this.userVoucher + order.payment.voucher)
+        }
+        if(order.payment.online){
+          this.userOnline = round( this.userOnline + order.payment.online)
         }
       })
       this.calcTotal()
@@ -143,7 +150,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   }
 
   calcTotal(){
-    this.userTotal = round(this.userCash + this.userCard)
+    this.userTotal = this.userCash + this.userCard +this.userOnline + this.userViva + this.userOnline + this.userVoucher
   }
 
 
@@ -177,22 +184,30 @@ export class CashControlPage implements OnInit, OnDestroy {
     if(payment.card && payment.card > 0){
       method.push(`Card ${payment.card} Lei`)
     }
+    if(payment.voucher && payment.voucher > 0){
+      method.push(`Voucher ${payment.voucher} Lei`)
+    }
+    if(payment.viva && payment.viva > 0){
+      method.push(`Viva ${payment.viva } Lei`)
+    }
+    if(payment.online && payment.online > 0){
+      method.push(`Online ${payment.online } Lei`)
+    }
     return method
  }
 
 
 reports(value: string){
-  this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
-    console.log(response)
-    if(response){
-      Preferences.remove({key: 'cashInAndOut'})
-    }
-  })
   this.cashSrv.raport(value).subscribe(response => {
     if(response){
       if(value === 'z'){
-        this.cashIn = 0
-        this.cashOut = 0
+        this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
+          if(response){
+            this.cashIn = 0
+            this.cashOut = 0
+            Preferences.remove({key: 'cashInAndOut'})
+          }
+        })
       }
       showToast(this.toastCtrl, response.message, 3000)
     }
@@ -219,7 +234,6 @@ setZeroDiscount(cats: Category[]){
       }
     })
   })
-  console.log(dataToSend)
   return dataToSend
 }
 

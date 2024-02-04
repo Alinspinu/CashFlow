@@ -16,7 +16,8 @@ export const environment = {
 
   BASE_URL: 'http://localhost:8080/',
   BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/',
-  BASE_URL_CAFETISH: 'https://www.cafetish.ro/'
+  // BASE_URL_CAFETISH: 'https://www.cafetish.ro/'
+  BASE_URL_CAFETISH: 'http://localhost:8090/'
   // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/'
 
 

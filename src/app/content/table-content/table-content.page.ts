@@ -83,6 +83,7 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   comment: string = ''
 
+  url: string[] = ['assets/photos/cafea.png', 'assets/photos/ceaii.png', 'assets/photos/jucy.png', 'assets/photos/magazin.png']
 
   constructor(
     private route: ActivatedRoute,
@@ -505,7 +506,7 @@ sendOrder(out: boolean){
   this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
     if(res){
       if(out){
-        this.router.navigateByUrl('/tabs/tables')
+        // this.router.navigateByUrl('/tabs/tables')
       }
     }
   }

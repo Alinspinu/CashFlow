@@ -20,6 +20,6 @@ export class CashService{
     }
 
  getOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string){
-  return this.http.post<{orders: Bill[], delProducts: any[]}>(`${environment.BASE_URL_CAFETISH}orders/get-orders`, {start: start, end: end, loc: locatie, day: day})
+  return this.http.post<{orders: Bill[], delProducts: any[]}>(`${environment.BASE_URL_CLOUD}orders/get-orders`, {start: start, end: end, loc: locatie, day: day})
  }
 }

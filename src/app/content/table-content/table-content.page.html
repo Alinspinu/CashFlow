@@ -54,9 +54,9 @@
 <ion-content [fullscreen]="false">
 <ion-grid>
           <ion-row *ngIf="showMainCats">
-              <ion-col size="6" *ngFor="let mainCat of getObjectKeys(mainCats)">
+              <ion-col size="6" *ngFor="let mainCat of getObjectKeys(mainCats); let i=index">
                 <ion-card (click)="showCategories(mainCat)">
-                  <img alt="main category image" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+                  <img alt="main category image" class="mainCatImg" [src]="url[i]" />
                   <ion-title  class="title">{{mainCat}}</ion-title>
                 </ion-card>
               </ion-col>

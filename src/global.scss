@@ -99,6 +99,8 @@ body ion-alert.deleteAlert{
     --width: 60% !important;
   }
 
+
+
   body ion-alert.discountAlert {
     --max-width: none!important;
     --width: 400px!important;
@@ -109,5 +111,13 @@ body ion-alert.deleteAlert{
       border: 0.5px solid black;
       border-radius: 8px;
       padding: 12px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .billModal{
+      --height: 100%;
+      --min-width: none !important;
+      --width: 100% !important;
     }
   }

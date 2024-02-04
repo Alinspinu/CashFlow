@@ -18,7 +18,7 @@ export class CustomerCheckService{
     return this.http.get<{message: string, customer: any}>(`${environment.BASE_URL}users/customer?id=${customerId}`)
   }
 
-  createCustomer(name: string, email: string, cardIndex: number, locatie: string){
+  createCustomer(name: string, email: string, cardIndex: any, locatie: string){
     return this.http.post<{message: string, customer: any}>(`${environment.BASE_URL}users/customer`, {name: name, email: email, cardIndex: cardIndex, loc: locatie})
   }
 }

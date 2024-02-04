@@ -62,7 +62,7 @@
               </ion-col>
           </ion-row>
            <ion-row *ngIf="showCats">
-              <ion-col size="3" *ngFor="let cat of categoriesToShow; let i = index">
+              <ion-col size="6" *ngFor="let cat of categoriesToShow; let i = index">
                 <ion-card (click)="showProducts(i, cat.mainCat)">
                   <img alt="category image" [src]="cat.image.path" />
                   <ion-card-subtitle class="small-title">{{cat.name}}</ion-card-subtitle>
@@ -70,7 +70,7 @@
               </ion-col>
             </ion-row>
             <ion-row *ngIf="showProd">
-              <ion-col size="3" *ngFor="let product of productsToShow">
+              <ion-col size="4" *ngFor="let product of productsToShow">
                 <ion-card (click)="addToBill(product)">
                     <img alt="image" class="prod-img" [src]="modifyImageURL(product.image.path)" />
                   <ion-card-subtitle class="product-title">{{product.name}}</ion-card-subtitle>

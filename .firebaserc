@@ -1,8 +1,13 @@
 {
   "projects": {
+<<<<<<< HEAD
     "default": "cash-flow-8a7f4",
     "cafetish": "cash-flow-cafetish",
     "true": "cash-flow-8a7f4"
+=======
+    "default": "cash-flow-cafetish",
+    "cafetish": "cash-flow-cafetish"
+>>>>>>> origin/cafetish
   },
   "targets": {},
   "etags": {}

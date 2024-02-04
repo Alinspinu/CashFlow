@@ -39,7 +39,7 @@ export class TableContentPage implements OnInit, OnDestroy {
 
 
   order!: Bill
-  onlineOrder: boolean = false
+  onlineOrder: boolean = false;
   dynamicColorChange = false
   colorToggleInterval: any;
 
@@ -517,23 +517,18 @@ async payment(){
   this.sendOrder(false)
   const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
     if(paymentInfo){
-      console.log(this.billToshow)
       this.billToshow.payment.card = paymentInfo.card;
       this.billToshow.payment.cash = paymentInfo.cash;
-      this.billToshow.payment.voucher = paymentInfo.voucher;
-      this.billToshow.payment.viva = paymentInfo.viva;
+      this.billToshow.dont = paymentInfo.dont;
       this.billToshow.cif = paymentInfo.cif;
-      this.billToshow.payment.online  = paymentInfo.online
       this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
         if(response){
           this.billToshow.discount = 0
-          console.log(response)
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.billProducts = []
           this.billToshow = emptyBill()
           this.billToshow.cashBack = 0
           this.client = null
-          this.router.navigateByUrl("/tabs/tables")
         }
       })
     }

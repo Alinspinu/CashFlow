@@ -15,18 +15,35 @@ ion-title{
   flex-direction: row;
   height: 100vh;
   .cash-info{
-    flex: 30%;
+    flex: 25%;
   }
   .separator{
     width: 40px;
   }
   .orders{
-    flex: 70%;
+    flex: 75%;
     margin-left: 30px;
     cursor: pointer;
     .input:hover{
       --background: var(--ion-color-medium);
+      font-size: 17px;
     }
+  }
+}
+.height{
+  height: 53px !important;
+}
+
+.cash-container{
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  span{
+    margin: 2px !important;
+  }
+  .unreg{
+    font-size: 16px;
+    color: var(--ion-color-primary);
   }
 }
 
@@ -39,7 +56,7 @@ ion-title{
 
 
 .input{
-  height: 48px;
+  height: 58px;
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   font-size: 24px;

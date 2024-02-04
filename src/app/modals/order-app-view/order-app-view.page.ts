@@ -40,6 +40,7 @@ export class OrderAppViewPage implements OnInit {
 
   ngOnInit() {
     this.order = this.navPar.get('options');
+    console.log(this.order.dont)
     const result = getPaymentMethod(this.order.payment)
     this.paymentMethod = result
   }
@@ -56,8 +57,6 @@ export class OrderAppViewPage implements OnInit {
         if(paymentInfo){
           this.order.payment.card = paymentInfo.card;
           this.order.payment.cash = paymentInfo.cash;
-          this.order.payment.voucher = paymentInfo.voucher;
-          this.order.payment.viva = paymentInfo.viva;
           this.order.cif = paymentInfo.cif;
           this.order.payment.online  = paymentInfo.online
           this.modalCtrl.dismiss({order: this.order, message: 'changePayment'})

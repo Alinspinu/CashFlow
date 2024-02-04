@@ -13,20 +13,14 @@
     </ion-title>
     <div class="col">
       <div class="cash-info-wrappr">
-        <ion-item lines="none" class="input" *ngIf="userCash > 0">
-          Cash: {{userCash}} Lei
+        <ion-item lines="none" class="input height" *ngIf="userCash > 0">
+          <div class="cash-container">
+            <span (click)="showHideUnreg()">Cash: {{userCash}} Lei</span>
+            <span *ngIf="show" class="unreg">{{userUnreg}}</span>
+          </div>
         </ion-item>
         <ion-item lines="none" class="input" *ngIf="userCard > 0">
           Card: {{userCard}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="userViva > 0">
-          Viva Wallet: {{userViva}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="userVoucher > 0">
-          Voucher: {{userVoucher}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="userOnline > 0">
-          Plata Online: {{userOnline}} Lei
         </ion-item>
         <ion-item lines="none" class="input bold" *ngIf="userTotal > 0">
           Total: {{userTotal}} Lei

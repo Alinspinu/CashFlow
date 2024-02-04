@@ -34,13 +34,15 @@ export class CashControlPage implements OnInit, OnDestroy {
   userViva: number = 0;
   userVoucher: number = 0;
   userOnline: number = 0;
-  userTotal: number = 0
+  userTotal: number = 0;
+  userUnreg: number = 0
 
   cashIn: number = 0;
   cashOut: number = 0;
   allCats: Category[] = []
 
   catSubs!: Subscription
+  show: boolean = false
 
 
   constructor(
@@ -113,23 +115,27 @@ export class CashControlPage implements OnInit, OnDestroy {
     })
   }
 
+  showHideUnreg(){
+    this.show = !this.show
+    if(this.show){
+      this.userTotal = round(this.userCash + this.userCard + this.userUnreg)
+    } else {
+      this.userTotal = round(this.userCash + this.userCard)
+
+    }
+  }
+
   calcCashIn(){
     if(this.orders){
       this.orders.forEach((order: Bill) => {
-        if(order.payment.cash){
+        if(order.payment.cash && !order.dont){
           this.userCash = round(this.userCash + order.payment.cash)
         }
         if(order.payment.card){
           this.userCard = round(this.userCard + order.payment.card)
         }
-        if(order.payment.viva){
-          this.userViva = round(this.userViva + order.payment.viva)
-        }
-        if(order.payment.voucher) {
-          this.userVoucher = round(this.userVoucher + order.payment.voucher)
-        }
-        if(order.payment.online){
-          this.userOnline = round( this.userOnline + order.payment.online)
+        if(order.payment.cash && order.dont){ 
+          this.userUnreg = round(this.userUnreg + order.payment.cash)
         }
       })
       this.calcTotal()
@@ -137,7 +143,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   }
 
   calcTotal(){
-    this.userTotal = this.userCash + this.userCard +this.userOnline + this.userViva + this.userOnline + this.userVoucher
+    this.userTotal = round(this.userCash + this.userCard)
   }
 
 
@@ -170,15 +176,6 @@ export class CashControlPage implements OnInit, OnDestroy {
     }
     if(payment.card && payment.card > 0){
       method.push(`Card ${payment.card} Lei`)
-    }
-    if(payment.voucher && payment.voucher > 0){
-      method.push(`Voucher ${payment.voucher} Lei`)
-    }
-    if(payment.viva && payment.viva > 0){
-      method.push(`Viva ${payment.viva } Lei`)
-    }
-    if(payment.online && payment.online > 0){
-      method.push(`Online ${payment.online } Lei`)
     }
     return method
  }

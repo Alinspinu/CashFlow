@@ -28,6 +28,7 @@ export class Bill{
     public paymentMethod: string,
     public onlineOrder: boolean,
     public prepStatus: string,
+    public dont: boolean,
     public payment: {
         cash: number,
         card: number,

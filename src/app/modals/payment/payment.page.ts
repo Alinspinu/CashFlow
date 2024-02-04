@@ -41,13 +41,6 @@ export class PaymentPage implements OnInit {
   ngOnInit() {
     this.order = this.navPar.get('options');
     this.total = this.order.total
-    console.log(this.order)
-    if(this.order.payment.online > 0 && this.order.total === 0){
-      this.total = this.order.payment.online
-    }
-    if(this.order.payment.online > 0 && this.order.total > 0){
-      this.total = this.order.total + this.order.payment.online
-    }
 
 
     if(this.order.status === "done"){
@@ -64,19 +57,18 @@ export class PaymentPage implements OnInit {
       card: new FormControl(null, {
         updateOn: 'change',
       }),
-      viva: new FormControl(null, {
+      dont: new FormControl(null, {
         updateOn: 'change',
       }),
-      voucher: new FormControl(null, {
-        updateOn: 'change',
-      }),
+
       cif: new FormControl(null, {
         updateOn: 'change',
       }),
-      online: new FormControl(null, {
-        updateOn: 'change',
-      }),
+      // online: new FormControl(null, {
+      //   updateOn: 'change',
+      // }),
     })
+    this.paymentForm.get('dont')?.setValue(false)
     // this.paymentForm.get('online')?.disable()
     // if(this.order.payment.online > 0 && this.order.total === 0){
     //   this.paymentForm.get('online')?.setValue(this.order.payment.online)
@@ -86,11 +78,11 @@ export class PaymentPage implements OnInit {
     //   // this.paymentForm.get('voucher')?.disable()
     //   this.disablePayButtons = true
     // }
-    if(this.order.payment.online > 0 && this.order.total > 0){
-      this.paymentForm.get('online')?.setValue(this.order.payment.online)
-      this.paymentForm.get('online')?.disable()
-      // this.disableOnline = true
-    }
+    // if(this.order.payment.online > 0 && this.order.total > 0){
+    //   this.paymentForm.get('online')?.setValue(this.order.payment.online)
+    //   this.paymentForm.get('online')?.disable()
+    //   this.disableOnline = true
+    // }
 
   }
 
@@ -102,17 +94,20 @@ export class PaymentPage implements OnInit {
     }
   }
 
+  checkboxChanged(ev: any){
+    this.paymentForm.get('dont')?.setValue(ev.detail.checked)
+  }
+
  async cashIn(){
-    const posSum = this.paymentForm.value.viva
+    const posSum = this.paymentForm.value.card
    if(this.checkTotal()){
     const pay = {
       cash: this.paymentForm.value.cash,
-      card: this.paymentForm.value.card,
-      viva: posSum,
-      voucher: this.paymentForm.value.voucher,
+      card: posSum,
       cif: this.paymentForm.value.cif,
-      online: this.paymentForm.value.online
+      dont: this.paymentForm.value.dont,
     }
+    console.log(pay)
     if(posSum && posSum > 0){
       this.disableCancelButton = true
       this.paySrv.checkPos(posSum).subscribe(response => {
@@ -154,30 +149,16 @@ export class PaymentPage implements OnInit {
         input.setValue(value)
       }
   }
-  viva(){
-    const input  = this.paymentForm.get('viva')
-    if(input){
-      const value = this.total - this.checkInputs('viva')
-      input.setValue(value)
-    }
-  }
 
 
-  voucher(){
-    const input  = this.paymentForm.get('voucher')
-    if(input){
-      const value = this.total - this.checkInputs('voucher')
-      input.setValue(value)
-    }
-  }
 
-  online(){
-    const input = this.paymentForm.get('online')
-    if(input) {
-      const value = this.total - this.checkInputs('online')
-      input.setValue(value)
-    }
-  }
+  // online(){
+  //   const input = this.paymentForm.get('online')
+  //   if(input) {
+  //     const value = this.total - this.checkInputs('online')
+  //     input.setValue(value)
+  //   }
+  // }
 
   cif(){
    const input = this.paymentForm.get('cif');

@@ -32,6 +32,7 @@
     "@capacitor/status-bar": "5.0.6",
     "@ionic/angular": "^7.5.0",
     "@ionic/pwa-elements": "^3.2.2",
+    "firebase": "^10.8.0",
     "ionicons": "^7.2.1",
     "jwt-decode": "^4.0.0",
     "ngx-extended-pdf-viewer": "^19.0.3",

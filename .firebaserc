@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "cash-flow-8a7f4"
-  }
+    "default": "cash-flow-cafetish",
+    "cafetish": "cash-flow-cafetish"
+  },
+  "targets": {},
+  "etags": {}
 }

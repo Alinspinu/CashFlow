@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyAKDiug9Hq2XwLwE0D3hUujc2X0RcXMUMs",
-    authDomain: "cash-flow-8a7f4.firebaseapp.com",
-    projectId: "cash-flow-8a7f4",
-    storageBucket: "cash-flow-8a7f4.appspot.com",
-    messagingSenderId: "436394493834",
-    appId: "1:436394493834:web:2a0ca6c49685f2fa65aa73"
+    apiKey: "AIzaSyCzkVTzxIpByr99lf3iJO_IWIrX0pvtAVY",
+    authDomain: "cash-flow-cafetish.firebaseapp.com",
+    projectId: "cash-flow-cafetish",
+    storageBucket: "cash-flow-cafetish.appspot.com",
+    messagingSenderId: "590058720789",
+    appId: "1:590058720789:web:b751dc22c5cd937f5d081c"
   },
   SUPLIER_APY_KEY: "77f20eb3e0afe9d39f3788783c39a4f4f7591009",
   SUPLIER_APY_URL: "https://infocui.ro/system/api/data",

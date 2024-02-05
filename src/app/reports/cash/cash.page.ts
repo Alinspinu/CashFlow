@@ -90,6 +90,7 @@ export class CashPage implements OnInit {
   discounts: number = 0
   totalIncasat: number = 0;
   totalNoTax: number = 0;
+  tips: number = 0;
 
   openTotal: number = 0
   cash: number = 0
@@ -223,7 +224,9 @@ calcTotals(){
        this.payOnline = round(this.payOnline + bill.payment.online)
      }
    }
-
+   if(bill.tips > 0){
+      this.tips += bill.tips
+  }
    if(bill.discount > 0){
     this.discountBills.push(bill)
    }
@@ -381,6 +384,14 @@ calcProcents(){
       procent: round(this.openTotal * 100 / this.total)
     }
     this.paymentMethods.push(openTableMethod)
+  }
+  if(this.tips > 0) {
+    const openTipsMethod: paymentMethod = {
+      name: "Bacsis",
+      value: this.tips,
+      procent: round(this.tips * 100 / this.total)
+    }
+    this.paymentMethods.push(openTipsMethod)
   }
    this.paymentMethods.sort((a,b) => b.procent - a.procent)
    this.createDeps()

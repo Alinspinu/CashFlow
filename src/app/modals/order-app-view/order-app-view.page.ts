@@ -55,7 +55,12 @@ export class OrderAppViewPage implements OnInit {
   async changePaymentMethod(){
       const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.order)
         if(paymentInfo){
-          this.order.payment.card = paymentInfo.card;
+          if(paymentInfo.card > 0){
+            this.order.payment.card = paymentInfo.card;
+          }
+          if(paymentInfo.card2 > 0){
+            this.order.payment.card = paymentInfo.card2;
+          }
           this.order.payment.cash = paymentInfo.cash;
           this.order.cif = paymentInfo.cif;
           this.order.payment.online  = paymentInfo.online

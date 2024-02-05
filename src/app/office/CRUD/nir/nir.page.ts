@@ -124,6 +124,8 @@ inputType: string = 'number'
         updateOn:'change',
       }),
     })
+
+    this.nirForm.get('date')?.setValue(new Date(Date.now()).toISOString())
     setTimeout(()=> {
       if(this.editMode){
         this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)

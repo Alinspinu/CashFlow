@@ -19,12 +19,12 @@
       <ion-item lines="none" class="item">
         <ion-button color="light" size="large" class="close" (click)="reset('card')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
-          <ion-input type="number" label="Card Bancar" labelPlacement="floating" placeholder="00" formControlName="card" ></ion-input>
+          <ion-input type="number" label="Card Bancar Auto" labelPlacement="floating" placeholder="00" formControlName="card" ></ion-input>
         </ion-item>
         <ion-button color="tertiary" size="large" class="button" (click)="card()"[disabled]="disablePayButtons">CARD</ion-button>
       </ion-item>
 
-      
+
 
 
       <!-- <ion-item lines="none" class="item">
@@ -41,6 +41,13 @@
           <ion-input type="text" label="Cod Fiscal" labelPlacement="floating" placeholder="ex.RO123232" formControlName="cif" #cifInp></ion-input>
         </ion-item>
         <ion-button color="tertiary" size="large" class="button" (click)="cif()">RO</ion-button>
+      </ion-item>
+      <ion-item lines="none" class="item">
+        <ion-button color="light" size="large" class="close" (click)="reset('card')"[disabled]="disablePayButtons">X</ion-button>
+        <ion-item lines="none" class="input">
+          <ion-input type="number" label="Card Manual" labelPlacement="floating" placeholder="00" formControlName="card2" ></ion-input>
+        </ion-item>
+        <ion-button color="tertiary" size="large" class="button" (click)="card2()"[disabled]="disablePayButtons">CARD Manual</ion-button>
       </ion-item>
       <ion-checkbox formConrtolName="dont"  (ionChange)="checkboxChanged($event)"></ion-checkbox>
     </form>

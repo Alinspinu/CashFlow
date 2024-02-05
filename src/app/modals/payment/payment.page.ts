@@ -57,6 +57,9 @@ export class PaymentPage implements OnInit {
       card: new FormControl(null, {
         updateOn: 'change',
       }),
+      card2: new FormControl(null, {
+        updateOn: 'change',
+      }),
       dont: new FormControl(null, {
         updateOn: 'change',
       }),
@@ -69,20 +72,6 @@ export class PaymentPage implements OnInit {
       // }),
     })
     this.paymentForm.get('dont')?.setValue(false)
-    // this.paymentForm.get('online')?.disable()
-    // if(this.order.payment.online > 0 && this.order.total === 0){
-    //   this.paymentForm.get('online')?.setValue(this.order.payment.online)
-    //   this.paymentForm.get('cash')?.disable()
-    //   // this.paymentForm.get('card')?.disable()
-    //   this.paymentForm.get('viva')?.disable()
-    //   // this.paymentForm.get('voucher')?.disable()
-    //   this.disablePayButtons = true
-    // }
-    // if(this.order.payment.online > 0 && this.order.total > 0){
-    //   this.paymentForm.get('online')?.setValue(this.order.payment.online)
-    //   this.paymentForm.get('online')?.disable()
-    //   this.disableOnline = true
-    // }
 
   }
 
@@ -100,10 +89,12 @@ export class PaymentPage implements OnInit {
 
  async cashIn(){
     const posSum = this.paymentForm.value.card
+    const cardManual = this.paymentForm.value.card2
    if(this.checkTotal()){
     const pay = {
       cash: this.paymentForm.value.cash,
       card: posSum,
+      card2: cardManual,
       cif: this.paymentForm.value.cif,
       dont: this.paymentForm.value.dont,
     }
@@ -146,6 +137,13 @@ export class PaymentPage implements OnInit {
       const input  = this.paymentForm.get('card')
       if(input){
         const value = this.total - this.checkInputs('card')
+        input.setValue(value)
+      }
+  }
+  card2(){
+      const input  = this.paymentForm.get('card2')
+      if(input){
+        const value = this.total - this.checkInputs('card2')
         input.setValue(value)
       }
   }

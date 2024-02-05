@@ -518,10 +518,16 @@ async payment(){
   this.sendOrder(false)
   const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
     if(paymentInfo){
-      this.billToshow.payment.card = paymentInfo.card;
+      if(paymentInfo.card2 && paymentInfo.card2 > 0) {
+        this.billToshow.payment.card = paymentInfo.card2;
+      }
+      if(paymentInfo.card && paymentInfo.card > 0){
+        this.billToshow.payment.card = paymentInfo.card;
+      }
       this.billToshow.payment.cash = paymentInfo.cash;
       this.billToshow.dont = paymentInfo.dont;
       this.billToshow.cif = paymentInfo.cif;
+      console.log(this.billToshow.payment)
       this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
         if(response){
           this.billToshow.discount = 0

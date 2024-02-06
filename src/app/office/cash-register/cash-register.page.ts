@@ -128,16 +128,12 @@ deleteEntry(id: string, index: number, dayIndex: number){
   const dateToCompare = new Date().setUTCHours(0,0,0,0)
   const day = this.documents[dayIndex];
   const dayDate = new Date(day.date).setUTCHours(0,0,0,0)
-  if(dayDate === dateToCompare){
     this.cashRegService.deleteEntry(id).subscribe(response => {
       showToast(this.toastCtrl, response.message, 3000);
       const entry = day.entry[index];
       day.cashOut = day.cashOut - entry.amount
       day.entry.splice(index, 1);
     })
-  } else {
-    showToast(this.toastCtrl, 'Poți șterge doar intrările din ziua curentă!', 4000)
-  }
 }
 
 round(num: number){

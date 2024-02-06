@@ -33,7 +33,7 @@ ingredients: any = [];
 ingredient!: any;
 supliers: any = [];
 suplier!: any
-nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [] }
+nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], totalDoc: 0, payd: false }
 
 furnizorSearch: string = '';
 ingredientSearch: string = '';
@@ -397,6 +397,7 @@ inputType: string = 'number'
       } else {
         this.nir.documentDate = this.nirForm.value.date;
         this.nir.nrDoc = this.nirForm.value.nrDoc
+        this.nir.totalDoc = this.valTotal
         this.nir.suplier = this.suplier._id
         this.nir.ingredients = this.nirIngredients
         this.nirSrv.saveNir(this.nir, this.user.locatie).subscribe(response=> {
@@ -409,7 +410,7 @@ inputType: string = 'number'
   }
 
   reserNirData(){
-    this.nir =  {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [] }
+    this.nir =  {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], totalDoc: 0 , payd: false}
     this.nirIngredients = []
     this.val = 0
     this.suplier = undefined

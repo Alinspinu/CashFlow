@@ -31,4 +31,11 @@ export class NirsService{
   exportNirs(startDate: any, endDate: any, loc: string){
     return this.http.post(`${environment.BASE_URL}nir/export-xcel`, {startDate: startDate, endDate: endDate, loc: loc}, { responseType: 'blob',})
   }
+
+  registerEntry(entry: any){
+    return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
+  }
+  payNir(update: boolean, id: string){
+    return this.http.post<{message: string}>(`${environment.BASE_URL}nir/pay`, {update: update, id: id})
+  }
 }

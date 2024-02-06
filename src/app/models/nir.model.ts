@@ -22,6 +22,8 @@ export class Nir{
     public nrDoc: number,
     public documentDate: string,
     public ingredients: NirIngredient[],
+    public totalDoc: number,
+    public payd: boolean,
     public discount: {tva: number, value: number, procent: number}[]
   ){}
 }

@@ -6,7 +6,7 @@ import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { NirsService } from './nirs.service';
 import { Router } from '@angular/router';
-import { formatedDateToShow, getUserFromLocalStorage } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
 
@@ -23,6 +23,7 @@ export class NirsPage implements OnInit {
   startDate!: any
   endDate!: any
   user!: User
+  total: number = 0
 
   constructor(
     public nirSrv: NirsService,
@@ -49,7 +50,6 @@ getUser(){
 
   export(){
     if(this.startDate && this.endDate){
-      console.log('hit')
       this.nirSrv.exportNirs(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
@@ -63,6 +63,7 @@ getUser(){
   }
 
 
+
   async openDateModal(mode: string){
     const response = await this.actionSheetService.openAuth(DatePickerPage)
     if(response && mode === 'start'){
@@ -73,10 +74,39 @@ getUser(){
     }
   }
 
+  async payCash(id: string, index: number,  total: number){
+    const nir = this.nirs[index]
+    const name = nir.suplier.name
+    const result = await this.actionSheetService.reasonAlert(`Plătește ${total} Lei`, 'Plată', 'Număr document')
+    if(result){
+      let entry = {
+        tip: 'expense',
+        date: new Date(Date.now()).toISOString(),
+        description: `Plata ${name}, ${result}`,
+        amount: total,
+        locatie: this.user.locatie
+      }
+      this.nirSrv.registerEntry(entry).subscribe(response => {
+        if( response){
+          showToast(this.toastCtrl, 'Pata efectuata registrul a fost actualizat', 2000)
+          entry.locatie = '65c221374c46336d1e6ac423';
+          this.nirSrv.registerEntry(entry).subscribe()
+          this.nirSrv.payNir(true, id).subscribe(response => {
+            if(response) {
+              nir.payd = true
+              showToast(this.toastCtrl, response.message, 2000)
+            }
+          })
+        }
+      })
+    }
+  }
+
   getNirs(){
     this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
       if(response){
         this.nirs = response
+        console.log(this.nirs[0])
       }
     })
   }

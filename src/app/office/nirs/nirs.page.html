@@ -6,6 +6,8 @@
     <span class="date">Data</span>
     <span class="suplier">Furnizor</span>
     <span class="docNumber">Nr Document</span>
+    <span class="total">Total</span>
+
     <ion-buttons solt="end">
       <ion-button>
         <ion-icon   size="large"></ion-icon>
@@ -13,7 +15,10 @@
       <ion-button>
         <ion-icon   size="large"></ion-icon>
       </ion-button>
-      <ion-button >
+      <ion-button>
+        <ion-icon  size="large"></ion-icon>
+      </ion-button>
+      <ion-button>
         <ion-icon  size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -55,7 +60,11 @@
         <span class="date">{{formatedDate(nir.documentDate)}}</span>
         <span class="suplier">{{nir.suplier.name}}</span>
         <span class="docNumber">{{nir.nrDoc}}</span>
+        <span class="total">{{nir.totalDoc}} Lei</span>
         <ion-buttons solt="end">
+          <ion-button (click)="payCash(nir._id, i, nir.totalDoc)">
+            <ion-icon class="cash" [src]="nir.payd ? '../../assets/icon/checkmark-outline.svg' : '../../assets/icon/cash.svg'"   [color]="nir.payd ? 'success' :'primary'"></ion-icon>
+          </ion-button>
           <ion-button (click)="editNir(nir._id)">
             <ion-icon  src="../../assets/icon/create-outline.svg"  size="large" color="success"></ion-icon>
           </ion-button>

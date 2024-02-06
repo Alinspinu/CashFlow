@@ -85,6 +85,9 @@ export class PaymentPage implements OnInit {
 
   checkboxChanged(ev: any){
     this.paymentForm.get('dont')?.setValue(ev.detail.checked)
+    const total = this.paymentForm.get('cash')?.value
+    console.log("cash total",total)
+    console.log( "", this.total)
   }
 
  async cashIn(){
@@ -193,7 +196,10 @@ export class PaymentPage implements OnInit {
       Object.keys(this.paymentForm.controls).forEach(key => {
         const control = this.paymentForm.controls[key];
           if(key !=='cif'){
-            controlTotal += control.value
+            if(typeof control.value === "number"){
+              console.log(control.value)
+              controlTotal += control.value
+            }
           }
       })
       if(controlTotal !== this.total){

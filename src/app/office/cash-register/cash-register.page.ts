@@ -32,6 +32,8 @@ export class CashRegisterPage implements OnInit {
   startDate!: any;
   endDate!: any;
   user!: User
+  locatie!: string
+  locVal: string = 'true'
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
@@ -48,6 +50,7 @@ export class CashRegisterPage implements OnInit {
     getUserFromLocalStorage().then( (user: User | null) => {
       if(user){
         this.user = user
+        this.locatie = this.user.locatie
         this.loadDocuments()
       } else {
         this.router.navigateByUrl('/auth')
@@ -56,7 +59,22 @@ export class CashRegisterPage implements OnInit {
   }
 
 
-
+swithLocatie(){
+  if(this.locVal === 'black'){
+    this.locatie = '65c221374c46336d1e6ac423'
+    this.locVal = 'true'
+    this.documents = []
+    this.loadDocuments()
+    return
+  }
+  if(this.locVal === "true"){
+    this.locatie = this.user.locatie
+    this.locVal = 'black'
+    this.documents = []
+    this.loadDocuments()
+    return
+  }
+}
 
   reciveEntry(ev: any){
     const dayIndex = this.documents.findIndex(el => el.date === ev.date)
@@ -64,7 +82,7 @@ export class CashRegisterPage implements OnInit {
   }
 
   async addEntry(){
-    const data = await this.actionSheet.openPayment(AddEntryPage, this.user.locatie)
+    const data = await this.actionSheet.openPayment(AddEntryPage, this.locatie)
     if(data){
       const dayIndex = this.documents.findIndex(el => el.date === data.date)
       this.documents[dayIndex] = data
@@ -73,8 +91,8 @@ export class CashRegisterPage implements OnInit {
 
 
 loadDocuments(event?: any) {
-  console.log(this.user)
-  this.cashRegService.getDocuments(this.page, this.user.locatie).subscribe((response) => {
+  console.log('hit-function')
+  this.cashRegService.getDocuments(this.page, this.locatie).subscribe((response) => {
     // Append new documents to the existing list
     this.documents = [...this.documents, ...response.documents];
     if (event) {
@@ -91,7 +109,7 @@ loadMore(event: any) {
 
 export(){
   if(this.startDate && this.endDate){
-    this.cashRegService.exportRegister(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
+    this.cashRegService.exportRegister(this.startDate, this.endDate, this.locatie).subscribe(response => {
       const url = window.URL.createObjectURL(response);
       const a = document.createElement('a');
       a.href = url;

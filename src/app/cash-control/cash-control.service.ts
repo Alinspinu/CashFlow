@@ -38,4 +38,7 @@ removeProductDiscount(data: any){
   return this.http.post(`${environment.BASE_URL}product/disc-prod`, {data: data})
 }
 
+registerEntry(entry: any){
+ return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
+}
 }

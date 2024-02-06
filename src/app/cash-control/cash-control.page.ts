@@ -129,20 +129,14 @@ export class CashControlPage implements OnInit, OnDestroy {
   calcCashIn(){
     if(this.orders){
       this.orders.forEach((order: Bill) => {
-        if(order.payment.cash){
+        if(order.payment.cash && !order.dont){
           this.userCash = round(this.userCash + order.payment.cash)
         }
         if(order.payment.card){
           this.userCard = round(this.userCard + order.payment.card)
         }
-        if(order.payment.viva){
-          this.userViva = round(this.userViva + order.payment.viva)
-        }
-        if(order.payment.voucher) {
-          this.userVoucher = round(this.userVoucher + order.payment.voucher)
-        }
-        if(order.payment.online){
-          this.userOnline = round( this.userOnline + order.payment.online)
+        if(order.payment.cash && order.dont){
+          this.userUnreg = round(this.userUnreg + order.payment.cash)
         }
       })
       this.calcTotal()
@@ -150,7 +144,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   }
 
   calcTotal(){
-    this.userTotal = this.userCash + this.userCard +this.userOnline + this.userViva + this.userOnline + this.userVoucher
+    this.userTotal = round(this.userCash + this.userCard)
   }
 
 
@@ -206,6 +200,72 @@ reports(value: string){
             this.cashIn = 0
             this.cashOut = 0
             Preferences.remove({key: 'cashInAndOut'})
+            const entryTrue = {
+              tip: 'income',
+              date: new Date(Date.now()).toISOString(),
+              description: 'Incasare Raport Z',
+              amount: this.userCash,
+              locatie: this.user.locatie
+            }
+            this.cashSrv.registerEntry(entryTrue).subscribe(response => {
+              if(response){
+                const entryTrue = {
+                  tip: 'income',
+                  date: new Date(Date.now()).toISOString(),
+                  description: 'Incasare Raport Z',
+                  amount: this.userCash,
+                  locatie: '65c221374c46336d1e6ac423',
+                }
+                this.cashSrv.registerEntry(entryTrue).subscribe(response => {
+                  if(response){
+                    const entryUnrg = {
+                      tip: 'income',
+                      date: new Date(Date.now()).toISOString(),
+                      description: 'Incasare Unreg',
+                      amount: this.userUnreg,
+                      locatie: '65c221374c46336d1e6ac423',
+                    }
+                    this.cashSrv.registerEntry(entryUnrg).subscribe(response => {
+                      if(response){
+                        const total = this.userCard +this.userUnreg + this.userCash
+                        console.log('total', total)
+                        let amount = 0
+                        if(total > 399){
+                          amount = 10
+                        }
+                        if(total > 499){
+                          amount = 20
+                        }
+                        if(total > 599){
+                          amount = 40
+                        }
+                        if(total > 699){
+                          amount = 50
+                        }
+                        if(total > 999){
+                          amount = 100
+                        }
+                        if(amount > 0){
+                          const entryTipsOly = {
+                            tip: 'expense',
+                            date: new Date(Date.now()).toISOString(),
+                            description: 'Tips Olivia',
+                            amount: amount,
+                            locatie: '65c221374c46336d1e6ac423',
+                          }
+                          this.cashSrv.registerEntry(entryTipsOly).subscribe(response => {
+                            if(response){
+                              showToast(this.toastCtrl, 'Registrul a fost actualizat', 2000)
+                            }
+                          })
+                        }
+                      }
+                    })
+                  }
+                })
+              }
+
+            })
           }
         })
       }

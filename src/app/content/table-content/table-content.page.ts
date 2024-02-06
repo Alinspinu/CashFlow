@@ -527,7 +527,6 @@ async payment(){
       this.billToshow.payment.cash = paymentInfo.cash;
       this.billToshow.dont = paymentInfo.dont;
       this.billToshow.cif = paymentInfo.cif;
-      console.log(this.billToshow.payment)
       this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
         if(response){
           this.billToshow.discount = 0

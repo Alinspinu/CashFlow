@@ -33,7 +33,7 @@ ingredients: any = [];
 ingredient!: any;
 supliers: any = [];
 suplier!: any
-nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], totalDoc: 0, payd: false }
+nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], totalDoc: 0, payd: false, type: 'unpayd' }
 
 furnizorSearch: string = '';
 ingredientSearch: string = '';
@@ -387,6 +387,7 @@ inputType: string = 'number'
       if(this.editMode) {
         this.nirSrv.deleteNir(this.nirId).subscribe(response => {
           if(response && response.message){
+            this.nir.totalDoc = this.valTotal
             this.nirSrv.saveNir(this.nir, this.user.locatie).subscribe(response => {
             this.reserNirData()
               showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
@@ -410,7 +411,7 @@ inputType: string = 'number'
   }
 
   reserNirData(){
-    this.nir =  {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], totalDoc: 0 , payd: false}
+    this.nir =  {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], totalDoc: 0 , payd: false, type: 'unpayd'}
     this.nirIngredients = []
     this.val = 0
     this.suplier = undefined

@@ -62,8 +62,8 @@
         <span class="docNumber">{{nir.nrDoc}}</span>
         <span class="total">{{nir.totalDoc}} Lei</span>
         <ion-buttons solt="end">
-          <ion-button (click)="payCash(nir._id, i, nir.totalDoc)">
-            <ion-icon class="cash" [src]="nir.payd ? '../../assets/icon/checkmark-outline.svg' : '../../assets/icon/cash.svg'"   [color]="nir.payd ? 'success' :'primary'"></ion-icon>
+          <ion-button (click)="payCash(nir._id, i, nir.totalDoc)" [disabled]="nir.payd">
+            <ion-icon class="cash" [src]="nir.payd ? '../../assets/icon/checkmark-outline.svg' : '../../assets/icon/cash.svg'"   [color]="nir.type === 'cash' ? 'success' :'primary'"></ion-icon>
           </ion-button>
           <ion-button (click)="editNir(nir._id)">
             <ion-icon  src="../../assets/icon/create-outline.svg"  size="large" color="success"></ion-icon>

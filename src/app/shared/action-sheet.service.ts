@@ -246,6 +246,44 @@ async reasonAlert(title: string, message: string, label: string){
     return null
   }
 }
+async payAlert(title: string, message: string, label: string){
+  const alert = await this.alertController.create({
+    header: title,
+    message: message,
+    buttons: [
+      {
+        text: 'BANCA',
+        role: 'banca',
+      },
+      {
+        text: 'RENUNȚĂ',
+        role: 'cancel',
+      },
+      {
+        text: 'CASH',
+        role: 'confirm',
+      },
+    ],
+    inputs: [
+      {
+      name: 'doc',
+      type: 'text',
+      placeholder: label
+
+    },
+  ],
+    cssClass: 'deleteAlert'
+  });
+  await alert.present();
+  const result = await alert.onDidDismiss();
+  if(result.role === 'confirm' && result.data.values) {
+    return result.data.values.doc
+  } else if(result.role === 'banca') {
+    return 'banca'
+  }else {
+    return null
+  }
+}
 
   async deleteBillProduct(options: string[]) {
     const inputs = options.map((option, index) => {

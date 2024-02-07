@@ -41,6 +41,7 @@ user!: User
     const data = this.navPar.get('options');
     if(data){
       this.discountsProd = data
+
     }
 
   }

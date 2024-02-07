@@ -35,7 +35,7 @@ export class NirsService{
   registerEntry(entry: any){
     return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
   }
-  payNir(update: boolean, id: string){
-    return this.http.post<{message: string}>(`${environment.BASE_URL}nir/pay`, {update: update, id: id})
+  payNir(update: boolean, type: string, id: string){
+    return this.http.post<{message: string}>(`${environment.BASE_URL}nir/pay`, {update: update, id: id, type: type})
   }
 }

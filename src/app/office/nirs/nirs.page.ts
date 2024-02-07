@@ -77,8 +77,8 @@ getUser(){
   async payCash(id: string, index: number,  total: number){
     const nir = this.nirs[index]
     const name = nir.suplier.name
-    const result = await this.actionSheetService.reasonAlert(`Plătește ${total} Lei`, 'Plată', 'Număr document')
-    if(result){
+    const result = await this.actionSheetService.payAlert(`Plătește ${total} Lei`, 'Plată', 'Număr document')
+    if(result && result !== 'banca'){
       let entry = {
         tip: 'expense',
         date: new Date(Date.now()).toISOString(),
@@ -91,22 +91,32 @@ getUser(){
           showToast(this.toastCtrl, 'Pata efectuata registrul a fost actualizat', 2000)
           entry.locatie = '65c221374c46336d1e6ac423';
           this.nirSrv.registerEntry(entry).subscribe()
-          this.nirSrv.payNir(true, id).subscribe(response => {
+          this.nirSrv.payNir(true, 'cash', id).subscribe(response => {
             if(response) {
               nir.payd = true
+              nir.type = 'cash'
               showToast(this.toastCtrl, response.message, 2000)
             }
           })
         }
       })
+    } else if(result && result === 'banca'){
+      this.nirSrv.payNir(true, "bank" ,id).subscribe(response => {
+        if(response) {
+          nir.payd = true
+          nir.type = 'bank'
+          showToast(this.toastCtrl, response.message, 2000)
+        }
+      })
     }
+
   }
 
   getNirs(){
     this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
       if(response){
         this.nirs = response
-        console.log(this.nirs[0])
+        console.log(this.nirs)
       }
     })
   }

@@ -91,7 +91,7 @@ export class CustomerCheckPage implements OnInit {
 searchCustomer(){
   const customerId = this.searchCustomerForm.value.customerId
   if(customerId){
-    this.customerSrv.searchCustomer(customerId).subscribe(response => {
+    this.customerSrv.searchCustomer(customerId, this.user.locatie).subscribe(response => {
       if(response.message === "All good"){
         this.customer = response.customer
       }

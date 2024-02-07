@@ -50,6 +50,7 @@ export class ContentService{
     printer: 'main',
     showSub: false,
     discount: 0,
+    sgrTax: false,
   }
   private categoryState!: BehaviorSubject<Category[]>;
   public categorySend$!: Observable<Category[]>;

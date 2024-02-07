@@ -122,7 +122,6 @@ if(table){
 }
 
  redOne(masa: number, billProdIndex: number, billIdex: number){
-  console.log(billIdex)
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     const bill = table.bills[billIdex]

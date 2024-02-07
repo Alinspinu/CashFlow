@@ -47,6 +47,7 @@ export function  emptyBillProduct(){
     sentToPrintOnline: true,
     qty: '',
     cantitate: '',
+    sgrTax: false,
   }
   return billProduct
  }

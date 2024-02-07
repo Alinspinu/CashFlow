@@ -363,8 +363,17 @@ async addToBill(product: Product){
       toppingsToSend: product.toppings,
       sentToPrintOnline: true,
       qty: product.qty,
-      cantitate: product.qty
+      cantitate: product.qty,
+      sgrTax: product.sgrTax,
     };
+    if(product.sgrTax){
+      let topping = product.toppings.find(p => p.name === "Taxa SGR")
+      if(topping){
+        cartProduct.toppings.push(topping)
+        cartProduct.price += topping.price
+        cartProduct.total = cartProduct.price * cartProduct.quantity
+      }
+    }
     this.disableBrakeButton()
     this.disableDeleteOrderButton()
     this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex)
@@ -386,6 +395,7 @@ async addToBill(product: Product){
 
 
   async openComments(product: BillProduct, index: number){
+    console.log(product)
     console.log(product)
     if(product.sentToPrint){
     if(product.toppings.length){
@@ -420,8 +430,9 @@ async addToBill(product: Product){
                product.price = totalPrice
                product.total = totalPrice * product.quantity
                product.discount = round(totalPrice * (product.discount * 100 / product.price) /100)
-               product.toppings = pickedToppings
+               product.toppings = [...product.toppings, ...pickedToppings]
                this.billToshow.total += (optionPrice * product.quantity)
+               console.log(product)
             }
             if(extra && extra.comment){
               this.tableSrv.addComment(this.tableNumber, index, this.billIndex, extra.comment)
@@ -517,7 +528,6 @@ async payment(){
   this.sendOrder(false)
   const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
     if(paymentInfo){
-      console.log(this.billToshow)
       this.billToshow.payment.card = paymentInfo.card;
       this.billToshow.payment.cash = paymentInfo.cash;
       this.billToshow.payment.voucher = paymentInfo.voucher;
@@ -803,7 +813,8 @@ async useCashBack(mode: boolean){
           toppingsToSend: product.toppings,
           sentToPrintOnline: true,
           qty: product.qty,
-          cantitate: product.qty
+          cantitate: product.qty,
+          sgrTax: product.sgrTax,
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){

@@ -97,6 +97,7 @@ export class BillProduct{
    public sentToPrintOnline: boolean,
    public qty: string,
    public cantitate: string,
+   public sgrTax: boolean,
   ){}
 }
 

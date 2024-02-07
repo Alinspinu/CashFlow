@@ -30,6 +30,7 @@ export class Product {
   public tva: string,
   public mainCat: string,
   public printer: string,
+  public sgrTax: boolean,
   public longDescription: string,
   public allergens: {name: string, _id: string}[],
   public additives: {name: string, _id: string}[],

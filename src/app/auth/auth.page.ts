@@ -103,7 +103,6 @@ export class AuthPage implements OnInit {
         Preferences.set({key: 'tempUserData', value: data });
         this.router.navigateByUrl('/tabs/tables');
       } else {
-        console.log(res)
         const id: any = jwtDecode(res.token);
         this.tableSrv.getTables(res.locatie, id.userId)
         this.router.navigateByUrl(`/tabs/tables`);

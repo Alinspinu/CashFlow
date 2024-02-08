@@ -12,7 +12,7 @@ export class AudioService {
     this.audio.src = 'assets/audio/ding.mp3'; // Adjust the path to your sound file
     this.audio.addEventListener('ended', () => {
       if (this.isPlaying) {
-        this.audio.play(); // Replay the sound when it ends
+        this.audio.play();
       }
     });
   }
@@ -26,7 +26,6 @@ export class AudioService {
 
   stop() {
     this.audio.pause();
-    this.audio.currentTime = 0;
     this.isPlaying = false;
   }
 

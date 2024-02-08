@@ -6,7 +6,6 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentService } from './payment.service';
 import { Bill } from 'src/app/models/table.model';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-payment',

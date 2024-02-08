@@ -191,7 +191,6 @@ export class SuplierPage implements OnInit {
       this.suplierSrv.saveSuplier(suplier, this.mode, this.user.locatie).subscribe((response: any) => {
         if(response){
           if(this.mode ){
-            console.log(response)
             const user = {
               name: this.suplierForm.value.ownerName,
               email: this.suplierForm.value.ownerEmail,
@@ -209,7 +208,6 @@ export class SuplierPage implements OnInit {
               password: this.suplierForm.value.password,
               confirmPassword: this.suplierForm.value.confirmPassword
             }
-            console.log(user)
             this.suplierSrv.saveAdmin(user, second).subscribe(response => {
               if(response){
                 showToast(this.toastCtrl, response.message, 2000)

@@ -41,4 +41,9 @@ removeProductDiscount(data: any){
 registerEntry(entry: any){
  return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
 }
+
+createInvoice(orderId: string, userId: string, clientId: string, locId: string){
+  return this.http.post(`${environment.BASE_URL}orders/invoice`, {orderId, userId, clientId, locId}, { responseType: 'arraybuffer' })
+}
+
 }

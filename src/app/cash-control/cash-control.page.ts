@@ -34,7 +34,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   userViva: number = 0;
   userVoucher: number = 0;
   userOnline: number = 0;
-  userTotal: number = 0
+  userTotal: number = 0;
   userUnreg: number = 0
 
   cashIn: number = 0;
@@ -103,14 +103,20 @@ export class CashControlPage implements OnInit, OnDestroy {
             showToast(this.toastCtrl, error.message, 3000)
           }
         })
-    }
+      }
+      if(result && result.message === "bill"){
+        this.cashSrv.createInvoice(result.orderId, this.user._id, result.clientId, this.user.locatie).subscribe(response => {
+          const blob = new Blob([response], { type: 'application/pdf' });
+          const pdfUrl = URL.createObjectURL(blob);
+          window.open(pdfUrl, '_blank');
+        })
+       }
   }
 
   getOrders(){
     this.cashSrv.getUserOrders(this.user._id).subscribe(response => {
       if(response) {
         this.orders = response
-        console.log(this.orders, this.user)
         this.calcCashIn()
       }
     })
@@ -178,96 +184,22 @@ export class CashControlPage implements OnInit, OnDestroy {
     if(payment.card && payment.card > 0){
       method.push(`Card ${payment.card} Lei`)
     }
-    if(payment.voucher && payment.voucher > 0){
-      method.push(`Voucher ${payment.voucher} Lei`)
-    }
-    if(payment.viva && payment.viva > 0){
-      method.push(`Viva ${payment.viva } Lei`)
-    }
-    if(payment.online && payment.online > 0){
-      method.push(`Online ${payment.online } Lei`)
-    }
     return method
  }
 
 
 reports(value: string){
+  this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
+    console.log(response)
+    if(response){
+      Preferences.remove({key: 'cashInAndOut'})
+    }
+  })
   this.cashSrv.raport(value).subscribe(response => {
     if(response){
       if(value === 'z'){
-        this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
-          if(response){
-            this.cashIn = 0
-            this.cashOut = 0
-            Preferences.remove({key: 'cashInAndOut'})
-            const entryTrue = {
-              tip: 'income',
-              date: new Date(Date.now()).toISOString(),
-              description: 'Incasare Raport Z',
-              amount: this.userCash,
-              locatie: this.user.locatie
-            }
-            this.cashSrv.registerEntry(entryTrue).subscribe(response => {
-              if(response){
-                const entryTrue = {
-                  tip: 'income',
-                  date: new Date(Date.now()).toISOString(),
-                  description: 'Incasare Raport Z',
-                  amount: this.userCash,
-                  locatie: '65c221374c46336d1e6ac423',
-                }
-                this.cashSrv.registerEntry(entryTrue).subscribe(response => {
-                  if(response){
-                    const entryUnrg = {
-                      tip: 'income',
-                      date: new Date(Date.now()).toISOString(),
-                      description: 'Incasare Unreg',
-                      amount: this.userUnreg,
-                      locatie: '65c221374c46336d1e6ac423',
-                    }
-                    this.cashSrv.registerEntry(entryUnrg).subscribe(response => {
-                      if(response){
-                        const total = this.userCard +this.userUnreg + this.userCash
-                        console.log('total', total)
-                        let amount = 0
-                        if(total > 399){
-                          amount = 10
-                        }
-                        if(total > 499){
-                          amount = 20
-                        }
-                        if(total > 599){
-                          amount = 40
-                        }
-                        if(total > 699){
-                          amount = 50
-                        }
-                        if(total > 999){
-                          amount = 100
-                        }
-                        if(amount > 0){
-                          const entryTipsOly = {
-                            tip: 'expense',
-                            date: new Date(Date.now()).toISOString(),
-                            description: 'Tips Olivia',
-                            amount: amount,
-                            locatie: '65c221374c46336d1e6ac423',
-                          }
-                          this.cashSrv.registerEntry(entryTipsOly).subscribe(response => {
-                            if(response){
-                              showToast(this.toastCtrl, 'Registrul a fost actualizat', 2000)
-                            }
-                          })
-                        }
-                      }
-                    })
-                  }
-                })
-              }
-
-            })
-          }
-        })
+        this.cashIn = 0
+        this.cashOut = 0
       }
       showToast(this.toastCtrl, response.message, 3000)
     }
@@ -294,6 +226,7 @@ setZeroDiscount(cats: Category[]){
       }
     })
   })
+  console.log(dataToSend)
   return dataToSend
 }
 

@@ -6,6 +6,7 @@ import { formatedDateToShow, getPaymentMethod } from 'src/app/shared/utils/funct
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { PaymentPage } from '../payment/payment.page';
+import { SuplierPage } from 'src/app/office/CRUD/suplier/suplier.page';
 
 @Component({
   selector: 'app-order-app-view',
@@ -48,6 +49,14 @@ export class OrderAppViewPage implements OnInit {
     const result = await this.actionSheet.deleteAlert('Bonul va fi retipărit pe casa de marcat. Esti sigur că vrei sa faci asta?', 'REPĂRIRE')
     if(result){
       this.modalCtrl.dismiss({order: this.order, message: 'reprint'})
+    }
+  }
+
+ async createBill(){
+    const result = await this.actionSheet.openModal(SuplierPage, '', false)
+    if(result){
+      console.log(result)
+      this.modalCtrl.dismiss({order: this.order._id, clientId: result._id, message: 'bill'})
     }
   }
 

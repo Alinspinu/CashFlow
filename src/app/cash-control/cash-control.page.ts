@@ -101,7 +101,15 @@ export class CashControlPage implements OnInit, OnDestroy {
             showToast(this.toastCtrl, error.message, 3000)
           }
         })
-    }
+     }
+     if(result && result.message === "bill"){
+      console.log(result)
+      this.cashSrv.createInvoice(result.order, this.user._id, result.clientId, this.user.locatie).subscribe(response => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const pdfUrl = URL.createObjectURL(blob);
+        window.open(pdfUrl, '_blank');
+      })
+     }
   }
 
   getOrders(){

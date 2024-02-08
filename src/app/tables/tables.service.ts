@@ -106,7 +106,6 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
       bill.total = bill.total + product.price
-      console.log(this.tables)
     this.tableState.next([...this.tables])
   } else {
     bill.masaRest.index = masa;
@@ -115,7 +114,6 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
     table.bills.push(bill)
-    console.log(this.tables)
     this.tableState.next([...this.tables])
   }
 }
@@ -195,7 +193,6 @@ getTables(locatie: string, id: string){
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
-      console.log(response)
       this.tableState.next([...this.tables])
     }
   })
@@ -305,7 +302,6 @@ registerDeletetProduct(product: any){
 }
 
 sendBillToPrint(bill: Bill){
-  console.log(bill)
   return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
 }
 

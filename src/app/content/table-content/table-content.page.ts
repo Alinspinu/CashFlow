@@ -238,7 +238,6 @@ export class TableContentPage implements OnInit, OnDestroy {
 incommingOrders(){
   console.log('hit the incomming message function')
  this.tableSub = this.tableSrv.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
-   console.log(response)
     if(response){
       const data = JSON.parse(response.data)
       if(data.message === 'New Order'){
@@ -395,8 +394,6 @@ async addToBill(product: Product){
 
 
   async openComments(product: BillProduct, index: number){
-    console.log(product)
-    console.log(product)
     if(product.sentToPrint){
     if(product.toppings.length){
       let price: number = 0
@@ -432,7 +429,6 @@ async addToBill(product: Product){
                product.discount = round(totalPrice * (product.discount * 100 / product.price) /100)
                product.toppings = [...product.toppings, ...pickedToppings]
                this.billToshow.total += (optionPrice * product.quantity)
-               console.log(product)
             }
             if(extra && extra.comment){
               this.tableSrv.addComment(this.tableNumber, index, this.billIndex, extra.comment)
@@ -537,7 +533,6 @@ async payment(){
       this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
         if(response){
           this.billToshow.discount = 0
-          console.log(response)
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.billProducts = []
           this.billToshow = emptyBill()
@@ -595,7 +590,6 @@ calcBillDiscount(bill: Bill){
             product.discount = round(product.quantity * product.price * productDiscountProcent)
           } else if(disc.precent === 0){
             product.discount = 0
-            console.log(disc.name)
           }else{
             product.discount = round(product.quantity * product.price * discountGeneralProcent)
           }
@@ -769,12 +763,10 @@ async useCashBack(mode: boolean){
 
  async break(index: number){
     const product =  this.billToshow.products[index]
-    console.log(product)
     let qty: number[] = []
     for(let i=1; i<=product.quantity; i++){
       qty.push(i)
     }
-    console.log('first')
     const qtyChioise = await this.actionSheet.breakBillProduct(qty)
     if(qtyChioise){
       this.tableSrv.addNewBill(this.tableNumber, 'COMANDĂ NOUĂ', false)

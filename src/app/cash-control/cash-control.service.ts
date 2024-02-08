@@ -37,4 +37,8 @@ removeProductDiscount(data: any){
   return this.http.post(`${environment.BASE_URL}product/disc-prod`, {data: data})
 }
 
+createInvoice(orderId: string, userId: string, clientId: string, locId: string){
+  return this.http.post(`${environment.BASE_URL}orders/invoice`, {orderId, userId, clientId, locId}, { responseType: 'arraybuffer' })
+}
+
 }

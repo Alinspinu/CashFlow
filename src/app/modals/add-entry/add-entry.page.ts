@@ -42,6 +42,7 @@ export class AddEntryPage implements OnInit {
 
   ngOnInit() {
    this.locatie = this.navPar.get('options')
+   console.log(this.locatie)
    this.setForm()
   }
 
@@ -85,7 +86,7 @@ export class AddEntryPage implements OnInit {
 
   confirm(){
     if(this.form.valid && this.date){
-      const entry = {
+      let entry = {
         tip: this.form.value.typeOfEntry,
         date: this.date,
         description: this.form.value.description,
@@ -93,7 +94,14 @@ export class AddEntryPage implements OnInit {
         locatie: this.locatie
       }
       this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
-        this.modalCtrl.dismiss(response)
+        if(response && this.locatie !== '65c221374c46336d1e6ac423'){
+          entry.locatie = '65c221374c46336d1e6ac423'
+          this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
+            this.modalCtrl.dismiss(response)
+          })
+        } else {
+          this.modalCtrl.dismiss(response)
+        }
       })
     }
   }

@@ -33,7 +33,7 @@ export class CashRegisterPage implements OnInit {
   endDate!: any;
   user!: User
   locatie!: string
-  locVal: string = 'true'
+  locVal: string = 'black'
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
@@ -60,16 +60,17 @@ export class CashRegisterPage implements OnInit {
 
 
 swithLocatie(){
-  if(this.locVal === 'black'){
-    this.locatie = '65c221374c46336d1e6ac423'
-    this.locVal = 'true'
+  if(this.locVal === "true"){
+    this.locatie = this.user.locatie
+    this.locVal = 'black'
     this.documents = []
     this.loadDocuments()
     return
   }
-  if(this.locVal === "true"){
-    this.locatie = this.user.locatie
-    this.locVal = 'black'
+
+  if(this.locVal === 'black'){
+    this.locatie = '65c221374c46336d1e6ac423'
+    this.locVal = 'true'
     this.documents = []
     this.loadDocuments()
     return

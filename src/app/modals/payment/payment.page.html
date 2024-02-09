@@ -63,7 +63,7 @@
         <ion-button size="large" expand="block" color="danger"(click)="cancel()" [disabled]="disableCancelButton">Renunță</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button size="large" expand="block" color="primary" (click)="cashIn()">{{button}}</ion-button>
+        <ion-button size="large" expand="block" color="primary" (click)="cashIn()" [disabled]="disableCancelButton">{{button}}</ion-button>
         </ion-col>
     </ion-row>
   </ion-grid>

@@ -189,6 +189,7 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
 
 
 getTables(locatie: string, id: string){
+  console.log(locatie)
   const headers = new HttpHeaders().set("ngrok-skip-browser-warning", "69420");
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){

@@ -23,4 +23,8 @@ export class ConfigService{
     return this.http.get(`${environment.BASE_URL}users/loc?id=${locId}`)
   }
 
+  saveServiceMail(email: string, appKey: string, locId: string ){
+    return this.http.put<{message: string}>(`${environment.BASE_URL}users/loc`, {email, appKey, locId})
+  }
+
 }

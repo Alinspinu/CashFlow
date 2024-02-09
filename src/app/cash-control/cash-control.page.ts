@@ -200,6 +200,71 @@ reports(value: string){
       if(value === 'z'){
         this.cashIn = 0
         this.cashOut = 0
+        const entryR = {
+          tip: 'income',
+          date: new Date(Date.now()),
+          description: 'Încasare Raport Z',
+          amount: this.userCash,
+          locatie: this.user.locatie
+        }
+         this.cashSrv.registerEntry(entryR).subscribe(response => {
+          if(response){
+            const entry = {
+              tip: 'income',
+              date: new Date(Date.now()),
+              description: 'Încasare Unreg',
+              amount: this.userUnreg,
+              locatie: '65c221374c46336d1e6ac423',
+            }
+            this.cashSrv.registerEntry(entry).subscribe(res =>{
+              if(res){
+                const entryR = {
+                  tip: 'income',
+                  date: new Date(Date.now()),
+                  description: 'Încasare Raport Z',
+                  amount: this.userCash,
+                  locatie: '65c221374c46336d1e6ac423',
+                }
+                this.cashSrv.registerEntry(entryR).subscribe(response => {
+                  if(response){
+                    let entryT = {
+                      tip: 'expense',
+                      date: new Date(Date.now()),
+                      description: 'Tips',
+                      amount: 0,
+                      locatie: '65c221374c46336d1e6ac423',
+                    }
+                    const total = this.userCash + this.userCard + this.userUnreg
+                    if(total > 399){
+                      entryT.amount = 10
+                    }
+                    if(total > 499){
+                      entryT.amount = 20
+                    }
+                    if(total > 599){
+                      entryT.amount = 40
+                    }
+                    if(total > 699){
+                      entryT.amount = 50
+                    }
+                    if(total > 999) {
+                      entryT.amount = 100
+                    }
+                    if(entryT.amount !== 0){
+                      this.cashSrv.registerEntry(entryT).subscribe(response => {
+                        if(response){
+                          showToast(this.toastCtrl, 'All good in the hood tipsy today!', 2000)
+                        }
+                      })
+                    }
+                    showToast(this.toastCtrl, 'All good in the hood', 2000)
+                  }
+                })
+              }
+            })
+          }
+
+         })
       }
       showToast(this.toastCtrl, response.message, 3000)
     }
@@ -226,7 +291,6 @@ setZeroDiscount(cats: Category[]){
       }
     })
   })
-  console.log(dataToSend)
   return dataToSend
 }
 

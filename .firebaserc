@@ -1,6 +1,7 @@
 {
   "projects": {
-    "cafetish": "cash-flow-cafetish"
+    "cafetish": "cash-flow-cafetish",
+    "caf": "cash-flow-cafetish"
   },
   "targets": {},
   "etags": {}

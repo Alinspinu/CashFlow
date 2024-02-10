@@ -325,7 +325,7 @@ inputType: string = 'number'
       price: this.ingredientForm.value.price,
       um: this.ingredientForm.value.um,
       qty: this.ingredientForm.value.qty,
-      value: round(this.ingredientForm.value.value),
+      value: round(+this.ingredientForm.value.value),
       tva: +this.ingredientForm.value.tva,
       tvaValue: this.ingredientForm.value.tvaValue,
       total: round(this.ingredientForm.value.total),
@@ -333,6 +333,7 @@ inputType: string = 'number'
       gestiune: this.ingredientForm.value.gestiune,
       sellPrice: this.ingredientForm.value.sellPrice ? this.ingredientForm.value.sellPrice : 0
     }
+    console.log(ingredient)
     if(this.ingredientForm.valid){
       this.nirIngredients.push(ingredient)
       this.ingredientForm.reset()

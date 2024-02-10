@@ -72,7 +72,7 @@ export class AuthService{
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<any>(`${environment.BASE_URL_CLOUD}auth/login`,{email, password}, httpOptions)
+    return this.http.post<any>(`${environment.BASE_URL_CLOUD}auth/login`,{email, password, loc: environment.ADMIN_EMAIL}, httpOptions)
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   }
 
@@ -82,7 +82,7 @@ export class AuthService{
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL_CLOUD}auth/register`,{name, email, password, confirmPassword, firstCart, survey, tel}, httpOptions);
+    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL_CLOUD}auth/register`,{name, email, password, confirmPassword, firstCart, survey, tel, loc: environment.LOC}, httpOptions);
   };
 
   verifyToken(token: string){

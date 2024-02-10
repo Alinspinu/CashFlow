@@ -17,9 +17,10 @@ export const environment = {
   BASE_URL: 'http://localhost:8080/',
   BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/',
   // BASE_URL_CAFETISH: 'https://www.cafetish.ro/'
-  BASE_URL_CAFETISH: 'http://localhost:8090/'
+  BASE_URL_CAFETISH: 'http://localhost:8090/',
   // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/'
-
+  LOC: '655e2e7c5a3d53943c6b7c53',
+  ADMIN_EMAIL: 'alinz.spinu@gmail.com',
 
   // BASE_URL: 'http://172.20.110.20:8080/',
   // BASE_URL: 'https://fa74-82-77-237-76.ngrok-free.app/'

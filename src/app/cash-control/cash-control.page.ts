@@ -66,6 +66,7 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.getCashInandOut()
     this.getUser()
     this.getData()
+    console.log("some")
   }
 
 
@@ -133,6 +134,9 @@ export class CashControlPage implements OnInit, OnDestroy {
   }
 
   calcCashIn(){
+    this.userCash = 0
+    this.userCard = 0
+    this.userUnreg = 0
     if(this.orders){
       this.orders.forEach((order: Bill) => {
         if(order.payment.cash && !order.dont){
@@ -252,7 +256,7 @@ reports(value: string){
                     }
                     if(entryT.amount !== 0){
                       this.cashSrv.registerEntry(entryT).subscribe(response => {
-                        if(response){
+                       if(response){
                           showToast(this.toastCtrl, 'All good in the hood tipsy today!', 2000)
                         }
                       })

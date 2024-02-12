@@ -91,7 +91,7 @@ export class CustomerCheckPage implements OnInit {
 searchCustomer(){
   const customerId = this.searchCustomerForm.value.customerId
   if(customerId){
-    this.customerSrv.searchCustomer(customerId).subscribe(response => {
+    this.customerSrv.searchCustomer(customerId, this.user.locatie).subscribe(response => {
       if(response.message === "All good"){
         this.customer = response.customer
       }
@@ -119,6 +119,7 @@ addClient(){
     const email = this.addCustomerForm.value.email
     const name = this.addCustomerForm.value.name
     const cardIndex = this.addCustomerForm.value.cardCode ? this.addCustomerForm.value.cardCode : 0
+    console.log(this.user.locatie)
       this.customerSrv.createCustomer(name, email, cardIndex, this.user.locatie).subscribe(res => {
         if(res.message === "All good"){
             showToast(this.toastCtrl, `Un email a fost trimis la ${email} pentru a completa înregistrarea!`, 5000)

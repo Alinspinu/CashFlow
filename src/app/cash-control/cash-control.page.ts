@@ -122,6 +122,11 @@ export class CashControlPage implements OnInit, OnDestroy {
   }
 
   calcCashIn(){
+    this.userCash = 0
+    this.userCard = 0
+    this.userViva = 0
+    this.userVoucher = 0
+    this.userOnline = 0
     if(this.orders){
       this.orders.forEach((order: Bill) => {
         if(order.payment.cash){

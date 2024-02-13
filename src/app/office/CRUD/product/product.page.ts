@@ -84,7 +84,6 @@ export class ProductPage implements OnInit {
           if(response){
             response.subProducts.length ? this.hideIng = true : this.hideIng = false
             this.product = response;
-            console.log(this.product)
             this.editMode = true
             this.topToEdit = this.product.toppings;
             this.ingsToEdit = this.product.ings;
@@ -95,12 +94,12 @@ export class ProductPage implements OnInit {
             this.form.get('cat')?.setValue(this.product.category._id)
             this.form.get('mainCat')?.setValue(this.product.mainCat)
             this.form.get('description')?.setValue(this.product.description)
+            this.form.get('longDescription')?.setValue(this.product.longDescription)
             this.form.get('qty')?.setValue(this.product.qty)
             this.form.get('order')?.setValue(this.product.order)
             this.form.get('dep')?.setValue(this.product.dep)
             this.form.get('tva')?.setValue(this.product.tva ? this.product.tva.toString() : '')
             this.form.get('printer')?.setValue(this.product.printer)
-            this.form.get('sgrTax')?.setValue(this.product.sgrTax)
           }
         })
        }
@@ -205,6 +204,10 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
+      longDescription: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
         qty: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
@@ -221,10 +224,6 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      sgrTax: new FormControl(null, {
-        updateOn: 'change',
-        validators: [Validators.required]
-      }),
       image: new FormControl(null),
     });
     this.form.get('mainCat')?.valueChanges.subscribe(this.updateValue);
@@ -236,20 +235,22 @@ export class ProductPage implements OnInit {
       const productData = new FormData()
       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
+      console.log(ings)
       const sub = JSON.stringify(this.subProducts);
       const tempSubs = JSON.stringify(this.tempSubArray);
+      console.log(toppings)
       productData.append('name', this.form.value.name);
       productData.append('price', this.form.value.price);
       productData.append('category', this.form.value.cat);
       productData.append('mainCat', this.form.value.mainCat);
       productData.append('description', this.form.value.description);
+      productData.append('longDescription', this.form.value.longDescription);
       productData.append('qty', this.form.value.qty);
       productData.append('order', this.form.value.order);
       productData.append('dep', this.form.value.dep);
       productData.append('tva', this.form.value.tva);
       productData.append('image', this.form.value.image);
       productData.append('printer', this.form.value.printer);
-      productData.append('sgrTax', this.form.value.sgrTax);
       if(toppings !== 'skip'){
         productData.append('toppings', toppings);
       }
@@ -265,7 +266,6 @@ export class ProductPage implements OnInit {
       } else {
         this.prodSrv.saveProduct(productData, this.user.locatie).subscribe(response => {
           const product = response.product
-          console.log(response)
           if(product){
             this.tempSubArray.map((obj:any) => {
               obj.product = product._id;

@@ -22,7 +22,6 @@ cashInAndOut(data: any){
 }
 
 getUserOrders(userId: string) {
-  console.log('ceva')
   return this.http.get<Bill[]>(`${environment.BASE_URL}orders/get-user-orders?userId=${userId}`)
 }
 

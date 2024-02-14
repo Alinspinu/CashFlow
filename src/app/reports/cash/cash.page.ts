@@ -78,6 +78,7 @@ export class CashPage implements OnInit {
   bills: Bill[] = []
   discountBills: Bill [] = []
   cashBackBills: Bill [] = []
+  unregBills: Bill [] = []
 
   paymentMethods: paymentMethod[] = []
   billProducts: BillProduct[] = []
@@ -91,6 +92,7 @@ export class CashPage implements OnInit {
   totalIncasat: number = 0;
   totalNoTax: number = 0;
   tips: number = 0;
+  unreg: number = 0
 
   openTotal: number = 0
   cash: number = 0
@@ -129,7 +131,6 @@ getOrders(){
       this.resetValues()
       this.bills = response.orders
       this.delProducts = response.delProducts
-      console.log(this.bills)
       this.isLoading = false
       this.calcTotals()
       this.calcTva()
@@ -201,15 +202,23 @@ resetValues(){
   this.billProducts = []
   this.users = []
   this.hours = []
+  this.unreg = 0
 }
 
 
 calcTotals(){
+  this.resetValues()
   this.bills.forEach(bill => {
    if(bill.production){
     bill.products.forEach(prod => {
       this.billProducts.push(prod)
     })
+
+    if(bill.dont && bill.payment.cash){
+      this.unreg = round(this.unreg + bill.payment.cash)
+      this.unregBills.push(bill)
+     }
+
      this.cashBack = round( this.cashBack +  bill.cashBack)
      this.discounts = round(this.discounts + bill.discount)
      this.total += (bill.total + bill.discount)
@@ -224,6 +233,7 @@ calcTotals(){
        this.payOnline = round(this.payOnline + bill.payment.online)
      }
    }
+
    if(bill.tips > 0){
       this.tips += bill.tips
   }
@@ -251,6 +261,10 @@ if(method === 'CashBack'){
 }
 if(method === "Note deschise"){
   this.showOpenOrders()
+}
+
+if(method === "Viva W"){
+  this.actionSheet.openPayment(OrdersViewPage, this.unregBills)
 }
 }
 
@@ -324,8 +338,8 @@ calcProcents(){
   if(this.total > 0 && this.cash > 0){
     const cashMethod: paymentMethod = {
       name: 'Numerar',
-      value: this.cash,
-      procent: round(this.cash * 100 / this.total)
+      value: round(this.cash - this.unreg),
+      procent: round((this.cash - this.unreg) * 100 / this.total)
     }
     this.paymentMethods.push(cashMethod)
   }
@@ -337,11 +351,11 @@ calcProcents(){
     }
     this.paymentMethods.push(cardMethod)
   }
-  if(this.total > 0 && this.vivaWallet > 0){
+  if(this.total > 0 && this.unreg > 0){
     const vivaMethod: paymentMethod = {
-      name: 'Viva Wallet',
-      value: this.vivaWallet,
-      procent: round(this.vivaWallet * 100 / this.total)
+      name: 'Viva W',
+      value: this.unreg,
+      procent: round(this.unreg * 100 / this.total)
     }
     this.paymentMethods.push(vivaMethod)
   }
@@ -518,7 +532,6 @@ showData(dep: departament){
   if(mode === 'day'){
     const day = await this.actionSheet.openAuth(DatePickerPage)
     if(day){
-      console.log(day)
       this.day = day
       this.endDate = undefined
       this.startDate = undefined

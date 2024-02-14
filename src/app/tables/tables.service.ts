@@ -189,8 +189,6 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
 
 
 getTables(locatie: string, id: string){
-  console.log(locatie)
-  const headers = new HttpHeaders().set("ngrok-skip-browser-warning", "69420");
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
@@ -203,6 +201,7 @@ getOrderMessage (locatie: string, id: string): Observable<MessageEvent>{
   this.eventSource = new EventSource(`${environment.BASE_URL}table/get-order-message`)
     return new Observable((observer) => {
       this.eventSource.onmessage = (event) => {
+        console.log(event)
         this.ngZone.run(() => {
         const data = JSON.parse(event.data)
         if(data && data.message === "New Order"){

@@ -18,8 +18,9 @@ export const environment = {
 
   BASE_URL: 'http://localhost:8080/',
   ADMIN_EMAIL: "alinz.spinu@gmail.com",
-  LOC: "655e2e7c5a3d53943c6b7c53"
-  // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/'
+  LOC: "655e2e7c5a3d53943c6b7c53",
+  BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/'
+
 
   // BASE_URL: 'https://3bab-91-132-4-34.ngrok-free.app/',
   // BASE_URL: 'http://172.20.110.20:8080/',

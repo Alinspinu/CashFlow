@@ -189,7 +189,7 @@ export class TableContentPage implements OnInit, OnDestroy {
       response.subscribe(user => {
         if(user){
           this.user = user;
-
+          this.incommingOrders()
         }
       })
     }
@@ -242,9 +242,9 @@ incommingOrders(){
       const data = JSON.parse(response.data)
       if(data.message === 'New Order'){
         this.order = data.doc
-        // if (!this.audio.isCurrentlyPlaying()) {
-        //   this.audio.play();
-        // }
+        if (!this.audio.isCurrentlyPlaying()) {
+          this.audio.play();
+        }
         this.onlineOrder = true
         this.colorToggleInterval = setInterval(() => {
           this.dynamicColorChange = !this.dynamicColorChange;

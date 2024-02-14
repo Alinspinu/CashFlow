@@ -96,6 +96,7 @@ export class ProductPage implements OnInit {
             this.form.get('description')?.setValue(this.product.description)
             this.form.get('longDescription')?.setValue(this.product.longDescription)
             this.form.get('qty')?.setValue(this.product.qty)
+            this.form.get('sgrTax')?.setValue(this.product.sgrTax)
             this.form.get('order')?.setValue(this.product.order)
             this.form.get('dep')?.setValue(this.product.dep)
             this.form.get('tva')?.setValue(this.product.tva ? this.product.tva.toString() : '')
@@ -212,6 +213,10 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
+        sgrTax: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
       order: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
@@ -247,6 +252,7 @@ export class ProductPage implements OnInit {
       productData.append('longDescription', this.form.value.longDescription);
       productData.append('qty', this.form.value.qty);
       productData.append('order', this.form.value.order);
+      productData.append('sgrTax', this.form.value.sgrTax);
       productData.append('dep', this.form.value.dep);
       productData.append('tva', this.form.value.tva);
       productData.append('image', this.form.value.image);

@@ -64,7 +64,6 @@ ngOnDestroy(): void {
 getTables(){
  this.tableSubs = this.tableServ.tableSend$.subscribe(response => {
     this.tables = response
-  console.log(response)
   })
 }
 
@@ -72,7 +71,7 @@ getUser(){
   Preferences.get({key: 'authData'}).then(data  => {
     if(data.value) {
      this.user = JSON.parse(data.value)
-    //  this.incommingOrders()
+     this.incommingOrders()
      this.getTables()
     } else{
       this.router.navigateByUrl('/auth')
@@ -108,8 +107,8 @@ getUser(){
 
 
   incommingOrders(){
-    console.log('hit incomming orders')
   this.tableServ.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
+    console.log(response)
     if(response){
       const data = JSON.parse(response.data)
       if(data.message === 'New Order'){

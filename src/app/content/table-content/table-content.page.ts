@@ -189,7 +189,7 @@ export class TableContentPage implements OnInit, OnDestroy {
       response.subscribe(user => {
         if(user){
           this.user = user;
-          this.incommingOrders()
+          // this.incommingOrders()
         }
       })
     }

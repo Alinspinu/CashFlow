@@ -21,7 +21,7 @@ export class NirsService{
   }
 
   getNirs(loc: string){
-    return this.http.post(`${environment.BASE_URL}nir/get-nirs`, {loc: loc})
+    return this.http.post<{nir: any}[]>(`${environment.BASE_URL}nir/get-nirs`, {loc: loc})
   }
 
   deleteNir(id: string) {
@@ -30,5 +30,9 @@ export class NirsService{
 
   exportNirs(startDate: any, endDate: any, loc: string){
     return this.http.post(`${environment.BASE_URL}nir/export-xcel`, {startDate: startDate, endDate: endDate, loc: loc}, { responseType: 'blob',})
+  }
+
+  getNirsByDate(startDate: any, endDate: any, loc: string){
+    return this.http.post<{nir: any}[]>(`${environment.BASE_URL}nir/get-nirs-by-date`, {startDate, endDate, loc})
   }
 }

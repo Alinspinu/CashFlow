@@ -2,9 +2,18 @@
 
 <ion-content [fullscreen]="true">
   <ion-item lines="none" class="nir-entry" slot="fixed">
-    <span class="nr start">Nr</span>
-    <span class="date">Data</span>
-    <span class="suplier">Furnizor</span>
+    <span class="nr start" (click)="index()">
+      Nr
+      <ion-icon src="assets/icon/arrows-down.svg" [color]="indexColor"></ion-icon>
+    </span>
+    <span class="date" (click)="date()">
+      Data
+      <ion-icon src="assets/icon/arrows-down.svg"  [color]="dateColor"></ion-icon>
+    </span>
+    <span class="suplier" (click)="suplier()">
+      Furnizor
+      <ion-icon src="assets/icon/arrows-down.svg"  [color]="suplierColor"></ion-icon>
+    </span>
     <span class="docNumber">Nr Document</span>
     <ion-buttons solt="end">
       <ion-button>
@@ -38,6 +47,8 @@
             <img src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo">
           </ion-button>
         </ion-buttons>
+        <ion-searchbar mode="ios" [(ngModel)]="nirSearch"  placeholder="Caută document după furnizor.."  (ionInput)="searchNir($event)" #searchbar>
+        </ion-searchbar>
         <ion-buttons slot="end">
           <ion-button class="input" (click)="addNir()">
             ADD

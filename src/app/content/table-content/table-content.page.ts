@@ -43,6 +43,8 @@ export class TableContentPage implements OnInit, OnDestroy {
   dynamicColorChange = false
   colorToggleInterval: any;
 
+  disableOrderButton: boolean = false
+
 
   discountValue: number = 0;
   discountMode: boolean = true
@@ -504,19 +506,23 @@ async addTips(){
 
 
 sendOrder(out: boolean){
-  this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
-  const tableIndex = this.tableNumber
-  this.billToshow.locatie = this.user.locatie
-  this.calcBillDiscount(this.billToshow)
-  this.home()
-  this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
-    if(res){
-      if(out){
-        this.router.navigateByUrl('/tabs/tables')
+  if(this.billToshow){
+    this.disableOrderButton = true
+    this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
+    const tableIndex = this.tableNumber
+    this.billToshow.locatie = this.user.locatie
+    this.calcBillDiscount(this.billToshow)
+    this.home()
+    this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
+      if(res){
+        if(out){
+          this.disableOrderButton = false
+          this.router.navigateByUrl('/tabs/tables')
+        }
       }
     }
+    );
   }
-  );
 }
 
 

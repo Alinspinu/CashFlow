@@ -215,7 +215,7 @@
              </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button size="large" expand="block" color="secondary" (click)="sendOrder(true)">
+            <ion-button size="large" expand="block" color="secondary" (click)="sendOrder(true)" [disabled]="disableOrderButton">
               Trimite Comanda
             </ion-button>
             <ion-button size="large" expand="block" color="primary" (click)="payment()">

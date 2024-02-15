@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, ToastButton, ToastController } from '@ionic/angular';
@@ -19,10 +19,18 @@ import User from 'src/app/auth/user.model';
 })
 export class NirsPage implements OnInit {
 
-  nirs: any = []
+  nirs: any[] = []
+  dbNirs: any[] = []
+
   startDate!: any
   endDate!: any
   user!: User
+  suplierColor: string = 'none'
+  dateColor: string = 'none'
+  indexColor: string = 'primary'
+
+  nirSearch!: string
+
 
   constructor(
     public nirSrv: NirsService,
@@ -36,6 +44,9 @@ export class NirsPage implements OnInit {
    this.getUser()
   }
 
+
+
+
 getUser(){
   getUserFromLocalStorage().then(user => {
     if(user){
@@ -45,6 +56,61 @@ getUser(){
       this.router.navigateByUrl('/auth')
     }
   })
+}
+
+
+index(){
+  this.nirs.sort((a, b) => a.index - b.index)
+  this.suplierColor = 'none'
+  this.dateColor = 'none'
+  this.indexColor = 'primary'
+}
+
+
+date(){
+  this.nirs.sort((a, b) =>{
+    const dateA = new Date(a.documentDate).getTime()
+    const dateB = new Date(b.documentDate).getTime()
+    if (!isNaN(dateA) && !isNaN(dateB)) {
+      return dateA - dateB;
+    } else {
+      return 0;
+    }
+  })
+  this.suplierColor = 'none'
+  this.dateColor = 'primary'
+  this.indexColor = 'none'
+}
+
+getNirs(){
+  this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
+    if(response){
+      this.dbNirs = response
+      this.nirs = [...this.dbNirs]
+    }
+  })
+}
+
+
+searchNir(ev: any){
+  const input = ev.detail.value
+  let filterData = this.nirs.filter((object) =>
+  object.suplier.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+  this.nirs = filterData
+  if(!input.length){
+    this.nirs = [ ...this.dbNirs]
+  }
+
+}
+
+
+suplier(){
+  console.log(this.nirs)
+  this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
+
+  this.suplierColor = 'primary'
+  this.dateColor = 'none'
+  this.indexColor = 'none'
 }
 
   export(){
@@ -70,16 +136,19 @@ getUser(){
     }
     if(response && mode === 'end'){
       this.endDate = response
+      if(this.startDate){
+        console.log(this.startDate, this.endDate)
+        this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
+          if(response){
+            this.dbNirs = response
+            this.nirs = [...this.dbNirs]
+          }
+        })
+      }
     }
   }
 
-  getNirs(){
-    this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
-      if(response){
-        this.nirs = response
-      }
-    })
-  }
+
 
   pushNirs(nir: any){
     this.nirs.push(nir)

@@ -19,7 +19,15 @@ import User from 'src/app/auth/user.model';
 })
 export class NirsPage implements OnInit {
 
-  nirs: any = []
+  nirs: any[] = []
+  dbNirs: any[] = []
+
+  nirSearch!: string
+
+  suplierColor!: string
+  indexColor!: string
+  dateColor!: string
+
   startDate!: any
   endDate!: any
   user!: User
@@ -46,6 +54,61 @@ getUser(){
       this.router.navigateByUrl('/auth')
     }
   })
+}
+
+
+index(){
+  this.nirs.sort((a, b) => a.index - b.index)
+  this.suplierColor = 'none'
+  this.dateColor = 'none'
+  this.indexColor = 'primary'
+}
+
+
+date(){
+  this.nirs.sort((a, b) =>{
+    const dateA = new Date(a.documentDate).getTime()
+    const dateB = new Date(b.documentDate).getTime()
+    if (!isNaN(dateA) && !isNaN(dateB)) {
+      return dateA - dateB;
+    } else {
+      return 0;
+    }
+  })
+  this.suplierColor = 'none'
+  this.dateColor = 'primary'
+  this.indexColor = 'none'
+}
+
+getNirs(){
+  this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
+    if(response){
+      this.dbNirs = response
+      this.nirs = [...this.dbNirs]
+    }
+  })
+}
+
+
+searchNir(ev: any){
+  const input = ev.detail.value
+  let filterData = this.nirs.filter((object) =>
+  object.suplier.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+  this.nirs = filterData
+  if(!input.length){
+    this.nirs = [ ...this.dbNirs]
+  }
+
+}
+
+
+suplier(){
+  console.log(this.nirs)
+  this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
+
+  this.suplierColor = 'primary'
+  this.dateColor = 'none'
+  this.indexColor = 'none'
 }
 
   export(){
@@ -112,14 +175,6 @@ getUser(){
 
   }
 
-  getNirs(){
-    this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
-      if(response){
-        this.nirs = response
-        console.log(this.nirs)
-      }
-    })
-  }
 
   pushNirs(nir: any){
     this.nirs.push(nir)

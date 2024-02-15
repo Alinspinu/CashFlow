@@ -133,20 +133,12 @@
 </ion-content>
 
 <ion-footer>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6">
-        <ion-button size="mediun" (click)="showOrders()" color="tertiary">
-          NOTE DE PLATĂ
-          <ion-badge color="secondary" style="margin-left: 8px;">{{bills.length}}</ion-badge>
+        <ion-button fill="outline" (click)="showOrders()" color="primary">
+          NOTE
+          <ion-badge color="secondary">{{bills.length}}</ion-badge>
         </ion-button>
-      </ion-col>
-      <ion-col size="6" class="ion-text-end">
-        <ion-button size="medium" (click)="showDeletedProducts()" color="tertiary">
+        <ion-button fill="outline" (click)="showDeletedProducts()" color="primary">
           PRODUSE STERSE
-          <ion-badge color="secondary" style="margin-left: 8px;">{{delProducts.length}}</ion-badge>
+          <ion-badge color="secondary">{{delProducts.length}}</ion-badge>
         </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
 </ion-footer>

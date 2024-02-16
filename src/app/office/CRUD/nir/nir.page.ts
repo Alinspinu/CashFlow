@@ -263,7 +263,6 @@ inputType: string = 'number'
           const qty = +qtyControl.value
           const value = +valueControl.value
           const tva = +tvaControl.value
-          console.log(qty, value, tva)
           priceControl.setValue(round(value/qty))
           tvaValueControl?.setValue( tva === 0 ? 0 : round(value * tva / 100))
           console.log(tvaValueControl?.value)
@@ -338,7 +337,6 @@ inputType: string = 'number'
       this.nirIngredients.push(ingredient)
       this.ingredientForm.reset()
       this.searchBar.setFocus()
-      console.log(ingredient)
       this.clacTotals(this.nirIngredients, -1)
     }
   }
@@ -364,7 +362,6 @@ inputType: string = 'number'
           this.val = round(this.val + ing.value)
           this.valTva = round(this.valTva +  ing.tvaValue)
           this.valTotal = round(this.valTotal +  ing.total)
-          console.log('val ', this.val, "ing total", ing.value)
           this.valVanzare = round(this.valVanzare + (ing.sellPrice *  ing.qty))
     }
   }

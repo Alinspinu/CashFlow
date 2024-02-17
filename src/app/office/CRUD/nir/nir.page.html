@@ -7,10 +7,7 @@
     <ion-row>
     <ion-col size="3">
       <ion-title class="ion-text-center">Adaugă Ingredient</ion-title>
-      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută ingredient"  (ionInput)="searchIngredient($event)" (keyup.enter)="setIng()" #searchBar></ion-searchbar>
-      <!-- <ion-item *ngFor="let ing of ingredients; let i = index" class="fur-name" (click)="selectIngredient(ing)">
-        <span>{{ing.name}}</span>
-      </ion-item> -->
+      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  [placeholder]="searcBarPlaceholder"  (ionInput)="searchIngredient($event)" (keyup.enter)="setIng()" #searchBar [disabled]="disableSearcbar"></ion-searchbar>
       <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
         <div>
           <span class="name">{{ing.name}}</span>

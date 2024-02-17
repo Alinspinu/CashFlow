@@ -36,6 +36,8 @@ suplier!: any
 nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], totalDoc: 0, payd: false, type: 'unpayd' }
 
 allIngs!: InvIngredient[]
+disableSearcbar: boolean = true
+searcBarPlaceholder: string = 'Încarcare ingrediente...'
 
 furnizorSearch: string = '';
 ingredientSearch: string = '';
@@ -435,6 +437,8 @@ inputType: string = 'number'
   getIngredients(){
     this.nirSrv.getIngredients(this.user.locatie).subscribe(response => {
       this.allIngs = response
+      this.disableSearcbar = false
+      this.searcBarPlaceholder = 'Caută ingredient'
     })
 
   }
@@ -443,6 +447,9 @@ inputType: string = 'number'
   searchIngredient(ev: any){
     const input = ev.detail.value;
     this.ingredients = this.allIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(input))
+    if(input === ''){
+      this.ingredients = []
+    }
   }
 
   setIng(){

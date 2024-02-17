@@ -13,6 +13,7 @@ import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
+import { InvIngredient } from 'src/app/models/nir.model';
 
 @Component({
   selector: 'app-ingredient',
@@ -30,6 +31,8 @@ export class IngredientPage implements OnInit {
   topToEdit!: any;
   ingsToEdit!: any;
   user!: User
+
+  allIngs!: InvIngredient[]
 
   toppings!: any;
   productIngredients!: any;
@@ -113,9 +116,10 @@ export class IngredientPage implements OnInit {
   }
 
   getIngredients(){
-    this.ingSrv.getIngredients('', this.filter, this.user.locatie).subscribe(response => {
+    this.ingSrv.getIngredients(this.filter, this.user.locatie).subscribe(response => {
       if(response){
-        this.ingredients = response
+        this.allIngs = response
+        this.ingredients = [...this.allIngs]
       }
     })
   }
@@ -161,11 +165,7 @@ updateProductIng(){
   }
 
   searchRecive(searchQuery: string){
-    this.ingSrv.getIngredients(searchQuery, this.filter, this.user.locatie).subscribe(response => {
-      if(response){
-        this.ingredients = response
-      }
-    })
+      this.ingredients = this.allIngs.filter((ing: InvIngredient) => ing.name.toLowerCase().includes(searchQuery))
   }
 
   onIngRecive(ev: any){

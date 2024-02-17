@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {environment} from '../../../../environments/environment'
 import { Suplier } from "../../../models/suplier.model";
-import { Nir } from "../../../models/nir.model";
+import { InvIngredient, Nir } from "../../../models/nir.model";
 
 
 
@@ -27,8 +27,8 @@ export class NirService{
     return this.http.post<{message: string, nir: any}>(`${environment.BASE_URL}nir/save-nir`, {nir: nir, loc: loc})
   }
 
-  getIngredients(input: any, loc: string){
-    return this.http.post(`${environment.BASE_URL}ing/search-ingredients`, {search: input, loc: loc})
+  getIngredients(loc: string){
+    return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
   }
 
   printNir(id: string){

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, IonSearchbar, NavParams, ToastController } from '@ionic/angular';
 import {Preferences} from "@capacitor/preferences"
-import { Nir, NirIngredient } from '../../../models/nir.model';
+import { InvIngredient, Nir, NirIngredient } from '../../../models/nir.model';
 import { NirService } from './nir.service';
 import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
@@ -34,6 +34,8 @@ ingredient!: any;
 supliers: any = [];
 suplier!: any
 nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], totalDoc: 0, payd: false, type: 'unpayd' }
+
+allIngs!: InvIngredient[]
 
 furnizorSearch: string = '';
 ingredientSearch: string = '';
@@ -77,6 +79,7 @@ inputType: string = 'number'
     getUserFromLocalStorage().then(user => {
       if(user){
         this.user = user
+        this.getIngredients()
       } else {
         this.router.navigateByUrl('/auth')
       }
@@ -429,15 +432,17 @@ inputType: string = 'number'
     })
   }
 
+  getIngredients(){
+    this.nirSrv.getIngredients(this.user.locatie).subscribe(response => {
+      this.allIngs = response
+    })
+
+  }
+
 
   searchIngredient(ev: any){
     const input = ev.detail.value;
-    this.nirSrv.getIngredients(input, this.user.locatie).subscribe(response => {
-      this.ingredients = response
-      if(input === ''){
-        this.ingredients = []
-      }
-    })
+    this.ingredients = this.allIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(input))
   }
 
   setIng(){

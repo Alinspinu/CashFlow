@@ -20,15 +20,9 @@ import { Preferences } from "@capacitor/preferences";
 export class NirService{
 
 
-  private ingState!: BehaviorSubject<InvIngredient[]>;
-  public ingSend$!: Observable<InvIngredient[]>;
-  ings: InvIngredient[] = [emptyIng()];
-
   constructor(
     private http: HttpClient
   ){
-    this.ingState = new BehaviorSubject<InvIngredient[]>([emptyIng()]);
-    this.ingSend$ =  this.ingState.asObservable();
   }
 
 
@@ -41,7 +35,6 @@ export class NirService{
   }
 
   getIngredients(loc: string){
-
     return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
   }
 

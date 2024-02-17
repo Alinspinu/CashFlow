@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import User from './auth/user.model';
 import { ContentService } from './content/content.service';
+import { NirService } from './office/CRUD/nir/nir.service';
 import { TablesService } from './tables/tables.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
     private contService: ContentService,
     private tablesService: TablesService,
     private router: Router,
+    private nirService: NirService
     ) {}
 
 
@@ -30,11 +32,13 @@ export class AppComponent implements OnInit {
          this.contService.getData(this.user.locatie).subscribe()
          this.tablesService.getTables(this.user.locatie, this.user._id)
          this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
+         this.nirService.getIngredients(this.user.locatie).subscribe()
         } else{
           this.router.navigateByUrl('/auth')
         }
       })
     }
+
 
   ngOnInit(): void {
    this.getUser()

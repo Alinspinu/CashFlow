@@ -1,6 +1,7 @@
 
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
+import { InvIngredient } from "./nir.model";
 
 export function emptyUser(){
   const user: User = {
@@ -126,4 +127,20 @@ export function emptyBill(){
   }
   return emptyBill
 }
+
+export function emptyIng(){
+  const emptyIng: InvIngredient = {
+    name: '',
+    price: 0,
+    um: '',
+    qty: 0,
+    tvaPrice: 0,
+    tva: 0,
+    dep: '',
+    gestiune: '',
+    locatie: '',
+   }
+   return emptyIng
+}
+
 

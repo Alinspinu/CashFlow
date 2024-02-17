@@ -1,9 +1,9 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, IonSearchbar, NavParams, ToastController } from '@ionic/angular';
 import {Preferences} from "@capacitor/preferences"
-import { Nir, NirIngredient } from '../../../models/nir.model';
+import { InvIngredient, Nir, NirIngredient } from '../../../models/nir.model';
 import { NirService } from './nir.service';
 import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
@@ -14,6 +14,7 @@ import { DiscountPage } from 'src/app/modals/discount/discount.page';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NirsService } from '../../nirs/nirs.service';
 import User from 'src/app/auth/user.model';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -23,7 +24,7 @@ import User from 'src/app/auth/user.model';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
-export class NirPage implements OnInit {
+export class NirPage implements OnInit, OnDestroy {
 
   @ViewChild('qtyInput', { static: false }) qtyInput!: IonInput;
   @ViewChild('searchBar', {static: false}) searchBar!: IonSearchbar
@@ -34,6 +35,9 @@ ingredient!: any;
 supliers: any = [];
 suplier!: any
 nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [] }
+
+allIngs!: InvIngredient[]
+ingSub!: Subscription
 
 furnizorSearch: string = '';
 ingredientSearch: string = '';
@@ -64,6 +68,12 @@ inputType: string = 'number'
     private router: Router,
   ) { }
 
+  ngOnDestroy(): void {
+    if(this.ingSub){
+      this.ingSub.unsubscribe()
+    }
+  }
+
   ngOnInit() {
     this.getUser()
     this.getNirToEdit()
@@ -73,10 +83,17 @@ inputType: string = 'number'
     this.setTvaValidators()
   }
 
+  getIngredients(){
+    this.ingSub = this.nirSrv.getIngredients(this.user.locatie).subscribe(response => {
+      this.allIngs = response
+    })
+  }
+
   getUser(){
     getUserFromLocalStorage().then(user => {
       if(user){
         this.user = user
+        this.getIngredients()
       } else {
         this.router.navigateByUrl('/auth')
       }
@@ -431,29 +448,27 @@ inputType: string = 'number'
 
   searchIngredient(ev: any){
     const input = ev.detail.value;
-    this.nirSrv.getIngredients(input, this.user.locatie).subscribe(response => {
-      this.ingredients = response
-      if(input === ''){
-        this.ingredients = []
-      }
-    })
+    this.ingredients = this.allIngs.filter(obj => obj.name.toLowerCase().includes(input))
   }
 
-  setIng(){
+  setIng(ev: any){
+    this.ingredientSearch = ''
     this.selectIngredient(this.ingredients[0])
   }
 
   selectIngredient(ingredient: any){
     this.ingredient = ingredient;
-    this.ingredientForm.get('name')?.setValue(this.ingredient.name)
-    this.ingredientForm.get('um')?.setValue(this.ingredient.um)
-    this.ingredientForm.get('dep')?.setValue(this.ingredient.dep)
-    this.ingredientForm.get('gestiune')?.setValue(this.ingredient.gestiune)
-    this.ingredientForm.get('price')?.setValue(this.ingredient.price)
-    this.ingredientForm.get('tva')?.setValue(this.ingredient.tva.toString())
-    this.ingredients = []
-    this.qtyInput.setFocus()
-    this.ingredientSearch = ''
+    if(this.ingredient){
+      this.ingredientForm.get('name')?.setValue(this.ingredient.name)
+      this.ingredientForm.get('um')?.setValue(this.ingredient.um)
+      this.ingredientForm.get('dep')?.setValue(this.ingredient.dep)
+      this.ingredientForm.get('gestiune')?.setValue(this.ingredient.gestiune)
+      this.ingredientForm.get('price')?.setValue(this.ingredient.price)
+      this.ingredientForm.get('tva')?.setValue(this.ingredient.tva.toString())
+      this.ingredients = []
+      this.qtyInput.setFocus()
+      this.ingredientSearch = ''
+    }
   }
 
   searchSuplier(ev: any){

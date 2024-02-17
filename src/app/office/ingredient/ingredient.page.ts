@@ -13,6 +13,8 @@ import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
+import { NirService } from '../CRUD/nir/nir.service';
+import { InvIngredient } from 'src/app/models/nir.model';
 
 @Component({
   selector: 'app-ingredient',
@@ -30,7 +32,7 @@ export class IngredientPage implements OnInit {
   topToEdit!: any;
   ingsToEdit!: any;
   user!: User
-
+  dbIngs!: InvIngredient[]
   toppings!: any;
   productIngredients!: any;
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
@@ -42,6 +44,7 @@ export class IngredientPage implements OnInit {
   constructor(
     private toastCtrl: ToastController,
     private ingSrv: IngredientService,
+    private nirSrv: NirService,
     private router: Router,
     @Inject(ActionSheetService) private actionSh: ActionSheetService
   ) { }
@@ -92,6 +95,7 @@ export class IngredientPage implements OnInit {
     }
   }
 
+
   showIngs(index: number){
     const ingredient = this.ingredients[index]
     ingredient.showIngs = !ingredient.showIngs
@@ -113,9 +117,10 @@ export class IngredientPage implements OnInit {
   }
 
   getIngredients(){
-    this.ingSrv.getIngredients('', this.filter, this.user.locatie).subscribe(response => {
+    this.ingSrv.getIngredients(this.filter, this.user.locatie).subscribe(response => {
       if(response){
-        this.ingredients = response
+        this.dbIngs = response
+        this.ingredients = this.dbIngs
       }
     })
   }
@@ -161,11 +166,7 @@ updateProductIng(){
   }
 
   searchRecive(searchQuery: string){
-    this.ingSrv.getIngredients(searchQuery, this.filter, this.user.locatie).subscribe(response => {
-      if(response){
-        this.ingredients = response
-      }
-    })
+    this.ingredients = this.dbIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(searchQuery))
   }
 
   onIngRecive(ev: any){

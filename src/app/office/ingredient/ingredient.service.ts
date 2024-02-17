@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { InvIngredient } from "src/app/models/nir.model";
 import {environment} from '../../../environments/environment'
 
 
@@ -13,8 +14,8 @@ export class IngredientService{
   ){}
 
 
-  getIngredients(searchQuery: string, filter: any, loc: string){
-    return this.http.post(`${environment.BASE_URL}ing/search-ingredients`, {filter: filter, search: searchQuery, loc: loc})
+  getIngredients(filter: any, loc: string){
+    return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {filter: filter, loc: loc})
   }
 
   deleteIngredient(id: string){

@@ -2,7 +2,10 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {environment} from '../../../../environments/environment'
 import { Suplier } from "../../../models/suplier.model";
-import { Nir } from "../../../models/nir.model";
+import { Nir, InvIngredient } from "../../../models/nir.model";
+import { BehaviorSubject, Observable, take, tap } from "rxjs";
+import { emptyIng } from "src/app/models/empty-models";
+import { Preferences } from "@capacitor/preferences";
 
 
 
@@ -12,11 +15,21 @@ import { Nir } from "../../../models/nir.model";
 
 
 
+
+
 export class NirService{
+
+
+  private ingState!: BehaviorSubject<InvIngredient[]>;
+  public ingSend$!: Observable<InvIngredient[]>;
+  ings: InvIngredient[] = [emptyIng()];
 
   constructor(
     private http: HttpClient
-  ){}
+  ){
+    this.ingState = new BehaviorSubject<InvIngredient[]>([emptyIng()]);
+    this.ingSend$ =  this.ingState.asObservable();
+  }
 
 
   getSuplier(input: any, loc: string){
@@ -27,8 +40,9 @@ export class NirService{
     return this.http.post<{message: string, nir: any}>(`${environment.BASE_URL}nir/save-nir`, {nir: nir, loc: loc})
   }
 
-  getIngredients(input: any, loc: string){
-    return this.http.post(`${environment.BASE_URL}ing/search-ingredients`, {search: input, loc: loc})
+  getIngredients(loc: string){
+
+    return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
   }
 
   printNir(id: string){

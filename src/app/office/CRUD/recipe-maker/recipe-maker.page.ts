@@ -11,6 +11,7 @@ import { RecipeMakerService } from './recipe-maker.service';
 import { IonSearchbar } from '@ionic/angular/standalone';
 import User from 'src/app/auth/user.model';
 import { Preferences } from '@capacitor/preferences';
+import { InvIngredient } from 'src/app/models/nir.model';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   recipeTotal: number = 0;
 
   user!: User
+  dbIngs!: any
 
 
   constructor(
@@ -80,6 +82,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     this.getUser()
     setTimeout(()=>{
       this.setDataToEdit()
+      this.getIngredients()
     }, 1100)
   }
 
@@ -169,17 +172,24 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     this.selectIngredient(this.ingredients[0])
   }
 
+
+  getIngredients(){
+    this.recipeService.getIngredients(this.user.locatie).subscribe(response => {
+      if(response){
+        this.dbIngs = response
+      }
+    })
+  }
+
   searchIngredient(ev: any){
-    const input = ev.detail.value;
+    const searchQuery = ev.detail.value
     if(!this.ingPage){
-      this.recipeService.getIngredients(input, this.user.locatie).subscribe(response => {
-        this.ingredients = response
-        if(input === ''){
-          this.ingredients = []
-        }
-      })
+    this.ingredients = this.dbIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(searchQuery))
+    if(searchQuery === ''){
+      this.ingredients = []
+    }
     } else {
-      this.search.emit(input)
+      this.search.emit(searchQuery)
     }
   }
 

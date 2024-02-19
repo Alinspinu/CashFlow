@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { RecipeMakerService } from '../recipe-maker/recipe-maker.service';
 import { Preferences } from '@capacitor/preferences';
 import User from 'src/app/auth/user.model';
+import { InvIngredient } from 'src/app/models/nir.model';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class ProductIngredientPage implements OnInit {
   form!: FormGroup
   ingredients: any[]  = [];
   ingredientSearch!:any ;
+
+  dbIngs!: any
 
   productIngredientMode: boolean = false;
   toppings: any = [];
@@ -57,6 +60,7 @@ export class ProductIngredientPage implements OnInit {
     this.getUser()
     setTimeout(()=>{
       this.getProdIng()
+      this.getIngredients()
     }, 100)
   }
 
@@ -139,16 +143,23 @@ export class ProductIngredientPage implements OnInit {
     this.ingredientsToSend.splice(index, 1)
   }
 
-  searchIngredient(ev: any){
-    const input = ev.detail.value;
-      this.recipeService.getIngredients(input, this.user.locatie).subscribe(response => {
-        this.ingredients = response
-        if(input === ''){
-          this.ingredients = []
-        }
-      })
+
+  getIngredients(){
+    this.recipeService.getIngredients(this.user.locatie).subscribe(response => {
+      if(response){
+        this.dbIngs = response
+      }
+    })
   }
 
+  searchIngredient(ev: any){
+    const searchQuery = ev.detail.value
+    this.ingredients = this.dbIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(searchQuery))
+    if(searchQuery === ''){
+      this.ingredients = []
+    }
+
+  }
 
 
   async selectIngredient(ing: any){

@@ -449,6 +449,9 @@ inputType: string = 'number'
   searchIngredient(ev: any){
     const input = ev.detail.value;
     this.ingredients = this.allIngs.filter(obj => obj.name.toLowerCase().includes(input))
+    if(input === '') {
+      this.ingredients = []
+    }
   }
 
   setIng(ev: any){

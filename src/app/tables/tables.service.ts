@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, NgZone } from "@angular/core";
-import { BehaviorSubject, Observable, take, tap } from "rxjs";
+import { BehaviorSubject, Observable, of, switchMap, take, tap, firstValueFrom } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../models/empty-models";
 import {AuthService} from "../auth/auth.service"
+
 
 
 
@@ -50,7 +51,7 @@ addNewBill(masa: number, name: string, newOrder: boolean){
   }
 }
 
-mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any, locatie: string){
+async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any, locatie: string){
   let mergedBills: Bill = emptyBill()
   let productsToMerge: any = []
   let total = 0
@@ -72,14 +73,25 @@ mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any,
     mergedBills.total = total;
     table.bills.push(mergedBills);
     let newIndex = bills.findIndex(obj => obj.name === 'UNITE')
-    this.saveOrder(masa, 'new', newIndex, employee, locatie).subscribe()
+    const response = await firstValueFrom(this.saveOrder(masa, 'new', newIndex, employee, locatie))
+    if(response) {
+      return true
+    } else {
+      return null
+    }
   }
+  return null
 }
 
-manageSplitBills(tableIndex: number, billIndex: number, employee: any, locatie: string){
+async manageSplitBills(tableIndex: number, billIndex: number, employee: any, locatie: string){
   let bill = this.tables[tableIndex-1].bills[billIndex]
   bill._id.length ? bill._id = bill._id : bill._id = 'new'
-  this.saveOrder(tableIndex, bill._id, billIndex, employee, locatie).subscribe()
+  const response = await firstValueFrom(this.saveOrder(tableIndex, bill._id, billIndex, employee, locatie))
+  if(response) {
+    return true
+  } else {
+    return null
+  }
 }
 
 removeBill(masa: number, billIndex: number){
@@ -105,7 +117,7 @@ if(table){
     bill.productCount++
     product.quantity = 1
     bill.products.push(product)
-      bill.total = bill.total + product.price
+    bill.total = bill.total + product.price
     this.tableState.next([...this.tables])
   } else {
     bill.masaRest.index = masa;
@@ -171,16 +183,22 @@ addCustomer(customer: any, masa: number, billIndex: number){
 }
 }
 
-redCustomer(masa: number, billIndex: number, billId: string, employee: any, locatie: string){
+ async redCustomer(masa: number, billIndex: number, billId: string, employee: any, locatie: string){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     let bill: Bill = emptyBill()
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = emptyBill().clientInfo
-      this.saveOrder(masa, billId, billIndex, employee, locatie).subscribe()
+      const response = await firstValueFrom(this.saveOrder(masa, billId, billIndex, employee, locatie))
+      if(response) {
+        return true
+      } else {
+        return null
+      }
+    }
   }
-}
+  return null
 }
 
 
@@ -262,7 +280,7 @@ deleteTable(tableId: string, index: number){
   }))
 }
 
-saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
+ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
@@ -276,17 +294,22 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
-  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} ).pipe(take(1), tap(res => {
-    bill._id = res.billId;
-    bill.index = res.index;
-    bill.products = res.products
-    bill.products.forEach(product => {
-      product.sentToPrint = false
-      product.sentToPrintOnline = false
-    })
-    bill.masaRest = res.masa
-    this.tableState.next([...this.tables])
- }));
+  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} )
+      .pipe(take(1),
+        switchMap(res => {
+        bill._id = res.billId;
+        bill.index = res.index;
+        bill.products = res.products;
+        bill.products.forEach(product => {
+          product.sentToPrint = false;
+          product.sentToPrintOnline = false;
+        });
+        bill.masaRest = res.masa;
+        this.tableState.next([...this.tables]);
+        // Return the original observable
+        return of(res);
+      })
+);
 };
 
 uploadIngs(ings: any, quantity: number, locatie: string){

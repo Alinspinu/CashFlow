@@ -40,7 +40,6 @@ export class PaymentPage implements OnInit {
   ngOnInit() {
     this.order = this.navPar.get('options');
     this.total = this.order.total
-    console.log(this.order)
     if(this.order.payment.online > 0 && this.order.total === 0){
       this.total = this.order.payment.online
     }
@@ -64,9 +63,6 @@ export class PaymentPage implements OnInit {
         updateOn: 'change',
       }),
       viva: new FormControl(null, {
-        updateOn: 'change',
-      }),
-      voucher: new FormControl(null, {
         updateOn: 'change',
       }),
       cif: new FormControl(null, {
@@ -108,7 +104,6 @@ export class PaymentPage implements OnInit {
       cash: this.paymentForm.value.cash,
       card: this.paymentForm.value.card,
       viva: posSum,
-      voucher: this.paymentForm.value.voucher,
       cif: this.paymentForm.value.cif,
       online: this.paymentForm.value.online
     }
@@ -162,13 +157,13 @@ export class PaymentPage implements OnInit {
   }
 
 
-  voucher(){
-    const input  = this.paymentForm.get('voucher')
-    if(input){
-      const value = this.total - this.checkInputs('voucher')
-      input.setValue(value)
-    }
-  }
+  // voucher(){
+  //   const input  = this.paymentForm.get('voucher')
+  //   if(input){
+  //     const value = this.total - this.checkInputs('voucher')
+  //     input.setValue(value)
+  //   }
+  // }
 
   online(){
     const input = this.paymentForm.get('online')

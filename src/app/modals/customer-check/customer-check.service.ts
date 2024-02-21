@@ -21,4 +21,16 @@ export class CustomerCheckService{
   createCustomer(name: string, email: string, cardIndex: number, locatie: string){
     return this.http.post<{message: string, customer: any}>(`${environment.BASE_URL}users/customer`, {name: name, email: email, cardIndex: cardIndex, loc: locatie})
   }
+
+  saveVoucher(code: string, value: number){
+    return this.http.post<{message: string}>(`${environment.BASE_URL}pay/add-voucher`, {code: code, value: value})
+  }
+
+  verfyVoucher(code: string){
+    return this.http.post<{message: string, voucher: any}>(`${environment.BASE_URL}pay/verify-voucher`, {code: code})
+  }
+
+  useVoucher(id: string){
+    return this.http.post<{message: string}>(`${environment.BASE_URL}pay/use-voucher`, {id: id})
+  }
 }

@@ -515,8 +515,8 @@ sendOrder(out: boolean){
     this.home()
     this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
       if(res){
+        this.disableOrderButton = false
         if(out){
-          this.disableOrderButton = false
           this.router.navigateByUrl('/tabs/tables')
         }
       }
@@ -528,38 +528,47 @@ sendOrder(out: boolean){
 
 async payment(){
   this.sendOrder(false)
-  const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
-    if(paymentInfo){
-      this.billToshow.payment.card = paymentInfo.card;
-      this.billToshow.payment.cash = paymentInfo.cash;
-      this.billToshow.payment.voucher = paymentInfo.voucher;
-      this.billToshow.payment.viva = paymentInfo.viva;
-      this.billToshow.cif = paymentInfo.cif;
-      this.billToshow.payment.online  = paymentInfo.online
-      this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
-        if(response){
-          this.billToshow.discount = 0
-          this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-          this.billProducts = []
-          this.billToshow = emptyBill()
-          this.billToshow.cashBack = 0
-          this.client = null
-          this.router.navigateByUrl("/tabs/tables")
-        }
-      })
-    }
+    const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
+      if(paymentInfo){
+        this.billToshow.payment.card = paymentInfo.card;
+        this.billToshow.payment.cash = paymentInfo.cash;
+        this.billToshow.payment.voucher = paymentInfo.voucher;
+        this.billToshow.payment.viva = paymentInfo.viva;
+        this.billToshow.cif = paymentInfo.cif;
+        this.billToshow.payment.online  = paymentInfo.online
+        this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
+          if(response){
+            this.billToshow.discount = 0
+            this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+            this.billProducts = []
+            this.billToshow = emptyBill()
+            this.billToshow.cashBack = 0
+            this.client = null
+            this.router.navigateByUrl("/tabs/tables")
+          }
+        })
+  }
 }
 
 async addCustomer(clientMode: boolean){
 if(clientMode){
   const clientInfo = await this.actionSheet.openPayment(CustomerCheckPage, '')
-  if(clientInfo){
-    this.client = clientInfo
+  console.log(clientInfo.message)
+  if(clientInfo.message === "client"){
+    this.client = clientInfo.data
     this.clientMode = false
     this.billToshow.clientInfo = this.client
     this.billToshow.name = this.client.name
     this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
     this.sendOrder(false)
+  }
+  if(clientInfo.message === "voucher"){
+    this.billToshow.voucher = clientInfo.data
+    if(this.billToshow.total < this.billToshow.voucher){
+      this.billToshow.voucher = this.billToshow.total
+    }
+    this.billToshow.total = this.billToshow.total - this.billToshow.voucher
+    this.clientMode = false
   }
 } else {
   if(this.billToshow.cashBack > 0){
@@ -577,8 +586,12 @@ if(clientMode){
   }
   // this.discountValue = 0
   this.client = null
-  this.tableSrv.redCustomer(this.tableNumber, this.billIndex, this.billId, this.user.employee, this.user.locatie)
-  this.clientMode = true;
+  this.disableOrderButton = true
+  const response = await this.tableSrv.redCustomer(this.tableNumber, this.billIndex, this.billId, this.user.employee, this.user.locatie)
+  if(response) {
+    this.disableOrderButton = false
+    this.clientMode = true;
+  }
 }
 
 }
@@ -754,10 +767,14 @@ async useCashBack(mode: boolean){
       let options = name.map((val, index) =>({name: val, data: {id: id[index], billIndex: billIndex[index]}}))
       const orders = await this.actionSheet.mergeOreders(options)
       if(orders){
-        this.tableSrv.mergeBills(this.tableNumber, orders, this.user.employee, this.user.locatie)
-        this.tableSrv.deleteOrders(orders).subscribe()
-        let index = bills.findIndex(obj => obj.name === 'UNITE')
-        this.showOrder(index)
+        this.disableOrderButton = true
+        const response = await this.tableSrv.mergeBills(this.tableNumber, orders, this.user.employee, this.user.locatie)
+        if(response) {
+          this.tableSrv.deleteOrders(orders).subscribe()
+          let index = bills.findIndex(obj => obj.name === 'UNITE')
+          this.showOrder(index)
+          this.disableOrderButton = false
+        }
       }
     }
   }
@@ -820,8 +837,16 @@ async useCashBack(mode: boolean){
             this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
           }
           this.showOrder(newBillIndex);
-          this.tableSrv.manageSplitBills(this.tableNumber, oldBillIndex, this.user.employee, this.user.locatie)
-          this.tableSrv.manageSplitBills(this.tableNumber, newBillIndex, this.user.employee, this.user.locatie)
+          this.disableOrderButton = true
+          const response = await this.tableSrv.manageSplitBills(this.tableNumber, oldBillIndex, this.user.employee, this.user.locatie)
+          if(response){
+            this.disableOrderButton = false
+          }
+          this.disableOrderButton = true
+         const resp = await this.tableSrv.manageSplitBills(this.tableNumber, newBillIndex, this.user.employee, this.user.locatie)
+         if(response){
+          this.disableOrderButton = false
+         }
         } else {
           this.tableSrv.removeBill(this.tableNumber, -1)
         }

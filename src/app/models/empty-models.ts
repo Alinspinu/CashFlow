@@ -83,6 +83,7 @@ export function emptyBill(){
     totalProducts: 0,
     total: 0,
     discount: 0,
+    voucher: 0,
     status: 'open',
     toGo: false,
     pickUp: false,

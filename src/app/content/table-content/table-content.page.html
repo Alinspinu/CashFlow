@@ -147,6 +147,14 @@
                 <span class="red-lei">- {{billToshow.cashBack}} Lei</span>
               </ion-col>
             </ion-row>
+            <ion-row class="bill-discount-row" *ngIf="billToshow.voucher !== 0">
+              <ion-col size="10">
+                <span class="red-text">VOUCHER</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-center">
+                <span class="red-lei">- {{billToshow.voucher}} Lei</span>
+              </ion-col>
+            </ion-row>
             <ion-row class="bill-tips-row" *ngIf="billToshow.tips > 0">
               <ion-col size="10">
                 <span class="tips-text">BACSIS</span>
@@ -218,7 +226,7 @@
             <ion-button size="large" expand="block" color="secondary" (click)="sendOrder(true)" [disabled]="disableOrderButton">
               Trimite Comanda
             </ion-button>
-            <ion-button size="large" expand="block" color="primary" (click)="payment()">
+            <ion-button size="large" expand="block" color="primary" (click)="payment()" [disabled]="disableOrderButton">
               Nota de plată
             </ion-button>
           </ion-col>

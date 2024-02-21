@@ -21,6 +21,7 @@ export class Bill{
     public totalProducts: number,
     public total: number,
     public discount: number,
+    public voucher: number,
     public status: string,
     public toGo: boolean,
     public pickUp: boolean,

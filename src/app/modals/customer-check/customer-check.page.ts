@@ -7,6 +7,7 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
+import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 
  export interface Customer{
   userId: string
@@ -21,7 +22,7 @@ import { Router } from '@angular/router';
   templateUrl: './customer-check.page.html',
   styleUrls: ['./customer-check.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, CapitalizePipe]
 })
 export class CustomerCheckPage implements OnInit {
 
@@ -29,6 +30,16 @@ export class CustomerCheckPage implements OnInit {
   addCustomerForm!: FormGroup;
 
   addClientMode: boolean = false
+  addVoucherMode: boolean = false
+
+
+  voucherForm!: FormGroup
+  checkForm!: FormGroup
+
+  voucher!: any
+  checkMode: boolean = true
+
+
   foundClient: boolean = false
   search: boolean = true
   customer!: Customer
@@ -45,6 +56,8 @@ export class CustomerCheckPage implements OnInit {
     this.getUser()
     this.setUpSearchForm()
     this.setUpAddForm()
+    this.setUpCheckForm()
+    this.setUpVoucherForm()
   }
 
   dismissModal(){
@@ -105,12 +118,16 @@ searchCustomer(){
 
 addCustomerToBill(){
   if(this.customer){
-    this.modalCtrl.dismiss(this.customer)
+    this.modalCtrl.dismiss({data: this.customer, message:'client'})
   }
 }
 
-setMode(){
+setClientMode(){
   this.addClientMode = !this.addClientMode
+}
+
+setVoucherMode(){
+  this.addVoucherMode = !this.addVoucherMode
 }
 
 addClient(){
@@ -123,12 +140,10 @@ addClient(){
             showToast(this.toastCtrl, `Un email a fost trimis la ${email} pentru a completa înregistrarea!`, 5000)
             this.customer = res.customer
             this.customer.userId = res.customer._id
-            this.modalCtrl.dismiss(this.customer)
-            console.log(this.customer)
+            this.modalCtrl.dismiss({data: this.customer, message:'client'})
           } else if(res.message === 'Acest email există deja în baza de date!' || res.message === "Utilizatorului i s-a adaugat cadrul la cont"){
             showToast(this.toastCtrl, res.message , 3000)
             this.customer = res.customer
-            console.log(this.customer)
           this.customer.userId = res.customer._id
           this.addClientMode = false
         }
@@ -136,5 +151,73 @@ addClient(){
   }
 
 }
+
+
+
+addVoucher(){
+  if(this.voucherForm.valid){
+    const code = this.voucherForm.value.code
+    const value = this.voucherForm.value.value
+    this.customerSrv.saveVoucher(code, +value).subscribe(response => {
+      if(response){
+        showToast(this.toastCtrl, response.message, 5000)
+        this.voucherForm.reset()
+      }
+    })
+  }
+}
+
+tryAgain(){
+ this.voucher = null
+}
+
+
+checkVoucher(){
+  if(this.checkForm.valid){
+    const code = this.checkForm.value.code
+    this.customerSrv.verfyVoucher(code).subscribe(response => {
+      if(response){
+        this.voucher = response.voucher
+        showToast(this.toastCtrl, response.message, 5000)
+        this.checkForm.reset()
+      }
+    })
+  }
+}
+
+
+setUpVoucherForm(){
+  this.voucherForm = new FormGroup({
+    code: new FormControl(null, {
+      updateOn: 'change',
+      validators: [Validators.required]
+    }),
+    value: new FormControl(null, {
+      updateOn: 'change',
+      validators: [Validators.required]
+    }),
+  });
+}
+
+setUpCheckForm(){
+  this.checkForm = new FormGroup({
+    code: new FormControl(null, {
+      updateOn: 'change',
+      validators: [Validators.required]
+    }),
+  });
+}
+
+useVoucher(id: string, value: number){
+  console.log(value)
+  this.customerSrv.useVoucher(id).subscribe(response => {
+    if(response){
+      this.modalCtrl.dismiss({message:'voucher', data: value})
+    }
+  })
+}
+
+
+
 
 }

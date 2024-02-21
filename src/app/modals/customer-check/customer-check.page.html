@@ -1,23 +1,22 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-     <ion-button (click)="dismissModal()">
-      <ion-icon src="../../../assets/icon/close-outline.svg"></ion-icon>
-      ÎNCHIDE
-     </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="setMode()">
-        <ion-icon [src]="addClientMode ? '../../../assets/icon/checkmark-outline.svg' : '../../../assets/icon/add-outline.svg'"></ion-icon>
-        {{addClientMode ? "Terminat" : "CREAZĂ CLIENT NOU"}}
-      </ion-button>
-    </ion-buttons>
-    <ion-title class="ion-text-center" *ngIf="customer">{{customer.name}}</ion-title>
-  </ion-toolbar>
-</ion-header>
+
 
 <ion-content [fullscreen]="true">
 <ion-grid>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+       <ion-button (click)="dismissModal()">
+        <ion-icon src="../../../assets/icon/close-outline.svg"></ion-icon>
+        ÎNCHIDE
+       </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="setClientMode()">
+          <ion-icon [src]="addClientMode ? '../../../assets/icon/checkmark-outline.svg' : '../../../assets/icon/add-outline.svg'"></ion-icon>
+          {{addClientMode ? "Terminat" : "CREAZĂ CLIENT NOU"}}
+        </ion-button>
+      </ion-buttons>
+      <ion-title class="ion-text-center" *ngIf="customer">{{customer.name}}</ion-title>
+    </ion-toolbar>
   <form [formGroup]="addCustomerForm">
   <ion-row>
     <ion-col>
@@ -74,5 +73,53 @@
       </ion-col>
   </ion-row>
 </ion-grid>
+<ion-grid>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="setVoucherMode()">
+        <ion-icon [src]="addVoucherMode ? '../../../assets/icon/checkmark-outline.svg' : '../../../assets/icon/add-outline.svg'"></ion-icon>
+        {{addVoucherMode ? "Terminat" : "CREAZA VOUCHER"}}
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center" slot="start">{{addVoucherMode ? 'Adaugă Voucher' : 'Verifică Voucher'}}</ion-title>
+  </ion-toolbar>
+  <ion-row *ngIf="!addVoucherMode">
+    <ion-col>
+      <div class="content">
+        <form [formGroup]="checkForm">
+          <ion-item lines="none" class="input" *ngIf="!voucher">
+            <ion-input type="text" label="Cod Voucher" labelPlacement="floating" placeholder="Scanează Voucherul" formControlName="code"></ion-input>
+          </ion-item>
+          <ion-item lines="none" class="input" *ngIf="voucher">
+            <ion-label>Status: <span class="data">{{voucher.status | capitalize}}</span></ion-label>
+          </ion-item>
+          <ion-item lines="none" class="input" *ngIf="voucher">
+            <ion-label>Valoare: <span class="data">{{voucher.value}}</span></ion-label>
+          </ion-item>
+          <ion-button expand="block" size="large" color="secondary" (click)="checkVoucher()" *ngIf="!voucher" [disabled]="!checkForm.valid">Verifică Voucher</ion-button>
+          <ion-button  expand="block" size="large" color="danger"(click)="useVoucher(voucher._id, voucher.value)" *ngIf="voucher && voucher.status === 'valid' ">Folosește Voucherul</ion-button>
+          <ion-button  expand="block" size="large" color="secondary"(click)="tryAgain()" *ngIf="voucher">Incearcă din nou</ion-button>
+        </form>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="addVoucherMode">
+    <ion-col>
+      <div class="content">
+        <form [formGroup]="voucherForm">
+          <ion-item lines="none" class="input">
+            <ion-input type="text" label="Cod Voucher" labelPlacement="floating" placeholder="Scanează Voucherul" formControlName="code"></ion-input>
+          </ion-item>
+          <ion-item lines="none" class="input">
+            <ion-input type="number" label="Valoare" labelPlacement="floating" placeholder="Introdu Valoarea Voucherului" formControlName="value"></ion-input>
+          </ion-item>
+          <ion-button expand="block" size="large" color="primary"(click)="addVoucher()" [disabled]="!voucherForm.valid">Adaugă Voucher</ion-button>
+        </form>
+      </div>
+    </ion-col>
+  </ion-row>
+
+</ion-grid>
+
 </ion-content>
 

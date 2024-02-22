@@ -14,7 +14,7 @@ export const environment = {
   },
   SUPLIER_APY_KEY: "77f20eb3e0afe9d39f3788783c39a4f4f7591009",
   SUPLIER_APY_URL: "https://infocui.ro/system/api/data",
-  LOC: '655e2e7c5a3d53943c6b7c53',
+  LOC: '65ba7dcf1694ff43f52d44ed',
   ADMIN_EMAIL: 'alinz.spinu@gmail.com',
 
   BASE_URL: 'http://localhost:8080/',

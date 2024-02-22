@@ -19,7 +19,7 @@ export const environment = {
   // BASE_URL_CAFETISH: 'https://www.cafetish.ro/'
   BASE_URL_CAFETISH: 'http://localhost:8090/',
   // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/'
-  LOC: '655e2e7c5a3d53943c6b7c53',
+  LOC: '65ba7dcf1694ff43f52d44ed',
   ADMIN_EMAIL: 'alinz.spinu@gmail.com',
 
   // BASE_URL: 'http://172.20.110.20:8080/',

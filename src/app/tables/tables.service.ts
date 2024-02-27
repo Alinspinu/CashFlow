@@ -108,7 +108,7 @@ removeBill(masa: number, billIndex: number){
 //***************************ORDER-PRODUCTS******************************* */
 
 
-addToBill(product: BillProduct, masa: number, billIndex: number){
+addToBill(product: BillProduct, masa: number, billIndex: number, userName: string){
 const table = this.tables.find((doc) => doc.index === masa)
 if(table){
   let bill: Bill = emptyBill()
@@ -121,12 +121,14 @@ if(table){
     this.tableState.next([...this.tables])
   } else {
     bill.masaRest.index = masa;
+    bill.name = userName
     bill.productCount++
     bill.total= bill.total + product.price
     product.quantity = 1
     bill.products.push(product)
     table.bills.push(bill)
     this.tableState.next([...this.tables])
+    console.log(this.tables)
   }
 }
 }
@@ -207,7 +209,8 @@ addCustomer(customer: any, masa: number, billIndex: number){
 
 
 getTables(locatie: string, id: string){
-  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`, { headers }).subscribe(response => {
     if(response){
       this.tables = response
       this.tableState.next([...this.tables])
@@ -281,12 +284,13 @@ deleteTable(tableId: string, index: number){
 }
 
  saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
-  bill.employee = employee
+  bill.employee.user.length ? bill.employee = bill.employee : bill.employee = employee
   bill.locatie = locatie
   bill.onlineOrder = false
   bill.pending = true
@@ -294,7 +298,7 @@ deleteTable(tableId: string, index: number){
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
-  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} )
+  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
       .pipe(take(1),
         switchMap(res => {
         bill._id = res.billId;
@@ -313,23 +317,28 @@ deleteTable(tableId: string, index: number){
 };
 
 uploadIngs(ings: any, quantity: number, locatie: string){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity})
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity}, {headers})
 }
 
 deleteOrders(data: any[]){
-  return this.http.put<{message: string}>(`${environment.BASE_URL}orders/bill`, {data: data})
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.put<{message: string}>(`${environment.BASE_URL}orders/bill`, {data: data}, {headers})
 }
 
 registerDeletetProduct(product: any){
-  return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product})
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product}, {headers})
 }
 
 sendBillToPrint(bill: Bill){
-  return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill}, {headers})
 }
 
 setOrderTime(orderId: string, time: number){
-  return this.http.get(`${environment.BASE_URL}orders/set-order-time?orderId=${orderId}&time=${time}`)
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.get(`${environment.BASE_URL}orders/set-order-time?orderId=${orderId}&time=${time}`, {headers})
 }
 
 //********************EMPTY MODELS**************************** */

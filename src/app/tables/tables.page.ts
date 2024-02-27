@@ -35,20 +35,28 @@ export class TablesPage implements OnInit, OnDestroy {
   user!: User
   tableSubs!: Subscription
 
+  accesLevel: number = 1
+
+  screenWidth!: number
+
   constructor(
     private router: Router,
     private tableServ: TablesService,
     private toastCtrl: ToastController,
     private actionSheet: ActionSheetService,
     private authSrv: AuthService,
-    ) {}
+    ) {
+      this.screenWidth = window.innerWidth
+    }
 
 ngOnInit(): void {
   this.getUser()
   this.audio = new Audio();
   this.audio.src = 'assets/audio/ding.mp3';
-
 }
+
+
+
 
 ngOnDestroy(): void {
   if(this.tableSubs){
@@ -58,12 +66,29 @@ ngOnDestroy(): void {
 }
 
 
+userBills(tableBills: Bill[]){
+  let userBill: number = 0
+  tableBills.forEach(bill => {
+    if(bill.employee.user === this.user._id)
+      userBill += 1
+  })
+  return userBill
+}
 
+waiterBills(tableBills: Bill[]){
+  let waiterBill: number = 0
+  tableBills.forEach(bill => {
+    if(bill.employee.user !== this.user._id)
+    waiterBill += 1
+  })
+  return waiterBill
+}
 
 
 getTables(){
  this.tableSubs = this.tableServ.tableSend$.subscribe(response => {
     this.tables = response
+    // this.separateBills()
   })
 }
 
@@ -71,6 +96,7 @@ getUser(){
   Preferences.get({key: 'authData'}).then(data  => {
     if(data.value) {
      this.user = JSON.parse(data.value)
+      this.accesLevel = this.user.employee.access
     //  this.incommingOrders()
      this.getTables()
     } else{
@@ -81,7 +107,16 @@ getUser(){
 
 
   openTable(num: number){
-    this.router.navigateByUrl(`table-content/${num}`)
+    if (this.screenWidth < 500) {
+      const table = this.tables.find((doc) => doc.index === num)
+      if(table && table.bills.length){
+        this.router.navigateByUrl(`table-content-mobile/${num}/tabs/bill`)
+      }else {
+        this.router.navigateByUrl(`table-content-mobile/${num}`)
+      }
+    } else {
+      this.router.navigateByUrl(`table-content/${num}`)
+    }
   }
 
 
@@ -140,8 +175,6 @@ getUser(){
       })
     }
   }
-
-
 
 
   activateEditMode(){

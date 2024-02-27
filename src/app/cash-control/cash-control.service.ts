@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { Bill } from "../models/table.model";
@@ -14,31 +14,43 @@ export class CashControlService{
   ){}
 
 raport(value: string){
-  return this.http.get<{message: string}>(`${environment.BASE_URL}pay/reports?value=${value}`)
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.get<{message: string}>(`${environment.BASE_URL}pay/reports?value=${value}`, {headers})
 }
 
 cashInAndOut(data: any){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/in-and-out`, {data: data})
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/in-and-out`, {data: data}, {headers})
 }
 
 getUserOrders(userId: string) {
-  return this.http.get<Bill[]>(`${environment.BASE_URL}orders/get-user-orders?userId=${userId}`)
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.get<Bill[]>(`${environment.BASE_URL}orders/get-user-orders?userId=${userId}`, {headers})
+}
+
+getAllorders(){
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.get<Bill[]>(`${environment.BASE_URL}orders/all-orders?loc=${environment.LOC}`, {headers})
 }
 
 changePaymnetMethod(bill: Bill){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/change-payment-method`, {bill: bill})
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/change-payment-method`, {bill: bill}, {headers})
 }
 
 reprintBill(bill: Bill){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill}, {headers})
 }
 
 removeProductDiscount(data: any){
-  return this.http.post(`${environment.BASE_URL}product/disc-prod`, {data: data})
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post(`${environment.BASE_URL}product/disc-prod`, {data: data}, {headers})
 }
 
 createInvoice(orderId: string, userId: string, clientId: string, locId: string){
-  return this.http.post(`${environment.BASE_URL}orders/invoice`, {orderId, userId, clientId, locId}, { responseType: 'arraybuffer' })
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post(`${environment.BASE_URL}orders/invoice`, {orderId, userId, clientId, locId}, { responseType: 'arraybuffer', headers })
 }
 
 }

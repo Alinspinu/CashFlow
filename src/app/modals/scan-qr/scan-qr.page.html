@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Scanează Codul</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon src="assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding video-wrapper">
+    <video id="video-preview" muted playsinline></video>
+  </div>
+  <ion-item *ngIf="this.text">
+    <ion-label>{{text}}</ion-label>
+    <ion-buttons slot="end">
+      <ion-button (click)="useCode()">Adaugă</ion-button>
+    </ion-buttons>
+  </ion-item>
+</ion-content>

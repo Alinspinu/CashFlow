@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- <ion-title *ngIf="user">{{user.employee.fullName}}</ion-title> -->
+    <ion-title>{{today()}}</ion-title>
+  </ion-toolbar>
+  <ion-item lines="none" class="input" *ngIf="userCash > 0">
+    Cash: {{userCash}} Lei
+  </ion-item>
+  <ion-item lines="none" class="input" *ngIf="userCard > 0">
+    Card: {{userCard}} Lei
+  </ion-item>
+  <ion-item lines="none" class="input" *ngIf="userViva > 0">
+    Viva Wallet: {{userViva}} Lei
+  </ion-item>
+  <ion-item lines="none" class="input" *ngIf="userVoucher > 0">
+    Voucher: {{userVoucher}} Lei
+  </ion-item>
+  <ion-item lines="none" class="input" *ngIf="userOnline > 0">
+    Plata Online: {{userOnline}} Lei
+  </ion-item>
+  <ion-item lines="none" class="input bold" *ngIf="userTotal > 0">
+    Total: {{userTotal}} Lei
+  </ion-item>
+</ion-header>
+  <ion-content [fullscreen]="true" class="cash-info">
+    <ion-toolbar>
+      <ion-title class="title">Note încasate</ion-title>
+    </ion-toolbar>
+    <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută notă după produs"  (ionInput)="searchProduct($event)" #searchbar>
+    </ion-searchbar>
+        <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="openBill(order)">
+          <span>Nr.{{order.index}} </span>
+          <span>{{orderTime(order.updatedAt)}}</span>
+          <span>{{showPaymentMethod(order.payment)}}</span>
+          <span>Masa: {{order.masa}}</span>
+        </ion-item>
+  </ion-content>
+

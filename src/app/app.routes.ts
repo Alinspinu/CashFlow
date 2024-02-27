@@ -20,6 +20,18 @@ const routes: Routes = [
     path: 'register-locatie/:value',
     loadComponent: () => import('./office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
   },
+  {
+    path: 'table-content-mobile/:id',
+    loadChildren: () => import('./content/table-content-mobile/table-content-mobile.routes').then( m => m.routes)
+  },
+  {
+    path: 'scan-qr',
+    loadComponent: () => import('./modals/scan-qr/scan-qr.page').then( m => m.ScanQrPage)
+  },
+  {
+    path: 'mobile',
+    loadComponent: () => import('./cash-control/mobile/mobile.page').then( m => m.MobilePage)
+  },
 
 ];
 

@@ -8,6 +8,8 @@ import User from 'src/app/auth/user.model';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
+import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { ScanQrPage } from '../scan-qr/scan-qr.page';
 
  export interface Customer{
   userId: string
@@ -47,6 +49,7 @@ export class CustomerCheckPage implements OnInit {
 
   constructor(
    @Inject(CustomerCheckService) private customerSrv: CustomerCheckService,
+   @Inject(ActionSheetService) private actSrv: ActionSheetService,
    private toastCtrl: ToastController,
    private modalCtrl: ModalController,
    private router: Router
@@ -152,6 +155,21 @@ addClient(){
 
 }
 
+async scanQr(mode: string){
+  if(mode === "client"){
+    const code = await this.actSrv.openAuth(ScanQrPage)
+    if(code){
+      this.searchCustomerForm.get('customerId')?.setValue(code)
+    }
+  }
+  if(mode === 'voucher'){
+    const code = await this.actSrv.openAuth(ScanQrPage)
+    if(code){
+      this.checkForm.get('code')?.setValue(code)
+    }
+  }
+}
+
 
 
 addVoucher(){
@@ -209,7 +227,6 @@ setUpCheckForm(){
 }
 
 useVoucher(id: string, value: number){
-  console.log(value)
   this.customerSrv.useVoucher(id).subscribe(response => {
     if(response){
       this.modalCtrl.dismiss({message:'voucher', data: value})

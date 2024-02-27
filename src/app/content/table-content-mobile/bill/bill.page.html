@@ -1,0 +1,152 @@
+<app-header-content (dataEvent)="receiveData($event)" [tableBills]="table.bills" (newOrderEv)="newBillOrder($event)"></app-header-content>
+
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+  <ion-row class="bill-content-row">
+    <ion-col size="12">
+        <div lines="none" *ngFor="let product of billProducts; let i = index" class="product-item" [ngClass]="{'grey': !product.sentToPrint}">
+        <!-- <ion-buttons slot="end" *ngIf="!product.sentToPrint">
+          <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings, product)">
+            <ion-icon color="danger" src="../../../assets/icon/trash-outline.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons> -->
+        <img [src]="product.imgPath" class="prod-img" (click)="openComments(product, i)">
+        <div class="prod">
+          <div class="product" (click)="openComments(product, i)">
+            <span class="prod-name">{{product.name}}</span>
+          </div>
+          <div class="toppings-wrapper" *ngIf="product.toppings.length">
+            <span *ngFor="let topping of product.toppings">+{{topping.name.split('/')[0]}}</span>
+          </div>
+          <div class="toppings-wrapper" *ngIf="product.comment && product.comment.length">
+            <span>-{{product.comment}}</span>
+          </div>
+       </div>
+          <div class="buttons">
+            <ion-button size="small" color="secondary" (click)="redProd(i)" *ngIf="product.sentToPrint">-</ion-button>
+            <span class="prod-qty">{{product.quantity}}</span>
+            <ion-button size="small" color="secondary"(click)="addProd(i)" *ngIf="product.sentToPrint">+</ion-button>
+          </div>
+          <ion-buttons *ngIf="breakMode">
+            <ion-button (click)="break(i)" size="large" color="tertiary">
+              <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <div class="price-wrapper">
+            <span class="prod-total">{{product.total}} Lei</span>
+            <span class="prod-discount"*ngIf="product.discount > 0">-{{product.discount}} Lei</span>
+          </div>
+      </div>
+
+
+      <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
+        <ion-row class="bill-discount-row" *ngIf="billToshow.discount !== 0">
+          <ion-col size="6">
+            <span class="red-text">TOTAL PRODUSE</span>
+          </ion-col>
+          <ion-col size="6" class="ion-text-end">
+            <span class="red-lei">{{calcProductTotal(billToshow.products)}} Lei</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bill-discount-row" *ngIf="billToshow.discount !== 0">
+          <ion-col size="6">
+            <span class="red-text">REDUCERE</span>
+          </ion-col>
+          <ion-col size="6" class="ion-text-end">
+            <span class="red-lei">- {{roundInHtml(billToshow.discount)}} Lei</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bill-discount-row" *ngIf="billToshow.cashBack !== 0">
+          <ion-col size="6">
+            <span class="red-text">CASH BACK</span>
+          </ion-col>
+          <ion-col size="6" class="ion-text-end">
+            <span class="red-lei">- {{roundInHtml(billToshow.cashBack)}} Lei</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bill-discount-row" *ngIf="billToshow.voucher !== 0">
+          <ion-col size="6">
+            <span class="red-text">VOUCHER</span>
+          </ion-col>
+          <ion-col size="6" class="ion-text-end">
+            <span class="red-lei">- {{roundInHtml(billToshow.voucher)}} Lei</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bill-tips-row" *ngIf="billToshow.tips > 0">
+          <ion-col size="6">
+            <span class="tips-text">BACSIS</span>
+          </ion-col>
+          <ion-col size="6" class="ion-text-end">
+            <span class="tips-lei"> + {{billToshow.tips}} Lei</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bill-tips-row" *ngIf="billToshow.payOnline || billToshow.payment.online > 0">
+          <ion-col size="6">
+            <span class="tips-text">PLĂTIT ONLINE</span>
+          </ion-col>
+          <ion-col size="6" class="ion-text-end">
+            <span class="tips-lei"> - {{roundInHtml(billToshow.payment.online)}} Lei</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bill-total-row">
+          <ion-col size="6">
+            <span class="total-text">TOTAL</span>
+          </ion-col>
+          <ion-col size="6" class="ion-text-end">
+            <span class="total-lei">{{roundInHtml(billToshow.total)}} Lei</span>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>
+
+<ion-footer [translucent]="true">
+  <ion-row class="ion-no-margin ion-no-padding">
+    <ion-col class="ion-no-margin ion-no-padding" style="width: 100vw; display:flex;">
+      <ion-icon src="assets/icon/seting.svg" class="setting" [color]="color" (click)="showSettings()"></ion-icon>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-no-margin ion-no-padding">
+    <ion-col class="ion-no-margin ion-no-padding">
+        <ion-row class="ion-no-margin ion-no-padding">
+          <ion-col class="ion-no-margin ion-no-padding" *ngIf="showButtons">
+            <ion-button expand="block" size="small" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
+              <ion-icon src="../../../assets/icon/hug.svg"></ion-icon>
+              UNEȘTE COMENZI
+            </ion-button>
+            <ion-button expand="block" size="small" (click)="breakOrder()" [disabled]="disableAction">
+              <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
+              SEPARĂ COMANDA
+            </ion-button>
+          </ion-col>
+          <ion-col class="ion-no-margin ion-no-padding" *ngIf="showButtons">
+            <ion-button class="client-button" (click)="addCustomer(clientMode)" expand="block" size="small">
+              <ion-icon [src]=" clientMode ? '../../../assets/icon/add-outline.svg': '../../../assets/icon/trash-outline.svg'"></ion-icon>
+              {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE CLIENT"}}
+            </ion-button>
+            <ion-button size="small" expand="block" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)" *ngIf="client">
+              {{ cashBackMode ? 'FOLOSEȘTE CASHBACK' : 'ELIMINĂ CASH BACK'}}
+             </ion-button>
+             <ion-button size="small" expand="block" color="primary" (click)="addTips()">
+             ADAUGA BACSIS
+             </ion-button>
+          </ion-col>
+         </ion-row>
+         <ion-row class="ion-no-margin ion-no-padding">
+           <ion-col class="ion-no-margin ion-no-padding">
+             <ion-button size="medium" expand="block" color="secondary" (click)="sendOrder(true)" [disabled]="disableOrderButton">
+               Trimite Comanda
+             </ion-button>
+             </ion-col>
+             <ion-col class="ion-no-margin ion-no-padding">
+             <ion-button size="medium" expand="block" color="primary" (click)="payment()" [disabled]="disableOrderButton">
+               Nota de plată
+             </ion-button>
+           </ion-col>
+         </ion-row>
+    </ion-col>
+  </ion-row>
+</ion-footer>

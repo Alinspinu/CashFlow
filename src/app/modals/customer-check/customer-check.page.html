@@ -17,6 +17,7 @@
       </ion-buttons>
       <ion-title class="ion-text-center" *ngIf="customer">{{customer.name}}</ion-title>
     </ion-toolbar>
+
   <form [formGroup]="addCustomerForm">
   <ion-row>
     <ion-col>
@@ -37,6 +38,11 @@
     <ion-col>
       <ion-item lines="none" class="input" *ngIf="!addClientMode && !customer">
         <ion-input type="text" label="Card code" labelPlacement="floating" placeholder="Scanează cardul" formControlName="customerId"></ion-input>
+        <ion-buttons slot="end">
+          <ion-button (click)="scanQr('client')" color="primary">
+            <ion-icon slot="start" src="assets/icon/photography.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-item>
     </ion-col>
   </ion-row>
@@ -78,10 +84,9 @@
     <ion-buttons slot="end">
       <ion-button (click)="setVoucherMode()">
         <ion-icon [src]="addVoucherMode ? '../../../assets/icon/checkmark-outline.svg' : '../../../assets/icon/add-outline.svg'"></ion-icon>
-        {{addVoucherMode ? "Terminat" : "CREAZA VOUCHER"}}
       </ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center" slot="start">{{addVoucherMode ? 'Adaugă Voucher' : 'Verifică Voucher'}}</ion-title>
+    <ion-title slot="start">{{addVoucherMode ? 'Adaugă Voucher' : 'Verifică Voucher'}}</ion-title>
   </ion-toolbar>
   <ion-row *ngIf="!addVoucherMode">
     <ion-col>
@@ -89,6 +94,11 @@
         <form [formGroup]="checkForm">
           <ion-item lines="none" class="input" *ngIf="!voucher">
             <ion-input type="text" label="Cod Voucher" labelPlacement="floating" placeholder="Scanează Voucherul" formControlName="code"></ion-input>
+            <ion-buttons slot="end">
+              <ion-button (click)="scanQr('voucher')" color="primary">
+                <ion-icon slot="start" src="assets/icon/photography.svg"></ion-icon>
+              </ion-button>
+            </ion-buttons>
           </ion-item>
           <ion-item lines="none" class="input" *ngIf="voucher">
             <ion-label>Status: <span class="data">{{voucher.status | capitalize}}</span></ion-label>

@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 
@@ -16,6 +16,7 @@ export class PaymentService{
   ){}
 
   checkPos(sum: number){
-    return this.http.post<{message: string, payment: boolean}>(`${environment.BASE_URL}pay/pos`, {sum: sum})
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.post<{message: string, payment: boolean}>(`${environment.BASE_URL}pay/pos`, {sum: sum}, {headers})
   }
 }

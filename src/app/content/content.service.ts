@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Preferences } from "@capacitor/preferences";
 import { BehaviorSubject, from, map, Observable, take, tap } from "rxjs";
@@ -72,7 +72,8 @@ export class ContentService{
           this.categoryState.next([...this.category])
         }
       })
-      return this.http.get<Category[]>(`${environment.BASE_URL}cat/get-cats?loc=${locatie}`).pipe(take(1), tap(res => {
+      const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+      return this.http.get<Category[]>(`${environment.BASE_URL}cat/get-cats?loc=${locatie}`, {headers}).pipe(take(1), tap(res => {
         this.category = this.sortData(res)
         this.categoryState.next([...this.category]);
         Preferences.set({key: 'categories', value: JSON.stringify(this.category)})

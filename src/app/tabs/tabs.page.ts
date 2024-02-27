@@ -15,16 +15,21 @@ import { getUserFromLocalStorage } from '../shared/utils/functions';
 })
 export class TabsPage implements OnInit{
   public environmentInjector = inject(EnvironmentInjector);
+  screenWidth!: number
 
   user!: User | null
 
   constructor(
     private authSrv: AuthService
-  ) {}
+  ) {
+  }
 
-ngOnInit(): void {
+  ngOnInit(): void {
+  this.screenWidth = window.innerWidth
   getUserFromLocalStorage().then(user => {
     this.user = user
   })
 }
+
+
 }

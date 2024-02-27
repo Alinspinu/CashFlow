@@ -24,6 +24,7 @@ import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { TipsPage } from '../modals/tips/tips.page';
 import { AddProductDiscountPage } from '../modals/add-product-discount/add-product-discount.page';
 import { DelProdViewPage } from '../reports/cash/del-prod-view/del-prod-view.page';
+import { ScanQrPage } from '../modals/scan-qr/scan-qr.page';
 
 
 
@@ -55,6 +56,26 @@ export class ActionSheetService {
     modal.present();
     const { data } = await modal.onDidDismiss();
     return data
+  }
+
+ async openMobileModal(
+    component: typeof PickOptionPage |
+               typeof PaymentPage |
+               typeof CustomerCheckPage |
+               typeof OrderViewPage |
+               typeof OrderAppViewPage |
+               typeof CashbackPage,
+    options: any,
+    sub: boolean
+  ){
+    const modal = await this.modalCtrl.create({
+      component: component,
+      componentProps: {options: options, sub: sub},
+    });
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    return data
+
   }
 
   async openPayment(
@@ -103,6 +124,7 @@ export class ActionSheetService {
     component: typeof AuthPage |
                typeof RegisterPage |
                typeof DatePickerPage |
+               typeof ScanQrPage |
                typeof TipsPage,
                 ) {
     const modal = await this.modalCtrl.create({

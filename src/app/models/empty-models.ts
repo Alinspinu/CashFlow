@@ -123,6 +123,7 @@ export function emptyBill(){
     name: 'COMANDA',
     products: [],
     createdAt: '',
+    updatedAt: '',
     locatie: '',
     prepStatus: 'open'
   }

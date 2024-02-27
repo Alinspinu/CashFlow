@@ -1,0 +1,21 @@
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/'" style="color: black" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-start ion-no-padding" routerLink="/">
+      Masa {{tableNumber}}
+    </ion-title>
+    <ion-buttons slot="end" class="horizontal-scroll">
+      <ion-button class="ion-text-end first" *ngFor="let bill of tableBills; let i = index;"  [ngClass]="{ 'active-button': bill.show }">
+        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }" (click)="sendOrder(i)">
+          <ion-label [id]="'orderName-' + i">C {{i+1}}</ion-label>
+        </ion-item>
+      </ion-button>
+      <ion-button (click)="newOrder()" *ngIf="tableBills && tableBills.length">
+        <ion-icon src="../../../assets/icon/add-outline.svg" class="icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

@@ -37,12 +37,18 @@ ion-title{
 }
 
 
+.active-button {
+  background-color: var(--ion-color-primary-shade); /* Change to your desired color */
+  --background: var(--ion-color-primary-shade); /* Change to your desired color */
+  color: #fff; /* Change to your desired text color */
+}
+
 
 .input{
   height: 48px;
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
-  font-size: 24px;
+  font-size: 20px;
   margin: 0.7rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
   span{

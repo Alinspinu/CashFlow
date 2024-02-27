@@ -28,6 +28,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   user!: any
 
   orders: Bill[] = []
+  data: Bill[] = []
 
   userCash: number = 0;
   userCard: number = 0;
@@ -41,6 +42,9 @@ export class CashControlPage implements OnInit, OnDestroy {
   allCats: Category[] = []
 
   catSubs!: Subscription
+  productSearch!: string
+
+  users: {name: string, id: string, show: boolean}[] = []
 
 
   constructor(
@@ -75,6 +79,30 @@ export class CashControlPage implements OnInit, OnDestroy {
     })
   }
 
+  showOrders(user: any){
+    if(user.id === 'total'){
+      this.getAllOrders()
+    } else{
+      this.getOrders(user.id)
+      user.show = true
+      this.users.forEach(obj => {
+        if(obj.id !== user.id){
+          obj.show = false
+        }
+      })
+    }
+
+  }
+
+  searchProduct(ev: any){
+    this.productSearch = ev.target.value;
+    this.orders = this.data.filter(parentItem =>
+      parentItem.products.some(child =>
+        child.name.toLowerCase().includes(this.productSearch.toLowerCase())
+      )
+    );
+  }
+
 
   async openBill(bill: Bill){
     const result = await this.actionSheet.openPayment(OrderAppViewPage, bill)
@@ -103,7 +131,6 @@ export class CashControlPage implements OnInit, OnDestroy {
         })
      }
      if(result && result.message === "bill"){
-      console.log(result)
       this.cashSrv.createInvoice(result.orderId, this.user._id, result.clientId, this.user.locatie).subscribe(response => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const pdfUrl = URL.createObjectURL(blob);
@@ -112,13 +139,42 @@ export class CashControlPage implements OnInit, OnDestroy {
      }
   }
 
-  getOrders(){
-    this.cashSrv.getUserOrders(this.user._id).subscribe(response => {
+
+  getOrders(id: string){
+    this.cashSrv.getUserOrders(id).subscribe(response => {
       if(response) {
-        this.orders = response
+        this.data = response
+        this.orders = [...this.data]
         this.calcCashIn()
       }
     })
+  }
+
+  getAllOrders(){
+    this.cashSrv.getAllorders().subscribe(response => {
+      if(response) {
+        this.data = response
+        this.orders = [...this.data]
+        this.calcCashIn()
+        this.getUsers()
+      }
+    })
+  }
+
+  getUsers(){
+    const uniqUsers = new Set()
+    const users = this.data
+      .map(doc => ({id: doc.employee.user, name: doc.employee.fullName, show: false}))
+      .filter(user => {
+        const userString = JSON.stringify(user)
+        if(!uniqUsers.has(userString)){
+          uniqUsers.add(userString)
+          return true
+        }
+        return false
+      })
+      this.users = users
+      this.users.unshift({id: 'total', name: 'total', show: true})
   }
 
   calcCashIn(){
@@ -129,21 +185,21 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.userOnline = 0
     if(this.orders){
       this.orders.forEach((order: Bill) => {
-        if(order.payment.cash){
-          this.userCash = round(this.userCash + order.payment.cash)
-        }
-        if(order.payment.card){
-          this.userCard = round(this.userCard + order.payment.card)
-        }
-        if(order.payment.viva){
-          this.userViva = round(this.userViva + order.payment.viva)
-        }
-        if(order.payment.voucher) {
-          this.userVoucher = round(this.userVoucher + order.payment.voucher)
-        }
-        if(order.payment.online){
-          this.userOnline = round( this.userOnline + order.payment.online)
-        }
+          if(order.payment.cash){
+            this.userCash = round(this.userCash + order.payment.cash)
+          }
+          if(order.payment.card){
+            this.userCard = round(this.userCard + order.payment.card)
+          }
+          if(order.payment.viva){
+            this.userViva = round(this.userViva + order.payment.viva)
+          }
+          if(order.payment.voucher) {
+            this.userVoucher = round(this.userVoucher + order.payment.voucher)
+          }
+          if(order.payment.online){
+            this.userOnline = round( this.userOnline + order.payment.online)
+          }
       })
       this.calcTotal()
     }
@@ -160,7 +216,7 @@ export class CashControlPage implements OnInit, OnDestroy {
       response.subscribe(user => {
         if(user) {
           this.user = user
-          this.getOrders()
+          this.getAllOrders()
         }
       })
     }
@@ -199,7 +255,6 @@ export class CashControlPage implements OnInit, OnDestroy {
 
 reports(value: string){
   this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
-    console.log(response)
     if(response){
       Preferences.remove({key: 'cashInAndOut'})
     }

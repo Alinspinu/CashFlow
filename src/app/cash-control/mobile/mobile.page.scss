@@ -1,0 +1,22 @@
+
+
+
+.title{
+  text-align: center;
+  font-size: 20px;
+  font-family: NoirProReg !important;
+}
+
+
+
+.input{
+  height: 48px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  font-size: 16px;
+  margin: 0.7rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
+  span{
+    margin: 8px;
+  }
+}

@@ -1,6 +1,6 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="cash-control" href="/tabs/cash-control">
+    <ion-tab-button [tab]="screenWidth > 500 ? 'cash-control' : 'mobile' " [href]=" screenWidth > 500 ? '/tabs/cash-control': '/tabs/mobile'">
       <ion-icon aria-hidden="true" src="../../assets/icon/home-outline.svg"></ion-icon>
       <ion-label>Casa</ion-label>
     </ion-tab-button>

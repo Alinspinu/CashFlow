@@ -1,6 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title *ngIf="user">{{user.employee.fullName}}</ion-title>
+    <!-- <ion-title *ngIf="user">{{user.employee.fullName}}</ion-title> -->
+    <ion-buttons>
+      <ion-button *ngFor="let user of users" (click)="showOrders(user)" [ngClass]="{ 'active-button': user.show }">
+        {{user.name}}
+      </ion-button>
+    </ion-buttons>
     <ion-title slot="end">{{today()}}</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -64,12 +69,14 @@
     <ion-title class="title">
       Note Încasate
     </ion-title>
-
+    <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută notă după produs"  (ionInput)="searchProduct($event)" #searchbar>
+    </ion-searchbar>
   <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="openBill(order)">
-    <span>Nr.{{i+1}} </span>
-    <span> Salvată la - {{orderTime(order.createdAt)}}</span>
-    <span>Metoda de plată - {{showPaymentMethod(order.payment)}}</span>
-    <span *ngIf="order.clientInfo.name.length">Client: {{order.clientInfo.name}}</span>
+    <span>Nr.{{order.index}} | </span>
+    <span>Ora - {{orderTime(order.updatedAt)}} |</span>
+    <span>{{showPaymentMethod(order.payment)}} |</span>
+    <span>Masa: {{order.masa}} |</span>
+    <span>Casier: {{order.employee.fullName}} |</span>
   </ion-item>
 </ion-content>
 </div>

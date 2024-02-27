@@ -61,6 +61,10 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'mobile',
+        loadComponent: () => import('../cash-control/mobile/mobile.page').then( m => m.MobilePage)
+      },
+      {
         path: '',
         redirectTo: '/tabs/tables',
         pathMatch: 'full',
@@ -71,9 +75,5 @@ export const routes: Routes = [
     path: '',
     redirectTo: '/tabs/tables',
     pathMatch: 'full',
-  },
-  {
-    path: 'config',
-    loadComponent: () => import('../config/config.page').then( m => m.ConfigPage)
   },
 ];

@@ -188,7 +188,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   getUser(){
   this.userSub = this.authSrv.user$.subscribe(response => {
     if(response){
-      response.subscribe(user => {
+      this.userSub = response.subscribe(user => {
         if(user){
           this.user = user;
           // this.incommingOrders()
@@ -268,7 +268,7 @@ incommingOrders(){
     const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
     if(result){
       const time = +result * 60 * 1000
-      this.tableSrv.setOrderTime(this.order._id, time).subscribe(response => {
+      this.tableSub = this.tableSrv.setOrderTime(this.order._id, time).subscribe(response => {
         console.log(response)
       })
     }
@@ -377,7 +377,7 @@ async addToBill(product: Product){
     }
     this.disableBrakeButton()
     this.disableDeleteOrderButton()
-    this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex)
+    this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex, this.user.name)
     if(this.billToshow && this.billToshow.products.length > 5){
       setTimeout(()=>{
         this.content.scrollToBottom(300);
@@ -465,12 +465,12 @@ async addToBill(product: Product){
           delProd.billProduct.quantity = buc
           delProd.billProduct.total = buc * delProd.billProduct.price
           result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
-          this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
+         this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
             if(result.upload){
               if(product.toppings.length){
-                this.tableSrv.uploadIngs(product.toppings, buc, this.user.locatie).subscribe()
+               this.tableSub = this.tableSrv.uploadIngs(product.toppings, buc, this.user.locatie).subscribe()
               }
-              this.tableSrv.uploadIngs(ings, buc, this.user.locatie).subscribe(response => {
+              this.tableSub = this.tableSrv.uploadIngs(ings, buc, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 4000)
                 }
@@ -513,7 +513,7 @@ sendOrder(out: boolean){
     this.billToshow.locatie = this.user.locatie
     this.calcBillDiscount(this.billToshow)
     this.home()
-    this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
+   this.tableSub = this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
       if(res){
         this.disableOrderButton = false
         if(out){
@@ -536,9 +536,10 @@ async payment(){
         this.billToshow.payment.viva = paymentInfo.viva;
         this.billToshow.cif = paymentInfo.cif;
         this.billToshow.payment.online  = paymentInfo.online
-        this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
+        this.tableSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
           if(response){
             this.billToshow.discount = 0
+            console.log(response)
             this.tableSrv.removeBill(this.tableNumber, this.billIndex)
             this.billProducts = []
             this.billToshow = emptyBill()
@@ -553,7 +554,6 @@ async payment(){
 async addCustomer(clientMode: boolean){
 if(clientMode){
   const clientInfo = await this.actionSheet.openPayment(CustomerCheckPage, '')
-  console.log(clientInfo.message)
   if(clientInfo.message === "client"){
     this.client = clientInfo.data
     this.clientMode = false
@@ -718,12 +718,12 @@ async useCashBack(mode: boolean){
           delProd.billProduct.quantity = buc
           delProd.billProduct.total = buc * delProd.billProduct.price
           choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
-          this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
+         this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
             if(choise.upload){
               if(el.toppings.length){
-                this.tableSrv.uploadIngs(el.toppings, buc, this.user.locatie).subscribe()
+              this.tableSub =  this.tableSrv.uploadIngs(el.toppings, buc, this.user.locatie).subscribe()
               }
-              this.tableSrv.uploadIngs(el.ings, buc, this.user.locatie).subscribe(response => {
+              this.tableSub = this.tableSrv.uploadIngs(el.ings, buc, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 3000)
                 }
@@ -738,7 +738,7 @@ async useCashBack(mode: boolean){
 
           data.push({id: this.billToshow._id})
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-          this.tableSrv.deleteOrders(data).subscribe()
+          this.tableSub = this.tableSrv.deleteOrders(data).subscribe()
           this.billProducts = []
           this.client = null
           this.clientMode = true
@@ -770,7 +770,7 @@ async useCashBack(mode: boolean){
         this.disableOrderButton = true
         const response = await this.tableSrv.mergeBills(this.tableNumber, orders, this.user.employee, this.user.locatie)
         if(response) {
-          this.tableSrv.deleteOrders(orders).subscribe()
+          this.tableSub = this.tableSrv.deleteOrders(orders).subscribe()
           let index = bills.findIndex(obj => obj.name === 'UNITE')
           this.showOrder(index)
           this.disableOrderButton = false
@@ -833,7 +833,7 @@ async useCashBack(mode: boolean){
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){
-            this.tableSrv.addToBill(cartProduct,this.tableNumber, newBillIndex)
+            this.tableSrv.addToBill(cartProduct,this.tableNumber, newBillIndex, this.user.name)
             this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
           }
           this.showOrder(newBillIndex);

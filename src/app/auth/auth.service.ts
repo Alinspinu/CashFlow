@@ -67,31 +67,25 @@ export class AuthService{
   constructor(private http: HttpClient){}
 
   onLogin(email: string, password: string){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-    return this.http.post<any>(`${environment.BASE_URL}auth/login`,{email, password, adminEmail: environment.ADMIN_EMAIL}, httpOptions)
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.post<any>(`${environment.BASE_URL}auth/login`,{email, password, adminEmail: environment.ADMIN_EMAIL, loc: environment.LOC}, {headers})
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   }
 
   onRegister(name: string, email: string, tel: string, password: string, confirmPassword: string, firstCart: string, survey: string){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL}auth/register`,{name, email, password, confirmPassword, firstCart, survey, tel, loc: environment.LOC}, httpOptions);
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL}auth/register`,{name, email, password, confirmPassword, firstCart, survey, tel, loc: environment.LOC}, {headers});
   };
 
   verifyToken(token: string){
-    return this.http.post<any>(`${environment.BASE_URL}auth/verify-token`, {token: token})
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.post<any>(`${environment.BASE_URL}auth/verify-token`, {token: token}, {headers})
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   };
 
   sendResetEmail(email: string){
-   return this.http.post<AuthResData>(`${environment.BASE_URL}auth/send-reset-email`, {email});
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+   return this.http.post<AuthResData>(`${environment.BASE_URL}auth/send-reset-email`, {email}, {headers});
   };
 
   resetPassword(token: string, password: string, confirmPassword: string){

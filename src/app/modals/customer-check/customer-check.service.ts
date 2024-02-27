@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { Customer } from "./customer-check.page";
@@ -15,22 +15,27 @@ export class CustomerCheckService{
   ){}
 
   searchCustomer(customerId: string, locatie: string){
-    return this.http.get<{message: string, customer: any}>(`${environment.BASE_URL}users/customer?id=${customerId}&loc=${locatie}`)
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.get<{message: string, customer: any}>(`${environment.BASE_URL}users/customer?id=${customerId}&loc=${locatie}`,{headers})
   }
 
   createCustomer(name: string, email: string, cardIndex: number, locatie: string){
-    return this.http.post<{message: string, customer: any}>(`${environment.BASE_URL}users/customer`, {name: name, email: email, cardIndex: cardIndex, loc: locatie})
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.post<{message: string, customer: any}>(`${environment.BASE_URL}users/customer`, {name: name, email: email, cardIndex: cardIndex, loc: locatie},{headers})
   }
 
   saveVoucher(code: string, value: number){
-    return this.http.post<{message: string}>(`${environment.BASE_URL}pay/add-voucher`, {code: code, value: value})
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.post<{message: string}>(`${environment.BASE_URL}pay/add-voucher`, {code: code, value: value}, {headers})
   }
 
   verfyVoucher(code: string){
-    return this.http.post<{message: string, voucher: any}>(`${environment.BASE_URL}pay/verify-voucher`, {code: code})
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.post<{message: string, voucher: any}>(`${environment.BASE_URL}pay/verify-voucher`, {code: code}, {headers})
   }
 
   useVoucher(id: string){
-    return this.http.post<{message: string}>(`${environment.BASE_URL}pay/use-voucher`, {id: id})
+    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    return this.http.post<{message: string}>(`${environment.BASE_URL}pay/use-voucher`, {id: id}, {headers})
   }
 }

@@ -69,8 +69,6 @@ export class MobilePage implements OnInit {
 
     searchProduct(ev: any){
       this.productSearch = ev.target.value;
-
-      // Use Array.filter to filter items based on the search term
       this.orders = this.data.filter(parentItem =>
         parentItem.products.some(child =>
           child.name.toLowerCase().includes(this.productSearch.toLowerCase())

@@ -28,10 +28,7 @@ const routes: Routes = [
     path: 'scan-qr',
     loadComponent: () => import('./modals/scan-qr/scan-qr.page').then( m => m.ScanQrPage)
   },
-  {
-    path: 'mobile',
-    loadComponent: () => import('./cash-control/mobile/mobile.page').then( m => m.MobilePage)
-  },
+
 
 ];
 

@@ -1,7 +1,22 @@
 
 
+    <ion-toolbar style="margin-top:10px">
+      <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută produs"  (ionInput)="searchProduct($event)" #searchbar>
+      </ion-searchbar>
+    </ion-toolbar>
   <ion-grid *ngIf="categories.length">
-    <ion-row>
+    <ion-row *ngIf="showProducts">
+      <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="5" offset-lg="3.5">
+        <div lines="none" *ngFor="let product of productsToShow; let i = index" class="product-item" (click)="addToBill(product)">
+          <div class="product">
+            <img [src]="product.image.path" class="prod-img">
+            <span class="prod-name">{{product.name}}</span>
+            <span class="price">{{product.price}} Lei</span>
+          </div>
+      </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!showProducts">
     <ion-col size-sm="8" offset-sm="2" size-md="8" offset-md="2" size-lg="5" offset-lg="3.5">
       <ion-row>
         <ion-col size-xs="6" class="ion-no-padding" *ngFor="let category of categories">

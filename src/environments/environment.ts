@@ -16,10 +16,10 @@ export const environment = {
   SUPLIER_APY_URL: "https://infocui.ro/system/api/data",
   // LOCATIE: '655e2e7c5a3d53943c6b7c53',
 
-  BASE_URL: 'http://localhost:8080/',
+  // BASE_URL: 'http://localhost:8080/',
 
 
-  // BASE_URL: 'https://flow-app-now-cash-true-mobile.loca.lt/',
+  BASE_URL: 'https://flow-app-now-cash-true-mobile.loca.lt/',
 
   ADMIN_EMAIL: "alinz.spinu@gmail.com",
   LOC: "655e2e7c5a3d53943c6b7c53",

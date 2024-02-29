@@ -94,18 +94,21 @@ swithLocatie(){
 loadDocuments(event?: any) {
   console.log('hit-function')
   this.cashRegService.getDocuments(this.page, this.locatie).subscribe((response) => {
-    // Append new documents to the existing list
-    this.documents = [...this.documents, ...response.documents];
-    if (event) {
-      event.target.complete();
+    if(response){
+      this.documents = response.documents
     }
+    // Append new documents to the existing list
+    // this.documents = [...this.documents, ...response.documents];
+    // if (event) {
+    //   event.target.complete();
+    // }
   });
 }
 
-loadMore(event: any) {
-  this.page++;
-  this.loadDocuments(event);
-}
+// loadMore(event: any) {
+//   this.page++;
+//   this.loadDocuments(event);
+// }
 
 
 export(){
@@ -130,6 +133,14 @@ async openDateModal(mode: string){
   }
   if(response && mode === 'end'){
     this.endDate = response
+    if(this.startDate && this.endDate){
+      this.cashRegService.getDaysByDate(this.startDate, this.endDate, this.user.locatie).subscribe(response =>{
+        console.log(response)
+        if(response) {
+          this.documents = response.documents
+        }
+      })
+    }
   }
 }
 

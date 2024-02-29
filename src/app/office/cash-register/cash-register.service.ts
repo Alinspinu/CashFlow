@@ -27,12 +27,15 @@ export class CashRegisterService{
     }
 
     getDocuments(page: number, loc: string): Observable<{message: string, documents: Day[]}> {
-      // loc = '65c221374c46336d1e6ac423'
       return this.http.get<{message: string, documents: Day[]}>(`${environment.BASE_URL}register/show-cash-register?page=${page}&loc=${loc}`);
     }
 
     deleteEntry(id: string){
       return this.http.delete<{message: string}>(`${environment.BASE_URL}register/delete-entry?id=${id}`)
+    }
+
+    getDaysByDate(startDate: any, endDate: any, loc: string){
+      return this.http.post<{message: string, documents: Day[]}>(`${environment.BASE_URL}register/get-days`,{startDate: startDate, endDate: endDate, loc: loc})
     }
 
 

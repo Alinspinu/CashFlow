@@ -12,7 +12,7 @@
         <span>{{ing.name}}</span>
       </ion-item> -->
       <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
-        <div *ngIf="ingredients.length > 1">
+        <div *ngIf="ingredients.length >= 1">
           <span class="name">{{ing.name}}</span>
           <div class="ing-info-wrapper">
             <span class="ing-info">Gestiune:</span>

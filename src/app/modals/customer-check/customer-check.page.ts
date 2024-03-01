@@ -93,6 +93,7 @@ searchCustomer(){
   if(customerId){
     this.customerSrv.searchCustomer(customerId, this.user.locatie).subscribe(response => {
       if(response.message === "All good"){
+        console.log(response)
         this.customer = response.customer
       }
     }, error => {

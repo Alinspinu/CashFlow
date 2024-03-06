@@ -28,6 +28,13 @@ ion-item[slot="fixed"]{
   font-family: NoirProReg !important;
 }
 
+.spinner-container{
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .content-container{
   display: flex;
   flex-direction: row;

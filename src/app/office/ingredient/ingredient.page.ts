@@ -15,13 +15,14 @@ import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { NirService } from '../CRUD/nir/nir.service';
 import { InvIngredient } from 'src/app/models/nir.model';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-ingredient',
   templateUrl: './ingredient.page.html',
   styleUrls: ['./ingredient.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe]
+  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe, SpinnerPage]
 })
 export class IngredientPage implements OnInit {
 

@@ -41,6 +41,13 @@ span{
   }
 }
 
+.spinner-container{
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 // .input:hover{
 //   --background: var(--ion-color-medium);
 // }

@@ -5,7 +5,7 @@
    <div class="header">
 
      <h4 class="subtitle"*ngIf="!resetPasswordMode">Login</h4>
-     <h4 class="subtitle"*ngIf="resetPasswordMode">Reset</h4>
+     <h4 class="subtitle"*ngIf="resetPasswordMode">Schimbă parola</h4>
     </div>
     <ion-grid>
         <form [formGroup]="form">
@@ -24,6 +24,7 @@
                 name="password"
                 minlength="6" required
                 [type]="getInputType()"
+                (keyup.enter)="onSubmit()"
                 ></ion-input>
                 <ion-icon [src]="iconSrc" slot="end" (click)="togglePassword()"></ion-icon>
               </ion-item>
@@ -31,7 +32,7 @@
         </ion-row>
           <ion-row *ngIf="!resetPasswordMode">
             <ion-col size-lg="6" offset-lg="3">
-              <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid">
+              <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid || disableLogIn">
                 <ion-label style="color:white;">
                   Login
                 </ion-label>
@@ -40,7 +41,7 @@
           </ion-row>
         </form>
         <ion-row *ngIf="resetPasswordMode">
-          <ion-col class="ion-text-center">
+          <ion-col size-lg="6" offset-lg="3" class="ion-text-center">
             <ion-item lines="none">
               <ion-input label="Email" labelPlacement="floating"  type="text" [(ngModel)]="emailValue" (input)="validateEmail()" >
               </ion-input>
@@ -48,12 +49,12 @@
           </ion-col>
         </ion-row>
         <ion-row *ngIf="resetPasswordMode">
-          <ion-col>
-            <ion-note class="note">Introdu adersa de mail folosită!</ion-note>
+          <ion-col size-lg="6" offset-lg="3">
+            <ion-note class="note">Introdu adersa de e-mail folosită!</ion-note>
           </ion-col>
         </ion-row>
         <ion-row *ngIf="resetPasswordMode">
-          <ion-col>
+          <ion-col size-lg="6" offset-lg="3">
             <ion-button color="danger" (click)="sendNewPassword()" class="ion-padding" size="medium" expand="full" [disabled]="!validEmail">
               <ion-label>
                 Resetează
@@ -62,7 +63,7 @@
           </ion-col>
         </ion-row>
         <ion-row *ngIf="resetPassword && !resetPasswordMode">
-          <ion-col>
+          <ion-col size-lg="6" offset-lg="3">
             <ion-button color="danger" (click)="onResetPassword()" class="ion-padding" size="small" expand="full">
               <ion-label>
                 Resetează parola!

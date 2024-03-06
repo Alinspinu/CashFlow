@@ -10,14 +10,19 @@
 //   margin-top: 2rem;
 // }
 
+span, ion-radio, ion-textarea, ion-button, ion-checkbox{
+  font-family: NoirProReg !important;
+}
+
 .input{
+  font-size: 12px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 65px;
+  height: 50px;
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
-  padding: 10px;
+  padding: 4px;
   margin: 0.5rem 0 0.5rem 0.5rem;
   .topping-name{
     flex:80%

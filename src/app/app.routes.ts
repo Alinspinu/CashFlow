@@ -28,6 +28,10 @@ const routes: Routes = [
     path: 'scan-qr',
     loadComponent: () => import('./modals/scan-qr/scan-qr.page').then( m => m.ScanQrPage)
   },
+  {
+    path: 'spinner',
+    loadComponent: () => import('./modals/spinner/spinner.page').then( m => m.SpinnerPage)
+  },
 
 
 ];

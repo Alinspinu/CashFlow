@@ -205,23 +205,23 @@ calcProductTotal(products: BillProduct[]){
 
   async openComments(product: BillProduct, index: number){
     if(product.sentToPrint){
-    if(product.toppings.length){
-      let price: number = 0
-      product.toppings.forEach(top => {
-        price += top.price
-      })
-      product.price -= price
-      product.total = product.price * product.quantity
-      this.billToshow.total -= (price * product.quantity)
-      product.toppings = []
-      this.tableSrv.addComment(this.tableNumber, index, this.billIndex, '')
-    }
+    // if(product.toppings.length){
+    //   let price: number = 0
+    //   product.toppings.forEach(top => {
+    //     price += top.price
+    //   })
+    //   product.price -= price
+    //   product.total = product.price * product.quantity
+    //   this.billToshow.total -= (price * product.quantity)
+    //   product.toppings = []
+    //   this.tableSrv.addComment(this.tableNumber, index, this.billIndex, '')
+    // }
       let options: Topping[] = []
       let optionPrice: number = 0;
       let pickedToppings: Topping[] = [];
       if(product.toppingsToSend.length){
         const itemsToSort = [...product.toppingsToSend]
-        options = itemsToSort.sort((a, b) => a.price - b.price)
+        options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
       } else {
         const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: 's'}
         options.push(fakeTopping)

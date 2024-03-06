@@ -9,13 +9,14 @@ import { Router } from '@angular/router';
 import { formatedDateToShow, getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-nirs',
   templateUrl: './nirs.page.html',
   styleUrls: ['./nirs.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, DatePickerPage]
+  imports: [IonicModule, CommonModule, FormsModule, DatePickerPage, SpinnerPage]
 })
 export class NirsPage implements OnInit {
 

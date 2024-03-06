@@ -24,9 +24,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" >
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="isLoadding" class="loading">
+      <ion-col size="6" offset="3">
+        <app-spinner></app-spinner>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!isLoadding">
       <ion-col *ngFor="let table of tables" size-lg="1" class="table-wrapper">
         <ion-icon *ngIf="editMode" src="../../assets/icon/create-outline.svg" (click)="editTable(table.index)" class="edit"></ion-icon>
         <ion-icon *ngIf="editMode" src="../../assets/icon/trash-outline.svg" (click)="deleteTable(table)" class="delete"></ion-icon>

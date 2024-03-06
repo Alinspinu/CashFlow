@@ -103,7 +103,8 @@ export class CategoryContentPage implements OnInit, OnDestroy {
       if(cat){
         this.categoryName = cat.name;
         const products = cat.product;
-        this.products = [...products]
+        const sortedProducts = products.sort((a, b) => a.name.localeCompare(b.name))
+        this.products = [...sortedProducts]
         this.backTab = cat.mainCat;
         const ambIndex = this.products.findIndex(prod => prod.name == "Ambalaj")
         if(ambIndex != -1) {
@@ -135,6 +136,28 @@ export class CategoryContentPage implements OnInit, OnDestroy {
        return triggerEscapeKeyPress()
       }
     }
+
+    let options: Topping[] = []
+    let optionPrice: number = 0;
+    let pickedToppings: Topping[] = [];
+    let comment: string = ''
+    if(product.category._id === '65d78af381e86f3feded7300' || product._id === "654e909215fb4c734b9689b8"){
+      const itemsToSort = [...product.toppings]
+      options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
+      if(options.length){
+          const extra = await this.actionSheet.openMobileModal(PickOptionPage, options, false)
+            if(extra && extra.toppings) {
+               pickedToppings = extra.toppings
+               pickedToppings.forEach(el => {
+                optionPrice += el.price
+               })
+               price += optionPrice
+            }
+            if(extra && extra.comment){
+              comment = extra.comment
+            }
+        }
+    }
       const cartProduct: BillProduct = {
         name: cartProdName,
         price: price,
@@ -144,7 +167,7 @@ export class CategoryContentPage implements OnInit, OnDestroy {
         imgPath: product.image.path,
         category: product.category._id,
         sub: false,
-        toppings: [],
+        toppings: pickedToppings,
         mainCat: product.mainCat,
         payToGo: false,
         newEntry: true,
@@ -154,7 +177,7 @@ export class CategoryContentPage implements OnInit, OnDestroy {
         printer: product.printer,
         sentToPrint: true,
         imgUrl: product.image.path,
-        comment: '',
+        comment: comment,
         tva: product.tva,
         toppingsToSend: product.toppings,
         sentToPrintOnline: true,

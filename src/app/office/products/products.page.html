@@ -41,6 +41,11 @@
         </ion-item>
       </ion-col>
     </ion-row>
+    <ion-row class="spinner-container" *ngIf="!products.length">
+      <ion-col size="6" offset="3">
+        <app-spinner></app-spinner>
+      </ion-col>
+    </ion-row>
     <ion-row *ngFor="let product of products; let i=index;">
       <ion-col>
         <div class="product-container">

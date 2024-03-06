@@ -67,7 +67,11 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-
+<ion-row class="spinner-container" *ngIf="!ingredients.length">
+  <ion-col size="6" offset="3">
+    <app-spinner></app-spinner>
+  </ion-col>
+</ion-row>
 <div style="margin-top:50px;">
   <ion-row *ngFor="let ing of ingredients; let i= index;">
     <ion-col>

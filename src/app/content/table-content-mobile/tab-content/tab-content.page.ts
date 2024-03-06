@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { round } from 'src/app/shared/utils/functions';
 import { triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
-import { BillProduct, Ing } from 'src/app/models/table.model';
+import { BillProduct, Ing, Topping } from 'src/app/models/table.model';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { TablesService } from 'src/app/tables/tables.service';
@@ -104,10 +104,12 @@ export class TabContentPage implements OnInit {
     console.log(this.productsToShow)
   }
 
+
   async addToBill(product: Product){
     let price: number = product.price;
     let cartProdName: string = product.name;
     let ings: Ing[] = product.ings
+
     if(product.subProducts.length){
       const result = await this.actionSheet.openMobileModal(PickOptionPage, product.subProducts, true)
       if(result){
@@ -118,6 +120,28 @@ export class TabContentPage implements OnInit {
        return triggerEscapeKeyPress()
       }
     }
+    let options: Topping[] = []
+    let optionPrice: number = 0;
+    let pickedToppings: Topping[] = [];
+    let comment: string = ''
+
+    if(product.category._id === '65d78af381e86f3feded7300' || product._id === "654e909215fb4c734b9689b8"){
+      const itemsToSort = [...product.toppings]
+      options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
+      if(options.length){
+          const extra = await this.actionSheet.openMobileModal(PickOptionPage, options, false)
+            if(extra && extra.toppings) {
+               pickedToppings = extra.toppings
+               pickedToppings.forEach(el => {
+                optionPrice += el.price
+               })
+               price += optionPrice
+            }
+            if(extra && extra.comment){
+              comment = extra.comment
+            }
+        }
+    }
       const cartProduct: BillProduct = {
         name: cartProdName,
         price: price,
@@ -127,7 +151,7 @@ export class TabContentPage implements OnInit {
         imgPath: product.image.path,
         category: product.category._id,
         sub: false,
-        toppings: [],
+        toppings: pickedToppings,
         mainCat: product.mainCat,
         payToGo: false,
         newEntry: true,
@@ -137,7 +161,7 @@ export class TabContentPage implements OnInit {
         printer: product.printer,
         sentToPrint: true,
         imgUrl: product.image.path,
-        comment: '',
+        comment: comment,
         tva: product.tva,
         toppingsToSend: product.toppings,
         sentToPrintOnline: true,

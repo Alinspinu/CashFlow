@@ -12,6 +12,7 @@ import { Preferences } from '@capacitor/preferences';
 import { Subscription } from 'rxjs';
 import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { AudioService } from '../shared/audio.service';
+import { SpinnerPage } from '../modals/spinner/spinner.page';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { AudioService } from '../shared/audio.service';
   templateUrl: 'tables.page.html',
   styleUrls: ['tables.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, SpinnerPage],
 })
 
 export class TablesPage implements OnInit, OnDestroy {
@@ -30,6 +31,8 @@ export class TablesPage implements OnInit, OnDestroy {
   onlineOrder: boolean = false
   dynamicColorChange = false
   colorToggleInterval: any
+
+  isLoadding: boolean = true
 
   editMode: boolean = false
   user!: User
@@ -50,6 +53,7 @@ export class TablesPage implements OnInit, OnDestroy {
     }
 
 ngOnInit(): void {
+  console.log(this.isLoadding)
   this.getUser()
   this.audio = new Audio();
   this.audio.src = 'assets/audio/ding.mp3';
@@ -86,9 +90,12 @@ waiterBills(tableBills: Bill[]){
 
 
 getTables(){
+  this.isLoadding = true
  this.tableSubs = this.tableServ.tableSend$.subscribe(response => {
     this.tables = response
-    // this.separateBills()
+    if(this.tables.length > 1){
+      this.isLoadding = false
+    }
   })
 }
 

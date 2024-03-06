@@ -177,6 +177,20 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
 }
 
 
+.loading{
+  display: flex;
+  flex-direction: row;
+  height: 90vh;
+  align-items: center;
+  ion-col{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+
 
 .bill{
   min-height: 80vh;

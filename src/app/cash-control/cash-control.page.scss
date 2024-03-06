@@ -30,6 +30,19 @@ ion-title{
   }
 }
 
+.spinner-container{
+  height: 100vh;
+  ion-content{
+    height: 100vh;
+    ion-row{
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+}
+
 .title{
   text-align: center;
   font-size: 28px;

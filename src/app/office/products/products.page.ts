@@ -12,13 +12,14 @@ import { CategoryPage } from '../CRUD/category/category.page';
 import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.page.html',
   styleUrls: ['./products.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, ReactiveFormsModule, CapitalizePipe, FormsModule]
+  imports: [IonicModule, CommonModule, ReactiveFormsModule, CapitalizePipe, FormsModule, SpinnerPage]
 })
 export class ProductsPage implements OnInit {
 

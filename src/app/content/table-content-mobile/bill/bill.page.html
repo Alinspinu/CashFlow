@@ -113,24 +113,24 @@
     <ion-col class="ion-no-margin ion-no-padding">
         <ion-row class="ion-no-margin ion-no-padding">
           <ion-col class="ion-no-margin ion-no-padding" *ngIf="showButtons">
-            <ion-button expand="block" size="small" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
+            <ion-button expand="block" size="medium" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
               <ion-icon src="../../../assets/icon/hug.svg"></ion-icon>
               UNEȘTE COMENZI
             </ion-button>
-            <ion-button expand="block" size="small" (click)="breakOrder()" [disabled]="disableAction">
+            <ion-button expand="block" size="medium" (click)="breakOrder()" [disabled]="disableAction">
               <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
               SEPARĂ COMANDA
             </ion-button>
           </ion-col>
           <ion-col class="ion-no-margin ion-no-padding" *ngIf="showButtons">
-            <ion-button class="client-button" (click)="addCustomer(clientMode)" expand="block" size="small">
+            <ion-button class="client-button" (click)="addCustomer(clientMode)" expand="block" size="medium">
               <ion-icon [src]=" clientMode ? '../../../assets/icon/add-outline.svg': '../../../assets/icon/trash-outline.svg'"></ion-icon>
               {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE CLIENT"}}
             </ion-button>
             <ion-button size="small" expand="block" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)" *ngIf="client">
               {{ cashBackMode ? 'FOLOSEȘTE CASHBACK' : 'ELIMINĂ CASH BACK'}}
              </ion-button>
-             <ion-button size="small" expand="block" color="primary" (click)="addTips()">
+             <ion-button size="medium" expand="block" color="primary" (click)="addTips()">
              ADAUGA BACSIS
              </ion-button>
           </ion-col>

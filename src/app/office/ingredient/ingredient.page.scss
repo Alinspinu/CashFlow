@@ -27,6 +27,13 @@ img{
   cursor: pointer
 }
 
+.spinner-container{
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 
 .header{
   font-size: 17px;

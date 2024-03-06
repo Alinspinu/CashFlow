@@ -37,6 +37,7 @@ export class AuthPage implements OnInit {
   resetPasswordMode: boolean = false;
   emailValue!: string;
   validEmail: boolean = false;
+  disableLogIn: boolean = false
 
   iconSrc: string = 'assets/icon/eye-outline.svg'
 
@@ -88,6 +89,7 @@ export class AuthPage implements OnInit {
   onSubmit(){
     const email = this.form.value.email;
     const password = this.form.value.password;
+    this.disableLogIn = true
     this.authService.onLogin(email, password).subscribe(res => {
       if(res){
         this.form.reset()
@@ -101,13 +103,16 @@ export class AuthPage implements OnInit {
           text: 'confirmare',
         });
         Preferences.set({key: 'tempUserData', value: data });
+        this.disableLogIn = false
         this.router.navigateByUrl('/tabs/tables');
       } else {
         const id: any = jwtDecode(res.token);
         this.tableSrv.getTables(res.locatie, id.userId)
+        this.disableLogIn = false
         this.router.navigateByUrl(`/tabs/tables`);
       }
     }, error => {
+      this.disableLogIn = false
       if(error.status === 401){
         showToast(this.toastCtrl, 'Nume sau parola incorectă!', 5000);
         setTimeout(() => {

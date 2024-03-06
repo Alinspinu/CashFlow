@@ -52,7 +52,14 @@
 
 <div class="contents-container">
 <ion-content [fullscreen]="false">
-<ion-grid>
+        <ion-grid *ngIf="isLoading">
+          <ion-row class="loadding">
+            <ion-col size="6" offset="3">
+              <app-spinner></app-spinner>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-grid *ngIf="!isLoading">
           <ion-row *ngIf="showMainCats">
               <ion-col size="6" *ngFor="let mainCat of getObjectKeys(mainCats)">
                 <ion-card (click)="showCategories(mainCat)">

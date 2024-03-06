@@ -7,6 +7,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
 import User from 'src/app/auth/user.model';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 
 @Component({
@@ -14,7 +15,7 @@ import User from 'src/app/auth/user.model';
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
 })
 export class UsersPage implements OnInit, OnDestroy {
 

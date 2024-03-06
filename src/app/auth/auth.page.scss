@@ -1,12 +1,17 @@
 
 .auth-wrapper{
-  font-family: NoirPro !important;
+  font-family: NoirProReg !important;
   display: flex;
   position: absolute;
   --background: #f4ede6;
   background-size: cover;
   height: 100vh;
 }
+
+ion-input, ion-button{
+  font-family: NoirProReg !important;
+}
+
 
 .header{
   position: relative;

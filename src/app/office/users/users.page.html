@@ -28,6 +28,11 @@
         </ion-item>
         </ion-col>
     </ion-row>
+    <ion-row class="spinner-container" *ngIf="!users.length">
+      <ion-col size="6" offset="3">
+        <app-spinner></app-spinner>
+      </ion-col>
+    </ion-row>
     <ion-row *ngFor="let user of users; let i = index;">
       <ion-col>
         <ion-item lines="none" class="content-container input user" (click)="goUserPage(user._id)">

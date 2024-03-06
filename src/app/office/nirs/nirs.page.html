@@ -58,7 +58,11 @@
       </ion-item>
     </ion-col>
   </ion-row>
-
+  <ion-row class="spinner-container" *ngIf="!nirs.length">
+    <ion-col size="6" offset="3">
+      <app-spinner></app-spinner>
+    </ion-col>
+  </ion-row>
   <ion-row style="margin-top: 45px;">
     <ion-col size="12">
       <ion-item lines="none" class="nir-entry input" *ngFor="let nir of nirs; let i = index">

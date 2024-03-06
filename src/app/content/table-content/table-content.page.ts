@@ -24,13 +24,14 @@ import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
 import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
 import { AudioService } from 'src/app/shared/audio.service';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-table-content',
   templateUrl: './table-content.page.html',
   styleUrls: ['./table-content.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule, CapitalizePipe]
+  imports: [IonicModule, CommonModule, FormsModule, RouterModule, CapitalizePipe, SpinnerPage]
 })
 export class TableContentPage implements OnInit, OnDestroy {
 
@@ -44,6 +45,8 @@ export class TableContentPage implements OnInit, OnDestroy {
   colorToggleInterval: any;
 
   disableOrderButton: boolean = false
+
+  isLoading: boolean = true
 
 
   discountValue: number = 0;
@@ -133,6 +136,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   getData(){
     this.contSrv.categorySend$.subscribe(response => {
       if(response.length > 1){
+        this.isLoading = false
         this.allCats = [...response]
         let tempMainCats: any = []
         for (const document of this.allCats) {
@@ -340,6 +344,27 @@ async addToBill(product: Product){
      return triggerEscapeKeyPress()
     }
   }
+  let options: Topping[] = []
+  let optionPrice: number = 0;
+  let pickedToppings: Topping[] = [];
+  let comment: string = ''
+  if(product.category._id === '65d78af381e86f3feded7300' || product._id === "654e909215fb4c734b9689b8"){
+    const itemsToSort = [...product.toppings]
+    options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
+    if(options.length){
+        const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
+          if(extra && extra.toppings) {
+             pickedToppings = extra.toppings
+             pickedToppings.forEach(el => {
+              optionPrice += el.price
+             })
+             price += optionPrice
+          }
+          if(extra && extra.comment){
+            comment = extra.comment
+          }
+      }
+  }
     const cartProduct: BillProduct = {
       name: cartProdName,
       price: price,
@@ -349,7 +374,7 @@ async addToBill(product: Product){
       imgPath: product.image.path,
       category: product.category._id,
       sub: false,
-      toppings: [],
+      toppings: pickedToppings,
       mainCat: product.mainCat,
       payToGo: false,
       newEntry: true,
@@ -359,7 +384,7 @@ async addToBill(product: Product){
       printer: product.printer,
       sentToPrint: true,
       imgUrl: product.image.path,
-      comment: this.comment,
+      comment: comment,
       tva: product.tva,
       toppingsToSend: product.toppings,
       sentToPrintOnline: true,
@@ -397,23 +422,23 @@ async addToBill(product: Product){
 
   async openComments(product: BillProduct, index: number){
     if(product.sentToPrint){
-    if(product.toppings.length){
-      let price: number = 0
-      product.toppings.forEach(top => {
-        price += top.price
-      })
-      product.price -= price
-      product.total = product.price * product.quantity
-      this.billToshow.total -= (price * product.quantity)
-      product.toppings = []
-      this.tableSrv.addComment(this.tableNumber, index, this.billIndex, '')
-    }
+    // if(product.toppings.length){
+    //   let price: number = 0
+    //   product.toppings.forEach(top => {
+    //     price += top.price
+    //   })
+    //   product.price -= price
+    //   product.total = product.price * product.quantity
+    //   this.billToshow.total -= (price * product.quantity)
+    //   product.toppings = []
+    //   this.tableSrv.addComment(this.tableNumber, index, this.billIndex, '')
+    // }
       let options: Topping[] = []
       let optionPrice: number = 0;
       let pickedToppings: Topping[] = [];
       if(product.toppingsToSend.length){
         const itemsToSort = [...product.toppingsToSend]
-        options = itemsToSort.sort((a, b) => a.price - b.price)
+        options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
       } else {
         const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: 's'}
         options.push(fakeTopping)

@@ -14,13 +14,14 @@ import { Preferences } from '@capacitor/preferences';
 import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { ContentService } from '../content/content.service';
 import { Category } from '../models/category.model';
+import { SpinnerPage } from '../modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-cash-control',
   templateUrl: './cash-control.page.html',
   styleUrls: ['./cash-control.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
 })
 export class CashControlPage implements OnInit, OnDestroy {
 
@@ -43,6 +44,8 @@ export class CashControlPage implements OnInit, OnDestroy {
 
   catSubs!: Subscription
   productSearch!: string
+
+  isLoading: boolean = true
 
   users: {name: string, id: string, show: boolean}[] = []
 
@@ -207,6 +210,7 @@ export class CashControlPage implements OnInit, OnDestroy {
 
   calcTotal(){
     this.userTotal = this.userCash + this.userCard +this.userOnline + this.userViva + this.userOnline + this.userVoucher
+    this.isLoading = false
   }
 
 

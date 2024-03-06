@@ -42,15 +42,13 @@ export class CashbackPage implements OnInit {
   }
 
   useCashBack(){
-    if(this.cashBackForm.valid && this.cashBackForm.value.val <= this.data.total / 1.1){
+    if(this.cashBackForm.valid){
       this.modalCtrl.dismiss(this.cashBackForm.value.val)
-    }else {
-      showToast(this.toastCtrl, 'Valoare din cashBack nu trebuie să depăsească 90 % din nota de plata', 3000)
     }
   }
 
   maxim(){
-    const value = this.data.cashBack > this.data.total / 1.1 ? this.data.total / 1.1 : this.data.cashBack
+    const value = this.data.cashBack > this.data.total  ? this.data.total : this.data.cashBack
     this.cashBackForm.get('val')?.setValue(value)
   }
 

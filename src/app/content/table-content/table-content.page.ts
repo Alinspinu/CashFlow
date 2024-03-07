@@ -664,8 +664,8 @@ async useCashBack(mode: boolean){
     const data = { cashBack: this.client.cashBack, total: this.billToshow.total}
     const cashBackValue = await this.actionSheet.openPayment(CashbackPage, data)
     if(cashBackValue){
-      this.billToshow.cashBack = cashBackValue;
-      this.billToshow.total  = this.billToshow.total - cashBackValue
+      this.billToshow.cashBack = round(cashBackValue);
+      this.billToshow.total  = round(this.billToshow.total - cashBackValue)
       this.cashBackMode = false
     }
   }else {

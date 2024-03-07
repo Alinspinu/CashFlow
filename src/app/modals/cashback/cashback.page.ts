@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { showToast } from 'src/app/shared/utils/toast-controller';
+import { round } from 'src/app/shared/utils/functions';
 
 @Component({
   selector: 'app-cashback',
@@ -49,7 +50,7 @@ export class CashbackPage implements OnInit {
 
   maxim(){
     const value = this.data.cashBack > this.data.total  ? this.data.total : this.data.cashBack
-    this.cashBackForm.get('val')?.setValue(value)
+    this.cashBackForm.get('val')?.setValue(round(value))
   }
 
 

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EnvironmentInjector, inject, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { Component, EnvironmentInjector, HostListener, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { IonicModule, NavController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
 import User from '../auth/user.model';
 import { getUserFromLocalStorage } from '../shared/utils/functions';
@@ -19,7 +20,9 @@ export class TabsPage implements OnInit{
   user!: User | null
 
   constructor(
-    private authSrv: AuthService
+    private authSrv: AuthService,
+    private router: Router,
+    private navCtrl: NavController,
   ) {}
 
 ngOnInit(): void {
@@ -27,4 +30,43 @@ ngOnInit(): void {
     this.user = user
   })
 }
+
+
+
+@HostListener('document:keydown', ['$event'])
+handleKeyDown(ev: KeyboardEvent){
+  if (ev.altKey &&  ev.code === "KeyC") {
+    this.router.navigateByUrl('/tabs/cash-control')
+  }
+  if (ev.altKey &&  ev.code === "KeyA") {
+    this.router.navigateByUrl('/tabs/office/nir/new')
+  }
+  if(ev.altKey && ev.code === "KeyV"){
+    this.router.navigateByUrl('/tabs/tables')
+  }
+  if(ev.altKey && ev.code === "KeyP"){
+    this.router.navigateByUrl('/tabs/office/products')
+  }
+  if(ev.altKey && ev.code === "KeyN"){
+    this.router.navigateByUrl('/tabs/office/nirs')
+  }
+  if(ev.altKey && ev.code === "KeyM"){
+    this.router.navigateByUrl('/tabs/office/ingredient')
+  }
+  if(ev.altKey && ev.code === "KeyR"){
+    this.router.navigateByUrl('/tabs/office/cash-register')
+  }
+  if(ev.altKey && ev.code === "KeyU"){
+    this.router.navigateByUrl('/tabs/office/users')
+  }
+  if(ev.ctrlKey && ev.code === "KeyA"){
+    this.router.navigateByUrl('/tabs/add-product/1')
+  }
+  if(ev.altKey && ev.code === "Backspace"){
+    this.navCtrl.back()
+  }
+
+}
+
+
 }

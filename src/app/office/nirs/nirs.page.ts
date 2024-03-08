@@ -45,6 +45,10 @@ export class NirsPage implements OnInit {
    this.getUser()
   }
 
+  ionViewDidEnter(){
+    this.getNirs()
+  }
+
 getUser(){
   getUserFromLocalStorage().then(user => {
     if(user){

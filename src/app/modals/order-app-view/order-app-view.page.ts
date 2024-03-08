@@ -55,7 +55,6 @@ export class OrderAppViewPage implements OnInit {
  async createBill(){
     const result = await this.actionSheet.openModal(SuplierPage, '', false)
     if(result){
-      console.log(result)
       this.modalCtrl.dismiss({orderId: this.order._id, clientId: result._id, message: 'bill'})
     }
   }

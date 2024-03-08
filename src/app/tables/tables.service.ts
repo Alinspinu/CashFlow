@@ -45,7 +45,6 @@ addNewBill(masa: number, name: string, newOrder: boolean){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     const index = table.bills.findIndex(obj => obj.name === "COMANDĂ NOUĂ")
-    console.log(index)
     if(index === -1 || newOrder){
       table.bills.push(bill)
     }

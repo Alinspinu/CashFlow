@@ -16,7 +16,6 @@ import { Preferences } from "@capacitor/preferences";
 
 
 
-
 export class NirService{
 
 

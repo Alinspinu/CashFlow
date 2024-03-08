@@ -61,13 +61,6 @@ getUser(){
   })
 }
 
-// @HostListener('document:keydown', ['$event'])
-// handleKeyDown(ev: KeyboardEvent){
-//   console.log(ev)
-//   if (ev.altKey &&  ev.key === "å") {
-//       this.addNir()
-//   }
-// }
 
 
 index(){

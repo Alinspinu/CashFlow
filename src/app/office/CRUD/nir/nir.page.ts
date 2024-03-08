@@ -350,7 +350,6 @@ inputType: string = 'number'
       gestiune: this.ingredientForm.value.gestiune,
       sellPrice: this.ingredientForm.value.sellPrice ? this.ingredientForm.value.sellPrice : 0
     }
-    console.log(ingredient)
     if(this.ingredientForm.valid){
       this.nirIngredients.push(ingredient)
       this.ingredientForm.reset()

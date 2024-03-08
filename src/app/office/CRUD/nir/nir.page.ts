@@ -27,6 +27,7 @@ import { Subscription } from 'rxjs';
 export class NirPage implements OnInit, OnDestroy {
 
   @ViewChild('qtyInput', { static: false }) qtyInput!: IonInput;
+  @ViewChild('docInput', { static: false }) docInput!: IonInput;
   @ViewChild('searchBar', {static: false}) searchBar!: IonSearchbar
 
 nirIngredients: NirIngredient[] = []
@@ -487,6 +488,7 @@ inputType: string = 'number'
    this.suplier = suplier;
     this.supliers = []
     this.furnizorSearch = ''
+    this.docInput.setFocus()
   }
 
 roundFor(num: number){

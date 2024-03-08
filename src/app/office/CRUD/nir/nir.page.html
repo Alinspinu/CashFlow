@@ -90,7 +90,7 @@
         <ion-item lines="none" class="nirForm">
           <ion-label class="furz-name" *ngIf="suplier">{{suplier.name}}</ion-label>
           <ion-label class="fur-cif" *ngIf="suplier">{{suplier.vatNumber.toUpperCase()}}</ion-label>
-          <ion-input mode="ios" type="text" label="Nr Doc" class="nr-doc" labelPlacement="floating" fill="outline" formControlName="nrDoc"></ion-input>
+          <ion-input mode="ios" type="text" label="Nr Doc" class="nr-doc" labelPlacement="floating" fill="outline" formControlName="nrDoc" #docInput></ion-input>
             <ion-datetime-button datetime="datetime" id="data"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>

@@ -77,7 +77,7 @@
     <ion-col size="9">
       <ion-title class="ion-text-center">Adaugă Nir</ion-title>
       <ion-item lines="none">
-        <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor"  (ionInput)="searchSuplier($event)"></ion-searchbar>
+        <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor"  (ionInput)="searchSuplier($event)" (keyup.enter)="selectSuplier(supliers[0])"></ion-searchbar>
         <img src="assets/icon/add-circle.svg" id="add-cat" (click)="addSuplier()">
       </ion-item>
       <ion-list>
@@ -89,7 +89,7 @@
         <ion-item lines="none" class="nirForm">
           <ion-label class="furz-name" *ngIf="suplier">{{suplier.name}}</ion-label>
           <ion-label class="fur-cif" *ngIf="suplier">{{suplier.vatNumber.toUpperCase()}}</ion-label>
-          <ion-input mode="ios" type="text" label="Nr Doc" class="nr-doc" labelPlacement="floating" fill="outline" formControlName="nrDoc"></ion-input>
+          <ion-input mode="ios" type="text" label="Nr Doc" class="nr-doc" labelPlacement="floating" fill="outline" formControlName="nrDoc" #docInput></ion-input>
             <ion-datetime-button datetime="datetime" id="data"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>

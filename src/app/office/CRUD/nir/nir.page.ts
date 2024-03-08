@@ -27,6 +27,7 @@ export class NirPage implements OnInit {
 
   @ViewChild('qtyInput', { static: false }) qtyInput!: IonInput;
   @ViewChild('searchBar', {static: false}) searchBar!: IonSearchbar
+  @ViewChild('docInput', {static: false}) docInput!: IonInput
 
 nirIngredients: NirIngredient[] = []
 ingredients: any = [];
@@ -483,6 +484,7 @@ inputType: string = 'number'
    this.suplier = suplier;
     this.supliers = []
     this.furnizorSearch = ''
+    this.docInput.setFocus()
   }
 
 roundFor(num: number){

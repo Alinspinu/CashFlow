@@ -17,6 +17,7 @@
               </ion-item>
               <ion-item lines="none">
                 <ion-input
+                (keyup.enter)="onSubmit()"
                 label="Password"
                 labelPlacement="floating"
                 type="password"
@@ -42,7 +43,7 @@
         <ion-row *ngIf="resetPasswordMode">
           <ion-col class="ion-text-center" size-lg="6" offset-lg="3">
             <ion-item lines="none">
-              <ion-input label="Email" labelPlacement="floating"  type="text" [(ngModel)]="emailValue" (input)="validateEmail()" >
+              <ion-input label="Email" labelPlacement="floating"  type="text" [(ngModel)]="emailValue" (input)="validateEmail()" (keyup.enter)="sendNewPassword()" >
               </ion-input>
             </ion-item>
           </ion-col>

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, ToastButton, ToastController } from '@ionic/angular';
@@ -45,7 +45,9 @@ export class NirsPage implements OnInit {
    this.getUser()
   }
 
-
+  ionViewDidEnter() {
+    this.getNirs()
+  }
 
 
 getUser(){
@@ -58,6 +60,14 @@ getUser(){
     }
   })
 }
+
+// @HostListener('document:keydown', ['$event'])
+// handleKeyDown(ev: KeyboardEvent){
+//   console.log(ev)
+//   if (ev.altKey &&  ev.key === "å") {
+//       this.addNir()
+//   }
+// }
 
 
 index(){

@@ -290,7 +290,12 @@ deleteTable(tableId: string, index: number){
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
-  bill.employee.user.length ? bill.employee = bill.employee : bill.employee = employee
+  if(bill.employee){
+    bill.employee.user.length ? bill.employee = bill.employee : bill.employee = employee
+  } else {
+    bill.employee = employee
+  }
+
   bill.locatie = locatie
   bill.onlineOrder = false
   bill.pending = true

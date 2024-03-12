@@ -73,7 +73,7 @@ ngOnDestroy(): void {
 userBills(tableBills: Bill[]){
   let userBill: number = 0
   tableBills.forEach(bill => {
-    if(bill.employee.user === this.user._id)
+    if(bill.employee &&(bill.employee.user === this.user._id))
       userBill += 1
   })
   return userBill
@@ -82,7 +82,7 @@ userBills(tableBills: Bill[]){
 waiterBills(tableBills: Bill[]){
   let waiterBill: number = 0
   tableBills.forEach(bill => {
-    if(bill.employee.user !== this.user._id)
+    if(bill.employee && (bill.employee.user !== this.user._id))
     waiterBill += 1
   })
   return waiterBill

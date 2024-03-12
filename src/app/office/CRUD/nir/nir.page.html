@@ -78,7 +78,7 @@
     <ion-col size="9">
       <ion-title class="ion-text-center">Adaugă Nir</ion-title>
       <ion-item lines="none">
-        <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplier($event)"></ion-searchbar>
+        <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplier($event)" #searchBarSuplier></ion-searchbar>
         <img src="assets/icon/add-circle.svg" id="add-cat"  (click)="addSuplier()">
       </ion-item>
       <ion-list>

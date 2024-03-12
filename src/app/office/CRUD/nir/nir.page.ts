@@ -29,6 +29,7 @@ export class NirPage implements OnInit, OnDestroy {
   @ViewChild('qtyInput', { static: false }) qtyInput!: IonInput;
   @ViewChild('docInput', { static: false }) docInput!: IonInput;
   @ViewChild('searchBar', {static: false}) searchBar!: IonSearchbar
+  @ViewChild('searchBarSuplier', {static: false}) searchBarSuplier!: IonSearchbar
 
 nirIngredients: NirIngredient[] = []
 ingredients: any = [];
@@ -74,6 +75,13 @@ inputType: string = 'number'
       this.ingSub.unsubscribe()
     }
   }
+
+  ionViewDidEnter(){
+    setTimeout(() => {
+      this.searchBarSuplier.setFocus()
+    }, 500)
+  }
+
 
   ngOnInit() {
     this.getUser()

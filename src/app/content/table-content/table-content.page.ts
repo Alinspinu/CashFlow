@@ -9,7 +9,7 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
 import { Bill, BillProduct, deletetBillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
-import {  Subscription } from 'rxjs';
+import {  map, Observable, of, Subscription } from 'rxjs';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
@@ -506,7 +506,7 @@ async addToBill(product: Product){
       } else {
         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
       }
-      this.sendOrder(false)
+      this.sendOrder(false).subscribe()
 
     }
   }
@@ -530,50 +530,85 @@ async addTips(){
 }
 
 
-sendOrder(out: boolean){
-  if(this.billToshow){
-    this.disableOrderButton = true
-    this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
-    const tableIndex = this.tableNumber
-    this.billToshow.locatie = this.user.locatie
-    this.calcBillDiscount(this.billToshow)
-    this.home()
-   this.tableSub = this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
-      if(res){
-        this.disableOrderButton = false
-        if(out){
-          this.router.navigateByUrl('/tabs/tables')
+// sendOrder(out: boolean){
+//   if(this.billToshow){
+//     this.disableOrderButton = true
+//     this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
+//     const tableIndex = this.tableNumber
+//     this.billToshow.locatie = this.user.locatie
+//     this.calcBillDiscount(this.billToshow)
+//     this.home()
+//    this.tableSub = this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
+//       if(res){
+//         this.disableOrderButton = false
+//         if(out){
+//         this.router.navigateByUrl('/tabs/tables')
+//         }
+//       }
+
+//     }
+//     );
+//   }
+// }
+
+sendOrder(out: boolean): Observable<boolean> {
+  if (this.billToshow) {
+    this.disableOrderButton = true;
+    this.billToshow._id.length
+      ? (this.billId = this.billToshow._id)
+      : (this.billId = 'new');
+    const tableIndex = this.tableNumber;
+    this.billToshow.locatie = this.user.locatie;
+    this.calcBillDiscount(this.billToshow);
+
+    return this.tableSrv.saveOrder(
+      tableIndex,
+      this.billId,
+      this.billIndex,
+      this.user.employee,
+      this.user.locatie
+    ).pipe(
+      map((res) => {
+        this.disableOrderButton = false;
+        if (out && res) {
+          this.router.navigateByUrl('/tabs/tables');
         }
-      }
-    }
+        return !!res; // Convert the response to a boolean
+      })
     );
+  } else {
+    // If this.billToshow is not truthy, return Observable of false
+    return of(false);
   }
 }
 
 
 async payment(){
-  this.sendOrder(false)
-    const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
-      if(paymentInfo){
-        this.billToshow.payment.card = paymentInfo.card;
-        this.billToshow.payment.cash = paymentInfo.cash;
-        this.billToshow.payment.voucher = paymentInfo.voucher;
-        this.billToshow.payment.viva = paymentInfo.viva;
-        this.billToshow.cif = paymentInfo.cif;
-        this.billToshow.payment.online  = paymentInfo.online
-        this.tableSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
-          if(response){
-            this.billToshow.discount = 0
-            console.log(response)
-            this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-            this.billProducts = []
-            this.billToshow = emptyBill()
-            this.billToshow.cashBack = 0
-            this.client = null
-            this.router.navigateByUrl("/tabs/tables")
-          }
-        })
-  }
+  this.sendOrder(false).subscribe(async(response) => {
+    if(response){
+      const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
+        if(paymentInfo){
+          this.billToshow.payment.card = paymentInfo.card;
+          this.billToshow.payment.cash = paymentInfo.cash;
+          this.billToshow.payment.voucher = paymentInfo.voucher;
+          this.billToshow.payment.viva = paymentInfo.viva;
+          this.billToshow.cif = paymentInfo.cif;
+          this.billToshow.payment.online  = paymentInfo.online
+          this.tableSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
+            if(response){
+              this.billToshow.discount = 0
+              console.log(response)
+              this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+              this.billProducts = []
+              this.billToshow = emptyBill()
+              this.billToshow.cashBack = 0
+              this.client = null
+              this.router.navigateByUrl("/tabs/tables")
+            }
+          })
+    }
+    }
+  })
 }
 
 async addCustomer(clientMode: boolean){
@@ -585,7 +620,7 @@ if(clientMode){
     this.billToshow.clientInfo = this.client
     this.billToshow.name = this.client.name
     this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-    this.sendOrder(false)
+    this.sendOrder(false).subscribe()
   }
   if(clientInfo.message === "voucher"){
     this.billToshow.voucher = clientInfo.data

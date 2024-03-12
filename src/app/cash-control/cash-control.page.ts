@@ -46,6 +46,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   productSearch!: string
 
   isLoading: boolean = true
+  message: boolean = false
 
   users: {name: string, id: string, show: boolean}[] = []
 
@@ -266,6 +267,15 @@ reports(value: string){
   this.cashSrv.raport(value).subscribe(response => {
     if(response){
       if(value === 'z'){
+        this.isLoading = true
+        this.message = true
+        this.cashSrv.saveInventary().subscribe(response => {
+          if(response){
+            this.isLoading = false
+            this.message = false
+            showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
+          }
+        })
         this.cashIn = 0
         this.cashOut = 0
       }

@@ -121,7 +121,7 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.cashSrv.getUserOrders(this.user._id).subscribe(response => {
       if(response) {
         this.orders = response
-        // this.isLoading = false
+        this.isLoading = false
         this.calcCashIn()
       }
     })
@@ -233,23 +233,22 @@ reports(value: string){
                   amount: this.userCash,
                   locatie: '65c221374c46336d1e6ac423',
                 }
-                this.cashSrv.registerEntry(entryR).subscribe(response => {
-                  if(response){
-                    this.cashSrv.saveInventary().subscribe(response => {
-                      if(response){
-                        this.isLoading = false
-                        this.message = false
-                        showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
-                      }
-                    })
-                  }
-                })
+                this.cashSrv.registerEntry(entryR).subscribe()
               }
             })
           }
 
          })
       }
+      this.isLoading = true
+      this.message = true
+      this.cashSrv.saveInventary().subscribe(response => {
+        if(response){
+          this.isLoading = false
+          this.message = false
+          showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
+        }
+      })
       showToast(this.toastCtrl, response.message, 3000)
     }
   }, error => {

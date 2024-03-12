@@ -32,7 +32,7 @@
         </ion-row>
           <ion-row *ngIf="!resetPasswordMode">
             <ion-col size-lg="6" offset-lg="3">
-              <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid">
+              <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid || disableSubmit">
                 <ion-label style="color:white;">
                   Login
                 </ion-label>

@@ -37,6 +37,7 @@ export class AuthPage implements OnInit {
   resetPasswordMode: boolean = false;
   emailValue!: string;
   validEmail: boolean = false;
+  disableSubmit: boolean = false
 
   iconSrc: string = 'assets/icon/eye-outline.svg'
 
@@ -86,6 +87,7 @@ export class AuthPage implements OnInit {
   };
 
   onSubmit(){
+    this.disableSubmit = true
     const email = this.form.value.email;
     const password = this.form.value.password;
     this.authService.onLogin(email, password).subscribe(res => {
@@ -93,6 +95,7 @@ export class AuthPage implements OnInit {
         this.form.reset()
       }
       if(res.message === 'Email sent'){
+        this.disableSubmit = false
         const data = JSON.stringify({
           name: res.user.name,
           email: res.user.email,
@@ -103,7 +106,7 @@ export class AuthPage implements OnInit {
         Preferences.set({key: 'tempUserData', value: data });
         this.router.navigateByUrl('/tabs/tables');
       } else {
-        console.log(res)
+        this.disableSubmit = false
         const id: any = jwtDecode(res.token);
         this.tableSrv.getTables(res.locatie, id.userId)
         this.router.navigateByUrl(`/tabs/tables`);

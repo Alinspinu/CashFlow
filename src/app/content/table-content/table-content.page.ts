@@ -530,27 +530,6 @@ async addTips(){
 }
 
 
-// sendOrder(out: boolean){
-//   if(this.billToshow){
-//     this.disableOrderButton = true
-//     this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
-//     const tableIndex = this.tableNumber
-//     this.billToshow.locatie = this.user.locatie
-//     this.calcBillDiscount(this.billToshow)
-//     this.home()
-//    this.tableSub = this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
-//       if(res){
-//         this.disableOrderButton = false
-//         if(out){
-//         this.router.navigateByUrl('/tabs/tables')
-//         }
-//       }
-
-//     }
-//     );
-//   }
-// }
-
 sendOrder(out: boolean): Observable<boolean> {
   if (this.billToshow) {
     this.disableOrderButton = true;

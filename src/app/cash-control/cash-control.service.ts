@@ -17,6 +17,10 @@ raport(value: string){
   return this.http.get<{message: string}>(`${environment.BASE_URL}pay/reports?value=${value}`)
 }
 
+saveInventary(){
+  return this.http.get<{message: string}>(`${environment.BASE_URL}ing/save-inventary?loc=${environment.LOC}`)
+}
+
 cashInAndOut(data: any){
   return this.http.post<{message: string}>(`${environment.BASE_URL}pay/in-and-out`, {data: data})
 }

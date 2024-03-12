@@ -40,6 +40,8 @@ export class CashControlPage implements OnInit, OnDestroy {
   cashIn: number = 0;
   cashOut: number = 0;
   allCats: Category[] = []
+  isLoading: boolean = true
+  message: boolean  = false
 
   catSubs!: Subscription
   show: boolean = false
@@ -231,37 +233,13 @@ reports(value: string){
                 }
                 this.cashSrv.registerEntry(entryR).subscribe(response => {
                   if(response){
-                    let entryT = {
-                      tip: 'expense',
-                      date: new Date(Date.now()),
-                      description: 'Tips',
-                      amount: 0,
-                      locatie: '65c221374c46336d1e6ac423',
-                    }
-                    const total = this.userCash + this.userCard + this.userUnreg
-                    if(total > 399){
-                      entryT.amount = 10
-                    }
-                    if(total > 499){
-                      entryT.amount = 20
-                    }
-                    if(total > 599){
-                      entryT.amount = 40
-                    }
-                    if(total > 699){
-                      entryT.amount = 50
-                    }
-                    if(total > 999) {
-                      entryT.amount = 100
-                    }
-                    if(entryT.amount !== 0){
-                      this.cashSrv.registerEntry(entryT).subscribe(response => {
-                       if(response){
-                          showToast(this.toastCtrl, 'All good in the hood tipsy today!', 2000)
-                        }
-                      })
-                    }
-                    showToast(this.toastCtrl, 'All good in the hood', 2000)
+                    this.cashSrv.saveInventary().subscribe(response => {
+                      if(response){
+                        this.isLoading = false
+                        this.message = false
+                        showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
+                      }
+                    })
                   }
                 })
               }

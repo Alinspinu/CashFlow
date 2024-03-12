@@ -5,8 +5,7 @@
   </ion-toolbar>
 </ion-header>
 
-
-<div class="contents-container">
+<div class="contents-container" *ngIf="!isLoading">
   <ion-content [fullscreen]="true" class="cash-info">
     <ion-title class="title" *ngIf="userTotal > 0">
       Încsări
@@ -52,13 +51,12 @@
       </div>
     </div>
   </ion-content>
-  <div class="separator"></div>
+<div class="separator"></div>
 <ion-content [fullscreen]="true" class="orders">
 
     <ion-title class="title">
       Note Încasate
     </ion-title>
-
   <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="openBill(order)">
     <span>Nr.{{i+1}} </span>
     <span> Salvată la - {{orderTime(order.createdAt)}}</span>
@@ -66,6 +64,24 @@
     <span *ngIf="order.clientInfo.name.length">Client: {{order.clientInfo.name}}</span>
   </ion-item>
 </ion-content>
+</div>
+
+
+<div class="spinner-container" *ngIf="isLoading">
+  <ion-content [fullscreen]="true">
+    dasdadsadsadadadasddsaas
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" offset="3">
+
+            <app-spinner></app-spinner>
+            <div class="label-wrapper">
+              <ion-label class="label" *ngIf="message" color="primary">Se lucrează intens....</ion-label>
+            </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
 </div>
 
 

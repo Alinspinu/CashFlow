@@ -106,6 +106,10 @@ export class CashPage implements OnInit {
   user!: User
 
 
+  snitzel: number = 0
+  hummus: number = 0
+  risotto: number = 0
+
   ngOnInit() {
     getUserFromLocalStorage().then(user => {
       if(user){
@@ -137,6 +141,7 @@ getOrders(){
     }
   })
 }
+
 
 calcTva(){
   let discountBills: Bill[] = []

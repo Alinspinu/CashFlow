@@ -321,9 +321,9 @@ deleteTable(tableId: string, index: number){
 );
 };
 
-uploadIngs(ings: any, quantity: number, locatie: string){
+uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity}, {headers})
+  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation}, {headers})
 }
 
 deleteOrders(data: any[]){

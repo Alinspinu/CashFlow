@@ -147,6 +147,7 @@ updateProductIng(){
     if(ingToEdit){
       this.ingSrv.editIngredient(ing._id, ingToEdit).subscribe(response => {
         if(response){
+          // this.getIngredients()
           showToast(this.toastCtrl, response.message, 3000)
         }
       })

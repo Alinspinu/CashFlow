@@ -492,10 +492,12 @@ async addToBill(product: Product){
           result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
          this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
             if(result.upload){
+              const operation = {name: 'intoarcere', details: product.name}
+              console.log(operation)
               if(product.toppings.length){
-               this.tableSub = this.tableSrv.uploadIngs(product.toppings, buc, this.user.locatie).subscribe()
+               this.tableSub = this.tableSrv.uploadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
               }
-              this.tableSub = this.tableSrv.uploadIngs(ings, buc, this.user.locatie).subscribe(response => {
+              this.tableSub = this.tableSrv.uploadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 4000)
                 }
@@ -759,10 +761,11 @@ async useCashBack(mode: boolean){
           choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
          this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
             if(choise.upload){
+              const operation = {name: 'intoarcere', details: el.name}
               if(el.toppings.length){
-              this.tableSub =  this.tableSrv.uploadIngs(el.toppings, buc, this.user.locatie).subscribe()
+              this.tableSub =  this.tableSrv.uploadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
               }
-              this.tableSub = this.tableSrv.uploadIngs(el.ings, buc, this.user.locatie).subscribe(response => {
+              this.tableSub = this.tableSrv.uploadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 3000)
                 }

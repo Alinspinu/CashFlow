@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
+import { IonInput } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-addingredient',
@@ -13,7 +14,7 @@ import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 export class AddIngredientPage implements OnInit {
 
   ingredientForm!: FormGroup
-    title: string = 'Adaugă Ingredient'
+  title: string = 'Adaugă Ingredient'
   ing!: any
 
   constructor(

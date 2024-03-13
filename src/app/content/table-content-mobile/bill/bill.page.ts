@@ -248,51 +248,51 @@ calcProductTotal(products: BillProduct[]){
     }
 
 
-  async openDeleteAlert(qty: number, index: number, ings: any, product: BillProduct){
-    let numberArr: string [] = []
-    let delProd: deletetBillProduct = emptyDeletetBillProduct()
-    for(let i=1; i<=qty; i++){
-      numberArr.push(i.toString())
-    }
-    const result = await this.actionSheet.deleteBillProduct(numberArr)
-    if(result){
-      const buc = parseFloat(result.qty);
-      const title = "MOTIVUL ȘTERRII"
-      const message = "Scrie motivul pentru care vrei să stergi produsul!"
-      const label = "Scrie motivul"
-      const reason = await this.actionSheet.reasonAlert(title, message, label);
-        if(reason) {
-          for(let i=0; i<buc; i++){
-            this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
-            this.disableBrakeButton()
-          }
-          delProd.billProduct = product
-          delProd.reason = reason;
-          delProd.employee = this.user.employee
-          delProd.locatie = this.user.locatie
-          delProd.billProduct.quantity = buc
-          delProd.billProduct.total = buc * delProd.billProduct.price
-          result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
-         this.tabSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-            if(result.upload){
-              if(product.toppings.length){
-               this.tabSub = this.tableSrv.uploadIngs(product.toppings, buc, this.user.locatie).subscribe()
-              }
-              this.tabSub = this.tableSrv.uploadIngs(ings, buc, this.user.locatie).subscribe(response => {
-                if(response) {
-                  showToast(this.toastCtrl, response.message, 4000)
-                }
-              })
-            }
-          })
+  // async openDeleteAlert(qty: number, index: number, ings: any, product: BillProduct){
+  //   let numberArr: string [] = []
+  //   let delProd: deletetBillProduct = emptyDeletetBillProduct()
+  //   for(let i=1; i<=qty; i++){
+  //     numberArr.push(i.toString())
+  //   }
+  //   const result = await this.actionSheet.deleteBillProduct(numberArr)
+  //   if(result){
+  //     const buc = parseFloat(result.qty);
+  //     const title = "MOTIVUL ȘTERRII"
+  //     const message = "Scrie motivul pentru care vrei să stergi produsul!"
+  //     const label = "Scrie motivul"
+  //     const reason = await this.actionSheet.reasonAlert(title, message, label);
+  //       if(reason) {
+  //         for(let i=0; i<buc; i++){
+  //           this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
+  //           this.disableBrakeButton()
+  //         }
+  //         delProd.billProduct = product
+  //         delProd.reason = reason;
+  //         delProd.employee = this.user.employee
+  //         delProd.locatie = this.user.locatie
+  //         delProd.billProduct.quantity = buc
+  //         delProd.billProduct.total = buc * delProd.billProduct.price
+  //         result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
+  //        this.tabSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
+  //           if(result.upload){
+  //             if(product.toppings.length){
+  //              this.tabSub = this.tableSrv.uploadIngs(product.toppings, buc, this.user.locatie).subscribe()
+  //             }
+  //             this.tabSub = this.tableSrv.uploadIngs(ings, buc, this.user.locatie).subscribe(response => {
+  //               if(response) {
+  //                 showToast(this.toastCtrl, response.message, 4000)
+  //               }
+  //             })
+  //           }
+  //         })
 
-      } else {
-        showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
-      }
-      this.sendOrder(false)
+  //     } else {
+  //       showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+  //     }
+  //     this.sendOrder(false)
 
-    }
-  }
+  //   }
+  // }
 
 
   getBill(){
@@ -599,60 +599,60 @@ disableBrakeButton(){
   }
 
 
-    async deleteOrder(){
-      let data = []
-      if(this.billProducts && this.billProducts.length && !this.billProducts[0].sentToPrint){
-        const choise = await this.actionSheet.deleteBill()
-        if(choise){
-          const title = "MOTIVUL ȘTERRII"
-          const message = "Scrie motivul pentru care vrei să stergi comanda!"
-          const label = "Scrie motivul"
-          const reason = await this.actionSheet.reasonAlert(title, message, label);
-          if(reason) {
-            this.billProducts.forEach((el: BillProduct) => {
-            let delProd: deletetBillProduct = emptyDeletetBillProduct()
-            const buc = el.quantity;
-            delProd.billProduct = el
-            delProd.reason = reason;
-            delProd.employee = this.user.employee
-            delProd.locatie = this.user.locatie
-            delProd.billProduct.quantity = buc
-            delProd.billProduct.total = buc * delProd.billProduct.price
-            choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
-            this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-              if(choise.upload){
-                if(el.toppings.length){
-                  this.tableSrv.uploadIngs(el.toppings, buc, this.user.locatie).subscribe()
-                }
-                this.tableSrv.uploadIngs(el.ings, buc, this.user.locatie).subscribe(response => {
-                  if(response) {
-                    showToast(this.toastCtrl, response.message, 3000)
-                  }
-                })
-              }
-            })
-          })
-          } else {
-            showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
-            return
-          }
+    // async deleteOrder(){
+    //   let data = []
+    //   if(this.billProducts && this.billProducts.length && !this.billProducts[0].sentToPrint){
+    //     const choise = await this.actionSheet.deleteBill()
+    //     if(choise){
+    //       const title = "MOTIVUL ȘTERRII"
+    //       const message = "Scrie motivul pentru care vrei să stergi comanda!"
+    //       const label = "Scrie motivul"
+    //       const reason = await this.actionSheet.reasonAlert(title, message, label);
+    //       if(reason) {
+    //         this.billProducts.forEach((el: BillProduct) => {
+    //         let delProd: deletetBillProduct = emptyDeletetBillProduct()
+    //         const buc = el.quantity;
+    //         delProd.billProduct = el
+    //         delProd.reason = reason;
+    //         delProd.employee = this.user.employee
+    //         delProd.locatie = this.user.locatie
+    //         delProd.billProduct.quantity = buc
+    //         delProd.billProduct.total = buc * delProd.billProduct.price
+    //         choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
+    //         this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
+    //           if(choise.upload){
+    //             if(el.toppings.length){
+    //               this.tableSrv.uploadIngs(el.toppings, buc, this.user.locatie).subscribe()
+    //             }
+    //             this.tableSrv.uploadIngs(el.ings, buc, this.user.locatie).subscribe(response => {
+    //               if(response) {
+    //                 showToast(this.toastCtrl, response.message, 3000)
+    //               }
+    //             })
+    //           }
+    //         })
+    //       })
+    //       } else {
+    //         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+    //         return
+    //       }
 
-            data.push({id: this.billToshow._id})
-            this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-            this.tableSrv.deleteOrders(data).subscribe()
-            this.billProducts = []
-            this.client = null
-            this.clientMode = true
-            this.billToshow = emptyBill()
-          }
-      } else {
-        this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-        this.billProducts = []
-        if(this.table.bills.length){
-        this.showOrder(0)
-        }
-      }
-    }
+    //         data.push({id: this.billToshow._id})
+    //         this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+    //         this.tableSrv.deleteOrders(data).subscribe()
+    //         this.billProducts = []
+    //         this.client = null
+    //         this.clientMode = true
+    //         this.billToshow = emptyBill()
+    //       }
+    //   } else {
+    //     this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+    //     this.billProducts = []
+    //     if(this.table.bills.length){
+    //     this.showOrder(0)
+    //     }
+    //   }
+    // }
 
     async mergeOrders(){
       const bills = this.table.bills;

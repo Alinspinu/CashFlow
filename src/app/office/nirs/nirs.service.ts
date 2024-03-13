@@ -25,7 +25,7 @@ export class NirsService{
   }
 
   deleteNir(id: string) {
-    return this.http.delete<{message: string}>(`${environment.BASE_URL}nir/nir?id=${id}`)
+    return this.http.delete<{message: string}>(`${environment.BASE_URL}nir/nir?id=${id}&loc=${environment.LOC}`)
   }
 
   exportNirs(startDate: any, endDate: any, loc: string){

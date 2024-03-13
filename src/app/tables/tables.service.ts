@@ -294,8 +294,8 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
  }));
 };
 
-uploadIngs(ings: any, quantity: number, locatie: string){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity})
+uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
+  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation})
 }
 
 deleteOrders(data: any[]){

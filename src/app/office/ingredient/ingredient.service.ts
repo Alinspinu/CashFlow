@@ -31,8 +31,8 @@ export class IngredientService{
 
   }
 
-  printConsum(filter: any, loc: string, startDate: string, endDate: string){
-    return this.http.post(`${environment.BASE_URL}ing/print-consum`, {filter: filter, startDate: startDate, endDate: endDate, loc: loc}, {responseType: 'blob'})
+  printConsum(dep: any, loc: string, startDate: string, endDate: string, dont: boolean){
+    return this.http.post(`${environment.BASE_URL}ing/print-consum`, {dep: dep, startDate: startDate, endDate: endDate, loc: loc, dont: dont}, {responseType: 'blob'})
   }
 
 

@@ -33,7 +33,7 @@ export class IngredientPage implements OnInit {
   user!: User
 
   allIngs!: InvIngredient[]
-
+  dep: string = ""
   toppings!: any;
   productIngredients!: any;
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
@@ -82,7 +82,7 @@ export class IngredientPage implements OnInit {
     if(startDate){
       const endDate = await this.actionSh.openAuth(DatePickerPage)
       if(endDate){
-        this.ingSrv.printConsum(this.filter, this.user.locatie, startDate, endDate).subscribe(response => {
+        this.ingSrv.printConsum(this.dep, this.user.locatie, startDate, endDate, true).subscribe(response => {
           const url = window.URL.createObjectURL(response);
           const a = document.createElement('a');
           a.href = url;
@@ -112,6 +112,7 @@ export class IngredientPage implements OnInit {
 
   onSelectDep(event: any){
     this.filter.dep = event.detail.value
+    this.dep = event.detail.value
     this.getIngredients()
   }
 
@@ -131,7 +132,6 @@ export class IngredientPage implements OnInit {
 updateProductIng(){
   this.ingSrv.uodateProductIngredientPrices(this.user.locatie).subscribe()
 }
-
 
 
  async ingEdit(ing: any){

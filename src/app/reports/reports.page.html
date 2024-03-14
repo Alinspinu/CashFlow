@@ -1,4 +1,4 @@
-
+<!--
 <ion-tabs>
   <ion-tab-bar slot="top">
 
@@ -18,4 +18,46 @@
     </ion-tab-button>
 
   </ion-tab-bar>
-</ion-tabs>
+</ion-tabs> -->
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title size="large" class="ion-text-center">Rapoarte</ion-title>
+  </ion-toolbar>
+</ion-header>
+<div class="contents-container">
+  <ion-content [fullscreen]="true" class="menu">
+  <ion-grid class="ion-no-padding ion-no-margin">
+    <ion-row class="ion-no-padding ion-no-margin">
+      <ion-col class="ion-no-padding ion-no-margin">
+       <ion-item lines="none" class="option ion-no-padding ion-no-margin" (click)="sales()"  [ngClass]="{'selected': show.sales}">
+        <ion-icon slot="start" src="assets/icon/business.svg"></ion-icon>
+        <ion-label>Vanzari</ion-label>
+       </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding ion-no-margin">
+      <ion-col class="ion-no-padding ion-no-margin">
+       <ion-item lines="none" class="option ion-no-padding ion-no-margin" (click)="products()"  [ngClass]="{'selected': show.products}">
+        <ion-icon slot="start" src="assets/icon/food.svg"></ion-icon>
+        <ion-label>Produse</ion-label>
+       </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding ion-no-margin">
+      <ion-col class="ion-no-padding ion-no-margin">
+       <ion-item lines="none" class="option ion-no-padding ion-no-margin" (click)="ingredients()"  [ngClass]="{'selected': show.ingredients}">
+        <ion-icon slot="start" src="assets/icon/plant.svg"></ion-icon>
+        <ion-label>Materii prime</ion-label>
+       </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  </ion-content>
+  <div class="separator"></div>
+    <div class="view">
+      <app-cash *ngIf="show.sales"></app-cash>
+      <app-products *ngIf="show.products"></app-products>
+      <app-ingredients *ngIf="show.ingredients"></app-ingredients>
+    </div>
+</div>

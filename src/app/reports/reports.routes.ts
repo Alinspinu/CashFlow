@@ -9,7 +9,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'live-stoc',
-        loadComponent: () => import('../reports/live-stoc/live-stoc.page').then( m => m.LiveStocPage),
+        loadComponent: () => import('./ingredients/ingredients.page').then( m => m.IngredientsPage),
       },
       {
         path: 'cash',

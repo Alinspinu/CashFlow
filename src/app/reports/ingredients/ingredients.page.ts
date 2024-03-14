@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
-  selector: 'app-live-stoc',
-  templateUrl: './live-stoc.page.html',
-  styleUrls: ['./live-stoc.page.scss'],
+  selector: 'app-ingredients',
+  templateUrl: './ingredients.page.html',
+  styleUrls: ['./ingredients.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class LiveStocPage implements OnInit {
+export class IngredientsPage implements OnInit {
 
   constructor() { }
 

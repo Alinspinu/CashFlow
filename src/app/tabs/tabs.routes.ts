@@ -32,7 +32,7 @@ export const routes: Routes = [
       {
         path: 'config',
         loadComponent: () =>
-          import('./config/config.page').then((m) => m.ConfigPage),
+          import('../config/config.page').then((m) => m.ConfigPage),
           canActivate: [AuthGuard]
       },
       {

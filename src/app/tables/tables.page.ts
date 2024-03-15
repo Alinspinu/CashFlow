@@ -96,10 +96,10 @@ getUser(){
        }
       this.tableServ.addTable(name, this.user.locatie).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 4000)
+          showToast(this.toastCtrl, response.message, 4000, 'success-toast')
         }
       }, err => {
-        showToast(this.toastCtrl, err, 4000)
+        showToast(this.toastCtrl, err, 4000, 'error-toast')
       })
     })
   }
@@ -156,11 +156,11 @@ getUser(){
         this.tableServ.editTable(tableIndex, response[0]).subscribe(response => {
           if(response){
             console.log(response)
-            showToast(this.toastCtrl, response.message, 4000)
+            showToast(this.toastCtrl, response.message, 4000, 'success-toast')
           }
         }, err => {
           console.log(err)
-          showToast(this.toastCtrl, err, 4000)
+          showToast(this.toastCtrl, err, 4000, 'error-toast')
         })
       }
     })
@@ -171,7 +171,7 @@ getUser(){
     const confirm = await this.actionSheet.deleteAlert(`Ești sigur ca vrei să ștergi masa ${message}`, "Sterge")
     if(confirm){
       this.tableServ.deleteTable(table._id, table.index).subscribe(response => {
-        showToast(this.toastCtrl, response.message, 4000)
+        showToast(this.toastCtrl, response.message, 4000, 'success-toast')
       })
     }
   }

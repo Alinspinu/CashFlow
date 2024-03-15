@@ -98,7 +98,7 @@ searchCustomer(){
       }
     }, error => {
       if(error){
-        showToast(this.toastCtrl, error.error.message, 4000)
+        showToast(this.toastCtrl, error.error.message, 4000, 'error-toast')
       }
     })
   }
@@ -123,13 +123,13 @@ addClient(){
     console.log(this.user.locatie)
       this.customerSrv.createCustomer(name, email, cardIndex, this.user.locatie).subscribe(res => {
         if(res.message === "All good"){
-            showToast(this.toastCtrl, `Un email a fost trimis la ${email} pentru a completa înregistrarea!`, 5000)
+            showToast(this.toastCtrl, `Un email a fost trimis la ${email} pentru a completa înregistrarea!`, 5000, 'success-toast')
             this.customer = res.customer
             this.customer.userId = res.customer._id
             this.modalCtrl.dismiss(this.customer)
             console.log(this.customer)
           } else if(res.message === 'Acest email există deja în baza de date!' || res.message === "Utilizatorului i s-a adaugat cadrul la cont"){
-            showToast(this.toastCtrl, res.message , 3000)
+            showToast(this.toastCtrl, res.message , 3000, 'error-toast')
             this.customer = res.customer
             console.log(this.customer)
           this.customer.userId = res.customer._id

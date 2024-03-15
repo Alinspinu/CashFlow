@@ -261,7 +261,7 @@ export class ProductPage implements OnInit {
       productData.append('sub', sub);
       if(this.editMode){
         this.prodSrv.editProduct(productData, this.product._id).subscribe(response => {
-          showToast(this.toastCtrl, response.message, 3000);
+          showToast(this.toastCtrl, response.message, 3000, 'success-toast');
           this.router.navigateByUrl('/tabs/office/products')
         })
       } else {

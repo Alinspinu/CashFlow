@@ -123,7 +123,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
       this.recipeTotal = +prodIng.price
       this.recipeService.saveIng(prodIng, this.user.locatie).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 3000)
+          showToast(this.toastCtrl, response.message, 3000, 'success-toast')
           this.displayIngs = [];
           this.ingredientsToSend = [];
           this.productIngredientMode = false,
@@ -229,7 +229,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
    const ing = await this.actionSrv.openModal(AddIngredientPage, [], false)
    if(ing){
      this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
-      showToast(this.toastCtrl, response.message, 4000)
+      showToast(this.toastCtrl, response.message, 4000, 'success-toast')
      })
    }
   }

@@ -74,16 +74,16 @@ export class ConfigPage implements OnInit {
       if(this.appKey.length){
         this.configSrv.saveServiceMail(this.emailValue,this.appKey, this.locId).subscribe(response => {
           if(response) {
-              showToast(this.toastCtrl, response.message, 2000)
+              showToast(this.toastCtrl, response.message, 2000, 'success-toast')
               this.emailValue = ''
               this.appKey = ''
           }
         })
       } else {
-        showToast(this.toastCtrl, 'Trebuie sa introduci cheia de aplicatie', 2000)
+        showToast(this.toastCtrl, 'Trebuie sa introduci cheia de aplicatie', 2000, 'error-toast')
       }
     } else{
-      showToast(this.toastCtrl, 'Adresa de email trebuie sa fie de la google  eg. example@gmail.com', 2000)
+      showToast(this.toastCtrl, 'Adresa de email trebuie sa fie de la google  eg. example@gmail.com', 2000, 'error-toast')
     }
   }
 

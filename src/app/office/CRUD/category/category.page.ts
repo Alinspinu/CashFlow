@@ -86,9 +86,9 @@ export class CategoryPage implements OnInit {
       const index = this.mainCats.findIndex((obj:any) => obj.name === response[0])
       if(index === -1){
         this.mainCats.push({name: response[0]})
-        showToast(this.toastCtrl, `Categoria ${response[0]} a fost adăugată`, 4000 )
+        showToast(this.toastCtrl, `Categoria ${response[0]} a fost adăugată`, 4000, 'success-toast' )
       } else {
-        showToast(this.toastCtrl, `Mai avem o categorie părinte cu numele ${response[0]}!`, 4000 )
+        showToast(this.toastCtrl, `Mai avem o categorie părinte cu numele ${response[0]}!`, 4000, 'error-toast' )
       }
     }
     }

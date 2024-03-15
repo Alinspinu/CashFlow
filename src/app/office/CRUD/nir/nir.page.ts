@@ -186,7 +186,7 @@ inputType: string = 'number'
         input.setValue(round(+result))
       } catch(err){
         console.log(err)
-        showToast(this.toastCtrl, 'Eroare la calcul', 2000)
+        showToast(this.toastCtrl, 'Eroare la calcul', 2000, 'error-toast')
       }
   }
 
@@ -319,7 +319,7 @@ inputType: string = 'number'
       this.calcTotalsAftDiscount(this.nirIngredients)
       console.log(this.nir)
    } else {
-    showToast(this.toastCtrl, "Valoarea TVA trebuie sa fie 19, 9, 5 sau 0", 3000)
+    showToast(this.toastCtrl, "Valoarea TVA trebuie sa fie 19, 9, 5 sau 0", 3000, 'error-toast')
    }
 
   }
@@ -396,7 +396,7 @@ inputType: string = 'number'
             this.nir.totalDoc = this.valTotal
             this.nirSrv.saveNir(this.nir, this.user.locatie).subscribe(response => {
             this.reserNirData()
-              showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
+              showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000, 'success-toast')
               this.router.navigateByUrl('/tabs/office/nirs')
             })
           }
@@ -410,7 +410,7 @@ inputType: string = 'number'
         this.nirSrv.saveNir(this.nir, this.user.locatie).subscribe(response=> {
           this.reserNirData()
           this.router.navigateByUrl('/tabs/office/nirs')
-          showToast(this.toastCtrl, response.message, 2000)
+          showToast(this.toastCtrl, response.message, 2000, 'success-toast')
         })
       }
     }

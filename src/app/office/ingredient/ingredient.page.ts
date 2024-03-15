@@ -145,7 +145,7 @@ updateProductIng(){
     if(ingToEdit){
       this.ingSrv.editIngredient(ing._id, ingToEdit).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 3000)
+          showToast(this.toastCtrl, response.message, 3000, '')
         }
       })
     }
@@ -157,7 +157,7 @@ updateProductIng(){
     if(result){
       this.ingSrv.deleteIngredient(id).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 3000)
+          showToast(this.toastCtrl, response.message, 3000, 'success-toast')
           this.getIngredients()
         }
       })

@@ -107,16 +107,16 @@ export class PaymentPage implements OnInit {
       this.paySrv.checkPos(posSum).subscribe(response => {
         if(response){
           if(response.payment){
-            showToast(this.toastCtrl, response.message, 2000)
+            showToast(this.toastCtrl, response.message, 2000, 'success-toast')
             this.disableCancelButton = false
             return this.modalCtrl.dismiss(pay)
           } else {
-            showToast(this.toastCtrl, response.message, 2000)
+            showToast(this.toastCtrl, response.message, 2000, 'error-toast')
             this.disableCancelButton = false
             return
           }
         } else {
-          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000)
+          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000, 'error-toast')
           this.disableCancelButton = false
           return
         }
@@ -125,7 +125,7 @@ export class PaymentPage implements OnInit {
       this.modalCtrl.dismiss(pay)
     }
 } else {
-    showToast(this.toastCtrl, "Valoare încasată trebuie sa fie egală cu nota de plată!", 5000)
+    showToast(this.toastCtrl, "Valoare încasată trebuie sa fie egală cu nota de plată!", 5000, 'error-toast')
    }
   }
 
@@ -213,14 +213,14 @@ export class PaymentPage implements OnInit {
       this.paySrv.checkPos(sum).subscribe(response => {
         if(response){
           if(response.payment){
-            showToast(this.toastCtrl, response.message, 2000)
+            showToast(this.toastCtrl, response.message, 2000, 'success-toast')
             return true
           } else {
-            showToast(this.toastCtrl, response.message, 2000)
+            showToast(this.toastCtrl, response.message, 2000, 'error-toast')
             return false
           }
         } else {
-          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000)
+          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000, 'error-toast')
           return false
         }
       })

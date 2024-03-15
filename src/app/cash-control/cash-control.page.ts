@@ -87,24 +87,24 @@ export class CashControlPage implements OnInit, OnDestroy {
     if( result && result.message === 'changePayment'){
       this.cashSrv.changePaymnetMethod(result.order).subscribe(response => {
         if(response) {
-          showToast(this.toastCtrl, response.message, 3000)
+          showToast(this.toastCtrl, response.message, 3000, 'success-toast')
         }
       }, error => {
         if(error) {
           console.log(error )
-          showToast(this.toastCtrl, error.message, 3000)
+          showToast(this.toastCtrl, error.message, 3000, 'error-toast')
         }
       })
     }
      if(result && result.message === "reprint") {
         this.cashSrv.reprintBill(result.order).subscribe(response => {
           if(response) {
-            showToast(this.toastCtrl, response.message, 3000)
+            showToast(this.toastCtrl, response.message, 3000, 'success-toast')
           }
         }, error => {
           if(error) {
             console.log(error )
-            showToast(this.toastCtrl, error.message, 3000)
+            showToast(this.toastCtrl, error.message, 3000, 'error-toast')
           }
         })
       }
@@ -246,14 +246,14 @@ reports(value: string){
         if(response){
           this.isLoading = false
           this.message = false
-          showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
+          showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000, 'success-toast')
         }
       })
-      showToast(this.toastCtrl, response.message, 3000)
+      showToast(this.toastCtrl, response.message, 3000, 'success-toast')
     }
   }, error => {
     if(error){
-      showToast(this.toastCtrl, error.message, 3000)
+      showToast(this.toastCtrl, error.message, 3000, 'error-toast')
     }
   })
 }
@@ -296,11 +296,11 @@ async inAndOut(value: string){
     if(response){
       const sums = {in: this.cashIn, out: this.cashOut}
       Preferences.set({key: 'cashInAndOut', value: JSON.stringify(sums)})
-      showToast(this.toastCtrl, response.message, 3000)
+      showToast(this.toastCtrl, response.message, 3000, 'success-toast')
     }
    }, error => {
     if(error){
-      showToast(this.toastCtrl, error.message, 3000)
+      showToast(this.toastCtrl, error.message, 3000, 'error-toast')
     }
    })
  }

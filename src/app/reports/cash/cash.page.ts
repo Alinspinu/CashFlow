@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { DatePickerPage } from '../../modals/date-picker/date-picker.page';
-import { CashService } from './cash.service';
 import { formatedDateToShow, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { Bill, BillProduct } from '../../models/table.model';
 import { CapitalizePipe } from '../../shared/utils/capitalize.pipe'
@@ -12,6 +11,7 @@ import { OrdersViewPage } from './orders-view/orders-view.page';
 import { DelProdViewPage } from './del-prod-view/del-prod-view.page';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
+import { ReportsService } from '../reports.service';
 
 
  interface paymentMethod {
@@ -65,7 +65,7 @@ export class CashPage implements OnInit {
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
-    private cashSrv: CashService,
+    private repSrv: ReportsService,
     private router: Router,
   ) { }
 
@@ -130,7 +130,7 @@ export class CashPage implements OnInit {
 
 getOrders(){
   this.isLoading = true
-  this.cashSrv.getOrders(this.startDate, this.endDate, this.day, this.user.locatie).subscribe(response => {
+  this.repSrv.getOrders(this.startDate, this.endDate, this.day, this.user.locatie).subscribe(response => {
     if(response){
       this.resetValues()
       this.bills = response.orders

@@ -7,6 +7,7 @@ import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routes';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from 'src/environments/environment';
 
 
@@ -19,6 +20,7 @@ import { environment } from 'src/environments/environment';
     IonicModule.forRoot(),
      AppRoutingModule,
      HttpClientModule,
+     BrowserAnimationsModule,
      provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
      provideFirestore(() => getFirestore()),
     ],

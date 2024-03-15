@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { Bill } from "../../models/table.model";
+
+import { Bill } from "../models/table.model";
 
 import { environment } from "src/environments/environment";
 
@@ -11,7 +11,7 @@ import { environment } from "src/environments/environment";
 
 
 
-export class CashService{
+export class ReportsService{
 
 
   constructor(

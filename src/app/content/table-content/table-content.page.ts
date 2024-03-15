@@ -465,14 +465,14 @@ async addToBill(product: Product){
               }
               this.tableSrv.uploadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
                 if(response) {
-                  showToast(this.toastCtrl, response.message, 4000)
+                  showToast(this.toastCtrl, response.message, 4000, 'success-toast')
                 }
               })
             }
           })
 
       } else {
-        showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+        showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000, 'error-toast')
       }
       this.sendOrder(false)
 
@@ -652,10 +652,10 @@ async addDiscount(){
     this.contSrv.setProdDisc(products).subscribe(response => {
       if(response){
         this.contSrv.editProductDiscount(products)
-        showToast(this.toastCtrl, response.message, 3000)
+        showToast(this.toastCtrl, response.message, 3000, 'success-toast')
       }
     }, err => {
-      showToast(this.toastCtrl, err.message, 3000)
+      showToast(this.toastCtrl, err.message, 3000, 'error-toast')
     })
   }
 }
@@ -705,14 +705,14 @@ async useCashBack(mode: boolean){
               }
               this.tableSrv.uploadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
                 if(response) {
-                  showToast(this.toastCtrl, response.message, 3000)
+                  showToast(this.toastCtrl, response.message, 3000, 'success-toast')
                 }
               })
             }
           })
         })
         } else {
-          showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+          showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000, 'error-toast')
           return
         }
 

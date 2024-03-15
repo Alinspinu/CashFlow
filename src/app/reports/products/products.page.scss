@@ -3,145 +3,40 @@ ion-content{
   --background: var(--ion-color-tertiary);
 }
 
-ion-searchbar{
-  font-family: NoirProReg !important;
+ion-label, ion-title{
+  font-family: NoirProSemi !important;
 }
 
-ion-select{
-  font-family: NoirProReg !important;
-}
-
-ion-label{
-  font-family: NoirProReg !important;
-}
-
-.input{
-  height: 45px;
-  border: 0.5px solid var(--ion-color-medium);
-  border-radius: 8px;
-  margin: 0.1rem 0 0.1rem 0.2rem;
-}
-
-img{
-  height: 25px;
-  cursor: pointer
-}
-
-.header{
-  font-size: 17px;
-  font-weight: 500;
-}
-
-.toggle-wrapper{
-  display: flex;
-  span{
-    font-size: 11px;
-    margin-left: 8px;
-  }
-}
-
-ion-item[slot="fixed"]{
-  top: 6%;
-  width: 100%;
-  opacity: 60%;
-  font-family: NoirProReg !important;
-  // --backgound: transparent;
-}
-
-#all{
-  font-weight: 500;
-}
-
-.input-wrapper{
-  display: flex;
-  flex-direction: row;
-}
-.edit{
-  color: var(--ion-color-primary);
-  margin: 10px;
- }
-
- .delete{
-   color: var(--ion-color-danger);
-   margin: 10px;
- }
-
- .product-container{
-  display: flex;
-  flex-direction: row;
- }
-
-.content-container{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  text-align: center;
-  flex:90%;
-  .name{
-    flex: 10%;
-    text-align: start !important;
-  }
-  .mainCat{
-    flex:5%;
-  }
-  .cat{
-    flex: 7%;
-  }
-  .price-prod{
-    flex: 5%;
-  }
-  .dep{
-    flex: 5%;
-  }
-  .sale-price{
-    flex: 5%
-  }
+ion-title{
+  font-size: 40px;
+  margin-top: 4rem;
+  color: var(--ion-color-medium)
 }
 
 
-.header-container{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  text-align: center;
-  .name{
-    flex: 10%;
-    text-align: start !important;
-  }
-  .mainCat{
-    flex:5%;
-  }
-  .cat{
-    flex: 7%;
-  }
-  .price-prod{
-    flex: 5%;
-  }
-  .dep{
-    flex: 5%;
-  }
-  .sale-price{
-    flex: 5%
-  }
-  .status{
-    flex: 6%;
-    text-align: end;
-  }
+
+  .grid-date{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   height: 80vh;
+   width: 100%;
+
+   ion-button{
+    padding: 16px;
+    width: 500px;
+    height: 150px;
+    --border-radius: 20px;
+    font-size: 25px;
+    font-family: NoirProReg;
+
+   }
 }
 
-.sub-container{
-  margin-left: 2rem;
-  ion-item{
-    ion-label{
-      font-size: 13px;
-    }
-  }
-}
 
-.product{
-  cursor: pointer;
-}
 
-.product:hover{
-  --background: var(--ion-color-medium);
-}
+
+
+
+

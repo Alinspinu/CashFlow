@@ -159,7 +159,7 @@ deleteEntry(id: string, index: number, dayIndex: number){
   const day = this.documents[dayIndex];
   const dayDate = new Date(day.date).setUTCHours(0,0,0,0)
     this.cashRegService.deleteEntry(id).subscribe(response => {
-      showToast(this.toastCtrl, response.message, 3000);
+      showToast(this.toastCtrl, response.message, 3000, 'success-toast');
       const entry = day.entry[index];
       day.cashOut = day.cashOut - entry.amount
       day.entry.splice(index, 1);

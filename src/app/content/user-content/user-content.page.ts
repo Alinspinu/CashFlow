@@ -61,7 +61,7 @@ export class UserContentPage implements OnInit {
     if(data){
       this.userSrv.setUserDiscount(this.userId, data).subscribe(response => {
         if(response) {
-          showToast(this.toastCtrl, response.message, 2000)
+          showToast(this.toastCtrl, response.message, 2000, 'success-toast')
         }
       })
       }
@@ -82,7 +82,7 @@ async editUser(){
     if(data){
       this.userSrv.editUser(data, this.user._id).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 3000)
+          showToast(this.toastCtrl, response.message, 3000, 'success-toast')
           this.user.employee = data
         }
       })
@@ -94,7 +94,7 @@ async editUser(){
 deleteUser(){
   this.userSrv.deleteUser(this.userId).subscribe(response => {
     if(response){
-      showToast(this.toastCtrl, response.message, 3000)
+      showToast(this.toastCtrl, response.message, 3000, 'success-toast')
       this.router.navigateByUrl('/tabs/office/users')
     }
   })

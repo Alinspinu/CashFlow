@@ -127,7 +127,7 @@ export class RegisterPage implements OnInit {
         triggerEscapeKeyPress();
       } else if(res.message === 'This email allrady exist'){
         this.router.navigate(['/tabs/tables']);
-        showToast(this.toastCtrl, res.message, 3000);
+        showToast(this.toastCtrl, res.message, 3000, 'success-toast');
         this.modalCtrl.dismiss()
       } else if(res.message === 'Error sending email'){
         const data = JSON.stringify({

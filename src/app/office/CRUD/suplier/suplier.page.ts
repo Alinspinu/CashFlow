@@ -167,7 +167,7 @@ export class SuplierPage implements OnInit {
             this.suplierForm.get('register')?.setValue(response.data.cod_inmatriculare);
             this.suplierForm.get('address')?.setValue(response.data.adresa);
           } else if(response.status === 402){
-            showToast(this.toastCtrl, response.message, 4000)
+            showToast(this.toastCtrl, response.message, 4000, 'success-toast')
           }
           }
       }, (err: any) => {
@@ -212,18 +212,18 @@ export class SuplierPage implements OnInit {
             console.log(user)
             this.suplierSrv.saveAdmin(user, second).subscribe(response => {
               if(response){
-                showToast(this.toastCtrl, response.message, 2000)
+                showToast(this.toastCtrl, response.message, 2000, 'success-toast')
               }
             })
           } else {
-            showToast(this.toastCtrl, response.message, 400)
+            showToast(this.toastCtrl, response.message, 400, 'success-toast')
             this.suplierForm.reset()
             this.modalCtrl.dismiss(response.suplier)
           }
         }
       }, (err: any) =>{
         console.log(err)
-        showToast(this.toastCtrl, err.message, 4000)
+        showToast(this.toastCtrl, err.message, 4000, 'error-toast')
       })
     }
 

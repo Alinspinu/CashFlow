@@ -80,9 +80,9 @@ getuser(){
         const product = this.products[index]
         if(product){
           product.available = response.available
-          showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000)
+          showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000, 'success-toast')
         } else {
-          showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000)
+          showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000, 'error-toast')
         }
       }
     })
@@ -101,9 +101,9 @@ getuser(){
           const subProduct = this.products[prodIndex].subProducts[subIndex]
           if(subProduct){
             subProduct.available = response.available
-            showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000)
+            showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000, 'success-toast')
           } else {
-            showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000)
+            showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000, 'error-toast')
           }
         }
       })

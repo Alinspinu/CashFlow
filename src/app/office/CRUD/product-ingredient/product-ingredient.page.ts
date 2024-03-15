@@ -125,7 +125,7 @@ export class ProductIngredientPage implements OnInit {
       this.recipeTotal = +prodIng.price
       this.recipeService.editIng(prodIng, this.productId).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 3000)
+          showToast(this.toastCtrl, response.message, 3000, 'success-toast')
           this.modalCtrl.dismiss("done")
         }
       })
@@ -178,7 +178,7 @@ export class ProductIngredientPage implements OnInit {
    const ing = await this.actionSrv.openModal(AddIngredientPage, [], false)
    if(ing){
      this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
-      showToast(this.toastCtrl, response.message, 4000)
+      showToast(this.toastCtrl, response.message, 4000, 'success-toast')
      })
    }
   }

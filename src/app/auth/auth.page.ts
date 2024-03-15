@@ -113,7 +113,7 @@ export class AuthPage implements OnInit {
       }
     }, error => {
       if(error.status === 401){
-        showToast(this.toastCtrl, 'Nume sau parola incorectă!', 5000);
+        showToast(this.toastCtrl, 'Nume sau parola incorectă!', 5000, 'error-toast');
         setTimeout(() => {
           this.resetPassword = true;
         }, 600);
@@ -153,7 +153,7 @@ export class AuthPage implements OnInit {
     }, error => {
       console.log('error', error);
       if(error.status === 404){
-        showToast(this.toastCtrl, error.error.message, 4000 );
+        showToast(this.toastCtrl, error.error.message, 4000, '');
       };
     });
   };

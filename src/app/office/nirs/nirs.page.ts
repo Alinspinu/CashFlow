@@ -155,14 +155,14 @@ suplier(){
       }
       this.nirSrv.registerEntry(entry).subscribe(response => {
         if( response){
-          showToast(this.toastCtrl, 'Pata efectuata registrul a fost actualizat', 2000)
+          showToast(this.toastCtrl, 'Pata efectuata registrul a fost actualizat', 2000, 'success-toast')
           entry.locatie = '65c221374c46336d1e6ac423';
           this.nirSrv.registerEntry(entry).subscribe()
           this.nirSrv.payNir(true, 'cash', id).subscribe(response => {
             if(response) {
               nir.payd = true
               nir.type = 'cash'
-              showToast(this.toastCtrl, response.message, 2000)
+              showToast(this.toastCtrl, response.message, 2000, 'success-toast')
             }
           })
         }
@@ -172,7 +172,7 @@ suplier(){
         if(response) {
           nir.payd = true
           nir.type = 'bank'
-          showToast(this.toastCtrl, response.message, 2000)
+          showToast(this.toastCtrl, response.message, 2000, 'success-toast')
         }
       })
     }
@@ -194,7 +194,7 @@ suplier(){
       this.nirSrv.deleteNir(id).subscribe(response => {
         if(response){
           this.nirs.splice(index, 1)
-          showToast(this.toastCtrl, response.message, 2000)
+          showToast(this.toastCtrl, response.message, 2000, 'success-toast')
         }
       })
     }

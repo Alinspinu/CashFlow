@@ -476,6 +476,7 @@ inputType: string = 'number'
       this.ingredientForm.get('gestiune')?.setValue(this.ingredient.gestiune)
       this.ingredientForm.get('price')?.setValue(this.ingredient.price)
       this.ingredientForm.get('tva')?.setValue(this.ingredient.tva.toString())
+      this.ingredientForm.get('sellPrice')?.setValue(this.ingredient.sellPrice)
       this.ingredients = []
       this.qtyInput.setFocus()
       this.ingredientSearch = ''

@@ -1,37 +1,24 @@
-<!--
-  <ion-toolbar class="toolbar">
-    <ion-buttons slot="start">
 
-    </ion-buttons>
-    <ion-buttons slot="end">
-
-    </ion-buttons>
-  </ion-toolbar> -->
-
-<!-- <ion-content [fullscreen]="true" *ngIf="isLoading">
-
-  <app-logo-page></app-logo-page>
-</ion-content> -->
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
 <ion-grid>
   <ion-row>
-    <ion-col size="3">
+    <ion-col size-lg="3" size-sm="0">
       <div class="buttons-wrapper">
-        <ion-button *ngIf="advance"  (click)="selectDate('start')" fill="outline">
-          SART DAY
+        <ion-button *ngIf="advance"  (click)="selectDate('start')" fill="outline" color="medium">
+         {{startDate ? formatDate(startDate): "ZI ÎNCEPUT"}}
           <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
         </ion-button>
-        <span *ngIf="today.length" class="show-date">{{startDate ? formatDate(startDate) : ''}}</span>
-        <ion-button *ngIf="advance" fill="outline" (click)="selectDate('end')">
-          END DAY
+        <!-- <span *ngIf="today.length" class="show-date">{{startDate ? formatDate(startDate) : ''}}</span> -->
+        <ion-button *ngIf="advance" fill="outline" (click)="selectDate('end')" color="medium">
+          ZI SFÂRȘIT
           <ion-icon src="../../../assets/icon/calendar.svg" class="icon-end"></ion-icon>
         </ion-button>
         <span *ngIf="today.length" class="show-date">{{endDate ?  formatDate(endDate): ''}}</span>
-        <ion-button *ngIf="!advance" fill="outline" (click)="selectDate('day')">
-          DAY
+        <ion-button *ngIf="!advance" fill="outline" (click)="selectDate('day')" color="medium">
+          ALEGE ZIUA
           <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
         </ion-button>
-        <ion-button (click)="advSearch()" *ngIf="!advance" fill="outline">
+        <ion-button (click)="advSearch()" *ngIf="!advance" fill="outline" color="medium">
           CAUTARE AVANSATA
           <ion-icon src="../../../assets/icon/search-outline.svg" class="icon-end"></ion-icon>
         </ion-button>
@@ -50,22 +37,19 @@
         <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
       </div>
     </ion-col>
-    <ion-col size="3">
+    <ion-col size-lg="3" size-sm="0">
       <div class="buttons-wrapper">
         <!-- <ion-button (click)="search()" [disabled]="!startDate || !endDate" *ngIf="advance" fill="outline">
           CATUTĂ
           <ion-icon src="../../../assets/icon/search-outline.svg" class="icon-start"></ion-icon>
         </ion-button> -->
-        <ion-button fill="outline" (click)="showOrders()">
+        <ion-button fill="outline" (click)="showOrders()" color="medium">
           NOTE
           <ion-badge class="badge">{{bills.length}}</ion-badge>
         </ion-button>
-        <ion-button fill="outline" (click)="showDeletedProducts()">
+        <ion-button fill="outline" (click)="showDeletedProducts()" color="medium">
           PRODUSE STERSE
           <ion-badge class="badge">{{delProducts.length}}</ion-badge>
-        </ion-button>
-        <ion-button fill="outline" (click)="refresh()">
-          REFRESH
         </ion-button>
       </div>
     </ion-col>

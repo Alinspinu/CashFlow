@@ -8,10 +8,6 @@ export const routes: Routes = [
     component: ReportsPage,
     children: [
       {
-        path: 'live-stoc',
-        loadComponent: () => import('./ingredients/ingredients.page').then( m => m.IngredientsPage),
-      },
-      {
         path: 'cash',
         loadComponent: () => import('./cash/cash.page').then( m => m.CashPage)
       },
@@ -21,14 +17,14 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/reports/live-stoc',
+        redirectTo: '/tabs/reports/cash',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/reports/live-stoc',
+    redirectTo: '/tabs/reports/cash',
     pathMatch: 'full',
   },
 

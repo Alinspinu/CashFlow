@@ -2,7 +2,8 @@
   "projects": {
     "cafetish": "cash-flow-cafetish",
     "caf": "cash-flow-cafetish",
-    "true": "cafetish-social"
+    "true": "cafetish-social",
+    "dsf": "cafetish-social"
   },
   "targets": {},
   "etags": {}

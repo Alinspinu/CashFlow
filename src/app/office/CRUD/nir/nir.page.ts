@@ -53,6 +53,8 @@ valTotal: number = 0;
 valVanzare: number = 0;
 nirId!: string
 
+disableIngredientSearch: boolean = true
+
 isTva: boolean = true
 user!: User;
 qtyCalcColor!: string
@@ -95,6 +97,7 @@ inputType: string = 'number'
   getIngredients(){
     this.ingSub = this.nirSrv.getIngredients(this.user.locatie).subscribe(response => {
       this.allIngs = response
+      this.disableIngredientSearch = false
     })
   }
 

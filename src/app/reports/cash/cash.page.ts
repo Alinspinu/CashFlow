@@ -103,9 +103,6 @@ export class CashPage implements OnInit {
   delProducts: any = []
   user!: User
 
-  snitzel: number = 0
-  risotto: number = 0
-  hummus: number = 0
 
 
   ngOnInit() {
@@ -132,7 +129,6 @@ getOrders(){
     if(response){
       this.resetValues()
       this.bills = response.orders
-      this.getProducts()
       this.delProducts = response.delProducts
       this.isLoading = false
       this.calcTotals()
@@ -142,24 +138,7 @@ getOrders(){
 }
 
 
-getProducts(){
-  this.bills.forEach(bill => {
-    bill.products.forEach(product => {
-      if(product.name === "Snițel de vită cu cartofi prăjiți și sos de creveți cu prosecco"){
-          this.snitzel += 1
-        }
-        if( product.name === "Hummus cu Carne de Vită" ){
-          this.hummus += 1
-        }
-        if(product.name === "Risotto cu Carne de Vită"){
-          this.risotto += 1
-        }
-    })
-  })
-  console.log("hummus", this.hummus)
-  console.log("snitzel", this.snitzel)
-  console.log("risotto", this.risotto)
-}
+
 
 calcTva(){
   let discountBills: Bill[] = []

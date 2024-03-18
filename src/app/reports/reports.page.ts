@@ -27,7 +27,7 @@ export class ReportsPage {
     sales: boolean
     products: boolean
     ingredients: boolean
-  } = {sales: true, products: false, ingredients: false}
+  } = {sales: false, products: true, ingredients: false}
 
   constructor() {}
 

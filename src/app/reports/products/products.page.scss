@@ -8,9 +8,11 @@ ion-label, ion-title{
 }
 
 ion-title{
-  font-size: 40px;
-  margin-top: 4rem;
+  font-size: 25px;
+  margin-top: 2rem;
+  margin-bottom: 4.5rem;
   color: var(--ion-color-medium)
+
 }
 
 
@@ -32,6 +34,139 @@ ion-title{
     font-family: NoirProReg;
 
    }
+}
+
+
+ion-item[slot="fixed"]{
+  top: 7.5%;
+  width: 95%;
+  opacity: 60%;
+  border-radius: 8px;
+  .qty{
+    font-family: NoirProSemi !important;
+    flex: 10%;
+    text-align: center;
+  }
+  .head{
+    display: flex;
+    flex-direction: column;
+  }
+  .name{
+    font-family: NoirProSemi !important;
+   flex: 50%;
+  }
+  // --backgound: transparent;
+}
+
+
+
+.content-container{
+  display: flex;
+  flex-direction: row;
+  height: 80vh;
+  .products-content{
+    flex: 43%;
+    --padding: 10px;
+  }
+  .reports-content{
+    flex: 55%;
+    padding: 20px;
+  }
+}
+
+.total{
+  height: 45px;
+  opacity: 60%;
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  width: 95%;
+  ion-label{
+    font-family: NoirProSemi !important;
+    font-size: 23px;
+  }
+}
+
+.input{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
+  cursor: pointer;
+  .qty{
+    font-family: NoirProSemi !important;
+
+  }
+}
+
+
+
+.ing-input{
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
+  width: 95%;
+  .qty{
+    font-family: NoirProSemi !important;
+    flex: 10%;
+    text-align: center;
+  }
+  .name{
+   flex: 50%;
+  }
+}
+
+#recipe-header{
+  min-height: 45px;
+  width: 95%;
+  opacity: 60%;
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProSemi !important;
+  .qty{
+    font-family: NoirProSemi !important;
+    flex: 10%;
+    text-align: center;
+  }
+  .head{
+    display: flex;
+    flex-direction: column;
+  }
+  .name{
+    font-family: NoirProSemi !important;
+   flex: 50%;
+  }
+}
+
+.label{
+  width: 100%;
+  text-align: center;
+}
+
+.input:hover{
+  --background: var(--ion-color-medium);
+}
+
+.production-content{
+  flex: 50%;
+  padding: 20px;
+  // align-items: center;
+  .recipe-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 90vh;
+    .content{
+      align-self: center;
+      width: 95%;
+    }
+  }
+}
+
+.selected{
+  --background: var(--ion-color-medium);
 }
 
 

@@ -15,6 +15,7 @@ export class RecipeMakerService{
 
 
 getIngredients(loc: string){
+  console.log(loc)
   return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients?prod=true`, {loc: loc})
 }
 saveIng(ing: any, loc: string){

@@ -52,6 +52,8 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   productIngGest: string = 'magazie'
   color: string = ""
 
+  isLoading: boolean = true
+
   recipeTotal: number = 0;
 
   dbIngs!: any
@@ -90,6 +92,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     Preferences.get({key: 'authData'}).then(data => {
       if(data.value){
         this.user = JSON.parse(data.value)
+        this.getIngredients()
       }
     })
   }
@@ -177,6 +180,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     this.recipeService.getIngredients(this.user.locatie).subscribe(response => {
       if(response){
         this.dbIngs = response
+        this.isLoading = false
       }
     })
   }

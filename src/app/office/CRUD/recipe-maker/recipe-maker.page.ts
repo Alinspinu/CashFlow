@@ -57,6 +57,8 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   user!: User
   dbIngs!: any
 
+  isLoading: boolean = true
+
 
   constructor(
     private navParams: NavParams,
@@ -82,7 +84,6 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     this.getUser()
     setTimeout(()=>{
       this.setDataToEdit()
-      this.getIngredients()
     }, 1100)
   }
 
@@ -90,6 +91,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     Preferences.get({key: 'authData'}).then(data => {
       if(data.value){
         this.user = JSON.parse(data.value)
+        this.getIngredients()
       }
     })
   }
@@ -177,6 +179,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     this.recipeService.getIngredients(this.user.locatie).subscribe(response => {
       if(response){
         this.dbIngs = response
+        this.isLoading = false
       }
     })
   }

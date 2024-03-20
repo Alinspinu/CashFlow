@@ -71,7 +71,7 @@
     </ion-item>
     <ion-item lines="none" class="total">
       <ion-label slot="start" class="text">Total încasat</ion-label>
-      <ion-label slot="end" class="value">23232</ion-label>
+      <ion-label slot="end" class="value">{{roundInHtml(totalProducts)}} Lei</ion-label>
     </ion-item>
   </ion-content>
   <ion-content [fullscreen]="true" class="reports-content" *ngIf="!showProductIngs">
@@ -102,7 +102,7 @@
     </ion-item>
     <ion-item lines="none" class="total">
       <ion-label slot="start" class="text">Total consum</ion-label>
-      <ion-label slot="end" class="value">23232</ion-label>
+      <ion-label slot="end" class="value">{{roundInHtml(totalIngredients)}} Lei</ion-label>
     </ion-item>
   </ion-content>
   <ion-content [fullscreen]="true" class="production-content" *ngIf="showProductIngs">
@@ -146,7 +146,7 @@
         </ion-item>
         <ion-item lines="none" class="total">
           <ion-label slot="start" class="text">Total consum</ion-label>
-          <ion-label slot="end" class="value">23232</ion-label>
+          <ion-label slot="end" class="value">{{roundInHtml(totalIngredients)}} Lei</ion-label>
         </ion-item>
       </div>
     </div>

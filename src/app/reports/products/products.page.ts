@@ -51,7 +51,6 @@ export class ProductsPage implements OnInit {
 
   totalProducts: number = 0;
   totalIngredients: number = 0;
-  totalRecipe: number = 0;
 
 
   constructor(
@@ -83,6 +82,7 @@ showConsumption(){
 
 
 showProduction(product: any, index: number){
+  console.log(product)
   this.productIngredients = []
   this.showProductIngs = true
   this.productQty = product.quantity
@@ -128,6 +128,8 @@ showProduction(product: any, index: number){
       }
     })
   }
+  console.log(this.productIngredients)
+  // this.calcIngredientsTotal(this.productIngredients)
 
 }
 
@@ -160,7 +162,7 @@ checkDtes(start: string | undefined, end: string | undefined){
 }
 
 dateErr(){
-  showToast(this.toastCtrl, 'DATA DE ÎNCEPUT TREBUIE SĂ FIE MAI NICĂ DECÂT CEA DE SFÂRȘIT!', 3000, 'error-toast')
+  showToast(this.toastCtrl, 'DATA DE ÎNCEPUT TREBUIE SĂ FIE MAI MICĂ DECÂT CEA DE SFÂRȘIT!', 3000, 'error-toast')
   this.startDay  = ''
   this.endDay = ''
 }
@@ -187,6 +189,9 @@ getBills(){
 getBillProducts(){
   this.bills.forEach(bill => {
     bill.products.forEach(product => {
+      if(product.name === "Americano-Brazilia Agua Lipa"){
+        console.log(bill)
+      }
       const existingProduct = this.products.find(p => p.name === product.name && this.arraysAreEqual(p.toppings, product.toppings))
       if(existingProduct){
         existingProduct.quantity += product.quantity
@@ -198,6 +203,15 @@ getBillProducts(){
   })
   this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
  this.getIngredients()
+ this.calcProductsTotal()
+}
+
+calcProductsTotal(){
+  this.totalProducts = 0
+  this.products.forEach(product => {
+    const productValue = round(product.quantity * product.price - product.discount)
+    this.totalProducts += productValue
+  })
 }
 
 
@@ -250,6 +264,15 @@ getIngredients(){
     }
   })
   this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
+  // this.calcIngredientsTotal(this.allIngredients)
+}
+
+calcIngredientsTotal(ingredients: any []){
+  this.totalIngredients = 0
+  ingredients.forEach(ing => {
+    const ingValue = round(ing.ing.price *ing.qty)
+    this.totalIngredients += ingValue
+  })
 }
 
 

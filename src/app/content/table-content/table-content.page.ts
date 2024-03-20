@@ -333,6 +333,7 @@ async addToBill(product: Product){
   if(product.subProducts.length){
     const result = await this.actionSheet.openModal(PickOptionPage, product.subProducts, true)
     if(result){
+      console.log(result)
       ings = result.ings
       price  = result.price
       cartProdName = product.name + '-' + result.name;

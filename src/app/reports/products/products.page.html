@@ -31,7 +31,7 @@
 <ion-header  *ngIf="showProducts && !isLoading">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="showProducts = false" >
+      <ion-button (click)="hide()" >
         ALEGE PERIOADA
       </ion-button>
       </ion-buttons>
@@ -73,7 +73,14 @@
     </div>
     <ion-title class="ion-text-center title">Produse Vândute</ion-title>
     <ion-item lines="none" slot="fixed">
-      <ion-label class="name">Nume</ion-label>
+      <div class="name head" (click)="filter('name')">
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="nameColor"></ion-icon>
+        <span>Nume Produs</span>
+      </div>
+      <div class="search-bar">
+        <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută produs..."  (ionInput)="searchProduct($event)" #searchbar>
+        </ion-searchbar>
+      </div>
       <div class="qty head"></div>
       <div class="qty head" (click)="filter('qty')">
         <span>Cantitate</span>
@@ -83,36 +90,37 @@
       <div class="qty head" (click)="filter('price')">
         <span>Preț UM</span>
         <span>(RON)</span>
-        <ion-icon src="assets/icon/arrows-down.svg"></ion-icon>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="priceColor"></ion-icon>
       </div>
       <div class="qty head" (click)="filter('total')">
         <span>Total</span>
         <span>(RON)</span>
-        <ion-icon src="assets/icon/arrows-down.svg"></ion-icon>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="totColor"></ion-icon>
       </div>
       <div class="qty head" (click)="filter('disc')">
         <span>Discount</span>
         <span>(RON)</span>
-        <ion-icon src="assets/icon/arrows-down.svg"></ion-icon>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="discColor"></ion-icon>
       </div>
       <div class="qty head" (click)="filter('cashIn')">
         <span>Total Încasat</span>
         <span>(RON)</span>
-        <ion-icon src="assets/icon/arrows-down.svg"></ion-icon>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="cashInColor"></ion-icon>
       </div>
       <div class="qty head" (click)="filter('cons')">
         <span>Total Consum</span>
         <span>(RON)</span>
-        <ion-icon src="assets/icon/arrows-down.svg"></ion-icon>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="consColor"></ion-icon>
       </div>
       <div class="qty head" (click)="filter('surplus')">
         <span>Adaos</span>
         <span>(%)</span>
-        <ion-icon src="assets/icon/arrows-down.svg"></ion-icon>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="surplusColor"></ion-icon>
       </div>
     </ion-item>
     <div class="product-wrapper" *ngFor="let product of products; let i = index">
       <ion-item lines="none" class="ing-input" (click)="showRecipe(i, product)" [ngClass]="{'selected': i === selected}">
+        <ion-label class="index">{{i+1}}.</ion-label>
         <ion-label class="name">{{product.name}}</ion-label>
         <ion-label  class="qty" *ngIf="!product.showSub"></ion-label>
         <ion-label  class="qty" *ngIf="product.showSub">Rețetă</ion-label>
@@ -170,23 +178,35 @@
     </div>
     <ion-title class="ion-text-center">Ingrediente Consumate</ion-title>
     <ion-item lines="none" slot="fixed">
-      <ion-label class="name">Nume</ion-label>
-      <div class="qty head">
+      <div class="name head" (click)="filterIngs('name')">
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="nameColor"></ion-icon>
+        <span>Nume Ingredient</span>
+      </div>
+      <div class="search-bar">
+        <ion-searchbar mode="ios" [(ngModel)]="ingSearch"  placeholder="Caută ingredient..."  (ionInput)="searchIng($event)" #searchbar>
+        </ion-searchbar>
+      </div>
+      <div class="qty head" (click)="filterIngs('qty')">
         <span>Qty</span>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="qtyColor"></ion-icon>
       </div>
-      <div class="qty head">
+      <div class="qty head" (click)="filterIngs('um')">
         <span>UM</span>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="surplusColor"></ion-icon>
       </div>
-      <div class="qty head">
+      <div class="qty head" (click)="filterIngs('price')">
         <span>Preț UM</span>
         <span>(RON)</span>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="priceColor"></ion-icon>
       </div>
-      <div class="qty head">
+      <div class="qty head" (click)="filterIngs('tot')">
         <span>Total</span>
         <span>(RON)</span>
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="totColor"></ion-icon>
       </div>
     </ion-item>
-    <ion-item lines="none" class="ing-input" *ngFor="let ing of allIngredients">
+    <ion-item lines="none" class="ing-input" *ngFor="let ing of allIngredients; let i=index">
+      <ion-label class="index">{{i+1}}.</ion-label>
       <ion-label class="name">{{ing.ing.name}}</ion-label>
       <ion-label  class="qty">{{roundInHtml(ing.qty)}}</ion-label>
       <ion-label  class="qty">{{ing.ing.um}}</ion-label>

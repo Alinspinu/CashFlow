@@ -12,7 +12,7 @@ ion-label, ion-title{
 ion-title{
   font-size: 25px;
   margin-top: 2rem;
-  margin-bottom: 4.5rem;
+  margin-bottom: 5rem;
   color: var(--ion-color-medium)
 
 }
@@ -41,9 +41,6 @@ ion-title{
 }
 
 
-// .reports-container{
-//   position: absolute;
-// }
 
   .grid-date{
    display: flex;
@@ -66,7 +63,7 @@ ion-title{
 
 
 ion-item[slot="fixed"]{
-  top: 25.5%;
+  top: 24.5%;
   width: 100%;
   opacity: 60%;
   border-radius: 8px;
@@ -75,16 +72,32 @@ ion-item[slot="fixed"]{
     flex: 10%;
     text-align: center;
   }
+  .index{
+    font-family: NoirProSemi !important;
+    flex: 3%;
+    text-align: start;
+  }
   .head{
     display: flex;
     flex-direction: column;
+    cursor: pointer;
     ion-icon{
      align-self: center;
     }
   }
   .name{
     font-family: NoirProSemi !important;
-   flex: 50%;
+    flex: 15%;
+    display: flex;
+    flex-direction: row;
+    ion-icon{
+      margin-right: 15px;
+      font-size: 22px;
+     }
+  }
+  .search-bar {
+    font-family: NoirProReg !important;
+    flex: 38%;
   }
   // --backgound: transparent;
 }
@@ -141,6 +154,11 @@ ion-item[slot="fixed"]{
   }
   .name{
    flex: 50%;
+  }
+  .index{
+    font-family: NoirProSemi !important;
+    flex: 3%;
+    text-align: start;
   }
 }
 

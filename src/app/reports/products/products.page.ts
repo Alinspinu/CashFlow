@@ -11,7 +11,6 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ReportsService } from '../reports.service';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
-
 @Component({
   selector: 'app-products',
   templateUrl: './products.page.html',
@@ -33,13 +32,17 @@ export class ProductsPage implements OnInit {
 
 
   products: any[] = []
+  dbProducts: any[] = []
 
   productSearch!: string
+  ingSearch!: string
+
   user!: User
 
   sel: boolean = false
   bills!: any[]
   allIngredients: any [] = []
+  dbIngs: any [] = []
 
   productIngredients: any = []
   productQty: number = 0
@@ -57,7 +60,7 @@ export class ProductsPage implements OnInit {
   cashInColor: string = 'none'
   consColor: string = 'none'
   surplusColor: string = 'none'
-  nameColor: string = 'none'
+  nameColor: string = 'primary'
 
   totalProducts: number = 0;
   totalIngredients: number = 0;
@@ -92,6 +95,35 @@ getuser(){
 }
 
 
+hide(){
+  this.showProductIngs = false
+  this.showProducts = false
+}
+
+
+searchProduct(ev: any){
+  const input = ev.detail.value
+  const data = [...this.products]
+  let filterData = data.filter((object) =>
+  object.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+  this.products = filterData
+  if(!input.length){
+    this.products= [ ...this.dbProducts]
+  }
+}
+
+
+searchIng(ev: any){
+  const input = ev.detail.value
+  let filterData = this.allIngredients.filter((object) =>
+  object.ing.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+  this.allIngredients = filterData
+  if(!input.length){
+    this.allIngredients= [ ...this.dbIngs]
+  }
+}
+
+
 filter(option: string){
   switch (option) {
     case 'qty':
@@ -106,33 +138,64 @@ filter(option: string){
       return
     case 'total':
       this.resetAllColors()
-      this.products.sort((a,b) => (b.price * b.quantity) - (a.price*b.quantity))
-      this.totColor = 'primary';
-      return;
-    case 'disc':
-      this.resetAllColors()
-      this.products.sort((a,b) => (b.price * b.quantity) - (a.price*b.quantity))
+      this.products.sort((a,b) => (b.price * b.quantity) - (a.price * a.quantity))
       this.totColor = 'primary';
       return;
     case 'cashIn':
       this.resetAllColors()
+      this.products.sort((a,b) => (b.price * b.quantity - b.discount) - (a.price * a.quantity - a.discount))
+      this.cashInColor = 'primary';
+      return;
+    case 'disc':
+      this.resetAllColors()
       this.products.sort((a,b) => b.discount - a.discount)
-      this.totColor = 'primary';
+      this.discColor = 'primary';
       return;
     case 'name':
       this.resetAllColors()
-      this.products.sort((a,b) => (b.price * b.quantity) - (a.price*b.quantity))
-      this.totColor = 'primary';
+      this.products.sort((a,b) => a.name.localeCompare(b.name))
+      this.nameColor = 'primary';
       return;
     case 'cons':
       this.resetAllColors()
       this.products.sort((a,b) => this.calcConsInHtml(b) - this.calcConsInHtml(a))
-      this.totColor = 'primary';
+      this.consColor = 'primary';
       return;
     case 'surplus':
       this.resetAllColors()
       this.products.sort((a,b) => (((b.price*b.quantity - b.discount) - this.calcConsInHtml(b)) / this.calcConsInHtml(b) * 100) - (((a.price*a.quantity - a.discount) - this.calcConsInHtml(a)) / this.calcConsInHtml(a) * 100))
+      this.surplusColor = 'primary';
+      return;
+    default:
+      return;
+}
+}
+filterIngs(option: string){
+  switch (option) {
+    case 'qty':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => b.qty - a.qty)
+      this.qtyColor = 'primary';
+      return
+    case 'price':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => b.ing.price - a.ing.price)
+      this.priceColor = 'primary';
+      return
+    case 'tot':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => (b.ing.price * b.qty) - (a.ing.price * a.qty))
       this.totColor = 'primary';
+      return;
+    case 'name':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
+      this.nameColor = 'primary';
+      return;
+    case 'um':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => a.ing.um.localeCompare(b.ing.um) )
+      this.surplusColor = 'primary';
       return;
     default:
       return;
@@ -153,6 +216,10 @@ resetAllColors(){
 showConsumption(){
   this.selected = -1
   this.showProductIngs = !this.showProductIngs
+  this.resetAllColors()
+  this.nameColor = 'primary'
+  this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
+  this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
 }
 
 
@@ -226,7 +293,7 @@ getBillProducts(){
 
     }
   })
-
+ this.products = this.dbProducts
  this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
  this.getIngredients(this.products)
  this.calcProductsTotal()
@@ -236,7 +303,7 @@ getBillProducts(){
 
 
 getIngredients(products: any[]){
-  this.allIngredients = []
+  this.dbIngs = []
   products.forEach(product => {
     const ingredients = [...product.ings]
     ingredients.forEach((ing: any) => {
@@ -249,6 +316,7 @@ getIngredients(products: any[]){
       })
     }
   })
+  this.allIngredients = this.dbIngs
   this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
   this.calcIngredientsTotal(this.allIngredients)
 }
@@ -411,13 +479,13 @@ printProduction(){
 
 
 pushProducts(product: any){
-  const existingProduct = this.products.find(p => p.name === product.name && this.arraysAreEqual(p.toppings, product.toppings))
+  const existingProduct = this.dbProducts.find(p => p.name === product.name && this.arraysAreEqual(p.toppings, product.toppings))
   if(existingProduct){
     existingProduct.quantity += product.quantity
     existingProduct.discount += product.discount
   } else {
     const prod = {...product}
-    this.products.push(prod)
+    this.dbProducts.push(prod)
   }
   if(product.toppings.length){
     product.toppings.forEach((top: any) => {
@@ -435,25 +503,25 @@ pushIngredients(ing: any, prodQty: number){
   if(ing.ing && ing.ing.ings.length){
     ing.ing.ings.forEach((ing:any) => {
       if(ing.ing){
-        const existingIng = this.allIngredients.find(p => p.ing._id === ing.ing._id)
+        const existingIng = this.dbIngs.find(p => p.ing._id === ing.ing._id)
         if(existingIng){
           existingIng.qty += (ing.qty * prodQty)
         } else {
           const ig = {...ing}
           ig.qty = round(ig.qty * prodQty)
-          this.allIngredients.push(ig)
+          this.dbIngs.push(ig)
         }
       }
     })
 }
 if(ing.ing){
-  const existingIng = this.allIngredients.find(p => p.ing._id === ing.ing._id)
+  const existingIng = this.dbIngs.find(p => p.ing._id === ing.ing._id)
   if(existingIng){
     existingIng.qty += (ing.qty * prodQty)
   } else {
     const ig = {...ing}
     ig.qty = round(ig.qty * prodQty)
-    this.allIngredients.push(ig)
+    this.dbIngs.push(ig)
   }
   }
 }
@@ -461,7 +529,7 @@ if(ing.ing){
 
 
 pushRecipeIngs(ing: any){
-  if(ing.ings && ing.ing.ings.length){
+  if(ing.ing && ing.ing.ings.length){
     ing.ing.ings.forEach((ing: any) => {
       if(ing.ing){
         const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
@@ -485,10 +553,13 @@ pushRecipeIngs(ing: any){
     }
 }
 
+
+
+
 calcConsInHtml(product: any) {
   let prodIngs: any = []
   product.ings.forEach((ing: any) => {
-    if(ing.ings && ing.ing.ings.length){
+    if(ing.ing && ing.ing.ings.length){
       ing.ing.ings.forEach((ing: any) => {
         if(ing.ing){
           const existingIng = prodIngs.find((p:any) => p.ing._id === ing.ing._id)
@@ -511,6 +582,33 @@ calcConsInHtml(product: any) {
         }
       }
   })
+  if(product.toppings.length){
+    const toppings = [...product.toppings]
+    toppings.forEach((topping: any) => {
+      if(topping.ing && topping.ing.ings.length){
+        topping.ing.ings.forEach((ing: any) => {
+          if(ing.ing){
+            const existingIng = prodIngs.find((p:any) => p.ing._id === ing.ing._id)
+            if(existingIng){
+              existingIng.qty += ing.qty
+            } else {
+              const ig = {...ing}
+              prodIngs.push(ig)
+            }
+          }
+          })
+        }
+        if(topping.ing){
+          const existingIng = prodIngs.find((p:any) => p.ing._id === topping.ing._id)
+          if(existingIng){
+            existingIng.qty += topping.qty
+          } else {
+            const ig = {...topping}
+            prodIngs.push(ig)
+          }
+        }
+    })
+  }
   let totalRecipe = 0
   prodIngs.forEach((ing:any) => {
     if(ing.ing){

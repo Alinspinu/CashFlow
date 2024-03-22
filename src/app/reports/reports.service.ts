@@ -23,5 +23,15 @@ export class ReportsService{
   return this.http.post<{orders: Bill[], delProducts: any[]}>(`${environment.BASE_URL}orders/get-orders`, {start: start, end: end, loc: locatie, day: day})
  }
 
+ printProducts(products: string, start: string | undefined, end: string | undefined){
+  return this.http.post(`${environment.BASE_URL}print/products`, {products: products, startDay: start, endDay: end}, {responseType: 'blob'})
+ }
+ printConsumtion(ings: string, start: string | undefined, end: string | undefined){
+  return this.http.post(`${environment.BASE_URL}print/consumption`, {ings: ings, startDay: start, endDay: end}, {responseType: 'blob'})
+ }
+ printProduction(products: string, start: string | undefined, end: string | undefined){
+  return this.http.post(`${environment.BASE_URL}print/production`, {products: products, startDay: start, endDay: end}, {responseType: 'blob'})
+ }
+
 
 }

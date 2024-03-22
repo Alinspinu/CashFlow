@@ -5,7 +5,7 @@
 
   <ion-item lines="none">
     <img src="assets/icon/art.svg" alt="" id="add-ing" (click)="switchMode()">
-    <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)">
+    <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)" [disabled]="isLoading">
     </ion-searchbar>
     <img src="assets/icon/add-circle.svg" id="add-ing" (click)="addIng()">
   </ion-item>

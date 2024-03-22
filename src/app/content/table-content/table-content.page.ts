@@ -327,6 +327,7 @@ incommingOrders(){
 //*********** BILL CONTROLS *******************************************/
 
 async addToBill(product: Product){
+  console.log(product)
   let price: number = product.price;
   let cartProdName: string = product.name;
   let ings: Ing[] = product.ings

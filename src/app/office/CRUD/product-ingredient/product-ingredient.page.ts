@@ -46,6 +46,7 @@ export class ProductIngredientPage implements OnInit {
 
   user!: User
   productId!: string
+  isLoading: boolean = true
 
 
   constructor(
@@ -67,6 +68,7 @@ export class ProductIngredientPage implements OnInit {
     Preferences.get({key: 'authData'}).then(data => {
       if(data.value){
         this.user = JSON.parse(data.value)
+        this.getIngredients()
       }
     })
   }
@@ -146,6 +148,7 @@ export class ProductIngredientPage implements OnInit {
     this.recipeService.getIngredients(this.user.locatie).subscribe(response => {
       if(response){
         this.dbIngs = response
+        this.isLoading = false
       }
     })
   }

@@ -1,11 +1,13 @@
 
 ion-content{
   --background: var(--ion-color-tertiary);
+  height: 85vh;
 }
 
 ion-label, ion-title{
   font-family: NoirProReg !important;
 }
+
 
 ion-title{
   font-size: 25px;
@@ -15,7 +17,33 @@ ion-title{
 
 }
 
+.filter-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 120px;
+  border: 1.5px solid var(--ion-color-medium);
+  border-radius: 22px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProLight !important;
+  font-size: 20px !important;
+  width: 471px;
+  .first-col, .second-col{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    ion-checkbox{
+      width: 100%;
+      color: var(--ion-color-medium);
 
+    }
+  }
+}
+
+
+// .reports-container{
+//   position: absolute;
+// }
 
   .grid-date{
    display: flex;
@@ -38,8 +66,8 @@ ion-title{
 
 
 ion-item[slot="fixed"]{
-  top: 7.5%;
-  width: 95%;
+  top: 25.5%;
+  width: 100%;
   opacity: 60%;
   border-radius: 8px;
   .qty{
@@ -50,6 +78,9 @@ ion-item[slot="fixed"]{
   .head{
     display: flex;
     flex-direction: column;
+    ion-icon{
+     align-self: center;
+    }
   }
   .name{
     font-family: NoirProSemi !important;
@@ -59,20 +90,6 @@ ion-item[slot="fixed"]{
 }
 
 
-
-.content-container{
-  display: flex;
-  flex-direction: row;
-  height: 80vh;
-  .products-content{
-    flex: 43%;
-    --padding: 10px;
-  }
-  .reports-content{
-    flex: 55%;
-    padding: 20px;
-  }
-}
 
 .total{
   height: 45px;
@@ -88,26 +105,35 @@ ion-item[slot="fixed"]{
 
 .input{
   height: 45px;
-  border: 0.5px solid var(--ion-color-medium);
+  --background: var(--ion-color-tertiary);
   border-radius: 8px;
   margin: 0.5rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
-  cursor: pointer;
   .qty{
     font-family: NoirProSemi !important;
-
+    flex: 10%;
+    text-align: center;
   }
+  .name{
+    flex: 50%;
+  }
+}
+
+.bold{
+  font-size: 17px;
+  font-family: NoirProSemi !important;
 }
 
 
 
 .ing-input{
+  cursor: pointer;
   height: 45px;
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   margin: 0.5rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
-  width: 95%;
+  width: 100%;
   .qty{
     font-family: NoirProSemi !important;
     flex: 10%;
@@ -170,7 +196,34 @@ ion-item[slot="fixed"]{
 }
 
 
+.sum-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 3%;
+  margin-bottom: 6px;
+  div{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--ion-color-primary);
+    border-radius: 12px;
+    color: white;
+    padding: 18px;
 
+  }
+    .value{
+        font-family: NoirProReg !important;
+        font-size: 30px;
+        align-self: center;
+      }
+
+      .note{
+        font-family: NoirProReg !important;
+        font-size: 20px;
+        align-self: center;
+    }
+}
 
 
 

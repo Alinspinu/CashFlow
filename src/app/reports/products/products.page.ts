@@ -3,24 +3,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { formatedDateToShow, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
-import { ProductsService } from 'src/app/office/products/products.service';
-import { ContentService } from 'src/app/content/content.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { Router } from '@angular/router';
-import { Ingredient, Product } from 'src/app/models/category.model';
 import User from 'src/app/auth/user.model';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
-import { Bill, BillProduct, Ing } from 'src/app/models/table.model';
 import { ReportsService } from '../reports.service';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.page.html',
   styleUrls: ['./products.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe]
+  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, SpinnerPage]
 })
 export class ProductsPage implements OnInit {
 
@@ -29,15 +26,19 @@ export class ProductsPage implements OnInit {
   day!: string | undefined
 
 
+  isProduction: boolean = true
+  isGoods: boolean = true
+  isInreg: boolean = true
+  isUnreg: boolean = true
+
+
   products: any[] = []
 
   productSearch!: string
   user!: User
 
   sel: boolean = false
-
-  bills!: Bill[]
-
+  bills!: any[]
   allIngredients: any [] = []
 
   productIngredients: any = []
@@ -49,8 +50,19 @@ export class ProductsPage implements OnInit {
   showProductIngs: boolean = false
   isLoading: boolean = false
 
+  qtyColor: string = 'none'
+  priceColor: string = 'none'
+  totColor: string = 'none'
+  discColor: string = 'none'
+  cashInColor: string = 'none'
+  consColor: string = 'none'
+  surplusColor: string = 'none'
+  nameColor: string = 'none'
+
   totalProducts: number = 0;
   totalIngredients: number = 0;
+  totalRecipe: number = 0;
+  recipeSurplus: number = 0
 
 
   constructor(
@@ -64,6 +76,10 @@ export class ProductsPage implements OnInit {
     this.getuser()
   }
 
+  search(){
+    this.getBills()
+    }
+
 
 getuser(){
   getUserFromLocalStorage().then(user => {
@@ -75,101 +91,87 @@ getuser(){
   })
 }
 
+
+filter(option: string){
+  switch (option) {
+    case 'qty':
+      this.resetAllColors()
+      this.products.sort((a,b) => b.quantity - a.quantity)
+      this.qtyColor = 'primary';
+      return
+    case 'price':
+      this.resetAllColors()
+      this.products.sort((a,b) => b.price - a.price)
+      this.priceColor = 'primary';
+      return
+    case 'total':
+      this.resetAllColors()
+      this.products.sort((a,b) => (b.price * b.quantity) - (a.price*b.quantity))
+      this.totColor = 'primary';
+      return;
+    case 'disc':
+      this.resetAllColors()
+      this.products.sort((a,b) => (b.price * b.quantity) - (a.price*b.quantity))
+      this.totColor = 'primary';
+      return;
+    case 'cashIn':
+      this.resetAllColors()
+      this.products.sort((a,b) => b.discount - a.discount)
+      this.totColor = 'primary';
+      return;
+    case 'name':
+      this.resetAllColors()
+      this.products.sort((a,b) => (b.price * b.quantity) - (a.price*b.quantity))
+      this.totColor = 'primary';
+      return;
+    case 'cons':
+      this.resetAllColors()
+      this.products.sort((a,b) => this.calcConsInHtml(b) - this.calcConsInHtml(a))
+      this.totColor = 'primary';
+      return;
+    case 'surplus':
+      this.resetAllColors()
+      this.products.sort((a,b) => (((b.price*b.quantity - b.discount) - this.calcConsInHtml(b)) / this.calcConsInHtml(b) * 100) - (((a.price*a.quantity - a.discount) - this.calcConsInHtml(a)) / this.calcConsInHtml(a) * 100))
+      this.totColor = 'primary';
+      return;
+    default:
+      return;
+}
+}
+
+resetAllColors(){
+  this.qtyColor = 'none'
+  this.priceColor = 'none'
+  this.totColor = 'none'
+  this.discColor = 'none'
+  this.cashInColor = 'none'
+  this.consColor = 'none'
+  this.surplusColor = 'none'
+  this.nameColor = 'none'
+}
+
 showConsumption(){
   this.selected = -1
-  this.showProductIngs = false
+  this.showProductIngs = !this.showProductIngs
 }
 
 
-showProduction(product: any, index: number){
-  console.log(product)
-  this.productIngredients = []
-  this.showProductIngs = true
-  this.productQty = product.quantity
-  this.selected = index
-  this.sel = true
-  product.ings.forEach((ing:any) => {
-    if(ing.ings && ing.ing.ings.length){
-      ing.ing.ings.forEach((ing: any) => {
-          const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
-          if(existingIng){
-            existingIng.qty += ing.qty
-          } else {
-            this.productIngredients.push(ing)
-          }
-        })
-      }
-      const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
-      if(existingIng){
-        existingIng.qty += ing.qty
-      } else {
-        this.productIngredients.push(ing)
-      }
+
+showRecipe(index: number, prod: any){
+  this.products.forEach(product => {
+    product.showSub = false
   })
-  if(product.toppings.length){
-    product.toppings.forEach((topping: any) => {
-      if(topping.ing){
-        if(topping.ing.ings.length){
-          topping.ing.ings.forEach((ing:any) => {
-            const existingIng = this.productIngredients.find((p: any) => p.ing._id === ing.ing._id)
-            if(existingIng){
-              existingIng.qty += ing.qty
-            } else {
-              this.productIngredients.push(ing)
-            }
-          })
-        }
-        const existingIng = this.productIngredients.find((p: any) => p.ing._id === topping.ing._id)
-        if(existingIng){
-          existingIng.qty += topping.qty
-        } else {
-          this.productIngredients.push({qty: topping.qty, ing: topping.ing})
-        }
-      }
-    })
+   const product = this.products[index]
+   product.showSub = true
+  if(this.selected === index){
+    this.selected = -1
+    product.showSub = false
+  } else{
+    this.selected = index
   }
-  console.log(this.productIngredients)
-  // this.calcIngredientsTotal(this.productIngredients)
-
+  this.getProductIngs(prod)
 }
 
-roundInHtml(num: number){
-  return round(num)
-}
-
-async pickStartDay(){
-  const result = await this.actionSrv.openAuth(DatePickerPage)
-  if(result){
-    this.startDay = formatedDateToShow(result).split('ora')[0]
-  }
-}
-
-async pickEndDay(){
-  const result = await this.actionSrv.openAuth(DatePickerPage)
-  if(result){
-    this.endDay = formatedDateToShow(result).split('ora')[0]
-  }
-  this.checkDtes(this.startDay, this.endDay) ? 'ss' : this.dateErr()
-}
-
-checkDtes(start: string | undefined, end: string | undefined){
-  if(start && end) {
-    const startDate = new Date(start).getTime()
-    const endDate = new Date(end).getTime()
-    return startDate <= endDate ? true : false
-  }
-  return
-}
-
-dateErr(){
-  showToast(this.toastCtrl, 'DATA DE ÎNCEPUT TREBUIE SĂ FIE MAI MICĂ DECÂT CEA DE SFÂRȘIT!', 3000, 'error-toast')
-  this.startDay  = ''
-  this.endDay = ''
-}
-
-search(){
-this.getBills()
-}
 
 
 
@@ -186,25 +188,105 @@ getBills(){
 }
 
 
+
 getBillProducts(){
+  this.products = []
   this.bills.forEach(bill => {
-    bill.products.forEach(product => {
-      if(product.name === "Americano-Brazilia Agua Lipa"){
-        console.log(bill)
+    if(this.isInreg){
+      if(!bill.dont){
+        bill.products.forEach((product:any) => {
+          if(this.isProduction){
+            if(product.dep === 'productie') {
+              this.pushProducts(product)
+            }
+          }
+          if(this.isGoods){
+            if(product.dep === 'marfa'){
+              this.pushProducts(product)
+            }
+          }
+        })
       }
-      const existingProduct = this.products.find(p => p.name === product.name && this.arraysAreEqual(p.toppings, product.toppings))
-      if(existingProduct){
-        existingProduct.quantity += product.quantity
-        existingProduct.discount += product.discount
-      } else {
-        this.products.push(product)
+    }
+    if(this.isUnreg){
+      if(bill.dont){
+          bill.products.forEach((product:any) => {
+            if(this.isProduction){
+              if(product.dep === 'productie') {
+                this.pushProducts(product)
+              }
+            }
+            if(this.isGoods){
+              if(product.dep === 'marfa'){
+                this.pushProducts(product)
+              }
+            }
+          })
       }
-    })
+
+    }
   })
-  this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
- this.getIngredients()
+
+ this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
+ this.getIngredients(this.products)
  this.calcProductsTotal()
 }
+
+
+
+
+getIngredients(products: any[]){
+  this.allIngredients = []
+  products.forEach(product => {
+    const ingredients = [...product.ings]
+    ingredients.forEach((ing: any) => {
+        this.pushIngredients(ing, product.quantity)
+      })
+      if(product.toppings.length){
+        const toppings = [...product.toppings]
+        toppings.forEach((topping: any) => {
+          this.pushIngredients(topping, product.quantity)
+      })
+    }
+  })
+  this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
+  this.calcIngredientsTotal(this.allIngredients)
+}
+
+
+calcComecialSurplus(product: any){
+  const productValue = round(product.quantity * product.price - product.discount)
+  this.recipeSurplus = (productValue - this.totalRecipe) / this.totalRecipe * 100
+}
+
+
+getProductIngs(product: any){
+  this.productIngredients = []
+  product.ings.forEach((ing:any) => {
+    this.pushRecipeIngs(ing)
+  })
+  if(product.toppings.length){
+    const toppings = [...product.toppings]
+    toppings.forEach((topping: any) => {
+      this.pushRecipeIngs(topping)
+    })
+  }
+}
+
+calcRecipeTotal(productQty: number){
+  let totalRecipe = 0
+  this.productIngredients.forEach((ing:any) => {
+    if(ing.ing){
+      const ingValue = round(ing.ing.price * productQty *ing.qty)
+      totalRecipe += ingValue
+    }
+  })
+    return round(totalRecipe)
+}
+
+
+
+
 
 calcProductsTotal(){
   this.totalProducts = 0
@@ -214,69 +296,14 @@ calcProductsTotal(){
   })
 }
 
-
-
-getIngredients(){
-  this.products.forEach(product => {
-    product.ings.forEach((ing: any) => {
-      if(ing.ing && ing.ing.ings.length){
-          ing.ing.ings.forEach((ing:any) => {
-            if(ing.ing){
-              const existingIng = this.allIngredients.find(p => p.ing._id === ing.ing._id)
-              if(existingIng){
-                existingIng.qty += ing.qty
-              } else {
-                this.allIngredients.push(ing)
-              }
-            }
-          })
-      }
-      if(ing.ing){
-        const existingIng = this.allIngredients.find(p => p.ing._id === ing.ing._id)
-        if(existingIng){
-          existingIng.qty += ing.qty
-        } else {
-          this.allIngredients.push(ing)
-        }
-      }
-    })
-    if(product.toppings.length){
-      product.toppings.forEach((topping: any) => {
-        if(topping.ing){
-          if(topping.ing.ings.length){
-            topping.ing.ings.forEach((ing:any) => {
-              const existingIng = this.allIngredients.find(p => p.ing._id === ing.ing._id)
-              if(existingIng){
-                existingIng.qty += ing.qty
-              } else {
-                this.allIngredients.push(ing)
-              }
-            })
-          }
-          const existingIng = this.allIngredients.find(p => p.ing._id === topping.ing._id)
-          if(existingIng){
-            existingIng.qty += topping.qty
-          } else {
-            this.allIngredients.push({qty: topping.qty, ing: topping.ing})
-          }
-        }
-      })
-    }
-  })
-  this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
-  // this.calcIngredientsTotal(this.allIngredients)
-}
-
 calcIngredientsTotal(ingredients: any []){
+  console.log(ingredients.length)
   this.totalIngredients = 0
   ingredients.forEach(ing => {
     const ingValue = round(ing.ing.price *ing.qty)
     this.totalIngredients += ingValue
   })
 }
-
-
-
 
 
 
@@ -303,7 +330,195 @@ objectsAreEqual(obj1: any, obj2: any): boolean {
 }
 
 
+roundInHtml(num: number){
+  return round(num)
+}
+
+async pickStartDay(){
+  const result = await this.actionSrv.openAuth(DatePickerPage)
+  if(result){
+    this.startDay = formatedDateToShow(result).split('ora')[0]
+  }
+}
+
+async pickEndDay(){
+  const result = await this.actionSrv.openAuth(DatePickerPage)
+  if(result){
+    this.endDay = formatedDateToShow(result).split('ora')[0]
+  }
+  this.checkDtes(this.startDay, this.endDay) ? 'ss' : this.dateErr()
+}
 
 
+
+checkDtes(start: string | undefined, end: string | undefined){
+  if(start && end) {
+    const startDate = new Date(start).getTime()
+    const endDate = new Date(end).getTime()
+    return startDate <= endDate ? true : false
+  }
+  return
+}
+
+dateErr(){
+  showToast(this.toastCtrl, 'DATA DE ÎNCEPUT TREBUIE SĂ FIE MAI MICĂ DECÂT CEA DE SFÂRȘIT!', 3000, 'error-toast')
+  this.startDay  = ''
+  this.endDay = ''
+}
+
+
+
+printProducts(){
+  const products = JSON.stringify(this.products)
+  this.reportsSrv.printProducts(products, this.startDay, this.endDay).subscribe(response => {
+    const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Produse Vandute ${this.startDay}--${this.endDay}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  })
+}
+
+
+printConsuption(){
+  const ings = JSON.stringify(this.allIngredients)
+  this.reportsSrv.printConsumtion(ings, this.startDay, this.endDay).subscribe(response => {
+    const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Consum materii prime ${this.startDay}--${this.endDay}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  })
+}
+
+
+printProduction(){
+  const products = JSON.stringify(this.products)
+  this.reportsSrv.printProduction(products, this.startDay, this.endDay).subscribe(response => {
+    const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Raport productie detaliat ${this.startDay}--${this.endDay}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  })
+}
+
+
+pushProducts(product: any){
+  const existingProduct = this.products.find(p => p.name === product.name && this.arraysAreEqual(p.toppings, product.toppings))
+  if(existingProduct){
+    existingProduct.quantity += product.quantity
+    existingProduct.discount += product.discount
+  } else {
+    const prod = {...product}
+    this.products.push(prod)
+  }
+  if(product.toppings.length){
+    product.toppings.forEach((top: any) => {
+      if(top.name === 'Lapte Vegetal'){
+        const index = product.ings.findIndex((i: any) => i.ing.name === "Lapte")
+        if(index !== -1){
+          product.ings.splice(index, 1)
+        }
+      }
+    })
+  }
+}
+
+pushIngredients(ing: any, prodQty: number){
+  if(ing.ing && ing.ing.ings.length){
+    ing.ing.ings.forEach((ing:any) => {
+      if(ing.ing){
+        const existingIng = this.allIngredients.find(p => p.ing._id === ing.ing._id)
+        if(existingIng){
+          existingIng.qty += (ing.qty * prodQty)
+        } else {
+          const ig = {...ing}
+          ig.qty = round(ig.qty * prodQty)
+          this.allIngredients.push(ig)
+        }
+      }
+    })
+}
+if(ing.ing){
+  const existingIng = this.allIngredients.find(p => p.ing._id === ing.ing._id)
+  if(existingIng){
+    existingIng.qty += (ing.qty * prodQty)
+  } else {
+    const ig = {...ing}
+    ig.qty = round(ig.qty * prodQty)
+    this.allIngredients.push(ig)
+  }
+  }
+}
+
+
+
+pushRecipeIngs(ing: any){
+  if(ing.ings && ing.ing.ings.length){
+    ing.ing.ings.forEach((ing: any) => {
+      if(ing.ing){
+        const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
+        if(existingIng){
+          existingIng.qty += ing.qty
+        } else {
+          const ig = {...ing}
+          this.productIngredients.push(ig)
+        }
+      }
+      })
+    }
+    if(ing.ing){
+      const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
+      if(existingIng){
+        existingIng.qty += ing.qty
+      } else {
+        const ig = {...ing}
+        this.productIngredients.push(ig)
+      }
+    }
+}
+
+calcConsInHtml(product: any) {
+  let prodIngs: any = []
+  product.ings.forEach((ing: any) => {
+    if(ing.ings && ing.ing.ings.length){
+      ing.ing.ings.forEach((ing: any) => {
+        if(ing.ing){
+          const existingIng = prodIngs.find((p:any) => p.ing._id === ing.ing._id)
+          if(existingIng){
+            existingIng.qty += ing.qty
+          } else {
+            const ig = {...ing}
+            prodIngs.push(ig)
+          }
+        }
+        })
+      }
+      if(ing.ing){
+        const existingIng = prodIngs.find((p:any) => p.ing._id === ing.ing._id)
+        if(existingIng){
+          existingIng.qty += ing.qty
+        } else {
+          const ig = {...ing}
+          prodIngs.push(ig)
+        }
+      }
+  })
+  let totalRecipe = 0
+  prodIngs.forEach((ing:any) => {
+    if(ing.ing){
+      const ingValue = round(ing.ing.price * product.quantity *ing.qty)
+      totalRecipe += ingValue
+    }
+  })
+  return round(totalRecipe)
+}
 
 }

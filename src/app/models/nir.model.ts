@@ -31,6 +31,7 @@ export class Nir{
 
 export class InvIngredient {
   constructor(
+    public _id: string,
     public name: string,
     public price: number,
     public um: string,

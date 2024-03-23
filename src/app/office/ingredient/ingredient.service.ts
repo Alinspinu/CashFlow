@@ -42,10 +42,29 @@ export class IngredientService{
 
   deleteIngredient(id: string){
     return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)
+        .pipe(tap(response => {
+          if(response){
+            const ingIndex = this.ingredients.findIndex(ing => ing._id === id)
+            if(ingIndex !== -1){
+              this.ingredients.splice(ingIndex, 1)
+              this.ingredientsState.next([...this.ingredients])
+            }
+          }
+        }))
   }
 
   editIngredient(id: string, ing: any){
-    return this.http.put<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`, {newIng: ing})
+    return this.http.put<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient?id=${id}`, {newIng: ing})
+        .pipe(tap(response => {
+          if(response){
+            const ingIndex = this.ingredients.findIndex(ing => ing._id === id)
+            if(ingIndex !== -1){
+              ing.ings = []
+              this.ingredients[ingIndex] = response.ing
+              this.ingredientsState.next([...this.ingredients])
+            }
+          }
+        }))
   }
 
   printIngredientsList(filter: any, loc: string){

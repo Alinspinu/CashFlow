@@ -192,12 +192,19 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
 
 
 getTables(locatie: string, id: string){
-  console.log(locatie)
   const headers = new HttpHeaders().set("ngrok-skip-browser-warning", "69420");
+  Preferences.get({key: 'tables'}).then(response =>{
+    if(response && response.value){
+      const parsedTables = JSON.parse(response.value)
+      this.tables = parsedTables
+      this.tableState.next(this.tables)
+    }
+  })
   this.http.get<Table[]>(`${environment.BASE_URL_CLOUD}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
-      console.log(response)
+      const stringTable = JSON.stringify(this.tables)
+      Preferences.set({key: 'tables', value: stringTable})
       this.tableState.next([...this.tables])
     }
   })

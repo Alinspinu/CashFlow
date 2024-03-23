@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -12,6 +12,7 @@ import { CategoryPage } from '../CRUD/category/category.page';
 import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -20,9 +21,10 @@ import User from 'src/app/auth/user.model';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule, CapitalizePipe, FormsModule]
 })
-export class ProductsPage implements OnInit {
+export class ProductsPage implements OnInit, OnDestroy {
 
-  productSearch: any
+  productSearch: any = ''
+
   recipeIcon: string = ''
   categories: any = []
   mainCats: any = []
@@ -33,8 +35,11 @@ export class ProductsPage implements OnInit {
   }
   user!: User
 
+  prodSub!:Subscription
+
   showSubProducts: boolean = false
   products: Product[] = []
+  dbProducts: Product[] = []
 
   constructor(
     @Inject(ProductsService) private productsSrv: ProductsService,
@@ -49,6 +54,13 @@ export class ProductsPage implements OnInit {
     this.getuser()
   }
 
+  ngOnDestroy(): void {
+    if(this.prodSub){
+      this.prodSub.unsubscribe()
+    }
+  }
+
+
 getuser(){
   getUserFromLocalStorage().then(user => {
     if(user) {
@@ -62,10 +74,15 @@ getuser(){
 
 
   searchProduct(ev: any){
-    this.productsSrv.getProducts(this.filter, ev.detail.value, this.user.locatie).subscribe(response => {
-      this.products = response
-    });
+   const input = ev.detail.value
+   this.products = this.products.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+   if(input === ''){
+    this.products = [...this.dbProducts]
+   }
   }
+
+
+
 
   productStatus(ev: any, id: string, index: number){
   let status
@@ -125,18 +142,25 @@ getuser(){
 
 
   onSelectMainCat(ev: CustomEvent){
-    const selectedMainCat = ev.detail.value;
-    this.categoriesToShow =  this.categories.filter((cat: any) => cat.mainCat === selectedMainCat);
-    this.filter.mainCat = selectedMainCat;
-    this.filter.cat = ''
-    this.getProducts();
+    this.filter.mainCat = ev.detail.value;
+    this.filterProducts()
   }
 
   onCatSelect(ev: CustomEvent){
-    const selectedCat = ev.detail.value;
-    this.filter.cat = selectedCat;
-    this.getProducts();
+    this.filter.cat = ev.detail.value;
+    this.filterProducts()
   }
+
+  filterProducts(){
+    this.products = this.dbProducts
+    if(this.filter.cat !== ''){
+      this.products = this.products.filter(product => product.category._id === this.filter.cat)
+    }
+    if(this.filter.mainCat !== ''){
+      this.products = this.products.filter(product => product.mainCat === this.filter.mainCat)
+    }
+  }
+
 
   getCategories(){
     this.categories = this.contentSrv.categoriesNameId$;
@@ -149,11 +173,11 @@ getuser(){
      this.mainCats = uniqueKeys.map(name => ({ name }));
     }
 
-    getProducts(){
-      console.log(this.filter)
-      this.productsSrv.getProducts(this.filter, '', this.user.locatie).subscribe(response => {
-        this.products = response
 
+    getProducts(){
+      this.productsSrv.productsSend$.subscribe(response => {
+        this.dbProducts = response
+        this.products = this.dbProducts
       });
     }
 
@@ -161,7 +185,6 @@ getuser(){
      const response = await this.actionSrv.openModal(CategoryPage, null, false)
      if(response){
        this.productsSrv.saveCat(response, this.user.locatie).subscribe(response => {
-        console.log(response)
        })
      }
 

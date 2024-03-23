@@ -42,7 +42,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   productIngredients!: any;
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingTypes: string[] = ["simplu", "compus"]
-  ingDep: string[] = ["materie", "marfa", 'consumabile']
+  ingDep: string[] = ["materie", "marfa", 'consumabil']
 
 
   filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
@@ -112,52 +112,52 @@ export class IngredientPage implements OnInit, OnDestroy {
     ingredient.showIngs = !ingredient.showIngs
   }
 
+
+
   onSelectGestiune(event: any){
-    const gest = event.detali.value
-    this.filter.gestiune = gest
+    this.filter.gestiune = event.detail.value
     this.ingredients = [...this.allIngs]
-    if(gest !== ""){
-      const ings = this.ingredients.filter((ing: any) => ing.gestiune === event.detail.value)
-      this.ingredients = [...ings]
-    }
+    this.filterIngredients()
   }
-
-
 
 
   onSelectType(event: any) {
-    const type = event.detail.value
-    this.filter.type = type
-
+    this.filter.type = event.detail.value
     this.ingredients = [...this.allIngs]
-    if(type === "compus") {
-      const ings = this.ingredients.filter((ing: any) => ing.ings.length > 1)
-      this.ingredients = [...ings]
-    }
-    if (type === "simplu"){
-      const ings = this.ingredients.filter((ing: any) => !ing.ings.length)
-      this.ingredients = [...ings]
-    }
-    if(type === ''){
-      this.ingredients = [...this.allIngs]
-    }
-
-    // this.getIngredients()
+    this.filterIngredients()
   }
-
-
 
 
   onSelectDep(event: any){
     this.filter.dep = event.detail.value
     this.dep = event.detail.value
+    this.ingredients = [...this.allIngs]
+    this.filterIngredients()
+  }
 
+
+  filterIngredients(){
+    if(this.filter.dep !== ''){
+      const ings = this.ingredients.filter((ing: any) => ing.dep === this.filter.dep)
+      this.ingredients = [...ings]
+    }
+    if(this.filter.gestiune !== ''){
+      const ings = this.ingredients.filter((ing: any) => ing.gestiune === this.filter.gestiune)
+      this.ingredients = [...ings]
+    }
+    if(this.filter.type === 'compus'){
+      const ings = this.ingredients.filter((ing: any) => ing.ings.length >= 1)
+      this.ingredients = [...ings]
+    }
+    if(this.filter.type === "simplu"){
+      const ings = this.ingredients.filter((ing: any) => !ing.ings.length)
+      this.ingredients = [...ings]
+    }
   }
 
   getIngredients(){
    this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
     if(response){
-      console.log('something')
       this.allIngs = response
       this.ingredients = [...this.allIngs]
     }
@@ -177,7 +177,7 @@ updateProductIng(){
   if(ing.ings.length){
     const message = await this.actionSh.openModal(ProductIngredientPage, ing, false)
     if(message === 'done'){
-      this.getIngredients()
+      // this.getIngredients()
     }
   } else {
     const ingToEdit = await this.actionSh.openModal(AddIngredientPage, ing, false)
@@ -194,10 +194,9 @@ updateProductIng(){
   async deleteIng(id: string, name: string){
     const result = await this.actionSh.deleteAlert(`Ești sigur ca vrei să ștergi ingredinetul ${name}! Cand stergi un ingredient il stergi din toate rețetele în care a fost folosit!`, "Sterge")
     if(result){
-      this.ingSrv.deleteIngredient(id).subscribe(response => {
+      this.ingSrv.deleteIngredient(id).pipe(take(1)).subscribe(response => {
         if(response){
           showToast(this.toastCtrl, response.message, 3000, 'success-toast')
-          this.getIngredients()
         }
       })
     }

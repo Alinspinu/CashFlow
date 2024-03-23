@@ -14,21 +14,17 @@ export class RecipeMakerService{
   ){}
 
 
-getIngredients(loc: string){
-  console.log(loc)
-  return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients?prod=true`, {loc: loc})
-}
 saveIng(ing: any, loc: string){
   return this.http.post<{message: string}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: loc})
 }
 
-editIng(ing: any, id: string){
-  return this.http.put<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`,{newIng: ing} )
-}
+// editIng(ing: any, id: string){
+//   return this.http.put<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`,{newIng: ing} )
+// }
 
-deleteIng(id: string){
-  return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)
-}
+// deleteIng(id: string){
+//   return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)
+// }
 
 // saveProductIngredient(productIngredient: ProductIngredient){
 //     return this.http.post<{message: string}>(`${environment.BASE_URL}ing/product-ing`, {productIngredient: productIngredient})

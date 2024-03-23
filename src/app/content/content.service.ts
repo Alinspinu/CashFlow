@@ -37,7 +37,7 @@ export class ContentService{
           this.categoryState.next([...this.category])
         }
       })
-      return this.http.get<Category[]>(`${environment.BASE_URL_CLOUD}cat/get-cats?loc=${locatie}`).pipe(take(1), tap(res => {
+      return this.http.get<Category[]>(`${environment.BASE_URL}cat/get-cats?loc=${locatie}`).pipe(take(1), tap(res => {
         this.category = this.sortData(res)
         this.categoryState.next([...this.category]);
         Preferences.set({key: 'categories', value: JSON.stringify(this.category)})

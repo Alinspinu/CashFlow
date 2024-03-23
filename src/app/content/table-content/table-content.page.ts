@@ -149,6 +149,8 @@ export class TableContentPage implements OnInit, OnDestroy {
     })
   }
 
+
+
   getBill(){
     this.tabSub = this.tableSrv.tableSend$.subscribe(response => {
       if(response){

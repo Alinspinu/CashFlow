@@ -151,7 +151,6 @@ getuser(){
           }
         }, (err) => {
           if(err){
-            console.log(err)
             showToast(this.toastCtrl, err.error.message, 3000 , 'error-toast')
           }
         })

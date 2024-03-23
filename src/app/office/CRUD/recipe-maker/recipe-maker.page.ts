@@ -182,6 +182,7 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+
   setIng(){
     this.selectIngredient(this.ingredients[0])
   }

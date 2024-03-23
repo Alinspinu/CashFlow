@@ -107,9 +107,7 @@ searchNir(ev: any){
 
 
 suplier(){
-  console.log(this.nirs)
   this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
-
   this.suplierColor = 'primary'
   this.dateColor = 'none'
   this.indexColor = 'none'

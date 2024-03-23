@@ -89,7 +89,7 @@ export class ProductPage implements OnInit {
             this.ingsToEdit = this.product.ings;
             this.subProducts = this.product.subProducts;
             this.toppings = this.product.toppings;
-            console.log("tva", this.product.tva.toString())
+            console.log("product db", this.ingsToEdit)
             this.form.get('name')?.setValue(this.product.name)
             this.form.get('price')?.setValue(this.product.price)
             this.form.get('cat')?.setValue(this.product.category._id)
@@ -99,7 +99,7 @@ export class ProductPage implements OnInit {
             this.form.get('qty')?.setValue(this.product.qty)
             this.form.get('order')?.setValue(this.product.order)
             this.form.get('dep')?.setValue(this.product.dep)
-            this.form.get('tva')?.setValue(this.product.tva.toString())
+            this.form.get('tva')?.setValue(this.product.tva ? this.product.tva.toString(): '')
             this.form.get('printer')?.setValue(this.product.printer)
           }
         })
@@ -234,12 +234,11 @@ export class ProductPage implements OnInit {
  async saveProduct(){
     if(this.form.valid){
       const productData = new FormData()
+      console.log('at save', this.toppings)
       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
-      console.log(ings)
       const sub = JSON.stringify(this.subProducts);
       const tempSubs = JSON.stringify(this.tempSubArray);
-      console.log(toppings)
       productData.append('name', this.form.value.name);
       productData.append('price', this.form.value.price);
       productData.append('category', this.form.value.cat);
@@ -260,6 +259,7 @@ export class ProductPage implements OnInit {
       }
       productData.append('sub', sub);
       if(this.editMode){
+        console.log(toppings)
         this.prodSrv.editProduct(productData, this.product._id).subscribe(response => {
           showToast(this.toastCtrl, response.message, 3000, 'success-toast');
           this.router.navigateByUrl('/tabs/office/products')

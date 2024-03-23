@@ -209,12 +209,27 @@ addCustomer(customer: any, masa: number, billIndex: number){
 
 getTables(locatie: string, id: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  Preferences.get({key: 'tables'}).then(response =>{
+    if(response && response.value){
+      const parsedTables = JSON.parse(response.value)
+      this.tables = parsedTables
+      this.tableState.next(this.tables)
+    }
+  })
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`, { headers }).subscribe(response => {
     if(response){
       this.tables = response
+      const stringTable = JSON.stringify(this.tables)
+      Preferences.set({key: 'tables', value: stringTable})
       this.tableState.next([...this.tables])
     }
   })
+  // this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`, { headers }).subscribe(response => {
+  //   if(response){
+  //     this.tables = response
+  //     this.tableState.next([...this.tables])
+  //   }
+  // })
 }
 
 getOrderMessage (locatie: string, id: string): Observable<MessageEvent>{

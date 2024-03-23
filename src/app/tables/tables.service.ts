@@ -192,7 +192,6 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
 
 
 getTables(locatie: string, id: string){
-  const headers = new HttpHeaders().set("ngrok-skip-browser-warning", "69420");
   Preferences.get({key: 'tables'}).then(response =>{
     if(response && response.value){
       const parsedTables = JSON.parse(response.value)

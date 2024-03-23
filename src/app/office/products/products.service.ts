@@ -20,9 +20,8 @@ export class ProductsService{
   ){}
 
 
-  getProducts(filter: any, searchInput: string, loc: string){
-    filter.locatie = loc
-    return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products?search=${searchInput}`, {filter: filter})
+  getProducts(loc: string){
+    return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products`, {loc: loc})
   }
 
   saveCat(cat: any, loc: string){

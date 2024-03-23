@@ -53,10 +53,9 @@ export class TablesPage implements OnInit, OnDestroy {
     }
 
 ngOnInit(): void {
-  console.log(this.isLoadding)
   this.getUser()
-  this.audio = new Audio();
-  this.audio.src = 'assets/audio/ding.mp3';
+  // this.audio = new Audio();
+  // this.audio.src = 'assets/audio/ding.mp3';
 }
 
 
@@ -90,11 +89,12 @@ waiterBills(tableBills: Bill[]){
 
 
 getTables(){
-  this.isLoadding = true
+ this.isLoadding = true
  this.tableSubs = this.tableServ.tableSend$.subscribe(response => {
+   this.tables = []
    const tempTables = response
    tempTables.forEach(table =>{
-    if(table.index > 48){
+    if(table.index > 49){
       this.tables.push(table)
     }
    })

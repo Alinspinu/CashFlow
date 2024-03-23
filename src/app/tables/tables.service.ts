@@ -200,7 +200,7 @@ getTables(locatie: string, id: string){
       this.tableState.next(this.tables)
     }
   })
-  this.http.get<Table[]>(`${environment.BASE_URL_CLOUD}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
+  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)

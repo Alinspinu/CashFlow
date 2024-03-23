@@ -63,9 +63,9 @@ getuser(){
 
 
   searchProduct(ev: any){
-    this.productsSrv.getProducts(this.filter, ev.detail.value, this.user.locatie).subscribe(response => {
-      this.products = response
-    });
+    // this.productsSrv.getProducts(this.filter, ev.detail.value, this.user.locatie).subscribe(response => {
+    //   this.products = response
+    // });
   }
 
   productStatus(ev: any, id: string, index: number){
@@ -152,7 +152,7 @@ getuser(){
 
     getProducts(){
       console.log(this.filter)
-      this.productsSrv.getProducts(this.filter, '', this.user.locatie).subscribe(response => {
+      this.productsSrv.getProducts(this.user.locatie).subscribe(response => {
         this.products = response
 
       });

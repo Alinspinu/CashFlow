@@ -59,7 +59,7 @@
             <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="product.subProducts.length"></ion-icon>
           </ion-label>
           <ion-icon  src="../../assets/icon/create-outline.svg" (click)="productEdit(product._id)" class="edit"></ion-icon>
-          <ion-icon  src="../../assets/icon/trash-outline.svg" class="delete"></ion-icon>
+          <ion-icon  src="../../assets/icon/trash-outline.svg" class="delete" (click)="deleteProduct(product)"></ion-icon>
         </ion-item>
         <ion-item lines="none" color="tertiary" class="toggle-wrapper">
           <ion-toggle [enableOnOffLabels]="true" labelPlacement="end" (ionChange)="productStatus($event, product._id, i)" [checked]="product.available"></ion-toggle>

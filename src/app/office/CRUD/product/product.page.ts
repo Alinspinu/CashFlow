@@ -16,6 +16,7 @@ import { CategoryPage } from '../category/category.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
+import { ProductsService } from '../../products/products.service';
 
 
 @Component({
@@ -53,6 +54,7 @@ export class ProductPage implements OnInit {
     @Inject(ContentService) private contentSrv: ContentService,
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
     @Inject(ProductService) private prodSrv: ProductService,
+    @Inject(ProductsService) private productsSrv: ProductsService,
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
     private router: Router,
@@ -89,7 +91,6 @@ export class ProductPage implements OnInit {
             this.ingsToEdit = this.product.ings;
             this.subProducts = this.product.subProducts;
             this.toppings = this.product.toppings;
-            console.log("product db", this.ingsToEdit)
             this.form.get('name')?.setValue(this.product.name)
             this.form.get('price')?.setValue(this.product.price)
             this.form.get('cat')?.setValue(this.product.category._id)
@@ -99,7 +100,7 @@ export class ProductPage implements OnInit {
             this.form.get('qty')?.setValue(this.product.qty)
             this.form.get('order')?.setValue(this.product.order)
             this.form.get('dep')?.setValue(this.product.dep)
-            this.form.get('tva')?.setValue(this.product.tva ? this.product.tva.toString(): '')
+            this.form.get('tva')?.setValue(this.product.tva.toString())
             this.form.get('printer')?.setValue(this.product.printer)
           }
         })
@@ -259,15 +260,13 @@ export class ProductPage implements OnInit {
       }
       productData.append('sub', sub);
       if(this.editMode){
-        console.log(toppings)
-        this.prodSrv.editProduct(productData, this.product._id).subscribe(response => {
+        this.productsSrv.editProduct(productData, this.product._id).subscribe(response => {
           showToast(this.toastCtrl, response.message, 3000, 'success-toast');
           this.router.navigateByUrl('/tabs/office/products')
         })
       } else {
-        this.prodSrv.saveProduct(productData, this.user.locatie).subscribe(response => {
+        this.productsSrv.saveProduct(productData, this.user.locatie).subscribe(response => {
           const product = response.product
-          console.log(response)
           if(product){
             this.tempSubArray.map((obj:any) => {
               obj.product = product._id;

@@ -19,14 +19,6 @@ export class ProductService{
   }
 
 
-  saveProduct(product: any, loc: string){
-    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?loc=${loc}`, product)
-  }
-
-  editProduct(product: any, id: string) {
-    return this.http.put<{message: string, product: any}>(`${environment.BASE_URL}product/product?id=${id}`, product)
-  }
-
   // getCategories(input: any){
   //   return this.http.post(`${environment.BASE_URL}product/seearch-category`, {search: input})
   // }

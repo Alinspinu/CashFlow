@@ -73,6 +73,9 @@ getuser(){
 }
 
 
+
+
+
   searchProduct(ev: any){
    const input = ev.detail.value
    this.products = this.products.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
@@ -105,6 +108,8 @@ getuser(){
     })
   }
 
+
+
   subStatus(ev: any, id: string, subIndex: number, prodIndex: number){
     let status
     const isCheked = ev.detail.checked
@@ -135,6 +140,24 @@ getuser(){
       this.router.navigate([`tabs/add-product/${id}`])
   }
 
+  async deleteProduct(product: Product){
+      const message = `Ești sigur ca vrei să ștergi produsul ${product.name}?`
+      const title = 'ȘTERGE!'
+      const result = await this.actionSrv.deleteAlert(message, title)
+      if(result){
+        this.productsSrv.deleteProduct(product._id).subscribe(response => {
+          if(response){
+            showToast(this.toastCtrl, response.message, 3000, 'success-toast')
+          }
+        }, (err) => {
+          if(err){
+            console.log(err)
+            showToast(this.toastCtrl, err.error.message, 3000 , 'error-toast')
+          }
+        })
+      }
+  }
+
   showSubs(index: number){
     const product = this.products[index]
       product.showSub = !product.showSub
@@ -143,6 +166,7 @@ getuser(){
 
   onSelectMainCat(ev: CustomEvent){
     this.filter.mainCat = ev.detail.value;
+    this.categoriesToShow =  this.categories.filter((cat: any) => cat.mainCat === this.filter.mainCat);
     this.filterProducts()
   }
 
@@ -210,6 +234,8 @@ getuser(){
         return 'Infint %'
       }
     }
+
+
 
 }
 

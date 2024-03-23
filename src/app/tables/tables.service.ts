@@ -30,7 +30,6 @@ export class TablesService{
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
   }
-
   private eventSource!: EventSource
 
 //******************************ORDERS************************* */

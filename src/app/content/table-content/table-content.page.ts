@@ -149,7 +149,6 @@ export class TableContentPage implements OnInit, OnDestroy {
           }
         }
         this.mainCats = tempMainCats
-        console.log(this.mainCats)
       }
     })
   }

@@ -25,7 +25,7 @@ import { SpinnerPage } from '../modals/spinner/spinner.page';
 
 export class TablesPage implements OnInit, OnDestroy {
 
-  tables!: Table[]
+  tables: Table[] = []
   audio!: HTMLAudioElement
   order!: Bill
   onlineOrder: boolean = false
@@ -92,7 +92,13 @@ waiterBills(tableBills: Bill[]){
 getTables(){
   this.isLoadding = true
  this.tableSubs = this.tableServ.tableSend$.subscribe(response => {
-    this.tables = response
+   const tempTables = response
+   tempTables.forEach(table =>{
+    if(table.index > 48){
+      this.tables.push(table)
+    }
+   })
+    // this.tables = response
     if(this.tables.length > 1){
       this.isLoadding = false
     }

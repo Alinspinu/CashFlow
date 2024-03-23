@@ -213,6 +213,7 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   showProducts(index: number, mainCat: string){
     this.productsToShow = this.mainCats[mainCat][index].product
+    console.log(this.productsToShow)
     this.showMainCats = false;
     this.showCats = false;
     this.showProd = true;
@@ -422,17 +423,6 @@ async addToBill(product: Product){
 
   async openComments(product: BillProduct, index: number){
     if(product.sentToPrint){
-    // if(product.toppings.length){
-    //   let price: number = 0
-    //   product.toppings.forEach(top => {
-    //     price += top.price
-    //   })
-    //   product.price -= price
-    //   product.total = product.price * product.quantity
-    //   this.billToshow.total -= (price * product.quantity)
-    //   product.toppings = []
-    //   this.tableSrv.addComment(this.tableNumber, index, this.billIndex, '')
-    // }
       let options: Topping[] = []
       let optionPrice: number = 0;
       let pickedToppings: Topping[] = [];
@@ -563,6 +553,12 @@ sendOrder(out: boolean): Observable<boolean> {
   }
 }
 
+updateProductsQuantity(products: any[]){
+  products.forEach(prod => {
+    this.contSrv.editProductQuantity(prod._id, prod.quantity, prod.name)
+  })
+}
+
 
 async payment(){
   this.sendOrder(false).subscribe(async(response) => {
@@ -577,8 +573,8 @@ async payment(){
           this.billToshow.payment.online  = paymentInfo.online
           this.tableSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
             if(response){
+              this.updateProductsQuantity(this.billToshow.products)
               this.billToshow.discount = 0
-              console.log(response)
               this.tableSrv.removeBill(this.tableNumber, this.billIndex)
               this.billProducts = []
               this.billToshow = emptyBill()

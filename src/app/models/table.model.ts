@@ -118,7 +118,7 @@ export class Topping {
 export class Ing{
   constructor(
     public qty: number,
-    public ing: string,
+    public ing: {_id: string, name: string, qty: number},
   ){}
 }
 

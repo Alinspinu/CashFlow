@@ -81,6 +81,9 @@
                 <ion-card (click)="addToBill(product)">
                     <img alt="image" class="prod-img" [src]="modifyImageURL(product.image.path)" />
                   <ion-card-subtitle class="product-title">{{product.name}}</ion-card-subtitle>
+                  <div class="badge-wrapper" *ngIf="product.category.name === 'PATISERIE' && product.ings.length === 1 ">
+                    <span class="badge">{{product.ings[0].ing.qty}}</span>
+                  </div>
                 </ion-card>
               </ion-col>
            </ion-row>

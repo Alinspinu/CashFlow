@@ -213,3 +213,31 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
 .total-text{
   font-size: 28px;
 }
+
+
+
+
+.badge-wrapper{
+  display: flex;
+  flex-direction: row;
+  width: 100px;
+    position: absolute;
+    right: 75%;
+    bottom: 80%;
+    z-index: 99;
+}
+
+  .badge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--ion-color-danger);
+    color: var(--ion-color-light);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+    font-size: 16px;
+    text-align: center;
+    margin-left: auto;
+  }

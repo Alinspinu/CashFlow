@@ -126,6 +126,24 @@ export class ContentService{
       return sortedCategories;
     }
 
+    editProductQuantity(id: string, qty: number, prodName: string){
+      const catIndex = this.category.findIndex(cat => cat.name === "PATISERIE")
+      const productIndex = this.category[catIndex].product.findIndex(prod => prod._id === id)
+      if(productIndex !== -1){
+        const prod = this.category[catIndex].product[productIndex]
+        if(prod.subProducts.length){
+          const subIndex = prod.subProducts.findIndex(sub => prodName.includes(sub.name))
+          console.log(subIndex, prod)
+          const sub = prod.subProducts[subIndex]
+          sub.ings[0].ing.qty -= qty
+          this.categoryState.next([...this.category])
+        } else {
+          prod.ings[0].ing.qty -= qty
+          this.categoryState.next([...this.category])
+        }
+      }
+    }
+
 
 
 }

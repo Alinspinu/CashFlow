@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { IonicModule, NavParams, ToastController } from '@ionic/angular';
@@ -12,6 +12,8 @@ import { IonSearchbar } from '@ionic/angular/standalone';
 import User from 'src/app/auth/user.model';
 import { Preferences } from '@capacitor/preferences';
 import { InvIngredient } from 'src/app/models/nir.model';
+import { IngredientService } from '../../ingredient/ingredient.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -22,7 +24,7 @@ import { InvIngredient } from 'src/app/models/nir.model';
   providers: [NavParams],
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class RecipeMakerPage implements OnInit, OnChanges {
+export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
 
   @Input() top: any
   @Input() ings: any
@@ -58,6 +60,8 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
   dbIngs!: any
 
+  ingSub!: Subscription
+
   user!: User
 
 
@@ -66,6 +70,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     @Inject(ProductService) private prodSrv: ProductService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private recipeService: RecipeMakerService,
+    private ingSrv: IngredientService,
     private toastCtrl: ToastController
   ) { }
 
@@ -86,6 +91,12 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     setTimeout(()=>{
       this.setDataToEdit()
     }, 1100)
+  }
+
+  ngOnDestroy(): void {
+    if(this.ingSub){
+      this.ingSub.unsubscribe()
+    }
   }
 
   getUser(){
@@ -177,7 +188,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
 
   getIngredients(){
-    this.recipeService.getIngredients(this.user.locatie).subscribe(response => {
+   this.ingSub =  this.ingSrv.ingredientsSend$.subscribe(response => {
       if(response){
         this.dbIngs = response
         this.isLoading = false

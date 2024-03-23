@@ -1,4 +1,5 @@
-import { Ing, Topping } from "./table.model";
+import { InvIngredient } from "./nir.model";
+import { Topping } from "./table.model";
 
 export class Category{
   constructor(
@@ -41,7 +42,7 @@ export class Product {
     protein: number,
   },
   public toppings: Topping[],
-  public ings: Ing[],
+  public ings: InvIngredient[],
   public ingredients:{quantity: number, ingredient: Ingredient}[],
   public paring: Product[],
   public showSub: boolean,
@@ -58,7 +59,7 @@ export class SubProduct{
     public quantity: number,
     public product: Product,
     public available: boolean,
-    public ings: Ing[],
+    public ings: InvIngredient[],
   ){};
 };
 

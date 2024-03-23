@@ -1,3 +1,4 @@
+import { InvIngredient } from "./nir.model"
 
 
 export class Table{
@@ -86,7 +87,7 @@ export class BillProduct{
    public discount: number,
    public sub: boolean,
    public toppings: Topping[],
-   public ings: Ing[],
+   public ings: InvIngredient[],
    public payToGo: boolean,
    public imgUrl: string,
    public printer: string,
@@ -109,16 +110,16 @@ export class Topping {
     public qty: number,
     public ingPrice: number,
     public um: string,
-    public ing: string
+    public ing: InvIngredient
   ){}
 }
 
-export class Ing{
-  constructor(
-    public qty: number,
-    public ing: string,
-  ){}
-}
+// export class Ing{
+//   constructor(
+//     public qty: number,
+//     public ing: string,
+//   ){}
+// }
 
 export class deletetBillProduct{
   constructor(

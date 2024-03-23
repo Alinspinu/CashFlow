@@ -5,6 +5,7 @@ import { Preferences } from '@capacitor/preferences';
 import User from './auth/user.model';
 import { ContentService } from './content/content.service';
 import { CashRegisterService } from './office/cash-register/cash-register.service';
+import { IngredientService } from './office/ingredient/ingredient.service';
 import { TablesService } from './tables/tables.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
     private contService: ContentService,
     private tablesService: TablesService,
     private cashReg: CashRegisterService,
+    private ingsSrv: IngredientService,
     private router: Router,
     ) {}
 
@@ -32,6 +34,7 @@ export class AppComponent implements OnInit {
          this.contService.getData(this.user.locatie).subscribe()
          this.tablesService.getTables(this.user.locatie, this.user._id)
          this.cashReg.getDocuments(1, this.user.locatie).subscribe()
+          this.ingsSrv.getIngredients({}, this.user.locatie).subscribe()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{
           this.router.navigateByUrl('/auth')

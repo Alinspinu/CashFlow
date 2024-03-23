@@ -40,6 +40,28 @@ export class InvIngredient {
     public dep: string,
     public gestiune: string,
     public locatie: string,
+    public ings: InvIngredient[],
+    public inventary: {
+      index: number,
+      day: string,
+      qty: number
+    } [],
+    public uploadLog: {
+      date: string,
+      qty: number,
+      operation: {
+        name: string,
+        details: string,
+      }
+    }[],
+    public unloadLog: {
+      date: string,
+      qty: number,
+      operation: {
+        name: string,
+        details: string,
+      }
+    }[]
   ){}
 }
 

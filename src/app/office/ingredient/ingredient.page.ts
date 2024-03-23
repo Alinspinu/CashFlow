@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -14,6 +14,7 @@ import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { InvIngredient } from 'src/app/models/nir.model';
+import { Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-ingredient',
@@ -22,7 +23,7 @@ import { InvIngredient } from 'src/app/models/nir.model';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe]
 })
-export class IngredientPage implements OnInit {
+export class IngredientPage implements OnInit, OnDestroy {
 
   ingredients: any = [];
 
@@ -32,13 +33,18 @@ export class IngredientPage implements OnInit {
   ingsToEdit!: any;
   user!: User
 
+  ingSub!: Subscription
+
   allIngs!: InvIngredient[]
+
   dep: string = ""
   toppings!: any;
   productIngredients!: any;
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingTypes: string[] = ["simplu", "compus"]
   ingDep: string[] = ["materie", "marfa", 'consumabile']
+
+
   filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
 
 
@@ -51,6 +57,12 @@ export class IngredientPage implements OnInit {
 
   ngOnInit() {
     this.getUser()
+  }
+
+  ngOnDestroy(): void {
+    if(this.ingSub){
+      this.ingSub.unsubscribe()
+    }
   }
 
 
@@ -102,27 +114,46 @@ export class IngredientPage implements OnInit {
 
   onSelectGestiune(event: any){
     this.filter.gestiune = event.detail.value
-    this.getIngredients()
+
+    this.ingredients = [...this.allIngs]
+    const ings = this.ingredients.filter((ing: any) => ing.gestiune === event.detail.value)
+    this.ingredients = [...ings]
   }
 
   onSelectType(event: any) {
     this.filter.type = event.detail.value
-    this.getIngredients()
+
+    this.ingredients = [...this.allIngs]
+    const type = event.detail.value
+    if(type === "compus") {
+      const ings = this.ingredients.filter((ing: any) => ing.ings.length > 1)
+      this.ingredients = [...ings]
+    }
+    if (type === "simplu"){
+      const ings = this.ingredients.filter((ing: any) => !ing.ings.length)
+      this.ingredients = [...ings]
+    }
+    if(type === ''){
+      this.ingredients = [...this.allIngs]
+    }
+
+    // this.getIngredients()
   }
 
   onSelectDep(event: any){
     this.filter.dep = event.detail.value
     this.dep = event.detail.value
-    this.getIngredients()
+
   }
 
   getIngredients(){
-    this.ingSrv.getIngredients(this.filter, this.user.locatie).subscribe(response => {
-      if(response){
-        this.allIngs = response
-        this.ingredients = [...this.allIngs]
-      }
-    })
+   this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
+    if(response){
+      console.log('something')
+      this.allIngs = response
+      this.ingredients = [...this.allIngs]
+    }
+   })
   }
 
   onTopRecive(ev: any){

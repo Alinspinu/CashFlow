@@ -7,7 +7,7 @@ import { ContentService } from '../content.service';
 import { Category, Product } from '../../models/category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
-import { Bill, BillProduct, deletetBillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
+import { Bill, BillProduct, deletetBillProduct, Table, Topping } from 'src/app/models/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
 import {  Subscription } from 'rxjs';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
@@ -18,12 +18,13 @@ import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { AuthService } from 'src/app/auth/auth.service';
 import User from 'src/app/auth/user.model';
-import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
+import { emptyBill, emptyDeletetBillProduct, emptyIng, emptyTable } from 'src/app/models/empty-models';
 import { round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
 import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
 import { AudioService } from 'src/app/shared/audio.service';
+import { InvIngredient } from 'src/app/models/nir.model';
 
 @Component({
   selector: 'app-table-content',
@@ -330,7 +331,7 @@ async addToBill(product: Product){
   console.log(product)
   let price: number = product.price;
   let cartProdName: string = product.name;
-  let ings: Ing[] = product.ings
+  let ings: InvIngredient[] = product.ings
   if(product.subProducts.length){
     const result = await this.actionSheet.openModal(PickOptionPage, product.subProducts, true)
     if(result){
@@ -409,7 +410,7 @@ async addToBill(product: Product){
         const itemsToSort = [...product.toppingsToSend]
         options = itemsToSort.sort((a, b) => a.price - b.price)
       } else {
-        const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: 's'}
+        const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: emptyIng()}
         options.push(fakeTopping)
       }
       if(options.length){

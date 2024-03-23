@@ -113,18 +113,23 @@ export class IngredientPage implements OnInit, OnDestroy {
   }
 
   onSelectGestiune(event: any){
-    this.filter.gestiune = event.detail.value
-
+    const gest = event.detali.value
+    this.filter.gestiune = gest
     this.ingredients = [...this.allIngs]
-    const ings = this.ingredients.filter((ing: any) => ing.gestiune === event.detail.value)
-    this.ingredients = [...ings]
+    if(gest !== ""){
+      const ings = this.ingredients.filter((ing: any) => ing.gestiune === event.detail.value)
+      this.ingredients = [...ings]
+    }
   }
 
+
+
+
   onSelectType(event: any) {
-    this.filter.type = event.detail.value
+    const type = event.detail.value
+    this.filter.type = type
 
     this.ingredients = [...this.allIngs]
-    const type = event.detail.value
     if(type === "compus") {
       const ings = this.ingredients.filter((ing: any) => ing.ings.length > 1)
       this.ingredients = [...ings]
@@ -139,6 +144,9 @@ export class IngredientPage implements OnInit, OnDestroy {
 
     // this.getIngredients()
   }
+
+
+
 
   onSelectDep(event: any){
     this.filter.dep = event.detail.value

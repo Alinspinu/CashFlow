@@ -27,7 +27,6 @@ export class IngredientService{
   getIngredients(filter: any, loc: string){
    Preferences.get({key: 'ings'}).then(result => {
     if(result && result.value){
-      console.log(result)
       this.ingredients = JSON.parse(result.value)
       this.ingredientsState.next([...this.ingredients])
     }

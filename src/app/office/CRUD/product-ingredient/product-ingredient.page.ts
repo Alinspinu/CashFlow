@@ -82,7 +82,6 @@ export class ProductIngredientPage implements OnInit, OnDestroy {
 
   getProdIng(){
       const product = this.navParams.get('options')
-      console.log(product)
       if(product){
         this.productIngredientMode = true;
         this.productIngName = product.name;

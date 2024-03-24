@@ -149,6 +149,7 @@ searchProduct(ev: any){
   }
 
   onSelectMainCat(ev: CustomEvent){
+    this.filter.cat = ''
     this.filter.mainCat = ev.detail.value;
     this.categoriesToShow =  this.categories.filter((cat: any) => cat.mainCat === this.filter.mainCat);
     this.filterProducts()

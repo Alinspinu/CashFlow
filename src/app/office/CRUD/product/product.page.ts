@@ -16,6 +16,7 @@ import { CategoryPage } from '../category/category.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
+import { ProductsService } from '../../products/products.service';
 
 
 @Component({
@@ -53,6 +54,7 @@ export class ProductPage implements OnInit {
     @Inject(ContentService) private contentSrv: ContentService,
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
     @Inject(ProductService) private prodSrv: ProductService,
+    @Inject(ProductsService) private prodsSrv: ProductsService,
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
     private router: Router,
@@ -240,10 +242,8 @@ export class ProductPage implements OnInit {
       const productData = new FormData()
       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
-      console.log(ings)
       const sub = JSON.stringify(this.subProducts);
       const tempSubs = JSON.stringify(this.tempSubArray);
-      console.log(toppings)
       productData.append('name', this.form.value.name);
       productData.append('price', this.form.value.price);
       productData.append('category', this.form.value.cat);
@@ -265,12 +265,12 @@ export class ProductPage implements OnInit {
       }
       productData.append('sub', sub);
       if(this.editMode){
-        this.prodSrv.editProduct(productData, this.product._id).subscribe(response => {
+        this.prodsSrv.editProduct(productData, this.product._id).subscribe(response => {
           showToast(this.toastCtrl, response.message, 3000);
           this.router.navigateByUrl('/tabs/office/products')
         })
       } else {
-        this.prodSrv.saveProduct(productData, this.user.locatie).subscribe(response => {
+        this.prodsSrv.saveProduct(productData, this.user.locatie).subscribe(response => {
           const product = response.product
           if(product){
             this.tempSubArray.map((obj:any) => {

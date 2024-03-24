@@ -1,6 +1,7 @@
 
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
+import { Category, Product } from "./category.model";
 import { InvIngredient } from "./nir.model";
 
 export function emptyUser(){
@@ -161,6 +162,7 @@ export function emptyProduct(){
     category: {_id: '', mainCat: '', name: '', product: [], image: {path: '', filename:''}, order: 0},
     available: false,
     total: 0,
+    sgrTax: false,
     longDescription: '',
     ingredients: [],
     mainCat: '',

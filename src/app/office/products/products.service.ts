@@ -4,6 +4,7 @@ import { Preferences } from "@capacitor/preferences";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 import { Product, SubProduct } from "src/app/models/category.model";
 import { emptyProduct } from "src/app/models/empty-models";
+import { IndexDbService } from "src/app/shared/indexDb.service";
 import {environment} from '../../../environments/environment'
 import { ProductService } from "../CRUD/product/product.service";
 
@@ -23,7 +24,8 @@ export class ProductsService{
 
   constructor(
     private http: HttpClient,
-    @Inject(ProductService) private productService: ProductService
+    @Inject(ProductService) private productService: ProductService,
+    private dbService: IndexDbService,
   ){
     this.productsState = new BehaviorSubject<Product[]>([emptyProduct()]);
     this.productsSend$ =  this.productsState.asObservable();
@@ -31,11 +33,17 @@ export class ProductsService{
 
 
   getProducts(loc: string){
-    Preferences.get({key: 'products'}).then(response => {
-      if(response && response.value){
-        const parsedProducts = JSON.parse(response.value)
-        this.products = parsedProducts
-        this.productsState.next([...this.products])
+    // Preferences.get({key: 'products'}).then(response => {
+    //   if(response && response.value){
+    //     const parsedProducts = JSON.parse(response.value)
+    //     this.products = parsedProducts
+    //     this.productsState.next([...this.products])
+    //   }
+    // })
+    this.dbService.getData('data', 2).subscribe((response: any) => {
+      if(response){
+        this.products = [...JSON.parse(response.products)]
+        this.productsState.next(this.products)
       }
     })
     return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products`, {loc: loc})
@@ -43,11 +51,12 @@ export class ProductsService{
             if(response){
               this.products = response
               const stringProducts = JSON.stringify(this.products)
-              Preferences.set({key:'products', value: stringProducts})
+              this.dbService.addOrUpdateIngredient({id: 2, products: stringProducts }).subscribe()
               this.productsState.next([...this.products])
             }
           }))
-  }
+        }
+        // Preferences.set({key:'products', value: stringProducts})
 
   saveCat(cat: any, loc: string){
     return this.productService.saveCategory(cat, loc)

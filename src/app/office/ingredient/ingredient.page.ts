@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -13,18 +13,17 @@ import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
-import { NirService } from '../CRUD/nir/nir.service';
 import { InvIngredient } from 'src/app/models/nir.model';
-import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-ingredient',
   templateUrl: './ingredient.page.html',
   styleUrls: ['./ingredient.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe]
 })
-export class IngredientPage implements OnInit {
+export class IngredientPage implements OnInit, OnDestroy {
 
   ingredients: any = [];
 
@@ -33,25 +32,37 @@ export class IngredientPage implements OnInit {
   topToEdit!: any;
   ingsToEdit!: any;
   user!: User
-  dbIngs!: InvIngredient[]
+
+  ingSub!: Subscription
+
+  allIngs!: InvIngredient[]
+
+  dep: string = ""
   toppings!: any;
   productIngredients!: any;
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingTypes: string[] = ["simplu", "compus"]
-  ingDep: string[] = ["materie", "marfa", 'consumabile']
+  ingDep: string[] = ["materie", "marfa", 'consumabil']
+
+
   filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
 
 
   constructor(
     private toastCtrl: ToastController,
     private ingSrv: IngredientService,
-    private nirSrv: NirService,
     private router: Router,
     @Inject(ActionSheetService) private actionSh: ActionSheetService
   ) { }
 
   ngOnInit() {
     this.getUser()
+  }
+
+  ngOnDestroy(): void {
+    if(this.ingSub){
+      this.ingSub.unsubscribe()
+    }
   }
 
 
@@ -83,7 +94,7 @@ export class IngredientPage implements OnInit {
     if(startDate){
       const endDate = await this.actionSh.openAuth(DatePickerPage)
       if(endDate){
-        this.ingSrv.printConsum(this.filter, this.user.locatie, startDate, endDate).subscribe(response => {
+        this.ingSrv.printConsum(this.dep, this.user.locatie, startDate, endDate, true).subscribe(response => {
           const url = window.URL.createObjectURL(response);
           const a = document.createElement('a');
           a.href = url;
@@ -96,34 +107,61 @@ export class IngredientPage implements OnInit {
     }
   }
 
-
   showIngs(index: number){
     const ingredient = this.ingredients[index]
     ingredient.showIngs = !ingredient.showIngs
   }
 
+
+
   onSelectGestiune(event: any){
     this.filter.gestiune = event.detail.value
-    this.getIngredients()
+    this.ingredients = [...this.allIngs]
+    this.filterIngredients()
   }
+
 
   onSelectType(event: any) {
     this.filter.type = event.detail.value
-    this.getIngredients()
+    this.ingredients = [...this.allIngs]
+    this.filterIngredients()
   }
+
 
   onSelectDep(event: any){
     this.filter.dep = event.detail.value
-    this.getIngredients()
+    this.dep = event.detail.value
+    this.ingredients = [...this.allIngs]
+    this.filterIngredients()
+  }
+
+
+  filterIngredients(){
+    if(this.filter.dep !== ''){
+      const ings = this.ingredients.filter((ing: any) => ing.dep === this.filter.dep)
+      this.ingredients = [...ings]
+    }
+    if(this.filter.gestiune !== ''){
+      const ings = this.ingredients.filter((ing: any) => ing.gestiune === this.filter.gestiune)
+      this.ingredients = [...ings]
+    }
+    if(this.filter.type === 'compus'){
+      const ings = this.ingredients.filter((ing: any) => ing.ings.length >= 1)
+      this.ingredients = [...ings]
+    }
+    if(this.filter.type === "simplu"){
+      const ings = this.ingredients.filter((ing: any) => !ing.ings.length)
+      this.ingredients = [...ings]
+    }
   }
 
   getIngredients(){
-    this.ingSrv.getIngredients(this.filter, this.user.locatie).subscribe(response => {
-      if(response){
-        this.dbIngs = response
-        this.ingredients = this.dbIngs
-      }
-    })
+   this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
+    if(response){
+      this.allIngs = response
+      this.ingredients = [...this.allIngs]
+    }
+   })
   }
 
   onTopRecive(ev: any){
@@ -135,19 +173,17 @@ updateProductIng(){
 }
 
 
-
  async ingEdit(ing: any){
   if(ing.ings.length){
     const message = await this.actionSh.openModal(ProductIngredientPage, ing, false)
     if(message === 'done'){
-      this.getIngredients()
+      // this.getIngredients()
     }
   } else {
     const ingToEdit = await this.actionSh.openModal(AddIngredientPage, ing, false)
     if(ingToEdit){
       this.ingSrv.editIngredient(ing._id, ingToEdit).subscribe(response => {
         if(response){
-          // this.getIngredients()
           showToast(this.toastCtrl, response.message, 3000)
         }
       })
@@ -158,17 +194,16 @@ updateProductIng(){
   async deleteIng(id: string, name: string){
     const result = await this.actionSh.deleteAlert(`Ești sigur ca vrei să ștergi ingredinetul ${name}! Cand stergi un ingredient il stergi din toate rețetele în care a fost folosit!`, "Sterge")
     if(result){
-      this.ingSrv.deleteIngredient(id).subscribe(response => {
+      this.ingSrv.deleteIngredient(id).pipe(take(1)).subscribe(response => {
         if(response){
           showToast(this.toastCtrl, response.message, 3000)
-          this.getIngredients()
         }
       })
     }
   }
 
   searchRecive(searchQuery: string){
-    this.ingredients = this.dbIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(searchQuery))
+      this.ingredients = this.allIngs.filter((ing: InvIngredient) => ing.name.toLowerCase().includes(searchQuery))
   }
 
   onIngRecive(ev: any){

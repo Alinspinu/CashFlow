@@ -5,6 +5,7 @@ import { Preferences } from '@capacitor/preferences';
 import User from './auth/user.model';
 import { ContentService } from './content/content.service';
 import { NirService } from './office/CRUD/nir/nir.service';
+import { IngredientService } from './office/ingredient/ingredient.service';
 import { ProductsService } from './office/products/products.service';
 import { TablesService } from './tables/tables.service';
 
@@ -22,6 +23,7 @@ export class AppComponent implements OnInit {
     private contService: ContentService,
     private tablesService: TablesService,
     private productsSrv: ProductsService,
+    private ingSrv: IngredientService,
     private router: Router,
     private nirService: NirService
     ) {}
@@ -30,10 +32,12 @@ export class AppComponent implements OnInit {
     getUser(){
       Preferences.get({key: 'authData'}).then(data  => {
         if(data.value) {
-         this.user = JSON.parse(data.value)
+          this.user = JSON.parse(data.value)
+          console.log(this.user)
          this.contService.getData(this.user.locatie).subscribe()
          this.tablesService.getTables(this.user.locatie, this.user._id)
          this.productsSrv.getProducts(this.user.locatie).subscribe()
+         this.ingSrv.getIngredients(this.user.locatie).subscribe()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{
           this.router.navigateByUrl('/auth')

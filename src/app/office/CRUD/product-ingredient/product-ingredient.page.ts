@@ -1,17 +1,17 @@
-import { Component, EventEmitter, inject, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
-import { ProductService } from '../product/product.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { PickQtyPage } from 'src/app/modals/pick-qty/pick-qty.page';
 import { AddIngredientPage } from '../add-ingredient/add-ingredient.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { environment } from 'src/environments/environment';
 import { RecipeMakerService } from '../recipe-maker/recipe-maker.service';
 import { Preferences } from '@capacitor/preferences';
 import User from 'src/app/auth/user.model';
 import { InvIngredient } from 'src/app/models/nir.model';
+import { IngredientService } from '../../ingredient/ingredient.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -21,20 +21,21 @@ import { InvIngredient } from 'src/app/models/nir.model';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class ProductIngredientPage implements OnInit {
+export class ProductIngredientPage implements OnInit, OnDestroy {
 
 
   form!: FormGroup
   ingredients: any[]  = [];
   ingredientSearch!:any ;
 
-  dbIngs!: any
-
   productIngredientMode: boolean = false;
   toppings: any = [];
 
+  dbIngs!: any
+
   displayIngs: any[] = [];
   ingredientsToSend: any[] = []
+  ingSub!: Subscription
 
   productIngName: string = '';
   productIngUm: string = '';
@@ -46,6 +47,7 @@ export class ProductIngredientPage implements OnInit {
 
   user!: User
   productId!: string
+  isLoading: boolean = true
 
 
   constructor(
@@ -53,14 +55,14 @@ export class ProductIngredientPage implements OnInit {
     @Inject(RecipeMakerService) private recipeService: RecipeMakerService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private toastCtrl: ToastController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private ingSrv: IngredientService,
   ) { }
 
   ngOnInit() {
     this.getUser()
     setTimeout(()=>{
       this.getProdIng()
-      this.getIngredients()
     }, 100)
   }
 
@@ -68,13 +70,18 @@ export class ProductIngredientPage implements OnInit {
     Preferences.get({key: 'authData'}).then(data => {
       if(data.value){
         this.user = JSON.parse(data.value)
+        this.getIngredients()
       }
     })
+  }
+  ngOnDestroy(): void {
+    if(this.ingSub){
+      this.ingSub.unsubscribe()
+    }
   }
 
   getProdIng(){
       const product = this.navParams.get('options')
-      console.log(product)
       if(product){
         this.productIngredientMode = true;
         this.productIngName = product.name;
@@ -124,7 +131,7 @@ export class ProductIngredientPage implements OnInit {
       }
       this.productIngQty = '1'
       this.recipeTotal = +prodIng.price
-      this.recipeService.editIng(prodIng, this.productId).subscribe(response => {
+      this.ingSrv.editIngredient(this.productId, prodIng).subscribe(response => {
         if(response){
           showToast(this.toastCtrl, response.message, 3000)
           this.modalCtrl.dismiss("done")
@@ -143,11 +150,11 @@ export class ProductIngredientPage implements OnInit {
     this.ingredientsToSend.splice(index, 1)
   }
 
-
   getIngredients(){
-    this.recipeService.getIngredients(this.user.locatie).subscribe(response => {
+   this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
       if(response){
         this.dbIngs = response
+        this.isLoading = false
       }
     })
   }
@@ -160,6 +167,7 @@ export class ProductIngredientPage implements OnInit {
     }
 
   }
+
 
 
   async selectIngredient(ing: any){

@@ -26,8 +26,10 @@ export class Nir{
   ){}
 }
 
+
 export class InvIngredient {
   constructor(
+    public _id: string,
     public name: string,
     public price: number,
     public um: string,
@@ -37,6 +39,28 @@ export class InvIngredient {
     public dep: string,
     public gestiune: string,
     public locatie: string,
+    public ings: InvIngredient[],
+    public inventary: {
+      index: number,
+      day: string,
+      qty: number
+    } [],
+    public uploadLog: {
+      date: string,
+      qty: number,
+      operation: {
+        name: string,
+        details: string,
+      }
+    }[],
+    public unloadLog: {
+      date: string,
+      qty: number,
+      operation: {
+        name: string,
+        details: string,
+      }
+    }[]
   ){}
 }
 

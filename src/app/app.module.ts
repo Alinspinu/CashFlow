@@ -8,8 +8,17 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routes';
 import { environment } from 'src/environments/environment';
+import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
 
-
+const dbConfig: DBConfig  = {
+  name: 'MyDb',
+  version: 1,
+  objectStoresMeta: [{
+    store: 'data',
+    storeConfig: { keyPath: 'id', autoIncrement: true },
+    storeSchema: [ ]
+  }]
+};
 
 
 @NgModule({
@@ -21,6 +30,7 @@ import { environment } from 'src/environments/environment';
      HttpClientModule,
      provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
      provideFirestore(() => getFirestore()),
+     NgxIndexedDBModule.forRoot(dbConfig)
     ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, HttpClient],
   bootstrap: [AppComponent],

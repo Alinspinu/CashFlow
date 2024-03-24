@@ -131,20 +131,6 @@ export function emptyBill(){
   return emptyBill
 }
 
-export function emptyIng(){
-  const emptyIng: InvIngredient = {
-    name: '',
-    price: 0,
-    um: '',
-    qty: 0,
-    tvaPrice: 0,
-    tva: 0,
-    dep: '',
-    gestiune: '',
-    locatie: '',
-   }
-   return emptyIng
-}
 
 export function emptyProduct(){
   const emptyProduct: Product = {
@@ -197,3 +183,22 @@ export function emptyCategory(){
 }
 
 
+export function emptyIng(){
+  const emptyIng: InvIngredient = {
+   _id: '',
+   name: '',
+   price: 0,
+   um: '',
+   qty: 0,
+   tvaPrice: 0,
+   tva: 0,
+   dep: '',
+   gestiune: '',
+   locatie: '',
+   ings: [],
+   inventary: [],
+   uploadLog: [],
+   unloadLog: []
+  }
+  return emptyIng
+}

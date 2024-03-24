@@ -1,3 +1,4 @@
+import { InvIngredient } from "./nir.model";
 import { Ing, Topping } from "./table.model";
 
 export class Category{
@@ -42,7 +43,7 @@ export class Product {
     protein: number,
   },
   public toppings: Topping[],
-  public ings: Ing[],
+  public ings: {qty: number, ing:InvIngredient}[],
   public ingredients:{quantity: number, ingredient: Ingredient}[],
   public paring: Product[],
   public showSub: boolean,
@@ -59,7 +60,7 @@ export class SubProduct{
     public quantity: number,
     public product: Product,
     public available: boolean,
-    public ings: Ing[],
+    public ings: {qty: number, ing:InvIngredient}[],
   ){};
 };
 

@@ -6,6 +6,7 @@ import { environment } from "src/environments/environment";
 import { AuthService } from "../auth/auth.service";
 import User from "../auth/user.model";
 import {Category, Product} from "../models/category.model"
+import { emptyCategory } from "../models/empty-models";
 
 
 @Injectable({providedIn: 'root'})
@@ -16,49 +17,13 @@ export class ContentService{
 
   user!: User
 
-  public emptyCategory: Category = {_id: '', mainCat: '', name: '', product: [], image: {path: '', filename:''}, order: 0}
-  public emptyProduct: Product = {
-    _id: '',
-    name: '',
-    qty: '',
-    price: 0,
-    tva: '',
-    dep: '',
-    order: 0,
-    description: '',
-    quantity: 0,
-    image: {path: '', filename: ''},
-    subProducts: [],
-    category: this.emptyCategory,
-    available: false,
-    total: 0,
-    longDescription: '',
-    ingredients: [],
-    mainCat: '',
-    nutrition: {
-      energy:{kJ: 0, kcal: 0},
-      fat: {all: 0, satAcids: 0},
-      carbs: {all: 0, sugar: 0},
-      salts: 0,
-      protein: 0,
-    },
-    additives: [],
-    allergens: [],
-    paring: [],
-    toppings: [],
-    ings: [],
-    printer: 'main',
-    showSub: false,
-    discount: 0,
-    sgrTax: false,
-  }
   private categoryState!: BehaviorSubject<Category[]>;
   public categorySend$!: Observable<Category[]>;
-  category: Category[] = [this.emptyCategory];
+  category: Category[] = [emptyCategory()];
 
 
   constructor(private http: HttpClient, private authSrv: AuthService){
-    this.categoryState = new BehaviorSubject<Category[]>([this.emptyCategory]);
+    this.categoryState = new BehaviorSubject<Category[]>([emptyCategory()]);
     this.categorySend$ =  this.categoryState.asObservable();
   }
 
@@ -133,7 +98,6 @@ export class ContentService{
         const prod = this.category[catIndex].product[productIndex]
         if(prod.subProducts.length){
           const subIndex = prod.subProducts.findIndex(sub => prodName.includes(sub.name))
-          console.log(subIndex, prod)
           const sub = prod.subProducts[subIndex]
           sub.ings[0].ing.qty -= qty
           this.categoryState.next([...this.category])

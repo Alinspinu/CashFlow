@@ -33,13 +33,6 @@ export class ProductsService{
 
 
   getProducts(loc: string){
-    // Preferences.get({key: 'products'}).then(response => {
-    //   if(response && response.value){
-    //     const parsedProducts = JSON.parse(response.value)
-    //     this.products = parsedProducts
-    //     this.productsState.next([...this.products])
-    //   }
-    // })
     this.dbService.getData('data', 2).subscribe((response: any) => {
       if(response){
         this.products = [...JSON.parse(response.products)]
@@ -56,8 +49,6 @@ export class ProductsService{
             }
           }))
         }
-        // Preferences.set({key:'products', value: stringProducts})
-
   saveCat(cat: any, loc: string){
     return this.productService.saveCategory(cat, loc)
   }

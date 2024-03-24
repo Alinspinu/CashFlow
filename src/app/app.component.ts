@@ -33,7 +33,6 @@ export class AppComponent implements OnInit {
       Preferences.get({key: 'authData'}).then(data  => {
         if(data.value) {
           this.user = JSON.parse(data.value)
-          console.log(this.user)
          this.contService.getData(this.user.locatie).subscribe()
          this.tablesService.getTables(this.user.locatie, this.user._id)
          this.productsSrv.getProducts(this.user.locatie).subscribe()

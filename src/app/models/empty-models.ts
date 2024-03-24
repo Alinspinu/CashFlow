@@ -145,4 +145,53 @@ export function emptyIng(){
    return emptyIng
 }
 
+export function emptyProduct(){
+  const emptyProduct: Product = {
+    _id: '',
+    name: '',
+    qty: '',
+    price: 0,
+    tva: '',
+    dep: '',
+    order: 0,
+    description: '',
+    quantity: 0,
+    image: {path: '', filename: ''},
+    subProducts: [],
+    category: {_id: '', mainCat: '', name: '', product: [], image: {path: '', filename:''}, order: 0},
+    available: false,
+    total: 0,
+    longDescription: '',
+    ingredients: [],
+    mainCat: '',
+    nutrition: {
+      energy:{kJ: 0, kcal: 0},
+      fat: {all: 0, satAcids: 0},
+      carbs: {all: 0, sugar: 0},
+      salts: 0,
+      protein: 0,
+    },
+    additives: [],
+    allergens: [],
+    paring: [],
+    toppings: [],
+    ings: [],
+    printer: 'main',
+    showSub: false,
+    discount: 0,
+  }
+  return emptyProduct
+}
+
+export function emptyCategory(){
+  const emptyCategory: Category = {
+    _id: '',
+    mainCat: '',
+    name: '',
+    product: [],
+    image: {path: '', filename:''}, order: 0
+  }
+  return emptyCategory
+}
+
 

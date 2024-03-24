@@ -36,6 +36,7 @@ export class ProductsPage implements OnInit {
 
   showSubProducts: boolean = false
   products: Product[] = []
+  dbProducts: Product[] = []
 
   constructor(
     @Inject(ProductsService) private productsSrv: ProductsService,
@@ -61,12 +62,16 @@ getuser(){
   })
 }
 
-
-  searchProduct(ev: any){
-    // this.productsSrv.getProducts(this.filter, ev.detail.value, this.user.locatie).subscribe(response => {
-    //   this.products = response
-    // });
+searchProduct(ev: any){
+  const input = ev.detail.value
+  this.products = this.products.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+  if(input === ''){
+   this.products = [...this.dbProducts]
   }
+ }
+
+
+
 
   productStatus(ev: any, id: string, index: number){
   let status
@@ -119,24 +124,49 @@ getuser(){
       this.router.navigate([`tabs/add-product/${id}`])
   }
 
+
+  async deleteProduct(product: Product){
+    const message = `Ești sigur ca vrei să ștergi produsul ${product.name}?`
+    const title = 'ȘTERGE!'
+    const result = await this.actionSrv.deleteAlert(message, title)
+    if(result){
+      this.productsSrv.deleteProduct(product._id).subscribe(response => {
+        if(response){
+          showToast(this.toastCtrl, response.message, 3000)
+        }
+      }, (err) => {
+        if(err){
+          showToast(this.toastCtrl, err.error.message, 3000)
+        }
+      })
+    }
+
+}
+
   showSubs(index: number){
     const product = this.products[index]
       product.showSub = !product.showSub
   }
 
-
   onSelectMainCat(ev: CustomEvent){
-    const selectedMainCat = ev.detail.value;
-    this.categoriesToShow =  this.categories.filter((cat: any) => cat.mainCat === selectedMainCat);
-    this.filter.mainCat = selectedMainCat;
-    this.filter.cat = ''
-    this.getProducts();
+    this.filter.mainCat = ev.detail.value;
+    this.categoriesToShow =  this.categories.filter((cat: any) => cat.mainCat === this.filter.mainCat);
+    this.filterProducts()
   }
 
   onCatSelect(ev: CustomEvent){
-    const selectedCat = ev.detail.value;
-    this.filter.cat = selectedCat;
-    this.getProducts();
+    this.filter.cat = ev.detail.value;
+    this.filterProducts()
+  }
+
+  filterProducts(){
+    this.products = this.dbProducts
+    if(this.filter.cat !== ''){
+      this.products = this.products.filter(product => product.category._id === this.filter.cat)
+    }
+    if(this.filter.mainCat !== ''){
+      this.products = this.products.filter(product => product.mainCat === this.filter.mainCat)
+    }
   }
 
   getCategories(){
@@ -151,10 +181,9 @@ getuser(){
     }
 
     getProducts(){
-      console.log(this.filter)
-      this.productsSrv.getProducts(this.user.locatie).subscribe(response => {
-        this.products = response
-
+      this.productsSrv.productsSend$.subscribe(response => {
+        this.dbProducts = response
+        this.products = this.dbProducts
       });
     }
 

@@ -145,3 +145,14 @@ ion-item[slot="fixed"]{
 .product:hover{
   --background: var(--ion-color-medium);
 }
+
+// .spinner-container{
+//   height: 100;
+// }
+app-spinner{
+  background-color: var(--ion-color-tertiary);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

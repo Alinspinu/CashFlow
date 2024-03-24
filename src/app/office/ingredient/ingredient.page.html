@@ -1,5 +1,5 @@
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
   <ion-item lines="none" class="header content-container" slot="fixed">
     <span class="name">Nume</span>
     <span class="compus">Compus</span>
@@ -67,7 +67,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-
 <div style="margin-top:50px;">
   <ion-row *ngFor="let ing of ingredients; let i= index;">
     <ion-col>
@@ -100,3 +99,5 @@
 </div>
   </ion-grid>
 </ion-content>
+
+<app-spinner *ngIf="isLoading"></app-spinner>

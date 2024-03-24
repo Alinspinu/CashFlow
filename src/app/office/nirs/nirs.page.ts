@@ -9,13 +9,14 @@ import { Router } from '@angular/router';
 import { formatedDateToShow, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-nirs',
   templateUrl: './nirs.page.html',
   styleUrls: ['./nirs.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, DatePickerPage]
+  imports: [IonicModule, CommonModule, FormsModule, DatePickerPage, SpinnerPage]
 })
 export class NirsPage implements OnInit {
 
@@ -32,6 +33,8 @@ export class NirsPage implements OnInit {
   endDate!: any
   user!: User
   total: number = 0
+
+  isLoading: boolean = true
 
   constructor(
     public nirSrv: NirsService,
@@ -87,6 +90,9 @@ date(){
 getNirs(){
   this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
     if(response){
+      if(response.length > 1){
+        this.isLoading = false
+      }
       this.dbNirs = response
       this.nirs = [...this.dbNirs]
     }

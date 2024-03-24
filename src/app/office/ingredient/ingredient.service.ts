@@ -2,9 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Preferences } from "@capacitor/preferences";
 import { BehaviorSubject, Observable, take, tap } from "rxjs";
-import { Ingredient } from "src/app/models/category.model";
 import { emptyIng } from "src/app/models/empty-models";
 import { InvIngredient } from "src/app/models/nir.model";
+import { IndexDbService } from "src/app/shared/indexDb.service";
 import {environment} from '../../../environments/environment'
 
 
@@ -18,28 +18,28 @@ export class IngredientService{
   ingredients: InvIngredient[] = [emptyIng()];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private dbService: IndexDbService,
   ){
     this.ingredientsState = new BehaviorSubject<InvIngredient[]>([emptyIng()]);
     this.ingredientsSend$ =  this.ingredientsState.asObservable();
   }
 
   getIngredients(filter: any, loc: string){
-   Preferences.get({key: 'ings'}).then(result => {
-    if(result && result.value){
-      this.ingredients = JSON.parse(result.value)
-      this.ingredientsState.next([...this.ingredients])
+  this.dbService.getData('data', 1).subscribe((response: any) => {
+    if(response){
+      this.ingredients = [...JSON.parse(response.ings)]
+      this.ingredientsState.next(this.ingredients)
     }
-   })
+  })
     return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {filter: filter, loc: loc})
         .pipe(tap(response => {
           this.ingredients = response
           const stringIngs = JSON.stringify(this.ingredients)
-          Preferences.set({key: 'ings', value: stringIngs} )
+          this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
           this.ingredientsState.next([...this.ingredients])
         }))
-  }
-
+      }
   deleteIngredient(id: string){
     return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)
         .pipe(tap(response => {

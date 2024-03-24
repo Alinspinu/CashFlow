@@ -9,6 +9,19 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from 'src/environments/environment';
+import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
+
+
+
+const dbConfig: DBConfig  = {
+  name: 'MyDb',
+  version: 1,
+  objectStoresMeta: [{
+    store: 'data',
+    storeConfig: { keyPath: 'id', autoIncrement: true },
+    storeSchema: [ ]
+  }]
+};
 
 
 
@@ -18,11 +31,12 @@ import { environment } from 'src/environments/environment';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-     AppRoutingModule,
-     HttpClientModule,
-     BrowserAnimationsModule,
-     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-     provideFirestore(() => getFirestore()),
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
+    NgxIndexedDBModule.forRoot(dbConfig),
     ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, HttpClient],
   bootstrap: [AppComponent],

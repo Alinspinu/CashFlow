@@ -15,13 +15,14 @@ import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { InvIngredient } from 'src/app/models/nir.model';
 import { Subscription, take } from 'rxjs';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-ingredient',
   templateUrl: './ingredient.page.html',
   styleUrls: ['./ingredient.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe]
+  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe, SpinnerPage]
 })
 export class IngredientPage implements OnInit, OnDestroy {
 
@@ -47,6 +48,7 @@ export class IngredientPage implements OnInit, OnDestroy {
 
   filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
 
+  isLoading: boolean = true
 
   constructor(
     private toastCtrl: ToastController,
@@ -158,6 +160,9 @@ export class IngredientPage implements OnInit, OnDestroy {
   getIngredients(){
    this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
     if(response){
+      if(response.length > 1){
+        this.isLoading = false
+      }
       this.allIngs = response
       this.ingredients = [...this.allIngs]
     }

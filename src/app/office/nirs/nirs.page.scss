@@ -83,3 +83,11 @@ ion-item[slot="fixed"]{
   opacity: 60%;
   // --backgound: transparent;
 }
+
+app-spinner{
+  background-color: var(--ion-color-tertiary);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

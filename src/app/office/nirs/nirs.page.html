@@ -1,6 +1,6 @@
 
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
   <ion-item lines="none" class="nir-entry" slot="fixed">
 
     <span class="nr start" (click)="index()">
@@ -91,3 +91,5 @@
   </ion-row>
 </ion-grid>
 </ion-content>
+
+<app-spinner *ngIf="isLoading"></app-spinner>

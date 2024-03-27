@@ -127,6 +127,181 @@ searchIng(ev: any){
 }
 
 
+
+
+showConsumption(){
+  this.selected = -1
+  this.showProductIngs = !this.showProductIngs
+  this.resetAllColors()
+  this.nameColor = 'primary'
+  this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
+  this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
+}
+
+
+
+showRecipe(index: number, prod: any){
+  this.products.forEach(product => {
+    product.showSub = false
+  })
+   const product = this.products[index]
+   product.showSub = true
+  if(this.selected === index){
+    this.selected = -1
+    product.showSub = false
+  } else{
+    this.selected = index
+  }
+  this.productIngredients = prod.ingr
+}
+
+
+
+
+getProducts(){
+  this.isLoading = true
+ this.reportsSrv.getOrders(this.startDay, this.endDay, undefined, this.user.locatie).subscribe(response => {
+   this.dbProducts = response.products
+   this.dbIngs = response.ingredients
+   this.allIngredients = this.dbIngs.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
+   this.products = this.dbProducts.sort((a,b) => a.name.localeCompare(b.name))
+   this.showProducts = true
+   this.isLoading = false
+  this.calcProductsTotal()
+  this.calcIngredientsTotal(this.allIngredients)
+ })
+}
+
+calcComecialSurplus(product: any){
+  const productValue = round(product.quantity * product.price - product.discount)
+  this.recipeSurplus = (productValue - this.totalRecipe) / this.totalRecipe * 100
+}
+
+
+calcRecipeTotal(productQty: number){
+  let totalRecipe = 0
+  this.productIngredients.forEach((ing:any) => {
+    if(ing.ing){
+      const ingValue = round(ing.ing.price *ing.qty)
+      totalRecipe += ingValue
+    }
+  })
+    return round(totalRecipe)
+}
+
+
+calcProductsTotal(){
+  this.totalProducts = 0
+  this.products.forEach(product => {
+    const productValue = round(product.quantity * product.price - product.discount)
+    this.totalProducts += productValue
+  })
+}
+
+calcIngredientsTotal(ingredients: any []){
+  this.totalIngredients = 0
+  ingredients.forEach(ing => {
+    if(ing.ing && ing.ing.price && ing.qty){
+      const ingValue = round(ing.ing.price *ing.qty)
+      this.totalIngredients += ingValue
+    } else {
+    }
+  })
+}
+
+
+roundInHtml(num: number){
+  return round(num)
+}
+
+async pickStartDay(){
+  const result = await this.actionSrv.openAuth(DatePickerPage)
+  if(result){
+    this.startDay = formatedDateToShow(result).split('ora')[0]
+  }
+}
+
+async pickEndDay(){
+  const result = await this.actionSrv.openAuth(DatePickerPage)
+  if(result){
+    this.endDay = formatedDateToShow(result).split('ora')[0]
+  }
+  this.checkDtes(this.startDay, this.endDay) ? 'ss' : this.dateErr()
+}
+
+
+
+checkDtes(start: string | undefined, end: string | undefined){
+  if(start && end) {
+    const startDate = new Date(start).getTime()
+    const endDate = new Date(end).getTime()
+    return startDate <= endDate ? true : false
+  }
+  return
+}
+
+dateErr(){
+  showToast(this.toastCtrl, 'DATA DE ÎNCEPUT TREBUIE SĂ FIE MAI MICĂ DECÂT CEA DE SFÂRȘIT!', 3000)
+  this.startDay  = ''
+  this.endDay = ''
+}
+
+
+
+printProducts(){
+  const products = JSON.stringify(this.products)
+  this.reportsSrv.printProducts(products, this.startDay, this.endDay).subscribe(response => {
+    const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Produse Vandute ${this.startDay}--${this.endDay}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  })
+}
+
+
+printConsuption(){
+  const ings = JSON.stringify(this.allIngredients)
+  this.reportsSrv.printConsumtion(ings, this.startDay, this.endDay).subscribe(response => {
+    const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Consum materii prime ${this.startDay}--${this.endDay}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  })
+}
+
+
+printProduction(){
+  const products = JSON.stringify(this.products)
+  this.reportsSrv.printProduction(products, this.startDay, this.endDay).subscribe(response => {
+    const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Raport productie detaliat ${this.startDay}--${this.endDay}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+  })
+}
+
+
+calcConsInHtml(product: any) {
+  let totalRecipe = 0
+  product.ingr.forEach((ing:any) => {
+    if(ing.ing){
+      const ingValue = round(ing.ing.price *ing.qty)
+      totalRecipe += ingValue
+    }
+  })
+  return round(totalRecipe)
+}
+
+
 filter(option: string){
   switch (option) {
     case 'qty':
@@ -216,419 +391,4 @@ resetAllColors(){
   this.nameColor = 'none'
 }
 
-showConsumption(){
-  this.selected = -1
-  this.showProductIngs = !this.showProductIngs
-  this.resetAllColors()
-  this.nameColor = 'primary'
-  this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
-  this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
 }
-
-
-
-showRecipe(index: number, prod: any){
-  this.products.forEach(product => {
-    product.showSub = false
-  })
-   const product = this.products[index]
-   product.showSub = true
-  if(this.selected === index){
-    this.selected = -1
-    product.showSub = false
-  } else{
-    this.selected = index
-  }
-  this.productIngredients = prod.ingr
-}
-
-
-
-
-getProducts(){
-  this.isLoading = true
- this.reportsSrv.getOrders(this.startDay, this.endDay, undefined, this.user.locatie).subscribe(response => {
-   this.dbProducts = response.products
-   this.dbIngs = response.ingredients
-   this.allIngredients = this.dbIngs.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
-   this.products = this.dbProducts.sort((a,b) => a.name.localeCompare(b.name))
-   this.showProducts = true
-   this.isLoading = false
-  // this.getIngredients(this.products)
-  this.calcProductsTotal()
-  this.calcIngredientsTotal(this.allIngredients)
- })
-}
-
-
-
-// getBillProducts(){
-//   this.products = []
-//   this.bills.forEach(bill => {
-//     if(this.isInreg){
-//       if(!bill.dont){
-//         bill.products.forEach((product:any) => {
-//           if(this.isProduction){
-//             if(product.dep === 'productie') {
-//               this.pushProducts(product)
-//             }
-//           }
-//           if(this.isGoods){
-//             if(product.dep === 'marfa'){
-//               this.pushProducts(product)
-//             }
-//           }
-//         })
-//       }
-//     }
-//     if(this.isUnreg){
-//       if(bill.dont){
-//           bill.products.forEach((product:any) => {
-//             if(this.isProduction){
-//               if(product.dep === 'productie') {
-//                 this.pushProducts(product)
-//               }
-//             }
-//             if(this.isGoods){
-//               if(product.dep === 'marfa'){
-//                 this.pushProducts(product)
-//               }
-//             }
-//           })
-//       }
-
-//     }
-//   })
-//  this.products = this.dbProducts
-//  this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
-// }
-
-
-
-
-
-// getIngredients(products: any[]){
-//   this.dbIngs = []
-//   products.forEach(product => {
-//     const ingredients = [...product.ings]
-//     ingredients.forEach((ing: any) => {
-//         this.pushIngredients(ing, product.quantity)
-//       })
-//       if(product.toppings.length){
-//         const toppings = [...product.toppings]
-//         toppings.forEach((topping: any) => {
-//           this.pushIngredients(topping, product.quantity)
-//       })
-//     }
-//   })
-//   this.allIngredients = this.dbIngs
-//   this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
-
-// }
-
-
-calcComecialSurplus(product: any){
-  const productValue = round(product.quantity * product.price - product.discount)
-  this.recipeSurplus = (productValue - this.totalRecipe) / this.totalRecipe * 100
-}
-
-
-// getProductIngs(product: any){
-//   this.productIngredients = []
-//   product.ings.forEach((ing:any) => {
-//     this.pushRecipeIngs(ing)
-//   })
-//   if(product.toppings.length){
-//     const toppings = [...product.toppings]
-//     toppings.forEach((topping: any) => {
-//       this.pushRecipeIngs(topping)
-//     })
-//   }
-// }
-
-calcRecipeTotal(productQty: number){
-  let totalRecipe = 0
-  this.productIngredients.forEach((ing:any) => {
-    if(ing.ing){
-      const ingValue = round(ing.ing.price *ing.qty)
-      totalRecipe += ingValue
-    }
-  })
-    return round(totalRecipe)
-}
-
-
-
-
-
-calcProductsTotal(){
-  this.totalProducts = 0
-  this.products.forEach(product => {
-    const productValue = round(product.quantity * product.price - product.discount)
-    this.totalProducts += productValue
-  })
-}
-
-calcIngredientsTotal(ingredients: any []){
-  this.totalIngredients = 0
-  ingredients.forEach(ing => {
-    if(ing.ing && ing.ing.price && ing.qty){
-      const ingValue = round(ing.ing.price *ing.qty)
-      this.totalIngredients += ingValue
-    } else {
-      // console.log('calcIngsTot',ing)
-    }
-  })
-}
-
-
-
-//  arraysAreEqual(arr1: any[], arr2: any[]): boolean {
-//   if (arr1.length !== arr2.length) {
-//       return false;
-//   }
-//   const sortedArr1 = arr1.slice().sort();
-//   const sortedArr2 = arr2.slice().sort();
-
-//   for (let i = 0; i < sortedArr1.length; i++) {
-//       const obj1 = sortedArr1[i];
-//       const obj2 = sortedArr2[i];
-
-//       if (!this.objectsAreEqual(obj1, obj2)) {
-//           return false;
-//       }
-//   }
-//   return true;
-// }
-
-// objectsAreEqual(obj1: any, obj2: any): boolean {
-//   return JSON.stringify(obj1) === JSON.stringify(obj2);
-// }
-
-
-roundInHtml(num: number){
-  return round(num)
-}
-
-async pickStartDay(){
-  const result = await this.actionSrv.openAuth(DatePickerPage)
-  if(result){
-    this.startDay = formatedDateToShow(result).split('ora')[0]
-  }
-}
-
-async pickEndDay(){
-  const result = await this.actionSrv.openAuth(DatePickerPage)
-  if(result){
-    this.endDay = formatedDateToShow(result).split('ora')[0]
-  }
-  this.checkDtes(this.startDay, this.endDay) ? 'ss' : this.dateErr()
-}
-
-
-
-checkDtes(start: string | undefined, end: string | undefined){
-  if(start && end) {
-    const startDate = new Date(start).getTime()
-    const endDate = new Date(end).getTime()
-    return startDate <= endDate ? true : false
-  }
-  return
-}
-
-dateErr(){
-  showToast(this.toastCtrl, 'DATA DE ÎNCEPUT TREBUIE SĂ FIE MAI MICĂ DECÂT CEA DE SFÂRȘIT!', 3000)
-  this.startDay  = ''
-  this.endDay = ''
-}
-
-
-
-printProducts(){
-  const products = JSON.stringify(this.products)
-  this.reportsSrv.printProducts(products, this.startDay, this.endDay).subscribe(response => {
-    const url = window.URL.createObjectURL(response);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Produse Vandute ${this.startDay}--${this.endDay}.xlsx`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-  })
-}
-
-
-printConsuption(){
-  const ings = JSON.stringify(this.allIngredients)
-  this.reportsSrv.printConsumtion(ings, this.startDay, this.endDay).subscribe(response => {
-    const url = window.URL.createObjectURL(response);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Consum materii prime ${this.startDay}--${this.endDay}.xlsx`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-  })
-}
-
-
-printProduction(){
-  const products = JSON.stringify(this.products)
-  this.reportsSrv.printProduction(products, this.startDay, this.endDay).subscribe(response => {
-    const url = window.URL.createObjectURL(response);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Raport productie detaliat ${this.startDay}--${this.endDay}.xlsx`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-  })
-}
-
-
-// pushProducts(product: any){
-//   const existingProduct = this.dbProducts.find(p => p.name === product.name && this.arraysAreEqual(p.toppings, product.toppings))
-//   if(existingProduct){
-//     existingProduct.quantity += product.quantity
-//     existingProduct.discount += product.discount
-//   } else {
-//     const prod = {...product}
-//     this.dbProducts.push(prod)
-//   }
-//   if(product.toppings.length){
-//     product.toppings.forEach((top: any) => {
-//       if(top.name === 'Lapte Vegetal'){
-//         const index = product.ings.findIndex((i: any) => i.ing.name === "Lapte")
-//         if(index !== -1){
-//           product.ings.splice(index, 1)
-//         }
-//       }
-//     })
-//   }
-// }
-
-
-
-
-// pushRecipeIngs(ing: any){
-//     const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
-//       if(existingIng){
-//         existingIng.qty += (ing.qty * ing.qty)
-//       } else {
-//         ing.qty = ing.qty * ing.qty
-//         const ig = {...ing}
-//             this.productIngredients.push(ig)
-//     }
-// }
-
-
-
-
-calcConsInHtml(product: any) {
-  let totalRecipe = 0
-  product.ingr.forEach((ing:any) => {
-    if(ing.ing){
-      const ingValue = round(ing.ing.price *ing.qty)
-      totalRecipe += ingValue
-    }
-  })
-  return round(totalRecipe)
-}
-
-}
-
-
-
-
-
-  // if(ing.ing && ing.ing.productIngredient){
-  //   if(ing.ing && ing.ing.ings.length){
-  //     ing.ing.ings.forEach((ingg: any) => {
-  //       if(ingg.ing){
-  //         const existingIng = this.productIngredients.find((p:any) => p.ing._id === ingg.ing._id)
-  //         if(existingIng){
-  //           existingIng.qty += (ingg.qty * ing.qty)
-  //         } else {
-  //           ingg.qty = ingg.qty * ing.qty
-  //           const ig = {...ingg}
-  //           this.productIngredients.push(ig)
-  //         }
-  //       }
-  //       })
-  //     }
-  // } else {
-  //   if(ing.ing){
-  //     const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
-  //     if(existingIng){
-  //       existingIng.qty += ing.qty
-  //     } else {
-  //       const ig = {...ing}
-  //       this.productIngredients.push(ig)
-  //     }
-  //   }
-  // }
-
-
-
-
-
-
-  // product.ings.forEach((ing: any) => {
-  //   if(ing.ing && ing.ing.productIngredient){
-  //     if(ing.ing && ing.ing.ings.length){
-  //       ing.ing.ings.forEach((ingg: any) => {
-  //         if(ingg.ing){
-  //           const existingIng = prodIngs.find((p:any) => p.ing._id === ingg.ing._id)
-  //           if(existingIng){
-  //             existingIng.qty += round(ing.qty * ingg.qty)
-  //           } else {
-  //             ingg.qty = round(ingg.qty*ing.qty)
-  //             const ig = {...ingg}
-  //             prodIngs.push(ig)
-  //           }
-  //         }
-  //         })
-  //       }
-  //   } else {
-  //     if(ing.ing){
-  //       const existingIng = prodIngs.find((p:any) => p.ing._id === ing.ing._id)
-  //       if(existingIng){
-  //         existingIng.qty += ing.qty
-  //       } else {
-  //         const ig = {...ing}
-  //         prodIngs.push(ig)
-  //       }
-  //     }
-  //   }
-  //   })
-  // if(product.toppings.length){
-  //   const toppings = [...product.toppings]
-  //   toppings.forEach((topping: any) => {
-  //     if(topping.ing && topping.ing.productIngredient){
-  //       if(topping.ing && topping.ing.ings.length){
-  //         topping.ing.ings.forEach((ingg: any) => {
-  //           if(ingg.ing){
-  //             const existingIng = prodIngs.find((p:any) => p.ing._id === ingg.ing._id)
-  //             if(existingIng){
-  //               existingIng.qty += round(ingg.qty * topping.qty)
-  //             } else {
-  //               ingg.qty = round(topping.qty * ingg.qty)
-  //               const ig = {...ingg}
-  //               prodIngs.push(ig)
-  //             }
-  //           }
-  //           })
-  //         }
-  //     } else {
-  //       if(topping.ing){
-  //         const existingIng = prodIngs.find((p:any) => p.ing._id === topping.ing._id)
-  //         if(existingIng){
-  //           existingIng.qty += topping.qty
-  //         } else {
-  //           const ig = {...topping}
-  //           prodIngs.push(ig)
-  //         }
-  //       }
-  //     }
-  //   })
-  // }

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { DatePickerPage } from '../../modals/date-picker/date-picker.page';
-import { CashService } from './cash.service';
 import { formatedDateToShow, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { Bill, BillProduct } from '../../models/table.model';
 import { CapitalizePipe } from '../../shared/utils/capitalize.pipe'
@@ -12,6 +11,7 @@ import { OrdersViewPage } from './orders-view/orders-view.page';
 import { DelProdViewPage } from './del-prod-view/del-prod-view.page';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
+import { ReportsService } from '../reports.service';
 
 
  interface paymentMethod {
@@ -65,7 +65,7 @@ export class CashPage implements OnInit {
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
-    private cashSrv: CashService,
+    private repSrv: ReportsService,
     private router: Router,
   ) { }
 
@@ -105,6 +105,10 @@ export class CashPage implements OnInit {
 
 
 
+  snitzel: number = 0
+  hummus: number = 0
+  risotto: number = 0
+
   ngOnInit() {
     getUserFromLocalStorage().then(user => {
       if(user){
@@ -125,7 +129,7 @@ export class CashPage implements OnInit {
 
 getOrders(){
   this.isLoading = true
-  this.cashSrv.getOrders(this.startDate, this.endDate, this.day, this.user.locatie).subscribe(response => {
+  this.repSrv.getOrders(this.startDate, this.endDate, this.day, this.user.locatie).subscribe(response => {
     if(response){
       this.resetValues()
       this.bills = response.orders
@@ -136,8 +140,6 @@ getOrders(){
     }
   })
 }
-
-
 
 
 calcTva(){
@@ -174,7 +176,7 @@ calcTva(){
     })
   })
   this.tvaValue = round(tvaDiscountBills + tvaFullBills)
-  this.totalIncasat = round(this.vivaWallet+this.cash)
+  this.totalIncasat = round(this.card+this.cash)
   this.totalNoTax = round(this.totalIncasat - this.tvaValue)
 }
 
@@ -205,7 +207,6 @@ resetValues(){
   this.users = []
   this.hours = []
 }
-
 
 calcTotals(){
   this.bills.forEach(bill => {
@@ -252,38 +253,39 @@ calcTotals(){
   this.calcUsers()
 }
 
+
 openBills(method: string){
-if(method === 'Discount') {
-  this.actionSheet.openPayment(OrdersViewPage, this.discountBills)
-}
-if(method === 'CashBack'){
-  this.actionSheet.openPayment(OrdersViewPage, this.cashBackBills)
-}
-if(method === "Note deschise"){
-  this.showOpenOrders()
-}
-}
+  if(method === 'Discount') {
+    this.actionSheet.openPayment(OrdersViewPage, this.discountBills)
+  }
+  if(method === 'CashBack'){
+    this.actionSheet.openPayment(OrdersViewPage, this.cashBackBills)
+  }
+  if(method === "Note deschise"){
+    this.showOpenOrders()
+  }
+  }
 
 
-showOrders(){
-  let billsToSend: any = []
-  this.bills.forEach(el => {
-    if(el.production){
-      billsToSend.push(el)
-    }
-  })
-  this.actionSheet.openPayment(OrdersViewPage, billsToSend)
-}
+  showOrders(){
+    let billsToSend: any = []
+    this.bills.forEach(el => {
+      if(el.production){
+        billsToSend.push(el)
+      }
+    })
+    this.actionSheet.openPayment(OrdersViewPage, billsToSend)
+  }
 
-showOpenOrders(){
-  let billsToShow: any [] = []
-  this.bills.forEach(el => {
-    if(el.status === 'open'){
-      billsToShow.push(el)
-    }
-  })
-  this.actionSheet.openPayment(OrdersViewPage, billsToShow)
-}
+  showOpenOrders(){
+    let billsToShow: any [] = []
+    this.bills.forEach(el => {
+      if(el.status === 'open'){
+        billsToShow.push(el)
+      }
+    })
+    this.actionSheet.openPayment(OrdersViewPage, billsToShow)
+  }
 
 
 calcHours(){
@@ -528,7 +530,6 @@ showData(dep: departament){
   if(mode === 'day'){
     const day = await this.actionSheet.openAuth(DatePickerPage)
     if(day){
-      console.log(day)
       this.day = day
       this.endDate = undefined
       this.startDate = undefined

@@ -1,5 +1,5 @@
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
   <ion-item lines="none" class="header content-container" slot="fixed">
     <span class="name">Nume</span>
     <span class="compus">Compus</span>
@@ -100,3 +100,5 @@
 </div>
   </ion-grid>
 </ion-content>
+
+<app-spinner *ngIf="isLoading"></app-spinner>

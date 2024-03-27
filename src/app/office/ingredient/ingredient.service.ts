@@ -51,6 +51,8 @@ export class IngredientService{
             const ingIndex = this.ingredients.findIndex(ing => ing._id === id)
             if(ingIndex !== -1){
               this.ingredients.splice(ingIndex, 1)
+              const stringIngs = JSON.stringify(this.ingredients)
+              this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
               this.ingredientsState.next([...this.ingredients])
             }
           }
@@ -65,6 +67,8 @@ export class IngredientService{
             if(ingIndex !== -1){
               ing.ings = []
               this.ingredients[ingIndex] = response.ing
+              const stringIngs = JSON.stringify(this.ingredients)
+              this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
               this.ingredientsState.next([...this.ingredients])
             }
           }

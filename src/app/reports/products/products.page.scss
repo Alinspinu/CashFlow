@@ -1,0 +1,248 @@
+
+ion-content{
+  --background: var(--ion-color-tertiary);
+  height: 85vh;
+}
+
+ion-label, ion-title{
+  font-family: NoirProReg !important;
+}
+
+
+ion-title{
+  font-size: 25px;
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+  color: var(--ion-color-medium)
+
+}
+
+.filter-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 120px;
+  border: 1.5px solid var(--ion-color-medium);
+  border-radius: 22px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProLight !important;
+  font-size: 20px !important;
+  width: 471px;
+  .first-col, .second-col{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    ion-checkbox{
+      width: 100%;
+      color: var(--ion-color-medium);
+
+    }
+  }
+}
+
+
+
+  .grid-date{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   height: 80vh;
+   width: 100%;
+
+   ion-button{
+    padding: 16px;
+    width: 500px;
+    height: 150px;
+    --border-radius: 20px;
+    font-size: 25px;
+    font-family: NoirProReg;
+
+   }
+}
+
+
+ion-item[slot="fixed"]{
+  top: 24.5%;
+  width: 100%;
+  opacity: 60%;
+  border-radius: 8px;
+  .qty{
+    font-family: NoirProSemi !important;
+    flex: 10%;
+    text-align: center;
+  }
+  .index{
+    font-family: NoirProSemi !important;
+    flex: 6%;
+    text-align: start;
+  }
+  .head{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    ion-icon{
+     align-self: center;
+    }
+  }
+  .name{
+    font-family: NoirProSemi !important;
+    flex: 15%;
+    display: flex;
+    flex-direction: row;
+    ion-icon{
+      margin-right: 15px;
+      font-size: 22px;
+     }
+  }
+  .search-bar {
+    font-family: NoirProReg !important;
+    flex: 38%;
+  }
+  // --backgound: transparent;
+}
+
+
+
+.total{
+  height: 45px;
+  opacity: 60%;
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  width: 95%;
+  ion-label{
+    font-family: NoirProSemi !important;
+    font-size: 23px;
+  }
+}
+
+.input{
+  height: 45px;
+  --background: var(--ion-color-tertiary);
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
+  .qty{
+    font-family: NoirProSemi !important;
+    flex: 10%;
+    text-align: center;
+  }
+  .name{
+    flex: 50%;
+  }
+}
+
+.bold{
+  font-size: 17px;
+  font-family: NoirProSemi !important;
+}
+
+
+
+.ing-input{
+  cursor: pointer;
+  height: 45px;
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProReg !important;
+  width: 100%;
+  .qty{
+    font-family: NoirProSemi !important;
+    flex: 10%;
+    text-align: center;
+  }
+  .name{
+   flex: 50%;
+  }
+  .index{
+    font-family: NoirProSemi !important;
+    flex: 6%;
+    text-align: start;
+  }
+}
+
+#recipe-header{
+  min-height: 45px;
+  width: 95%;
+  opacity: 60%;
+  border-radius: 8px;
+  margin: 0.5rem 0 0.1rem 0.2rem;
+  font-family: NoirProSemi !important;
+  .qty{
+    font-family: NoirProSemi !important;
+    flex: 10%;
+    text-align: center;
+  }
+  .head{
+    display: flex;
+    flex-direction: column;
+  }
+  .name{
+    font-family: NoirProSemi !important;
+   flex: 50%;
+  }
+}
+
+.label{
+  width: 100%;
+  text-align: center;
+}
+
+.input:hover{
+  --background: var(--ion-color-medium);
+}
+
+.production-content{
+  flex: 50%;
+  padding: 20px;
+  // align-items: center;
+  .recipe-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 90vh;
+    .content{
+      align-self: center;
+      width: 95%;
+    }
+  }
+}
+
+.selected{
+  --background: var(--ion-color-medium);
+}
+
+
+.sum-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 3%;
+  margin-bottom: 6px;
+  div{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--ion-color-primary);
+    border-radius: 12px;
+    color: white;
+    padding: 18px;
+
+  }
+    .value{
+        font-family: NoirProReg !important;
+        font-size: 30px;
+        align-self: center;
+      }
+
+      .note{
+        font-family: NoirProReg !important;
+        font-size: 20px;
+        align-self: center;
+    }
+}
+
+
+
+

@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NirsService } from '../../nirs/nirs.service';
 import User from 'src/app/auth/user.model';
 import { Subscription } from 'rxjs';
+import { IngredientService } from '../../ingredient/ingredient.service';
 
 
 @Component({
@@ -66,6 +67,7 @@ inputType: string = 'number'
   constructor(
     @Inject(NirService) private nirSrv: NirService,
     // @Inject(NirsService) private nirsSrv: NirsService,
+    private ingSrv: IngredientService,
     @Inject(ActionSheetService) private actionSht: ActionSheetService,
     private toastCtrl: ToastController,
     private route: ActivatedRoute,
@@ -90,14 +92,17 @@ inputType: string = 'number'
     this.getNirToEdit()
     this.setupIngForm()
     this.setupNirForm()
-    this.getIngs()
+    // this.getIngs()
     this.setTvaValidators()
   }
 
   getIngredients(){
-    this.ingSub = this.nirSrv.getIngredients(this.user.locatie).subscribe(response => {
+    this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
       this.allIngs = response
-      this.disableIngredientSearch = false
+      if(response.length > 1){
+
+        this.disableIngredientSearch = false
+      }
     })
   }
 
@@ -114,6 +119,7 @@ inputType: string = 'number'
 
   getNirToEdit(){
     const id = this.route.snapshot.paramMap.get('id')
+    console.log(id)
     if(id && id !== "new") {
       this.nirSrv.getNir(id).subscribe(response => {
         if(response) {
@@ -448,13 +454,13 @@ inputType: string = 'number'
     this.nirForm.reset()
   }
 
-  getIngs(){
-    Preferences.get({key: 'ings'}).then(result => {
-      if(result && result.value){
-        this.nirIngredients = JSON.parse(result.value)
-      }
-    })
-  }
+  // getIngs(){
+  //   Preferences.get({key: 'ings'}).then(result => {
+  //     if(result && result.value){
+  //       this.nirIngredients = JSON.parse(result.value)
+  //     }
+  //   })
+  // }
 
 
   searchIngredient(ev: any){

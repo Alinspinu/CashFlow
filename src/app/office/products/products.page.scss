@@ -27,13 +27,6 @@ img{
   cursor: pointer
 }
 
-.spinner-container{
-  height: 70vh;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
 .header{
   font-size: 17px;
   font-weight: 500;
@@ -48,7 +41,7 @@ img{
 }
 
 ion-item[slot="fixed"]{
-  top: 7%;
+  top: 8%;
   width: 100%;
   opacity: 60%;
   font-family: NoirProReg !important;
@@ -151,4 +144,12 @@ ion-item[slot="fixed"]{
 
 .product:hover{
   --background: var(--ion-color-medium);
+}
+
+app-spinner{
+  background-color: var(--ion-color-tertiary);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

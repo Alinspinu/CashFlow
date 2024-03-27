@@ -1,5 +1,5 @@
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
   <ion-item lines="none" class="header header-container" slot="fixed">
     <ion-label class="name">Nume Produs</ion-label>
     <ion-label class="mainCat">Categorie Parinte</ion-label>
@@ -95,3 +95,5 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<app-spinner *ngIf="isLoading"></app-spinner>

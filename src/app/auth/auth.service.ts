@@ -6,6 +6,7 @@ import { Preferences } from "@capacitor/preferences";
 import {environment} from "../../environments/environment"
 import User from "./user.model";
 import { emptyUser } from "../models/empty-models";
+import { IndexDbService } from "../shared/indexDb.service";
 
 
 
@@ -64,7 +65,7 @@ export class AuthService{
       }));
   };
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient,     private dbService: IndexDbService){}
 
   onLogin(email: string, password: string){
     const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
@@ -134,6 +135,7 @@ export class AuthService{
     }
     Preferences.remove({key: "authData"});
     Preferences.remove({key: 'data'});
+    this.dbService.clearData().subscribe()
   }
 
   private aoutoLogout(duration: number) {

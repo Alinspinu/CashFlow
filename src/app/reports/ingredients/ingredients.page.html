@@ -1,0 +1,10 @@
+
+<ion-content [fullscreen]="true">
+  <div class="grid-date">
+    <ion-button fill="outline" mode="md" color="medium" (click)="pickStartDay()">{{startDay && startDay.length ? startDay : "ZI Început"}}</ion-button>
+    <ion-label color="medium" *ngIf="startDay">LA</ion-label>
+    <ion-label color="medium" *ngIf="!startDay" style="height: 13px"></ion-label>
+    <ion-button fill="outline" mode="md" color="medium" (click)="pickEndDay()"[disabled]="!startDay"> {{endDay && endDay.length ? endDay : "Zi Sfârșit"}}</ion-button>
+    <ion-button fill="outline" mode="md" color="primary" (click)="search()" *ngIf="endDay && endDay.length">CAUTĂ</ion-button>
+  </div>
+</ion-content>

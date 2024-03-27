@@ -1,3 +1,48 @@
 ion-label{
   font-family: NoirProReg !important;
 }
+
+
+
+
+.contents-container{
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+    .menu{
+      .option{
+        cursor: pointer;
+        ion-icon{
+          margin-left: 2rem;
+        }
+      }
+      .option:hover{
+       --background: var(--ion-color-medium);
+      }
+    }
+
+
+
+  .separator{
+    border-right: 1px solid rgb(194, 194, 194);
+    height: 100vh;
+  }
+
+  .view{
+    flex: 70%;
+  }
+}
+
+.selected{
+  --background: var(--ion-color-medium);
+  --color: white;
+ion-icon{
+  color: white
+}
+}
+
+
+ion-input, ion-label, ion-title, ion-button{
+  font-family: NoirProReg !important;
+}
+

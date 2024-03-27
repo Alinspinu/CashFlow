@@ -38,6 +38,8 @@ export class ProductsPage implements OnInit {
   products: Product[] = []
   dbProducts: Product[] = []
 
+  isLoading: boolean = true
+
   constructor(
     @Inject(ProductsService) private productsSrv: ProductsService,
     @Inject(ContentService) private contentSrv: ContentService,
@@ -185,6 +187,9 @@ searchProduct(ev: any){
       this.productsSrv.productsSend$.subscribe(response => {
         this.dbProducts = response
         this.products = this.dbProducts
+        if(this.dbProducts.length > 1){
+            this.isLoading = false
+        }
       });
     }
 

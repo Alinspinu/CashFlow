@@ -12,6 +12,7 @@ import { IonSearchbar } from '@ionic/angular/standalone';
 import User from 'src/app/auth/user.model';
 import { Preferences } from '@capacitor/preferences';
 import { InvIngredient } from 'src/app/models/nir.model';
+import { IngredientService } from '../../ingredient/ingredient.service';
 
 
 @Component({
@@ -65,6 +66,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     @Inject(ProductService) private prodSrv: ProductService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private recipeService: RecipeMakerService,
+    private ingSrv: IngredientService,
     private toastCtrl: ToastController
   ) { }
 
@@ -176,7 +178,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
 
   getIngredients(){
-    this.recipeService.getIngredients(this.user.locatie).subscribe(response => {
+    this.ingSrv.ingredientsSend$.subscribe(response => {
       if(response){
         this.dbIngs = response
         this.isLoading = false

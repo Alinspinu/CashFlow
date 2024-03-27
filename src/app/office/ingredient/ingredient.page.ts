@@ -15,13 +15,14 @@ import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { InvIngredient } from 'src/app/models/nir.model';
 import { Subscription, take } from 'rxjs';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-ingredient',
   templateUrl: './ingredient.page.html',
   styleUrls: ['./ingredient.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe]
+  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe, SpinnerPage]
 })
 export class IngredientPage implements OnInit, OnDestroy {
 
@@ -43,6 +44,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingTypes: string[] = ["simplu", "compus"]
   ingDep: string[] = ["materie", "marfa", 'consumabil']
+  isLoading: boolean = true
 
 
   filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
@@ -54,6 +56,11 @@ export class IngredientPage implements OnInit, OnDestroy {
     private router: Router,
     @Inject(ActionSheetService) private actionSh: ActionSheetService
   ) { }
+
+
+  ionViewWillEnter(){
+
+  }
 
   ngOnInit() {
     this.getUser()
@@ -137,6 +144,7 @@ export class IngredientPage implements OnInit, OnDestroy {
 
 
   filterIngredients(){
+    console.log('hit the function', this.filter)
     if(this.filter.dep !== ''){
       const ings = this.ingredients.filter((ing: any) => ing.dep === this.filter.dep)
       this.ingredients = [...ings]
@@ -160,6 +168,10 @@ export class IngredientPage implements OnInit, OnDestroy {
     if(response){
       this.allIngs = response
       this.ingredients = [...this.allIngs]
+      this.filterIngredients()
+      if(this.allIngs.length > 1){
+        this.isLoading = false
+      }
     }
    })
   }

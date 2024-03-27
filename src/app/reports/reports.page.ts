@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, EnvironmentInjector, inject } from '@angular/core';
+import { Component} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { CashPage } from './cash/cash.page';
+import { IngredientsPage } from './ingredients/ingredients.page';
+import { ProductsPage } from './products/products.page';
 
 
 
@@ -10,11 +13,39 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: 'reports.page.html',
   styleUrls: ['reports.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule],
+  imports: [IonicModule, FormsModule, CommonModule, CashPage, IngredientsPage, ProductsPage],
 })
 
 
+
+
 export class ReportsPage {
-  public environmentInjector = inject(EnvironmentInjector);
+
+
+  show:
+  {
+    sales: boolean
+    products: boolean
+    ingredients: boolean
+  } = {sales: false, products: true, ingredients: false}
+
   constructor() {}
+
+  sales(){
+    this.show.sales = true
+    this.show.products = false
+    this.show.ingredients = false
+  }
+
+  products(){
+    this.show.products = true
+    this.show.sales = false
+    this.show.ingredients = false
+  }
+
+  ingredients(){
+    this.show.ingredients = true
+    this.show.products = false
+    this.show.sales = false
+  }
 }

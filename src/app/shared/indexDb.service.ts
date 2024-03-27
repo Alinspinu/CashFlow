@@ -33,4 +33,8 @@ export class IndexDbService {
     return from(this.dbService.getByKey(store, id))
   }
 
+  clearData(){
+    return from(this.dbService.clear('data'))
+  }
+
 }

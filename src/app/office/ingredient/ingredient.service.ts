@@ -89,6 +89,19 @@ export class IngredientService{
     return this.http.post(`${environment.BASE_URL}product/update-pro-ing-price`, {loc: locatie})
   }
 
+  updateIngredientInventary(data: any) {
+    return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/save-faptic`, {data: data})
+      .pipe(tap(response => {
+        if(response) {
+          const ingIndex = this.ingredients.findIndex(ing => ing._id === response.ing._id)
+          if(ingIndex !== -1){
+            this.ingredients[ingIndex] = response.ing
+            this.ingredientsState.next([...this.ingredients])
+          }
+        }
+      }))
+  }
+
 
 
 

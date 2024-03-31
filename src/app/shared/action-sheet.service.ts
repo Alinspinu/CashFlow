@@ -25,6 +25,7 @@ import { TipsPage } from '../modals/tips/tips.page';
 import { AddProductDiscountPage } from '../modals/add-product-discount/add-product-discount.page';
 import { DelProdViewPage } from '../reports/cash/del-prod-view/del-prod-view.page';
 import { ScanQrPage } from '../modals/scan-qr/scan-qr.page';
+import { AddToInventaryPage } from '../modals/add-to-inventary/add-to-inventary.page';
 
 
 
@@ -44,7 +45,8 @@ export class ActionSheetService {
                typeof PaymentPage |
                typeof SuplierPage |
                typeof AddEmployeeDataPage |
-               typeof ProductIngredientPage,
+               typeof ProductIngredientPage |
+               typeof AddToInventaryPage,
     options: any,
     sub: boolean
                ) {
@@ -150,6 +152,7 @@ export class ActionSheetService {
         {
           text: 'Renunță',
           role: 'cancel',
+          cssClass: 'cancel'
         },
         {
           text: 'Adaugă',
@@ -185,7 +188,8 @@ export class ActionSheetService {
       buttons: [
         {
           text: 'Nu Muțumesc!',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'cancel'
         },
         {
           text: 'Adaugă',
@@ -218,13 +222,15 @@ export class ActionSheetService {
       buttons: [
         {
           text: 'Renunță',
-          role: 'cancel'
+          role: 'cancel',
+          cssClass: 'cancel'
         },
         {
           text: 'Confirm',
           role: 'confirm',
         },
       ],
+      cssClass: "reprint-alert"
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -236,6 +242,33 @@ export class ActionSheetService {
   }
 
 
+  async reprintAlert(){
+    const alert = await this.alertController.create({
+      header: 'RETIPĂRIRE!',
+      message: 'Retipărește nota de plată!',
+      buttons: [
+        {
+          text: 'RENUNTA',
+          role: 'cancel',
+          cssClass: 'cancel'
+        },
+        {
+          text: 'FSICAL',
+          role: 'fiscal'
+        },
+        {
+          text: 'NEFISCAL',
+          role: 'nefiscal',
+        },
+      ],
+      cssClass: "reprint-alert"
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    return result
+  }
+
+
 async reasonAlert(title: string, message: string, label: string){
   const alert = await this.alertController.create({
     header: title,
@@ -244,6 +277,7 @@ async reasonAlert(title: string, message: string, label: string){
       {
         text: 'RENUNȚĂ',
         role: 'cancel',
+        cssClass: 'cancel'
       },
       {
         text: 'CONFIRMĂ',
@@ -252,22 +286,132 @@ async reasonAlert(title: string, message: string, label: string){
     ],
     inputs: [
       {
-      name: 'reason',
-      type: 'text',
-      placeholder: label
-
+      name: 'Deprecieri',
+      label: 'Deprecieri',
+      type: 'radio',
+      value: 'dep',
     },
+      {
+      name: 'Produs realizat incorect ce trebuie refacut!',
+      label: 'Produs realizat incorect ce trebuie refacut!',
+      type: 'radio',
+      value: 'Produs realizat incorect ce trebuie refacut',
+    },
+      {
+      name: 'Clientul s-a răzgandit!',
+      label: 'Clientul s-a răzgandit!',
+      type: 'radio',
+      value: 'Clientul s-a răzgandit',
+    },
+      {
+      name: 'Protocol',
+      label: 'Protocol',
+      type: 'radio',
+      value: 'protocol',
+    },
+      {
+      name: 'Altele',
+      label: 'Altele....',
+      type: 'radio',
+      value: 'altele',
+    },
+
   ],
-    cssClass: 'deleteAlert'
+    cssClass: 'reprint-alert'
   });
   await alert.present();
   const result = await alert.onDidDismiss();
   if(result.role === 'confirm' && result.data.values) {
-    return result.data.values.reason
+    return result.data.values
   } else {
     return null
   }
 }
+
+
+async protocolAlert(){
+  const alert = await this.alertController.create({
+    header: 'PROTOCOL',
+    message: 'Alege responsabilul de protocol',
+    buttons: [
+      {
+        text: 'RENUNȚĂ',
+        role: 'cancel',
+        cssClass: 'cancel'
+      },
+      {
+        text: 'CONFIRMĂ',
+        role: 'confirm',
+      },
+    ],
+    inputs:[
+      {
+        name: 'Bighiu Sergiu',
+        label: 'Bighiu Sergiu',
+        type: 'radio',
+        value: 'Bighiu Sergiu',
+      },
+      {
+        name: 'Adrian Piticariu',
+        label: 'Adrian Piticariu',
+        type: 'radio',
+        value: 'Adrian Piticariu',
+      },
+      {
+        name: 'Alin Spinu',
+        label: 'Alin Spinu',
+        type: 'radio',
+        value: 'Alin Spinu',
+      },
+
+    ],
+    cssClass: 'reprint-alert'
+  })
+  await alert.present();
+  const result = await alert.onDidDismiss();
+  if(result.role === 'confirm' && result.data.values) {
+    return result.data.values
+  } else {
+    return null
+  }
+}
+
+
+async detailsAlert(){
+  const alert = await this.alertController.create({
+    header: 'ALT MOTIV',
+    message: 'Scrie motivul pentru care ștergi produsul!',
+    buttons: [
+      {
+        text: 'RENUNȚĂ',
+        role: 'cancel',
+        cssClass: 'cancel'
+      },
+      {
+        text: 'CONFIRMĂ',
+        role: 'confirm',
+      },
+    ],
+    inputs:[
+      {
+        name: 'motiv',
+        label: 'Scrie Motivul',
+        type: 'text',
+        placeholder: 'Scrie Motivul',
+      },
+
+    ],
+    cssClass: 'reprint-alert'
+  })
+  await alert.present();
+  const result = await alert.onDidDismiss();
+  if(result.role === 'confirm' && result.data.values) {
+    return result.data.values.motiv
+  } else {
+    return null
+  }
+}
+
 
   async deleteBillProduct(options: string[]) {
     const inputs = options.map((option, index) => {
@@ -289,18 +433,18 @@ async reasonAlert(title: string, message: string, label: string){
           cssClass: 'cancel'
         },
         {
-          text: 'Cu întoarcere în stoc',
+          text: 'Cu întoarcere',
           role: 'confirm-1',
           cssClass: 'inStoc'
         },
         {
-          text: 'Fara întoarcere în stoc',
+          text: 'Fara întoarcere',
           role: 'confirm-2',
           cssClass: 'outStoc',
         },
       ],
       inputs: inputs,
-      cssClass: 'deleteAlert'
+      cssClass: 'reprint-alert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -331,6 +475,7 @@ async reasonAlert(title: string, message: string, label: string){
         {
           text: 'RENUNȚĂ',
           role: 'cancel',
+          cssClass: 'cancel'
         },
         {
           text: 'UNEȘTE',
@@ -338,7 +483,7 @@ async reasonAlert(title: string, message: string, label: string){
         },
       ],
       inputs: inputs,
-      // cssClass: 'deleteAlert'
+      cssClass: 'reprint-alert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -378,7 +523,7 @@ async reasonAlert(title: string, message: string, label: string){
         },
 
       ],
-      cssClass: 'extraAlert'
+      cssClass: 'reprint-alert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -407,16 +552,18 @@ async reasonAlert(title: string, message: string, label: string){
       message: `Alege cantitatea`,
       buttons: [
         {
-          text: 'ALEGE',
-          role: 'confirm',
-        },
-        {
           text: 'RENUNȚA',
           role: 'cancel',
           cssClass: 'cancel'
         },
+        {
+          text: 'ALEGE',
+          role: 'confirm',
+        },
+
       ],
       inputs: inputs,
+      cssClass: 'reprint-alert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -440,17 +587,19 @@ async reasonAlert(title: string, message: string, label: string){
       header: 'SEPARĂ',
       message: `Alege comanda`,
       buttons: [
+
+        {
+          text: 'RENUNȚĂ',
+          role: 'cancel',
+          cssClass: 'cancel'
+        },
         {
           text: 'CONFIRM',
           role: 'confirm',
         },
-        {
-          text: 'RENUNȚĂ',
-          role: 'cancel',
-        },
       ],
       inputs: inputs,
-      // cssClass: 'deleteAlert'
+      cssClass: 'reprint-alert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();

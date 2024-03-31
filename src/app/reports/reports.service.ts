@@ -21,7 +21,10 @@ export class ReportsService{
     }
 
  getOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string): Observable<any>{
-  return this.http.post<any>(`${environment.BASE_URL}orders/get-havy-orders`, {start: start, end: end, loc: locatie, day: day})
+  return this.http.post<any>(`${environment.BASE_URL}orders/get-orders`, {start: start, end: end, loc: locatie, day: day})
+ }
+ getHavyOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string, filter: any): Observable<any>{
+  return this.http.post<any>(`${environment.BASE_URL}orders/get-havy-orders`, {start: start, end: end, loc: locatie, day: day, filter})
  }
 
  printProducts(products: string, start: string | undefined, end: string | undefined){

@@ -48,6 +48,11 @@ reprintBill(bill: Bill){
   return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill}, {headers})
 }
 
+printNefiscal(bill: Bill){
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-unreg`, {bill: bill}, {headers})
+}
+
 removeProductDiscount(data: any){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   return this.http.post(`${environment.BASE_URL}product/disc-prod`, {data: data}, {headers})

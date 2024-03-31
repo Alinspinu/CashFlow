@@ -19,7 +19,7 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { AuthService } from 'src/app/auth/auth.service';
 import User from 'src/app/auth/user.model';
 import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
-import { round } from 'src/app/shared/utils/functions';
+import { getSection, round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
 import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
@@ -243,7 +243,6 @@ export class TableContentPage implements OnInit, OnDestroy {
 
 
 incommingOrders(){
-  console.log('hit the incomming message function')
  this.tableSub = this.tableSrv.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
     if(response){
       const data = JSON.parse(response.data)
@@ -366,6 +365,7 @@ async addToBill(product: Product){
           }
       }
   }
+  const section = getSection(product)
     const cartProduct: BillProduct = {
       name: cartProdName,
       price: price,
@@ -384,6 +384,7 @@ async addToBill(product: Product){
       dep: product.dep,
       printer: product.printer,
       sentToPrint: true,
+      section: section,
       imgUrl: product.image.path,
       comment: comment,
       tva: product.tva,
@@ -410,6 +411,9 @@ async addToBill(product: Product){
       }, 200)
     }
   }
+
+
+
 
   addProd(billProIndex: number){
     this.tableSrv.addOne(this.tableNumber, billProIndex, this.billIndex)
@@ -464,17 +468,37 @@ async addToBill(product: Product){
     const result = await this.actionSheet.deleteBillProduct(numberArr)
     if(result){
       const buc = parseFloat(result.qty);
-      const title = "MOTIVUL ȘTERRII"
-      const message = "Scrie motivul pentru care vrei să stergi produsul!"
+      const title = "MOTIVUL ȘTERGERII"
+      const message = "Alege motivul pentru care vrei să stergi produsul!"
       const label = "Scrie motivul"
-      const reason = await this.actionSheet.reasonAlert(title, message, label);
-        if(reason) {
+      let admin = ''
+      let reason = ''
+      const response = await this.actionSheet.reasonAlert(title, message, label);
+        if(response) {
+          reason = response
+          if(response === 'protocol'){
+            const res = await this.actionSheet.protocolAlert()
+            if(res){
+             admin = res
+            } else {
+              return showToast(this.toastCtrl, 'Trebuie să alegi un responsabil!', 3000)
+            }
+          }
+          if(response === 'altele'){
+            const res = await this.actionSheet.detailsAlert()
+            if(res){
+              reason = res
+            } else {
+              return showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+            }
+          }
           for(let i=0; i<buc; i++){
             this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
             this.disableBrakeButton()
           }
           delProd.billProduct = product
           delProd.reason = reason;
+          delProd.admin = admin
           delProd.employee = this.user.employee
           delProd.locatie = this.user.locatie
           delProd.billProduct.quantity = buc
@@ -483,7 +507,6 @@ async addToBill(product: Product){
          this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
             if(result.upload){
               const operation = {name: 'intoarcere', details: product.name}
-              console.log(operation)
               if(product.toppings.length){
                this.tableSub = this.tableSrv.uploadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
               }
@@ -565,23 +588,25 @@ async payment(){
     if(response){
       const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
         if(paymentInfo){
-          this.billToshow.payment.card = paymentInfo.card;
-          this.billToshow.payment.cash = paymentInfo.cash;
-          this.billToshow.payment.voucher = paymentInfo.voucher;
-          this.billToshow.payment.viva = paymentInfo.viva;
+          this.billToshow.payment = paymentInfo
           this.billToshow.cif = paymentInfo.cif;
-          this.billToshow.payment.online  = paymentInfo.online
-          this.tableSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
-            if(response){
-              this.updateProductsQuantity(this.billToshow.products)
-              this.billToshow.discount = 0
-              this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-              this.billProducts = []
-              this.billToshow = emptyBill()
-              this.billToshow.cashBack = 0
-              this.client = null
-              this.router.navigateByUrl("/tabs/tables")
-            }
+         this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
+                next: (response => {
+                  if(response && response.bill.status === 'done'){
+                    this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                    this.billToshow = emptyBill()
+                    this.client = null
+                    this.router.navigateByUrl("/tabs/tables")
+                    showToast(this.toastCtrl, response.message, 3000)
+                  }
+                }),
+                error: (error => {
+                  if(error){
+                    this.isLoading = false
+                    showToast(this.toastCtrl, error.error.message, 3000)
+                  }
+                }),
+                complete: () => console.log('complete')
           })
     }
     }
@@ -634,7 +659,6 @@ if(clientMode){
 }
 
 calcBillDiscount(bill: Bill){
-  console.log('hit the orders')
   const discountGeneralProcent = bill.clientInfo.discount.general / 100
   const categoryDiscounts = bill.clientInfo.discount.category
   bill.products.forEach(product => {
@@ -696,6 +720,7 @@ async addDiscount(){
   this.allCats.forEach(cat => {
     cat.product.forEach(product => {
       if(product.discount > 0){
+        console.log(product)
         const data = {
           precent: product.discount,
           productId: product._id,
@@ -740,11 +765,30 @@ async useCashBack(mode: boolean){
     if(this.billProducts && this.billProducts.length && !this.billProducts[0].sentToPrint){
       const choise = await this.actionSheet.deleteBill()
       if(choise){
-        const title = "MOTIVUL ȘTERRII"
-        const message = "Scrie motivul pentru care vrei să stergi comanda!"
+        const title = "MOTIVUL ȘTERGERII"
+        const message = "Alege motivul pentru care vrei să stergi comanda!"
         const label = "Scrie motivul"
-        const reason = await this.actionSheet.reasonAlert(title, message, label);
-        if(reason) {
+        const response = await this.actionSheet.reasonAlert(title, message, label);
+        let reason = ''
+        let admin =''
+        if(response) {
+          reason = response
+          if(response === 'protocol'){
+            const res = await this.actionSheet.protocolAlert()
+            if(res){
+             admin = res
+            } else {
+             return showToast(this.toastCtrl, 'Trebuie să alegi un responsabil!', 3000)
+            }
+          }
+          if(response === 'altele'){
+            const res = await this.actionSheet.detailsAlert()
+            if(res){
+              reason = res
+            } else {
+              return showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi nota!', 3000)
+            }
+          }
           this.billProducts.forEach((el: BillProduct) => {
           let delProd: deletetBillProduct = emptyDeletetBillProduct()
           const buc = el.quantity;
@@ -854,6 +898,7 @@ async useCashBack(mode: boolean){
           toppings: [],
           mainCat: product.mainCat,
           payToGo: false,
+          section: product.section,
           newEntry: true,
           discount: product.discount,
           ings: product.ings,

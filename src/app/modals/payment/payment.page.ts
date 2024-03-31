@@ -130,7 +130,7 @@ export class PaymentPage implements OnInit {
       this.modalCtrl.dismiss(pay)
     }
 } else {
-    showToast(this.toastCtrl, "Valoare încasată trebuie sa fie egală cu nota de plată!", 5000)
+    showToast(this.toastCtrl, "Valoare încasată trebuie sa fie egală cu nota de plată!", 3000)
    }
   }
 
@@ -156,14 +156,6 @@ export class PaymentPage implements OnInit {
     }
   }
 
-
-  // voucher(){
-  //   const input  = this.paymentForm.get('voucher')
-  //   if(input){
-  //     const value = this.total - this.checkInputs('voucher')
-  //     input.setValue(value)
-  //   }
-  // }
 
   online(){
     const input = this.paymentForm.get('online')
@@ -240,34 +232,3 @@ export class PaymentPage implements OnInit {
 
 }
 
-
-
-// const inputCash = this.paymentForm.get('cash');
-// const inputCard = this.paymentForm.get('card');
-// const inputVoucher = this.paymentForm.get('voucher');
-// const inputViva = this.paymentForm.get('viva');
-
-// const inputCashVal = inputCash?.value;
-// const inputCardVal = inputCard?.value;
-// const inputVoucherVal = inputVoucher?.value;
-// const inputVivaVal = inputViva?.value
-
-// const totaImputsValue = inputCashVal + inputVivaVal + inputCardVal + inputVoucherVal
-
-
-// if(
-//   (this.total < this.tempTotal) &&
-//   (inputCashVal === 0 || inputCashVal === null) &&
-//   (inputCardVal === 0 || inputCardVal === null) &&
-//   (inputVivaVal === 0 || inputVivaVal === null)
-//   ){
-//   this.total = this.tempTotal
-// }
-
-// this.tempTotal = this.total
-// if(inputVoucherVal > this.total){
-//     inputVoucher?.setValue(this.total)
-//     this.total = 0
-//     return
-// }
-// this.total = this.tempTotal - totaImputsValue

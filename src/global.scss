@@ -66,6 +66,39 @@ body ion-alert.extraAlert{
 
 }
 
+body ion-alert.reprint-alert{
+  font-family: NoirProReg !important;
+  --max-width: none !important;
+  --width: 700px !important;
+  .alert-title{
+    font-size: 32px;
+  }
+  .alert-message{
+    font-size: 25px;
+  }
+  .alert-radio-label{
+    font-size: 25px;
+  }
+  .alert-input{
+    font-size: 30px;
+    padding-left: 12px;
+    height: 100px;
+    border: 1px solid var(--ion-color-primary);
+    border-radius: 12px;
+  }
+  .alert-button-group{
+    flex-direction: row !important;
+    justify-content: space-between;
+    .alert-button{
+      padding: 18px;
+      font-size: 25px;
+      border: 1.5px solid var(--ion-color-primary);
+      border-radius: 8px;
+    }
+  }
+}
+
+
 body ion-alert.deleteAlert{
   --max-width: none!important;
   --width: 500px!important;
@@ -81,10 +114,10 @@ body ion-alert.deleteAlert{
     text-align: start !important;
     width: 150px !important;
   }
-  .cancel{
-    text-align: start !important;
-    width: 100px !important;
-  }
+}
+.cancel{
+  color: var(--ion-color-danger) !important;
+  border: 2px solid var(--ion-color-danger) !important;
 }
 
 .crud-modal{

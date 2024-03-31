@@ -41,14 +41,15 @@ export class OrderAppViewPage implements OnInit {
 
   ngOnInit() {
     this.order = this.navPar.get('options');
+    console.log(this.order)
     const result = getPaymentMethod(this.order.payment)
     this.paymentMethod = result
   }
 
   async reprint(){
-    const result = await this.actionSheet.deleteAlert('Bonul va fi retipărit pe casa de marcat. Esti sigur că vrei sa faci asta?', 'REPĂRIRE')
-    if(result){
-      this.modalCtrl.dismiss({order: this.order, message: 'reprint'})
+    const result = await this.actionSheet.reprintAlert()
+    if(result && result.role !== 'cancel'){
+      this.modalCtrl.dismiss({order: this.order, message: result.role})
     }
   }
 

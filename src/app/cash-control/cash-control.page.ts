@@ -122,7 +122,7 @@ export class CashControlPage implements OnInit, OnDestroy {
         }
       })
     }
-     if(result && result.message === "reprint") {
+     if(result && result.message === "fiscal") {
         this.cashSrv.reprintBill(result.order).subscribe(response => {
           if(response) {
             showToast(this.toastCtrl, response.message, 3000)
@@ -133,6 +133,18 @@ export class CashControlPage implements OnInit, OnDestroy {
             showToast(this.toastCtrl, error.message, 3000)
           }
         })
+     }
+     if(result && result.message === "nefiscal"){
+      this.cashSrv.printNefiscal(result.order).subscribe(response => {
+        if(response) {
+          showToast(this.toastCtrl, response.message, 3000)
+        }
+      }, error => {
+        if(error) {
+          console.log(error )
+          showToast(this.toastCtrl, error.message, 3000)
+        }
+      })
      }
      if(result && result.message === "bill"){
       this.cashSrv.createInvoice(result.orderId, this.user._id, result.clientId, this.user.locatie).subscribe(response => {

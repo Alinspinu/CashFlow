@@ -58,8 +58,12 @@ export class AddIngredientPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
+      invQty: new FormControl(null, {
+        updateOn: 'change',
+      }),
     });
     if(this.ing){
+
       this.ingredientForm.get('name')?.setValue(this.ing.name);
       this.ingredientForm.get('um')?.setValue(this.ing.um);
       this.ingredientForm.get('tva')?.setValue(this.ing.tva.toString());
@@ -71,6 +75,7 @@ export class AddIngredientPage implements OnInit {
       if(this.ing.dep){
         this.ingredientForm.get('dep')?.setValue(this.ing.dep)
       }
+      // this.ingredientForm.get('invQty')?.setValue(this.ing.inventary[19].qty - this.ing.qty);
     }
 }
 
@@ -79,6 +84,7 @@ getIngToedit(){
   if(ing.length !== 0){
     this.title = 'Modifică ingredient'
     this.ing = ing
+    console.log(this.ing)
   }
 }
 
@@ -92,7 +98,9 @@ saveIng(){
       dep: this.ingredientForm.value.dep ? this.ingredientForm.value.dep : this.ing.dep,
       qty: this.ingredientForm.value.qty,
       price: this.ingredientForm.value.price,
+      tvaPrice: this.ingredientForm.value.price / ((this.ingredientForm.value.tva / 100) +1)
     }
+    console.log(ingTosave.tvaPrice)
     this.modalCtr.dismiss(ingTosave)
   }
 }

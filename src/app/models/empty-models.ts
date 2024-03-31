@@ -39,6 +39,7 @@ export function  emptyBillProduct(){
     newEntry: true,
     ings: [],
     printer: 'main',
+    section: '',
     sentToPrint: true,
     imgUrl: '',
     comment: '',
@@ -58,6 +59,7 @@ export function  emptyBillProduct(){
   const deletetBillProduct: deletetBillProduct = {
     billProduct: emptyBillProduct(),
     reason: '',
+    admin: '',
     employee: {fullName: '', position: '', user: ''},
     locatie: '',
     inv: '',

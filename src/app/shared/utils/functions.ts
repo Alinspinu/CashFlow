@@ -1,5 +1,6 @@
 import { Preferences } from "@capacitor/preferences";
 import User from "src/app/auth/user.model";
+import { Product } from "src/app/models/category.model";
 
 
 export function round(num: number): number {
@@ -62,3 +63,36 @@ export function formatedDateToShow(date: any){
       }
     })
   }
+
+
+  export function getSection(product: Product){
+    let section = ''
+    if(product.mainCat === 'food'){
+        if(product.category._id === "64be6a3e3ef7bd6552c84608" || product.category._id === "64be690d3ef7bd6552c84602") {
+          section = 'vitrina'
+        } else {
+          section = 'buc'
+        }
+    }
+    if(product.mainCat === 'bar'){
+      section = 'bar'
+    }
+    if(product.mainCat === "shop"){
+      section = 'shop'
+    }
+    if(product.mainCat === 'coffee'){
+        if(product.category._id === "64c8e6c548b61f91a0d45e66" || product.category._id === "64c8e69548b61f91a0d45e64"){
+          section = "tea"
+        } else {
+          section ='coffee'
+        }
+    }
+    return section
+  }
+
+
+
+
+
+
+

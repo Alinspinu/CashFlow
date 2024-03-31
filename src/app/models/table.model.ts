@@ -89,6 +89,7 @@ export class BillProduct{
    public toppings: Topping[],
    public ings: Ing[],
    public payToGo: boolean,
+   public section: string,
    public imgUrl: string,
    public printer: string,
    public sentToPrint: boolean,
@@ -131,6 +132,7 @@ export class deletetBillProduct{
     user: string,
    },
    public reason: string,
+   public admin: string,
    public locatie: string,
    public inv: string,
   ){}

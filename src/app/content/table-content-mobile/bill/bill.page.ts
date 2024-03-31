@@ -9,7 +9,7 @@ import User from 'src/app/auth/user.model';
 import { TablesService } from 'src/app/tables/tables.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
-import { round } from 'src/app/shared/utils/functions';
+import { getSection, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -22,13 +22,14 @@ import { ContentService } from '../../content.service';
 import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { MobileService } from '../table-content-service';
+import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
   selector: 'app-bill',
   templateUrl: './bill.page.html',
   styleUrls: ['./bill.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderContentPage]
+  imports: [IonicModule, CommonModule, FormsModule, HeaderContentPage, SpinnerPage]
 })
 export class BillPage implements OnInit, OnDestroy {
 
@@ -56,6 +57,7 @@ export class BillPage implements OnInit, OnDestroy {
   client!: any
   clientMode: boolean = true
 
+  isLoading: boolean = false
 
   user!: User;
 
@@ -205,17 +207,6 @@ calcProductTotal(products: BillProduct[]){
 
   async openComments(product: BillProduct, index: number){
     if(product.sentToPrint){
-    // if(product.toppings.length){
-    //   let price: number = 0
-    //   product.toppings.forEach(top => {
-    //     price += top.price
-    //   })
-    //   product.price -= price
-    //   product.total = product.price * product.quantity
-    //   this.billToshow.total -= (price * product.quantity)
-    //   product.toppings = []
-    //   this.tableSrv.addComment(this.tableNumber, index, this.billIndex, '')
-    // }
       let options: Topping[] = []
       let optionPrice: number = 0;
       let pickedToppings: Topping[] = [];
@@ -246,53 +237,6 @@ calcProductTotal(products: BillProduct[]){
         }
     }
     }
-
-
-  // async openDeleteAlert(qty: number, index: number, ings: any, product: BillProduct){
-  //   let numberArr: string [] = []
-  //   let delProd: deletetBillProduct = emptyDeletetBillProduct()
-  //   for(let i=1; i<=qty; i++){
-  //     numberArr.push(i.toString())
-  //   }
-  //   const result = await this.actionSheet.deleteBillProduct(numberArr)
-  //   if(result){
-  //     const buc = parseFloat(result.qty);
-  //     const title = "MOTIVUL ȘTERRII"
-  //     const message = "Scrie motivul pentru care vrei să stergi produsul!"
-  //     const label = "Scrie motivul"
-  //     const reason = await this.actionSheet.reasonAlert(title, message, label);
-  //       if(reason) {
-  //         for(let i=0; i<buc; i++){
-  //           this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
-  //           this.disableBrakeButton()
-  //         }
-  //         delProd.billProduct = product
-  //         delProd.reason = reason;
-  //         delProd.employee = this.user.employee
-  //         delProd.locatie = this.user.locatie
-  //         delProd.billProduct.quantity = buc
-  //         delProd.billProduct.total = buc * delProd.billProduct.price
-  //         result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
-  //        this.tabSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-  //           if(result.upload){
-  //             if(product.toppings.length){
-  //              this.tabSub = this.tableSrv.uploadIngs(product.toppings, buc, this.user.locatie).subscribe()
-  //             }
-  //             this.tabSub = this.tableSrv.uploadIngs(ings, buc, this.user.locatie).subscribe(response => {
-  //               if(response) {
-  //                 showToast(this.toastCtrl, response.message, 4000)
-  //               }
-  //             })
-  //           }
-  //         })
-
-  //     } else {
-  //       showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
-  //     }
-  //     this.sendOrder(false)
-
-  //   }
-  // }
 
 
   getBill(){
@@ -371,6 +315,7 @@ async break(index: number){
         imgPath: product.imgPath,
         category: product.category,
         sub: false,
+        section: product.section,
         toppings: [],
         mainCat: product.mainCat,
         payToGo: false,
@@ -447,7 +392,6 @@ disableBrakeButton(){
 
 
   calcBillDiscount(bill: Bill){
-    console.log('hit the orders')
     const discountGeneralProcent = bill.clientInfo.discount.general / 100
     const categoryDiscounts = bill.clientInfo.discount.category
     bill.products.forEach(product => {
@@ -514,22 +458,27 @@ disableBrakeButton(){
     this.sendOrder(false)
       const paymentInfo = await this.actionSheet.openMobileModal(PaymentPage, this.billToshow, false)
         if(paymentInfo){
-          this.billToshow.payment.card = paymentInfo.card;
-          this.billToshow.payment.cash = paymentInfo.cash;
-          this.billToshow.payment.voucher = paymentInfo.voucher;
-          this.billToshow.payment.viva = paymentInfo.viva;
+          this.billToshow.payment = paymentInfo
           this.billToshow.cif = paymentInfo.cif;
-          this.billToshow.payment.online  = paymentInfo.online
-         this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
-            if(response){
-              this.billToshow.discount = 0
-              this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-              this.billProducts = []
-              this.billToshow = emptyBill()
-              this.billToshow.cashBack = 0
-              this.client = null
-              this.router.navigateByUrl("/tabs/tables")
-            }
+          this.isLoading = true
+         this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
+                next: (response => {
+                  if(response && response.bill.status === 'done'){
+                    this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                    this.billToshow = emptyBill()
+                    this.client = null
+                    this.router.navigateByUrl("/tabs/tables")
+                    this.isLoading = false
+                    showToast(this.toastCtrl, response.message, 3000)
+                  }
+                }),
+                error: (error => {
+                  if(error){
+                    this.isLoading = false
+                    showToast(this.toastCtrl, error.error.message, 3000)
+                  }
+                }),
+                complete: () => console.log('complete')
           })
     }
   }
@@ -567,7 +516,6 @@ disableBrakeButton(){
       this.billToshow.discount = 0
       this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
     }
-    // this.discountValue = 0
     this.client = null
     this.disableOrderButton = true
     const response = await this.tableSrv.redCustomer(this.tableNumber, this.billIndex, this.billId, this.user.employee, this.user.locatie)
@@ -585,7 +533,7 @@ disableBrakeButton(){
   async useCashBack(mode: boolean){
     if(mode){
       const data = { cashBack: this.client.cashBack, total: this.billToshow.total}
-      const cashBackValue = await this.actionSheet.openPayment(CashbackPage, data)
+      const cashBackValue = await this.actionSheet.openMobileModal(CashbackPage, data, false)
       if(cashBackValue){
         this.billToshow.cashBack = cashBackValue;
         this.billToshow.total  = this.billToshow.total - cashBackValue
@@ -597,62 +545,6 @@ disableBrakeButton(){
       this.billToshow.cashBack = 0
     }
   }
-
-
-    // async deleteOrder(){
-    //   let data = []
-    //   if(this.billProducts && this.billProducts.length && !this.billProducts[0].sentToPrint){
-    //     const choise = await this.actionSheet.deleteBill()
-    //     if(choise){
-    //       const title = "MOTIVUL ȘTERRII"
-    //       const message = "Scrie motivul pentru care vrei să stergi comanda!"
-    //       const label = "Scrie motivul"
-    //       const reason = await this.actionSheet.reasonAlert(title, message, label);
-    //       if(reason) {
-    //         this.billProducts.forEach((el: BillProduct) => {
-    //         let delProd: deletetBillProduct = emptyDeletetBillProduct()
-    //         const buc = el.quantity;
-    //         delProd.billProduct = el
-    //         delProd.reason = reason;
-    //         delProd.employee = this.user.employee
-    //         delProd.locatie = this.user.locatie
-    //         delProd.billProduct.quantity = buc
-    //         delProd.billProduct.total = buc * delProd.billProduct.price
-    //         choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
-    //         this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-    //           if(choise.upload){
-    //             if(el.toppings.length){
-    //               this.tableSrv.uploadIngs(el.toppings, buc, this.user.locatie).subscribe()
-    //             }
-    //             this.tableSrv.uploadIngs(el.ings, buc, this.user.locatie).subscribe(response => {
-    //               if(response) {
-    //                 showToast(this.toastCtrl, response.message, 3000)
-    //               }
-    //             })
-    //           }
-    //         })
-    //       })
-    //       } else {
-    //         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
-    //         return
-    //       }
-
-    //         data.push({id: this.billToshow._id})
-    //         this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-    //         this.tableSrv.deleteOrders(data).subscribe()
-    //         this.billProducts = []
-    //         this.client = null
-    //         this.clientMode = true
-    //         this.billToshow = emptyBill()
-    //       }
-    //   } else {
-    //     this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-    //     this.billProducts = []
-    //     if(this.table.bills.length){
-    //     this.showOrder(0)
-    //     }
-    //   }
-    // }
 
     async mergeOrders(){
       const bills = this.table.bills;

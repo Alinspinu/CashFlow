@@ -40,12 +40,20 @@ img{
 
 .edit{
  color: var(--ion-color-primary);
- margin: 10px;
+ margin: 5px 10px;
+ font-size: 25px;
+}
+
+.inv{
+  color: var(--ion-color-success);
+  margin: 5px 10px;
+  font-size: 22px;
 }
 
 .delete{
   color: var(--ion-color-danger);
-  margin: 10px;
+  margin: 5px 10px;
+  font-size: 25px;
 }
 
 ion-item[slot="fixed"]{
@@ -67,6 +75,10 @@ ion-item[slot="fixed"]{
   text-align: center;
   span{
     margin: 10px 0 10px 0;
+  }
+  .nr{
+    flex: 1%;
+    max-width: 40px;
   }
   .name{
     flex: 10%;

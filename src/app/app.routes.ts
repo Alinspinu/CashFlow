@@ -32,6 +32,10 @@ const routes: Routes = [
     path: 'spinner',
     loadComponent: () => import('./modals/spinner/spinner.page').then( m => m.SpinnerPage)
   },
+  {
+    path: 'add-to-inventary',
+    loadComponent: () => import('./modals/add-to-inventary/add-to-inventary.page').then( m => m.AddToInventaryPage)
+  },
 
 
 ];

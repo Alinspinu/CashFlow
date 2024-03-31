@@ -1,6 +1,7 @@
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
   <ion-item lines="none" class="header content-container" slot="fixed">
+    <span class="nr">Nr</span>
     <span class="name">Nume</span>
     <span class="compus">Compus</span>
     <span class="gestiune">Gestiune</span>
@@ -8,6 +9,7 @@
     <span class="um">UM</span>
     <span class="price">Pret de intare cu TVA</span>
     <span class="qty">Cantitate Inv</span>
+    <ion-icon  class="edit"></ion-icon>
     <ion-icon  class="edit"></ion-icon>
     <ion-icon  class="delete"></ion-icon>
   </ion-item>
@@ -72,6 +74,7 @@
   <ion-row *ngFor="let ing of ingredients; let i= index;">
     <ion-col>
       <ion-item class="content-container product input" lines="none" (click)="showIngs(i)">
+        <span class="nr">{{i+1}}.</span>
         <span class="name">{{ing.name}}</span>
         <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="ing.ings.length" class="arrow"></ion-icon>
         <ion-icon  *ngIf="!ing.ings.length" class="arrow"></ion-icon>
@@ -80,8 +83,15 @@
         <span class="um">{{ing.um}}</span>
         <span class="price">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
         <span class="qty">{{ing.ings.length ? 1 : ing.qty}}</span>
-        <ion-icon  src="../../assets/icon/create-outline.svg" (click)="ingEdit(ing)" class="edit"></ion-icon>
-        <ion-icon  src="../../assets/icon/trash-outline.svg" (click)="deleteIng(ing._id, ing.name)" class="delete"></ion-icon>
+        <ion-button fill="ghost" (click)="inventary(ing)">
+          <ion-icon  src="../../assets/icon/tools.svg" class="inv"></ion-icon>
+        </ion-button>
+        <ion-button fill="ghost" (click)="ingEdit(ing)">
+          <ion-icon  src="../../assets/icon/create-outline.svg"  class="edit"></ion-icon>
+        </ion-button>
+        <ion-button fill="ghost" (click)="deleteIng(ing._id, ing.name)">
+          <ion-icon  src="../../assets/icon/trash-outline.svg" class="delete"></ion-icon>
+        </ion-button>
       </ion-item>
       <div *ngIf="ing.ings.length && ing.showIngs" class="sub-container">
         <ion-item *ngFor="let ingr of ing.ings" lines="none" class="content-container" (click)="ingEdit(ing._id)" color="tertiary">

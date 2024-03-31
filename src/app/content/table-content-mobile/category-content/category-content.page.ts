@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 import { ContentService } from '../../content.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { round } from 'src/app/shared/utils/functions';
+import { getSection, round } from 'src/app/shared/utils/functions';
 import { TablesService } from 'src/app/tables/tables.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -158,6 +158,7 @@ export class CategoryContentPage implements OnInit, OnDestroy {
             }
         }
     }
+      const section = getSection(product)
       const cartProduct: BillProduct = {
         name: cartProdName,
         price: price,
@@ -170,6 +171,7 @@ export class CategoryContentPage implements OnInit, OnDestroy {
         toppings: pickedToppings,
         mainCat: product.mainCat,
         payToGo: false,
+        section: section,
         newEntry: true,
         discount: round(price *  product.discount / 100),
         ings: ings,

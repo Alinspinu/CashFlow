@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import User from 'src/app/auth/user.model';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { round } from 'src/app/shared/utils/functions';
+import { getSection, round } from 'src/app/shared/utils/functions';
 import { triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
 import { BillProduct, Ing, Topping } from 'src/app/models/table.model';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
@@ -142,6 +142,7 @@ export class TabContentPage implements OnInit {
             }
         }
     }
+      const section = getSection(product)
       const cartProduct: BillProduct = {
         name: cartProdName,
         price: price,
@@ -155,6 +156,7 @@ export class TabContentPage implements OnInit {
         mainCat: product.mainCat,
         payToGo: false,
         newEntry: true,
+        section: section,
         discount: round(price *  product.discount / 100),
         ings: ings,
         dep: product.dep,

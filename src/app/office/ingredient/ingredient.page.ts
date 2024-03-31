@@ -16,6 +16,7 @@ import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { InvIngredient } from 'src/app/models/nir.model';
 import { Subscription, take } from 'rxjs';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { AddToInventaryPage } from 'src/app/modals/add-to-inventary/add-to-inventary.page';
 
 @Component({
   selector: 'app-ingredient',
@@ -28,6 +29,8 @@ export class IngredientPage implements OnInit, OnDestroy {
 
   ingredients: any = [];
 
+  selectDate: boolean = true
+  inventaryDate!: string
   ingPage: boolean = true
 
   topToEdit!: any;
@@ -144,7 +147,6 @@ export class IngredientPage implements OnInit, OnDestroy {
 
 
   filterIngredients(){
-    console.log('hit the function', this.filter)
     if(this.filter.dep !== ''){
       const ings = this.ingredients.filter((ing: any) => ing.dep === this.filter.dep)
       this.ingredients = [...ings]
@@ -201,6 +203,24 @@ updateProductIng(){
       })
     }
   }
+  }
+
+  async inventary(ing: any){
+    if(this.selectDate){
+      this.inventaryDate = await this.actionSh.openAuth(DatePickerPage)
+      if(this.inventaryDate){
+        this.selectDate = false
+      }
+    }
+    if(!this.selectDate){
+      let data = {date: this.inventaryDate, ing: ing}
+      const ingToUpdate = await this.actionSh.openModal(AddToInventaryPage, data, false)
+      if(ingToUpdate){
+        this.ingSrv.updateIngredientInventary(ingToUpdate).subscribe(response => {
+          showToast(this.toastCtrl, response.message, 3000)
+        })
+      }
+    }
   }
 
   async deleteIng(id: string, name: string){

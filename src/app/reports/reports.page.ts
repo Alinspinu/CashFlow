@@ -22,12 +22,14 @@ import { ProductsPage } from './products/products.page';
 export class ReportsPage {
 
 
+
   show:
   {
+    menu: boolean
     sales: boolean
     products: boolean
     ingredients: boolean
-  } = {sales: false, products: true, ingredients: false}
+  } = {sales: false, products: true, ingredients: false, menu: true}
 
   constructor() {}
 
@@ -47,5 +49,14 @@ export class ReportsPage {
     this.show.ingredients = true
     this.show.products = false
     this.show.sales = false
+  }
+
+
+  hideMenu(){
+    this.show.menu = false
+  }
+
+  showMenu(){
+    this.show.menu = true
   }
 }

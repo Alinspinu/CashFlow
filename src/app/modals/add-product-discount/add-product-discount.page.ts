@@ -7,6 +7,8 @@ import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { ProductsService } from 'src/app/office/products/products.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-product-discount',
@@ -22,17 +24,22 @@ products: any [] = []
 discountsProd: any [] = []
 deletedDiscounts: any [] = []
 user!: User
+dbProducts: any [] = []
+
+prodSub!: Subscription
 
   constructor(
     @Inject(ActionSheetService) private actioSrv: ActionSheetService,
     private modalCtrl: ModalController,
     private addProdDiscSrv: AddProductDiscountService ,
     private router: Router,
+    private productService: ProductsService,
     private navPar: NavParams,
   ) { }
 
   ngOnInit() {
     this.getUser()
+    this.getProducts()
     this.getData()
   }
 
@@ -76,14 +83,31 @@ user!: User
     })
   }
 
-  searchProduct(ev: any){
-    let search = ev.detail.value
-      this.addProdDiscSrv.searchProduct(search, {}, this.user.locatie).subscribe((response:any) => {
-        if(response) {
-          this.products= response
-        }
-      })
+  // searchProduct(ev: any){
+  //   let search = ev.detail.value
+  //     this.addProdDiscSrv.searchProduct(search, {}, this.user.locatie).subscribe((response:any) => {
+  //       if(response) {
+  //         this.products= response
+  //       }
+  //     })
+  // }
+
+  getProducts(){
+    this.prodSub = this.productService.productsSend$.subscribe(response => {
+      if(response){
+        this.dbProducts = response
+
+      }
+    })
   }
+
+  searchProduct(ev: any){
+    const input = ev.detail.value
+    this.products = this.dbProducts.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+    if(input === ''){
+     this.products = [...this.dbProducts]
+    }
+   }
 
   onSubmit(){
     if(this.deletedDiscounts.length) {

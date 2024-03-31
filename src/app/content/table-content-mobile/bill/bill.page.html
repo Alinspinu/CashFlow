@@ -1,16 +1,11 @@
 <app-header-content (dataEvent)="receiveData($event)" [tableBills]="table.bills" (newOrderEv)="newBillOrder($event)"></app-header-content>
 
-
-<ion-content [fullscreen]="true">
+<app-spinner *ngIf="isLoading"></app-spinner>
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
   <ion-grid>
   <ion-row class="bill-content-row">
     <ion-col size="12">
         <div lines="none" *ngFor="let product of billProducts; let i = index" class="product-item" [ngClass]="{'grey': !product.sentToPrint}">
-        <!-- <ion-buttons slot="end" *ngIf="!product.sentToPrint">
-          <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings, product)">
-            <ion-icon color="danger" src="../../../assets/icon/trash-outline.svg"></ion-icon>
-          </ion-button>
-        </ion-buttons> -->
         <img [src]="product.imgPath" class="prod-img" (click)="openComments(product, i)">
         <div class="prod">
           <div class="product" (click)="openComments(product, i)">
@@ -103,7 +98,7 @@
 </ion-grid>
 </ion-content>
 
-<ion-footer [translucent]="true">
+<ion-footer [translucent]="true" *ngIf="!isLoading">
   <ion-row class="ion-no-margin ion-no-padding">
     <ion-col class="ion-no-margin ion-no-padding" style="width: 100vw; display:flex;">
       <ion-icon src="assets/icon/seting.svg" class="setting" [color]="color" (click)="showSettings()"></ion-icon>

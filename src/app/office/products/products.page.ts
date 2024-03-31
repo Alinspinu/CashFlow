@@ -24,6 +24,7 @@ import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 export class ProductsPage implements OnInit {
 
   productSearch: any
+  productIngSearch: any
   recipeIcon: string = ''
   categories: any = []
   mainCats: any = []
@@ -67,6 +68,32 @@ getuser(){
 searchProduct(ev: any){
   const input = ev.detail.value
   this.products = this.products.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+  if(input === ''){
+   this.products = [...this.dbProducts]
+  }
+ }
+
+searchIngProduct(ev: any){
+  const input = ev.detail.value
+  this.products = this.dbProducts.filter(parentItem =>
+    parentItem.ings.some(child => {
+      if(child.ing.name){
+        return child.ing.name.toLowerCase().includes(input.toLowerCase())
+      } else {
+        console.log(parentItem)
+        return false
+      }
+    }) ||
+    parentItem.subProducts.some(sub => {
+      return sub.ings.some(child => {
+        if (child.ing && child.ing.name) {
+          return child.ing.name.toLowerCase().includes(input.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+    })
+  );
   if(input === ''){
    this.products = [...this.dbProducts]
   }

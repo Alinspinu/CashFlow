@@ -3,7 +3,8 @@
     "default": "cash-flow-8a7f4",
     "true": "cash-flow-8a7f4",
     "test": "cash-test-6f218",
-    "tru": "cash-flow-8a7f4"
+    "tru": "cash-flow-8a7f4",
+    "treu": "cash-flow-8a7f4"
   },
   "targets": {},
   "etags": {}

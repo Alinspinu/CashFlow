@@ -1,6 +1,7 @@
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
-  <ion-item lines="none" class="header header-container" slot="fixed">
+  <ion-item lines="none" class="header container" slot="fixed">
+    <ion-label class="nr">Nr</ion-label>
     <ion-label class="name">Nume Produs</ion-label>
     <ion-label class="mainCat">Categorie Parinte</ion-label>
     <ion-label class="cat">Categorie Produs</ion-label>
@@ -16,14 +17,20 @@
   </ion-item>
   <ion-grid>
     <ion-row style="margin-bottom:48px;">
-      <ion-col size-lg="6">
+      <ion-col size-lg="4">
         <ion-item lines="none" color="tertiary">
           <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută Produs"  (ionInput)="searchProduct($event)">
           </ion-searchbar>
           <img src="assets/icon/add-circle.svg" id="add-ing" (click)="addProduct()">
         </ion-item>
       </ion-col>
-      <ion-col size-lg="3" size-md="6">
+      <ion-col size-lg="4">
+        <ion-item lines="none" color="tertiary">
+          <ion-searchbar mode="ios" [(ngModel)]="productIngSearch"  placeholder="Caută Produs după ingredient..."  (ionInput)="searchIngProduct($event)">
+          </ion-searchbar>
+        </ion-item>
+      </ion-col>
+      <ion-col size-lg="2" size-md="6">
         <ion-item lines="none" class="input">
           <ion-select placeholder="Alege Categorie Parinte" (ionChange)="onSelectMainCat($event)">
             <ion-select-option value="">Toate</ion-select-option>
@@ -31,7 +38,7 @@
           </ion-select>
         </ion-item>
         </ion-col>
-        <ion-col size-lg="3" size-md="6">
+        <ion-col size-lg="2" size-md="6">
         <ion-item lines="none" class="input">
           <ion-select placeholder="Alege Categorie Produs" (ionChange)="onCatSelect($event)">
             <ion-select-option value="">Toate Categoriile</ion-select-option>
@@ -49,7 +56,8 @@
     <ion-row *ngFor="let product of products; let i=index;">
       <ion-col>
         <div class="product-container">
-        <ion-item class="content-container product input" lines="none" (click)="showSubs(i)">
+        <ion-item class="container product input" lines="none" (click)="showSubs(i)">
+          <ion-label class="nr">{{i+1}}.</ion-label>
           <ion-label class="name">{{product.name}}</ion-label>
           <ion-label class="mainCat">{{product.mainCat | capitalize}}</ion-label>
           <ion-label class="cat">{{product.category.name}}</ion-label>

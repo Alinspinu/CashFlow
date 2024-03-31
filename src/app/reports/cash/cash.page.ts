@@ -176,7 +176,7 @@ calcTva(){
     })
   })
   this.tvaValue = round(tvaDiscountBills + tvaFullBills)
-  this.totalIncasat = round(this.card+this.cash)
+  this.totalIncasat = round(this.vivaWallet+this.cash)
   this.totalNoTax = round(this.totalIncasat - this.tvaValue)
 }
 

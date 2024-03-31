@@ -46,7 +46,10 @@
       <ion-input  mode="ios" type="number" label="Preț fară TVA" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
     </ion-item>
     <ion-item lines="none" class="input">
-      <ion-input  mode="ios" type="number" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty" (keyup.enter)="saveIng()"></ion-input>
+      <ion-input  mode="ios" type="number" label="Cantitate Actuală" labelPlacement="floating" fill="outline" formControlName="qty" (keyup.enter)="saveIng()"></ion-input>
+    </ion-item>
+    <ion-item lines="none" class="input">
+      <ion-input  mode="ios" type="number" label="Cantitate Inventar" labelPlacement="floating" fill="outline" formControlName="invQty"></ion-input>
     </ion-item>
 
   </form>

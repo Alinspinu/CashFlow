@@ -5,7 +5,7 @@ import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../models/empty-models";
-import {AuthService} from "../auth/auth.service"
+import {AuthService} from "../auth/auth.service";
 
 
 
@@ -352,7 +352,7 @@ registerDeletetProduct(product: any){
 
 sendBillToPrint(bill: Bill){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill}, {headers})
+  return this.http.post<{message: string, bill: Bill}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill}, {headers})
 }
 
 setOrderTime(orderId: string, time: number){

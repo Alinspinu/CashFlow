@@ -28,6 +28,7 @@ export class Bill{
     public completetime: number,
     public paymentMethod: string,
     public onlineOrder: boolean,
+    public inOrOut: string,
     public prepStatus: string,
     public payment: {
         cash: number,

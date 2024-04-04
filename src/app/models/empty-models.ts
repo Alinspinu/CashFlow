@@ -90,6 +90,7 @@ export function emptyBill(){
     status: 'open',
     toGo: false,
     pickUp: false,
+    inOrOut: '',
     completetime: 0,
     paymentMethod: '',
     onlineOrder: false,

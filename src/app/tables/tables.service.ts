@@ -72,7 +72,7 @@ async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee
     mergedBills.total = total;
     table.bills.push(mergedBills);
     let newIndex = bills.findIndex(obj => obj.name === 'UNITE')
-    const response = await firstValueFrom(this.saveOrder(masa, 'new', newIndex, employee, locatie))
+    const response = await firstValueFrom(this.saveOrder(masa, 'new', newIndex, employee, locatie, ''))
     if(response) {
       return true
     } else {
@@ -85,7 +85,7 @@ async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee
 async manageSplitBills(tableIndex: number, billIndex: number, employee: any, locatie: string){
   let bill = this.tables[tableIndex-1].bills[billIndex]
   bill._id.length ? bill._id = bill._id : bill._id = 'new'
-  const response = await firstValueFrom(this.saveOrder(tableIndex, bill._id, billIndex, employee, locatie))
+  const response = await firstValueFrom(this.saveOrder(tableIndex, bill._id, billIndex, employee, locatie, ''))
   if(response) {
     return true
   } else {
@@ -191,7 +191,7 @@ addCustomer(customer: any, masa: number, billIndex: number){
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = emptyBill().clientInfo
-      const response = await firstValueFrom(this.saveOrder(masa, billId, billIndex, employee, locatie))
+      const response = await firstValueFrom(this.saveOrder(masa, billId, billIndex, employee, locatie, ''))
       if(response) {
         return true
       } else {
@@ -297,19 +297,19 @@ deleteTable(tableId: string, index: number){
   }))
 }
 
- saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
+ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string, inOrOut: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
+  bill.inOrOut = inOrOut
   if(bill.employee){
     bill.employee.user.length ? bill.employee = bill.employee : bill.employee = employee
   } else {
     bill.employee = employee
   }
-
   bill.locatie = locatie
   bill.onlineOrder = false
   bill.pending = true

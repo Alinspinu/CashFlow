@@ -37,7 +37,7 @@ export class AuthPage implements OnInit {
   resetPasswordMode: boolean = false;
   emailValue!: string;
   validEmail: boolean = false;
-  disableLogIn: boolean = false
+  disableLogIn: boolean = false;
 
   iconSrc: string = 'assets/icon/eye-outline.svg'
 

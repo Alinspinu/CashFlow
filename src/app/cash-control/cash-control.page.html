@@ -75,7 +75,7 @@
     <span>Ora - {{orderTime(order.updatedAt)}} |</span>
     <span>{{showPaymentMethod(order.payment)}} |</span>
     <span>Masa: {{order.masa}} |</span>
-    <span>Casier: {{order.employee.fullName}} |</span>
+    <span *ngIf="order.employee">Casier: {{order.employee.fullName}} |</span>
   </ion-item>
 </ion-content>
 </div>

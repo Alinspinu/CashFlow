@@ -93,6 +93,81 @@ export function formatedDateToShow(date: any){
 
 
 
+  // db.orders.aggregate([
+  //   {
+  //     $match: {}
+  //   },
+  //   {
+  //     $set: {
+  //       "products": {
+  //         $map: {
+  //           input: "$products",
+  //           as: "product",
+  //           in: {
+  //             $mergeObjects: [
+  //               "$$product",
+  //               {
+  //                 "section": {
+  //                   $switch: {
+  //                     branches: [
+  //                       {
+  //                         case: { $eq: ["$$product.mainCat", "food"] },
+  //                         then: {
+  //                           $switch: {
+  //                             branches: [
+  //                               {
+  //                                 case: {
+  //                                   $in: ["$$product.category", ["64be6a3e3ef7bd6552c84608", "64be690d3ef7bd6552c84602"]]
+  //                                 },
+  //                                 then: "vitrina"
+  //                               },
+  //                               {
+  //                                 case: true,
+  //                                 then: "buc"
+  //                               }
+  //                             ]
+  //                           }
+  //                         }
+  //                       },
+  //                       {
+  //                         case: { $eq: ["$$product.mainCat", "bar"] },
+  //                         then: "bar"
+  //                       },
+  //                       {
+  //                         case: { $eq: ["$$product.mainCat", "shop"] },
+  //                         then: "shop"
+  //                       },
+  //                       {
+  //                         case: { $eq: ["$$product.mainCat", "coffee"] },
+  //                         then: {
+  //                           $switch: {
+  //                             branches: [
+  //                               {
+  //                                 case: {
+  //                                   $in: ["$$product.category", ["64c8e6c548b61f91a0d45e66", "64c8e69548b61f91a0d45e64"]]
+  //                                 },
+  //                                 then: "tea"
+  //                               },
+  //                               {
+  //                                 case: true,
+  //                                 then: "coffee"
+  //                               }
+  //                             ]
+  //                           }
+  //                         }
+  //                       }
+  //                     ],
+  //                     default: "unknown"
+  //                   }
+  //                 }
+  //               }
+  //             ]
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // ])
 
 
 

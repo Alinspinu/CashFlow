@@ -11,7 +11,7 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
 import { getSection, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { Subscription } from 'rxjs';
+import { map, Observable, of, Subscription, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { HeaderContentPage } from '../header-content/header-content.page';
 import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
@@ -124,25 +124,61 @@ ngOnDestroy(): void {
     }
 
 
-  sendOrder(out: boolean){
-    if(this.billToshow){
-      this.disableOrderButton = true
-      this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
-      const tableIndex = this.tableNumber
-      this.billToshow.locatie = this.user.locatie
-      this.calcBillDiscount(this.billToshow)
-      this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
-        if(res){
-          this.disableOrderButton = false
-          // if(out){
-          //   this.router.navigateByUrl('/tabs/tables')
-          // }
+    sendOrder(out: boolean): Observable<boolean> {
+      if (this.billToshow) {
+        this.disableOrderButton = true;
+        this.billToshow._id.length
+          ? (this.billId = this.billToshow._id)
+          : (this.billId = 'new');
+        const tableIndex = this.tableNumber;
+        this.billToshow.locatie = this.user.locatie;
+        this.calcBillDiscount(this.billToshow);
+        if(this.billToshow.inOrOut && this.billToshow.inOrOut !== ''){
+          return this.tableSrv.saveOrder(
+            tableIndex,
+            this.billId,
+            this.billIndex,
+            this.user.employee,
+            this.user.locatie,
+            this.billToshow.inOrOut
+          ).pipe(
+            map((res) => {
+              this.disableOrderButton = false;
+              if (out && res) {
+                this.router.navigateByUrl('/tabs/tables');
+              }
+              return !!res; // Convert the response to a boolean
+            })
+          );
+        } else {
+          return this.actionSheet.chosseInOrOut().pipe(
+            switchMap((response) => {
+              this.billToshow.inOrOut = response.inOrOut
+              return this.tableSrv.saveOrder(
+                tableIndex,
+                this.billId,
+                this.billIndex,
+                this.user.employee,
+                this.user.locatie,
+                this.billToshow.inOrOut
+              ).pipe(
+                map((res) => {
+                  this.disableOrderButton = false;
+                  if (out && res) {
+                    this.router.navigateByUrl('/tabs/tables');
+                  }
+                  return !!res; // Convert the response to a boolean
+                })
+              );
+            })
+          )
         }
-      }
-      );
-    }
-  }
 
+      } else {
+        // If this.billToshow is not truthy, return Observable of false
+        return of(false);
+      }
+    }
   newOrder(){
     this.tableSrv.addNewBill(this.tableNumber, 'COMANDĂ', true)
     this.disableMergeButton()
@@ -455,32 +491,35 @@ disableBrakeButton(){
   }
 
   async payment(){
-    this.sendOrder(false)
-      const paymentInfo = await this.actionSheet.openMobileModal(PaymentPage, this.billToshow, false)
-        if(paymentInfo){
-          this.billToshow.payment = paymentInfo
-          this.billToshow.cif = paymentInfo.cif;
-          this.isLoading = true
-         this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
-                next: (response => {
-                  if(response && response.bill.status === 'done'){
-                    this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-                    this.billToshow = emptyBill()
-                    this.client = null
-                    this.router.navigateByUrl("/tabs/tables")
-                    this.isLoading = false
-                    showToast(this.toastCtrl, response.message, 3000)
-                  }
-                }),
-                error: (error => {
-                  if(error){
-                    this.isLoading = false
-                    showToast(this.toastCtrl, error.error.message, 3000)
-                  }
-                }),
-                complete: () => console.log('complete')
-          })
-    }
+    this.sendOrder(false).subscribe(async(res) => {
+      if(res){
+        const paymentInfo = await this.actionSheet.openMobileModal(PaymentPage, this.billToshow, false)
+          if(paymentInfo){
+            this.billToshow.payment = paymentInfo
+            this.billToshow.cif = paymentInfo.cif;
+            this.isLoading = true
+           this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
+                  next: (response => {
+                    if(response && response.bill.status === 'done'){
+                      this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                      this.billToshow = emptyBill()
+                      this.client = null
+                      this.router.navigateByUrl("/tabs/tables")
+                      this.isLoading = false
+                      showToast(this.toastCtrl, response.message, 3000)
+                    }
+                  }),
+                  error: (error => {
+                    if(error){
+                      this.isLoading = false
+                      showToast(this.toastCtrl, error.error.message, 3000)
+                    }
+                  }),
+                  complete: () => console.log('complete')
+            })
+      }
+      }
+    })
   }
 
   async addCustomer(clientMode: boolean){

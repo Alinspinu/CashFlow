@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
+import { round } from 'src/app/shared/utils/functions';
 
 @Component({
   selector: 'app-add-employee-data',
@@ -52,10 +53,14 @@ export class AddEmployeeDataPage implements OnInit {
       access: new FormControl(null, {
         updateOn: 'change',
       }),
-      generalDiscount: new FormControl(null, {
+      salary: new FormControl(null, {
+        updateOn: 'change',
+      }),
+      onPaper: new FormControl(null, {
         updateOn: 'change',
       }),
     });
+    console.log(this.data)
     if(this.data){
       this.form.get('fullName')?.setValue(this.data.fullName);
       this.form.get('cnp')?.setValue(this.data.cnp);
@@ -63,8 +68,11 @@ export class AddEmployeeDataPage implements OnInit {
       this.form.get('ciNumber')?.setValue(this.data.ciNumber);
       this.form.get('address')?.setValue(this.data.address);
       this.form.get('position')?.setValue(this.data.position);
-      this.form.get('access')?.setValue(this.data.access.toString());
-      this.form.get('generalDiscount')?.setValue(this.data.discount.general);
+      if(this.data.access){
+        this.form.get('access')?.setValue(this.data.access.toString());
+      }
+      this.form.get('salary')?.setValue(this.data.salary.inHeand);
+      this.form.get('onPaper')?.setValue(this.data.salary.onPaper.salary);
     }
   }
 
@@ -76,7 +84,15 @@ export class AddEmployeeDataPage implements OnInit {
       ciNumber: this.form.value.ciNumber,
       address: this.form.value.address,
       position: this.form.value.position,
-      access: +this.form.value.access
+      access: +this.form.value.access,
+      salary: {
+        inHeand: this.form.value.salary,
+        onPaper: {
+          salary:  this.form.value.onPaper,
+          tax: round(this.form.value.onPaper * 0.4)
+        },
+      } ,
+
     }
     this.modalCtrl.dismiss(dataToSend)
   }

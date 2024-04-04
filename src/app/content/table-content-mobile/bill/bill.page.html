@@ -132,7 +132,7 @@
          </ion-row>
          <ion-row class="ion-no-margin ion-no-padding">
            <ion-col class="ion-no-margin ion-no-padding">
-             <ion-button size="medium" expand="block" color="secondary" (click)="sendOrder(true)" [disabled]="disableOrderButton">
+             <ion-button size="medium" expand="block" color="secondary" (click)="sendOrder(true).subscribe()" [disabled]="disableOrderButton">
                Trimite Comanda
              </ion-button>
              </ion-col>

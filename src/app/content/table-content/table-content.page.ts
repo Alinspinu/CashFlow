@@ -9,7 +9,7 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
 import { Bill, BillProduct, deletetBillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
-import {  map, Observable, of, Subscription } from 'rxjs';
+import {  map, Observable, of, Subscription, switchMap } from 'rxjs';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
@@ -118,7 +118,6 @@ export class TableContentPage implements OnInit, OnDestroy {
     if(this.tableSub){
       this.tableSub.unsubscribe()
     }
-    this.tableSrv.stopSse()
   }
 
   //***************************NG-ON-INIT************************** */
@@ -554,22 +553,47 @@ sendOrder(out: boolean): Observable<boolean> {
     const tableIndex = this.tableNumber;
     this.billToshow.locatie = this.user.locatie;
     this.calcBillDiscount(this.billToshow);
+    if(this.billToshow.inOrOut && this.billToshow.inOrOut !== ''){
+      return this.tableSrv.saveOrder(
+        tableIndex,
+        this.billId,
+        this.billIndex,
+        this.user.employee,
+        this.user.locatie,
+        this.billToshow.inOrOut
+      ).pipe(
+        map((res) => {
+          this.disableOrderButton = false;
+          if (out && res) {
+            this.router.navigateByUrl('/tabs/tables');
+          }
+          return !!res; // Convert the response to a boolean
+        })
+      );
+    } else {
+      return this.actionSheet.chosseInOrOut().pipe(
+        switchMap((response) => {
+          this.billToshow.inOrOut = response.inOrOut
+          return this.tableSrv.saveOrder(
+            tableIndex,
+            this.billId,
+            this.billIndex,
+            this.user.employee,
+            this.user.locatie,
+            this.billToshow.inOrOut
+          ).pipe(
+            map((res) => {
+              this.disableOrderButton = false;
+              if (out && res) {
+                this.router.navigateByUrl('/tabs/tables');
+              }
+              return !!res; // Convert the response to a boolean
+            })
+          );
+        })
+      )
+    }
 
-    return this.tableSrv.saveOrder(
-      tableIndex,
-      this.billId,
-      this.billIndex,
-      this.user.employee,
-      this.user.locatie
-    ).pipe(
-      map((res) => {
-        this.disableOrderButton = false;
-        if (out && res) {
-          this.router.navigateByUrl('/tabs/tables');
-        }
-        return !!res; // Convert the response to a boolean
-      })
-    );
   } else {
     // If this.billToshow is not truthy, return Observable of false
     return of(false);

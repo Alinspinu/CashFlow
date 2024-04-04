@@ -26,6 +26,7 @@ import { AddProductDiscountPage } from '../modals/add-product-discount/add-produ
 import { DelProdViewPage } from '../reports/cash/del-prod-view/del-prod-view.page';
 import { ScanQrPage } from '../modals/scan-qr/scan-qr.page';
 import { AddToInventaryPage } from '../modals/add-to-inventary/add-to-inventary.page';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 
 
@@ -676,6 +677,35 @@ async detailsAlert(){
     } else {
       return null
     }
+  }
+
+
+  chosseInOrOut(): Observable<any> {
+    return new Observable<any>((observer) => {
+      this.alertController.create({
+        header: 'ALEGE LOC',
+        message: `UNDE SERVIM?`,
+        buttons: [
+          {
+            text: 'TERASĂ',
+            handler: () => {
+              observer.next({ inOrOut: 'TERASA' });
+              observer.complete();
+            }
+          },
+          {
+            text: 'INTERIOR',
+            handler: () => {
+              observer.next({ inOrOut: 'INTERIOR' });
+              observer.complete();
+            }
+          }
+        ],
+        cssClass: 'reprint-alert'
+      }).then((alert) => {
+        alert.present();
+      });
+    });
   }
 
 

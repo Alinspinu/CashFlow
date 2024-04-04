@@ -53,7 +53,6 @@ export class UserContentPage implements OnInit {
   }
 
   showOrder(order: any){
-    console.log(order)
     this.actSrv.openPayment(OrderAppViewPage, order)
   }
 

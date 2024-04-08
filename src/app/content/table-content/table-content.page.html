@@ -1,9 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar [class.dynamic-header-active]="dynamicColorChange">
-    <div class="accept-button-wrapper">
-      <ion-title  class="ion-text-center" style="flex: 70%; font-size: 23px;" *ngIf="onlineOrder">Comandă Online</ion-title>
-      <ion-button [class.dynamic-header-active]="dynamicColorChange" size="medium" style="flex: 30%;" (click)="acceptOrder()" *ngIf="onlineOrder">ACCEPTĂ</ion-button>
-    </div>
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button routerLink="/tabs/tables" class="back-button">
         <ion-icon src="../../../assets/icon/close-outline.svg" (click)="home()"  class="icon"></ion-icon>
@@ -198,27 +194,27 @@
               <ion-icon src="../../../assets/icon/trash-outline.svg"></ion-icon>
               ȘTERGE COMANDA
             </ion-button>
+            <ion-button size="medium" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount()">
+             {{ discountMode ? 'ADAUGĂ REDUCERE' : 'ELIMINĂ REDUCEREA'}}
+            </ion-button>
+            <ion-button size="medium" expand="block" color="primary" (click)="addTips()">
+            ADAUGA BACSIS
+            </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button class="client-button" (click)="addCustomer(clientMode)" expand="block" size="medium">
+            <ion-button class="client-button big" (click)="addCustomer(clientMode)" expand="block" size="large">
               <ion-icon [src]=" clientMode ? '../../../assets/icon/add-outline.svg': '../../../assets/icon/trash-outline.svg'"></ion-icon>
               {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE CLIENT"}}
             </ion-button>
-            <ion-button size="medium" expand="block" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)" *ngIf="client">
+            <ion-button size="large" expand="block" class="big" [color]="cashBackMode ? 'primary' : 'danger'" (click)="useCashBack(cashBackMode)" *ngIf="client">
               {{ cashBackMode ? 'FOLOSEȘTE CASHBACK' : 'ELIMINĂ CASH BACK'}}
-             </ion-button>
-             <ion-button size="medium" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount()">
-              {{ discountMode ? 'ADAUGĂ REDUCERE' : 'ELIMINĂ REDUCEREA'}}
-             </ion-button>
-             <ion-button size="medium" expand="block" color="primary" (click)="addTips()">
-             ADAUGA BACSIS
              </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button size="large" expand="block" color="secondary" (click)="sendOrder(true)">
+            <ion-button size="large" class="big" expand="block" color="secondary" (click)="sendOrder(true).subscribe()" [disabled]="disableOrderButton">
               Trimite Comanda
             </ion-button>
-            <ion-button size="large" expand="block" color="primary" (click)="payment()">
+            <ion-button size="large" class="big" expand="block" color="primary" (click)="payment()" [disabled]="disableOrderButton">
               Nota de plată
             </ion-button>
           </ion-col>

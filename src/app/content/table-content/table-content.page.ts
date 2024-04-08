@@ -9,7 +9,7 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
 import { Bill, BillProduct, deletetBillProduct, Table, Topping } from 'src/app/models/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
-import {  Subscription } from 'rxjs';
+import {  map, Observable, of, Subscription } from 'rxjs';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
@@ -22,7 +22,6 @@ import { emptyBill, emptyDeletetBillProduct, emptyIng, emptyTable } from 'src/ap
 import { round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
-import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
 import { AudioService } from 'src/app/shared/audio.service';
 import { InvIngredient } from 'src/app/models/nir.model';
 
@@ -83,6 +82,8 @@ export class TableContentPage implements OnInit, OnDestroy {
   user!: User;
 
   comment: string = ''
+
+  disableOrderButton: boolean = false
 
   url: string[] = ['assets/photos/cafea.png', 'assets/photos/ceaii.png', 'assets/photos/jucy.png', 'assets/photos/magazin.png']
 
@@ -193,7 +194,6 @@ export class TableContentPage implements OnInit, OnDestroy {
       response.subscribe(user => {
         if(user){
           this.user = user;
-
         }
       })
     }
@@ -236,49 +236,6 @@ export class TableContentPage implements OnInit, OnDestroy {
 
 
 // ***********************ORDERS CONTROLS*********************
-
-
-
-incommingOrders(){
-  console.log('hit the incomming message function')
- this.tableSub = this.tableSrv.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
-   console.log(response)
-    if(response){
-      const data = JSON.parse(response.data)
-      if(data.message === 'New Order'){
-        this.order = data.doc
-        // if (!this.audio.isCurrentlyPlaying()) {
-        //   this.audio.play();
-        // }
-        this.onlineOrder = true
-        this.colorToggleInterval = setInterval(() => {
-          this.dynamicColorChange = !this.dynamicColorChange;
-        }, 500);
-      }
-    }
-   })
-  }
-
-  stopDynamicHeader() {
-    clearInterval(this.colorToggleInterval);
-    this.dynamicColorChange = false;
-  }
-
-  async acceptOrder(){
-    // this.audio.stop()
-    this.onlineOrder = false
-    this.stopDynamicHeader()
-    const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
-    if(result){
-      const time = +result * 60 * 1000
-      this.tableSrv.setOrderTime(this.order._id, time).subscribe(response => {
-        console.log(response)
-      })
-    }
-  }
-
-
-// ***********************INCOMMING ORDERS*********************
 
   editOrderName(orderIndex: number){
     this.table.bills[orderIndex].setName = true
@@ -479,7 +436,7 @@ async addToBill(product: Product){
       } else {
         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000, 'error-toast')
       }
-      this.sendOrder(false)
+      this.sendOrder(false).subscribe()
 
     }
   }
@@ -502,48 +459,94 @@ async addTips(){
 }
 }
 
-
-sendOrder(out: boolean){
-  this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
-  const tableIndex = this.tableNumber
-  this.billToshow.locatie = this.user.locatie
-  this.calcBillDiscount(this.billToshow)
-  this.home()
-  this.tableSrv.saveOrder(tableIndex, this.billId, this.billIndex, this.user.employee, this.user.locatie).subscribe(res => {
-    if(res){
-      if(out){
-        // this.router.navigateByUrl('/tabs/tables')
-      }
-    }
+sendOrder(out: boolean): Observable<boolean> {
+  if (this.billToshow) {
+    this.disableOrderButton = true;
+    this.billToshow._id.length
+      ? (this.billId = this.billToshow._id)
+      : (this.billId = 'new');
+    const tableIndex = this.tableNumber;
+    this.billToshow.locatie = this.user.locatie;
+    console.log('before save',this.billToshow)
+    this.calcBillDiscount(this.billToshow);
+      return this.tableSrv.saveOrder(
+        tableIndex,
+        this.billId,
+        this.billIndex,
+        this.user.employee,
+        this.user.locatie,
+      ).pipe(
+        map((res) => {
+          this.disableOrderButton = false;
+          console.log(" after save ",res)
+          if (out && res) {
+            this.router.navigateByUrl('/tabs/tables');
+          }
+          return !!res; // Convert the response to a boolean
+        })
+      );
+  } else {
+    // If this.billToshow is not truthy, return Observable of false
+    return of(false);
   }
-  );
 }
 
 
+
+
+// async payment(){
+//   this.sendOrder(false)
+//   const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
+//     if(paymentInfo){
+//       if(paymentInfo.card2 && paymentInfo.card2 > 0) {
+//         this.billToshow.payment.card = paymentInfo.card2;
+//       }
+//       if(paymentInfo.card && paymentInfo.card > 0){
+//         this.billToshow.payment.card = paymentInfo.card;
+//       }
+//       this.billToshow.payment.cash = paymentInfo.cash;
+//       this.billToshow.dont = paymentInfo.dont;
+//       this.billToshow.cif = paymentInfo.cif;
+//       this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
+//         if(response){
+//           this.billToshow.discount = 0
+//           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+//           this.billProducts = []
+//           this.billToshow = emptyBill()
+//           this.billToshow.cashBack = 0
+//           this.client = null
+//         }
+//       })
+//     }
+// }
+
 async payment(){
-  this.sendOrder(false)
-  const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
-    if(paymentInfo){
-      if(paymentInfo.card2 && paymentInfo.card2 > 0) {
-        this.billToshow.payment.card = paymentInfo.card2;
-      }
-      if(paymentInfo.card && paymentInfo.card > 0){
-        this.billToshow.payment.card = paymentInfo.card;
-      }
-      this.billToshow.payment.cash = paymentInfo.cash;
-      this.billToshow.dont = paymentInfo.dont;
-      this.billToshow.cif = paymentInfo.cif;
-      this.tableSrv.sendBillToPrint(this.billToshow).subscribe(response => {
-        if(response){
-          this.billToshow.discount = 0
-          this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-          this.billProducts = []
-          this.billToshow = emptyBill()
-          this.billToshow.cashBack = 0
-          this.client = null
-        }
-      })
+  this.sendOrder(false).subscribe(async(response) => {
+    if(response){
+      const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
+        if(paymentInfo){
+          this.billToshow.payment = paymentInfo
+          this.billToshow.cif = paymentInfo.cif;
+         this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
+                next: (response => {
+                  if(response && response.bill.status === 'done'){
+                    this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                    this.billToshow = emptyBill()
+                    this.client = null
+                    this.router.navigateByUrl("/tabs/tables")
+                    showToast(this.toastCtrl, response.message, 3000, 'success-toast')
+                  }
+                }),
+                error: (error => {
+                  if(error){
+                    showToast(this.toastCtrl, error.error.message, 3000, 'error-toast')
+                  }
+                }),
+                complete: () => console.log('complete')
+          })
     }
+    }
+  })
 }
 
 async addCustomer(clientMode: boolean){
@@ -555,7 +558,7 @@ if(clientMode){
     this.billToshow.clientInfo = this.client
     this.billToshow.name = this.client.name
     this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-    this.sendOrder(false)
+    this.sendOrder(false).subscribe()
   }
 } else {
   if(this.billToshow.cashBack > 0){
@@ -580,7 +583,6 @@ if(clientMode){
 }
 
 calcBillDiscount(bill: Bill){
-  console.log('hit the orders')
   const discountGeneralProcent = bill.clientInfo.discount.general / 100
   const categoryDiscounts = bill.clientInfo.discount.category
   bill.products.forEach(product => {

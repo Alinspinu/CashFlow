@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, NgZone } from "@angular/core";
-import { BehaviorSubject, Observable, take, tap } from "rxjs";
+import { BehaviorSubject, Observable, of, switchMap, take, tap } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
@@ -273,13 +273,46 @@ deleteTable(tableId: string, index: number){
   }))
 }
 
+// saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
+//   const table = this.tables[tableIndex-1];
+//   const bill = this.tables[tableIndex-1].bills[billIndex];
+//   bill.masa = tableIndex;
+//   bill.masaRest = table._id;
+//   bill.production = true;
+//   bill.employee = employee
+//   bill.locatie = locatie
+//   bill.onlineOrder = false
+//   bill.pending = true
+//   bill.prepStatus = 'open'
+//   const billToSend = JSON.stringify(bill);
+//   const tables = JSON.stringify(this.tables);
+//   Preferences.set({key: 'tables', value: tables});
+//   return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} ).pipe(take(1), tap(res => {
+//     bill._id = res.billId;
+//     bill.index = res.index;
+//     bill.products = res.products
+//     bill.products.forEach(product => {
+//       product.sentToPrint = false
+//       product.sentToPrintOnline = false
+//     })
+//     bill.masaRest = res.masa
+//     this.tableState.next([...this.tables])
+//  }));
+// };
+
+
+
 saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
-  bill.employee = employee
+  if(bill.employee){
+    bill.employee.user.length ? bill.employee = bill.employee : bill.employee = employee
+  } else {
+    bill.employee = employee
+  }
   bill.locatie = locatie
   bill.onlineOrder = false
   bill.pending = true
@@ -287,18 +320,26 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
-  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} ).pipe(take(1), tap(res => {
-    bill._id = res.billId;
-    bill.index = res.index;
-    bill.products = res.products
-    bill.products.forEach(product => {
-      product.sentToPrint = false
-      product.sentToPrintOnline = false
-    })
-    bill.masaRest = res.masa
-    this.tableState.next([...this.tables])
- }));
+  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} )
+      .pipe(take(1),
+        switchMap(res => {
+          console.log('service res', res)
+        bill._id = res.billId;
+        bill.index = res.index;
+        bill.products = res.products;
+        bill.products.forEach(product => {
+          product.sentToPrint = false;
+          product.sentToPrintOnline = false;
+        });
+        bill.masaRest = res.masa;
+        this.tableState.next([...this.tables]);
+        // Return the original observable
+        return of(res);
+      })
+);
 };
+
+
 
 uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
   return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation})
@@ -313,7 +354,7 @@ registerDeletetProduct(product: any){
 }
 
 sendBillToPrint(bill: Bill){
-  return this.http.post(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
+  return this.http.post<{bill: any, message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
 }
 
 setOrderTime(orderId: string, time: number){

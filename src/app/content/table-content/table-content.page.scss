@@ -28,6 +28,10 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
   color: var(--ion-color-dark);
 }
 
+.big{
+  height: 100px !important;
+}
+
 .product-title{
   text-transform: uppercase;
   text-align: center;
@@ -46,7 +50,7 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
 
 
 .client-button{
-  --background: var(--ion-color-tertiary);
+  --background: var(--ion-color-primary);
 }
 
 

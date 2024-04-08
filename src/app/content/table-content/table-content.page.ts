@@ -22,9 +22,9 @@ import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/e
 import { getSection, round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
-import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
 import { AudioService } from 'src/app/shared/audio.service';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { WebRTCService } from '../webRTC.service';
 
 @Component({
   selector: 'app-table-content',
@@ -38,8 +38,8 @@ export class TableContentPage implements OnInit, OnDestroy {
   @ViewChild('addNameInput') nameInput!: IonInput;
   @ViewChild('billContent') content!: IonContent;
 
-
-  order!: Bill
+  invite: string = 'invite'
+   order!: Bill
   onlineOrder: boolean = false
   dynamicColorChange = false
   colorToggleInterval: any;
@@ -47,7 +47,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   disableOrderButton: boolean = false
 
   isLoading: boolean = true
-
+  showZeroTips: boolean = false
 
   discountValue: number = 0;
   discountMode: boolean = true
@@ -97,7 +97,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController,
     private authSrv: AuthService,
     private router: Router,
-    private audio: AudioService,
+    private webRTC: WebRTCService,
     ) { }
 
 
@@ -106,6 +106,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getTableNumber();
     this.getData();
     this.getBill();
+    this.getUserTips()
   }
 
   ngOnDestroy(): void {
@@ -120,7 +121,23 @@ export class TableContentPage implements OnInit, OnDestroy {
     }
   }
 
-  //***************************NG-ON-INIT************************** */
+//***************************NG-ON-INIT************************** */
+
+  getUserTips(){
+    this.webRTC.getUserTipObservable().subscribe(response => {
+      if(response || response === 0){
+        if(this.billToshow){
+          this.billToshow.tips = response
+          this.billToshow.total += response
+          this.webRTC.sendProductData(JSON.stringify(this.billToshow))
+          this.invite = "invite"
+        }
+        if(response === 0){
+          this.showZeroTips = true
+        }
+      }
+    })
+  }
 
   getTableNumber(){
     this.route.paramMap.subscribe(params => {
@@ -182,6 +199,7 @@ export class TableContentPage implements OnInit, OnDestroy {
      if(this.billToshow){
       this.hideAllBils(this.table)
       this.billToshow.show = true
+      this.webRTC.sendProductData(JSON.stringify(this.billToshow))
        this.billProducts = [...this.billToshow.products]
      }
     }
@@ -240,46 +258,6 @@ export class TableContentPage implements OnInit, OnDestroy {
 // ***********************ORDERS CONTROLS*********************
 
 
-
-incommingOrders(){
- this.tableSub = this.tableSrv.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
-    if(response){
-      const data = JSON.parse(response.data)
-      if(data.message === 'New Order'){
-        this.order = data.doc
-        if (!this.audio.isCurrentlyPlaying()) {
-          this.audio.play();
-        }
-        this.onlineOrder = true
-        this.colorToggleInterval = setInterval(() => {
-          this.dynamicColorChange = !this.dynamicColorChange;
-        }, 500);
-      }
-    }
-   })
-  }
-
-  stopDynamicHeader() {
-    clearInterval(this.colorToggleInterval);
-    this.dynamicColorChange = false;
-  }
-
-  async acceptOrder(){
-    // this.audio.stop()
-    this.onlineOrder = false
-    this.stopDynamicHeader()
-    const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
-    if(result){
-      const time = +result * 60 * 1000
-      this.tableSub = this.tableSrv.setOrderTime(this.order._id, time).subscribe(response => {
-        console.log(response)
-      })
-    }
-  }
-
-
-// ***********************INCOMMING ORDERS*********************
-
   editOrderName(orderIndex: number){
     this.table.bills[orderIndex].setName = true
     this.orderName = ''
@@ -309,6 +287,7 @@ incommingOrders(){
     }
     // this.billToshow.masaRest.index = this.tableNumber
     this.billToshow.show = true
+    this.webRTC.sendProductData(JSON.stringify(this.billToshow))
     this.disableBrakeButton()
     this.calcBillDiscount(this.billToshow)
   }
@@ -392,6 +371,7 @@ async addToBill(product: Product){
       qty: product.qty,
       cantitate: product.qty,
       sgrTax: product.sgrTax,
+      description: product.description,
     };
     if(product.sgrTax){
       let topping = product.toppings.find(p => p.name === "Taxa SGR")
@@ -526,6 +506,16 @@ async addToBill(product: Product){
   }
 
 //***********************************BUTTONS LOGIC************************** */
+
+inviteUserToTip(invite: string){
+  this.webRTC.inviteUserToTip(invite)
+  this.invite === 'invite' ? this.invite = 'uninvite' : this.invite = 'invite'
+  if(this.billToshow.tips > 0){
+    this.billToshow.total -= this.billToshow.tips;
+    this.billToshow.tips = 0
+    this.webRTC.sendProductData(JSON.stringify(this.billToshow))
+  }
+}
 
 
 
@@ -937,6 +927,7 @@ async useCashBack(mode: boolean){
           qty: product.qty,
           cantitate: product.qty,
           sgrTax: product.sgrTax,
+          description: product.description,
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){
@@ -1003,8 +994,54 @@ modifyImageURL(url: string): string {
 
 arraysAreEqual = (arr1: {}[], arr2: {}[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 
+roundInHtml(num: number){
+  return round(num)
+}
 }
 
 
 
 
+
+
+
+
+
+// incommingOrders(){
+//  this.tableSub = this.tableSrv.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
+//     if(response){
+//       const data = JSON.parse(response.data)
+//       if(data.message === 'New Order'){
+//         this.order = data.doc
+//         if (!this.audio.isCurrentlyPlaying()) {
+//           this.audio.play();
+//         }
+//         this.onlineOrder = true
+//         this.colorToggleInterval = setInterval(() => {
+//           this.dynamicColorChange = !this.dynamicColorChange;
+//         }, 500);
+//       }
+//     }
+//    })
+//   }
+
+  // stopDynamicHeader() {
+  //   clearInterval(this.colorToggleInterval);
+  //   this.dynamicColorChange = false;
+  // }
+
+  // async acceptOrder(){
+  //   // this.audio.stop()
+  //   this.onlineOrder = false
+  //   this.stopDynamicHeader()
+  //   const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
+  //   if(result){
+  //     const time = +result * 60 * 1000
+  //     this.tableSub = this.tableSrv.setOrderTime(this.order._id, time).subscribe(response => {
+  //       console.log(response)
+  //     })
+  //   }
+  // }
+
+
+// ***********************INCOMMING ORDERS*********************

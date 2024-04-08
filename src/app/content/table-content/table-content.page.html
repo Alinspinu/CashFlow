@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar [class.dynamic-header-active]="dynamicColorChange">
-    <div class="accept-button-wrapper">
+    <!-- <div class="accept-button-wrapper">
       <ion-title  class="ion-text-center" style="flex: 70%; font-size: 23px;" *ngIf="onlineOrder">Comandă Online</ion-title>
       <ion-button [class.dynamic-header-active]="dynamicColorChange" size="medium" style="flex: 30%;" (click)="acceptOrder()" *ngIf="onlineOrder">ACCEPTĂ</ion-button>
-    </div>
+    </div> -->
     <ion-buttons slot="start">
       <ion-button routerLink="/tabs/tables" class="back-button">
         <ion-icon src="../../../assets/icon/close-outline.svg" (click)="home()"  class="icon"></ion-icon>
@@ -146,7 +146,7 @@
                 <span class="red-text">REDUCERE</span>
               </ion-col>
               <ion-col size="2" class="ion-text-center">
-                <span class="red-lei">- {{billToshow.discount}} Lei</span>
+                <span class="red-lei">- {{roundInHtml(billToshow.discount)}} Lei</span>
               </ion-col>
             </ion-row>
             <ion-row class="bill-discount-row" *ngIf="billToshow.cashBack !== 0">
@@ -154,7 +154,7 @@
                 <span class="red-text">CASH BACK</span>
               </ion-col>
               <ion-col size="2" class="ion-text-center">
-                <span class="red-lei">- {{billToshow.cashBack}} Lei</span>
+                <span class="red-lei">- {{roundInHtml(billToshow.cashBack)}} Lei</span>
               </ion-col>
             </ion-row>
             <ion-row class="bill-discount-row" *ngIf="billToshow.voucher !== 0">
@@ -165,7 +165,7 @@
                 <span class="red-lei">- {{billToshow.voucher}} Lei</span>
               </ion-col>
             </ion-row>
-            <ion-row class="bill-tips-row" *ngIf="billToshow.tips > 0">
+            <ion-row class="bill-tips-row" *ngIf="billToshow.tips > 0 || showZeroTips">
               <ion-col size="10">
                 <span class="tips-text">BACSIS</span>
               </ion-col>
@@ -186,7 +186,7 @@
                 <span class="total-text">TOTAL</span>
               </ion-col>
               <ion-col size="2" class="ion-text-center">
-                <span class="total-lei">{{billToshow.total}} Lei</span>
+                <span class="total-lei">{{roundInHtml(billToshow.total)}} Lei</span>
               </ion-col>
             </ion-row>
           </div>
@@ -212,9 +212,9 @@
               <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
               SEPARĂ COMANDA
             </ion-button>
-            <ion-button expand="block" size="medium" color="danger" (click)="deleteOrder()" [disabled]="disableDelete">
-              <ion-icon src="../../../assets/icon/trash-outline.svg"></ion-icon>
-              ȘTERGE COMANDA
+            <ion-button expand="block" size="large" color="success" (click)="inviteUserToTip(invite)">
+              <ion-icon src="../../../assets/icon/business.svg"></ion-icon>
+             {{invite === 'invite' ?  'INTREABĂ DE TIPS?' : 'ANULEAZĂ INVITATIA'}}
             </ion-button>
           </ion-col>
           <ion-col>

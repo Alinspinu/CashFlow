@@ -1,0 +1,90 @@
+
+<div class="contents-container">
+
+  <div class="category-content" *ngIf="!hideBill">
+    <div class="category-header">
+    </div>
+    <div class="category-wrapper">
+      <ion-content [fullscreen]="false">
+        <div class="cat shadow" *ngFor="let cat of selectedMainCat" (click)="selectCategory(cat._id)" [ngClass]="{'selected-cat': categoryToShowId === cat._id}" #categoryChip [id]="cat._id">
+          {{cat.name}}
+        </div>
+      </ion-content>
+    </div>
+  </div>
+
+  <div class="menu-wrapper" *ngIf="!hideBill">
+    <div class="main-cat-content" *ngIf="mainCats">
+      <div class="main-cat shadow" *ngFor="let mainCat of getObjectKeys(mainCats)" (click)="selectMainCat(mainCat)" [ngClass]="{'selected': mainCategoryToShowName === mainCat}">
+          {{mainCat | capitalize}}
+      </div>
+    </div>
+   <div class="products-content">
+      <ion-content [fullscreen]="false" class="category-product-wrapper" (ionScroll)="onScroll($event)" [scrollEvents]="true">
+            <div class="category-product" *ngFor="let product of productsToShow" #myCard [attr.data-cat]="product.category._id" [attr.data-main]="product.mainCat" [id]="product._id">
+              <ion-card class="product-card" >
+                <ion-card-content>
+                  <ion-row>
+                    <ion-col size="3">
+                      <img [src]="modifyImageURL(product.image.path)"alt="Image" class="product-image">
+                    </ion-col>
+                    <ion-col size="9">
+                      <ion-card-header>
+                        <ion-card-title>{{product.name}}</ion-card-title>
+                        <ion-card-subtitle>{{product.price}} Lei / {{product.qty}}</ion-card-subtitle>
+                      </ion-card-header>
+                      <div class="product-description">
+                        <span>{{product.description}}</span>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
+            </div>
+      </ion-content>
+    </div>
+  </div>
+  <app-tips *ngIf="bill && hideBill"[total]="bill.total" (tipsValue)="reciveTipsValue($event)"></app-tips>
+    <div class="bill-content" *ngIf="bill && !hideBill">
+        <div class="bill-header">
+          <div class="shadow">TOTAL
+            <span class="bill-total">{{roundInHtml(bill.total)}} Lei</span>
+          </div>
+        </div>
+        <ion-content [fullscreen]="false" #billContent class="bill-wrapper">
+                <ion-card class="bill-product-card"  *ngFor="let product of bill.products; let i = index" >
+                  <ion-card-content>
+                    <ion-row>
+                      <ion-col size="2.5">
+                        <img [src]="modifyImageURL(product.imgPath)"alt="Image" class="bill-product-image">
+                      </ion-col>
+                      <ion-col size="7.5">
+                        <ion-card-header>
+                          <ion-card-title>{{product.name}}</ion-card-title>
+                          <ion-card-subtitle>{{product.quantity}} Buc</ion-card-subtitle>
+                        </ion-card-header>
+                        <div class="product-description">
+                          <span>{{product.description}}</span>
+                        </div>
+                        <div class="toppings" *ngIf="product.toppings.length">
+                          <span *ngFor="let topping of product.toppings">+ {{topping.name.split('/')[0]}}</span>
+                        </div>
+                        <div class="comments" *ngIf="product.comment && product.comment.length">
+                          <span>-{{product.comment}}</span>
+                        </div>
+                      </ion-col>
+                      <ion-col size="2" >
+                        <div class="total-wrapper">
+                          <span class="total">{{product.total}} Lei</span>
+                          <div class="red-line" *ngIf="product.discount > 0"></div>
+                          <span class="discount" *ngIf="product.discount > 0">{{product.total - product.discount}} Lei</span>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-card-content>
+                </ion-card>
+      </ion-content>
+    </div>
+
+  </div>
+

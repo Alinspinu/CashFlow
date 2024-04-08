@@ -102,6 +102,7 @@ export class BillProduct{
    public qty: string,
    public cantitate: string,
    public sgrTax: boolean,
+   public description: string,
   ){}
 }
 

@@ -51,6 +51,7 @@ export function  emptyBillProduct(){
     qty: '',
     cantitate: '',
     sgrTax: false,
+    description: '',
   }
   return billProduct
  }

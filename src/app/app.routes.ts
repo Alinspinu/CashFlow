@@ -36,6 +36,14 @@ const routes: Routes = [
     path: 'add-to-inventary',
     loadComponent: () => import('./modals/add-to-inventary/add-to-inventary.page').then( m => m.AddToInventaryPage)
   },
+  {
+    path: 'user-display',
+    loadComponent: () => import('./content/user-display/user-display.page').then( m => m.UserDisplayPage)
+  },
+  {
+    path: 'tips',
+    loadComponent: () => import('./content/user-display/tips/tips.page').then( m => m.TipsPage)
+  },
 
 
 ];

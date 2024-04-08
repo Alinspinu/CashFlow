@@ -3,13 +3,13 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { Bill, BillProduct, deletetBillProduct, Table, Topping } from 'src/app/models/table.model';
+import { Bill, BillProduct, Table, Topping } from 'src/app/models/table.model';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import User from 'src/app/auth/user.model';
 import { TablesService } from 'src/app/tables/tables.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
-import { getSection, round } from 'src/app/shared/utils/functions';
+import { emptyBill, emptyTable } from 'src/app/models/empty-models';
+import { round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { map, Observable, of, Subscription, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -17,7 +17,6 @@ import { HeaderContentPage } from '../header-content/header-content.page';
 import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
 import { Router } from '@angular/router';
-import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
 import { ContentService } from '../../content.service';
 import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
@@ -369,6 +368,7 @@ async break(index: number){
         qty: product.qty,
         cantitate: product.qty,
         sgrTax: product.sgrTax,
+        description: product.description,
       };
       if(newBillIndex){
         for(let i=0; i<qtyChioise; i++){

@@ -5,7 +5,7 @@ import { BehaviorSubject, from, map, Observable, take, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AuthService } from "../auth/auth.service";
 import User from "../auth/user.model";
-import {Category, Product} from "../models/category.model"
+import {Category} from "../models/category.model"
 import { emptyCategory } from "../models/empty-models";
 
 

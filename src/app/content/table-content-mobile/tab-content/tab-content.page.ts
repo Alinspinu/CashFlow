@@ -170,6 +170,7 @@ export class TabContentPage implements OnInit {
         qty: product.qty,
         cantitate: product.qty,
         sgrTax: product.sgrTax,
+        description: product.description
       };
       if(product.sgrTax){
         let topping = product.toppings.find(p => p.name === "Taxa SGR")

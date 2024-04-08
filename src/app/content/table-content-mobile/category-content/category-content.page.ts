@@ -186,6 +186,7 @@ export class CategoryContentPage implements OnInit, OnDestroy {
         qty: product.qty,
         cantitate: product.qty,
         sgrTax: product.sgrTax,
+        description: product.description
       };
       if(product.sgrTax){
         let topping = product.toppings.find(p => p.name === "Taxa SGR")

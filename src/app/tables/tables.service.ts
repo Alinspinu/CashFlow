@@ -6,6 +6,7 @@ import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../models/empty-models";
 import {AuthService} from "../auth/auth.service";
+import { WebRTCService } from "../content/webRTC.service";
 
 
 
@@ -24,8 +25,7 @@ export class TablesService{
 
   constructor(
     private http: HttpClient,
-    private authSrv: AuthService,
-    private ngZone: NgZone
+    private webRtc: WebRTCService
   ){
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
@@ -100,6 +100,7 @@ removeBill(masa: number, billIndex: number){
   } else {
     table.bills.splice(billIndex, 1)
   }
+  this.webRtc.sendProductData(JSON.stringify(emptyBill()))
   this.tableState.next([...this.tables])
 }
 
@@ -118,6 +119,7 @@ if(table){
     bill.products.push(product)
     bill.total = bill.total + product.price
     this.tableState.next([...this.tables])
+    this.webRtc.sendProductData(JSON.stringify(bill))
   } else {
     bill.masaRest.index = masa;
     bill.name = userName
@@ -125,9 +127,9 @@ if(table){
     bill.total= bill.total + product.price
     product.quantity = 1
     bill.products.push(product)
+    this.webRtc.sendProductData(JSON.stringify(bill))
     table.bills.push(bill)
     this.tableState.next([...this.tables])
-    console.log(this.tables)
   }
 }
 }
@@ -136,26 +138,32 @@ if(table){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     const bill = table.bills[billIdex]
-    const product =  bill.products[billProdIndex]
-    product.quantity--
-    product.total = product.quantity * product.price
-    bill.total = bill.total - product.price
-    if(product.quantity === 0){
-      bill.products.splice(billProdIndex, 1)
+    if(bill){
+      const product =  bill.products[billProdIndex]
+      product.quantity--
+      product.total = product.quantity * product.price
+      bill.total = bill.total - product.price
+      if(product.quantity === 0){
+        bill.products.splice(billProdIndex, 1)
+      }
+      this.webRtc.sendProductData(JSON.stringify(bill))
+      this.tableState.next([...this.tables])
     }
-    this.tableState.next([...this.tables])
-  }
+    }
 }
 
 addOne(masa: number, billProdIndex: number, billindex: number){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     const bill = table.bills[billindex]
-    const product =  bill.products[billProdIndex]
-    product.quantity++
-    product.total = product.quantity * product.price
-    bill.total = bill.total + product.price
-    this.tableState.next([...this.tables])
+    if(bill){
+      const product =  bill.products[billProdIndex]
+      product.quantity++
+      product.total = product.quantity * product.price
+      bill.total = bill.total + product.price
+      this.webRtc.sendProductData(JSON.stringify(bill))
+      this.tableState.next([...this.tables])
+    }
   }
 }
 
@@ -166,6 +174,7 @@ addComment(masa: number, billProdIndex: number, billIndex: number, comment: stri
     const bill = table.bills[billIndex]
     const product =  bill.products[billProdIndex]
     product.comment = comment
+    this.webRtc.sendProductData(JSON.stringify(bill))
     this.tableState.next([...this.tables])
   }
 }
@@ -179,6 +188,7 @@ addCustomer(customer: any, masa: number, billIndex: number){
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = customer;
+      this.webRtc.sendProductData(JSON.stringify(bill))
       this.tableState.next([...this.tables])
   }
 }
@@ -206,7 +216,6 @@ addCustomer(customer: any, masa: number, billIndex: number){
 //**********************HTTP REQ******************* */
 
 
-
 getTables(locatie: string, id: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   Preferences.get({key: 'tables'}).then(response =>{
@@ -224,44 +233,7 @@ getTables(locatie: string, id: string){
       this.tableState.next([...this.tables])
     }
   })
-  // this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`, { headers }).subscribe(response => {
-  //   if(response){
-  //     this.tables = response
-  //     this.tableState.next([...this.tables])
-  //   }
-  // })
 }
-
-getOrderMessage (locatie: string, id: string): Observable<MessageEvent>{
-  this.eventSource = new EventSource(`${environment.BASE_URL}table/get-order-message`)
-    return new Observable((observer) => {
-      this.eventSource.onmessage = (event) => {
-        console.log(event)
-        this.ngZone.run(() => {
-        const data = JSON.parse(event.data)
-        if(data && data.message === "New Order"){
-          console.log('hit inside event')
-        this.getTables(locatie, id)
-        observer.next(event);
-        }
-        });
-      };
-
-      this.eventSource.onerror = (error) => {
-        this.ngZone.run(() => {
-          observer.error(error);
-        });
-      };
-    });
-}
-
-
-stopSse() {
-if (this.eventSource) {
-  this.eventSource.close();
-}
-}
-
 
 addTable(name: string, locatie: string){
   return this.http.post<{message: string, table: Table}>(`${environment.BASE_URL}table?loc=${locatie}`, {name: name})
@@ -328,6 +300,7 @@ deleteTable(tableId: string, index: number){
           product.sentToPrintOnline = false;
         });
         bill.masaRest = res.masa;
+        this.webRtc.sendProductData(JSON.stringify(bill))
         this.tableState.next([...this.tables]);
         // Return the original observable
         return of(res);
@@ -367,3 +340,34 @@ setOrderTime(orderId: string, time: number){
 arraysAreEqual = (arr1: Topping[], arr2: Topping[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 
 }
+
+// stopSse() {
+// if (this.eventSource) {
+//   this.eventSource.close();
+// }
+// }
+
+
+
+// getOrderMessage (locatie: string, id: string): Observable<MessageEvent>{
+//   this.eventSource = new EventSource(`${environment.BASE_URL}table/get-order-message`)
+//     return new Observable((observer) => {
+//       this.eventSource.onmessage = (event) => {
+//         console.log(event)
+//         this.ngZone.run(() => {
+//         const data = JSON.parse(event.data)
+//         if(data && data.message === "New Order"){
+//           console.log('hit inside event')
+//         this.getTables(locatie, id)
+//         observer.next(event);
+//         }
+//         });
+//       };
+
+//       this.eventSource.onerror = (error) => {
+//         this.ngZone.run(() => {
+//           observer.error(error);
+//         });
+//       };
+//     });
+// }

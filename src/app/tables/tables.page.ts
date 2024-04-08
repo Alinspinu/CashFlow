@@ -65,7 +65,7 @@ ngOnDestroy(): void {
   if(this.tableSubs){
     this.tableSubs.unsubscribe()
   }
-  this.tableServ.stopSse()
+  // this.tableServ.stopSse()
 }
 
 
@@ -154,40 +154,40 @@ getUser(){
 
 
 
-  incommingOrders(){
-  this.tableServ.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
-    console.log(response)
-    if(response){
-      const data = JSON.parse(response.data)
-      if(data.message === 'New Order'){
-        this.order = data.doc
-        this.onlineOrder = true
-        this.colorToggleInterval = setInterval(() => {
-          this.audio.play()
-          this.dynamicColorChange = !this.dynamicColorChange;
-        }, 500);
-      }
-    }
-   })
-  }
+  // incommingOrders(){
+  // this.tableServ.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
+  //   console.log(response)
+  //   if(response){
+  //     const data = JSON.parse(response.data)
+  //     if(data.message === 'New Order'){
+  //       this.order = data.doc
+  //       this.onlineOrder = true
+  //       this.colorToggleInterval = setInterval(() => {
+  //         this.audio.play()
+  //         this.dynamicColorChange = !this.dynamicColorChange;
+  //       }, 500);
+  //     }
+  //   }
+  //  })
+  // }
 
-  stopDynamicHeader() {
-    clearInterval(this.colorToggleInterval);
-    this.dynamicColorChange = false;
-  }
+  // stopDynamicHeader() {
+  //   clearInterval(this.colorToggleInterval);
+  //   this.dynamicColorChange = false;
+  // }
 
-  async acceptOrder(){
-    this.audio.pause()
-    this.onlineOrder = false
-    this.stopDynamicHeader()
-    const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
-    if(result){
-      const time = +result * 60 * 1000
-      this.tableServ.setOrderTime(this.order._id, time).subscribe(response => {
-        console.log(response)
-      })
-    }
-  }
+  // async acceptOrder(){
+  //   this.audio.pause()
+  //   this.onlineOrder = false
+  //   this.stopDynamicHeader()
+  //   const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
+  //   if(result){
+  //     const time = +result * 60 * 1000
+  //     this.tableServ.setOrderTime(this.order._id, time).subscribe(response => {
+  //       console.log(response)
+  //     })
+  //   }
+  // }
 
 
   activateEditMode(){

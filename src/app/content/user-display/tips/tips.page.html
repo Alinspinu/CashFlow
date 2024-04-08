@@ -1,0 +1,29 @@
+
+        <div class="bill-header">
+          <div>TOTAL
+            <span class="bill-total">{{roundInHtml(total)}} Lei</span>
+          </div>
+        </div>
+        <div class="tips-wrapper">
+          <ion-title class="">Feeling tipsy today?</ion-title>
+          <ion-row  class="ion-padding">
+            <ion-col *ngFor="let option of options">
+              <ion-card class="tips-card" (click)="sendTips(option.precent * total / 100)">
+                <div class="message">
+                  <span>
+                    {{option.message}}
+                  </span>
+                </div>
+                <ion-icon [src]="option.img" alt="tips-image" #icon></ion-icon>
+                <ion-card-header>
+                  <ion-card-title>{{option.precent}} %
+                  </ion-card-title>
+                  <span class="tips-value">{{roundInHtml(option.precent * total / 100)}} Lei</span>
+                  <div class="tips-total-wrapper">
+                    <span class="number">{{roundInHtml((option.precent * total / 100) +total)}} Lei</span>
+                  </div>
+                </ion-card-header>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+      </div>

@@ -186,21 +186,21 @@
     <ion-col>
         <ion-row class="ion-no-margin ion-no-padding">
           <ion-col>
-            <ion-button expand="block" size="medium" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
+            <!-- <ion-button expand="block" size="medium" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
               <ion-icon src="../../../assets/icon/hug.svg"></ion-icon>
               UNEȘTE COMENZI
             </ion-button>
             <ion-button expand="block" size="medium" (click)="breakOrder()" [disabled]="disableAction">
               <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
               SEPARĂ COMANDA
-            </ion-button>
+            </ion-button> -->
             <ion-button expand="block" size="medium" color="danger" (click)="deleteOrder()" [disabled]="disableDelete">
               <ion-icon src="../../../assets/icon/trash-outline.svg"></ion-icon>
               ȘTERGE COMANDA
             </ion-button>
-            <ion-button size="medium" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount()">
+            <!-- <ion-button size="medium" expand="block" [color]="discountMode ? 'secondary': 'danger'" (click)="addDiscount()">
              {{ discountMode ? 'ADAUGĂ REDUCERE' : 'ELIMINĂ REDUCEREA'}}
-            </ion-button>
+            </ion-button> -->
             <ion-button size="medium" expand="block" color="primary" (click)="addTips()">
             ADAUGA BACSIS
             </ion-button>
@@ -218,6 +218,8 @@
             <ion-button size="large" class="big" expand="block" color="secondary" (click)="sendOrder(true).subscribe()" [disabled]="disableOrderButton">
               Trimite Comanda
             </ion-button>
+          </ion-col>
+          <ion-col>
             <ion-button size="large" class="big" expand="block" color="primary" (click)="payment()" [disabled]="disableOrderButton">
               Nota de plată
             </ion-button>

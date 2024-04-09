@@ -216,10 +216,11 @@ ion-card-subtitle{
   }
 }
 
-
-.scroll-content::-webkit-scrollbar {
-  display: none !important; /* Hide scrollbar for Chrome */
+.scroll-content{
+  position: relative !important;
+  right: -40px !important;
 }
+
 
 
 

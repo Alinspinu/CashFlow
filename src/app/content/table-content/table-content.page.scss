@@ -208,3 +208,25 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
 .total-text{
   font-size: 28px;
 }
+
+
+.scroll {
+  flex: 50%;
+  position: relative;
+  // overflow-y: scroll !important;
+  right: -40px !important;
+
+}
+// .scoll::-webkit-scrollbar { display: none; }
+
+.billl{
+  flex: 50%;
+  position: relative;
+  // overflow-y: scroll !important;
+  right: -18px !important;
+}
+
+ion-footer {
+  background-color: rgba(255, 255, 255, 1) !important; /* Set the background color to fully opaque white */
+}
+

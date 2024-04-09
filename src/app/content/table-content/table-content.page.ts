@@ -527,6 +527,7 @@ async payment(){
         if(paymentInfo){
           this.billToshow.payment = paymentInfo
           this.billToshow.cif = paymentInfo.cif;
+          this.billToshow.dont = paymentInfo.dont;
          this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
                 next: (response => {
                   if(response && response.bill.status === 'done'){

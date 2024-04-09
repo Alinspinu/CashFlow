@@ -47,137 +47,141 @@
 </ion-header>
 
 <div class="contents-container">
-<ion-content [fullscreen]="false">
-<ion-grid>
-          <ion-row *ngIf="showMainCats">
-              <ion-col size="6" *ngFor="let mainCat of getObjectKeys(mainCats); let i=index">
-                <ion-card (click)="showCategories(mainCat)">
-                  <img alt="main category image" class="mainCatImg" [src]="url[i]" />
-                  <ion-title  class="title">{{mainCat}}</ion-title>
-                </ion-card>
-              </ion-col>
-          </ion-row>
-           <ion-row *ngIf="showCats">
-              <ion-col size="4" *ngFor="let cat of categoriesToShow; let i = index">
-                <ion-card (click)="showProducts(i, cat.mainCat)">
-                  <img alt="category image" [src]="cat.image.path" />
-                  <ion-card-subtitle class="small-title">{{cat.name}}</ion-card-subtitle>
-                </ion-card>
-              </ion-col>
+<!-- <div class="scroll"> -->
+  <ion-content [fullscreen]="true" class="scroll">
+    <ion-grid>
+            <ion-row *ngIf="showMainCats">
+                <ion-col size="6" *ngFor="let mainCat of getObjectKeys(mainCats); let i=index">
+                  <ion-card (click)="showCategories(mainCat)">
+                    <img alt="main category image" class="mainCatImg" [src]="url[i]" />
+                    <ion-title  class="title">{{mainCat}}</ion-title>
+                  </ion-card>
+                </ion-col>
             </ion-row>
-            <ion-row *ngIf="showProd">
-              <ion-col size="3" *ngFor="let product of productsToShow">
-                <ion-card (click)="addToBill(product)">
-                    <img alt="image" class="prod-img" [src]="modifyImageURL(product.image.path)" />
-                  <ion-card-subtitle class="product-title">{{product.name}}</ion-card-subtitle>
-                </ion-card>
-              </ion-col>
-           </ion-row>
-        </ion-grid>
+             <ion-row *ngIf="showCats">
+                <ion-col size="4" *ngFor="let cat of categoriesToShow; let i = index">
+                  <ion-card (click)="showProducts(i, cat.mainCat)">
+                    <img alt="category image" [src]="cat.image.path" />
+                    <ion-card-subtitle class="small-title">{{cat.name}}</ion-card-subtitle>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="showProd">
+                <ion-col size="3" *ngFor="let product of productsToShow">
+                  <ion-card (click)="addToBill(product)">
+                      <img alt="image" class="prod-img" [src]="modifyImageURL(product.image.path)" />
+                    <ion-card-subtitle class="product-title">{{product.name}}</ion-card-subtitle>
+                  </ion-card>
+                </ion-col>
+             </ion-row>
+          </ion-grid>
   </ion-content>
-<ion-content [fullscreen]="false" #billContent>
-<ion-row>
-  <ion-col>
-    <ion-grid class="bill">
-      <ion-row>
-        <ion-col>
+      <!-- </div> -->
+<ion-content [fullscreen]="false" #billContent class="billl">
+  <!-- <div class="scroll" #billContent> -->
+    <ion-row>
+      <ion-col>
+        <ion-grid class="bill">
+          <ion-row>
+            <ion-col>
 
-        </ion-col>
-      </ion-row>
-      <ion-row class="bill-content-row">
-        <ion-col size="12">
-          <ion-item class="product-item input" lines="none"  *ngFor="let product of billProducts; let i = index" [ngClass]="{'grey': !product.sentToPrint}">
-            <ion-buttons slot="end" *ngIf="!product.sentToPrint">
-              <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings, product)">
-                <ion-icon color="danger" src="../../../assets/icon/trash-outline.svg"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-            <ion-thumbnail slot="start" (click)="openComments(product, i)">
-              <img alt="image" [src]="modifyImageURL(product.imgPath)"/>
-            </ion-thumbnail>
-            <div class="prod-name" (click)="openComments(product, i)">
-              <span id="p-name">{{product.name}}</span>
-              <div class="toppings-wrapper" *ngIf="product.toppings.length">
-                <span *ngFor="let topping of product.toppings">+{{topping.name.split('/')[0]}}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row class="bill-content-row ion-padding">
+            <ion-col size="12">
+              <ion-item class="product-item input" lines="none"  *ngFor="let product of billProducts; let i = index" [ngClass]="{'grey': !product.sentToPrint}">
+                <ion-buttons slot="end" *ngIf="!product.sentToPrint">
+                  <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings, product)">
+                    <ion-icon color="danger" src="../../../assets/icon/trash-outline.svg"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+                <ion-thumbnail slot="start" (click)="openComments(product, i)">
+                  <img alt="image" [src]="modifyImageURL(product.imgPath)"/>
+                </ion-thumbnail>
+                <div class="prod-name" (click)="openComments(product, i)">
+                  <span id="p-name">{{product.name}}</span>
+                  <div class="toppings-wrapper" *ngIf="product.toppings.length">
+                    <span *ngFor="let topping of product.toppings">+{{topping.name.split('/')[0]}}</span>
+                  </div>
+                  <div class="toppings-wrapper" *ngIf="product.comment && product.comment.length">
+                    <span>-{{product.comment}}</span>
+                  </div>
+                </div>
+                <ion-buttons *ngIf="breakMode">
+                  <ion-button (click)="break(i)" size="large" color="tertiary">
+                    <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+                  <span class="prod-price">{{product.price}} Lei</span>
+                  <ion-button size="medium" color="secondary" (click)="redProd(i)" *ngIf="product.sentToPrint">-</ion-button>
+                  <span class="prod-qty">{{product.quantity}} Buc</span>
+                  <ion-button size="medium" color="secondary"(click)="addProd(i)" *ngIf="product.sentToPrint">+</ion-button>
+                  <div class="price-wrapper">
+                    <span class="prod-total">{{product.total}} Lei</span>
+                    <span class="prod-discount"*ngIf="product.discount > 0">-{{product.discount}} Lei</span>
+                  </div>
+              </ion-item>
+              <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
+                <ion-row class="bill-discount-row" *ngIf="billToshow.discount !== 0">
+                  <ion-col size="10">
+                    <span class="red-text">TOTAL PRODUSE</span>
+                  </ion-col>
+                  <ion-col size="2" class="ion-text-center">
+                    <span class="red-lei">{{calcProductTotal(billToshow.products)}} Lei</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="bill-discount-row" *ngIf="billToshow.discount !== 0">
+                  <ion-col size="10">
+                    <span class="red-text">REDUCERE</span>
+                  </ion-col>
+                  <ion-col size="2" class="ion-text-center">
+                    <span class="red-lei">- {{billToshow.discount}} Lei</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="bill-discount-row" *ngIf="billToshow.cashBack !== 0">
+                  <ion-col size="10">
+                    <span class="red-text">CASH BACK</span>
+                  </ion-col>
+                  <ion-col size="2" class="ion-text-center">
+                    <span class="red-lei">- {{billToshow.cashBack}} Lei</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="bill-tips-row" *ngIf="billToshow.tips > 0">
+                  <ion-col size="10">
+                    <span class="tips-text">BACSIS</span>
+                  </ion-col>
+                  <ion-col size="2" class="ion-text-center">
+                    <span class="tips-lei"> + {{billToshow.tips}} Lei</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="bill-tips-row" *ngIf="billToshow.payOnline || billToshow.payment.online > 0">
+                  <ion-col size="10">
+                    <span class="tips-text">PLĂTIT ONLINE</span>
+                  </ion-col>
+                  <ion-col size="2" class="ion-text-center">
+                    <span class="tips-lei"> - {{billToshow.payment.online}} Lei</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="bill-total-row">
+                  <ion-col size="10">
+                    <span class="total-text">TOTAL</span>
+                  </ion-col>
+                  <ion-col size="2" class="ion-text-center">
+                    <span class="total-lei">{{billToshow.total}} Lei</span>
+                  </ion-col>
+                </ion-row>
               </div>
-              <div class="toppings-wrapper" *ngIf="product.comment && product.comment.length">
-                <span>-{{product.comment}}</span>
-              </div>
-            </div>
-            <ion-buttons *ngIf="breakMode">
-              <ion-button (click)="break(i)" size="large" color="tertiary">
-                <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-              <span class="prod-price">{{product.price}} Lei</span>
-              <ion-button size="medium" color="secondary" (click)="redProd(i)" *ngIf="product.sentToPrint">-</ion-button>
-              <span class="prod-qty">{{product.quantity}} Buc</span>
-              <ion-button size="medium" color="secondary"(click)="addProd(i)" *ngIf="product.sentToPrint">+</ion-button>
-              <div class="price-wrapper">
-                <span class="prod-total">{{product.total}} Lei</span>
-                <span class="prod-discount"*ngIf="product.discount > 0">-{{product.discount}} Lei</span>
-              </div>
-          </ion-item>
-          <div class="buttons-container" *ngIf="billToshow && billToshow.products.length">
-            <ion-row class="bill-discount-row" *ngIf="billToshow.discount !== 0">
-              <ion-col size="10">
-                <span class="red-text">TOTAL PRODUSE</span>
-              </ion-col>
-              <ion-col size="2" class="ion-text-center">
-                <span class="red-lei">{{calcProductTotal(billToshow.products)}} Lei</span>
-              </ion-col>
-            </ion-row>
-            <ion-row class="bill-discount-row" *ngIf="billToshow.discount !== 0">
-              <ion-col size="10">
-                <span class="red-text">REDUCERE</span>
-              </ion-col>
-              <ion-col size="2" class="ion-text-center">
-                <span class="red-lei">- {{billToshow.discount}} Lei</span>
-              </ion-col>
-            </ion-row>
-            <ion-row class="bill-discount-row" *ngIf="billToshow.cashBack !== 0">
-              <ion-col size="10">
-                <span class="red-text">CASH BACK</span>
-              </ion-col>
-              <ion-col size="2" class="ion-text-center">
-                <span class="red-lei">- {{billToshow.cashBack}} Lei</span>
-              </ion-col>
-            </ion-row>
-            <ion-row class="bill-tips-row" *ngIf="billToshow.tips > 0">
-              <ion-col size="10">
-                <span class="tips-text">BACSIS</span>
-              </ion-col>
-              <ion-col size="2" class="ion-text-center">
-                <span class="tips-lei"> + {{billToshow.tips}} Lei</span>
-              </ion-col>
-            </ion-row>
-            <ion-row class="bill-tips-row" *ngIf="billToshow.payOnline || billToshow.payment.online > 0">
-              <ion-col size="10">
-                <span class="tips-text">PLĂTIT ONLINE</span>
-              </ion-col>
-              <ion-col size="2" class="ion-text-center">
-                <span class="tips-lei"> - {{billToshow.payment.online}} Lei</span>
-              </ion-col>
-            </ion-row>
-            <ion-row class="bill-total-row">
-              <ion-col size="10">
-                <span class="total-text">TOTAL</span>
-              </ion-col>
-              <ion-col size="2" class="ion-text-center">
-                <span class="total-lei">{{billToshow.total}} Lei</span>
-              </ion-col>
-            </ion-row>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-col>
-</ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  <!-- </div> -->
 </ion-content>
 
 </div>
 
-<ion-footer>
+<ion-footer  collapse="fade" mode="ios">
   <ion-row>
     <ion-col>
         <ion-row class="ion-no-margin ion-no-padding">

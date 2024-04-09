@@ -300,7 +300,7 @@ deleteTable(tableId: string, index: number){
           product.sentToPrintOnline = false;
         });
         bill.masaRest = res.masa;
-        this.webRtc.sendProductData(JSON.stringify(bill))
+        // this.webRtc.sendProductData(JSON.stringify(bill))
         this.tableState.next([...this.tables]);
         // Return the original observable
         return of(res);

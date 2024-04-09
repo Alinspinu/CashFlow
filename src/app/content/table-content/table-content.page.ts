@@ -129,7 +129,7 @@ export class TableContentPage implements OnInit, OnDestroy {
         if(this.billToshow){
           this.billToshow.tips = response
           this.billToshow.total += response
-          this.webRTC.sendProductData(JSON.stringify(this.billToshow))
+          // this.webRTC.sendProductData(JSON.stringify(this.billToshow))
           this.invite = "invite"
         }
         if(response === 0){

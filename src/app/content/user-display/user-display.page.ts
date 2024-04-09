@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InfiniteScrollCustomEvent, IonicModule } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, IonContent, IonicModule } from '@ionic/angular';
 import { WebRTCService } from '../webRTC.service';
 import { Bill, BillProduct } from 'src/app/models/table.model';
 import { round } from 'src/app/shared/utils/functions';
@@ -40,7 +40,7 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
 
   @ViewChildren('myCard') myCards!: QueryList<any>;
   @ViewChildren('categoryChip') myCats!: QueryList<any>;
-
+  @ViewChild(IonContent) content!: IonContent;
 
   constructor(
     private webRTC: WebRTCService,
@@ -53,8 +53,19 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
     this.getCategories()
     this.selectMainCat('food')
     this.getInvite()
-    // setTimeout(() => {
-    // }, 1000 )
+    setTimeout(() => {
+      this.hideScrollbar()
+    }, 1000 )
+
+  }
+
+
+  private hideScrollbar() {
+    const elementsToHideScrollBar = this.elementRef.nativeElement.querySelectorAll('.scroll-content');
+    elementsToHideScrollBar.forEach((element: HTMLElement) => {
+      console.log(elementsToHideScrollBar)
+      element.style.overflow = 'hidden';
+    });
 
   }
 

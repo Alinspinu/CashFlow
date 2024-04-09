@@ -64,7 +64,7 @@
                 <span class="total">{{order.total}} Lei</span>
               </div>
             </ion-item>
-            <ion-item lines="none" color="tertiary" class="input">
+            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.employee">
               <div class="total-wrapper">
                 <span class="total-text">CASIER</span>
                 <span class="total">{{order.employee.fullName}}</span>

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { io } from 'socket.io-client';
 import { Subject } from 'rxjs';
-import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +10,11 @@ export class WebRTCService {
   private productAddedSubject = new Subject<any>();
   private getUserTipSubject = new Subject<any>();
   private inviteUserToTipSubject = new Subject<any>();
+  private getOnlineOrderIdSubject = new Subject<any>();
+  private setOrderOnlineTime = new Subject<any>();
 
   constructor() {
-    this.socket = io('http://localhost:3000');
+    this.socket = io('https://live669-0bac3349fa62.herokuapp.com');
 
     this.socket.on('productAdded', (data: any) => {
       this.productAddedSubject.next(data);
@@ -24,6 +25,9 @@ export class WebRTCService {
     });
     this.socket.on('inviteToTip', (data: any) => {
       this.inviteUserToTipSubject.next(data);
+    });
+    this.socket.on('orderId', (data: any) => {
+      this.getOnlineOrderIdSubject.next(data);
     });
   }
 
@@ -49,5 +53,8 @@ export class WebRTCService {
 
   getUserTipObservable() {
     return this.getUserTipSubject.asObservable();
+  }
+  getOdrerIdObservable() {
+    return this.getOnlineOrderIdSubject.asObservable();
   }
 }

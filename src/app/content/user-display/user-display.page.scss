@@ -217,6 +217,10 @@ ion-card-subtitle{
 }
 
 
+.scroll-content::-webkit-scrollbar {
+  display: none !important; /* Hide scrollbar for Chrome */
+}
+
 
 
 

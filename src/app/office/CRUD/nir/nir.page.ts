@@ -99,6 +99,7 @@ inputType: string = 'number'
   getIngredients(){
     this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
       this.allIngs = response
+      console.log(response)
       if(response.length > 1){
 
         this.disableIngredientSearch = false

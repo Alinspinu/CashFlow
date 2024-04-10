@@ -246,6 +246,7 @@ getBills(){
   this.isLoading = true
  this.reportsSrv.getOrders(this.startDay, this.endDay, undefined, this.user.locatie).subscribe((response: any) => {
   if(response){
+    console.log(response)
     this.bills = response.orders
     this.getBillProducts()
     this.showProducts = true
@@ -500,7 +501,7 @@ pushProducts(product: any){
 }
 
 pushIngredients(ing: any, prodQty: number){
-  if(ing.ing && ing.ing.ings.length){
+  if(ing.ing && ing.ing.ings && ing.ing.ings.length){
     ing.ing.ings.forEach((ing:any) => {
       if(ing.ing){
         const existingIng = this.dbIngs.find(p => p.ing._id === ing.ing._id)

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -11,6 +11,9 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ReportsService } from '../reports.service';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+
+
+;
 @Component({
   selector: 'app-products',
   templateUrl: './products.page.html',
@@ -20,8 +23,8 @@ import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 })
 export class ProductsPage implements OnInit {
 
-  startDay!: string | undefined
-  endDay!: string | undefined
+  startDay: string | undefined = formatedDateToShow(new Date()).split('ora')[0]
+  endDay: string | undefined = formatedDateToShow(new Date()).split('ora')[0]
   day!: string | undefined
 
 
@@ -30,26 +33,41 @@ export class ProductsPage implements OnInit {
   isInreg: boolean = true
   isUnreg: boolean = true
 
+  colSize: Record<string, any> = {
+    buc: 1.4,
+    pat: 1.4,
+    shop: 1.4,
+    bar: 1.4,
+    coffee: 1.4,
+    tea: 1.4,
+    default: 1.4,
+    total: 2.2,
+  }
 
-  products: any[] = []
-  dbProducts: any[] = []
 
   productSearch!: string
   ingSearch!: string
 
   user!: User
-
   sel: boolean = false
+
   bills!: any[]
+
   allIngredients: any [] = []
+
+  sections!: any
+
   dbIngs: any [] = []
+  dbProducts: any[] = []
+
+  products: any[] = []
 
   productIngredients: any = []
-  productQty: number = 0
+
   selected: number = -1
+  productQty: number = 0
 
-
-  showProducts: boolean = false
+  showProducts: boolean = true
   showProductIngs: boolean = false
   isLoading: boolean = false
 
@@ -72,7 +90,7 @@ export class ProductsPage implements OnInit {
    private reportsSrv: ReportsService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private router: Router,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
@@ -80,14 +98,15 @@ export class ProductsPage implements OnInit {
   }
 
   search(){
-    this.getBills()
-    }
+    this.getProducts()
+  }
 
 
-getuser(){
-  getUserFromLocalStorage().then(user => {
-    if(user) {
-      this.user = user
+  getuser(){
+    getUserFromLocalStorage().then(user => {
+      if(user) {
+        this.user = user
+        this.getProducts()
     } else {
       this.router.navigateByUrl('/auth')
     }
@@ -124,94 +143,8 @@ searchIng(ev: any){
 }
 
 
-filter(option: string){
-  switch (option) {
-    case 'qty':
-      this.resetAllColors()
-      this.products.sort((a,b) => b.quantity - a.quantity)
-      this.qtyColor = 'primary';
-      return
-    case 'price':
-      this.resetAllColors()
-      this.products.sort((a,b) => b.price - a.price)
-      this.priceColor = 'primary';
-      return
-    case 'total':
-      this.resetAllColors()
-      this.products.sort((a,b) => (b.price * b.quantity) - (a.price * a.quantity))
-      this.totColor = 'primary';
-      return;
-    case 'cashIn':
-      this.resetAllColors()
-      this.products.sort((a,b) => (b.price * b.quantity - b.discount) - (a.price * a.quantity - a.discount))
-      this.cashInColor = 'primary';
-      return;
-    case 'disc':
-      this.resetAllColors()
-      this.products.sort((a,b) => b.discount - a.discount)
-      this.discColor = 'primary';
-      return;
-    case 'name':
-      this.resetAllColors()
-      this.products.sort((a,b) => a.name.localeCompare(b.name))
-      this.nameColor = 'primary';
-      return;
-    case 'cons':
-      this.resetAllColors()
-      this.products.sort((a,b) => this.calcConsInHtml(b) - this.calcConsInHtml(a))
-      this.consColor = 'primary';
-      return;
-    case 'surplus':
-      this.resetAllColors()
-      this.products.sort((a,b) => (((b.price*b.quantity - b.discount) - this.calcConsInHtml(b)) / this.calcConsInHtml(b) * 100) - (((a.price*a.quantity - a.discount) - this.calcConsInHtml(a)) / this.calcConsInHtml(a) * 100))
-      this.surplusColor = 'primary';
-      return;
-    default:
-      return;
-}
-}
-filterIngs(option: string){
-  switch (option) {
-    case 'qty':
-      this.resetAllColors()
-      this.allIngredients.sort((a,b) => b.qty - a.qty)
-      this.qtyColor = 'primary';
-      return
-    case 'price':
-      this.resetAllColors()
-      this.allIngredients.sort((a,b) => b.ing.price - a.ing.price)
-      this.priceColor = 'primary';
-      return
-    case 'tot':
-      this.resetAllColors()
-      this.allIngredients.sort((a,b) => (b.ing.price * b.qty) - (a.ing.price * a.qty))
-      this.totColor = 'primary';
-      return;
-    case 'name':
-      this.resetAllColors()
-      this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
-      this.nameColor = 'primary';
-      return;
-    case 'um':
-      this.resetAllColors()
-      this.allIngredients.sort((a,b) => a.ing.um.localeCompare(b.ing.um) )
-      this.surplusColor = 'primary';
-      return;
-    default:
-      return;
-}
-}
 
-resetAllColors(){
-  this.qtyColor = 'none'
-  this.priceColor = 'none'
-  this.totColor = 'none'
-  this.discColor = 'none'
-  this.cashInColor = 'none'
-  this.consColor = 'none'
-  this.surplusColor = 'none'
-  this.nameColor = 'none'
-}
+
 
 showConsumption(){
   this.selected = -1
@@ -236,91 +169,36 @@ showRecipe(index: number, prod: any){
   } else{
     this.selected = index
   }
-  this.getProductIngs(prod)
+  this.productIngredients = prod.ingr
 }
 
 
 
 
-getBills(){
+getProducts(){
   this.isLoading = true
- this.reportsSrv.getOrders(this.startDay, this.endDay, undefined, this.user.locatie).subscribe((response: any) => {
-  if(response){
-    console.log(response)
-    this.bills = response.orders
-    this.getBillProducts()
-    this.showProducts = true
-    this.isLoading = false
+  const filter = {
+    inreg: this.isInreg,
+    unreg: this.isUnreg,
+    goods: this.isGoods,
+    prod: this.isProduction
   }
+ this.reportsSrv.getHavyOrders(this.startDay, this.endDay, undefined, this.user.locatie, filter).subscribe(response => {
+   this.sections = response.result.sections
+   this.dbProducts = response.result.allProd
+   this.dbIngs = response.ingredients
+   this.allIngredients = this.dbIngs.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
+   this.products = this.dbProducts.sort((a,b) => a.name.localeCompare(b.name))
+   this.showProducts = true
+   this.isLoading = false
  })
 }
 
-
-
-getBillProducts(){
-  this.products = []
-  this.bills.forEach(bill => {
-    if(this.isInreg){
-      if(!bill.dont){
-        bill.products.forEach((product:any) => {
-          if(this.isProduction){
-            if(product.dep === 'productie') {
-              this.pushProducts(product)
-            }
-          }
-          if(this.isGoods){
-            if(product.dep === 'marfa'){
-              this.pushProducts(product)
-            }
-          }
-        })
-      }
-    }
-    if(this.isUnreg){
-      if(bill.dont){
-          bill.products.forEach((product:any) => {
-            if(this.isProduction){
-              if(product.dep === 'productie') {
-                this.pushProducts(product)
-              }
-            }
-            if(this.isGoods){
-              if(product.dep === 'marfa'){
-                this.pushProducts(product)
-              }
-            }
-          })
-      }
-
-    }
-  })
- this.products = this.dbProducts
- this.products = this.products.sort((a,b) => a.name.localeCompare(b.name))
- this.getIngredients(this.products)
- this.calcProductsTotal()
+calcProcents(total: number, value: number){
+  return round(value*100/total)
 }
 
 
-
-
-getIngredients(products: any[]){
-  this.dbIngs = []
-  products.forEach(product => {
-    const ingredients = [...product.ings]
-    ingredients.forEach((ing: any) => {
-        this.pushIngredients(ing, product.quantity)
-      })
-      if(product.toppings.length){
-        const toppings = [...product.toppings]
-        toppings.forEach((topping: any) => {
-          this.pushIngredients(topping, product.quantity)
-      })
-    }
-  })
-  this.allIngredients = this.dbIngs
-  this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
-  this.calcIngredientsTotal(this.allIngredients)
-}
 
 
 calcComecialSurplus(product: any){
@@ -329,24 +207,11 @@ calcComecialSurplus(product: any){
 }
 
 
-getProductIngs(product: any){
-  this.productIngredients = []
-  product.ings.forEach((ing:any) => {
-    this.pushRecipeIngs(ing)
-  })
-  if(product.toppings.length){
-    const toppings = [...product.toppings]
-    toppings.forEach((topping: any) => {
-      this.pushRecipeIngs(topping)
-    })
-  }
-}
-
-calcRecipeTotal(productQty: number){
+calcRecipeTotal(){
   let totalRecipe = 0
   this.productIngredients.forEach((ing:any) => {
     if(ing.ing){
-      const ingValue = round(ing.ing.price * productQty *ing.qty)
+      const ingValue = round(ing.ing.tvaPrice *ing.qty)
       totalRecipe += ingValue
     }
   })
@@ -354,48 +219,25 @@ calcRecipeTotal(productQty: number){
 }
 
 
-
-
-
-calcProductsTotal(){
-  this.totalProducts = 0
-  this.products.forEach(product => {
+calcProductsTotal(products: any[]){
+  let totalProducts = 0
+  products.forEach(product => {
     const productValue = round(product.quantity * product.price - product.discount)
-    this.totalProducts += productValue
+    totalProducts += productValue
   })
+  return round(totalProducts)
 }
 
 calcIngredientsTotal(ingredients: any []){
-  console.log(ingredients.length)
-  this.totalIngredients = 0
+  let totalIngredients = 0
   ingredients.forEach(ing => {
-    const ingValue = round(ing.ing.price *ing.qty)
-    this.totalIngredients += ingValue
+    if(ing.ing && ing.ing.tvaPrice && ing.qty){
+      const ingValue = round(ing.ing.tvaPrice *ing.qty)
+      totalIngredients += ingValue
+    } else {
+    }
   })
-}
-
-
-
- arraysAreEqual(arr1: any[], arr2: any[]): boolean {
-  if (arr1.length !== arr2.length) {
-      return false;
-  }
-  const sortedArr1 = arr1.slice().sort();
-  const sortedArr2 = arr2.slice().sort();
-
-  for (let i = 0; i < sortedArr1.length; i++) {
-      const obj1 = sortedArr1[i];
-      const obj2 = sortedArr2[i];
-
-      if (!this.objectsAreEqual(obj1, obj2)) {
-          return false;
-      }
-  }
-  return true;
-}
-
-objectsAreEqual(obj1: any, obj2: any): boolean {
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
+  return round(totalIngredients)
 }
 
 
@@ -479,145 +321,164 @@ printProduction(){
 }
 
 
-pushProducts(product: any){
-  const existingProduct = this.dbProducts.find(p => p.name === product.name && this.arraysAreEqual(p.toppings, product.toppings))
-  if(existingProduct){
-    existingProduct.quantity += product.quantity
-    existingProduct.discount += product.discount
-  } else {
-    const prod = {...product}
-    this.dbProducts.push(prod)
-  }
-  if(product.toppings.length){
-    product.toppings.forEach((top: any) => {
-      if(top.name === 'Lapte Vegetal'){
-        const index = product.ings.findIndex((i: any) => i.ing.name === "Lapte")
-        if(index !== -1){
-          product.ings.splice(index, 1)
-        }
-      }
-    })
-  }
-}
-
-pushIngredients(ing: any, prodQty: number){
-  if(ing.ing && ing.ing.ings && ing.ing.ings.length){
-    ing.ing.ings.forEach((ing:any) => {
-      if(ing.ing){
-        const existingIng = this.dbIngs.find(p => p.ing._id === ing.ing._id)
-        if(existingIng){
-          existingIng.qty += (ing.qty * prodQty)
-        } else {
-          const ig = {...ing}
-          ig.qty = round(ig.qty * prodQty)
-          this.dbIngs.push(ig)
-        }
-      }
-    })
-}
-if(ing.ing){
-  const existingIng = this.dbIngs.find(p => p.ing._id === ing.ing._id)
-  if(existingIng){
-    existingIng.qty += (ing.qty * prodQty)
-  } else {
-    const ig = {...ing}
-    ig.qty = round(ig.qty * prodQty)
-    this.dbIngs.push(ig)
-  }
-  }
-}
-
-
-
-pushRecipeIngs(ing: any){
-  if(ing.ing && ing.ing.ings.length){
-    ing.ing.ings.forEach((ing: any) => {
-      if(ing.ing){
-        const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
-        if(existingIng){
-          existingIng.qty += ing.qty
-        } else {
-          const ig = {...ing}
-          this.productIngredients.push(ig)
-        }
-      }
-      })
-    }
-    if(ing.ing){
-      const existingIng = this.productIngredients.find((p:any) => p.ing._id === ing.ing._id)
-      if(existingIng){
-        existingIng.qty += ing.qty
-      } else {
-        const ig = {...ing}
-        this.productIngredients.push(ig)
-      }
-    }
-}
-
-
-
-
 calcConsInHtml(product: any) {
-  let prodIngs: any = []
-  product.ings.forEach((ing: any) => {
-    if(ing.ing && ing.ing.ings.length){
-      ing.ing.ings.forEach((ing: any) => {
-        if(ing.ing){
-          const existingIng = prodIngs.find((p:any) => p.ing._id === ing.ing._id)
-          if(existingIng){
-            existingIng.qty += ing.qty
-          } else {
-            const ig = {...ing}
-            prodIngs.push(ig)
-          }
-        }
-        })
-      }
-      if(ing.ing){
-        const existingIng = prodIngs.find((p:any) => p.ing._id === ing.ing._id)
-        if(existingIng){
-          existingIng.qty += ing.qty
-        } else {
-          const ig = {...ing}
-          prodIngs.push(ig)
-        }
-      }
-  })
-  if(product.toppings.length){
-    const toppings = [...product.toppings]
-    toppings.forEach((topping: any) => {
-      if(topping.ing && topping.ing.ings.length){
-        topping.ing.ings.forEach((ing: any) => {
-          if(ing.ing){
-            const existingIng = prodIngs.find((p:any) => p.ing._id === ing.ing._id)
-            if(existingIng){
-              existingIng.qty += ing.qty
-            } else {
-              const ig = {...ing}
-              prodIngs.push(ig)
-            }
-          }
-          })
-        }
-        if(topping.ing){
-          const existingIng = prodIngs.find((p:any) => p.ing._id === topping.ing._id)
-          if(existingIng){
-            existingIng.qty += topping.qty
-          } else {
-            const ig = {...topping}
-            prodIngs.push(ig)
-          }
-        }
-    })
-  }
   let totalRecipe = 0
-  prodIngs.forEach((ing:any) => {
+  product.ingr.forEach((ing:any) => {
     if(ing.ing){
-      const ingValue = round(ing.ing.price * product.quantity *ing.qty)
+      const ingValue = round(ing.ing.price *ing.qty)
       totalRecipe += ingValue
     }
   })
   return round(totalRecipe)
+}
+
+
+filter(option: string){
+  switch (option) {
+    case 'qty':
+      this.resetAllColors()
+      this.products.sort((a,b) => b.quantity - a.quantity)
+      this.qtyColor = 'primary';
+      return
+    case 'price':
+      this.resetAllColors()
+      this.products.sort((a,b) => b.price - a.price)
+      this.priceColor = 'primary';
+      return
+    case 'total':
+      this.resetAllColors()
+      this.products.sort((a,b) => (b.price * b.quantity) - (a.price * a.quantity))
+      this.totColor = 'primary';
+      return;
+    case 'cashIn':
+      this.resetAllColors()
+      this.products.sort((a,b) => (b.price * b.quantity - b.discount) - (a.price * a.quantity - a.discount))
+      this.cashInColor = 'primary';
+      return;
+    case 'disc':
+      this.resetAllColors()
+      this.products.sort((a,b) => b.discount - a.discount)
+      this.discColor = 'primary';
+      return;
+    case 'name':
+      this.resetAllColors()
+      this.products.sort((a,b) => a.name.localeCompare(b.name))
+      this.nameColor = 'primary';
+      return;
+    case 'cons':
+      this.resetAllColors()
+      this.products.sort((a,b) => this.calcConsInHtml(b) - this.calcConsInHtml(a))
+      this.consColor = 'primary';
+      return;
+    case 'surplus':
+      this.resetAllColors()
+      this.products.sort((a,b) => (((b.price*b.quantity - b.discount) - this.calcConsInHtml(b)) / this.calcConsInHtml(b) * 100) - (((a.price*a.quantity - a.discount) - this.calcConsInHtml(a)) / this.calcConsInHtml(a) * 100))
+      this.surplusColor = 'primary';
+      return;
+    default:
+      return;
+}
+}
+filterIngs(option: string){
+  switch (option) {
+    case 'qty':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => b.qty - a.qty)
+      this.qtyColor = 'primary';
+      return
+    case 'price':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => b.ing.price - a.ing.price)
+      this.priceColor = 'primary';
+      return
+    case 'tot':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => (b.ing.tvaPrice * b.qty) - (a.ing.tvaPrice * a.qty))
+      this.totColor = 'primary';
+      return;
+    case 'name':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => a.ing.name.localeCompare(b.ing.name))
+      this.nameColor = 'primary';
+      return;
+    case 'um':
+      this.resetAllColors()
+      this.allIngredients.sort((a,b) => a.ing.um.localeCompare(b.ing.um) )
+      this.surplusColor = 'primary';
+      return;
+    default:
+      return;
+}
+}
+
+
+showMain(option: string){
+  switch(option){
+    case 'buc':
+      this.products = this.sections.buc.products.sort(( a:any, b: any) => a.name.localeCompare(b.name))
+      this.allIngredients = this.sections.buc.ings.sort(( a:any, b: any) => a.ing.name.localeCompare(b.ing.name))
+      this.changeColSize('buc')
+      return
+    case 'pat':
+      this.products = this.sections.pat.products.sort(( a:any, b: any) => a.name.localeCompare(b.name))
+      this.allIngredients = this.sections.pat.ings.sort(( a:any, b: any) => a.ing.name.localeCompare(b.ing.name))
+      this.changeColSize('pat')
+      return
+    case 'shop':
+      this.products = this.sections.shop.products.sort(( a:any, b: any) => a.name.localeCompare(b.name))
+      this.allIngredients = this.sections.shop.ings.sort(( a:any, b: any) => a.ing.name.localeCompare(b.ing.name))
+      this.changeColSize('shop')
+      return
+    case 'total':
+      this.products = this.dbProducts.sort(( a:any, b: any) => a.name.localeCompare(b.name))
+      this.allIngredients = this.dbIngs.sort(( a:any, b: any) => a.ing.name.localeCompare(b.ing.name))
+      this.changeColSize('total')
+      return
+    case 'bar':
+      this.products = this.sections.bar.products.sort(( a:any, b: any) => a.name.localeCompare(b.name))
+      this.allIngredients = this.sections.bar.ings.sort(( a:any, b: any) => a.ing.name.localeCompare(b.ing.name))
+      this.changeColSize('bar')
+      return
+    case 'coffee':
+      this.products = this.sections.coffee.products.sort(( a:any, b: any) => a.name.localeCompare(b.name))
+      this.allIngredients = this.sections.coffee.ings.sort(( a:any, b: any) => a.ing.name.localeCompare(b.ing.name))
+      this.changeColSize('coffee')
+        return
+    case 'tea':
+      this.products = this.sections.tea.products.sort(( a:any, b: any) => a.name.localeCompare(b.name))
+      this.allIngredients = this.sections.tea.ings.sort(( a:any, b: any) => a.ing.name.localeCompare(b.ing.name))
+      this.changeColSize('tea')
+      return
+    case 'default':
+      this.products = this.sections.default.products.sort(( a:any, b: any) => a.name.localeCompare(b.name))
+      this.allIngredients = this.sections.default.ings.sort(( a:any, b: any) => a.ing.name.localeCompare(b.ing.name))
+      this.changeColSize('default')
+      return
+    default:
+      return
+  }
+}
+
+changeColSize(option: string){
+  Object['entries'](this.colSize).forEach(([key, value]: [string, number]) => {
+    console.log(option)
+    if(option === key){
+      this.colSize[`${key}`] = 2.2
+    } else {
+      this.colSize[`${key}`] = 1.4
+    }
+});
+}
+
+resetAllColors(){
+  this.qtyColor = 'none'
+  this.priceColor = 'none'
+  this.totColor = 'none'
+  this.discColor = 'none'
+  this.cashInColor = 'none'
+  this.consColor = 'none'
+  this.surplusColor = 'none'
+  this.nameColor = 'none'
 }
 
 }

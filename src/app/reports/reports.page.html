@@ -1,31 +1,16 @@
-<!--
-<ion-tabs>
-  <ion-tab-bar slot="top">
 
-    <ion-tab-button tab="live-stoc" href="/register/live-stoc">
-      <ion-icon aria-hidden="true" src="../../assets/icon/tools.svg"></ion-icon>
-      <ion-label>Live Stoc</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="cash" href="/register/cash">
-      <ion-icon aria-hidden="true" src="../../assets/icon/business.svg"></ion-icon>
-      <ion-label>Cash</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="products" href="/register/products">
-      <ion-icon aria-hidden="true" src="../../assets/icon/food.svg"></ion-icon>
-      <ion-label>Produse</ion-label>
-    </ion-tab-button>
-
-  </ion-tab-bar>
-</ion-tabs> -->
 
 
 <div class="contents-container">
-  <ion-content [fullscreen]="true" class="menu">
+  <ion-content [fullscreen]="true" class="menu" *ngIf="show.menu">
     <ion-header [translucent]="true">
       <ion-toolbar>
         <ion-title size="large" class="ion-text-center">Rapoarte</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="hideMenu()">
+            <ion-icon src="assets/icon/arrow-back-outline.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
   <ion-grid class="ion-no-padding ion-no-margin">
@@ -55,6 +40,10 @@
     </ion-row>
   </ion-grid>
   </ion-content>
+  <ion-button (click)="showMenu()" *ngIf="!show.menu" class="menu-button" fill="gohst">
+      <ion-icon src="assets/icon/menu-outline.svg"></ion-icon>
+  </ion-button>
+
   <div class="separator"></div>
     <div class="view">
       <app-cash *ngIf="show.sales"></app-cash>

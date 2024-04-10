@@ -3,10 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { WebRTCService } from '../webRTC.service';
-import { Bill, BillProduct } from 'src/app/models/table.model';
-import { round } from 'src/app/shared/utils/functions';
-import {ContentService} from '../content.service';
-import { take, tap } from 'rxjs';
+import { Bill} from 'src/app/models/table.model';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { TipsPage } from './tips/tips.page';
 import * as confetti from 'canvas-confetti';
@@ -28,7 +25,6 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
   bill!: Bill
   hideBill: boolean = false
 
-  @ViewChild('scrollableElement') content!: ElementRef;
   @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
 
   constructor(
@@ -73,7 +69,6 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
 
 
   getInvite(){
-    console.log('hit the function')
     this.webRTC.getInviteToTip().subscribe(response => {
       console.log(response)
       if(response === 'invite'){
@@ -84,8 +79,6 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
     })
   }
 
-
-
   reciveTipsValue(ev: any){
     console.log(ev)
     if(ev || ev === 0){
@@ -94,28 +87,5 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
     }
   }
 
-  modifyImageURL(url: string): string {
-    const parts = url.split('/v1');
-    const baseURL = parts[0];
-    const cropParameters = '/w_555,h_555,c_fill';
-    const cropUrl = baseURL + cropParameters + '/v1' + parts[1];
-    return cropUrl;
-  }
-
-  calcProductTotal(products: BillProduct[]){
-    let total = 0
-    products.forEach(el => {
-        total += +el.total
-    })
-    return total
-  }
-
-  roundInHtml(num: number){
-    return round(num)
-  }
-
-  getObjectKeys(obj: any): string[] {
-    return Object.keys(obj);
-  }
 
 }

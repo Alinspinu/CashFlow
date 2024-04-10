@@ -3,50 +3,8 @@
   <app-meniu *ngIf="!hideBill" class="meniu"></app-meniu>
   <app-tips *ngIf="bill && hideBill"[total]="bill.total" (tipsValue)="reciveTipsValue($event)"></app-tips>
   <!-- <canvas #confettiCanvas class="confetti-canvans"></canvas> -->
-
   <app-bill *ngIf="bill && !hideBill" class="bill"></app-bill>
-    <!-- <div class="bill-content" *ngIf="bill && !hideBill">
-        <div class="bill-header">
-          <div class="shadow">TOTAL
-            <span class="bill-total">{{roundInHtml(bill.total)}} Lei</span>
-          </div>
-        </div>
-        <div class="bill-wrapper">
-          <ion-content [fullscreen]="false" #billContent class="scroll-content">
-                  <ion-card class="bill-product-card"  *ngFor="let product of bill.products; let i = index" >
-                    <ion-card-content>
-                      <ion-row>
-                        <ion-col size="2.5">
-                          <img [src]="modifyImageURL(product.imgPath)"alt="Image" class="bill-product-image">
-                        </ion-col>
-                        <ion-col size="7.5">
-                          <ion-card-header>
-                            <ion-card-title>{{product.name}}</ion-card-title>
-                            <ion-card-subtitle>{{product.quantity}} Buc</ion-card-subtitle>
-                          </ion-card-header>
-                          <div class="product-description">
-                            <span>{{product.description}}</span>
-                          </div>
-                          <div class="toppings" *ngIf="product.toppings.length">
-                            <span *ngFor="let topping of product.toppings">+ {{topping.name.split('/')[0]}}</span>
-                          </div>
-                          <div class="comments" *ngIf="product.comment && product.comment.length">
-                            <span>-{{product.comment}}</span>
-                          </div>
-                        </ion-col>
-                        <ion-col size="2" >
-                          <div class="total-wrapper">
-                            <span class="total">{{product.total}} Lei</span>
-                            <div class="red-line" *ngIf="product.discount > 0"></div>
-                            <span class="discount" *ngIf="product.discount > 0">{{product.total - product.discount}} Lei</span>
-                          </div>
-                        </ion-col>
-                      </ion-row>
-                    </ion-card-content>
-                  </ion-card>
-        </ion-content>
-        </div>
-    </div> -->
+
 
   </div>
 

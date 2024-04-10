@@ -19,7 +19,6 @@ export class WebRTCService {
     this.socket.on('productAdded', (data: any) => {
       this.productAddedSubject.next(data);
     });
-
     this.socket.on('getUserTip', (data: any) => {
       this.getUserTipSubject.next(data);
     });

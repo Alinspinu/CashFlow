@@ -29,7 +29,6 @@ export class IngredientService{
   }
 
   getIngredients(loc: string){
-    console.log('hit')
     this.dbService.getData('data', 1).subscribe((data: any) => {
       if(data){
         console.log('data ings',data)

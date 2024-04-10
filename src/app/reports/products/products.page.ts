@@ -185,7 +185,6 @@ getProducts(){
   }
  this.reportsSrv.getHavyOrders(this.startDay, this.endDay, undefined, this.user.locatie, filter).subscribe(response => {
    this.sections = response.result.sections
-   console.log(this.sections.default.products)
    this.dbProducts = response.result.allProd
    this.dbIngs = response.ingredients
    this.allIngredients = this.dbIngs.sort((a,b) => a.ing.name.localeCompare(b.ing.name))

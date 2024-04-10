@@ -289,7 +289,7 @@ deleteTable(tableId: string, index: number){
   const billToSend = JSON.stringify(bill);
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
-  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
+  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.PRINT_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
       .pipe(take(1),
         switchMap(res => {
         bill._id = res.billId;
@@ -308,6 +308,12 @@ deleteTable(tableId: string, index: number){
 );
 };
 
+sendBillToPrint(bill: Bill){
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post<{message: string, bill: Bill}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill}, {headers})
+}
+
+
 uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation}, {headers})
@@ -323,10 +329,6 @@ registerDeletetProduct(product: any){
   return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product}, {headers})
 }
 
-sendBillToPrint(bill: Bill){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string, bill: Bill}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill}, {headers})
-}
 
 setOrderTime(orderId: string, time: number){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')

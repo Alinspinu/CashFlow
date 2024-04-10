@@ -16,15 +16,16 @@ export const environment = {
 
   // BASE_URL: 'https://flow-app-now-cash-true-mobile.loca.lt/',
 
-  BASE_URL: 'http://localhost:8080/',
+  // BASE_URL: 'http://localhost:8080/',
+
+  BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
 
   ADMIN_EMAIL: "alinz.spinu@gmail.com",
   LOC: "655e2e7c5a3d53943c6b7c53",
-  BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/'
+  BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/',
 
+  PRINT_URL: 'http://localhost:8080/'
 
-  // BASE_URL: 'http://172.20.110.20:8080/',
-  // BASE_URL: 'https://fa74-82-77-237-76.ngrok-free.app/'
 
 };
 

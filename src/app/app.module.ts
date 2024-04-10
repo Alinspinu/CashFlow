@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app.routes';
 import { environment } from 'src/environments/environment';
 import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
 
+
 const dbConfig: DBConfig  = {
   name: 'MyDb',
   version: 1,
@@ -30,7 +31,7 @@ const dbConfig: DBConfig  = {
      HttpClientModule,
      provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
      provideFirestore(() => getFirestore()),
-     NgxIndexedDBModule.forRoot(dbConfig)
+     NgxIndexedDBModule.forRoot(dbConfig),
     ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, HttpClient],
   bootstrap: [AppComponent],

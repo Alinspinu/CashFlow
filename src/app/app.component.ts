@@ -40,9 +40,9 @@ export class AppComponent implements OnInit {
         this.user = JSON.parse(data.value)
          this.contService.getData(this.user.locatie).subscribe()
          this.tablesService.getTables(this.user.locatie, this.user._id)
-         this.productsSrv.getProducts(this.user.locatie).subscribe()
-        //  console.log('hit')
-         this.ingSrv.getIngredients(this.user.locatie).subscribe()
+        //  this.productsSrv.getProducts(this.user.locatie).subscribe()
+        // //  console.log('hit')
+        //  this.ingSrv.getIngredients(this.user.locatie).subscribe()
          this.getIncommingOrders()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{

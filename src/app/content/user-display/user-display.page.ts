@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InfiniteScrollCustomEvent, IonContent, IonicModule } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { WebRTCService } from '../webRTC.service';
 import { Bill, BillProduct } from 'src/app/models/table.model';
 import { round } from 'src/app/shared/utils/functions';
@@ -9,74 +9,59 @@ import {ContentService} from '../content.service';
 import { take, tap } from 'rxjs';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { TipsPage } from './tips/tips.page';
+import * as confetti from 'canvas-confetti';
+import { MeniuPage } from './meniu/meniu.page';
+import { BillPage } from './bill/bill.page';
+
+
+
 
 @Component({
   selector: 'app-user-display',
   templateUrl: './user-display.page.html',
   styleUrls: ['./user-display.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, TipsPage]
+  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, TipsPage, MeniuPage, BillPage]
 })
 export class UserDisplayPage implements OnInit, AfterViewInit {
 
   bill!: Bill
-  isLoading: boolean = false
-
-  mainCategoryToShowName!: string;
-  categoryToShowId!: string;
-
-  productsToShow: any [] = []
-
-  enableScrollChange: boolean = true
-
-  categories!: any[];
-  mainCats!: any
-  selectedMainCat!: any
-  products!: any
-  sortMain: string[] = ['food', 'coffee', 'bar', 'shop']
-
-
   hideBill: boolean = false
 
-  @ViewChildren('myCard') myCards!: QueryList<any>;
-  @ViewChildren('categoryChip') myCats!: QueryList<any>;
-  @ViewChild(IonContent) content!: IonContent;
+  @ViewChild('scrollableElement') content!: ElementRef;
+  @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
 
   constructor(
     private webRTC: WebRTCService,
-    private contentService: ContentService,
-    private elementRef: ElementRef,
+
   ) { }
 
   ngOnInit() {
     this.getBill()
-    this.getCategories()
-    this.selectMainCat('food')
     this.getInvite()
-    setTimeout(() => {
-      this.hideScrollbar()
-    }, 1000 )
-
   }
 
 
-  private hideScrollbar() {
-    const elementsToHideScrollBar = this.elementRef.nativeElement.querySelectorAll('.scroll-content');
-    elementsToHideScrollBar.forEach((element: HTMLElement) => {
-      console.log(elementsToHideScrollBar)
-      element.style.overflow = 'hidden';
-    });
-
-  }
 
   ngAfterViewInit(): void {
-       setTimeout(() => {
-        //  this.changeIconsColor()
-    }, 2000 )
 
   }
 
 
+  // celebrate() {
+  //   confetti.create(this.confettiCanvas.nativeElement, { resize: true })({
+  //     particleCount: 2000,
+  //     spread: 600,
+  //     colors: ['#d17b5f', '#dda170', '#ffa052', '#000'],
+  //     origin: { x: 0.5, y: 0.7 },
+  //     angle: 40,
+  //     decay: 0.9,
+  //     gravity: 1.5,
+  //     scalar: 1.3,
+  //     ticks: 600,
+  //     shapes: ['square', 'circle', 'star'],
+  //   });
+  // }
 
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
@@ -109,117 +94,6 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
     }
   }
 
-
-  catScroll(catId: string){
-    this.myCats.forEach(cat => {
-      const cardEl: HTMLElement = cat.nativeElement
-      if(catId === cardEl.id){
-          cardEl.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-      }
-
-    })
-
-  }
-//   @ViewChildren('icon') myIcons!: QueryList<any>;
-// changeIconsColor(){
-//     this.myIcons.forEach(icon => {
-//      if(icon){
-//       console.log(icon)
-//        const svgElement = icon.el.shadowRoot.querySelector('svg');
-//        console.log(svgElement)
-//      }
-//     })
-
-// }
-
-
-
-
-  onScroll(event: CustomEvent) {
-    if(this.enableScrollChange){
-      this.myCards.forEach(card => {
-        const cardElement: HTMLElement = card.nativeElement;
-        setTimeout(() => {
-          const catId = cardElement.dataset['cat']
-          const isInViewPort = this.isInViewport(cardElement)
-          let viewPortId = []
-          if(isInViewPort && catId){
-            viewPortId.push(catId)
-          }
-          const catIdToShow = this.findStringWithMostDuplicates(viewPortId)
-          if(catIdToShow.length)
-          this.categoryToShowId = catIdToShow
-        }, 300)
-      })
-      this.catScroll(this.categoryToShowId)
-    }
-  }
-
-  scrollToCard(cardId: string) {
-    const cardElement = this.myCards.find(card => card.nativeElement.id === cardId);
-    if (cardElement) {
-      cardElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-      setTimeout(()=> {
-        this.enableScrollChange = true
-      }, 1000)
-    }
-  }
-
-
-  selectCategory(cat: string){
-    this.enableScrollChange = false
-    const catIndex = this.categories.findIndex(category => category._id === cat)
-    const cardId = this.categories[catIndex].product[0]._id
-    this.scrollToCard(cardId)
-    this.categoryToShowId = cat
-  }
-
-  selectMainCat(name: string){
-    this.selectedMainCat = this.mainCats[name]
-    this.productsToShow = []
-    this.selectedMainCat.show = true
-    this.mainCategoryToShowName = name
-    this.selectedMainCat.forEach((cat:any) => {
-      cat.product.forEach((prod: any) => {
-        this.productsToShow.push(prod)
-      })
-    })
-    this.categoryToShowId = this.selectedMainCat[0]._id
-  }
-
-
-  getCategories(){
-    this.contentService.categorySend$
-    .pipe(
-      take(1),
-      tap(response => {
-        if(response.length > 1){
-          this.categories = [...response]
-          this.isLoading = false
-          let tempMainCats: any = []
-          for (const document of this.categories) {
-            const category = document.mainCat;
-            if (!tempMainCats[category]) {
-              tempMainCats[category] = [];
-              tempMainCats[category].push(document);
-            } else{
-              tempMainCats[category].push(document);
-            }
-          }
-          let sortedData: {[category: string]: any[]} = {};
-          ['food', 'coffee', 'bar', 'shop'].forEach(key => {
-            if (tempMainCats.hasOwnProperty(key)) {
-              sortedData[key] = tempMainCats[key];
-            }
-          });
-          this.mainCats = sortedData
-        }
-      })
-    ).subscribe()
-  }
-
-
-
   modifyImageURL(url: string): string {
     const parts = url.split('/v1');
     const baseURL = parts[0];
@@ -243,32 +117,5 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
   getObjectKeys(obj: any): string[] {
     return Object.keys(obj);
   }
-
-  findStringWithMostDuplicates(arr: any[]) {
-    const counts: any = {};
-    arr.forEach(str => {
-        counts[str] = (counts[str] || 0) + 1;
-    });
-    let maxCount = 0;
-    let stringWithMostDuplicates = '';
-    for (const str in counts) {
-        if (counts.hasOwnProperty(str) && counts[str] >= maxCount) {
-            maxCount = counts[str];
-            stringWithMostDuplicates = str;
-        }
-    }
-    return stringWithMostDuplicates;
-}
-
-
-  isInViewport(card: HTMLElement): boolean {
-    const viewportTop = window.scrollY;
-    const viewportBottom = viewportTop + window.innerHeight;
-    const cardRect = card.getBoundingClientRect();
-    const cardTop = cardRect.top + window.scrollY;
-    const cardBottom = cardTop + cardRect.height;
-    return cardBottom >= viewportTop && cardTop <= viewportBottom;
-  }
-
 
 }

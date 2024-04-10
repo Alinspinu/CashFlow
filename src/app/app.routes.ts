@@ -44,6 +44,14 @@ const routes: Routes = [
     path: 'tips',
     loadComponent: () => import('./content/user-display/tips/tips.page').then( m => m.TipsPage)
   },
+  {
+    path: 'meniu',
+    loadComponent: () => import('./content/user-display/meniu/meniu.page').then( m => m.MeniuPage)
+  },
+  {
+    path: 'bill',
+    loadComponent: () => import('./content/user-display/bill/bill.page').then( m => m.BillPage)
+  },
 
 
 ];

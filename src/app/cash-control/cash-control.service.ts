@@ -15,7 +15,7 @@ export class CashControlService{
 
 raport(value: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.get<{message: string}>(`${environment.BASE_URL}pay/reports?value=${value}`, {headers})
+  return this.http.get<{message: string}>(`${environment.PRINT_URL}pay/reports?value=${value}`, {headers})
 }
 
 saveInventary(){
@@ -25,7 +25,7 @@ saveInventary(){
 
 cashInAndOut(data: any){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/in-and-out`, {data: data}, {headers})
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/in-and-out`, {data: data}, {headers})
 }
 
 getUserOrders(userId: string) {
@@ -45,12 +45,12 @@ changePaymnetMethod(bill: Bill){
 
 reprintBill(bill: Bill){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill}, {headers})
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill}, {headers})
 }
 
 printNefiscal(bill: Bill){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-unreg`, {bill: bill}, {headers})
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/print-unreg`, {bill: bill}, {headers})
 }
 
 removeProductDiscount(data: any){

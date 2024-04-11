@@ -17,6 +17,6 @@ export class PaymentService{
 
   checkPos(sum: number){
     const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-    return this.http.post<{message: string, payment: boolean}>(`${environment.BASE_URL}pay/pos`, {sum: sum}, {headers})
+    return this.http.post<{message: string, payment: boolean}>(`${environment.PRINT_URL}pay/pos`, {sum: sum}, {headers})
   }
 }

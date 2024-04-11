@@ -287,7 +287,6 @@ export class TableContentPage implements OnInit, OnDestroy {
 //*********** BILL CONTROLS *******************************************/
 
 async addToBill(product: Product){
-  console.log(product)
   let price: number = product.price;
   let cartProdName: string = product.name;
   let ings: InvIngredient[] = product.ings
@@ -349,7 +348,6 @@ async addToBill(product: Product){
 
 
   async openComments(product: BillProduct, index: number){
-    console.log(product)
     if(product.sentToPrint){
     if(product.toppings.length){
       let price: number = 0
@@ -367,7 +365,7 @@ async addToBill(product: Product){
       let pickedToppings: Topping[] = [];
       if(product.toppingsToSend.length){
         const itemsToSort = [...product.toppingsToSend]
-        options = itemsToSort.sort((a, b) => a.price - b.price)
+        options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
       } else {
         const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: emptyIng()}
         options.push(fakeTopping)

@@ -14,7 +14,7 @@ export class CashControlService{
   ){}
 
 raport(value: string){
-  return this.http.get<{message: string}>(`${environment.BASE_URL}pay/reports?value=${value}`)
+  return this.http.get<{message: string}>(`${environment.PRINT_URL}pay/reports?value=${value}`)
 }
 
 saveInventary(){
@@ -22,7 +22,7 @@ saveInventary(){
 }
 
 cashInAndOut(data: any){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/in-and-out`, {data: data})
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/in-and-out`, {data: data})
 }
 
 getUserOrders(userId: string) {
@@ -34,7 +34,7 @@ changePaymnetMethod(bill: Bill){
 }
 
 reprintBill(bill: Bill){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill})
 }
 
 removeProductDiscount(data: any){

@@ -17,16 +17,16 @@ export const environment = {
   LOC: '65ba7dcf1694ff43f52d44ed',
   ADMIN_EMAIL: 'alinz.spinu@gmail.com',
 
-  BASE_URL: 'http://localhost:8080/',
+  // BASE_URL: 'http://localhost:8080/',
   BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/',
-  // BASE_URL_CAFETISH: 'https://www.cafetish.ro/',
+
   BASE_URL_CAFETISH: 'http://localhost:8090/',
 
-  // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/'
+  PRINT_URL: 'http://localhost:8080/',
 
-  // BASE_URL: 'https://3bab-91-132-4-34.ngrok-free.app/',
-  // BASE_URL: 'http://172.20.110.20:8080/',
-  // BASE_URL: 'https://fa74-82-77-237-76.ngrok-free.app/'
+  BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/'
+
+
 };
 
 /*

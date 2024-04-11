@@ -16,7 +16,6 @@ export class PaymentService{
   ){}
 
   checkPos(sum: number){
-    console.log(sum)
-    return this.http.post<{message: string, payment: boolean}>(`${environment.BASE_URL}pay/pos`, {sum: sum})
+    return this.http.post<{message: string, payment: boolean}>(`${environment.PRINT_URL}pay/pos`, {sum: sum})
   }
 }

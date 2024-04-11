@@ -354,7 +354,7 @@ registerDeletetProduct(product: any){
 }
 
 sendBillToPrint(bill: Bill){
-  return this.http.post<{bill: any, message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
+  return this.http.post<{bill: any, message: string}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill})
 }
 
 setOrderTime(orderId: string, time: number){

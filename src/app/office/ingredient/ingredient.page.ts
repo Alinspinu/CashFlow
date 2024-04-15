@@ -46,7 +46,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   ingDep: string[] = ["materie", "marfa", 'consumabil']
 
 
-  filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
+  filter: {gestiune: string, type: string, dep: string, date: string} = {gestiune: '', type: '', dep: '', date: ''}
 
   isLoading: boolean = true
 
@@ -67,8 +67,15 @@ export class IngredientPage implements OnInit, OnDestroy {
     }
   }
 
+  async openDateModal(){
+   const date = await this.actionSh.openAuth(DatePickerPage)
+  const dateToSend = new Date(date)
+  this.filter.date = dateToSend.toISOString().split('T')[0]
+  console.log(this.filter.date)
+  }
 
   exportIngsList(){
+    console.log(this.filter)
     this.ingSrv.printIngredientsList(this.filter, this.user.locatie).subscribe(response => {
       const url = window.URL.createObjectURL(response);
       const a = document.createElement('a');
@@ -164,6 +171,7 @@ export class IngredientPage implements OnInit, OnDestroy {
         this.isLoading = false
       }
       this.allIngs = response
+      console.log(this.allIngs[0])
       this.ingredients = [...this.allIngs]
     }
    })

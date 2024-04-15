@@ -1,116 +1,145 @@
 
-.contents-container{
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-    .category-content{
-      flex: 15%;
-      height: 98vh;
-      max-width: 300px;
-      width: 100%;
-      .category-header{
-        margin: 12px 0 0 12px;
-        padding: 24px 8px 8px 24px;
-        height: 10%;
-        border-radius: 12px;
-      }
-      .category-wrapper{
-        margin: 12px 0 12px 12px;
-        padding: 24px 8px 8px 24px;
-        height: 83%;
-        border-radius: 12px;
-        width: 89%;
-        overflow: hidden;
-        .cat-wr{
-          overflow-y: scroll;
-          position: relative;
-          right: -30px;
-          height: 100%;
-          .cat{
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 10%;
-            margin-right: 40px;
-            width: 90%;
-            text-align: center;
-            background-color: white;
-            opacity: 80%;
-            cursor: pointer;
-          }
-        }
+
+  .category-wrapper{
+    height: 950px;
+    width: 100%;
+    padding-top: 18px ;
+    overflow: hidden;
+    .cat-wr{
+      overflow-y: scroll;
+      padding: 0 23px;
+      // position: relative;
+      // right: -17px;
+      height: 100%;
+      .cat{
+        font-family: NoirProReg !important;
+        font-size: 22px;
+        padding: 12px 8px;
+        margin-bottom: 5%;
+        width: 100%;
+        text-align: center;
+        background-color: white;
+        opacity: 80%;
+        cursor: pointer;
       }
     }
-    .menu-wrapper{
-      flex: 75%;
-      height: 98vh;
-      max-width: 70%;
+  }
+
+    .products-content{
+      border-radius: 12px;
+      margin-top: 18px;
+      height: 87%;
       width: 100%;
-      .main-cat-content{
-        border-radius: 12px;
-        margin: 12px;
-        height: 10%;
-        padding: 0 24px 0 24px;
+      display: flex;
+      overflow: hidden;
+
+    }
+
+
+  .main-cat-row{
+    margin-top: 75px;
+    ion-col{
+      padding: 0 24px;
+      .main-cat{
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        .main-cat{
-          background-color: white;
-          opacity: 80%;
-          border-radius: 30px;
-          padding: 18px;
-          width: 20%;
-          text-align: center;
-          cursor: pointer;
+        background-color: white;
+        opacity: 80%;
+        border-bottom-left-radius: 40px;
+        border-top-right-radius: 40px;
+        height: 65px;
+        padding-top: 12px;
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+        img{
+          padding: 0;
+          height: 35px;
+          margin-right: 10px;
         }
-      }
-      .products-content{
-        border-radius: 12px;
-        margin: 12px;
-        height: 87%;
-        display: flex;
-        overflow: hidden;
-
+        span{
+          font-family: NoirProReg !important;
+          font-size: 40px;
+        }
       }
     }
   }
 
 ion-content{
   --background: transparent !important;
+    height:970px !important;
+    padding: 0;
 }
 
   .selected{
-    background-color: var(--ion-color-secondary) !important;
+    animation: switch 0.2s ease forwards;
+    background-color: black !important;
     color: white;
+  }
+
+  .main-cat:active{
+    // animation: switch 0.2s ease forwards;
+    transform: scale(0.8);
+    background-color: black !important;
+    color: white;
+    img{
+      filter: invert(100%);
+    }
+
   }
 
   .selected-cat{
-    background-color: var(--ion-color-secondary)!important;
+
+    background-color: black!important;
     color: white;
   }
 
 
-  .category-product{
-    padding-left: 30px;
-  }
+
 
   .product-card{
     border-radius: 12px;
-    height: 200px;
+    box-shadow: none !important;
+    height: 130px;
     opacity: 80%;
-    direction: ltr;
+    padding-top: 0;
+    // direction: ltr;
     ion-card-title{
+      font-family: NoirProMed !important;
       font-size: 25px;
+      padding-top: 8px;
+      color: black;
     }
     ion-card-subtitle{
-      font-family: NoirProSemi !important;
-      font-size: 25px;
-      color: black;
+      padding: 0;
+      width: 80%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+    }
+
+    .price{
+      padding: 0;
+      // display: flex;
+      // flex-direction: column;
+      // justify-content: center;
+      div{
+        border-top: 6px solid black;
+        width: 50px;
+        padding: 0;
+      }
+      span{
+        font-family: NoirProReg !important;
+        font-size: 40px;
+        color: black;
+      }
     }
 
     .product-image{
       border-radius: 24px;
-      height: 150px;
+      height: 115px;
+      padding: 8px 0 8px 8px;
     }
 
     .product-description{
@@ -120,11 +149,26 @@ ion-content{
   }
 
 
-  .scroll-products{
-    direction: rtl;
-    left: -17px;
-  }
+  // .scroll-products{
+  //   direction: rtl;
+  //   left: -17px;
+  // }
 
   .shadow{
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+
+
+  @keyframes switch {
+    0% {
+      scale: 1;
+    }
+    50% {
+      scale: 1.2;
+    }
+
+    100% {
+      scale: 1;
+    }
   }

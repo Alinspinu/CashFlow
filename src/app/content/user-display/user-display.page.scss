@@ -17,18 +17,19 @@
   display: flex;
   flex-direction: row;
   height: 100vh;
-  background-image: url('https://www.7iasi.ro/wp-content/uploads/2023/07/06.jpg');
-  background-size: cover;
+  // background-image: url('https://www.7iasi.ro/wp-content/uploads/2023/07/06.jpg');
+  // background-size: cover;
+  background-color: #f7f0eb;
   app-tips{
     width: 100%;
   }
     .meniu{
-      flex: 55%
+      width: 100%;
     }
 
-    .bill{
-      flex: 45%;
-    }
+    // .bill{
+    //   flex: 30%;
+    // }
   }
 
 .confetti-canvans{

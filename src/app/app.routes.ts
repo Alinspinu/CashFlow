@@ -52,6 +52,26 @@ const routes: Routes = [
     path: 'bill',
     loadComponent: () => import('./content/user-display/bill/bill.page').then( m => m.BillPage)
   },
+  {
+    path: 'meniu',
+    loadComponent: () => import('./content/order-content/meniu/meniu.page').then( m => m.MeniuPage)
+  },
+  {
+    path: 'bill',
+    loadComponent: () => import('./content/order-content/bill/bill.page').then( m => m.BillPage)
+  },
+  {
+    path: 'order-content/:id',
+    loadComponent: () => import('./content/order-content/order-content.page').then( m => m.OrderContentPage)
+  },
+  {
+    path: 'bill',
+    loadComponent: () => import('./content/order-content/bill/bill.page').then( m => m.BillPage)
+  },
+  {
+    path: 'meniu',
+    loadComponent: () => import('./content/order-content/meniu/meniu.page').then( m => m.MeniuPage)
+  },
 
 
 ];

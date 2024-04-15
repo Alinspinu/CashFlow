@@ -1,24 +1,28 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { ContentService } from '../../content.service';
 import { take, tap } from 'rxjs';
+import { BillPage } from '../bill/bill.page';
+import { WebRTCService } from '../../webRTC.service';
+import { Bill } from 'src/app/models/table.model';
+
 
 @Component({
   selector: 'app-meniu',
   templateUrl: './meniu.page.html',
   styleUrls: ['./meniu.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe]
+  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, BillPage]
 })
 export class MeniuPage implements OnInit {
 
 
   @ViewChildren('myCard') myCards!: QueryList<any>;
   @ViewChildren('categoryChip') myCats!: QueryList<any>;
-
+  @ViewChild('scrollableElement') container!: ElementRef
 
   mainCategoryToShowName!: string;
   categoryToShowId!: string;
@@ -27,19 +31,52 @@ export class MeniuPage implements OnInit {
 
   enableScrollChange: boolean = true
 
+  sideColSize: number = 1
+  menuColSize: number = 10
+
+
   categories!: any[];
   mainCats!: any
   selectedMainCat!: any
   products!: any
   sortMain: string[] = ['food', 'coffee', 'bar', 'shop']
 
+  bill!: Bill
+
+  cats:any = [
+    {
+      name: 'food',
+      url: 'assets/icon/food.svg',
+      urlW: 'assets/icon/food-w.svg',
+    },
+    {
+      name: 'coffee',
+      url: 'assets/icon/coffee.svg',
+      urlW: 'assets/icon/coffee-w.svg',
+    },
+    {
+      name: 'bar',
+      url: 'assets/icon/bar.svg',
+      urlW: 'assets/icon/bar-w.svg',
+    },
+    {
+      name: 'shop',
+      url: 'assets/icon/shop.svg',
+      urlW: 'assets/icon/shop-w.svg',
+    },
+
+  ]
+
+
   constructor(
-    private contentService: ContentService
+    private contentService: ContentService,
+    private webRTC: WebRTCService,
   ) { }
 
   ngOnInit() {
     this.getCategories()
-    this.selectMainCat('food')
+    this.selectMainCat('food', 0)
+    this.getBill()
   }
 
 
@@ -52,6 +89,20 @@ export class MeniuPage implements OnInit {
 
     })
 
+  }
+
+
+  getBill(){
+    this.webRTC.getProductAddedObservable().subscribe(response => {
+      if(response){
+        this.bill = JSON.parse(response)
+        this.sideColSize = 0.7
+        this.menuColSize = 8
+      } else {
+        this.sideColSize = 1
+        this.menuColSize = 10
+      }
+      })
   }
 
   toggleFullscreen() {
@@ -69,17 +120,15 @@ export class MeniuPage implements OnInit {
     if(this.enableScrollChange){
       this.myCards.forEach(card => {
         const cardElement: HTMLElement = card.nativeElement;
-        setTimeout(() => {
-          const catId = cardElement.dataset['cat']
-          const isInViewPort = this.isInViewport(cardElement)
+        const catId = cardElement.dataset['cat']
+          const isInViewPort = this.isInViewport(cardElement, this.container.nativeElement)
           let viewPortId: any = []
           if(isInViewPort && catId){
             viewPortId.push(catId)
           }
           const catIdToShow = this.findStringWithMostDuplicates(viewPortId)
           if(catIdToShow.length)
-            this.categoryToShowId = catIdToShow
-        }, 900)
+          this.categoryToShowId = catIdToShow
       })
       this.catScroll(this.categoryToShowId)
     }
@@ -104,7 +153,7 @@ export class MeniuPage implements OnInit {
     this.categoryToShowId = cat
   }
 
-  selectMainCat(name: string){
+  selectMainCat(name: string, index: number){
     this.selectedMainCat = this.mainCats[name]
     this.productsToShow = []
     this.selectedMainCat.show = true
@@ -115,6 +164,19 @@ export class MeniuPage implements OnInit {
       })
     })
     this.categoryToShowId = this.selectedMainCat[0]._id
+    if(index !== 0){
+      let url = ''
+      const clickedCategory = this.cats[index];
+      url = clickedCategory.url
+      console.log('first url', url)
+      clickedCategory.url = clickedCategory.urlW
+      console.log('second url', clickedCategory.url)
+      setTimeout(() => {
+        this.cats.splice(index, 1)
+        this.cats.unshift(clickedCategory);
+        clickedCategory.url = url
+      }, 100)
+    }
   }
 
 
@@ -165,14 +227,39 @@ export class MeniuPage implements OnInit {
 }
 
 
-  isInViewport(card: HTMLElement): boolean {
-    const viewportTop = window.scrollY;
-    const viewportBottom = viewportTop + window.innerHeight;
-    const cardRect = card.getBoundingClientRect();
-    const cardTop = cardRect.top + window.scrollY;
-    const cardBottom = cardTop + cardRect.height;
-    return cardBottom >= viewportTop && cardTop <= viewportBottom;
-  }
+isInViewport(card: HTMLElement, container: HTMLElement): boolean {
+  console.log(container)
+  const containerRect = container.getBoundingClientRect();
+  const containerTop = containerRect.top;
+  const containerBottom = containerTop + containerRect.height;
+
+  const cardRect = card.getBoundingClientRect();
+  const cardTop = cardRect.top;
+  const cardBottom = cardTop + cardRect.height;
+
+  return cardBottom >= containerTop && cardTop <= containerBottom;
+}
+
+
+//  isInViewport(card: HTMLElement, container: HTMLElement): boolean {
+//   console.log(container)
+//   const containerTop = container.scrollTop;
+//   console.log(containerTop)
+//   const containerBottom = containerTop + container.clientHeight;
+//   const cardRect = card.getBoundingClientRect();
+//   const cardTop = cardRect.top + container.scrollTop;
+//   const cardBottom = cardTop + cardRect.height;
+//   return cardBottom >= containerTop && cardTop <= containerBottom;
+// }
+
+  // isInViewport(card: HTMLElement): boolean {
+  //   const viewportTop = window.scrollY;
+  //   const viewportBottom = viewportTop + window.innerHeight;
+  //   const cardRect = card.getBoundingClientRect();
+  //   const cardTop = cardRect.top + window.scrollY;
+  //   const cardBottom = cardTop + cardRect.height;
+  //   return cardBottom >= viewportTop && cardTop <= viewportBottom;
+  // }
 
 
 
@@ -187,6 +274,21 @@ export class MeniuPage implements OnInit {
   getObjectKeys(obj: any): string[] {
     return Object.keys(obj);
   }
+
+
+uppercaseAllLetters(inputString: string): string {
+  return inputString.replace(/[a-zăâîțș]/gi, (letter) => letter.toUpperCase());
+}
+
+capitalizeWords(inputString: string): string {
+  return inputString
+      .split(/\s+/) // Split the string into words
+      .map(word => {
+          // Capitalize the first letter and convert the rest to lowercase
+          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(' '); // Join the words back into a single string
+}
 
 
 }

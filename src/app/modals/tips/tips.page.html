@@ -23,8 +23,15 @@
       <ion-button size="large" expand="block" color="danger" (click)="close()">RENUNȚĂ</ion-button>
     </ion-col>
       <ion-col>
-        <ion-button size="large" expand="block" color="primary"(click)="addTips()" [disabled]="!tipsValue">ADAUGĂ BACSIS</ion-button>
+        <ion-button size="large" expand="block" color="primary"(click)="addTips()" [disabled]="!tipsValue && tipsValue !== 0">ADAUGĂ BACSIS</ion-button>
         </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button size="large" expand="block" color="tertiary" (click)="inviteTip(invite)">
+          {{invite === 'invite' ? 'ÎNVITĂ SĂ LASE TIPS!' : 'ANULEAZĂ'}}
+        </ion-button>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-footer>

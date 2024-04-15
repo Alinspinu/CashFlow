@@ -1,47 +1,94 @@
 
-<div class="contents-container">
+
+
+
+
+
+<ion-grid>
+  <ion-row>
+    <ion-col [size]="sideColSize">
+    </ion-col>
+    <ion-col [size]="menuColSize">
+      <ion-grid>
+        <ion-row *ngIf="mainCats" class="main-cat-row">
+          <ion-col size="3"   *ngFor="let mainCat of cats; let i= index;">
+            <div class="main-cat" (click)="selectMainCat(mainCat.name, i)" [ngClass]="{'selected': i === 0}">
+              <img [src]=" i === 0 ? mainCat.urlW : mainCat.url" color="primary">
+              <span>
+                {{uppercaseAllLetters(mainCat.name)}}
+              </span>
+            </div>
+          </ion-col>
+        </ion-row>
+          <ion-row>
+            <ion-col size="3">
+              <div class="category-wrapper">
+                <div class="cat-wr">
+                  <div class="cat" *ngFor="let cat of selectedMainCat" (click)="selectCategory(cat._id)" [ngClass]="{'selected-cat': categoryToShowId === cat._id}" #categoryChip [id]="cat._id">
+                    {{capitalizeWords(cat.name)}}
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="9">
+                <div class="products-content" #scrollableElement>
+                  <ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" class="scroll-products" [scrollEvents]="true"  >
+                        <div class="category-product" *ngFor="let product of productsToShow" #myCard [attr.data-cat]="product.category._id" [attr.data-main]="product.mainCat" [id]="product._id">
+                          <ion-card class="product-card" >
+                            <ion-card-content class="ion-no-padding">
+                              <ion-row>
+                                <ion-col size="1.65">
+                                  <img [src]="modifyImageURL(product.image.path)"alt="Image" class="product-image">
+                                </ion-col>
+                                <ion-col size="9.05">
+                                  <ion-card-header class="ion-no-padding">
+                                    <ion-card-title>{{uppercaseAllLetters(product.name)}}</ion-card-title>
+                                    <ion-card-subtitle>{{product.description}}</ion-card-subtitle>
+                                  </ion-card-header>
+                                </ion-col>
+                                <ion-col size="1.3">
+                                  <div class="price">
+                                    <span>{{product.price}}</span>
+                                    <div></div>
+                                    <span>LEI</span>
+                                  </div>
+                                </ion-col>
+                              </ion-row>
+                            </ion-card-content>
+                          </ion-card>
+                        </div>
+                  </ion-content>
+                </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+    </ion-col>
+    <ion-col size="2.6" *ngIf="bill">
+      <app-bill class="bill"></app-bill>
+    </ion-col>
+    <ion-col [size]="sideColSize">
+      <ion-button (click)="toggleFullscreen()">full</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+
+
+
+
+
+
+
+
+    <!-- <div class="main-cat-content" *ngIf="mainCats">
+    </div> -->
+
+
+<!--
   <div class="category-content">
     <div class="category-header">
-      <ion-button (click)="toggleFullscreen()">full</ion-button>
-      <!-- <ion-button (click)="celebrate()">Confetti</ion-button> -->
+
+      <ion-button (click)="celebrate()">Confetti</ion-button>
     </div>
-    <div class="category-wrapper">
-        <div class="cat-wr">
-          <div class="cat shadow" *ngFor="let cat of selectedMainCat" (click)="selectCategory(cat._id)" [ngClass]="{'selected-cat': categoryToShowId === cat._id}" #categoryChip [id]="cat._id">
-            {{cat.name}}
-          </div>
-        </div>
-    </div>
-  </div>
-  <div class="menu-wrapper">
-    <div class="main-cat-content" *ngIf="mainCats">
-      <div class="main-cat shadow" *ngFor="let mainCat of getObjectKeys(mainCats)" (click)="selectMainCat(mainCat)" [ngClass]="{'selected': mainCategoryToShowName === mainCat}">
-          {{mainCat | capitalize}}
-      </div>
-    </div>
-   <div class="products-content">
-      <ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" class="scroll-products" [scrollEvents]="true"  #scrollableElement>
-            <div class="category-product" *ngFor="let product of productsToShow" #myCard [attr.data-cat]="product.category._id" [attr.data-main]="product.mainCat" [id]="product._id">
-              <ion-card class="product-card" >
-                <ion-card-content>
-                  <ion-row>
-                    <ion-col size="3">
-                      <img [src]="modifyImageURL(product.image.path)"alt="Image" class="product-image">
-                    </ion-col>
-                    <ion-col size="9">
-                      <ion-card-header>
-                        <ion-card-title>{{product.name}}</ion-card-title>
-                        <ion-card-subtitle>{{product.price}} Lei / {{product.qty}}</ion-card-subtitle>
-                      </ion-card-header>
-                      <div class="product-description">
-                        <span>{{product.description}}</span>
-                      </div>
-                    </ion-col>
-                  </ion-row>
-                </ion-card-content>
-              </ion-card>
-            </div>
-      </ion-content>
-    </div>
-  </div>
-  </div>
+
+  </div> -->

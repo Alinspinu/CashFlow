@@ -58,4 +58,8 @@ export class BillPage implements OnInit {
     return round(num)
   }
 
+  uppercaseAllLetters(inputString: string): string {
+    return inputString.replace(/[a-zăâîțș]/gi, (letter) => letter.toUpperCase());
+  }
+
 }

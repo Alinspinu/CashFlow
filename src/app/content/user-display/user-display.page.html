@@ -3,7 +3,7 @@
   <app-meniu *ngIf="!hideBill" class="meniu"></app-meniu>
   <app-tips *ngIf="bill && hideBill"[total]="bill.total" (tipsValue)="reciveTipsValue($event)"></app-tips>
   <!-- <canvas #confettiCanvas class="confetti-canvans"></canvas> -->
-  <app-bill *ngIf="bill && !hideBill" class="bill"></app-bill>
+  <!-- <app-bill *ngIf="bill && !hideBill" class="bill"></app-bill> -->
 
 
   </div>

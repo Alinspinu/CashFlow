@@ -26,24 +26,7 @@
 @import "@ionic/angular/css/flex-utils.css";
 
 
-@font-face {
-  font-family: 'RobMedium';    //This is what we are going to call
-  src: url('./assets/fonts/RobotoSlab-Medium.ttf');
-}
 
-@font-face {
-  font-family: 'RobReg';    //This is what we are going to call
-  src: url('./assets/fonts/RobotoSlab-Regular.ttf');
-}
-@font-face {
-  font-family: 'RobBold';    //This is what we are going to call
-  src: url('./assets/fonts/RobotoSlab-Bold.ttf');
-}
-
-@font-face {
-  font-family: 'RobThin';    //This is what we are going to call
-  src: url('./assets/fonts/RobotoSlab-Thin.ttf');
-}
 @font-face {
   font-family: 'NoirProSemi';    //This is what we are going to call
   src: url('./assets/fonts/NoirPro-SemiBold.woff2');
@@ -55,6 +38,10 @@
 @font-face {
   font-family: 'NoirProLight';    //This is what we are going to call
   src: url('./assets/fonts/NoirPro-Light.woff2');
+}
+@font-face {
+  font-family: 'NoirProMed';    //This is what we are going to call
+  src: url('./assets/fonts/NoirPro-Medium.woff2');
 }
 
 body ion-alert.extraAlert{

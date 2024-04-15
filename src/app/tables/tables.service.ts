@@ -5,7 +5,6 @@ import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../models/empty-models";
-import {AuthService} from "../auth/auth.service";
 import { WebRTCService } from "../content/webRTC.service";
 
 
@@ -110,6 +109,7 @@ removeBill(masa: number, billIndex: number){
 
 addToBill(product: BillProduct, masa: number, billIndex: number, userName: string){
 const table = this.tables.find((doc) => doc.index === masa)
+console.log(masa, table)
 if(table){
   let bill: Bill = emptyBill()
   if(table.bills.length){
@@ -131,6 +131,7 @@ if(table){
     table.bills.push(bill)
     this.tableState.next([...this.tables])
   }
+  // console.log(table)
 }
 }
 

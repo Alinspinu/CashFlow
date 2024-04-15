@@ -1,0 +1,42 @@
+
+
+<div class="contents-container">
+  <div class="category-content">
+    <div class="category-header">
+      <ion-button (click)="toggleFullscreen()">full</ion-button>
+      <!-- <ion-button (click)="celebrate()">Confetti</ion-button> -->
+    </div>
+    <div class="category-wrapper">
+        <div class="cat-wr">
+          <div class="cat shadow" *ngFor="let cat of selectedMainCat" (click)="selectCategory(cat._id)" [ngClass]="{'selected-cat': categoryToShowId === cat._id}"  [id]="cat._id">
+            {{cat.name}}
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="menu-wrapper">
+    <div class="main-cat-content" *ngIf="mainCats">
+      <div class="main-cat shadow" *ngFor="let mainCat of getObjectKeys(mainCats)" (click)="selectMainCat(mainCat)" [ngClass]="{'selected': mainCategoryToShowName === mainCat}">
+          {{mainCat | capitalize}}
+      </div>
+    </div>
+   <div class="products-content">
+      <ion-content [fullscreen]="true" class="scroll-products" [scrollEvents]="true"  #scrollableElement>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4"  *ngFor="let product of productsToShow" (click)="addToBill(product)">
+              <div class="category-product" #myCard [attr.data-cat]="product.category._id" [attr.data-main]="product.mainCat" [id]="product._id">
+                <ion-card class="product-card">
+                  <img [src]="modifyImageURL(product.image.path)"alt="Image" class="product-image">
+                  <ion-card-header>
+                    <ion-card-title class="ion-text-center">{{product.name}}</ion-card-title>
+                  </ion-card-header>
+                </ion-card>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </div>
+  </div>
+  </div>

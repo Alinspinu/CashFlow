@@ -128,7 +128,7 @@ getUser(){
         this.router.navigateByUrl(`table-content-mobile/${num}`)
       }
     } else {
-      this.router.navigateByUrl(`table-content/${num}`)
+      this.router.navigateByUrl(`order-content/${num}`)
     }
   }
 

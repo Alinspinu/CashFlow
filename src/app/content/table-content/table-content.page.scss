@@ -95,7 +95,7 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
   color: #fff; /* Change to your desired text color */
 }
 
-.product-item{
+  .product-item{
   display: flex;
   flex-direction: row;
   cursor: pointer;
@@ -140,7 +140,7 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
     height: 30px;
   }
 
-}
+  }
 
 .grey{
   --background: var(--ion-color-medium-tint);

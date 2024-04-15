@@ -22,7 +22,6 @@ import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/e
 import { getSection, round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
-import { AudioService } from 'src/app/shared/audio.service';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 import { WebRTCService } from '../webRTC.service';
 

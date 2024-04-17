@@ -1,7 +1,7 @@
 
 
 .meniu-wrapper{
-  background-color: #f7f0eb;
+  background-color: #fbe9db;
 }
 
   .category-wrapper{
@@ -10,10 +10,7 @@
     padding-top: 18px ;
     overflow: hidden;
     .cat-wr{
-      overflow-y: scroll;
       padding: 0 23px;
-      // position: relative;
-      // right: -17px;
       height: 100%;
       .cat{
         font-family: NoirProReg !important;
@@ -46,7 +43,9 @@
 
 
   .main-cat-row{
+    position: relative;
     margin-top: 75px;
+    left: -22px;
     ion-col{
       padding: 0 24px;
       .main-cat{
@@ -109,7 +108,7 @@
     height: 130px;
     opacity: 80%;
     padding-top: 0;
-    // direction: ltr;
+    direction: ltr;
     ion-card-title{
       font-family: NoirProMed !important;
       font-size: 25px;
@@ -162,10 +161,10 @@
   }
 
 
-  // .scroll-products{
-  //   direction: rtl;
-  //   left: -17px;
-  // }
+  .scroll-products{
+    direction: rtl;
+    left: -17px;
+  }
 
   .shadow{
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);

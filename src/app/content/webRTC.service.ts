@@ -14,8 +14,8 @@ export class WebRTCService {
   private setOrderOnlineTime = new Subject<any>();
 
   constructor() {
-    // this.socket = io('https://live669-0bac3349fa62.herokuapp.com');
-    this.socket = io('http://localhost:8090');
+    this.socket = io('https://live669-0bac3349fa62.herokuapp.com');
+    // this.socket = io('http://localhost:8090');
 
     this.socket.on('productAdded', (data: any) => {
       this.productAddedSubject.next(data);

@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { WebRTCService } from 'src/app/content/webRTC.service';
-import { round } from '../../../../../../CashFlow/src/app/shared/utils/functions';
+import { round } from 'src/app/shared/utils/functions';
+
 
 @Component({
   selector: 'app-tips',

@@ -34,7 +34,7 @@ export class TipsPage implements OnInit {
   options: any = [
     {
       precent: 0,
-      img: 'assets/icon/t0.svg'
+      img: 'assets/icon/0.svg'
     },
     {
       precent: 10,

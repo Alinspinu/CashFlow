@@ -38,14 +38,17 @@ getBillIndex(tableIndex: number, billId: string){
 }
 
 addNewBill(masa: number, name: string, newOrder: boolean){
+  console.log('addBill name', newOrder)
   let bill: Bill = emptyBill()
   bill.name = name
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
-    const index = table.bills.findIndex(obj => obj.name === "COMANDĂ NOUĂ")
+    const index = table.bills.findIndex(obj => obj.name === "COMANDA NOUA")
     if(index === -1 || newOrder){
       table.bills.push(bill)
     }
+    const tables = JSON.stringify(this.tables);
+    Preferences.set({key: 'tables', value: tables});
   }
 }
 
@@ -100,6 +103,8 @@ removeBill(masa: number, billIndex: number){
     table.bills.splice(billIndex, 1)
   }
   this.webRtc.sendProductData(JSON.stringify(emptyBill()))
+  const tables = JSON.stringify(this.tables);
+  Preferences.set({key: 'tables', value: tables});
   this.tableState.next([...this.tables])
 }
 
@@ -109,7 +114,6 @@ removeBill(masa: number, billIndex: number){
 
 addToBill(product: BillProduct, masa: number, billIndex: number, userName: string){
 const table = this.tables.find((doc) => doc.index === masa)
-console.log(masa, table)
 if(table){
   let bill: Bill = emptyBill()
   if(table.bills.length){
@@ -118,6 +122,8 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
     bill.total = bill.total + product.price
+    const tables = JSON.stringify(this.tables);
+    Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
     this.webRtc.sendProductData(JSON.stringify(bill))
   } else {
@@ -129,9 +135,10 @@ if(table){
     bill.products.push(product)
     this.webRtc.sendProductData(JSON.stringify(bill))
     table.bills.push(bill)
+    const tables = JSON.stringify(this.tables);
+    Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
   }
-  // console.log(table)
 }
 }
 
@@ -148,6 +155,8 @@ if(table){
         bill.products.splice(billProdIndex, 1)
       }
       this.webRtc.sendProductData(JSON.stringify(bill))
+      const tables = JSON.stringify(this.tables);
+      Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
     }
     }
@@ -163,6 +172,8 @@ addOne(masa: number, billProdIndex: number, billindex: number){
       product.total = product.quantity * product.price
       bill.total = bill.total + product.price
       this.webRtc.sendProductData(JSON.stringify(bill))
+      const tables = JSON.stringify(this.tables);
+      Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
     }
   }
@@ -175,9 +186,23 @@ addComment(masa: number, billProdIndex: number, billIndex: number, comment: stri
     const bill = table.bills[billIndex]
     const product =  bill.products[billProdIndex]
     product.comment = comment
-    this.webRtc.sendProductData(JSON.stringify(bill))
+    const tables = JSON.stringify(this.tables);
+    Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
   }
+}
+
+addTopping(masa: number, billProdIndex: number, billIndex: number, product: any){
+  const table = this.tables.find((doc) => doc.index === masa)
+  if(table){
+    console.log(table)
+    const bill = table.bills[billIndex]
+    bill.products[billProdIndex] = product
+    const tables = JSON.stringify(this.tables);
+    Preferences.set({key: 'tables', value: tables});
+    this.tableState.next([...this.tables])
+    this.webRtc.sendProductData(JSON.stringify(bill))
+}
 }
 
 //*********************CLIENTS**************************** */
@@ -190,6 +215,8 @@ addCustomer(customer: any, masa: number, billIndex: number){
       bill = table.bills[billIndex]
       bill.clientInfo = customer;
       this.webRtc.sendProductData(JSON.stringify(bill))
+      const tables = JSON.stringify(this.tables);
+      Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
   }
 }
@@ -223,7 +250,7 @@ getTables(locatie: string, id: string){
     if(response && response.value){
       const parsedTables = JSON.parse(response.value)
       this.tables = parsedTables
-      this.tableState.next(this.tables)
+      this.tableState.next([...this.tables])
     }
   })
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`, { headers }).subscribe(response => {
@@ -231,7 +258,7 @@ getTables(locatie: string, id: string){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)
       Preferences.set({key: 'tables', value: stringTable})
-      this.tableState.next([...this.tables])
+      // this.tableState.next([...this.tables])
     }
   })
 }
@@ -241,6 +268,8 @@ addTable(name: string, locatie: string){
     .pipe(take(1), tap(response => {
     if(response){
       this.tables.push(response.table)
+      const tables = JSON.stringify(this.tables);
+      Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
     }
   }))
@@ -253,6 +282,8 @@ editTable(tableIndex: number, name: string){
     if(response){
       const table = this.tables[response.table.index-1]
       table.name = response.table.name
+      const tables = JSON.stringify(this.tables);
+      Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
     }
   }))
@@ -265,6 +296,8 @@ deleteTable(tableId: string, index: number){
     if(response){
       const indexToDelete = this.tables.findIndex(obj => obj.index === index)
       this.tables.splice(indexToDelete, 1)
+      const tables = JSON.stringify(this.tables);
+      Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
     }
   }))
@@ -288,8 +321,6 @@ deleteTable(tableId: string, index: number){
   bill.pending = true
   bill.prepStatus = 'open'
   const billToSend = JSON.stringify(bill);
-  const tables = JSON.stringify(this.tables);
-  Preferences.set({key: 'tables', value: tables});
   return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.PRINT_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
       .pipe(take(1),
         switchMap(res => {
@@ -303,7 +334,8 @@ deleteTable(tableId: string, index: number){
         bill.masaRest = res.masa;
         // this.webRtc.sendProductData(JSON.stringify(bill))
         this.tableState.next([...this.tables]);
-        // Return the original observable
+        const tables = JSON.stringify(this.tables);
+        Preferences.set({key: 'tables', value: tables});
         return of(res);
       })
 );

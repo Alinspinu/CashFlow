@@ -3,7 +3,7 @@
 
 
 
-
+<div class="meniu-wrapper">
 <ion-grid>
   <ion-row>
     <ion-col [size]="sideColSize">
@@ -48,9 +48,9 @@
                                 </ion-col>
                                 <ion-col size="1.3">
                                   <div class="price">
-                                    <span>{{product.price}}</span>
-                                    <div></div>
-                                    <span>LEI</span>
+                                    <span class="pr">{{product.price}}</span>
+                                    <div class="line"></div>
+                                    <span class="lei">LEI</span>
                                   </div>
                                 </ion-col>
                               </ion-row>
@@ -64,13 +64,14 @@
         </ion-grid>
     </ion-col>
     <ion-col size="2.6" *ngIf="bill">
-      <app-bill class="bill"></app-bill>
+      <app-bill class="bill" [bill]="bill"></app-bill>
     </ion-col>
     <ion-col [size]="sideColSize">
       <ion-button (click)="toggleFullscreen()">full</ion-button>
     </ion-col>
   </ion-row>
 </ion-grid>
+</div>
 
 
 

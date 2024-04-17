@@ -1,29 +1,44 @@
 
-        <div class="bill-header">
-          <div>TOTAL
-            <span class="bill-total">{{roundInHtml(total)}} Lei</span>
+
+
+
+  <div class="tips-wrapper">
+    <ion-grid *ngIf="isVisible" [@fadeOut]>
+      <ion-row>
+        <ion-col size="4" offset-lg="4">
+          <h1>FEELING TIPSY TODAY?</h1>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="1.6">
+
+        </ion-col>
+        <ion-col size="2.2" *ngFor="let option of options;">
+          <div class="choise-container" (click)="sendTips(option.precent)">
+            <img [src]="option.img" alt="tips" class="">
+            <div class="value-container" >
+              <span class="tips">{{roundInHtml(option.precent / 100 * total)}} LEI</span>
+              <span class="total">{{roundInHtml((option.precent / 100 * total)+total)}} LEI</span>
+            </div>
           </div>
-        </div>
-        <div class="tips-wrapper">
-          <ion-title class="">Feeling tipsy today?</ion-title>
-          <ion-row  class="ion-padding">
-            <ion-col *ngFor="let option of options">
-              <ion-card class="tips-card" (click)="sendTips(option.precent * total / 100)">
-                <div class="message">
-                  <span>
-                    {{option.message}}
-                  </span>
-                </div>
-                <ion-icon [src]="option.img" alt="tips-image" #icon></ion-icon>
-                <ion-card-header>
-                  <ion-card-title>{{option.precent}} %
-                  </ion-card-title>
-                  <span class="tips-value">{{roundInHtml(option.precent * total / 100)}} Lei</span>
-                  <div class="tips-total-wrapper">
-                    <span class="number">{{roundInHtml((option.precent * total / 100) +total)}} Lei</span>
-                  </div>
-                </ion-card-header>
-              </ion-card>
-            </ion-col>
-          </ion-row>
-      </div>
+        </ion-col>
+        <ion-col size="1.6">
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" offset="3" class="total-col">
+          <div class="total-wrapper">
+            <span>TOTAL <span> {{total}} LEI</span> </span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div class="center-container" *ngIf="!isVisible">
+      <span>mulțumim!</span>
+      <img src="assets/icon/heart.gif" alt="">
+    </div>
+    <div class="total-container" *ngIf="!isVisible">
+      <span>TOTAL <span> {{total + tipsVal}} LEI</span> </span>
+    </div>
+  </div>
+  <canvas #confettiCanvas class="confetti-canvans" *ngIf="showConfeti"></canvas>

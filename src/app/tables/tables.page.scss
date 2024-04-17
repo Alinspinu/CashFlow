@@ -1,6 +1,6 @@
 
 ion-content{
-  --background: var(--ion-color-light-shade);
+  --background: tranasparent;
   font-family: NoirProSemi;
 }
 
@@ -11,6 +11,27 @@ ion-title{
   font-family: NoirProReg !important;
 }
 
+
+.container{
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-image: url('https://www.7iasi.ro/wp-content/uploads/2023/07/06.jpg');
+  background-size: cover;
+  z-index: -1;
+}
+
+
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+}
 
 
 .dynamic-header-active {

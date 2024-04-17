@@ -8,6 +8,9 @@
         <div class="product-container" *ngFor="let product of bill.products">
           <span class="qty">{{product.quantity}} x</span>
           <span class="name">{{uppercaseAllLetters(product.name)}}</span>
+          <div class="topping-wrapper" *ngIf="product.toppings.length">
+            <span class="topping" *ngFor="let topping of product.toppings">{{topping.qty}} {{topping.um}} x {{topping.name.split('/')[0]}}</span>
+          </div>
          <span class="price">{{product.total}} LEI</span>
         </div>
         </ion-content>

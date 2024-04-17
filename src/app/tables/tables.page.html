@@ -1,4 +1,5 @@
 
+
 <ion-header [translucent]="true">
   <ion-toolbar [class.dynamic-header-active]="dynamicColorChange">
     <ion-buttons slot="start">
@@ -23,7 +24,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
+<div class="container">
 <ion-content [fullscreen]="true" >
   <ion-grid>
     <ion-row *ngIf="isLoadding" class="loading">
@@ -55,7 +56,7 @@
   </ion-grid>
 
 </ion-content>
-
+</div>
 
 
 

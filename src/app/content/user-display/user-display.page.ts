@@ -6,7 +6,7 @@ import { WebRTCService } from '../webRTC.service';
 import { Bill} from 'src/app/models/table.model';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { TipsPage } from './tips/tips.page';
-import * as confetti from 'canvas-confetti';
+
 import { MeniuPage } from './meniu/meniu.page';
 import { BillPage } from './bill/bill.page';
 
@@ -25,7 +25,7 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
   bill!: Bill
   hideBill: boolean = false
 
-  @ViewChild('confettiCanvas') confettiCanvas!: ElementRef<HTMLCanvasElement>;
+
 
   constructor(
     private webRTC: WebRTCService,
@@ -44,25 +44,13 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
   }
 
 
-  // celebrate() {
-  //   confetti.create(this.confettiCanvas.nativeElement, { resize: true })({
-  //     particleCount: 2000,
-  //     spread: 600,
-  //     colors: ['#d17b5f', '#dda170', '#ffa052', '#000'],
-  //     origin: { x: 0.5, y: 0.7 },
-  //     angle: 40,
-  //     decay: 0.9,
-  //     gravity: 1.5,
-  //     scalar: 1.3,
-  //     ticks: 600,
-  //     shapes: ['square', 'circle', 'star'],
-  //   });
-  // }
+
 
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
       if(response){
         this.bill = JSON.parse(response)
+        console.log('products from user', this.bill)
       }
       })
   }
@@ -70,7 +58,6 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
 
   getInvite(){
     this.webRTC.getInviteToTip().subscribe(response => {
-      console.log(response)
       if(response === 'invite'){
         this.hideBill = true
       } else {
@@ -80,9 +67,10 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
   }
 
   reciveTipsValue(ev: any){
-    console.log(ev)
     if(ev || ev === 0){
-      this.hideBill = false
+      setTimeout(()=> {
+        this.hideBill = false
+      }, 6000)
       this.webRTC.getUserTip(ev)
     }
   }

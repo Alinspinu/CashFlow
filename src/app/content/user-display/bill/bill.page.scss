@@ -32,11 +32,24 @@
           display: flex;
           flex-direction: column;
           text-align: center;
-          margin-top: 24px;
-          padding: 0 70px 0 70px;
-          .qty, .name{
-            font-family: NoirProMed !important;
+          margin-top: 32px;
+          padding: 0 50px 0 50px;
+          .qty{
+            font-family: NoirProSemi !important;
             font-size: 26px;
+          }
+          .name{
+            font-family: NoirProReg !important;
+            font-size: 26px;
+          }
+          .topping-wrapper{
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            .topping{
+                font-family: NoirProReg !important;
+                font-size: 16px;
+            }
           }
           .price{
             margin-top: 8px;

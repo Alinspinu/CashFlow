@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routes';
 import { environment } from 'src/environments/environment';
 import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 const dbConfig: DBConfig  = {
@@ -32,6 +33,7 @@ const dbConfig: DBConfig  = {
      provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
      provideFirestore(() => getFirestore()),
      NgxIndexedDBModule.forRoot(dbConfig),
+     BrowserAnimationsModule
     ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, HttpClient],
   bootstrap: [AppComponent],

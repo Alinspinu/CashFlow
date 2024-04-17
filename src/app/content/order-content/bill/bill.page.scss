@@ -18,12 +18,20 @@ ion-button{
   display: flex;
   flex-direction: column;
   .header{
-    // flex: 12%;
     display: flex;
     flex-direction: row;
-    // height: 100%;
     width: 900px;
     --background: transparent;
+    .masa{
+      // --background: white;
+      --color: white;
+      z-index: 1;
+      font-size: 50px;
+      font-family: NoirProMed !important;
+      height: 60px;
+      width: 180px;
+      --border-radius: 40px;
+    }
     .horizontal-scroll{
       height: 120px;
       overflow-x: auto;
@@ -69,6 +77,13 @@ ion-button{
         // direction: rtl;
         // position: relative;
         // left: -60px;
+      }
+
+      .extra-bill{
+        font-size: 30px;
+        color: white;
+        font-family: NoirProSemi !important;
+        width: 95%;
       }
       .bill-total{
         bottom: 10px;

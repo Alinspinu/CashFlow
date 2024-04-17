@@ -404,6 +404,7 @@ async addToBill(product: Product){
 
 
   async openComments(product: BillProduct, index: number){
+    console.log('hit something')
     if(product.sentToPrint){
       let options: Topping[] = []
       let optionPrice: number = 0;
@@ -417,6 +418,7 @@ async addToBill(product: Product){
       }
       if(options.length){
           const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
+          console.log(extra)
             if(extra && extra.toppings) {
                pickedToppings = extra.toppings
                pickedToppings.forEach(el => {
@@ -428,6 +430,7 @@ async addToBill(product: Product){
                product.discount = round(totalPrice * (product.discount * 100 / product.price) /100)
                product.toppings = [...product.toppings, ...pickedToppings]
                this.billToshow.total += (optionPrice * product.quantity)
+               this.tableSrv.addTopping(this.tableNumber, index, this.billIndex, product)
             }
             if(extra && extra.comment){
               this.tableSrv.addComment(this.tableNumber, index, this.billIndex, extra.comment)

@@ -6,7 +6,7 @@ import { IonicModule, IonContent, ToastController, BooleanValueAccessor } from '
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, Observable, map, switchMap, of } from 'rxjs';
 import { Bill, BillProduct, deletetBillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
-import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
+import { emptyBill, emptyBillProduct, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
 import { TablesService } from 'src/app/tables/tables.service';
 import { WebRTCService } from '../../webRTC.service';
 import { getSection, round } from 'src/app/shared/utils/functions';
@@ -153,6 +153,7 @@ export class BillPage implements OnInit, OnDestroy {
   getBill(){
     this.tabSub = this.tableSrv.tableSend$.subscribe(response => {
       if(response){
+        console.log("get table")
       const table = response.find(obj => obj.index === this.tableNumber)
       if(table){
         this.table = table;
@@ -594,6 +595,7 @@ export class BillPage implements OnInit, OnDestroy {
         this.billToshow.tips = tipsValue
         this.billToshow.total =   this.billToshow.total  + tipsValue
     }
+    this.webRTC.sendProductData(JSON.stringify(this.billToshow))
   }
   }
 
@@ -633,6 +635,7 @@ export class BillPage implements OnInit, OnDestroy {
                product.discount = round(totalPrice * (product.discount * 100 / product.price) /100)
                product.toppings = [...product.toppings, ...pickedToppings]
                this.billToshow.total += (optionPrice * product.quantity)
+               this.tableSrv.addTopping(this.tableNumber, index, this.billIndex, product)
             }
             if(extra && extra.comment){
               this.tableSrv.addComment(this.tableNumber, index, this.billIndex, extra.comment)
@@ -650,8 +653,11 @@ export class BillPage implements OnInit, OnDestroy {
           this.clientMode = false
           this.billToshow.clientInfo = this.client
           this.billToshow.name = this.client.name
+          this.billToshow.inOrOut = '',
           this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-          this.sendOrder(false).subscribe()
+          this.sendOrder(false).subscribe(response => {
+            console.log(response)
+          })
         }
         if(clientInfo.message === "voucher"){
           this.billToshow.voucher = clientInfo.data
@@ -676,12 +682,12 @@ export class BillPage implements OnInit, OnDestroy {
           this.billToshow._id.length ? this.billId = this.billToshow._id : this.billId = 'new';
         }
         // this.discountValue = 0
-        this.client = null
         this.disableOrderButton = true
         const response = await this.tableSrv.redCustomer(this.tableNumber, this.billIndex, this.billId, this.user.employee, this.user.locatie)
         if(response) {
           this.disableOrderButton = false
           this.clientMode = true;
+          this.client = null
         }
       }
 
@@ -834,7 +840,16 @@ roundInHtml(num: number){
   return round(num)
 }
 
-
+toggleFullscreen() {
+  const elem = document.documentElement;
+  if (!document.fullscreenElement) {
+    elem.requestFullscreen();
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
 
 
 }

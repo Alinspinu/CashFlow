@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Bill, BillProduct } from 'src/app/models/table.model';
 import { round } from 'src/app/shared/utils/functions';
-import { WebRTCService } from '../../webRTC.service';
 
 @Component({
   selector: 'app-bill',
@@ -13,28 +12,15 @@ import { WebRTCService } from '../../webRTC.service';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class BillPage implements OnInit {
+export class BillPage implements OnInit{
 
+@Input() bill!: Bill
 
-  bill!: Bill
 
   constructor(
-    private webRTC: WebRTCService
   ) { }
 
   ngOnInit() {
-    this.getBill()
-
-  }
-
-
-  getBill(){
-    this.webRTC.getProductAddedObservable().subscribe(response => {
-      if(response){
-        this.bill = JSON.parse(response)
-       this.bill.products.reverse()
-      }
-      })
   }
 
 

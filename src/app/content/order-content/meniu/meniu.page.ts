@@ -14,7 +14,7 @@ import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
 import { getSection, round } from 'src/app/shared/utils/functions';
 import { TablesService } from 'src/app/tables/tables.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-content.service';
 
 
@@ -59,6 +59,7 @@ export class MeniuPage implements OnInit, OnDestroy {
     private tableSrv: TablesService,
     private route: ActivatedRoute,
     private orderService: OrderService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -112,16 +113,7 @@ export class MeniuPage implements OnInit, OnDestroy {
 
 
 
-  toggleFullscreen() {
-    const elem = document.documentElement;
-    if (!document.fullscreenElement) {
-      elem.requestFullscreen();
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    }
-  }
+
 
 
   selectCategory(cat: string){
@@ -264,7 +256,9 @@ export class MeniuPage implements OnInit, OnDestroy {
 
     }
 
-
+    goBack(){
+      this.router.navigateByUrl('/tabs/tables')
+    }
 
 
 

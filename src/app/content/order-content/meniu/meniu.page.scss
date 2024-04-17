@@ -7,16 +7,31 @@ div, ion-card-title{
   display: flex;
   flex-direction: row;
   height: 100vh;
+
     .category-content{
+      z-index: 1;
       flex: 10%;
       height: 98vh;
       max-width: 200px;
       width: 100%;
+      // display: flex;
+      // flex-direction: column;
+      // align-items: center;
       .category-header{
-        margin: 12px 0 0 12px;
-        padding: 24px 8px 8px 24px;
-        height: 10%;
-        border-radius: 12px;
+        margin: 18px 0 0 12px;
+        padding: 8px;
+        height: 9%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        ion-button{
+          font-family: NoirProMed !important;
+          height: 70px;
+          --background: var(--ion-color-secondary);
+          --color: white;
+          font-size: 20px;
+        }
       }
       .category-wrapper{
         margin: 12px 0 12px 0px;
@@ -58,6 +73,7 @@ div, ion-card-title{
         justify-content: space-between;
         align-items: center;
         .main-cat{
+          z-index: 2;
           background-color: white;
           opacity: 80%;
           border-radius: 30px;

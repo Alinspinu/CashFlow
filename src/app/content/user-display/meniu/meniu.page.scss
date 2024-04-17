@@ -1,5 +1,9 @@
 
 
+.meniu-wrapper{
+  background-color: #f7f0eb;
+}
+
   .category-wrapper{
     height: 950px;
     width: 100%;
@@ -28,10 +32,15 @@
     .products-content{
       border-radius: 12px;
       margin-top: 18px;
-      height: 87%;
+      height: 860px;
       width: 100%;
       display: flex;
       overflow: hidden;
+      ion-content{
+        --background: transparent !important;
+          // height:800px !important;
+          padding: 0;
+      }
 
     }
 
@@ -67,11 +76,7 @@
     }
   }
 
-ion-content{
-  --background: transparent !important;
-    height:970px !important;
-    padding: 0;
-}
+
 
   .selected{
     animation: switch 0.2s ease forwards;
@@ -80,7 +85,6 @@ ion-content{
   }
 
   .main-cat:active{
-    // animation: switch 0.2s ease forwards;
     transform: scale(0.8);
     background-color: black !important;
     color: white;
@@ -121,18 +125,27 @@ ion-content{
 
     .price{
       padding: 0;
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: center;
-      div{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 70px;
+      .line{
         border-top: 6px solid black;
-        width: 50px;
+        width: 55px;
         padding: 0;
       }
       span{
+        position: relative;
+        padding: 0;
         font-family: NoirProReg !important;
         font-size: 40px;
         color: black;
+      }
+      .pr{
+        top: 10px;
+      }
+      .lei{
+        bottom: 10px;
       }
     }
 

@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
          this.tablesService.getTables(this.user.locatie, this.user._id)
          this.productsSrv.getProducts(this.user.locatie).subscribe()
          this.ingSrv.getIngredients(this.user.locatie).subscribe()
-         this.getIncommingOrders()
+        //  this.getIncommingOrders()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{
           this.router.navigateByUrl('/auth')

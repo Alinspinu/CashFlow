@@ -1,6 +1,11 @@
 <div class="container">
 
       <ion-toolbar class="header">
+        <ion-buttons slot="start">
+          <ion-button class="masa" (click)="toggleFullscreen()">
+           M {{tableNumber}}
+          </ion-button>
+        </ion-buttons>
         <ion-buttons slot="end" class="horizontal-scroll">
           <ion-button
               class="ion-text-end orders"
@@ -57,50 +62,50 @@
       </ion-content>
       <div class="extra-bill" *ngIf="billToshow">
         <ion-row class="bill-discount-row" *ngIf="billToshow.discount !== 0">
-          <ion-col size="10">
+          <ion-col size="8">
             <span class="red-text">TOTAL PRODUSE</span>
           </ion-col>
-          <ion-col size="2" class="ion-text-center">
+          <ion-col size="4" class="ion-text-end">
             <span class="red-lei">{{calcProductTotal(billToshow.products)}} Lei</span>
           </ion-col>
         </ion-row>
         <ion-row class="bill-discount-row" *ngIf="billToshow.discount !== 0">
-          <ion-col size="10">
+          <ion-col size="8">
             <span class="red-text">REDUCERE</span>
           </ion-col>
-          <ion-col size="2" class="ion-text-center">
+          <ion-col size="4" class="ion-text-end">
             <span class="red-lei">- {{roundInHtml(billToshow.discount)}} Lei</span>
           </ion-col>
         </ion-row>
         <ion-row class="bill-discount-row" *ngIf="billToshow.cashBack !== 0">
-          <ion-col size="10">
+          <ion-col size="8">
             <span class="red-text">CASH BACK</span>
           </ion-col>
-          <ion-col size="2" class="ion-text-center">
+          <ion-col size="4" class="ion-text-end">
             <span class="red-lei">- {{roundInHtml(billToshow.cashBack)}} Lei</span>
           </ion-col>
         </ion-row>
         <ion-row class="bill-discount-row" *ngIf="billToshow.voucher !== 0">
-          <ion-col size="10">
+          <ion-col size="8">
             <span class="red-text">VOUCHER</span>
           </ion-col>
-          <ion-col size="2" class="ion-text-center">
+          <ion-col size="4" class="ion-text-end">
             <span class="red-lei">- {{billToshow.voucher}} Lei</span>
           </ion-col>
         </ion-row>
         <ion-row class="bill-tips-row" *ngIf="billToshow.tips > 0 || showZeroTips">
-          <ion-col size="10">
+          <ion-col size="8">
             <span class="tips-text">BACSIS</span>
           </ion-col>
-          <ion-col size="2" class="ion-text-center">
+          <ion-col size="4" class="ion-text-end">
             <span class="tips-lei"> + {{billToshow.tips}} Lei</span>
           </ion-col>
         </ion-row>
         <ion-row class="bill-tips-row" *ngIf="billToshow.payOnline || billToshow.payment.online > 0">
-          <ion-col size="10">
+          <ion-col size="8">
             <span class="tips-text">PLĂTIT ONLINE</span>
           </ion-col>
-          <ion-col size="2" class="ion-text-center">
+          <ion-col size="4" class="ion-text-end">
             <span class="tips-lei"> - {{billToshow.payment.online}} Lei</span>
           </ion-col>
         </ion-row>
@@ -125,7 +130,7 @@
         (click)="sendOrder(true).subscribe()"
         [disabled]="disableOrderButton"
         >
-        <ion-label>COMANDĂ</ion-label>
+        <ion-label>TRIMITE</ion-label>
         <ion-icon src="assets/icon/send-outline.svg"></ion-icon>
       </ion-button>
       </div>
@@ -182,7 +187,7 @@
     class=""
     (click)="useCashBack(cashBackMode)"
     >
-    <div class="label-wrapper">
+    <div class="label-wrapper" *ngIf="client">
       <ion-label class="label">
         CashBack
       </ion-label>

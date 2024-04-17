@@ -6,6 +6,9 @@
       <ion-button (click)="logout()" class="back-button">
         <ion-icon src="../../assets/icon/log-out-outline.svg"></ion-icon>
       </ion-button>
+      <ion-button (click)="toggleMode(mode)" class="mode" [color]="modeColor">
+        {{mode ? 'Intefață veche' : 'Interfață nouă'}}
+      </ion-button>
     </ion-buttons>
     <!-- <div class="accept-button-wrapper">
       <ion-title  class="ion-text-center" style="flex: 70%; font-size: 23px;" *ngIf="onlineOrder">Comandă Online</ion-title>
@@ -24,7 +27,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<div class="container">
+<div class="container" [ngStyle]="{ 'background-image': backgroundImageUrl }">
 <ion-content [fullscreen]="true" >
   <ion-grid>
     <ion-row *ngIf="isLoadding" class="loading">

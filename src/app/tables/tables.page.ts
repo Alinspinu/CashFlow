@@ -34,9 +34,14 @@ export class TablesPage implements OnInit, OnDestroy {
 
   isLoadding: boolean = true
 
+  mode: boolean = false
+
   editMode: boolean = false
   user!: User
   tableSubs!: Subscription
+  redirectUrl: string = 'table-content/'
+  modeColor: string = 'danger'
+  backgroundImageUrl = "";
 
   accesLevel: number = 1
 
@@ -128,12 +133,26 @@ getUser(){
         this.router.navigateByUrl(`table-content-mobile/${num}`)
       }
     } else {
-      this.router.navigateByUrl(`order-content/${num}`)
+      console.log(this.redirectUrl)
+      console.log(this.mode)
+      this.router.navigateByUrl(`${this.redirectUrl}${num}`)
     }
   }
 
 
-
+    toggleMode(mode: boolean){
+      if(mode) {
+        this.redirectUrl = 'table-content/'
+        this.modeColor = "danger"
+        this.backgroundImageUrl = "";
+        this.mode = false
+      } else {
+        this.redirectUrl = "order-content/"
+        this.modeColor = "primary"
+        this.backgroundImageUrl = "url(https://www.7iasi.ro/wp-content/uploads/2023/07/06.jpg)";
+        this.mode = true
+      }
+    }
 
   async addTable(){
     await this.actionSheet.addMainCat().then(response => {

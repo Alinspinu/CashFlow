@@ -12,13 +12,21 @@ ion-title{
 }
 
 
+.mode{
+  margin-left: 40px;
+  font-family: NoirProMed !important;
+  font-size: 22px;
+  height: 40px;
+  // --color: white;
+  --background: var(--ion-color-primary) ;
+}
+
 .container{
   display: flex;
   flex-direction: row;
   height: 100vh;
-  background-image: url('https://www.7iasi.ro/wp-content/uploads/2023/07/06.jpg');
+  // background-image: url('https://www.7iasi.ro/wp-content/uploads/2023/07/06.jpg');
   background-size: cover;
-  z-index: -1;
 }
 
 

@@ -509,6 +509,51 @@ async payAlert(title: string, message: string, label: string){
     }
   }
 
+  async download() {
+    const alert = await this.alertController.create({
+      header: 'Alege',
+      message: `Alege o opțiune`,
+      buttons: [
+        {
+          text: 'Renunță',
+          role: 'canncel',
+        },
+        {
+          text: 'Alege',
+          role: 'confirm',
+        },
+      ],
+      inputs: [
+        {
+          label: 'Produse',
+          type: 'radio',
+          value: 'products',
+          cssClass: 'option'
+        },
+        {
+          label: 'Consum',
+          type: 'radio',
+          value: 'consumption',
+          cssClass: 'option'
+        },
+        {
+          label: 'Productie',
+          type: 'radio',
+          value: 'production',
+          cssClass: 'option'
+        },
+      ],
+      cssClass: 'extraAlert'
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm"){
+      return result.data.values
+    } else {
+      return null
+    }
+  }
+
 
 
   async chooseExtra(options: string[]) {

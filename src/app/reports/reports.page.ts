@@ -17,11 +17,7 @@ import { ProductsPage } from './products/products.page';
 })
 
 
-
-
 export class ReportsPage {
-
-
 
   show:
   {
@@ -29,7 +25,7 @@ export class ReportsPage {
     sales: boolean
     products: boolean
     ingredients: boolean
-  } = {sales: false, products: true, ingredients: false, menu: true}
+  } = {sales: false, products: true, ingredients: false, menu: false}
 
   constructor() {}
 

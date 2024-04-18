@@ -71,7 +71,6 @@ getUser(){
   Preferences.get({key: 'authData'}).then(data  => {
     if(data.value) {
      this.user = JSON.parse(data.value)
-    //  this.incommingOrders()
      this.getTables()
     } else{
       this.router.navigateByUrl('/auth')
@@ -106,40 +105,40 @@ getUser(){
 
 
 
-  incommingOrders(){
-    console.log('hit incomming orders')
-  this.tableServ.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
-    if(response){
-      const data = JSON.parse(response.data)
-      if(data.message === 'New Order'){
-        this.order = data.doc
-        this.onlineOrder = true
-        this.colorToggleInterval = setInterval(() => {
-          this.audio.play()
-          this.dynamicColorChange = !this.dynamicColorChange;
-        }, 500);
-      }
-    }
-   })
-  }
+  // incommingOrders(){
+  //   console.log('hit incomming orders')
+  // this.tableServ.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
+  //   if(response){
+  //     const data = JSON.parse(response.data)
+  //     if(data.message === 'New Order'){
+  //       this.order = data.doc
+  //       this.onlineOrder = true
+  //       this.colorToggleInterval = setInterval(() => {
+  //         this.audio.play()
+  //         this.dynamicColorChange = !this.dynamicColorChange;
+  //       }, 500);
+  //     }
+  //   }
+  //  })
+  // }
 
-  stopDynamicHeader() {
-    clearInterval(this.colorToggleInterval);
-    this.dynamicColorChange = false;
-  }
+  // stopDynamicHeader() {
+  //   clearInterval(this.colorToggleInterval);
+  //   this.dynamicColorChange = false;
+  // }
 
-  async acceptOrder(){
-    this.audio.pause()
-    this.onlineOrder = false
-    this.stopDynamicHeader()
-    const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
-    if(result){
-      const time = +result * 60 * 1000
-      this.tableServ.setOrderTime(this.order._id, time).subscribe(response => {
-        console.log(response)
-      })
-    }
-  }
+  // async acceptOrder(){
+  //   this.audio.pause()
+  //   this.onlineOrder = false
+  //   this.stopDynamicHeader()
+  //   const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
+  //   if(result){
+  //     const time = +result * 60 * 1000
+  //     this.tableServ.setOrderTime(this.order._id, time).subscribe(response => {
+  //       console.log(response)
+  //     })
+  //   }
+  // }
 
 
 

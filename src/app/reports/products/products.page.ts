@@ -278,6 +278,22 @@ dateErr(){
 }
 
 
+async openDownload(){
+  const file = await this.actionSrv.download()
+  console.log(file)
+  if(file){
+    if(file === 'products'){
+      this.printProducts()
+    }
+    if(file === 'consumption') {
+      this.printConsuption()
+    }
+    if(file === 'production'){
+      this.printProduction()
+    }
+  }
+}
+
 
 printProducts(){
   const products = JSON.stringify(this.products)

@@ -1,10 +1,7 @@
 
 
-
-
-
 <ion-content [fullscreen]="true" *ngIf="!showProducts && !isLoading">
-  <ion-title class="ion-text-center">Alege Perioada</ion-title>
+ <div class="title">Alege Perioada</div>
   <div class="grid-date">
     <ion-button fill="outline" mode="md" color="medium" (click)="pickStartDay()">{{startDay && startDay.length ? startDay : "ZI Început"}}</ion-button>
     <ion-label color="medium" *ngIf="startDay">LA</ion-label>
@@ -28,101 +25,35 @@
     <app-spinner></app-spinner>
   </div>
 </ion-content>
-<ion-header  *ngIf="showProducts && !isLoading">
-  <ion-toolbar>
-    <ion-buttons slot="start" class="time">
-      <ion-button (click)="hide()"  >
-        ALEGE PERIOADA
-      </ion-button>
-      </ion-buttons>
-      <div class="label">
+
+  <ion-toolbar *ngIf="showProducts && !isLoading">
+    <!-- <div class="label">
         <ion-label *ngIf="startDay === endDay">
           {{startDay}}
         </ion-label>
         <ion-label *ngIf="startDay !== endDay">
           {{startDay}} -- {{endDay}}
         </ion-label>
-      </div>
-      <ion-buttons slot="end">
-        <ion-button (click)="printProducts()">
-         <span class="but">Produse vândute</span>
-          <ion-icon src="./assets/icon/download.svg"></ion-icon>
+    </div> -->
+    <ion-buttons slot="end">
+      <ion-button (click)="hide()">
+        <ion-icon src="assets/icon/calendar.svg"></ion-icon>
+      </ion-button>
+        <ion-button (click)="openDownload()">
+          <ion-icon src="assets/icon/download.svg"></ion-icon>
         </ion-button>
-        <ion-button (click)="printConsuption()">
-          <span class="but">Centralizator consum</span>
-          <ion-icon src="./assets/icon/download.svg"></ion-icon>
-        </ion-button>
-        <ion-button (click)="printProduction()">
-         <span class="but"> Raport de productie</span>
-          <ion-icon src="./assets/icon/download.svg"></ion-icon>
-        </ion-button>
-      <ion-button (click)="showConsumption()">
-        {{showProductIngs ? "ARATĂ VÂNZĂRILE" : "ARATĂ CONSUMUL"}}
+        <ion-button (click)="showConsumption()">
+        {{showProductIngs ? "VÂNZĂRI" : "CONSUM"}}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
+
   <ion-content [fullscreen]="true" class="products-content" *ngIf="showProducts && !isLoading && !showProductIngs">
     <ion-grid *ngIf="sections">
-      <ion-row class="totals-row">
-        <ion-col [size]="colSize['buc']" >
-          <div class="section" (click)="showMain('buc')" [ngClass]="{'main': colSize['buc'] === 2.2}">
-            <span class="proc">{{calcProcents(calcProductsTotal(dbProducts), calcProductsTotal(sections.buc.products))}} %</span>
-            <span class="title">Bucătărie</span>
-            <div class="sales">
-              <span class="value">{{calcProductsTotal(sections.buc.products)}}</span>
-              <span class="note">(Vânzări Lei)</span>
-            </div>
-            <div class="consumption">
-              <span class="value">{{calcIngredientsTotal(sections.buc.ings)}}</span>
-              <span class="note">(Consum Lei)</span>
-            </div>
-            <div class="surplus">
-              <span class="value">{{roundInHtml((calcProductsTotal(sections.buc.products) - calcIngredientsTotal(sections.buc.ings)) / calcIngredientsTotal(sections.buc.ings) * 100)}}</span>
-              <span class="note">(Adaos %)</span>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col [size]="colSize['pat']">
-          <div class="section" (click)="showMain('pat')" [ngClass]="{'main': colSize['pat'] === 2.2}">
-            <span class="proc">{{calcProcents(calcProductsTotal(dbProducts), calcProductsTotal(sections.pat.products))}} %</span>
-            <span class="title">Patiserie</span>
-            <div class="sales">
-              <span class="value">{{calcProductsTotal(sections.pat.products)}}</span>
-              <span class="note">(Vânzări Lei)</span>
-            </div>
-            <div class="consumption">
-              <span class="value">{{calcIngredientsTotal(sections.pat.ings)}}</span>
-              <span class="note">(Consum Lei)</span>
-            </div>
-            <div class="surplus">
-              <span class="value">{{roundInHtml((calcProductsTotal(sections.pat.products) - calcIngredientsTotal(sections.pat.ings)) / calcIngredientsTotal(sections.pat.ings) * 100)}}</span>
-              <span class="note">(Adaos %)</span>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col [size]="colSize['shop']">
-          <div class="section" (click)="showMain('shop')" [ngClass]="{'main': colSize['shop'] === 2.2}">
-            <span class="proc">{{calcProcents(calcProductsTotal(dbProducts), calcProductsTotal(sections.shop.products))}} %</span>
-            <span class="title">Shop</span>
-            <div class="sales">
-              <span class="value">{{calcProductsTotal(sections.shop.products)}}</span>
-              <span class="note">(Vânzări Lei)</span>
-            </div>
-            <div class="consumption">
-              <span class="value">{{calcIngredientsTotal(sections.shop.ings)}}</span>
-              <span class="note">(Consum Lei)</span>
-            </div>
-            <div class="surplus">
-              <span class="value">{{roundInHtml((calcProductsTotal(sections.shop.products) - calcIngredientsTotal(sections.shop.ings)) / calcIngredientsTotal(sections.shop.ings) * 100)}}</span>
-              <span class="note">(Adaos %)</span>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col [size]="colSize['total']">
-          <div class="section" (click)="showMain('total')" [ngClass]="{'main': colSize['total'] === 2.2}">
-            <span class="proc">100 %</span>
-            <span class="title">Total</span>
+      <ion-row>
+        <ion-col size-lg="3" offset-lg="5">
+          <div class="section" (click)="showMain('total')">
+            <span class="">Total</span>
             <div class="sales">
               <span class="value">{{calcProductsTotal(dbProducts)}}</span>
               <span class="note">(Vânzări Lei)</span>
@@ -137,81 +68,11 @@
             </div>
           </div>
         </ion-col>
-        <ion-col [size]="colSize['coffee']">
-          <div class="section" (click)="showMain('coffee')" [ngClass]="{'main': colSize['coffee'] === 2.2}">
-            <span class="proc">{{calcProcents(calcProductsTotal(dbProducts), calcProductsTotal(sections.coffee.products))}} %</span>
-            <span class="title">Cafea</span>
-            <div class="sales">
-              <span class="value">{{calcProductsTotal(sections.coffee.products)}}</span>
-              <span class="note">(Vânzări Lei)</span>
-            </div>
-            <div class="consumption">
-              <span class="value">{{calcIngredientsTotal(sections.coffee.ings)}}</span>
-              <span class="note">(Consum Lei)</span>
-            </div>
-            <div class="surplus">
-              <span class="value">{{roundInHtml((calcProductsTotal(sections.coffee.products) - calcIngredientsTotal(sections.coffee.ings)) / calcIngredientsTotal(sections.coffee.ings) * 100)}}</span>
-              <span class="note">(Adaos %)</span>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col [size]="colSize['tea']">
-          <div class="section" (click)="showMain('tea')" [ngClass]="{'main': colSize['tea'] === 2.2}">
-            <span class="proc">{{calcProcents(calcProductsTotal(dbProducts), calcProductsTotal(sections.tea.products))}} %</span>
-            <span class="title">Ceai</span>
-            <div class="sales">
-              <span class="value">{{calcProductsTotal(sections.tea.products)}}</span>
-              <span class="note">(Vânzări Lei)</span>
-            </div>
-            <div class="consumption">
-              <span class="value">{{calcIngredientsTotal(sections.tea.ings)}}</span>
-              <span class="note">(Consum Lei)</span>
-            </div>
-            <div class="surplus">
-              <span class="value">{{roundInHtml((calcProductsTotal(sections.tea.products) - calcIngredientsTotal(sections.tea.ings)) / calcIngredientsTotal(sections.tea.ings) * 100)}}</span>
-              <span class="note">(Adaos %)</span>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col [size]="colSize['bar']">
-          <div class="section" (click)="showMain('bar')" [ngClass]="{'main': colSize['bar'] === 2.2}">
-            <span class="proc">{{calcProcents(calcProductsTotal(dbProducts), calcProductsTotal(sections.bar.products))}} %</span>
-            <span class="title">Bar</span>
-            <div class="sales">
-              <span class="value">{{calcProductsTotal(sections.bar.products)}}</span>
-              <span class="note">(Vânzări Lei)</span>
-            </div>
-            <div class="consumption">
-              <span class="value">{{calcIngredientsTotal(sections.bar.ings)}}</span>
-              <span class="note">(Consum Lei)</span>
-            </div>
-            <div class="surplus">
-              <span class="value">{{roundInHtml((calcProductsTotal(sections.bar.products) - calcIngredientsTotal(sections.bar.ings)) / calcIngredientsTotal(sections.bar.ings) * 100)}}</span>
-              <span class="note">(Adaos %)</span>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col [size]="colSize['default']">
-          <div class="section" (click)="showMain('default')" [ngClass]="{'main': colSize['default'] === 2.2}">
-            <span class="proc">{{calcProcents(calcProductsTotal(dbProducts), calcProductsTotal(sections.default.products))}} %</span>
-            <span class="title">Nedefinit</span>
-            <div class="sales">
-              <span class="value">{{calcProductsTotal(sections.default.products)}}</span>
-              <span class="note">(Vânzări Lei)</span>
-            </div>
-            <div class="consumption">
-              <span class="value">{{calcIngredientsTotal(sections.default.ings)}}</span>
-              <span class="note">(Consum Lei)</span>
-            </div>
-            <div class="surplus">
-              <span class="value">{{roundInHtml((calcProductsTotal(sections.default.products) - calcIngredientsTotal(sections.default.ings)) / calcIngredientsTotal(sections.bar.ings) * 100)}}</span>
-              <span class="note">(Adaos %)</span>
-            </div>
-          </div>
-        </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-title class="ion-text-center title">Produse Vândute</ion-title>
+
+    <div class="title">Produse Vândute</div>
+
     <ion-item lines="none" slot="fixed" [ngClass]="{'cons': showProductIngs}">
       <div class="name head" (click)="filter('name')">
         <ion-icon src="assets/icon/arrows-down.svg" [color]="nameColor"></ion-icon>
@@ -221,7 +82,7 @@
         <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută produs..."  (ionInput)="searchProduct($event)" #searchbar>
         </ion-searchbar>
       </div>
-      <div class="qty head"></div>
+      <div class="qty head hide"></div>
       <div class="qty head" (click)="filter('qty')">
         <span>Cantitate</span>
         <span>(UM)</span>
@@ -258,19 +119,45 @@
         <ion-icon src="assets/icon/arrows-down.svg" [color]="surplusColor"></ion-icon>
       </div>
     </ion-item>
-    <div class="product-wrapper" *ngFor="let product of products; let i = index">
+
+    <div class="product-mobile" *ngFor="let product of products; let i = index">
+      <ion-item lines="none" class="mobile-input" (click)="showRecipe(i, product)">
+        <ion-grid>
+          <ion-row>
+            <ion-col size='1'>
+              <span class="label">{{i+1}}.</span>
+            </ion-col>
+            <ion-col size="4">
+              <span class="label" (click)="filter('name')">{{product.name}}</span>
+            </ion-col>
+            <ion-col size="2" (click)="filter('qty')">
+              <span class="label">{{product.quantity}} buc</span>
+            </ion-col>
+            <ion-col  size="2" (click)="filter('cashIn')">
+              <span class="label">{{roundInHtml(product.price*product.quantity - product.discount)}} Lei</span>
+            </ion-col>
+            <ion-col  size="3" (click)="filter('surplus')">
+              <span class="label">{{roundInHtml(((product.price*product.quantity - product.discount) - calcConsInHtml(product)) / calcConsInHtml(product) * 100)}} %</span>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </div>
+
+
+    <div class="product-wrapper hide" *ngFor="let product of products; let i = index">
       <ion-item lines="none" class="ing-input" (click)="showRecipe(i, product)" [ngClass]="{'selected': i === selected}">
-        <ion-label class="index">{{i+1}}.</ion-label>
-        <ion-label class="name">{{product.name}}</ion-label>
-        <ion-label  class="qty" *ngIf="!product.showSub"></ion-label>
-        <ion-label  class="qty" *ngIf="product.showSub">Rețetă</ion-label>
-        <ion-label  class="qty">{{product.quantity}} Buc</ion-label>
-        <ion-label  class="qty">{{roundInHtml(product.price)}} Lei</ion-label>
-        <ion-label  class="qty">{{roundInHtml(product.price*product.quantity)}} Lei</ion-label>
-        <ion-label  class="qty">{{roundInHtml(product.discount)}} Lei</ion-label>
-        <ion-label  class="qty">{{roundInHtml(product.price*product.quantity - product.discount)}} Lei</ion-label>
-        <ion-label  class="qty">{{calcConsInHtml(product)}} Lei</ion-label>
-        <ion-label  class="qty">{{roundInHtml(((product.price*product.quantity - product.discount) - calcConsInHtml(product)) / calcConsInHtml(product) * 100)}} %</ion-label>
+        <span class="index">{{i+1}}.</span>
+        <span class="name">{{product.name}}</span>
+        <span  class="qty" *ngIf="!product.showSub"></span>
+        <span  class="qty" *ngIf="product.showSub">Rețetă</span>
+        <span  class="qty">{{product.quantity}} buc</span>
+        <span  class="qty">{{roundInHtml(product.price)}} Lei</span>
+        <span  class="qty">{{roundInHtml(product.price*product.quantity)}} Lei</span>
+        <span  class="qty">{{roundInHtml(product.discount)}} Lei</span>
+        <span  class="qty">{{roundInHtml(product.price*product.quantity - product.discount)}} Lei</span>
+        <span  class="qty">{{calcConsInHtml(product)}} Lei</span>
+        <span  class="qty">{{roundInHtml(((product.price*product.quantity - product.discount) - calcConsInHtml(product)) / calcConsInHtml(product) * 100)}} %</span>
       </ion-item>
       <div class="recipe-wrapper" *ngIf="product.showSub">
         <div class="ings-wrapper" *ngFor="let ing of product.ingr">
@@ -302,7 +189,7 @@
     </div>
   </ion-content>
   <ion-content [fullscreen]="true" class="reports-content" *ngIf="showProductIngs">
-    <ion-title class="ion-text-center">Ingrediente Consumate</ion-title>
+    <div class="title">Ingrediente Consumate</div>
     <ion-item lines="none" slot="fixed" id="cons">
       <div class="name head" (click)="filterIngs('name')">
         <ion-icon src="assets/icon/arrows-down.svg" [color]="nameColor"></ion-icon>
@@ -331,7 +218,7 @@
         <ion-icon src="assets/icon/arrows-down.svg" [color]="totColor"></ion-icon>
       </div>
     </ion-item>
-    <ion-item lines="none" class="ing-input" *ngFor="let ing of allIngredients; let i=index">
+    <ion-item lines="none" class="ing-input hide" *ngFor="let ing of allIngredients; let i=index">
       <ion-label class="index">{{i+1}}.</ion-label>
       <ion-label class="name">{{ing.ing.name}}</ion-label>
       <ion-label  class="qty">{{roundInHtml(ing.qty)}}</ion-label>
@@ -339,4 +226,24 @@
       <ion-label  class="qty">{{roundInHtml(ing.ing.tvaPrice)}}</ion-label>
       <ion-label  class="qty">{{roundInHtml(ing.ing.tvaPrice*ing.qty)}}</ion-label>
     </ion-item>
+    <div class="ing-mobile" *ngFor="let ing of allIngredients; let i=index">
+      <ion-item lines="none" class="mobile-input">
+        <ion-grid>
+          <ion-row>
+            <ion-col size='1'>
+              <span class="label">{{i+1}}.</span>
+            </ion-col>
+            <ion-col size="6">
+              <span class="label" (click)="filterIngs('name')">{{ing.ing.name}}</span>
+            </ion-col>
+            <ion-col size="2" (click)="filterIngs('qty')">
+              <span class="label">{{roundInHtml(ing.qty)}} {{ing.ing.um}}</span>
+            </ion-col>
+            <ion-col  size="3" (click)="filterIngs('tot')">
+              <span class="label">{{roundInHtml(ing.ing.tvaPrice*ing.qty)}} Lei</span>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </div>
   </ion-content>

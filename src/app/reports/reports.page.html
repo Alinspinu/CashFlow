@@ -1,53 +1,41 @@
 
 
+<ion-menu contentId="main-content">
 
-<div class="contents-container">
-  <ion-content [fullscreen]="true" class="menu" *ngIf="show.menu">
-    <ion-header [translucent]="true">
-      <ion-toolbar>
-        <ion-title size="large" class="ion-text-center">Rapoarte</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="hideMenu()">
-            <ion-icon src="assets/icon/arrow-back-outline.svg"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
+    <ion-header class="header">
+        <ion-title>Menu </ion-title>
     </ion-header>
-  <ion-grid class="ion-no-padding ion-no-margin">
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-       <ion-item lines="none" class="option ion-no-padding ion-no-margin" (click)="sales()"  [ngClass]="{'selected': show.sales}">
-        <ion-icon slot="start" src="assets/icon/business.svg"></ion-icon>
-        <ion-label>Vanzari</ion-label>
-       </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-       <ion-item lines="none" class="option ion-no-padding ion-no-margin" (click)="products()"  [ngClass]="{'selected': show.products}">
-        <ion-icon slot="start" src="assets/icon/food.svg"></ion-icon>
-        <ion-label>Produse</ion-label>
-       </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-       <ion-item lines="none" class="option ion-no-padding ion-no-margin" (click)="ingredients()"  [ngClass]="{'selected': show.ingredients}">
-        <ion-icon slot="start" src="assets/icon/plant.svg"></ion-icon>
-        <ion-label>Materii prime</ion-label>
-       </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  </ion-content>
-  <ion-button (click)="showMenu()" *ngIf="!show.menu" class="menu-button" fill="gohst">
-      <ion-icon src="assets/icon/menu-outline.svg"></ion-icon>
-  </ion-button>
 
-  <div class="separator"></div>
-    <div class="view">
-      <app-cash *ngIf="show.sales"></app-cash>
-      <app-products *ngIf="show.products"></app-products>
-      <app-ingredients *ngIf="show.ingredients"></app-ingredients>
-    </div>
+  <ion-content [fullscreen]="true">
+    <div class="button-container" [ngClass]="{'selected': show.sales}">
+      <ion-menu-toggle [ngClass]="{'selected': show.sales}">
+        <ion-button (click)="sales()" fill="ghost">
+          <ion-icon slot="start" src="assets/icon/business.svg"></ion-icon>
+          <ion-label>Vanzari</ion-label>
+        </ion-button>
+      </ion-menu-toggle>
+      </div>
+      <div class="button-container" [ngClass]="{'selected': show.products}">
+        <ion-menu-toggle [ngClass]="{'selected': show.products}">
+          <ion-button  (click)="products()" fill="ghost">
+            <ion-icon slot="start" src="assets/icon/food.svg"></ion-icon>
+            <ion-label>Produse</ion-label>
+          </ion-button>
+        </ion-menu-toggle>
+      </div>
+      <div class="button-container" [ngClass]="{'selected': show.ingredients}">
+      <ion-menu-toggle [ngClass]="{'selected': show.ingredients}">
+        <ion-button (click)="ingredients()" fill="ghost">
+          <ion-icon slot="start" src="assets/icon/plant.svg"></ion-icon>
+          <ion-label>Materii Prime</ion-label>
+        </ion-button>
+      </ion-menu-toggle>
+      </div>
+  </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+  <ion-menu-button class="menu"></ion-menu-button>
+  <app-cash *ngIf="show.sales"></app-cash>
+  <app-products *ngIf="show.products"></app-products>
+  <app-ingredients *ngIf="show.ingredients"></app-ingredients>
 </div>

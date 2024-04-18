@@ -47,6 +47,8 @@ addNewBill(masa: number, name: string, newOrder: boolean){
     if(index === -1 || newOrder){
       table.bills.push(bill)
     }
+    const stringTable = JSON.stringify(this.tables)
+    Preferences.set({key: 'tables', value: stringTable})
   }
 }
 
@@ -89,6 +91,8 @@ removeBill(masa: number, billIndex: number){
   } else {
     table.bills.splice(billIndex, 1)
   }
+  const stringTable = JSON.stringify(this.tables)
+  Preferences.set({key: 'tables', value: stringTable})
   this.tableState.next([...this.tables])
 }
 
@@ -105,8 +109,7 @@ if(table){
     bill.productCount++
     product.quantity = 1
     bill.products.push(product)
-      bill.total = bill.total + product.price
-      console.log(this.tables)
+    bill.total = bill.total + product.price
     this.tableState.next([...this.tables])
   } else {
     bill.masaRest.index = masa;
@@ -115,9 +118,10 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
     table.bills.push(bill)
-    console.log(this.tables)
     this.tableState.next([...this.tables])
   }
+  const stringTable = JSON.stringify(this.tables)
+  Preferences.set({key: 'tables', value: stringTable})
 }
 }
 
@@ -133,6 +137,8 @@ if(table){
     if(product.quantity === 0){
       bill.products.splice(billProdIndex, 1)
     }
+    const stringTable = JSON.stringify(this.tables)
+    Preferences.set({key: 'tables', value: stringTable})
     this.tableState.next([...this.tables])
   }
 }
@@ -145,6 +151,8 @@ addOne(masa: number, billProdIndex: number, billindex: number){
     product.quantity++
     product.total = product.quantity * product.price
     bill.total = bill.total + product.price
+    const stringTable = JSON.stringify(this.tables)
+    Preferences.set({key: 'tables', value: stringTable})
     this.tableState.next([...this.tables])
   }
 }
@@ -156,6 +164,8 @@ addComment(masa: number, billProdIndex: number, billIndex: number, comment: stri
     const bill = table.bills[billIndex]
     const product =  bill.products[billProdIndex]
     product.comment = comment
+    const stringTable = JSON.stringify(this.tables)
+    Preferences.set({key: 'tables', value: stringTable})
     this.tableState.next([...this.tables])
   }
 }
@@ -169,6 +179,8 @@ addCustomer(customer: any, masa: number, billIndex: number){
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = customer;
+      const stringTable = JSON.stringify(this.tables)
+      Preferences.set({key: 'tables', value: stringTable})
       this.tableState.next([...this.tables])
   }
 }
@@ -196,7 +208,7 @@ getTables(locatie: string, id: string){
     if(response && response.value){
       const parsedTables = JSON.parse(response.value)
       this.tables = parsedTables
-      this.tableState.next(this.tables)
+      this.tableState.next([...this.tables])
     }
   })
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
@@ -204,32 +216,11 @@ getTables(locatie: string, id: string){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)
       Preferences.set({key: 'tables', value: stringTable})
-      this.tableState.next([...this.tables])
+      // this.tableState.next([...this.tables])
     }
   })
 }
 
-getOrderMessage (locatie: string, id: string): Observable<MessageEvent>{
-  this.eventSource = new EventSource(`${environment.BASE_URL}table/get-order-message`)
-    return new Observable((observer) => {
-      this.eventSource.onmessage = (event) => {
-        this.ngZone.run(() => {
-        const data = JSON.parse(event.data)
-        if(data && data.message === "New Order"){
-          console.log('hit inside event')
-        this.getTables(locatie, id)
-        observer.next(event);
-        }
-        });
-      };
-
-      this.eventSource.onerror = (error) => {
-        this.ngZone.run(() => {
-          observer.error(error);
-        });
-      };
-    });
-}
 
 
 stopSse() {
@@ -244,6 +235,8 @@ addTable(name: string, locatie: string){
     .pipe(take(1), tap(response => {
     if(response){
       this.tables.push(response.table)
+      const stringTable = JSON.stringify(this.tables)
+      Preferences.set({key: 'tables', value: stringTable})
       this.tableState.next([...this.tables])
     }
   }))
@@ -256,6 +249,8 @@ editTable(tableIndex: number, name: string){
     if(response){
       const table = this.tables[response.table.index-1]
       table.name = response.table.name
+      const stringTable = JSON.stringify(this.tables)
+      Preferences.set({key: 'tables', value: stringTable})
       this.tableState.next([...this.tables])
     }
   }))
@@ -268,6 +263,8 @@ deleteTable(tableId: string, index: number){
     if(response){
       const indexToDelete = this.tables.findIndex(obj => obj.index === index)
       this.tables.splice(indexToDelete, 1)
+      const stringTable = JSON.stringify(this.tables)
+      Preferences.set({key: 'tables', value: stringTable})
       this.tableState.next([...this.tables])
     }
   }))
@@ -318,8 +315,6 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
   bill.pending = true
   bill.prepStatus = 'open'
   const billToSend = JSON.stringify(bill);
-  const tables = JSON.stringify(this.tables);
-  Preferences.set({key: 'tables', value: tables});
   return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} )
       .pipe(take(1),
         switchMap(res => {
@@ -332,6 +327,8 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
           product.sentToPrintOnline = false;
         });
         bill.masaRest = res.masa;
+        const tables = JSON.stringify(this.tables);
+        Preferences.set({key: 'tables', value: tables});
         this.tableState.next([...this.tables]);
         // Return the original observable
         return of(res);

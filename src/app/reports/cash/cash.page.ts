@@ -136,49 +136,11 @@ getOrders(){
       this.delProducts = response.delProducts
       this.isLoading = false
       this.calcTotals()
-      this.calcTva()
     }
   })
 }
 
 
-calcTva(){
-  let discountBills: Bill[] = []
-  let fullBills: Bill[] = []
-  this.bills.forEach(bill => {
-    if(bill.discount > 0 || bill.cashBack > 0 && bill.status === 'done'){
-      discountBills.push(bill)
-    }
-    if(bill.discount === 0 && bill.cashBack === 0 && bill.status === 'done') {
-      fullBills.push(bill)
-    }
-  })
-  let tvaDiscountBills = 0
-  let tvaFullBills = 0
-  discountBills.forEach(bill => {
-    const discountProcent = (bill.discount + bill.cashBack) * 100 / bill.total;
-    bill.products.forEach(product => {
-      if(product.quantity > 0 && product.tva && product.quantity * product.price > product.discount){
-        const productPrice = product.price * product.quantity
-        const discountValue = productPrice * discountProcent / 100
-        const productRealPrice = productPrice - discountValue
-        const tvaValue = productRealPrice * +product.tva / 100
-        tvaDiscountBills += round(tvaValue)
-      }
-    })
-  })
-  fullBills.forEach(bill => {
-    bill.products.forEach(product => {
-      if(product.quantity > 0 && product.tva && product.quantity * product.price > product.discount){
-        const tvaValue = product.price * product.quantity * +product.tva / 100
-        tvaFullBills += round(tvaValue)
-      }
-    })
-  })
-  this.tvaValue = round(tvaDiscountBills + tvaFullBills)
-  this.totalIncasat = round(this.vivaWallet+this.cash)
-  this.totalNoTax = round(this.totalIncasat - this.tvaValue)
-}
 
  async showDeletedProducts(){
     await this.actionSheet.openPayment(DelProdViewPage, this.delProducts)
@@ -224,18 +186,12 @@ calcTotals(){
      if(bill.payment.card){
        this.card = round(this.card + bill.payment.card)
      }
-     if(bill.payment.viva){
-       this.vivaWallet = round(this.vivaWallet + bill.payment.viva)
-     }
-     if(bill.payment.voucher) {
-       this.voucher = round(this.voucher + bill.payment.voucher)
-     }
-     if(bill.payment.online){
-       this.payOnline = round(this.payOnline + bill.payment.online)
-     }
    }
    if(bill.tips > 0) {
     this.tips += bill.tips
+   }
+   if(bill.dont){
+    this.totalNoTax += bill.total
    }
 
    if(bill.discount > 0){
@@ -248,6 +204,7 @@ calcTotals(){
     this.openTotal += (bill.total - bill.discount)
    }
   })
+  this.totalIncasat = this.total - this.discounts
   this.calcProcents()
   this.calcHours()
   this.calcUsers()

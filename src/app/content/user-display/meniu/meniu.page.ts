@@ -34,6 +34,7 @@ export class MeniuPage implements OnInit {
   sideColSize: number = 1
   menuColSize: number = 10
 
+  fullScreenUrl: string = 'assets/icon/arrows.svg'
 
   categories!: any[];
   mainCats!: any
@@ -92,6 +93,7 @@ export class MeniuPage implements OnInit {
   }
 
 
+
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
       if(response){
@@ -109,9 +111,11 @@ export class MeniuPage implements OnInit {
     const elem = document.documentElement;
     if (!document.fullscreenElement) {
       elem.requestFullscreen();
+      this.fullScreenUrl = 'assets/icon/fullscreen.svg'
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen();
+        this.fullScreenUrl = 'assets/icon/arrows.svg'
       }
     }
   }
@@ -228,7 +232,6 @@ export class MeniuPage implements OnInit {
 
 
 isInViewport(card: HTMLElement, container: HTMLElement): boolean {
-  console.log(container)
   const containerRect = container.getBoundingClientRect();
   const containerTop = containerRect.top;
   const containerBottom = containerTop + containerRect.height;
@@ -239,28 +242,6 @@ isInViewport(card: HTMLElement, container: HTMLElement): boolean {
 
   return cardBottom >= containerTop && cardTop <= containerBottom;
 }
-
-
-//  isInViewport(card: HTMLElement, container: HTMLElement): boolean {
-//   console.log(container)
-//   const containerTop = container.scrollTop;
-//   console.log(containerTop)
-//   const containerBottom = containerTop + container.clientHeight;
-//   const cardRect = card.getBoundingClientRect();
-//   const cardTop = cardRect.top + container.scrollTop;
-//   const cardBottom = cardTop + cardRect.height;
-//   return cardBottom >= containerTop && cardTop <= containerBottom;
-// }
-
-  // isInViewport(card: HTMLElement): boolean {
-  //   const viewportTop = window.scrollY;
-  //   const viewportBottom = viewportTop + window.innerHeight;
-  //   const cardRect = card.getBoundingClientRect();
-  //   const cardTop = cardRect.top + window.scrollY;
-  //   const cardBottom = cardTop + cardRect.height;
-  //   return cardBottom >= viewportTop && cardTop <= viewportBottom;
-  // }
-
 
 
   modifyImageURL(url: string): string {

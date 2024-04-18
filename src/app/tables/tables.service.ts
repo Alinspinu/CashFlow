@@ -332,7 +332,7 @@ deleteTable(tableId: string, index: number){
           product.sentToPrintOnline = false;
         });
         bill.masaRest = res.masa;
-        // this.webRtc.sendProductData(JSON.stringify(bill))
+        this.webRtc.sendProductData(null)
         this.tableState.next([...this.tables]);
         const tables = JSON.stringify(this.tables);
         Preferences.set({key: 'tables', value: tables});

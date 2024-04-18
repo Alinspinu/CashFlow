@@ -123,6 +123,10 @@ getUser(){
   })
 }
 
+goToUser(){
+  this.router.navigateByUrl('/user-display')
+}
+
 
   openTable(num: number){
     if (this.screenWidth < 500) {

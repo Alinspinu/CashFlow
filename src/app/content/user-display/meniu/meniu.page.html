@@ -67,7 +67,11 @@
       <app-bill class="bill" [bill]="bill"></app-bill>
     </ion-col>
     <ion-col [size]="sideColSize">
-      <ion-button (click)="toggleFullscreen()">full</ion-button>
+      <ion-buttons style="margin-left: 100px">
+        <ion-button (click)="toggleFullscreen()">
+          <ion-icon [src]="fullScreenUrl"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-col>
   </ion-row>
 </ion-grid>

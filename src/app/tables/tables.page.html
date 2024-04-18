@@ -9,6 +9,9 @@
       <ion-button (click)="toggleMode(mode)" class="mode" [color]="modeColor">
         {{mode ? 'Intefață veche' : 'Interfață nouă'}}
       </ion-button>
+      <ion-button (click)="goToUser()" class="mode">
+        Monitor Utilizator
+      </ion-button>
     </ion-buttons>
     <!-- <div class="accept-button-wrapper">
       <ion-title  class="ion-text-center" style="flex: 70%; font-size: 23px;" *ngIf="onlineOrder">Comandă Online</ion-title>

@@ -80,7 +80,7 @@ getUser(){
 
 
   openTable(num: number){
-    this.router.navigateByUrl(`table-content/${num}`)
+    this.router.navigateByUrl(`order-content/${num}`)
   }
 
 

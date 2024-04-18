@@ -13,11 +13,15 @@ ion-label, ion-title{
   font-size: 25px;
   width: 100%;
   margin-top: 2rem;
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
   text-align: center;
   font-family: NoirProReg !important;
   color: var(--ion-color-medium)
+}
 
+.ing{
+  margin-top: 9rem;
+  margin-bottom: 10rem;
 }
 
 
@@ -45,11 +49,6 @@ ion-label, ion-title{
   }
 }
 
-.but{
-  margin-right: 4px;
-}
-
-
   .grid-date{
    display: flex;
    justify-content: center;
@@ -71,7 +70,7 @@ ion-label, ion-title{
 
 
 ion-item[slot="fixed"]{
-  top: 32.5%;
+  top: 30.0%;
   width: 100%;
   opacity: 60%;
   border-radius: 8px;
@@ -107,11 +106,6 @@ ion-item[slot="fixed"]{
     font-family: NoirProReg !important;
     flex: 38%;
   }
-  // --backgound: transparent;
-}
-
-#cons{
-  top: 9.3% !important;
 }
 
 
@@ -143,12 +137,6 @@ ion-item[slot="fixed"]{
   }
 }
 
-.bold{
-  font-size: 17px;
-  font-family: NoirProSemi !important;
-}
-
-
 
 .ing-input{
   cursor: pointer;
@@ -173,32 +161,6 @@ ion-item[slot="fixed"]{
   }
 }
 
-#recipe-header{
-  min-height: 45px;
-  width: 95%;
-  opacity: 60%;
-  border-radius: 8px;
-  margin: 0.5rem 0 0.1rem 0.2rem;
-  font-family: NoirProSemi !important;
-  .qty{
-    font-family: NoirProSemi !important;
-    flex: 10%;
-    text-align: center;
-  }
-  .head{
-    display: flex;
-    flex-direction: column;
-  }
-  .name{
-    font-family: NoirProSemi !important;
-   flex: 50%;
-  }
-}
-
-.input:hover{
-  --background: var(--ion-color-medium);
-}
-
 .production-content{
   flex: 50%;
   padding: 20px;
@@ -218,11 +180,6 @@ ion-item[slot="fixed"]{
   --background: var(--ion-color-medium);
 }
 
-.totals-row{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 
 .section {
@@ -230,20 +187,11 @@ ion-item[slot="fixed"]{
   align-self: center;
   display: flex;
   flex-direction: column;
-  background-color: var(--ion-color-primary);
-  border: 4px solid white;
+  background-color: rgb(26, 20, 20);
   border-radius: 12px;
   color: white;
   padding: 8px;
   text-align: center;
-  .title{
-    font-size: 24px;
-    padding: 8px;
-
-  }
-  .proc{
-    font-size: 20px;
-  }
   div{
     display: flex;
     flex-direction: column;

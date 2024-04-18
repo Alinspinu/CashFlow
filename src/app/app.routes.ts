@@ -17,6 +17,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'order-content/:id',
+    loadComponent: () => import('./content/order-content/order-content.page').then( m => m.OrderContentPage),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'register-locatie/:value',
     loadComponent: () => import('./office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
   },

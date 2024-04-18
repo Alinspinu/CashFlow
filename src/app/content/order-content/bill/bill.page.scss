@@ -1,0 +1,241 @@
+
+div, span{
+  font-family: NoirProReg !important;
+}
+ion-button{
+  font-family: NoirProSemi !important;
+
+}
+
+.shadow{
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.container{
+  height: 97vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  .header{
+    display: flex;
+    flex-direction: row;
+    width: 900px;
+    --background: transparent;
+    .masa{
+      --color: white;
+      font-size: 50px;
+      height: 60px;
+      width: 180px;
+      --border-radius: 40px;
+    }
+    .horizontal-scroll{
+      height: 120px;
+      overflow-x: auto;
+      white-space: nowrap;
+        .orders{
+          padding: 8px;
+          --min-width: 100px;
+          --border-radius: 28px;
+          --background: rgba(255,255,255,0.7);
+          ion-label{
+            padding: 14px;
+            text-align: center;
+            min-width: 100px;
+          }
+        }
+      }
+      .add{
+        padding: 8px;
+        margin-right: 18px;
+        --background: rgba(255,255,255,0.7);
+        font-size: 35px;
+        --box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        --border-radius: 50%;
+      }
+
+  }
+  .bill-wrapper{
+    height: 95vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    .bill{
+      flex: 80%;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      .product-content{
+        --background: transparent !important;
+      }
+
+      .extra-bill{
+        font-size: 30px;
+        color: white;
+        font-family: NoirProSemi !important;
+        width: 95%;
+      }
+      .bill-total{
+        bottom: 10px;
+        height: 100px;
+        width: 700px;
+        display: flex;
+        flex-direction: row;
+        .order{
+          flex: 30%;
+          --border-radius: 50px !important;
+          --background: rgba(236, 190, 103, 0.5);
+          ion-label{
+            padding: 24px 8px 24px 8px;
+            font-size: 28px;
+          }
+          ion-icon{
+            font-size: 24px;
+          }
+        }
+        .total{
+          flex: 70%;
+          --border-radius: 50px;
+          font-size: 28px;
+          --background: rgba(146, 56, 18, 0.7);
+          --color: white;
+          --box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
+          ion-icon{
+            margin-right: 16px;
+            font-size: 24px;
+          }
+          .label{
+            span{
+              font-size: 36px;
+            }
+          }
+        }
+      }
+    }
+    .bill-controls{
+      flex: 20%;
+      margin-top: 5%;
+      height: 70%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      ion-button{
+        --border-radius: 28px;
+        --background: rgba(255,255,255,0.7);
+        --box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        ion-label{
+          padding: 18px 12px 18px 12px;
+          text-align: center;
+          min-width: 135px;
+          font-size: 18px;
+        }
+        ion-icon{
+          margin-right: 4px;
+          size: 18px;
+          font-size: 18px;
+        }
+        .label-wrapper{
+          display: flex;
+          flex-direction: column;
+          padding: 6px 8px 6px 8px;
+          .value{
+            padding: 0;
+            font-family: NoirProSemi !important;
+          }
+          .label{
+            padding: 0;
+            font-family: NoirProReg !important;
+          }
+        }
+      }
+
+
+      .nota{
+        --border-radius: 12px !important;
+        --background: rgba(146, 56, 18, 0.7);
+        --color: white;
+        ion-label{
+          padding: 24px 8px 24px 8px;
+          font-size: 22px;
+        }
+        ion-icon{
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+
+.scroll-products{
+  direction: rtl;
+  left: -17px;
+}
+
+
+
+
+.product-item{
+  display: flex;
+  flex-direction: row;
+  margin-top: 8px;
+  border-radius: 12px;
+  --background: rgba(255,255,255,0.7);
+  direction: ltr;
+  cursor: pointer;
+  ion-avatar{
+    height: 100px;
+    width: 100px;
+  }
+  .prod-name{
+    flex: 50%;
+    #p-name{
+      font-size: 18px;
+    }
+    .toppings-wrapper{
+      margin-left: 10%;
+      span{
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+  }
+  .price-wrapper{
+    flex: 20%;
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    .prod-discount{
+      font-size: 12px;
+      color: red;
+      text-align: end;
+    }
+  }
+  .prod-qty{
+    flex: 20%;
+    text-align: center;
+  }
+
+  .prod-total{
+    flex: 20%;
+    text-align: end;
+  }
+  .trash{
+    height: 30px;
+  }
+  }
+
+
+
+
+.grey{
+  --background: rgba(236, 201, 135, 0.7);
+  border: none!important;
+}
+
+.active-button {
+  --background: rgba(146, 56, 18, 0.7) !important;
+  color: white;
+}

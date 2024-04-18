@@ -404,7 +404,6 @@ async addToBill(product: Product){
 
 
   async openComments(product: BillProduct, index: number){
-    console.log('hit something')
     if(product.sentToPrint){
       let options: Topping[] = []
       let optionPrice: number = 0;
@@ -953,6 +952,8 @@ async useCashBack(mode: boolean){
       }
     }
   }
+
+
 
   //**********************************DISABLE// ENAMEBLE BUTTONS************************ */
   disableBrakeButton(){

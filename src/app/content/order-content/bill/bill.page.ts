@@ -356,10 +356,6 @@ export class BillPage implements OnInit, OnDestroy {
       }
     }
 
-
-
-
-
   breakOrder(){
     this.breakMode = !this.breakMode
 

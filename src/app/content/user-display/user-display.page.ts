@@ -45,7 +45,6 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
 
 
 
-
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
       if(response){

@@ -1,14 +1,54 @@
 
 
 
+
+
+ion-content, ion-grid, ion-col, ion-row, ion-item, ion-toolbar, ion-list, ion-radio{
+  --background: transparent !important;
+  background-color: transparent !important;
+}
+
+ion-title, ion-button, ion-textarea, ion-radio, ion-checkbox{
+  color: white;
+}
+ion-radio, ion-checkbox{
+  font-size: 25px;
+}
+
+
+.button-row > ion-col > ion-button{
+  height: 150px;
+}
+
+.container{
+  height: 100%;
+  width: 100%;
+  background-image: url('https://res.cloudinary.com/dhetxk68c/image/upload/c_crop,w_2667,h_1500,ar_16:9,g_auto/v1713458971/Produse/IMG_9809_if4jtt.jpg') !important;
+  background-size: cover;
+
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+}
 .option-row{
   margin-top: 2rem;
 }
 
 
-// ion-item{
-//   margin-top: 2rem;
-// }
+ion-radio::part(container) {
+  background-color: white;
+}
+
+ion-checkbox::part(container) {
+  background-color: white;
+}
 
 .input{
   display: flex;

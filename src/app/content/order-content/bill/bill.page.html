@@ -51,9 +51,9 @@
             </ion-button>
           </ion-buttons>
             <span class="prod-price">{{product.price}} Lei</span>
-            <ion-button size="medium" color="secondary" (click)="redProd(i)" *ngIf="product.sentToPrint">-</ion-button>
+            <ion-button size="large" color="secondary" (click)="redProd(i)" *ngIf="product.sentToPrint">-</ion-button>
             <span class="prod-qty">{{product.quantity}} Buc</span>
-            <ion-button size="medium" color="secondary"(click)="addProd(i)" *ngIf="product.sentToPrint">+</ion-button>
+            <ion-button size="large" color="secondary"(click)="addProd(i)" *ngIf="product.sentToPrint">+</ion-button>
             <div class="price-wrapper">
               <span class="prod-total">{{product.total}} Lei</span>
               <span class="prod-discount"*ngIf="product.discount > 0">-{{product.discount}} Lei</span>
@@ -104,6 +104,14 @@
       </div>
       <div class="bill-total" *ngIf="billToshow">
         <ion-button
+        class="order"
+        (click)="sendOrder(true).subscribe()"
+        [disabled]="disableOrderButton"
+        >
+        <ion-label>TRIMITE</ion-label>
+        <ion-icon src="assets/icon/send-outline.svg"></ion-icon>
+      </ion-button>
+        <ion-button
             class="total"
             size="large"
             expand="block"
@@ -117,14 +125,6 @@
             Lei
           </ion-label>
         </ion-button>
-        <ion-button
-        class="order"
-        (click)="sendOrder(true).subscribe()"
-        [disabled]="disableOrderButton"
-        >
-        <ion-label>TRIMITE</ion-label>
-        <ion-icon src="assets/icon/send-outline.svg"></ion-icon>
-      </ion-button>
       </div>
     </div>
       <ion-buttons slot="end" class="bill-controls">

@@ -1,24 +1,44 @@
-// .input{
-//   border: 0.5px solid var(--ion-color-medium);
-//   border-radius: 8px;
-//   margin: 1rem 0 0.5rem 0.5rem;
-//   width: 100%;
-// }
+
 
 ion-title{
   font-size: 60px;
   font-weight: 600;
+  color:white;
 }
 
+ion-content, ion-grid, ion-col, ion-row, ion-item, ion-heder, ion-toolbar{
+  --background: transparent !important;
+}
+
+.container{
+  height: 100%;
+  width: 100%;
+  background-image: url('https://res.cloudinary.com/dhetxk68c/image/upload/v1713500841/Produse/IMG_5284_gleitb.jpg') !important;
+  background-size: cover;
+
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+}
 ion-checkbox{
   margin: 30px 0 0 60px;
-  --size: 18px;
+  --size: 50px;
 }
 
 ion-checkbox::part(container) {
   border-radius: 6px;
-  border: 2px solid white;
+  background-color: transparent;
+  border: 2px solid rgb(74, 74, 74);
 }
+
+
 
 
 .item{
@@ -28,6 +48,7 @@ ion-checkbox::part(container) {
     margin: 1rem 0 0.5rem 0.5rem;
     width: 100%;
     ion-input{
+      color: white;
       font-size: 26px;
       height: 80px;
       font-weight: 500;
@@ -44,5 +65,10 @@ ion-checkbox::part(container) {
     margin-left: 8px;
     height: 80px;
     width: 80px;
+  }
+}
+ion-footer{
+  ion-button{
+    height: 200px;
   }
 }

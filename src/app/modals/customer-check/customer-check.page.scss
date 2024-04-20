@@ -1,9 +1,53 @@
+
+
+ion-content, ion-grid, ion-col, ion-row, ion-item, ion-toolbar, ion-list, ion-radio{
+  --background: transparent !important;
+  background-color: transparent !important;
+}
+
+ion-title, ion-button, ion-input, ion-radio, ion-checkbox{
+  color: white;
+}
+ion-radio, ion-checkbox{
+  font-size: 25px;
+}
+
+
+ion-row > ion-col > ion-button{
+  height: 150px;
+}
+
+.container{
+  height: 100%;
+  width: 100%;
+  background-image: url('https://res.cloudinary.com/dhetxk68c/image/upload/c_crop,w_3067,h_2300,ar_4:3,g_auto/v1713596619/Produse/IMG_1201_jamvuf.jpg') !important;
+  background-size: cover;
+
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+}
+
+
+
 .input{
   border: 1px solid var(--ion-color-medium);
   border-radius: 8px;
   margin: 1rem 0 0.5rem 0.5rem;
+  height: 130px;
   ion-input{
     height: 130px;
     font-size: 32px;
+  }
+  ion-label{
+    color: white;
+    font-size: 40px;
   }
 }

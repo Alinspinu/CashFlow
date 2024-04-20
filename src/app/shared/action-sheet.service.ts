@@ -354,7 +354,7 @@ async payAlert(title: string, message: string, label: string){
         },
       ],
       inputs: inputs,
-      // cssClass: 'deleteAlert'
+      cssClass: 'reptint-alert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -466,7 +466,7 @@ async payAlert(title: string, message: string, label: string){
         },
       ],
       inputs: inputs,
-      // cssClass: 'deleteAlert'
+      cssClass: 'deleteAlert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();

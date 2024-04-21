@@ -123,6 +123,7 @@ export class AuthService{
         }
       });
       const tokenDate = new Date(expirationDate).getTime() - new Date().getTime();
+      console.log(tokenDate)
       this.aoutoLogout(tokenDate);
       this.user.next(JSON.parse(data));
     Preferences.set({key: 'authData', value: data});

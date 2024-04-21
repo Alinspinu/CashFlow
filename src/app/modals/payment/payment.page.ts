@@ -86,23 +86,23 @@ export class PaymentPage implements OnInit {
   checkboxChanged(ev: any){
     this.paymentForm.get('dont')?.setValue(ev.detail.checked)
     const total = this.paymentForm.get('cash')?.value
-    console.log("cash total",total)
-    console.log( "", this.total)
   }
 
  async cashIn(){
-    const posSum = this.paymentForm.value.card
+    let posSum = this.paymentForm.value.card
     const cardManual = this.paymentForm.value.card2
+    if(cardManual > 0 && !posSum){
+      posSum = cardManual
+    }
    if(this.checkTotal()){
     const pay = {
       cash: this.paymentForm.value.cash,
       card: posSum,
-      card2: cardManual,
       cif: this.paymentForm.value.cif,
       dont: this.paymentForm.value.dont,
     }
     console.log(pay)
-    if(posSum && posSum > 0){
+    if(posSum && posSum > 0 && !cardManual){
       this.disableCancelButton = true
       this.paySrv.checkPos(posSum).subscribe(response => {
         if(response){

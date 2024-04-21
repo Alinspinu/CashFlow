@@ -74,7 +74,7 @@ inputType: string = 'number'
     this.getNirToEdit()
     this.setupIngForm()
     this.setupNirForm()
-    this.getIngs()
+    // this.getIngs()
     this.setTvaValidators()
   }
 
@@ -427,13 +427,13 @@ inputType: string = 'number'
     this.nirForm.reset()
   }
 
-  getIngs(){
-    Preferences.get({key: 'ings'}).then(result => {
-      if(result && result.value){
-        this.nirIngredients = JSON.parse(result.value)
-      }
-    })
-  }
+  // getIngs(){
+  //   Preferences.get({key: 'ings'}).then(result => {
+  //     if(result && result.value){
+  //       this.nirIngredients = JSON.parse(result.value)
+  //     }
+  //   })
+  // }
 
   getIngredients(){
     this.nirSrv.getIngredients(this.user.locatie).subscribe(response => {

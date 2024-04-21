@@ -351,6 +351,7 @@ registerDeletetProduct(product: any){
 }
 
 sendBillToPrint(bill: Bill){
+  console.log(bill)
   return this.http.post<{bill: any, message: string}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill})
 }
 

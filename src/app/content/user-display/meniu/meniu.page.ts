@@ -98,6 +98,7 @@ export class MeniuPage implements OnInit {
     this.webRTC.getProductAddedObservable().subscribe(response => {
       if(response){
         this.bill = JSON.parse(response)
+        this.bill.products.reverse()
         this.sideColSize = 0.7
         this.menuColSize = 8
       } else {

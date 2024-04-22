@@ -44,6 +44,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   colorToggleInterval: any;
 
   disableOrderButton: boolean = false
+  sendOrderSub!: Subscription
 
   isLoading: boolean = true
   showZeroTips: boolean = false
@@ -117,6 +118,9 @@ export class TableContentPage implements OnInit, OnDestroy {
     }
     if(this.tableSub){
       this.tableSub.unsubscribe()
+    }
+    if(this.sendOrderSub){
+      this.sendOrderSub.unsubscribe()
     }
   }
 
@@ -229,7 +233,6 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   showProducts(index: number, mainCat: string){
     this.productsToShow = this.mainCats[mainCat][index].product
-    console.log(this.productsToShow)
     this.showMainCats = false;
     this.showCats = false;
     this.showProd = true;
@@ -417,7 +420,6 @@ async addToBill(product: Product){
       }
       if(options.length){
           const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
-          console.log(extra)
             if(extra && extra.toppings) {
                pickedToppings = extra.toppings
                pickedToppings.forEach(el => {
@@ -501,7 +503,7 @@ async addToBill(product: Product){
       } else {
         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
       }
-      this.sendOrder(false).subscribe()
+     this.sendOrderSub = this.sendOrder(false).subscribe()
 
     }
   }
@@ -599,7 +601,7 @@ updateProductsQuantity(products: any[]){
 
 
 async payment(){
-  this.sendOrder(false).subscribe(async(response) => {
+  this.sendOrderSub = this.sendOrder(false).subscribe(async(response) => {
     if(response){
       const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
         if(paymentInfo){
@@ -637,7 +639,7 @@ if(clientMode){
     this.billToshow.clientInfo = this.client
     this.billToshow.name = this.client.name
     this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-    this.sendOrder(false).subscribe()
+    this.sendOrderSub = this.sendOrder(false).subscribe()
   }
   if(clientInfo.message === "voucher"){
     this.billToshow.voucher = clientInfo.data
@@ -735,7 +737,6 @@ async addDiscount(){
   this.allCats.forEach(cat => {
     cat.product.forEach(product => {
       if(product.discount > 0){
-        console.log(product)
         const data = {
           precent: product.discount,
           productId: product._id,

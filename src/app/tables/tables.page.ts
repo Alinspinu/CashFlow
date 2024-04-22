@@ -137,8 +137,6 @@ goToUser(){
         this.router.navigateByUrl(`table-content-mobile/${num}`)
       }
     } else {
-      console.log(this.redirectUrl)
-      console.log(this.mode)
       this.router.navigateByUrl(`${this.redirectUrl}${num}`)
     }
   }
@@ -174,56 +172,15 @@ goToUser(){
     })
   }
 
-
-
-
-  // incommingOrders(){
-  // this.tableServ.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
-  //   console.log(response)
-  //   if(response){
-  //     const data = JSON.parse(response.data)
-  //     if(data.message === 'New Order'){
-  //       this.order = data.doc
-  //       this.onlineOrder = true
-  //       this.colorToggleInterval = setInterval(() => {
-  //         this.audio.play()
-  //         this.dynamicColorChange = !this.dynamicColorChange;
-  //       }, 500);
-  //     }
-  //   }
-  //  })
-  // }
-
-  // stopDynamicHeader() {
-  //   clearInterval(this.colorToggleInterval);
-  //   this.dynamicColorChange = false;
-  // }
-
-  // async acceptOrder(){
-  //   this.audio.pause()
-  //   this.onlineOrder = false
-  //   this.stopDynamicHeader()
-  //   const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
-  //   if(result){
-  //     const time = +result * 60 * 1000
-  //     this.tableServ.setOrderTime(this.order._id, time).subscribe(response => {
-  //       console.log(response)
-  //     })
-  //   }
-  // }
-
-
   activateEditMode(){
     this.editMode = !this.editMode
   }
 
    async editTable(tableIndex: number){
     await this.actionSheet.addMainCat().then(response => {
-      console.log(response)
       if(response){
         this.tableServ.editTable(tableIndex, response[0]).subscribe(response => {
           if(response){
-            console.log(response)
             showToast(this.toastCtrl, response.message, 4000)
           }
         }, err => {

@@ -31,14 +31,12 @@ export class IngredientService{
   getIngredients(loc: string){
     this.dbService.getData('data', 1).subscribe((data: any) => {
       if(data){
-        console.log('data ings',data)
         this.ingredients = [...JSON.parse(data.ings)]
         this.ingredientsState.next([...this.ingredients])
       }
     })
     return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
         .pipe(tap(response => {
-          console.log('db ings', response)
           this.ingredients = response
           const stringIngs = JSON.stringify(this.ingredients)
           this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()

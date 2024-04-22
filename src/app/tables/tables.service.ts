@@ -375,34 +375,3 @@ setOrderTime(orderId: string, time: number){
 arraysAreEqual = (arr1: Topping[], arr2: Topping[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 
 }
-
-// stopSse() {
-// if (this.eventSource) {
-//   this.eventSource.close();
-// }
-// }
-
-
-
-// getOrderMessage (locatie: string, id: string): Observable<MessageEvent>{
-//   this.eventSource = new EventSource(`${environment.BASE_URL}table/get-order-message`)
-//     return new Observable((observer) => {
-//       this.eventSource.onmessage = (event) => {
-//         console.log(event)
-//         this.ngZone.run(() => {
-//         const data = JSON.parse(event.data)
-//         if(data && data.message === "New Order"){
-//           console.log('hit inside event')
-//         this.getTables(locatie, id)
-//         observer.next(event);
-//         }
-//         });
-//       };
-
-//       this.eventSource.onerror = (error) => {
-//         this.ngZone.run(() => {
-//           observer.error(error);
-//         });
-//       };
-//     });
-// }

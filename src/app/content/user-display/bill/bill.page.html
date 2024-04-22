@@ -6,7 +6,7 @@
       </div>
         <div #billContent class="scroll-content bill">
             <!-- <div class="wrapper"> -->
-          <div class="product-container" *ngFor="let product of bill.products.reverse()">
+          <div class="product-container" *ngFor="let product of bill.products">
             <span class="qty">{{product.quantity}} x</span>
             <span class="name">{{uppercaseAllLetters(product.name)}}</span>
             <div class="topping-wrapper" *ngIf="product.toppings.length">

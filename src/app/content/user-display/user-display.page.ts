@@ -22,7 +22,7 @@ import { BillPage } from './bill/bill.page';
 })
 export class UserDisplayPage implements OnInit, AfterViewInit {
 
-  bill!: Bill
+  bill!: Bill | null
   hideBill: boolean = false
 
 
@@ -37,19 +37,17 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
     this.getInvite()
   }
 
-
-
   ngAfterViewInit(): void {
 
   }
 
-
-
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
+      console.log(response)
       if(response){
         this.bill = JSON.parse(response)
-        console.log('products from user', this.bill)
+      } else {
+        this.bill = null
       }
       })
   }

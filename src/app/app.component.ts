@@ -25,15 +25,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   private contentSub!: Subscription;
-  private productSub!: Subscription;
-  private ingSub!: Subscription;
 
 
   constructor(
     private contService: ContentService,
     private tablesService: TablesService,
-    private productsSrv: ProductsService,
-    private ingSrv: IngredientService,
+
     private router: Router,
     private nirService: NirService,
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
@@ -47,8 +44,6 @@ export class AppComponent implements OnInit, OnDestroy {
          this.user = JSON.parse(data.value)
         this.contentSub = this.contService.getData(this.user.locatie).subscribe()
         this.tablesService.getTables(this.user.locatie, this.user._id)
-        //  this.productsSrv.getProducts(this.user.locatie).subscribe()
-        //  this.ingSrv.getIngredients(this.user.locatie).subscribe()
         //  this.getIncommingOrders()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{
@@ -63,7 +58,6 @@ export class AppComponent implements OnInit, OnDestroy {
         if(order){
           const parsedOrder = JSON.parse(order)
           this.actSrv.openPayment(OrderAppViewPage, parsedOrder)
-          console.log(parsedOrder)
         }
       })
     }

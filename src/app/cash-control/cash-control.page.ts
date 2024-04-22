@@ -305,7 +305,7 @@ setZeroDiscount(cats: Category[]){
   let dataToSend: any = []
   cats.forEach(cat => {
     cat.product.forEach(product => {
-      console.log(product.discount)
+
       if(product.discount > 0){
         const data = {
           precent: 0,
@@ -316,7 +316,6 @@ setZeroDiscount(cats: Category[]){
       }
     })
   })
-  console.log(dataToSend)
   return dataToSend
 }
 

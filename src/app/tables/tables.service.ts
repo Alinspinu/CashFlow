@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, NgZone } from "@angular/core";
-import { BehaviorSubject, Observable, of, switchMap, take, tap } from "rxjs";
+import { BehaviorSubject, Observable, of, switchMap, take, tap, Subscription } from 'rxjs';
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
@@ -20,6 +20,7 @@ export class TablesService{
   tables: Table[] = [emptyTable()];
 
   user!: any;
+  private orderSub!: Subscription
 
   constructor(
     private http: HttpClient,
@@ -74,14 +75,14 @@ mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any,
     mergedBills.total = total;
     table.bills.push(mergedBills);
     let newIndex = bills.findIndex(obj => obj.name === 'UNITE')
-    this.saveOrder(masa, 'new', newIndex, employee, locatie).subscribe()
+   this.orderSub = this.saveOrder(masa, 'new', newIndex, employee, locatie).subscribe()
   }
 }
 
 manageSplitBills(tableIndex: number, billIndex: number, employee: any, locatie: string){
   let bill = this.tables[tableIndex-1].bills[billIndex]
   bill._id.length ? bill._id = bill._id : bill._id = 'new'
-  this.saveOrder(tableIndex, bill._id, billIndex, employee, locatie).subscribe()
+  this.orderSub = this.saveOrder(tableIndex, bill._id, billIndex, employee, locatie).subscribe()
 }
 
 removeBill(masa: number, billIndex: number){
@@ -193,7 +194,7 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = emptyBill().clientInfo
-      this.saveOrder(masa, billId, billIndex, employee, locatie).subscribe()
+      this.orderSub = this.saveOrder(masa, billId, billIndex, employee, locatie).subscribe()
   }
 }
 }

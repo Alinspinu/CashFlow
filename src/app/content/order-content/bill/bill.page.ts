@@ -39,6 +39,7 @@ export class BillPage implements OnInit, OnDestroy {
   tabSub!: Subscription
   userSub!: Subscription
   contSub!: Subscription
+  orderSub!: Subscription
 
   isLoading: boolean = false
   tableNumber!: number
@@ -94,6 +95,9 @@ export class BillPage implements OnInit, OnDestroy {
       }
       if(this.userSub){
         this.userSub.unsubscribe()
+      }
+      if(this.orderSub){
+        this.tabSub.unsubscribe()
       }
   }
 
@@ -372,7 +376,7 @@ export class BillPage implements OnInit, OnDestroy {
   }
 
   async payment(){
-    this.sendOrder(false).subscribe(async(response) => {
+   this.orderSub = this.sendOrder(false).subscribe(async(response) => {
       if(response){
         const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
           if(paymentInfo){
@@ -573,7 +577,7 @@ async addDiscount(){
           this.billToshow.clientInfo = this.client
           this.billToshow.name = this.client.name
           this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-          this.sendOrder(false).subscribe()
+          this.orderSub = this.sendOrder(false).subscribe()
         }
       } else {
         if(this.billToshow.cashBack > 0){
@@ -642,7 +646,7 @@ async addDiscount(){
           } else {
             showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000, 'error-toast')
           }
-          this.sendOrder(false).subscribe()
+         this.orderSub = this.sendOrder(false).subscribe()
 
         }
       }

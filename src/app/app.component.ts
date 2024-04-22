@@ -1,5 +1,5 @@
 
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import User from './auth/user.model';
@@ -8,6 +8,7 @@ import { CashRegisterService } from './office/cash-register/cash-register.servic
 import { IngredientService } from './office/ingredient/ingredient.service';
 import { ProductsService } from './office/products/products.service';
 import { TablesService } from './tables/tables.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -15,16 +16,16 @@ import { TablesService } from './tables/tables.service';
   styleUrls: ['app.component.scss']
 
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   user!: User
+
+  private contSub!: Subscription
 
   constructor(
     private contService: ContentService,
     private tablesService: TablesService,
     private cashReg: CashRegisterService,
-    private ingsSrv: IngredientService,
-    private productServ: ProductsService,
     private router: Router,
     ) {}
 
@@ -33,11 +34,10 @@ export class AppComponent implements OnInit {
       Preferences.get({key: 'authData'}).then(data  => {
         if(data.value) {
          this.user = JSON.parse(data.value)
-         this.contService.getData(this.user.locatie).subscribe()
+         this.contSub = this.contService.getData(this.user.locatie).subscribe()
          this.tablesService.getTables(this.user.locatie, this.user._id)
          this.cashReg.getDocuments(1, this.user.locatie).subscribe()
-          this.ingsSrv.getIngredients({}, this.user.locatie).subscribe()
-          this.productServ.getProducts(this.user.locatie).subscribe()
+
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{
           this.router.navigateByUrl('/auth')
@@ -48,6 +48,12 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
    this.getUser()
 
+  }
+
+  ngOnDestroy(): void {
+      if(this.contSub){
+        this.contSub.unsubscribe()
+      }
   }
 
 

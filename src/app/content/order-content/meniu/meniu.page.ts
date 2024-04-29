@@ -236,6 +236,15 @@ export class MeniuPage implements OnInit, OnDestroy {
         sgrTax: product.sgrTax,
         cantitate: product.qty,
       };
+      console.log(product.sgrTax)
+      if(product.sgrTax){
+        let topping = product.toppings.find(p => p.name === "Taxa SGR")
+        if(topping){
+          cartProduct.toppings.push(topping)
+          cartProduct.price += topping.price
+          cartProduct.total = cartProduct.price * cartProduct.quantity
+        }
+      }
       // this.disableBrakeButton()
       // this.disableDeleteOrderButton()
       this.tableSrv.addToBill(cartProduct, this.tableNumber, this.billIndex)

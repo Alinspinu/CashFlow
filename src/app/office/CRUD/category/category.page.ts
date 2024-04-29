@@ -55,7 +55,6 @@ export class CategoryPage implements OnInit {
 
   saveCategory(){
     if(this.catForm.valid){
-      // console.log(this.catForm)
       const categoryData = new FormData()
       categoryData.append('name', this.catForm.value.name)
       categoryData.append('order', this.catForm.value.order)
@@ -77,7 +76,6 @@ export class CategoryPage implements OnInit {
     setMainCats(cats: any[]){
      const uniqueKeys = [...new Set(cats.map(obj => obj.mainCat))];
      this.mainCats = uniqueKeys.map(name => ({ name }));
-     console.log(this.mainCats)
     }
 
    async addMainCat(){

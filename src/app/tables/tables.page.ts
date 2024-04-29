@@ -97,12 +97,13 @@ getTables(){
  this.isLoadding = true
  this.tableSubs = this.tableServ.tableSend$.subscribe(response => {
    this.tables = []
-   const tempTables = response
-   tempTables.forEach(table =>{
-    if(table.index > 49){
-      this.tables.push(table)
-    }
-   })
+   this.tables = response
+  //  const tempTables = response
+  //  tempTables.forEach(table =>{
+  //   if(table.index > 49){
+  //     this.tables.push(table)
+  //   }
+  //  })
     // this.tables = response
     if(this.tables.length > 1){
       this.isLoadding = false

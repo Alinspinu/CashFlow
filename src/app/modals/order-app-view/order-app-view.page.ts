@@ -41,7 +41,6 @@ export class OrderAppViewPage implements OnInit {
 
   ngOnInit() {
     this.order = this.navPar.get('options');
-    console.log(this.order)
     const result = getPaymentMethod(this.order.payment)
     this.paymentMethod = result
   }

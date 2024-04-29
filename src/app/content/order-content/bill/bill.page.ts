@@ -40,6 +40,7 @@ export class BillPage implements OnInit, OnDestroy {
   tabSub!: Subscription
   userSub!: Subscription
   contSub!: Subscription
+  orderSub!: Subscription;
 
   isLoading: boolean = false
   tableNumber!: number
@@ -97,6 +98,9 @@ export class BillPage implements OnInit, OnDestroy {
       if(this.userSub){
         this.userSub.unsubscribe()
       }
+      if(this.orderSub){
+        this.orderSub.unsubscribe()
+      }
   }
 
   getUserTips(){
@@ -153,7 +157,6 @@ export class BillPage implements OnInit, OnDestroy {
   getBill(){
     this.tabSub = this.tableSrv.tableSend$.subscribe(response => {
       if(response){
-        console.log("get table")
       const table = response.find(obj => obj.index === this.tableNumber)
       if(table){
         this.table = table;
@@ -446,7 +449,7 @@ export class BillPage implements OnInit, OnDestroy {
 
 
   async payment(){
-    this.sendOrder(false).subscribe(async(response) => {
+    this.orderSub = this.sendOrder(false).subscribe(async(response) => {
       if(response){
         const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
           if(paymentInfo){
@@ -651,9 +654,7 @@ export class BillPage implements OnInit, OnDestroy {
           this.billToshow.name = this.client.name
           this.billToshow.inOrOut = '',
           this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-          this.sendOrder(false).subscribe(response => {
-            console.log(response)
-          })
+          this.orderSub = this.sendOrder(false).subscribe()
         }
         if(clientInfo.message === "voucher"){
           this.billToshow.voucher = clientInfo.data
@@ -752,7 +753,7 @@ export class BillPage implements OnInit, OnDestroy {
       } else {
         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
       }
-      this.sendOrder(false).subscribe()
+      this.orderSub = this.sendOrder(false).subscribe()
 
     }
   }

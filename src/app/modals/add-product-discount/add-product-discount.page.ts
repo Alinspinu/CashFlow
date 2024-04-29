@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { ProductsService } from 'src/app/office/products/products.service';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-add-product-discount',
@@ -27,6 +28,7 @@ user!: User
 dbProducts: any [] = []
 
 prodSub!: Subscription
+proDbSub!: Subscription
 
   constructor(
     @Inject(ActionSheetService) private actioSrv: ActionSheetService,
@@ -41,6 +43,7 @@ prodSub!: Subscription
     this.getUser()
     this.getProducts()
     this.getData()
+    this.getProductsFromDb()
   }
 
 
@@ -49,7 +52,10 @@ prodSub!: Subscription
     if(data){
       this.discountsProd = data
     }
+  }
 
+  getProductsFromDb(){
+   this.prodSub = this.productService.getProducts(environment.LOC).subscribe()
   }
 
 
@@ -96,6 +102,7 @@ prodSub!: Subscription
     this.prodSub = this.productService.productsSend$.subscribe(response => {
       if(response){
         this.dbProducts = response
+        console.log(response)
 
       }
     })
@@ -103,6 +110,7 @@ prodSub!: Subscription
 
   searchProduct(ev: any){
     const input = ev.detail.value
+    // console.log(input)
     this.products = this.dbProducts.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
     if(input === ''){
      this.products = [...this.dbProducts]

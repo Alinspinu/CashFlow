@@ -13,6 +13,7 @@
     <ion-col>
       <ion-card *ngIf="order">
         <ion-card-header>
+          <ion-card-title class="ion-text-center" style="color: red;" *ngIf="order.pending">COMANDĂ ONLINE</ion-card-title>
           <ion-card-title>{{formatDate(order.createdAt)}}</ion-card-title>
           <ion-card-subtitle>Masa {{order.masa}} </ion-card-subtitle>
           <ion-card-subtitle>Nr. {{order.index}} </ion-card-subtitle>
@@ -73,7 +74,7 @@
             <ion-item lines="none" color="tertiary" class="input" *ngIf="order.clientInfo.name.length">
               <div class="total-wrapper">
                 <span class="total-text">CLIENT</span>
-                <span class="total">{{order.clientInfo.name}}}</span>
+                <span class="total">{{order.clientInfo.name}}</span>
               </div>
             </ion-item>
           </ion-list>
@@ -85,38 +86,39 @@
 </ion-content>
 
 <ion-footer *ngIf="order && order.pending">
+  <ion-title class="ion-text-center" style="color: green">ALEGE TIMP DE PREPARARE</ion-title>
   <ion-grid>
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('10')" class="ion-no-padding ion-no-margin">10 Minute</ion-button>
+    <ion-row class="ion-no-padding">
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('10')" class="ion-no-padding button">10 Minute</ion-button>
       </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('15')" class="ion-no-padding ion-no-margin">15 Minute</ion-button>
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('15')" class="ion-no-padding button">15 Minute</ion-button>
       </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('20')" class="ion-no-padding ion-no-margin">20 Minute</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('25')" class="ion-no-padding ion-no-margin">25 Minute</ion-button>
-      </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('30')" class="ion-no-padding ion-no-margin">30 Minute</ion-button>
-      </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('35')" class="ion-no-padding ion-no-margin">35 Minute</ion-button>
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('20')" class="ion-no-padding button">20 Minute</ion-button>
       </ion-col>
     </ion-row>
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('40')" class="ion-no-padding ion-no-margin">40 Minute</ion-button>
+    <ion-row class="ion-no-padding">
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('25')" class="ion-no-padding button">25 Minute</ion-button>
       </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('45')" class="ion-no-padding ion-no-margin">45 Minute</ion-button>
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('30')" class="ion-no-padding button">30 Minute</ion-button>
       </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('50')" class="ion-no-padding ion-no-margin">50 Minute</ion-button>
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('35')" class="ion-no-padding button">35 Minute</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding">
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('40')" class="ion-no-padding button">40 Minute</ion-button>
+      </ion-col>
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('45')" class="ion-no-padding button">45 Minute</ion-button>
+      </ion-col>
+      <ion-col class="ion-no-padding">
+        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('50')" class="ion-no-padding button">50 Minute</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

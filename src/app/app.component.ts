@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private tablesService: TablesService,
 
     private router: Router,
-    private nirService: NirService,
+    // private nirService: NirService,
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
     private webRTC: WebRTCService
     ) {}
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
          this.user = JSON.parse(data.value)
         this.contentSub = this.contService.getData(this.user.locatie).subscribe()
         this.tablesService.getTables(this.user.locatie, this.user._id)
-        //  this.getIncommingOrders()
+         this.getIncommingOrders()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{
           this.router.navigateByUrl('/auth')
@@ -53,11 +53,15 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
 
-    getIncommingOrders(){
-      this.webRTC.getOdrerIdObservable().subscribe(order => {
+   getIncommingOrders(){
+      this.webRTC.getOdrerIdObservable().subscribe(async order => {
         if(order){
           const parsedOrder = JSON.parse(order)
-          this.actSrv.openPayment(OrderAppViewPage, parsedOrder)
+          const time = await this.actSrv.openPayment(OrderAppViewPage, parsedOrder)
+          this.tablesService.addOnlineOrder(parsedOrder)
+          if(time){
+            this.tablesService.setOrderTime(parsedOrder._id, +time).subscribe()
+          }
         }
       })
     }

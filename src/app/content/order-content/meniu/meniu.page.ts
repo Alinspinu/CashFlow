@@ -117,9 +117,7 @@ export class MeniuPage implements OnInit, OnDestroy {
 
 
   selectCategory(cat: string){
-    console.log(cat)
     this.enableScrollChange = false
-    console.log(this.categories)
     const catIndex = this.categories.findIndex(category => category._id === cat)
     this.productsToShow = this.categories[catIndex].product
     this.categoryToShowId = cat

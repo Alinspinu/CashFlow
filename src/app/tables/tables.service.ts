@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Injectable, NgZone } from "@angular/core";
+import { Injectable} from "@angular/core";
 import { BehaviorSubject, Observable, of, switchMap, take, tap, firstValueFrom } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
@@ -38,7 +38,6 @@ getBillIndex(tableIndex: number, billId: string){
 }
 
 addNewBill(masa: number, name: string, newOrder: boolean){
-  console.log('addBill name', newOrder)
   let bill: Bill = emptyBill()
   bill.name = name
   const table = this.tables.find((doc) => doc.index === masa)
@@ -50,6 +49,14 @@ addNewBill(masa: number, name: string, newOrder: boolean){
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
   }
+}
+
+addOnlineOrder(bill: Bill){
+    const table = this.tables[53]
+    table.bills.push(bill)
+    const tables = JSON.stringify(this.tables);
+    Preferences.set({key: 'tables', value: tables});
+    this.tableState.next([...this.tables])
 }
 
 async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any, locatie: string){
@@ -332,7 +339,7 @@ deleteTable(tableId: string, index: number){
           product.sentToPrintOnline = false;
         });
         bill.masaRest = res.masa;
-        this.webRtc.sendProductData(null)
+        // this.webRtc.sendProductData(null)
         this.tableState.next([...this.tables]);
         const tables = JSON.stringify(this.tables);
         Preferences.set({key: 'tables', value: tables});

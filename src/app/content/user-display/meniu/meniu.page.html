@@ -63,7 +63,7 @@
           </ion-row>
         </ion-grid>
     </ion-col>
-    <ion-col size="2.6" *ngIf="bill">
+    <ion-col size="2.6" *ngIf="bill && bill.products.length">
       <app-bill class="bill" [bill]="bill"></app-bill>
     </ion-col>
     <ion-col [size]="sideColSize">

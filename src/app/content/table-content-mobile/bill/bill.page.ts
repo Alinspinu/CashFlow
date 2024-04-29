@@ -51,6 +51,7 @@ export class BillPage implements OnInit, OnDestroy {
   disableMerge: boolean = true
   disableDelete: boolean = true
 
+
   breakMode: boolean = false
 
   client!: any
@@ -62,6 +63,7 @@ export class BillPage implements OnInit, OnDestroy {
 
   tabSub!: Subscription
   userSub!: Subscription
+  orderSub!: Subscription;
 
   color: string = 'none'
   showButtons: boolean = false
@@ -93,6 +95,9 @@ ngOnDestroy(): void {
   }
   if(this.userSub){
     this.userSub.unsubscribe()
+  }
+  if(this.orderSub){
+    this.orderSub.unsubscribe()
   }
 }
 
@@ -491,7 +496,7 @@ disableBrakeButton(){
   }
 
   async payment(){
-    this.sendOrder(false).subscribe(async(res) => {
+   this.orderSub = this.sendOrder(false).subscribe(async(res) => {
       if(res){
         const paymentInfo = await this.actionSheet.openMobileModal(PaymentPage, this.billToshow, false)
           if(paymentInfo){
@@ -531,7 +536,7 @@ disableBrakeButton(){
       this.billToshow.clientInfo = this.client
       this.billToshow.name = this.client.name
       this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-      this.sendOrder(false)
+      this.orderSub = this.sendOrder(false).subscribe()
     }
     if(clientInfo.message === "voucher"){
       this.billToshow.voucher = clientInfo.data

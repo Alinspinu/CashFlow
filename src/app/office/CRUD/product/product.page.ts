@@ -100,6 +100,7 @@ export class ProductPage implements OnInit {
             this.form.get('qty')?.setValue(this.product.qty)
             this.form.get('order')?.setValue(this.product.order)
             this.form.get('dep')?.setValue(this.product.dep)
+            this.form.get('sgrTax')?.setValue(this.product.sgrTax)
             this.form.get('tva')?.setValue(this.product.tva.toString())
             this.form.get('printer')?.setValue(this.product.printer)
           }
@@ -218,6 +219,10 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
+      sgrTax: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
       dep: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
@@ -235,7 +240,6 @@ export class ProductPage implements OnInit {
  async saveProduct(){
     if(this.form.valid){
       const productData = new FormData()
-      console.log('at save', this.toppings)
       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
       const sub = JSON.stringify(this.subProducts);
@@ -250,6 +254,7 @@ export class ProductPage implements OnInit {
       productData.append('order', this.form.value.order);
       productData.append('dep', this.form.value.dep);
       productData.append('tva', this.form.value.tva);
+      productData.append('sgrTax', this.form.value.sgrTax);
       productData.append('image', this.form.value.image);
       productData.append('printer', this.form.value.printer);
       if(toppings !== 'skip'){

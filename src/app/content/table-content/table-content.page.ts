@@ -325,7 +325,8 @@ async addToBill(product: Product){
       toppingsToSend: product.toppings,
       sentToPrintOnline: true,
       qty: product.qty,
-      cantitate: product.qty
+      cantitate: product.qty,
+      sgrTax: product.sgrTax,
     };
     this.disableBrakeButton()
     this.disableDeleteOrderButton()
@@ -807,6 +808,7 @@ async useCashBack(mode: boolean){
           printer: product.printer,
           sentToPrint: false,
           imgUrl: product.imgUrl,
+          sgrTax: product.sgrTax,
           comment: product.comment,
           tva: product.tva,
           toppingsToSend: product.toppings,

@@ -71,6 +71,12 @@
             </ion-select>
         </ion-item>
         <ion-item lines="none" class="input">
+          <ion-select label="Aplică taxă ambalaj"  formControlName="sgrTax">
+            <ion-select-option [value]="true">Da</ion-select-option>
+            <ion-select-option [value]="false">Nu</ion-select-option>
+          </ion-select>
+          </ion-item>
+        <ion-item lines="none" class="input">
           <ion-textarea  mode="ios" type="text" label="Descriere" labelPlacement="floating" fill="outline" formControlName="description" class="big"></ion-textarea>
         </ion-item>
         <ion-item lines="none" class="input">

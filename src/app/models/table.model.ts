@@ -95,6 +95,7 @@ export class BillProduct{
    public comment: string,
    public tva: string,
    public dep: string,
+   public sgrTax: boolean,
    public toppingsToSend: Topping[],
    public sentToPrintOnline: boolean,
    public qty: string,

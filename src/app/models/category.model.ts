@@ -41,6 +41,7 @@ export class Product {
     salts: number,
     protein: number,
   },
+  public sgrTax: boolean,
   public toppings: Topping[],
   public ings: InvIngredient[],
   public ingredients:{quantity: number, ingredient: Ingredient}[],

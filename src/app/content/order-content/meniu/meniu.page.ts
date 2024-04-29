@@ -233,6 +233,7 @@ export class MeniuPage implements OnInit, OnDestroy {
         toppingsToSend: product.toppings,
         sentToPrintOnline: true,
         qty: product.qty,
+        sgrTax: product.sgrTax,
         cantitate: product.qty,
       };
       // this.disableBrakeButton()

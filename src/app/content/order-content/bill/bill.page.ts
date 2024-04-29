@@ -479,6 +479,7 @@ async addDiscount(){
           tva: product.tva,
           toppingsToSend: product.toppings,
           sentToPrintOnline: true,
+          sgrTax: product.sgrTax,
           qty: product.qty,
           cantitate: product.qty
         };

@@ -2,18 +2,15 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { Preferences } from '@capacitor/preferences';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { formatedDateToShow, round } from 'src/app/shared/utils/functions';
 import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
 import { Bill } from 'src/app/models/table.model';
 import { CashControlService } from '../cash-control.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { ContentService } from 'src/app/content/content.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/models/category.model';
-import { CashInOutPage } from 'src/app/modals/cash-in-out/cash-in-out.page';
 
 @Component({
   selector: 'app-mobile',
@@ -36,6 +33,7 @@ export class MobilePage implements OnInit {
   userVoucher: number = 0;
   userOnline: number = 0;
   userTotal: number = 0
+  userTips: number = 0
 
   cashIn: number = 0;
   cashOut: number = 0;
@@ -53,6 +51,7 @@ export class MobilePage implements OnInit {
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
   ) { }
 
+
   ngOnDestroy(): void {
     if(this.userSub){
       this.userSub.unsubscribe()
@@ -65,6 +64,7 @@ export class MobilePage implements OnInit {
   ngOnInit() {
     this.getUser()
   }
+
 
 
     searchProduct(ev: any){
@@ -127,6 +127,7 @@ export class MobilePage implements OnInit {
     this.userViva = 0
     this.userVoucher = 0
     this.userOnline = 0
+    this.userTips = 0
     if(this.orders){
       this.orders.forEach((order: Bill) => {
         if(order.payment.cash){
@@ -144,6 +145,9 @@ export class MobilePage implements OnInit {
         if(order.payment.online){
           this.userOnline = round( this.userOnline + order.payment.online)
         }
+        if(order.tips > 0){
+          this.userTips = round(this.userTips + order.tips)
+        }
       })
       this.calcTotal()
     }
@@ -152,6 +156,7 @@ export class MobilePage implements OnInit {
   calcTotal(){
     this.userTotal = this.userCash + this.userCard +this.userOnline + this.userViva + this.userOnline + this.userVoucher
   }
+
 
 
  getUser(){

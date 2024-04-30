@@ -37,6 +37,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   userVoucher: number = 0;
   userOnline: number = 0;
   userTotal: number = 0
+  userTips: number = 0
 
   cashIn: number = 0;
   cashOut: number = 0;
@@ -199,6 +200,7 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.userViva = 0
     this.userVoucher = 0
     this.userOnline = 0
+    this.userTips = 0;
     if(this.orders){
       this.orders.forEach((order: Bill) => {
           if(order.payment.cash){
@@ -215,6 +217,9 @@ export class CashControlPage implements OnInit, OnDestroy {
           }
           if(order.payment.online){
             this.userOnline = round( this.userOnline + order.payment.online)
+          }
+          if(order.tips > 0){
+            this.userTips = round(this.userTips + order.tips)
           }
       })
       this.calcTotal()

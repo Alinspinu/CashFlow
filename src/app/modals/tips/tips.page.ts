@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { WebRTCService } from 'src/app/content/webRTC.service';
 import { round } from 'src/app/shared/utils/functions';
 
@@ -16,18 +16,17 @@ import { round } from 'src/app/shared/utils/functions';
 export class TipsPage implements OnInit {
 
   tipsValue!: number
-  invite: string = 'invite'
 
   constructor(
     private modalCtrl: ModalController,
     private webRTC: WebRTCService,
+    private navPar: NavParams,
   ) { }
 
   ngOnInit() {
     this.getUserTips()
+    this.inviteTip()
   }
-
-
 
 
   close(){
@@ -44,7 +43,6 @@ export class TipsPage implements OnInit {
     this.webRTC.getUserTipObservable().subscribe(response => {
       if(response || response === 0){
           this.tipsValue = round(response)
-          this.invite = "invite"
         if(response === 0){
           this.tipsValue = 0
         }
@@ -53,8 +51,10 @@ export class TipsPage implements OnInit {
   }
 
 
-  inviteTip(invite: string){
-    this.invite === 'invite' ? this.invite = 'uninvite' : this.invite = 'invite'
-    this.webRTC.inviteUserToTip(invite)
+  inviteTip(){
+    const invite = this.navPar.get('options')
+    if(invite === 'invite'){
+      this.webRTC.inviteUserToTip(invite)
+    }
   }
 }

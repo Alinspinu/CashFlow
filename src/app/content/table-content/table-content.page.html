@@ -203,6 +203,12 @@
   <ion-row>
     <ion-col>
         <ion-row class="ion-no-margin ion-no-padding">
+          <ion-col size="1.5">
+            <ion-button expand="block" size="large" color="success" (click)="inviteUserToTip(invite)" style="height: 100%;">
+              <ion-icon src="../../../assets/icon/business.svg" style="margin-right:12px;"></ion-icon>
+           {{invite === 'invite' ? 'ÎNTREABĂ TIPS' : 'ANULEAZĂ'}}
+            </ion-button>
+          </ion-col>
           <ion-col>
             <ion-button expand="block" size="medium" color="secondary" (click)="mergeOrders()" [disabled]="disableMerge">
               <ion-icon src="../../../assets/icon/hug.svg"></ion-icon>
@@ -232,7 +238,7 @@
              ADAUGA BACSIS
              </ion-button>
           </ion-col>
-          <ion-col>
+          <ion-col size="4">
             <ion-button size="large" expand="block" color="secondary" (click)="sendOrder(true).subscribe()" [disabled]="disableOrderButton">
               Trimite Comanda
             </ion-button>

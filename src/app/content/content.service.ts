@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Preferences } from "@capacitor/preferences";
-import { BehaviorSubject, from, map, Observable, take, tap } from "rxjs";
+import { BehaviorSubject,  Observable, take, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AuthService } from "../auth/auth.service";
 import User from "../auth/user.model";

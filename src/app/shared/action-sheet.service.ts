@@ -94,6 +94,7 @@ export class ActionSheetService {
                typeof OrdersViewPage |
                typeof OrderAppViewPage |
                typeof AddEntryPage |
+               typeof TipsPage |
                typeof DelProdViewPage,
     options: any
   ){

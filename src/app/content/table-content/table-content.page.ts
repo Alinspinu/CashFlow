@@ -106,7 +106,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getTableNumber();
     this.getData();
     this.getBill();
-    this.getUserTips()
+    // this.getUserTips()
   }
 
   ngOnDestroy(): void {
@@ -126,21 +126,21 @@ export class TableContentPage implements OnInit, OnDestroy {
 
 //***************************NG-ON-INIT************************** */
 
-  getUserTips(){
-    this.webRTC.getUserTipObservable().subscribe(response => {
-      if(response || response === 0){
-        if(this.billToshow){
-          this.billToshow.tips = response
-          this.billToshow.total += response
-          // this.webRTC.sendProductData(JSON.stringify(this.billToshow))
-          this.invite = "invite"
-        }
-        if(response === 0){
-          this.showZeroTips = true
-        }
-      }
-    })
-  }
+  // getUserTips(){
+  //   this.webRTC.getUserTipObservable().subscribe(response => {
+  //     if(response || response === 0){
+  //       if(this.billToshow){
+  //         this.billToshow.tips = response
+  //         this.billToshow.total += response
+  //         // this.webRTC.sendProductData(JSON.stringify(this.billToshow))
+  //         this.invite = "invite"
+  //       }
+  //       if(response === 0){
+  //         this.showZeroTips = true
+  //       }
+  //     }
+  //   })
+  // }
 
   getTableNumber(){
     this.route.paramMap.subscribe(params => {
@@ -436,6 +436,9 @@ async addToBill(product: Product){
             if(extra && extra.comment){
               this.tableSrv.addComment(this.tableNumber, index, this.billIndex, extra.comment)
             }
+            if(extra && extra.qty){
+              this.tableSrv.addQty(this.tableNumber, index, this.billIndex, extra.qty)
+            }
         }
     }
     }
@@ -510,21 +513,10 @@ async addToBill(product: Product){
 
 //***********************************BUTTONS LOGIC************************** */
 
-inviteUserToTip(invite: string){
-  this.webRTC.inviteUserToTip(invite)
-  this.invite === 'invite' ? this.invite = 'uninvite' : this.invite = 'invite'
-  if(this.billToshow.tips > 0){
-    this.billToshow.total -= this.billToshow.tips;
-    this.billToshow.tips = 0
-    this.webRTC.sendProductData(JSON.stringify(this.billToshow))
-  }
-}
-
-
-
-async addTips(){
-  const tipsValue = await this.actionSheet.openAuth(TipsPage)
-  if(tipsValue){
+async inviteUserToTip(invite: string){
+  const tipsValue = await this.actionSheet.openPayment(TipsPage, invite)
+  // this.invite === 'invite' ? this.invite = 'uninvite' : this.invite = 'invite'
+  if(tipsValue || tipsValue === 0){
     if(this.billToshow.tips > 0){
       this.billToshow.total =   this.billToshow.total - this.billToshow.tips
       this.billToshow.tips = tipsValue
@@ -533,6 +525,26 @@ async addTips(){
       this.billToshow.tips = tipsValue
       this.billToshow.total =   this.billToshow.total  + tipsValue
   }
+} else {
+  this.webRTC.inviteUserToTip('uninvite')
+}
+}
+
+
+
+async addTips(){
+  const tipsValue = await this.actionSheet.openPayment(TipsPage, 'uninvite')
+  if(tipsValue || tipsValue === 0){
+    console.log(tipsValue)
+    if(this.billToshow.tips > 0){
+      this.billToshow.total =   this.billToshow.total - this.billToshow.tips
+      this.billToshow.tips = tipsValue
+      this.billToshow.total  =   this.billToshow.total  + tipsValue
+    } else {
+      this.billToshow.tips = tipsValue
+      this.billToshow.total =   this.billToshow.total  + tipsValue
+  }
+
 }
 }
 

@@ -6,6 +6,7 @@ import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../models/empty-models";
 import { WebRTCService } from "../content/webRTC.service";
+import { round } from "../shared/utils/functions";
 
 
 
@@ -29,7 +30,6 @@ export class TablesService{
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
   }
-  private eventSource!: EventSource
 
 //******************************ORDERS************************* */
 
@@ -202,14 +202,30 @@ addComment(masa: number, billProdIndex: number, billIndex: number, comment: stri
 addTopping(masa: number, billProdIndex: number, billIndex: number, product: any){
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
-    console.log(table)
     const bill = table.bills[billIndex]
+    console.log(table)
     bill.products[billProdIndex] = product
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
     this.webRtc.sendProductData(JSON.stringify(bill))
 }
+}
+
+addQty(masa: number, billProdIndex: number, billIndex: number, qty: number){
+  const table = this.tables.find((doc) => doc.index === masa)
+  if(table){
+    const bill = table.bills[billIndex]
+    const product =  bill.products[billProdIndex]
+    product.quantity = qty
+    const total = round(product.quantity * product.price)
+    const diference = total - product.total
+    product.total = total
+    bill.total += diference
+    // const tables = JSON.stringify(this.tables);
+    // Preferences.set({key: 'tables', value: tables});
+    this.tableState.next([...this.tables])
+  }
 }
 
 //*********************CLIENTS**************************** */
@@ -265,7 +281,6 @@ getTables(locatie: string, id: string){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)
       Preferences.set({key: 'tables', value: stringTable})
-      // this.tableState.next([...this.tables])
     }
   })
 }
@@ -314,6 +329,7 @@ deleteTable(tableId: string, index: number){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
+  console.log('table index', tableIndex, 'bill index', billIndex)
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
@@ -339,7 +355,6 @@ deleteTable(tableId: string, index: number){
           product.sentToPrintOnline = false;
         });
         bill.masaRest = res.masa;
-        // this.webRtc.sendProductData(null)
         this.tableState.next([...this.tables]);
         const tables = JSON.stringify(this.tables);
         Preferences.set({key: 'tables', value: tables});

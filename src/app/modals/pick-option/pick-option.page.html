@@ -55,6 +55,13 @@
         </ion-item>
       </ion-col>
     </ion-row>
+    <ion-row *ngIf="!sub">
+      <ion-col size-lg="8" offset-lg="2">
+        <ion-item lines="none" class="text-input" >
+          <ion-input  placeholder="Ex. 1.25 buc" label="Cantitate" labelPlacement="floating" [(ngModel)]="qty"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>
 <ion-footer>

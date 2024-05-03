@@ -1,5 +1,4 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -17,7 +16,6 @@ import { HeaderContentPage } from '../header-content/header-content.page';
 import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
 import { Router } from '@angular/router';
-import { ContentService } from '../../content.service';
 import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { MobileService } from '../table-content-service';
@@ -76,14 +74,12 @@ export class BillPage implements OnInit, OnDestroy {
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     @Inject(MobileService) private mobilSrv: MobileService,
     private toastCtrl: ToastController,
-    private contSrv: ContentService,
     private authSrv: AuthService,
     private router: Router,
 
   ) { }
 
   ngOnInit() {
-
     this.getUser();
     this.getTableNumber();
     this.getBill();
@@ -113,7 +109,6 @@ ngOnDestroy(): void {
        this.userSub = response.subscribe(user => {
           if(user){
             this.user = user;
-            // this.incommingOrders()
           }
         })
       }

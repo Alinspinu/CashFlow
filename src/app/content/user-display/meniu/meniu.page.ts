@@ -93,7 +93,6 @@ export class MeniuPage implements OnInit {
   }
 
 
-
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
       if(response){
@@ -109,6 +108,9 @@ export class MeniuPage implements OnInit {
       } else {
         this.sideColSize = 1
         this.menuColSize = 10
+        const foodIndex = this.cats.findIndex((cat: any) => cat.name = 'food')
+        this.selectMainCat('food', foodIndex)
+        this.selectCategory('64be665dd6abf741cec1b9b0')
       }
       })
   }
@@ -156,6 +158,7 @@ export class MeniuPage implements OnInit {
 
 
   selectCategory(cat: string){
+    console.log(cat)
     this.enableScrollChange = false
     const catIndex = this.categories.findIndex(category => category._id === cat)
     const cardId = this.categories[catIndex].product[0]._id
@@ -178,9 +181,7 @@ export class MeniuPage implements OnInit {
       let url = ''
       const clickedCategory = this.cats[index];
       url = clickedCategory.url
-      console.log('first url', url)
       clickedCategory.url = clickedCategory.urlW
-      console.log('second url', clickedCategory.url)
       setTimeout(() => {
         this.cats.splice(index, 1)
         this.cats.unshift(clickedCategory);

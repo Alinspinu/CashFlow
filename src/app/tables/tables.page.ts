@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
 import { ActionSheetService } from '../shared/action-sheet.service';
@@ -9,10 +9,9 @@ import { Bill, Table } from '../models/table.model';
 import { TablesService } from './tables.service';
 import User from '../auth/user.model';
 import { Preferences } from '@capacitor/preferences';
-import { Subscription } from 'rxjs';
-import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
-import { AudioService } from '../shared/audio.service';
+import { Subscription, filter } from 'rxjs';
 import { SpinnerPage } from '../modals/spinner/spinner.page';
+import { WebRTCService } from '../content/webRTC.service';
 
 
 @Component({
@@ -53,14 +52,14 @@ export class TablesPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController,
     private actionSheet: ActionSheetService,
     private authSrv: AuthService,
+    private webRTC: WebRTCService,
     ) {
       this.screenWidth = window.innerWidth
     }
 
 ngOnInit(): void {
   this.getUser()
-  // this.audio = new Audio();
-  // this.audio.src = 'assets/audio/ding.mp3';
+  this.hideBill()
 }
 
 
@@ -70,7 +69,7 @@ ngOnDestroy(): void {
   if(this.tableSubs){
     this.tableSubs.unsubscribe()
   }
-  // this.tableServ.stopSse()
+
 }
 
 
@@ -92,19 +91,22 @@ waiterBills(tableBills: Bill[]){
   return waiterBill
 }
 
+hideBill(){
+  this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+        .subscribe((event: NavigationEnd) => {
+    if (event.url === '/tabs/tables') {
+      this.webRTC.sendProductData(null)
+    }
+  })
+}
+
 
 getTables(){
  this.isLoadding = true
  this.tableSubs = this.tableServ.tableSend$.subscribe(response => {
    this.tables = []
    this.tables = response
-  //  const tempTables = response
-  //  tempTables.forEach(table =>{
-  //   if(table.index > 49){
-  //     this.tables.push(table)
-  //   }
-  //  })
-    // this.tables = response
     if(this.tables.length > 1){
       this.isLoadding = false
     }
@@ -116,7 +118,6 @@ getUser(){
     if(data.value) {
      this.user = JSON.parse(data.value)
       this.accesLevel = this.user.employee.access
-    //  this.incommingOrders()
      this.getTables()
     } else{
       this.router.navigateByUrl('/auth')

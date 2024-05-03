@@ -19,6 +19,7 @@ export class PickOptionPage implements OnInit {
   selectedO: string[] = []
   sub!: any
   comment!: string
+  qty!: number
 
   toppingLabel: string[] = []
 
@@ -70,12 +71,12 @@ export class PickOptionPage implements OnInit {
   pick(){
     if(this.selectedOption){
       this.modalCtrl.dismiss(this.selectedOption)
-    } else if(this.selectedO.length || this.comment){
+    } else if(this.selectedO.length || this.comment || this.qty){
       const extra = {
         toppings: this.selectedO,
-        comment: this.comment
+        comment: this.comment,
+        qty: this.qty
       }
-      console.log(extra)
       this.modalCtrl.dismiss(extra)
     } else {
       triggerEscapeKeyPress()

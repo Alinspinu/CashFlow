@@ -344,7 +344,7 @@ deleteTable(tableId: string, index: number){
   bill.pending = true
   bill.prepStatus = 'open'
   const billToSend = JSON.stringify(bill);
-  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.PRINT_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
+  return this.http.post<{billId: string, index: number, products: any, billTotal: number, masa: any}>(`${environment.PRINT_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
       .pipe(take(1),
         switchMap(res => {
         bill._id = res.billId;
@@ -354,6 +354,7 @@ deleteTable(tableId: string, index: number){
           product.sentToPrint = false;
           product.sentToPrintOnline = false;
         });
+        bill.total = res.billTotal
         bill.masaRest = res.masa;
         this.tableState.next([...this.tables]);
         const tables = JSON.stringify(this.tables);

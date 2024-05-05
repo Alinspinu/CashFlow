@@ -97,19 +97,8 @@ loadDocuments(event?: any) {
     if(response){
       this.documents = response.documents
     }
-    // Append new documents to the existing list
-    // this.documents = [...this.documents, ...response.documents];
-    // if (event) {
-    //   event.target.complete();
-    // }
   });
 }
-
-// loadMore(event: any) {
-//   this.page++;
-//   this.loadDocuments(event);
-// }
-
 
 export(){
   if(this.startDate && this.endDate){

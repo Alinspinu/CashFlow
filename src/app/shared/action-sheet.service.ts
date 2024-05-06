@@ -26,7 +26,7 @@ import { AddProductDiscountPage } from '../modals/add-product-discount/add-produ
 import { DelProdViewPage } from '../reports/cash/del-prod-view/del-prod-view.page';
 import { ScanQrPage } from '../modals/scan-qr/scan-qr.page';
 import { AddToInventaryPage } from '../modals/add-to-inventary/add-to-inventary.page';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 
@@ -709,5 +709,110 @@ async detailsAlert(){
     });
   }
 
+
+
+  async entryAlert(options: string[], tip: string, title: string, message: string, cssClass: string){
+    const inputs = options.map(option => {
+      return {
+          label: option,
+          type: `radio` as const,
+          value: option,
+
+      };
+  });
+    const inputsC = options.map(option => {
+      return {
+          label: option,
+          type: `checkbox` as const,
+          value: option,
+
+      };
+  });
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: [
+        {
+          text: 'Alege',
+          role: 'confirm',
+        },
+      ],
+      inputs: tip === 'radio' ? inputs : inputsC,
+      cssClass: ['reprint-alert', cssClass],
+      backdropDismiss: false,
+      keyboardClose: false,
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === 'confirm'){
+      return result.data.values
+    } else {
+      return null
+    }
+  }
+
+
+  async textAlert(title: string, message: string, name: string, label: string){
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: [
+        {
+          text: 'ADAUGĂ',
+          role: 'confirm',
+        },
+      ],
+      inputs:[
+        {
+          name: name,
+          label: label,
+          type: 'text',
+        },
+
+      ],
+      backdropDismiss: false,
+      keyboardClose: false,
+      cssClass: 'reprint-alert'
+    })
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === 'confirm' && result.data.values) {
+      return result.data.values.nr
+    } else {
+      return null
+    }
+  }
+
+  async numberAlert(title: string, message: string, name: string, label: string){
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: [
+        {
+          text: 'ADAUGĂ',
+          role: 'confirm',
+        },
+      ],
+      inputs:[
+        {
+          name: name,
+          label: label,
+          type: 'number',
+        },
+
+      ],
+      backdropDismiss: false,
+      keyboardClose: false,
+      cssClass: 'reprint-alert'
+    })
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === 'confirm' && result.data.values) {
+      return result.data.values.val
+    } else {
+      return null
+    }
+  }
 
 };

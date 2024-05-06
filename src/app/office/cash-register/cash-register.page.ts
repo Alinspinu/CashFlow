@@ -73,13 +73,13 @@ export class CashRegisterPage implements OnInit {
 
 
 loadDocuments(event?: any) {
-  console.log(this.user)
   this.cashRegService.getDocuments(this.page, this.user.locatie).subscribe((response) => {
     // Append new documents to the existing list
     this.documents = [...this.documents, ...response.documents];
     if (event) {
       event.target.complete();
     }
+    console.log(this.documents)
   });
 }
 

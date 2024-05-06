@@ -26,7 +26,7 @@ export class NirService{
 
 
   getSuplier(input: any, loc: string){
-    return this.http.post(`${environment.BASE_URL}suplier/send-supliers`, {search: input, loc: loc})
+    return this.http.post<any[]>(`${environment.BASE_URL}suplier/send-supliers`, {search: input, loc: loc})
   }
 
   saveNir(nir: Nir, loc: string){

@@ -24,3 +24,13 @@
 
   }
 
+  .fur-name{
+    cursor: pointer;
+    --background: var(--ion-color-warning-shade);
+    border-radius: 8px;
+    margin: 4px;
+    span{
+      color: var(--ion-color-warning-contrast);
+    }
+  }
+

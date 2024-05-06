@@ -7,11 +7,19 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-title  class="ion-margin ion-text-center">Detalii Companie</ion-title>
+  <ion-item lines="none">
+    <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplierInDb($event)"></ion-searchbar>
+  </ion-item>
+  <ion-list>
+    <ion-item *ngFor="let suplier of supliers; let i = index" class="fur-name" (click)="selectSuplier(suplier)">
+      <span>{{suplier.name}}</span>
+    </ion-item>
+  </ion-list>
   <form [formGroup]="suplierForm">
   <ion-grid>
     <ion-row>
             <ion-col [size]="size">
-              <ion-title  class="ion-margin ion-text-center">Detalii Companie</ion-title>
                 <ion-item lines="none" class="input">
                   <ion-input mode="ios" type="text" label="CUI Complanie" labelPlacement="floating" formControlName="vatNumber" placeholder="Ex. RO12343219"></ion-input>
                   <ion-buttons slot="end">

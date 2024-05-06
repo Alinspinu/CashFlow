@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { Suplier } from '../../../models/suplier.model';
 import { SuplierService } from './suplier.service';
@@ -8,13 +8,14 @@ import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-con
 import { ActivatedRoute, Router } from '@angular/router';
 import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
+import { NirService } from '../nir/nir.service';
 
 @Component({
   selector: 'app-suplier',
   templateUrl: './suplier.page.html',
   styleUrls: ['./suplier.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, ReactiveFormsModule, FormsModule]
 })
 export class SuplierPage implements OnInit {
 
@@ -25,6 +26,11 @@ export class SuplierPage implements OnInit {
   mode!: any
   size: string = '12'
   user!: User
+  supliers!: any
+  furnizorSearch: string = ''
+
+  saveSuplier: boolean = true
+  suplierId: string = ''
 
   showPassword = false;
   checkedTerms: boolean = false;
@@ -39,6 +45,7 @@ export class SuplierPage implements OnInit {
    private fb: FormBuilder,
    private router: Router,
    private route: ActivatedRoute,
+   private nirSrv: NirService,
   ) {
     this.suplierForm = fb.group({
       ownerEmail: fb.control('', [Validators.required]),
@@ -61,6 +68,23 @@ export class SuplierPage implements OnInit {
     this.suplierForm.addValidators(
       this.createCompareValidator(this.passwordControl, this.confirmPasswordControl));
    };
+
+   selectSuplier(suplier: any){
+    console.log(suplier)
+    if(suplier){
+      this.suplierForm.get('bussinessName')?.setValue(suplier.name)
+      this.suplierForm.get('vatNumber')?.setValue(suplier.vatNumber)
+      this.suplierForm.get('register')?.setValue(suplier.register)
+      this.suplierForm.get('address')?.setValue(suplier.address)
+      this.suplierForm.get('bank')?.setValue(suplier.bank)
+      this.suplierForm.get('account')?.setValue(suplier.account)
+      this.suplierId = suplier._id
+      this.supliers = []
+      this.furnizorSearch = ''
+      this.saveSuplier = false
+    }
+  }
+
 
      validateForm() {
       this.suplierForm.reset();
@@ -167,7 +191,7 @@ export class SuplierPage implements OnInit {
             this.suplierForm.get('register')?.setValue(response.data.cod_inmatriculare);
             this.suplierForm.get('address')?.setValue(response.data.adresa);
           } else if(response.status === 402){
-            showToast(this.toastCtrl, response.message, 4000, 'success-toast')
+            showToast(this.toastCtrl, response.message, 4000, 'error-toast')
           }
           }
       }, (err: any) => {
@@ -177,7 +201,7 @@ export class SuplierPage implements OnInit {
   }
 
   addSuplier(){
-    if(this.suplierForm.valid){
+    if(this.suplierForm.valid && this.saveSuplier){
       const suplier: Suplier = {
         name: this.suplierForm.value.name,
         bussinessName: this.suplierForm.value.bussinessName,
@@ -188,46 +212,70 @@ export class SuplierPage implements OnInit {
         account: this.suplierForm.value.account ? this.suplierForm.value.account : '',
         VAT: this.suplierForm.value.VAT === 'yes'? true : false,
       }
-      this.suplierSrv.saveSuplier(suplier, this.mode, this.user.locatie).subscribe((response: any) => {
-        if(response){
-          if(this.mode ){
-            console.log(response)
-            const user = {
-              name: this.suplierForm.value.ownerName,
-              email: this.suplierForm.value.ownerEmail,
-              telephone: this.suplierForm.value.tel,
-              admin: 1,
-              locatie: response.id,
-              status: 'active',
-              employee: {
-                fullName: this.suplierForm.value.ownerName,
-                position: "Administrator",
-                access: 3
+
+        this.suplierSrv.saveSuplier(suplier, this.mode, this.user.locatie).subscribe((response: any) => {
+          if(response){
+            if(this.mode ){
+              const user = {
+                name: this.suplierForm.value.ownerName,
+                email: this.suplierForm.value.ownerEmail,
+                telephone: this.suplierForm.value.tel,
+                admin: 1,
+                locatie: response.id,
+                status: 'active',
+                employee: {
+                  fullName: this.suplierForm.value.ownerName,
+                  position: "Administrator",
+                  access: 3
+                }
               }
-            }
-            const second = {
-              password: this.suplierForm.value.password,
-              confirmPassword: this.suplierForm.value.confirmPassword
-            }
-            console.log(user)
-            this.suplierSrv.saveAdmin(user, second).subscribe(response => {
-              if(response){
-                showToast(this.toastCtrl, response.message, 2000, 'success-toast')
+              const second = {
+                password: this.suplierForm.value.password,
+                confirmPassword: this.suplierForm.value.confirmPassword
               }
-            })
-          } else {
-            showToast(this.toastCtrl, response.message, 400, 'success-toast')
-            this.suplierForm.reset()
-            this.modalCtrl.dismiss(response.suplier)
+              this.suplierSrv.saveAdmin(user, second).subscribe(response => {
+                if(response){
+                  showToast(this.toastCtrl, response.message, 2000, 'success-toast')
+                }
+              })
+            } else {
+              showToast(this.toastCtrl, response.message, 2000, 'success-toast')
+              this.suplierForm.reset()
+              this.modalCtrl.dismiss(response.suplier)
+            }
           }
-        }
-      }, (err: any) =>{
-        console.log(err)
-        showToast(this.toastCtrl, err.message, 4000, 'error-toast')
-      })
+        }, (err: any) =>{
+          console.log(err)
+          showToast(this.toastCtrl, err.message, 2000, 'error-toast')
+        })
+
+    } else if(!this.saveSuplier) {
+      const suplier = {
+        name: this.suplierForm.value.name,
+        bussinessName: this.suplierForm.value.bussinessName,
+        vatNumber: this.suplierForm.value.vatNumber,
+        register: this.suplierForm.value.register,
+        address: this.suplierForm.value.address,
+        bank: this.suplierForm.value.bank ? this.suplierForm.value.bank : '',
+        account: this.suplierForm.value.account ? this.suplierForm.value.account : '',
+        _id: this.suplierId
+      }
+      this.modalCtrl.dismiss(suplier)
+
     }
 
   }
+
+  searchSuplierInDb(ev: any){
+    const input = ev.detail.value
+    this.nirSrv.getSuplier(input, this.user.locatie).subscribe(response => {
+      this.supliers = response
+      if(input === ''){
+        this.supliers = []
+      }
+    })
+  }
+
 
 
 

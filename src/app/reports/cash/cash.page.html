@@ -1,14 +1,14 @@
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
 <ion-grid>
-  <ion-row>
+  <!-- <ion-row>
     <ion-col size-lg="3" size-sm="0">
       <div class="buttons-wrapper">
         <ion-button *ngIf="advance"  (click)="selectDate('start')" fill="outline" color="medium">
          {{startDate ? formatDate(startDate): "ZI ÎNCEPUT"}}
           <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
         </ion-button>
-        <!-- <span *ngIf="today.length" class="show-date">{{startDate ? formatDate(startDate) : ''}}</span> -->
+
         <ion-button *ngIf="advance" fill="outline" (click)="selectDate('end')" color="medium">
           ZI SFÂRȘIT
           <ion-icon src="../../../assets/icon/calendar.svg" class="icon-end"></ion-icon>
@@ -39,10 +39,7 @@
     </ion-col>
     <ion-col size-lg="3" size-sm="0">
       <div class="buttons-wrapper">
-        <!-- <ion-button (click)="search()" [disabled]="!startDate || !endDate" *ngIf="advance" fill="outline">
-          CATUTĂ
-          <ion-icon src="../../../assets/icon/search-outline.svg" class="icon-start"></ion-icon>
-        </ion-button> -->
+
         <ion-button fill="outline" (click)="showOrders()" color="medium">
           NOTE
           <ion-badge class="badge">{{bills.length}}</ion-badge>
@@ -53,7 +50,58 @@
         </ion-button>
       </div>
     </ion-col>
+  </ion-row> -->
+
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3">
+    <ion-row>
+      <ion-col size-lg="9">
+        <div class="sum-wrapper">
+          <span class="label tot">Încasări</span>
+          <span class="total tot">{{total}} Lei</span>
+          <span class="note tot">(Total cu mese deschise și discount)</span>
+          <span class="incasat">{{totalIncasat}} Lei</span>
+          <span class="note incasat">(Total fară mese deschise și fară discount)</span>
+          <span class="vat">{{totalNoTax}} Lei</span>
+          <span class="note vat">(Total fără mese deschise și fără TVA)</span>
+          <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
+          <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
+        </div>
+      </ion-col>
+      <ion-col size-lg="3">
+        <div class="buttons-wrapper">
+          <ion-button *ngIf="advance"  (click)="selectDate('start')" fill="outline" color="medium">
+            {{startDate ? formatDate(startDate): "ZI ÎNCEPUT"}}
+             <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
+           </ion-button>
+           <!-- <span *ngIf="today.length" class="show-date">{{startDate ? formatDate(startDate) : ''}}</span> -->
+           <ion-button *ngIf="advance" fill="outline" (click)="selectDate('end')" color="medium">
+             ZI SFÂRȘIT
+             <ion-icon src="../../../assets/icon/calendar.svg" class="icon-end"></ion-icon>
+           </ion-button>
+           <span *ngIf="today.length" class="show-date">{{endDate ?  formatDate(endDate): ''}}</span>
+           <ion-button *ngIf="!advance" fill="outline" (click)="selectDate('day')" color="medium">
+             ALEGE ZIUA
+             <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
+           </ion-button>
+           <ion-button (click)="advSearch()" *ngIf="!advance" fill="outline" color="medium">
+             CAUTARE AVANSATA
+             <ion-icon src="../../../assets/icon/search-outline.svg" class="icon-end"></ion-icon>
+           </ion-button>
+          <ion-button fill="outline" (click)="showOrders()" color="medium">
+            NOTE
+            <ion-badge class="badge">{{bills.length}}</ion-badge>
+          </ion-button>
+          <ion-button fill="outline" (click)="showDeletedProducts()" color="medium">
+            PRODUSE STERSE
+            <ion-badge class="badge">{{delProducts.length}}</ion-badge>
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-col>
   </ion-row>
+
   <ion-row>
     <ion-col size-lg="6" offset-lg="3" *ngIf="paymentMethods.length">
       <div class="method-container">

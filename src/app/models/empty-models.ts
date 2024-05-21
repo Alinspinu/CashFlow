@@ -3,6 +3,8 @@ import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 import { Category, Product } from "./category.model";
 import { InvIngredient } from "./nir.model";
+import { Shedule } from './shedule.model';
+import { environment } from '../../environments/environment';
 
 export function emptyUser(){
   const user: User = {
@@ -16,7 +18,20 @@ export function emptyUser(){
     status: '',
     telephone: '',
     locatie: '',
-    employee: {fullName: '', position: '', user: '', access: 0}
+    employee: {
+      fullName: '',
+      position: '',
+      user: '',
+      access: 0,
+      salary: {
+        inHeand: 0,
+        onPaper: {
+          salary: 0,
+          tax: 0
+        }
+      }
+    },
+    workLog: []
   };
     return user
 }
@@ -205,4 +220,15 @@ export function emptyIng(){
    unloadLog: []
   }
   return emptyIng
+}
+
+
+export function  emptyShedule(){
+  const emptyShedule: Shedule = {
+    _id: '',
+    locatie: environment.LOC,
+    period: '',
+    days: []
+  }
+  return emptyShedule
 }

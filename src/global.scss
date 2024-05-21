@@ -98,6 +98,22 @@ body ion-alert.suplier-alert{
   }
 }
 
+body ion-alert.time-alert{
+  --max-height: none !important;
+  --width: 900px !important;
+  --height: 600px !important;
+  .alert-radio-group{
+    max-height: none !important;
+    height: 600px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    .alert-radio-button{
+      width: 180px !important;
+    }
+  }
+}
+
 
 body ion-alert.deleteAlert{
   --max-width: none!important;

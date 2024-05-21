@@ -150,6 +150,7 @@ export class IngredientPage implements OnInit, OnDestroy {
     if(this.filter.dep !== ''){
       const ings = this.ingredients.filter((ing: any) => ing.dep === this.filter.dep)
       this.ingredients = [...ings]
+      console.log(this.ingredients)
     }
     if(this.filter.gestiune !== ''){
       const ings = this.ingredients.filter((ing: any) => ing.gestiune === this.filter.gestiune)

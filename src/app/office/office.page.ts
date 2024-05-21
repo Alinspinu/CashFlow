@@ -6,6 +6,9 @@ import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { ProductsService } from './products/products.service';
 import { IngredientService } from './ingredient/ingredient.service';
+import { AuthService } from '../auth/auth.service';
+import User from '../auth/user.model';
+
 
 
 @Component({
@@ -15,19 +18,39 @@ import { IngredientService } from './ingredient/ingredient.service';
   standalone: true,
   imports: [IonicModule, CommonModule, ProductsPage]
 })
-export class OfficePage implements OnDestroy {
+export class OfficePage implements OnInit, OnDestroy {
   public environmentInjector = inject(EnvironmentInjector);
 
   private productSub!: Subscription;
   private ingSub!: Subscription;
+   user!: User
+  private userSub!: Subscription
 
   constructor(
     private productsSrv: ProductsService,
     private ingSrv: IngredientService,
+    private authSrv: AuthService
   ) {
-      this.productSub =  this.productsSrv.getProducts(environment.LOC).subscribe()
-      this.ingSub = this.ingSrv.getIngredients(environment.LOC).subscribe()
   }
+
+  ngOnInit(): void {
+    this.getUser()
+    this.productSub =  this.productsSrv.getProducts(environment.LOC).subscribe()
+    this.ingSub = this.ingSrv.getIngredients(environment.LOC).subscribe()
+  }
+
+
+  getUser(){
+    this.userSub = this.authSrv.user$.subscribe(response => {
+      if(response){
+        this.userSub = response.subscribe(user => {
+          if(user){
+            this.user = user;
+          }
+        })
+      }
+    })
+    }
 
   ngOnDestroy(): void {
     if(this.productSub){
@@ -35,6 +58,10 @@ export class OfficePage implements OnDestroy {
     }
     if(this.ingSub){
       this.ingSub.unsubscribe()
+    }
+
+    if(this.userSub){
+      this.userSub.unsubscribe()
     }
   }
 

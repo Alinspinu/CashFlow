@@ -39,7 +39,7 @@
         <ion-item *ngFor="let entry of day.entry; let i = index" class="entry" class="ion-no-margin ion-no-padding">
           <ion-label class="description">{{entry.description | capitalize}}</ion-label>
           <ion-label class="tip" [class.red]="entry.tip === 'expense'">{{entry.tip === 'expense' ? 'out' : 'in'}}</ion-label>
-          <ion-label class="amount" [class.red]="entry.tip === 'expense'">{{entry.amount}}</ion-label>
+          <ion-label class="amount" [class.red]="entry.tip === 'expense'">{{showEntryAmount(entry)}}</ion-label>
           <ion-buttons slot="end">
             <ion-button (click)="deleteEntry(entry._id, i, z)">
               <ion-icon src="../../assets/icon/trash-outline.svg" class="trash"></ion-icon>
@@ -53,8 +53,8 @@
     </ion-card-header>
   </ion-card>
 
-  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+  <!-- <ion-infinite-scroll (ionInfinite)="loadMore($event)">
     <ion-infinite-scroll-content loadingText="Loading more data..."></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  </ion-infinite-scroll> -->
 </ion-content>
 

@@ -45,6 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.contentSub = this.contService.getData(this.user.locatie).subscribe()
         this.tablesService.getTables(this.user.locatie, this.user._id)
          this.getIncommingOrders()
+         this.getUpdatedOrder()
+         this.removeLive()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
         } else{
           this.router.navigateByUrl('/auth')
@@ -66,6 +68,24 @@ export class AppComponent implements OnInit, OnDestroy {
       })
     }
 
+    getUpdatedOrder(){
+      this.webRTC.getUpdatedOrderObservable().subscribe(order => {
+        if(order){
+          const parsedOrder = JSON.parse(order)
+          this.tablesService.updateOrder(parsedOrder)
+        }
+      })
+    }
+
+    removeLive(){
+      this.webRTC.getTableBillIdObservable().subscribe(response => {
+        if(response) {
+          console.log(response)
+          const pasedData = JSON.parse(response)
+          this.tablesService.removeLive(pasedData.number, pasedData.id)
+        }
+      })
+    }
 
   ngOnInit(): void {
    this.getUser()

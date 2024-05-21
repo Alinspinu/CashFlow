@@ -1,0 +1,193 @@
+<ion-header>
+  <ion-grid>
+    <ion-row *ngIf="pontaj && users">
+      <ion-col size="1">
+      </ion-col>
+      <ion-col size="0.4">
+        <div class="square days">Baza</div>
+      </ion-col>
+      <ion-col size="0.3">
+        <div class="square days">Bonus</div>
+      </ion-col>
+      <ion-col size="0.4">
+        <div class="square days">Total</div>
+      </ion-col>
+      <ion-col size="0.4">
+        <div class="square days">Plătit</div>
+      </ion-col>
+      <ion-col size="0.5">
+        <div class="square days">De Plată</div>
+      </ion-col>
+      <ion-col size="0.3">
+        <div class="square days">lei/h</div>
+      </ion-col>
+      <ion-col size="0.3">
+        <div class="square days">Ora</div>
+      </ion-col>
+      <ion-col *ngFor="let day of pontaj.days">
+        <div class="square days">
+          <span class="day">{{day.number}}</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngIf="pontaj && users">
+
+        <ion-row *ngFor="let user of users">
+          <ion-col size="1">
+            <div class="square"
+            [ngClass]="{
+              'barista' : user.employee.position === 'Barista',
+              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'casier' : user.employee.position === 'Casier',
+              'ospatar' : user.employee.position === 'Ospatar',
+              'bucatar' : user.employee.position === 'Bucatar',
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Asistent Manager' || user.employee.position === 'Manager' || user.employee.position === 'Designer'
+            }">
+              <span class="name">{{user.employee.fullName}}</span>
+            </div>
+          </ion-col>
+          <ion-col size="0.4">
+            <div class="square"
+            [ngClass]="{
+              'barista' : user.employee.position === 'Barista',
+              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'casier' : user.employee.position === 'Casier',
+              'ospatar' : user.employee.position === 'Ospatar',
+              'bucatar' : user.employee.position === 'Bucatar',
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Asistent Manager' || user.employee.position === 'Manager' || user.employee.position === 'Designer'
+            }">
+            {{user.employee.salary.inHeand}}</div>
+          </ion-col>
+          <ion-col size="0.3">
+            <div class="square"
+            [ngClass]="{
+              'barista' : user.employee.position === 'Barista',
+              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'casier' : user.employee.position === 'Casier',
+              'ospatar' : user.employee.position === 'Ospatar',
+              'bucatar' : user.employee.position === 'Bucatar',
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Asistent Manager' || user.employee.position === 'Manager' || user.employee.position === 'Designer'
+            }">
+              {{calcBonus(user.employee.payments)}}</div>
+          </ion-col>
+          <ion-col size="0.4">
+            <div class="square"
+            [ngClass]="{
+              'barista' : user.employee.position === 'Barista',
+              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'casier' : user.employee.position === 'Casier',
+              'ospatar' : user.employee.position === 'Ospatar',
+              'bucatar' : user.employee.position === 'Bucatar',
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Asistent Manager' || user.employee.position === 'Manager' || user.employee.position === 'Designer'
+            }">
+            {{calcBonus(user.employee.payments) +
+              calcIncome(user.employee)}} </div>
+          </ion-col>
+          <ion-col size="0.4">
+            <div class="square"
+            [ngClass]="{
+              'barista' : user.employee.position === 'Barista',
+              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'casier' : user.employee.position === 'Casier',
+              'ospatar' : user.employee.position === 'Ospatar',
+              'bucatar' : user.employee.position === 'Bucatar',
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Asistent Manager' || user.employee.position === 'Manager' || user.employee.position === 'Designer'
+            }">
+            {{calcPayments(user.employee.payments)}}</div>
+          </ion-col>
+          <ion-col size="0.5">
+            <div class="square"
+            [ngClass]="{
+              'barista' : user.employee.position === 'Barista',
+              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'casier' : user.employee.position === 'Casier',
+              'ospatar' : user.employee.position === 'Ospatar',
+              'bucatar' : user.employee.position === 'Bucatar',
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Asistent Manager' || user.employee.position === 'Manager' || user.employee.position === 'Designer'
+            }">
+            {{roundInHtml(calcBonus(user.employee.payments) +
+              calcIncome(user.employee) -
+              calcPayments(user.employee.payments))}}</div>
+          </ion-col>
+          <ion-col size="0.3">
+            <div class="square"
+            [ngClass]="{
+              'barista' : user.employee.position === 'Barista',
+              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'casier' : user.employee.position === 'Casier',
+              'ospatar' : user.employee.position === 'Ospatar',
+              'bucatar' : user.employee.position === 'Bucatar',
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Asistent Manager' || user.employee.position === 'Manager' || user.employee.position === 'Designer'
+            }">
+            {{roundInHtml(user.employee.salary.inHeand / 176)}}</div>
+          </ion-col>
+          <ion-col size="0.3">
+            <div class="square"
+            [ngClass]="{
+              'barista' : user.employee.position === 'Barista',
+              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'casier' : user.employee.position === 'Casier',
+              'ospatar' : user.employee.position === 'Ospatar',
+              'bucatar' : user.employee.position === 'Bucatar',
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Asistent Manager' || user.employee.position === 'Manager' || user.employee.position === 'Designer'
+            }">
+            {{calcTotalsHours(user.employee.workLog)}}</div>
+          </ion-col>
+          <ion-col *ngFor="let day of pontaj.days">
+            <div class="square pointer size"
+            [ngClass]="{
+              'barista' : getPosition(day.users, user._id) === 'Barista',
+              'aj-barista' : getPosition(day.users, user._id) === 'Ajutor barman',
+              'casier' : getPosition(day.users, user._id) === 'Casier',
+              'ospatar' : getPosition(day.users, user._id) === 'Ospatar',
+              'bucatar' : getPosition(day.users, user._id) === 'Bucatar',
+              'aj-bucatar' : getPosition(day.users, user._id) === 'Ajutor bucatar',
+              'liber' : getPosition(day.users, user._id) === '0'}">
+              {{findUser(day.users, user._id)}}
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="1.1">
+            <div class="total">
+              <span>Total:</span>
+              <span>{{roundInHtml(totalSalary + totalBonus)}}</span>
+            </div>
+          </ion-col>
+          <ion-col size="1.1">
+            <div class="total">
+              <span>Plătit:</span>
+              <span>{{totalPayd}}</span>
+            </div>
+          </ion-col>
+          <ion-col size="1.1">
+            <div class="total">
+              <span>Rest:</span>
+              <span>{{roundInHtml(totalSalary + totalBonus - totalPayd)}}</span>
+            </div>
+          </ion-col>
+          <ion-col *ngFor="let day of pontaj.days">
+            <div class="total">
+              <span class="day">{{roundInHtml(calcWorkDayValue(day, pontaj.days.length) + totalTesDay)}}</span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

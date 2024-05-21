@@ -186,13 +186,13 @@ export class AddEntryPage implements OnInit {
     if(date){
       this.hide.date = true
       this.date = date
-      const tip = await this.actionSheet.entryAlert(['Încasare', 'Cheltuială'], 'radio', 'Tip de intrare', 'Alege o opțiune', '')
+      const tip = await this.actionSheet.entryAlert(['Încasare', 'Cheltuială'], 'radio', 'Tip de intrare', 'Alege o opțiune', '', '')
       if(tip){
         this.hide.tip = true
         this.form.get('typeOfEntry')?.setValue(tip === "Încasare" ? 'income' : 'expense' )
         if(tip === "Încasare"){
           this.operations = this.incomeOp
-          const typeOf = await this.actionSheet.entryAlert(this.incomeOp, 'radio','Tip de Încasare','Alege o opțiune', '')
+          const typeOf = await this.actionSheet.entryAlert(this.incomeOp, 'radio','Tip de Încasare','Alege o opțiune', '', '')
             if(typeOf){
               this.hide.typeOf = true
               this.form.get('typeOf')?.setValue(typeOf)
@@ -215,7 +215,7 @@ export class AddEntryPage implements OnInit {
                   return
                 case 'Incasare de la administrator':
                   this.usersToShow = this.admin
-                  const admin = await this.actionSheet.entryAlert([this.admin[0].employee.fullName, this.admin[1].employee.fullName], 'radio', 'Administratori', 'Alege o opțiune', '')
+                  const admin = await this.actionSheet.entryAlert([this.admin[0].employee.fullName, this.admin[1].employee.fullName], 'radio', 'Administratori', 'Alege o opțiune', '', '')
                   if(admin){
                     this.hide.user = true
                     const user = this.admin.find(user => user.employee.fullName === admin)
@@ -245,20 +245,20 @@ export class AddEntryPage implements OnInit {
             }
         } else {
           this.operations = this.expenseOp
-          const typeOf = await this.actionSheet.entryAlert(this.expenseOp, 'radio','Tip de Încasare','Alege o opțiune','')
+          const typeOf = await this.actionSheet.entryAlert(this.expenseOp, 'radio','Tip de Încasare','Alege o opțiune','', '')
           if(typeOf){
             this.hide.typeOf = true
             this.form.get('typeOf')?.setValue(typeOf)
             switch(typeOf){
               case 'Plata furnizor':
-                const suplierName = await this.actionSheet.entryAlert(this.supliersToSend, 'radio', 'Furnizori', 'Alege un furnizor','suplier-alert')
+                const suplierName = await this.actionSheet.entryAlert(this.supliersToSend, 'radio', 'Furnizori', 'Alege un furnizor','suplier-alert','')
                 if(suplierName){
                   if(suplierName === "Altul"){
                     const desc = await this.actionSheet.textAlert('Nume furnizor', 'Scrie numele furnizorului', 'nr', 'Descriere')
                     if(desc){
                       this.hide.desc = true
                       this.form.get('description')?.setValue(desc)
-                      const document = await this.actionSheet.entryAlert(this.documents, 'radio', 'Tip de Document', 'Alege o opțiune', '')
+                      const document = await this.actionSheet.entryAlert(this.documents, 'radio', 'Tip de Document', 'Alege o opțiune', '', '')
                       if(document) {
                         this.hide.document = true
                         this.form.get('document')?.setValue(document)
@@ -285,7 +285,7 @@ export class AddEntryPage implements OnInit {
                       this.hide.suplier = true
                       this.form.get('suplier')?.setValue(suplier._id)
                     }
-                    const document = await this.actionSheet.entryAlert(this.documents, 'radio', 'Tip de Document', 'Alege o opțiune', '')
+                    const document = await this.actionSheet.entryAlert(this.documents, 'radio', 'Tip de Document', 'Alege o opțiune', '', '')
                     if(document) {
                       if(document === 'Fara'){
                         this.description = typeOf + ' ' + suplier.name + ' Fara document de plata'
@@ -310,7 +310,7 @@ export class AddEntryPage implements OnInit {
                 return
               case 'Plata catre administrator':
                 this.usersToShow = this.admin
-                const admin = await this.actionSheet.entryAlert([this.admin[0].employee.fullName, this.admin[1].employee.fullName], 'radio', 'Tip de Document', 'Alege o opțiune', '')
+                const admin = await this.actionSheet.entryAlert([this.admin[0].employee.fullName, this.admin[1].employee.fullName], 'radio', 'Tip de Document', 'Alege o opțiune', '', '')
                 if(admin){
                   this.hide.user = true
                   const user = this.admin.find(user => user.employee.fullName === admin)
@@ -325,7 +325,7 @@ export class AddEntryPage implements OnInit {
                 return
               case 'Avans':
                 this.usersToShow = this.users
-                const user = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert')
+                const user = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert', '')
                 if(user){
                   this.hide.user = true
                   const choise = this.users.find((usr:any) => usr.employee.fullName === user)
@@ -340,7 +340,7 @@ export class AddEntryPage implements OnInit {
                 return
               case 'Salariu':
                 this.usersToShow = this.users
-                const employee = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert')
+                const employee = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert', '')
                 if(employee){
                   this.hide.user = true
                   const choise = this.users.find((usr:any) => usr.employee.fullName === employee)
@@ -355,7 +355,7 @@ export class AddEntryPage implements OnInit {
                 return
               case 'Bonus vanzari':
                 this.usersToShow = this.users
-                const users = await this.actionSheet.entryAlert(this.usersNames, 'checkbox', 'Angajați', 'Alege angajați', 'suplier-alert')
+                const users = await this.actionSheet.entryAlert(this.usersNames, 'checkbox', 'Angajați', 'Alege angajați', 'suplier-alert', '')
                 if(users){
                   this.hide.users = true
                   this.bonusName = users
@@ -376,7 +376,7 @@ export class AddEntryPage implements OnInit {
                 return
               case 'Bonus excelenta':
                 this.usersToShow = this.users
-                const lucky = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert')
+                const lucky = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert', '')
                 if(lucky){
                   this.hide.user = true
                   const choise = this.users.find((usr:any) => usr.employee.fullName === lucky)

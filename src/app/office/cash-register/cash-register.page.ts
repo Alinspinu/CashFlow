@@ -56,6 +56,14 @@ export class CashRegisterPage implements OnInit {
   }
 
 
+  showEntryAmount(entry: any){
+      if(this.user.employee.access < 4 && entry.typeOf === 'Salariu') {
+        return 'xxx'
+      } else {
+        return entry.amount
+      }
+  }
+
 
 
   reciveEntry(ev: any){

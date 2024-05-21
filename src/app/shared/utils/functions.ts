@@ -6,6 +6,9 @@ import { Product } from "src/app/models/category.model";
 export function round(num: number): number {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 }
+export function roundOne(num: number): number {
+  return Math.round((num + Number.EPSILON) * 1) / 1;
+}
 
 
 export function getObjectKeys(obj: any): string[] {
@@ -91,83 +94,20 @@ export function formatedDateToShow(date: any){
   }
 
 
+export function formatPeriod(start: number, end: number){
+  const startDate = new Date(start);
+  const endDate = new Date(end);
 
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Bucharest" // Set the time zone to match the Romanian locale
+  };
 
-  // db.orders.aggregate([
-  //   {
-  //     $match: {}
-  //   },
-  //   {
-  //     $set: {
-  //       "products": {
-  //         $map: {
-  //           input: "$products",
-  //           as: "product",
-  //           in: {
-  //             $mergeObjects: [
-  //               "$$product",
-  //               {
-  //                 "section": {
-  //                   $switch: {
-  //                     branches: [
-  //                       {
-  //                         case: { $eq: ["$$product.mainCat", "food"] },
-  //                         then: {
-  //                           $switch: {
-  //                             branches: [
-  //                               {
-  //                                 case: {
-  //                                   $in: ["$$product.category", ["64be6a3e3ef7bd6552c84608", "64be690d3ef7bd6552c84602"]]
-  //                                 },
-  //                                 then: "vitrina"
-  //                               },
-  //                               {
-  //                                 case: true,
-  //                                 then: "buc"
-  //                               }
-  //                             ]
-  //                           }
-  //                         }
-  //                       },
-  //                       {
-  //                         case: { $eq: ["$$product.mainCat", "bar"] },
-  //                         then: "bar"
-  //                       },
-  //                       {
-  //                         case: { $eq: ["$$product.mainCat", "shop"] },
-  //                         then: "shop"
-  //                       },
-  //                       {
-  //                         case: { $eq: ["$$product.mainCat", "coffee"] },
-  //                         then: {
-  //                           $switch: {
-  //                             branches: [
-  //                               {
-  //                                 case: {
-  //                                   $in: ["$$product.category", ["64c8e6c548b61f91a0d45e66", "64c8e69548b61f91a0d45e64"]]
-  //                                 },
-  //                                 then: "tea"
-  //                               },
-  //                               {
-  //                                 case: true,
-  //                                 then: "coffee"
-  //                               }
-  //                             ]
-  //                           }
-  //                         }
-  //                       }
-  //                     ],
-  //                     default: "unknown"
-  //                   }
-  //                 }
-  //               }
-  //             ]
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // ])
+  const startt = startDate.toLocaleString("ro-RO", options);
+  const endd = endDate.toLocaleString("ro-RO", options);
+  return `${startt} -- ${endd}`
+}
 
 
 

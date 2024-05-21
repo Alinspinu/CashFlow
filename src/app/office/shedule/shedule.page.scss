@@ -1,0 +1,81 @@
+
+
+.square{
+  font-family: NoirProReg !important;
+  // border: solid 1.2px black;
+  border-radius: 4px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+
+  .name{
+    font-size: 18px;
+  }
+  .position{
+    font-size: 14px;
+  }
+  .day{
+    font-size: 20px;
+  }
+  .date{
+    font-size: 14px;
+  }
+  .label{
+    font-size: 18px;
+  }
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.date-wrapper{
+font-family: NoirProSemi !important;
+  .date{
+    font-size: 22px;
+  }
+}
+
+
+.section-wrapper{
+  display: flex;
+  flex-direction: row;
+}
+.section{
+  border: solid 1.2px black;
+  border-radius: 8px;
+  height: 50px;
+  padding: 8px;
+  flex: 33.3%;
+}
+
+
+.barista{
+  background-color: rgb(61, 158, 190);
+}
+.aj-barista{
+  background-color: rgb(129, 196, 218);
+}
+.casier{
+  background-color: rgb(225, 115, 109);
+}
+.ospatar{
+  background-color: rgb(225, 177, 109);
+}
+.bucatar{
+  background-color: rgb(116, 169, 107);
+}
+.aj-bucatar{
+  background-color: rgb(155, 182, 150);
+}
+.days{
+  background-color: rgb(19, 82, 116);
+  color: white;
+}
+.liber{
+  background-color: rgb(98, 91, 91) !important;
+  color: white !important;
+}

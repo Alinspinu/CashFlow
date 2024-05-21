@@ -158,18 +158,20 @@ calcTva(){
   discountBills.forEach(bill => {
     const discountProcent = (bill.discount + bill.cashBack) * 100 / bill.total;
     bill.products.forEach(product => {
-      if(product.quantity > 0 && product.tva && product.quantity * product.price > product.discount){
+      if(product.quantity > 0 && +product.tva > 0 && product.quantity * product.price > product.discount){
         const productPrice = product.price * product.quantity
         const discountValue = productPrice * discountProcent / 100
+      if(isFinite(discountValue)){
         const productRealPrice = productPrice - discountValue
         const tvaValue = productRealPrice * +product.tva / 100
         tvaDiscountBills += round(tvaValue)
+      }
       }
     })
   })
   fullBills.forEach(bill => {
     bill.products.forEach(product => {
-      if(product.quantity > 0 && product.tva && product.quantity * product.price > product.discount){
+      if(product.quantity > 0 && +product.tva > 0 && product.quantity * product.price > product.discount){
         const tvaValue = product.price * product.quantity * +product.tva / 100
         tvaFullBills += round(tvaValue)
       }

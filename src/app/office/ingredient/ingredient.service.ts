@@ -1,9 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Preferences } from "@capacitor/preferences";
-import { NgxIndexedDBService } from "ngx-indexed-db";
-import { BehaviorSubject, from, Observable, switchMap, take, tap } from "rxjs";
-import { Ingredient } from "src/app/models/category.model";
+
+import { BehaviorSubject, Observable, tap } from "rxjs";
 import { emptyIng } from "src/app/models/empty-models";
 import { InvIngredient } from "src/app/models/nir.model";
 import { IndexDbService } from "src/app/shared/indexDb.service";

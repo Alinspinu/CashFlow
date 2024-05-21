@@ -10,7 +10,27 @@ export default class User {
     public email: string,
     public locatie: string,
     public tokenExpirationDate: string,
-    public employee: {fullName: string, position: string, user: string, access: number},
+    public employee: {
+      fullName: string,
+      position: string,
+      user: string,
+      access: number,
+      salary: {
+        inHeand: number,
+        onPaper: {
+          salary: number,
+          tax: number
+        }
+      }
+    },
+    public workLog: {
+      day: Date,
+      checkIn: Date,
+      checkOut: Date,
+      hours: number,
+      earnd: number,
+      position: string,
+    }[]
   ){}
   };
 

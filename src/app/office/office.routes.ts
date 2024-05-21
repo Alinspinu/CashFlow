@@ -34,8 +34,18 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'shedule',
+        loadComponent: () => import('./shedule/shedule.page').then( m => m.ShedulePage),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'nir/:id',
         loadComponent: () => import('./CRUD//nir/nir.page').then( m => m.NirPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pontaj',
+        loadComponent: () => import('./pontaj/pontaj.page').then( m => m.PontajPage),
         canActivate: [AuthGuard]
       },
       {
@@ -50,8 +60,10 @@ export const routes: Routes = [
     redirectTo: '/tabs/office/products',
     pathMatch: 'full',
   },
-  {
-    path: 'product-ingredient',
-    loadComponent: () => import('./CRUD/product-ingredient/product-ingredient.page').then( m => m.ProductIngredientPage)
-  },
+
+  // {
+  //   path: 'product-ingredient',
+  //   loadComponent: () => import('./CRUD/product-ingredient/product-ingredient.page').then( m => m.ProductIngredientPage)
+  // },
+
 ];

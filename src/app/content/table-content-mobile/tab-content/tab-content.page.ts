@@ -101,7 +101,6 @@ export class TabContentPage implements OnInit {
     this.productsToShow = products.filter((object) =>
     object.name.toLocaleLowerCase().includes(input.toLocaleLowerCase())
     );
-    console.log(this.productsToShow)
   }
 
 

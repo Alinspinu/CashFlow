@@ -59,6 +59,9 @@ export class AddEmployeeDataPage implements OnInit {
       onPaper: new FormControl(null, {
         updateOn: 'change',
       }),
+      fix: new FormControl(null, {
+        updateOn: 'change',
+      }),
     });
     console.log(this.data)
     if(this.data){
@@ -73,6 +76,7 @@ export class AddEmployeeDataPage implements OnInit {
       }
       this.form.get('salary')?.setValue(this.data.salary.inHeand);
       this.form.get('onPaper')?.setValue(this.data.salary.onPaper.salary);
+      this.form.get('fix')?.setValue(this.data.salary.fix ? this.data.salary.fix : false );
     }
   }
 
@@ -91,7 +95,10 @@ export class AddEmployeeDataPage implements OnInit {
           salary:  this.form.value.onPaper,
           tax: round(this.form.value.onPaper * 0.4)
         },
-      } ,
+        fix: this.form.value.fix
+      },
+      workLog: this.data.workLog,
+      payments: this.data.payments
 
     }
     this.modalCtrl.dismiss(dataToSend)

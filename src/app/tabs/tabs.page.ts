@@ -5,6 +5,7 @@ import { IonicModule, Platform, IonRouterOutlet, NavController} from '@ionic/ang
 import { AuthService } from '../auth/auth.service';
 import User from '../auth/user.model';
 import { getUserFromLocalStorage } from '../shared/utils/functions';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { getUserFromLocalStorage } from '../shared/utils/functions';
 export class TabsPage implements OnInit{
   public environmentInjector = inject(EnvironmentInjector);
   screenWidth!: number
+  userSub!: Subscription
 
   user!: User | null
 
@@ -27,12 +29,27 @@ export class TabsPage implements OnInit{
   ) {
   }
 
+
+
   ngOnInit(): void {
   this.screenWidth = window.innerWidth
   getUserFromLocalStorage().then(user => {
     this.user = user
   })
 }
+
+
+// getUser(){
+//   this.userSub = this.authSrv.user$.subscribe(response => {
+//     if(response){
+//       this.userSub = response.subscribe(user => {
+//         if(user){
+//           this.user = user;
+//         }
+//       })
+//     }
+//   })
+//   }
 
 @HostListener('document:keydown', ['$event'])
 handleKeyDown(ev: KeyboardEvent){

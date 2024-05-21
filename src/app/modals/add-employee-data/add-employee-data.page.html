@@ -47,6 +47,12 @@
         </ion-input>
       </ion-item>
       <ion-item lines="none" class="input">
+        <ion-select label="Cuantificare" placeholder="Level" formControlName="fix">
+          <ion-select-option [value]="true">Fix</ion-select-option>
+          <ion-select-option [value]="false">Ore</ion-select-option>
+        </ion-select>
+        </ion-item>
+      <ion-item lines="none" class="input">
         <ion-select label="Acces aplicatie" placeholder="Level" formControlName="access">
           <ion-select-option value="1">Level 1</ion-select-option>
           <ion-select-option value="2">Level 2</ion-select-option>

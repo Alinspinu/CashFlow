@@ -160,6 +160,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   getOrders(id: string){
     this.cashSrv.getUserOrders(id).subscribe(response => {
       if(response) {
+
         this.data = response
         this.orders = [...this.data]
         this.calcCashIn()
@@ -171,6 +172,7 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.cashSrv.getAllorders().subscribe(response => {
       if(response) {
         this.data = response
+        console.log(this.data)
         this.orders = [...this.data]
         this.calcCashIn()
         this.getUsers()

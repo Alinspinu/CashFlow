@@ -27,6 +27,7 @@ import { DelProdViewPage } from '../reports/cash/del-prod-view/del-prod-view.pag
 import { ScanQrPage } from '../modals/scan-qr/scan-qr.page';
 import { AddToInventaryPage } from '../modals/add-to-inventary/add-to-inventary.page';
 import { Observable } from 'rxjs';
+import { TogglePage } from '../office/shedule/toggle/toggle.page';
 
 
 
@@ -95,6 +96,7 @@ export class ActionSheetService {
                typeof OrderAppViewPage |
                typeof AddEntryPage |
                typeof TipsPage |
+               typeof TogglePage |
                typeof DelProdViewPage,
     options: any
   ){
@@ -711,12 +713,14 @@ async detailsAlert(){
 
 
 
-  async entryAlert(options: string[], tip: string, title: string, message: string, cssClass: string){
+  async entryAlert(options: string[], tip: string, title: string, message: string, cssClass: string, choise: string){
     const inputs = options.map(option => {
       return {
           label: option,
           type: `radio` as const,
           value: option,
+          checked: option === choise
+
 
       };
   });
@@ -725,6 +729,7 @@ async detailsAlert(){
           label: option,
           type: `checkbox` as const,
           value: option,
+          checked: option === choise
 
       };
   });
@@ -814,5 +819,6 @@ async detailsAlert(){
       return null
     }
   }
+
 
 };

@@ -59,6 +59,21 @@ addOnlineOrder(bill: Bill){
     this.tableState.next([...this.tables])
 }
 
+updateOrder(bill: Bill){
+  const table = this.tables.find(obj => obj.index === bill.masa)
+  if(table){
+    const billIndex = table.bills.findIndex(obj => obj._id === bill._id)
+    console.log(billIndex)
+    if(billIndex !== -1){
+      table.bills[billIndex] = bill
+      this.tableState.next([...this.tables])
+    } else {
+      table.bills.push(bill)
+      this.tableState.next([...this.tables])
+    }
+  }
+}
+
 async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any, locatie: string){
   let mergedBills: Bill = emptyBill()
   let productsToMerge: any = []
@@ -115,6 +130,19 @@ removeBill(masa: number, billIndex: number){
   this.tableState.next([...this.tables])
 }
 
+
+removeLive(masa: number, billId: string){
+  console.log(masa, billId)
+  let table = this.tables[masa-1];
+  const billIndex = table.bills.findIndex(obj => obj._id === billId)
+  if(billIndex !== -1){
+    table.bills.splice(billIndex, 1)
+    this.webRtc.sendProductData(JSON.stringify(emptyBill()))
+    const tables = JSON.stringify(this.tables);
+    Preferences.set({key: 'tables', value: tables});
+    this.tableState.next([...this.tables])
+  }
+}
 
 //***************************ORDER-PRODUCTS******************************* */
 
@@ -328,8 +356,9 @@ deleteTable(tableId: string, index: number){
  saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string, inOrOut: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
+  console.log(billIndex)
   const bill = this.tables[tableIndex-1].bills[billIndex];
-  console.log('table index', tableIndex, 'bill index', billIndex)
+  console.log(bill)
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;

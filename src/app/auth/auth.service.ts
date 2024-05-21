@@ -42,7 +42,27 @@ export class AuthService{
             status: string,
             telephone: string,
             locatie: string,
-            employee: {position: string, fullName: string, user: string, access: number}
+            employee: {
+              position: string,
+              fullName: string,
+              user: string,
+              access: number,
+              salary: {
+                inHeand: number,
+                onPaper: {
+                  salary: number,
+                  tax: number
+                }
+              }
+            },
+            workLog: {
+              day: Date,
+              checkIn: Date,
+              checkOut: Date,
+              hours: number,
+              earnd: number,
+              position: string,
+            }[]
           };
           const tokenDate = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
           if(tokenDate <= 0){
@@ -95,7 +115,6 @@ export class AuthService{
   }
 
   private setAndStoreUserData(userData: any){
-    console.log(userData)
     if(userData.message){
     } else {
       const decodedToken: any = jwtDecode(userData.token);
@@ -115,8 +134,10 @@ export class AuthService{
           fullName: userData.employee.fullName,
           position: userData.employee.position,
           access: userData.employee.access,
-          user: decodedToken.userId
-        }
+          user: decodedToken.userId,
+          salary: userData.employee.salary
+        },
+        workLog: userData.workLog
       });
       const tokenDate = new Date(expirationDate).getTime() - new Date().getTime();
       this.aoutoLogout(tokenDate);

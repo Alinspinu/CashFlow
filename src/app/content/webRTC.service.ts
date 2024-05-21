@@ -12,6 +12,8 @@ export class WebRTCService {
   private inviteUserToTipSubject = new Subject<any>();
   private getOnlineOrderIdSubject = new Subject<any>();
   private setOrderOnlineTime = new Subject<any>();
+  private getUpdatadOrder = new Subject<any>();
+  private getTableBillId = new Subject<any>();
 
   constructor() {
     this.socket = io('https://live669-0bac3349fa62.herokuapp.com');
@@ -29,6 +31,12 @@ export class WebRTCService {
     this.socket.on('orderId', (data: any) => {
       this.getOnlineOrderIdSubject.next(data);
     });
+    this.socket.on('bill', (data: any) => {
+      this.getUpdatadOrder.next(data);
+    })
+    this.socket.on('tableBillId', (data: any) => {
+      this.getTableBillId.next(data);
+    })
   }
 
   sendProductData(data: any) {
@@ -43,12 +51,21 @@ export class WebRTCService {
     this.socket.emit('inviteToTip', data);
   }
 
+
   getInviteToTip(){
     return this.inviteUserToTipSubject.asObservable();
   }
 
+  getTableBillIdObservable() {
+    return this.getTableBillId.asObservable();
+  }
+
   getProductAddedObservable() {
     return this.productAddedSubject.asObservable();
+  }
+
+  getUpdatedOrderObservable(){
+    return this.getUpdatadOrder.asObservable()
   }
 
   getUserTipObservable() {

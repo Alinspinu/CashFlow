@@ -2,6 +2,10 @@
   <ion-grid>
     <ion-row *ngIf="pontaj && users">
       <ion-col size="1">
+        <ion-item lines="none" class="date-wrapper pointer" color="primary" (click)="selectPontaj()">
+          <ion-icon src="assets/icon/create-outline.svg"></ion-icon>
+          <span class="date">{{pontaj.month}}</span>
+        </ion-item>
       </ion-col>
       <ion-col size="0.4">
         <div class="square days">Baza</div>
@@ -80,7 +84,7 @@
               {{calcBonus(user.employee.payments)}}</div>
           </ion-col>
           <ion-col size="0.4">
-            <div class="square"
+            <div class="square" (click)="openPayments(user.employee.payments)" style="cursor:pointer;"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
               'aj-barista' : user.employee.position === 'Ajutor barman',
@@ -162,19 +166,19 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="1.1">
+          <ion-col size="1.2">
             <div class="total">
               <span>Total:</span>
               <span>{{roundInHtml(totalSalary + totalBonus)}}</span>
             </div>
           </ion-col>
-          <ion-col size="1.1">
+          <ion-col size="1.2">
             <div class="total">
               <span>Plătit:</span>
-              <span>{{totalPayd}}</span>
+              <span>{{roundInHtml(totalPayd)}}</span>
             </div>
           </ion-col>
-          <ion-col size="1.1">
+          <ion-col size="1.2">
             <div class="total">
               <span>Rest:</span>
               <span>{{roundInHtml(totalSalary + totalBonus - totalPayd)}}</span>

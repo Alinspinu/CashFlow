@@ -43,8 +43,11 @@ export class AddToInventaryPage implements OnInit {
 getIngToedit(){
   const ing = this.navParams.get('options')
     this.ing = ing.ing
-    this.date =  formatedDateToShow(ing.date).split('ora')[0]
-    const invDay = this.ing.inventary.find((inv:any) => this.setDateToZero(inv.day) === this.setDateToZero(ing.date))
+    this.date =  formatedDateToShow(ing.date)
+    const invDay = this.ing.inventary.find((inv:any) => {
+      return this.setDateToZero(inv.day) === this.setDateToZero(ing.date)
+    })
+    console.log(invDay)
     if(invDay){
       this.invDayIndex = invDay.index
       this.dateQty = invDay.qty
@@ -69,7 +72,7 @@ cancel(){
 
 
 setDateToZero(date: string){
- return new Date(new Date(date).setHours(0,0,0,0)).toISOString()
+ return new Date(date).setUTCHours(0,0,0,0)
 }
 
 roundInhtml(num: number){

@@ -5,6 +5,7 @@ import { Bill } from "../models/table.model";
 
 import { environment } from "src/environments/environment";
 import { Observable, tap } from "rxjs";
+import { Report } from "../models/report.model";
 
 
 
@@ -23,8 +24,11 @@ export class ReportsService{
  getOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string): Observable<any>{
   return this.http.post<any>(`${environment.BASE_URL}orders/get-orders`, {start: start, end: end, loc: locatie, day: day})
  }
- getHavyOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string, filter: any): Observable<any>{
-  return this.http.post<any>(`${environment.BASE_URL}orders/get-havy-orders`, {start: start, end: end, loc: locatie, day: day, filter})
+ getDep(start: string | undefined, end: string | undefined): Observable<any>{
+  return this.http.get<any>(`${environment.BASE_URL}orders/dep?start=${start}&end=${end}&loc=${environment.LOC}`)
+ }
+ getHavyOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string, filter: any, report: string): Observable<any>{
+  return this.http.post<any>(`${environment.BASE_URL}orders/get-havy-orders`, {start: start, end: end, loc: locatie, day: day, filter, report: report})
  }
 
  printProducts(products: string, start: string | undefined, end: string | undefined){
@@ -36,6 +40,11 @@ export class ReportsService{
  printProduction(products: string, start: string | undefined, end: string | undefined){
   return this.http.post(`${environment.BASE_URL}print/production`, {products: products, startDay: start, endDay: end}, {responseType: 'blob'})
  }
+
+ getReport(startDate: string | undefined, endDate: string | undefined){
+  return this.http.get<any>(`${environment.BASE_URL}report?startDate=${startDate}&endDate=${endDate}&loc=${environment.LOC}`)
+ }
+
 
 
 }

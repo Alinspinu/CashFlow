@@ -176,14 +176,14 @@ showRecipe(index: number, prod: any){
 
 
 getProducts(){
-  this.isLoading = true
+  // this.isLoading = true
   const filter = {
     inreg: this.isInreg,
     unreg: this.isUnreg,
     goods: this.isGoods,
     prod: this.isProduction
   }
- this.reportsSrv.getHavyOrders(this.startDay, this.endDay, undefined, this.user.locatie, filter).subscribe(response => {
+ this.reportsSrv.getHavyOrders(this.startDay, this.endDay, undefined, this.user.locatie, filter, '').subscribe(response => {
    this.sections = response.result.sections
    this.dbProducts = response.result.allProd
    this.dbIngs = response.ingredients

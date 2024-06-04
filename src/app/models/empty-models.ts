@@ -3,7 +3,7 @@ import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 import { Category, Product } from "./category.model";
 import { InvIngredient } from "./nir.model";
-import { Shedule } from './shedule.model';
+import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
 
 export function emptyUser(){
@@ -232,3 +232,18 @@ export function  emptyShedule(){
   }
   return emptyShedule
 }
+
+
+export function emptyPontaj(){
+  const emptyPont: Pontaj = {
+    _id: '',
+    locatie: '',
+    month: '',
+    workValue: '',
+    days: []
+  }
+  return emptyPont
+}
+
+
+

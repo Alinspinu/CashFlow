@@ -1,0 +1,63 @@
+
+ion-content {
+  --background: var(--ion-color-tertiary) !important;
+  font-family: NoirProReg !important;
+  height: 90vh;
+}
+
+
+ion-toolbar{
+
+  text-align: center;
+}
+.date{
+}
+
+
+.incasari{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-family: NoirProSemi !important;
+  margin: 50px;
+  .title{
+    font-size: 28px;
+  }
+  .value{
+    font-size: 40px;
+    color: green;
+  }
+}
+
+
+ion-label[slot="start"]{
+  font-family: NoirProReg !important;
+  font-size: 20px;
+}
+ion-label[slot="end"]{
+  font-family: NoirProReg !important;
+  font-size: 20px;
+  color: red;
+}
+
+
+.total{
+  font-family: NoirProSemi !important;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 30px;
+  .title{
+    font-size: 28px;
+  }
+  .value{
+    font-size: 28px;
+  }
+}
+
+.green{
+  color: green;
+}
+.red{
+  color: red;
+}

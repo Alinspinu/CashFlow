@@ -1,0 +1,23 @@
+
+
+ion-row{
+  margin-top: 24px;
+}
+ion-title{
+  font-family: NoirProReg !important;
+  font-size: 30px;
+  padding: 12px;
+  margin: 18px
+}
+.shedule{
+  font-family: NoirProReg !important;
+  border: solid 1.2px black;
+  border-radius: 4px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+}

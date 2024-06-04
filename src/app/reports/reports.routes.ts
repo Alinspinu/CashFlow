@@ -27,5 +27,9 @@ export const routes: Routes = [
     redirectTo: '/tabs/reports/cash',
     pathMatch: 'full',
   },
+  {
+    path: 'finance',
+    loadComponent: () => import('./finance/finance.page').then( m => m.FinancePage)
+  },
 
 ];

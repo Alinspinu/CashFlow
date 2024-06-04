@@ -164,6 +164,7 @@ export class CashControlPage implements OnInit, OnDestroy {
         this.data = response
         this.orders = [...this.data]
         this.calcCashIn()
+        this.isLoading = false
       }
     })
   }
@@ -172,10 +173,10 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.cashSrv.getAllorders().subscribe(response => {
       if(response) {
         this.data = response
-        console.log(this.data)
         this.orders = [...this.data]
         this.calcCashIn()
         this.getUsers()
+        this.isLoading = false
       }
     })
   }
@@ -221,6 +222,7 @@ export class CashControlPage implements OnInit, OnDestroy {
             this.userOnline = round( this.userOnline + order.payment.online)
           }
           if(order.tips > 0){
+            console.log(order.tips)
             this.userTips = round(this.userTips + order.tips)
           }
       })

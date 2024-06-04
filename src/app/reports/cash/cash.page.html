@@ -1,68 +1,32 @@
 
+
+<app-logo-page *ngIf="isLoading"></app-logo-page>
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
 <ion-grid>
-  <!-- <ion-row>
-    <ion-col size-lg="3" size-sm="0">
-      <div class="buttons-wrapper">
-        <ion-button *ngIf="advance"  (click)="selectDate('start')" fill="outline" color="medium">
-         {{startDate ? formatDate(startDate): "ZI ÎNCEPUT"}}
-          <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
-        </ion-button>
-
-        <ion-button *ngIf="advance" fill="outline" (click)="selectDate('end')" color="medium">
-          ZI SFÂRȘIT
-          <ion-icon src="../../../assets/icon/calendar.svg" class="icon-end"></ion-icon>
-        </ion-button>
-        <span *ngIf="today.length" class="show-date">{{endDate ?  formatDate(endDate): ''}}</span>
-        <ion-button *ngIf="!advance" fill="outline" (click)="selectDate('day')" color="medium">
-          ALEGE ZIUA
-          <ion-icon src="../../../assets/icon/calendar.svg" class="icon-start"></ion-icon>
-        </ion-button>
-        <ion-button (click)="advSearch()" *ngIf="!advance" fill="outline" color="medium">
-          CAUTARE AVANSATA
-          <ion-icon src="../../../assets/icon/search-outline.svg" class="icon-end"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-col>
-    <ion-col size-lg="6">
-      <div class="sum-wrapper">
-        <span class="label tot">Încasări</span>
-        <span class="total tot">{{total}} Lei</span>
-        <span class="note tot">(Total cu mese deschise și discount)</span>
-        <span class="incasat">{{totalIncasat}} Lei</span>
-        <span class="note incasat">(Total fară mese deschise și fară discount)</span>
-        <span class="vat">{{totalNoTax}} Lei</span>
-        <span class="note vat">(Total fără mese deschise și fără TVA)</span>
-        <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
-        <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
-      </div>
-    </ion-col>
-    <ion-col size-lg="3" size-sm="0">
-      <div class="buttons-wrapper">
-
-        <ion-button fill="outline" (click)="showOrders()" color="medium">
-          NOTE
-          <ion-badge class="badge">{{bills.length}}</ion-badge>
-        </ion-button>
-        <ion-button fill="outline" (click)="showDeletedProducts()" color="medium">
-          PRODUSE STERSE
-          <ion-badge class="badge">{{delProducts.length}}</ion-badge>
-        </ion-button>
-      </div>
-    </ion-col>
-  </ion-row> -->
-
 <ion-row>
   <ion-col size-lg="6" offset-lg="3">
     <ion-row>
-      <ion-col size-lg="9">
+      <ion-col size-lg="9" size-xs="12" *ngIf="!showRep">
         <div class="sum-wrapper">
           <span class="label tot">Încasări</span>
-          <span class="total tot">{{total}} Lei</span>
-          <span class="note tot">(Total cu mese deschise și discount)</span>
-          <span class="incasat">{{totalIncasat}} Lei</span>
-          <span class="note incasat">(Total fară mese deschise și fară discount)</span>
+          <span class="total tot">{{roundInHtml(total)}} Lei</span>
+          <span class="note tot">(Total cu mese deschise, cu discount și cu bacșiș)</span>
+          <span class="incasat">{{roundInHtml(totalIncasat - tips)}} Lei</span>
+          <span class="note incasat">(Total fară mese deschise, fără discount si fără bacșiș)</span>
           <span class="vat">{{totalNoTax}} Lei</span>
+          <span class="note vat">(Total fără mese deschise și fără TVA)</span>
+          <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
+          <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
+        </div>
+      </ion-col>
+      <ion-col size-lg="9" size-xs="12" *ngIf="showRep">
+        <div class="sum-wrapper">
+          <span class="label tot">Încasări</span>
+          <span class="total tot">{{report.cashIn}} Lei</span>
+          <span class="note tot">(Total cu mese deschise, cu discount și cu bacșiș)</span>
+          <span class="incasat"> Lei</span>
+          <span class="note incasat">(Total fară mese deschise, fără discount si fără bacșiș)</span>
+          <span class="vat"> Lei</span>
           <span class="note vat">(Total fără mese deschise și fără TVA)</span>
           <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
           <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
@@ -101,9 +65,78 @@
     </ion-row>
   </ion-col>
   </ion-row>
-
+  <div class="rep" *ngIf="showRep">
   <ion-row>
     <ion-col size-lg="6" offset-lg="3" *ngIf="paymentMethods.length">
+      <div class="method-container">
+        <span class="title">Metode de plată</span>
+        <div class="method" *ngFor="let paymentMeth of report.paymentMethods; let i = index;" (click)="openRepBills(paymentMeth.bills)">
+          <span class="index">{{i+1}}.</span>
+          <span class="label">{{paymentMeth.name}}</span>
+          <span class="proc">{{paymentMeth.procent}}%</span>
+          <span class="sum">{{paymentMeth.value}} Lei</span>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
+    <div class="method-container">
+      <span class="title">Departamente</span>
+      <div *ngFor="let dep of report.departaments; let i = index;">
+        <div class="method">
+          <span class="index">{{i+1}}.</span>
+          <span class="label">{{dep.name | capitalize}}</span>
+          <span class="proc">{{dep.procent}}%</span>
+          <span class="sum">{{dep.total}} Lei</span>
+        </div>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3" *ngIf="hours.length">
+    <div class="method-container">
+      <span class="title">Vanzare pe Ore</span>
+      <div class="method"  *ngFor="let hour of report.hours; let i = index;">
+        <span class="label">{{hour.hour}}:01 - {{hour.hour +1}}:00</span>
+        <span class="proc">{{hour.procent}}%</span>
+        <span class="sum">{{hour.total}} Lei</span>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3" *ngIf="users.length">
+    <div class="method-container">
+      <span class="title">Utilizatori</span>
+      <div class="method" *ngFor="let user of users; let i = index;">
+        <span class="index">{{i+1}}</span>
+        <span class="label">{{user.name}}</span>
+        <span class="proc">{{user.procent}}%</span>
+        <span class="sum">{{user.total}} Lei</span>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
+    <div class="method-container" *ngFor="let dep of departaments">
+      <span class="title">Top 10 produse {{dep.name}}</span>
+      <div class="method" *ngFor="let product of dep.products.slice(0, 10); let i = index;">
+        <span class="index">{{i+1}}.</span>
+        <span class="label">{{product.name}}</span>
+        <span class="proc">{{product.qty}} buc</span>
+        <span class="sum">{{product.price * product.qty}} Lei</span>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>
+</div>
+  <div class="day" *ngIf="!showRep">
+  <ion-row>
+    <ion-col size-lg="6" offset-lg="3" *ngIf="report.paymentMethods.length">
       <div class="method-container">
         <span class="title">Metode de plată</span>
         <div class="method" *ngFor="let paymentMeth of paymentMethods; let i = index;" (click)="openBills(paymentMeth.name)">
@@ -116,7 +149,7 @@
     </ion-col>
   </ion-row>
 <ion-row>
-  <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
+  <ion-col size-lg="6" offset-lg="3" *ngIf="report.departaments.length">
     <div class="method-container">
       <span class="title">Departamente</span>
       <div *ngFor="let dep of departaments; let i = index;">
@@ -165,7 +198,7 @@
 
 <ion-row>
   <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
-    <div class="method-container" *ngFor="let dep of departaments">
+    <div class="method-container" *ngFor="let dep of report.departaments">
       <span class="title">Top 10 produse {{dep.name}}</span>
       <div class="method" *ngFor="let product of dep.products.slice(0, 10); let i = index;">
         <span class="index">{{i+1}}.</span>
@@ -176,6 +209,7 @@
     </div>
   </ion-col>
 </ion-row>
+</div>
 </ion-grid>
 </ion-content>
 

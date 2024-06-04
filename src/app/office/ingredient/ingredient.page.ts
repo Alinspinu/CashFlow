@@ -40,6 +40,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   ingSub!: Subscription
 
   allIngs!: InvIngredient[]
+  ind: number = 0
 
   dep: string = ""
   toppings!: any;
@@ -206,7 +207,8 @@ updateProductIng(){
   }
   }
 
-  async inventary(ing: any){
+  async inventary(index: number){
+    this.ind = index
     if(this.selectDate){
       this.inventaryDate = await this.actionSh.openAuth(DatePickerPage)
       if(this.inventaryDate){
@@ -214,10 +216,12 @@ updateProductIng(){
       }
     }
     if(!this.selectDate){
-      let data = {date: this.inventaryDate, ing: ing}
+      let data = {date: this.inventaryDate, ing: this.ingredients[this.ind]}
       const ingToUpdate = await this.actionSh.openModal(AddToInventaryPage, data, false)
       if(ingToUpdate){
-        this.ingSrv.updateIngredientInventary(ingToUpdate).subscribe(response => {
+        this.ingSrv.updateIngredientInventary(ingToUpdate).subscribe(async response => {
+          this.ind += 1
+          // await this.inventary(this.ind)
           showToast(this.toastCtrl, response.message, 3000)
         })
       }

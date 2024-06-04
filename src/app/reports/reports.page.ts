@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { CashPage } from './cash/cash.page';
 import { IngredientsPage } from './ingredients/ingredients.page';
 import { ProductsPage } from './products/products.page';
+import { FinancePage } from './finance/finance.page';
 
 
 
@@ -13,7 +14,7 @@ import { ProductsPage } from './products/products.page';
   templateUrl: 'reports.page.html',
   styleUrls: ['reports.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule, CashPage, IngredientsPage, ProductsPage],
+  imports: [IonicModule, FormsModule, CommonModule, CashPage, IngredientsPage, ProductsPage, FinancePage],
 })
 
 
@@ -21,7 +22,7 @@ import { ProductsPage } from './products/products.page';
 
 export class ReportsPage {
 
-
+  screenWidth!: number
 
   show:
   {
@@ -29,28 +30,40 @@ export class ReportsPage {
     sales: boolean
     products: boolean
     ingredients: boolean
-  } = {sales: false, products: true, ingredients: false, menu: true}
+    finance: boolean
+  } = {sales: true, products: false, ingredients: false, menu: true, finance: false}
 
-  constructor() {}
+  constructor() {
+    this.screenWidth = window.innerWidth
+  }
 
   sales(){
     this.show.sales = true
     this.show.products = false
     this.show.ingredients = false
+    this.show.finance = false
   }
 
   products(){
     this.show.products = true
     this.show.sales = false
     this.show.ingredients = false
+    this.show.finance = false
   }
 
   ingredients(){
     this.show.ingredients = true
     this.show.products = false
     this.show.sales = false
+    this.show.finance = false
   }
 
+  finance(){
+    this.show.ingredients = false
+    this.show.products = false
+    this.show.sales = false
+    this.show.finance = true
+  }
 
   hideMenu(){
     this.show.menu = false

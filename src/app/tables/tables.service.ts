@@ -357,6 +357,7 @@ deleteTable(tableId: string, index: number){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
   console.log(billIndex)
+  console.log(tableIndex)
   const bill = this.tables[tableIndex-1].bills[billIndex];
   console.log(bill)
   bill.masa = tableIndex;
@@ -410,6 +411,7 @@ deleteOrders(data: any[]){
 }
 
 registerDeletetProduct(product: any){
+  console.log(product)
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product}, {headers})
 }

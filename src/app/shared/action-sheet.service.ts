@@ -28,6 +28,7 @@ import { ScanQrPage } from '../modals/scan-qr/scan-qr.page';
 import { AddToInventaryPage } from '../modals/add-to-inventary/add-to-inventary.page';
 import { Observable } from 'rxjs';
 import { TogglePage } from '../office/shedule/toggle/toggle.page';
+import { TogglePontPage } from '../office/pontaj/togglePont/toggle-pont.page';
 
 
 
@@ -97,6 +98,7 @@ export class ActionSheetService {
                typeof AddEntryPage |
                typeof TipsPage |
                typeof TogglePage |
+               typeof TogglePontPage |
                typeof DelProdViewPage,
     options: any
   ){

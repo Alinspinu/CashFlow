@@ -481,6 +481,7 @@ async addToBill(product: Product){
             this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
             this.disableBrakeButton()
           }
+          console.log(product)
           delProd.billProduct = product
           delProd.reason = reason;
           delProd.admin = admin
@@ -820,6 +821,7 @@ async useCashBack(mode: boolean){
           this.billProducts.forEach((el: BillProduct) => {
           let delProd: deletetBillProduct = emptyDeletetBillProduct()
           const buc = el.quantity;
+          console.log(el)
           delProd.billProduct = el
           delProd.reason = reason;
           delProd.employee = this.user.employee

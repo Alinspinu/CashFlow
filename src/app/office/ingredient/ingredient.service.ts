@@ -6,6 +6,7 @@ import { emptyIng } from "src/app/models/empty-models";
 import { InvIngredient } from "src/app/models/nir.model";
 import { IndexDbService } from "src/app/shared/indexDb.service";
 import {environment} from '../../../environments/environment'
+import { Ingredient } from '../../models/category.model';
 
 
 @Injectable({providedIn: 'root'})
@@ -100,7 +101,9 @@ export class IngredientService{
       }))
   }
 
-
+getIngsConsumabils(){
+  return this.http.get<InvIngredient[]>(`${environment.BASE_URL}ing/get-consumabil?loc=${environment.LOC}`)
+}
 
 
 }

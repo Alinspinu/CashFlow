@@ -8,6 +8,7 @@ import { ProductsService } from './products/products.service';
 import { IngredientService } from './ingredient/ingredient.service';
 import { AuthService } from '../auth/auth.service';
 import User from '../auth/user.model';
+import { PontajService } from './pontaj/pontaj.service';
 
 
 
@@ -29,7 +30,7 @@ export class OfficePage implements OnInit, OnDestroy {
   constructor(
     private productsSrv: ProductsService,
     private ingSrv: IngredientService,
-    private authSrv: AuthService
+    private authSrv: AuthService,
   ) {
   }
 
@@ -37,6 +38,7 @@ export class OfficePage implements OnInit, OnDestroy {
     this.getUser()
     this.productSub =  this.productsSrv.getProducts(environment.LOC).subscribe()
     this.ingSub = this.ingSrv.getIngredients(environment.LOC).subscribe()
+
   }
 
 

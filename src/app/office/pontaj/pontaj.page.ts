@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -9,6 +9,9 @@ import { UsersService } from '../users/users.service';
 import { environment } from 'src/environments/environment';
 import User from '../../auth/user.model';
 import { round, roundOne } from '../../shared/utils/functions';
+import { ActionSheetService } from '../../shared/action-sheet.service';
+import { TogglePontPage } from './togglePont/toggle-pont.page';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pontaj',
@@ -17,7 +20,7 @@ import { round, roundOne } from '../../shared/utils/functions';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class PontajPage implements OnInit {
+export class PontajPage implements OnInit, OnDestroy {
 
 pontaj!: Pontaj
 users: any[] = []
@@ -29,17 +32,24 @@ totalPayd: number = 0
 totalBonus: number = 0
 totalTesDay: number = 0
 totalTes: number = 0
+pontSub!: Subscription
 
   constructor(
     private pontSrv: PontajService,
-    private usersSrv: UsersService
+    private usersSrv: UsersService,
+    @Inject(ActionSheetService) private actSrv: ActionSheetService,
   ) { }
 
   ngOnInit() {
+    this.pontSrv.getLastPontaj().subscribe()
     this.getUsers()
   }
 
-
+  ngOnDestroy(): void {
+      if(this.pontSub){
+        this.pontSub.unsubscribe()
+      }
+  }
 
   getUsers(){
     this.usersSrv.getUsers('employees', '', environment.LOC).subscribe(response => {
@@ -50,37 +60,50 @@ totalTes: number = 0
           return rolesOrder[a.employee.position] - rolesOrder[b.employee.position];
         });
         this.users = sortedUsers.slice(0,-2)
-        this.getLastPontaj()
+        this.getPontaj()
 
     }
   })
 }
 
+openPayments(payments: any){
+  console.log(payments)
 
-  getLastPontaj(){
-    this.pontSrv.getLastPontaj().subscribe(response => {
+}
+
+  getPontaj(){
+    this.pontSub = this.pontSrv.pontajSend$.subscribe(response => {
         if(response) {
           this.pontaj = response
           const month = this.pontaj.month.split(' - ')[0]
           this.monthIndex = this.monhs.findIndex(obj => obj === month)
+          console.log(this.monthIndex)
           this.calcTotalStalary()
           this.calcTesTotal()
         }
     })
   }
 
-  selectPontaj(){
-
+ async selectPontaj(){
+    const pontaj = await this.actSrv.openPayment(TogglePontPage, '')
+    if(pontaj){
+      this.pontSrv.selectPontaj(pontaj)
+    }
   }
 
   calcTotalsHours(workLog: any[]){
-    const date = new Date(Date.now()).getDate()
-    const documentsInTargetMonth = workLog.filter(doc => {
+    const date = new Date().getDate()
+    const docToFilter = workLog.filter(doc => {
+      const docDate = new Date(doc.checkIn);
+      return docDate.getUTCMonth() === this.monthIndex
+    })
+    const documentsInTargetMonth = docToFilter.filter(doc => {
       const docDate = new Date(doc.checkIn);
       if(date > 20) {
+        // console.log('filter',docDate.getUTCMonth())
         return docDate.getUTCMonth() === this.monthIndex;
       } else {
-        return docDate.getDate() <= 15
+        return docDate.getDate() > 15
       }
     });
     let hours = 0
@@ -90,20 +113,28 @@ totalTes: number = 0
     return hours
   }
 
+  getWorkLog(workLog: any){
+    console.log(workLog)
+  }
+
   calcIncome(empl: any){
     let earnd = 0
-    const date = new Date(Date.now()).getDate()
+    const date = new Date().getDate()
     if(empl.salary.fix){
-      if(date > 20){
+      if(date < 20){
         earnd = empl.salary.inHeand
       } else {
         earnd = empl.salary.inHeand / 2
       }
     } else {
-      const documentsInTargetMonth = empl.workLog.filter((doc: any) => {
+      const docToFilter = empl.workLog.filter((doc: any) => {
         const docDate = new Date(doc.checkIn);
-        if(date < 20){
-          return docDate.getDate() < 16
+        return docDate.getUTCMonth() === this.monthIndex
+      })
+      const documentsInTargetMonth = docToFilter.filter((doc: any) => {
+        const docDate = new Date(doc.checkIn);
+        if(date > 20){
+          return docDate.getDate() > 15
         } else {
           return docDate.getUTCMonth() === this.monthIndex;
         }
@@ -113,7 +144,7 @@ totalTes: number = 0
           earnd += log.earnd
       })
     }
-    return round(earnd)
+    return roundOne(earnd)
   }
 
   calcPayments(paymentLog: any[]){
@@ -139,10 +170,13 @@ totalTes: number = 0
         payments += log.amount
       }
     })
-    return round(payments)
+    return roundOne(payments)
   }
 
   calcTotalStalary(){
+    this.totalSalary = 0
+    this.totalBonus = 0
+    this.totalPayd = 0
     this.users.forEach(user => {
         this.totalSalary += this.calcIncome(user.employee)
         this.totalBonus += this.calcBonus(user.employee.payments)

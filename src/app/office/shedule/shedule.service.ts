@@ -51,7 +51,6 @@ addShedule(){
 }
 
 selectShedule(shedule: Shedule){
-  console.log(shedule)
   this.shedule = shedule
   this.sheduleState.next(this.shedule)
 }

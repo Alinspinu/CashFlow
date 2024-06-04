@@ -1,0 +1,95 @@
+<app-logo-page *ngIf="isLoading"></app-logo-page>
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
+  <ion-header>
+    <ion-toolbar>
+      <span class="date" *ngIf="!day">{{startDate + " -- " + endDate}}</span>
+      <span class="date" *ngIf="day">{{today}}</span>
+      <ion-buttons slot="end">
+          <ion-button (click)="selectDate()">
+            <ion-icon src="assets/icon/time.svg"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-grid *ngIf="!isLoading">
+  <ion-row>
+    <ion-col size-lg="6" offset-lg="3">
+      <ion-row>
+        <ion-col>
+          <div class="incasari">
+            <span class="title">Încasări</span>
+            <span class="value">{{totalProducta}} Lei</span>
+          </div>
+          <!-- <ion-item lines="none"> -->
+            <!-- <ion-label slot="start">Incasări</ion-label> -->
+            <!-- <ion-label slot="end">{{totalProducta}}</ion-label> -->
+            <!-- <ion-label slot="end">40000</ion-label> -->
+          <!-- </ion-item> -->
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item lines="none" color="tertiary">
+            <ion-label slot="start">Marfă</ion-label>
+            <!-- <ion-label slot="end">{{totalIngs}}</ion-label> -->
+            <ion-label slot="end">- {{totalIngs}} Lei</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item lines="none" color="tertiary">
+            <ion-label slot="start">Chirie și utilități</ion-label>
+            <!-- <ion-label slot="end">{{roundInHtml(rent)}}</ion-label> -->
+            <ion-label slot="end">- {{roundInHtml(rent)}} Lei</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col>
+          <ion-item lines="none" color="tertiary">
+            <ion-label slot="start">Personal</ion-label>
+            <!-- <ion-label slot="end">{{roundInHtml(totalWorkDays)}} Lei</ion-label> -->
+            <ion-label slot="end">- {{roundInHtml(totalWorkDays)}} Lei</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col>
+          <ion-item lines="none" color="tertiary">
+            <ion-label slot="start">Consumabile</ion-label>
+            <!-- <ion-label slot="end">{{consValue}} Lei</ion-label> -->
+            <ion-label slot="end">- {{consValue}} Lei</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col>
+
+          <ion-item lines="none" color="tertiary">
+              <ion-label slot="start">Deprecieri</ion-label>
+              <!-- <ion-label slot="end">{{dep}}</ion-label> -->
+              <ion-label slot="end">- {{dep}} Lei</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col>
+          <ion-item lines="none" color="tertiary">
+            <div class="total">
+              <span class="title">Total</span>
+              <span class="value">{{roundInHtml(situation)}} Lei</span>
+            </div>
+            <!-- <ion-label slot="start">Situatie</ion-label> -->
+            <!-- <ion-label slot="end">{{roundInHtml(situation)}}</ion-label> -->
+            <!-- <ion-label slot="end">3343</ion-label> -->
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+</ion-content>
+

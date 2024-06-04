@@ -12,6 +12,9 @@ import { DelProdViewPage } from './del-prod-view/del-prod-view.page';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
 import { ReportsService } from '../reports.service';
+import { LogoPagePage } from '../../shared/logo-page/logo-page.page';
+import { Report } from 'src/app/models/report.model';
+import { filter } from 'rxjs';
 
 
  interface paymentMethod {
@@ -59,7 +62,7 @@ interface user{
   templateUrl: './cash.page.html',
   styleUrls: ['./cash.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe]
+  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, LogoPagePage]
 })
 export class CashPage implements OnInit {
 
@@ -68,6 +71,9 @@ export class CashPage implements OnInit {
     private repSrv: ReportsService,
     private router: Router,
   ) { }
+
+
+  showRep: boolean = false
 
   advance: boolean = false
   startDate!: string | undefined
@@ -109,6 +115,8 @@ export class CashPage implements OnInit {
   hummus: number = 0
   risotto: number = 0
 
+  report!: Report
+
   ngOnInit() {
     getUserFromLocalStorage().then(user => {
       if(user){
@@ -116,6 +124,19 @@ export class CashPage implements OnInit {
         this.getOrders()
       } else {
         this.router.navigateByUrl('/auth')
+      }
+    })
+  }
+
+  gerReport(start: string, end: string){
+    this.repSrv.getReport(start, end).subscribe(response => {
+      if(response){
+        this.report = response
+        console.log(this.report)
+        this.report.departaments.forEach(dep => {
+          dep.products.sort((a,b) => b.qty - a.qty)
+
+          })
       }
     })
   }
@@ -137,6 +158,7 @@ getOrders(){
       this.isLoading = false
       this.calcTotals()
       this.calcTva()
+      this.isLoading = false
     }
   })
 }
@@ -268,6 +290,10 @@ openBills(method: string){
   }
   }
 
+
+  openRepBills(bills: any){
+    this.actionSheet.openPayment(OrdersViewPage, bills)
+  }
 
   showOrders(){
     let billsToSend: any = []
@@ -402,7 +428,7 @@ calcProcents(){
   if(this.tips > 0) {
     const openTipsMethod: paymentMethod = {
       name: "Bacsis",
-      value: this.tips,
+      value: round(this.tips),
       procent: round(this.tips * 100 / this.total)
     }
     this.paymentMethods.push(openTipsMethod)
@@ -492,6 +518,7 @@ createDeps(){
   })
 
   this.departaments.sort((a,b) => b.procent - a.procent)
+  console.log(this.departaments)
   this.calcTypeProcents(this.departaments)
 }
 
@@ -508,11 +535,12 @@ calcTypeProcents(deps: departament[]){
 showData(dep: departament){
   dep.showType = !dep.showType
 }
-
+ start: string = ''
 
  async selectDate(mode: string){
   if(mode === "start"){
     const startDate = await this.actionSheet.openAuth(DatePickerPage)
+    this.start = startDate
     if(startDate){
       this.startDate = startDate
     }
@@ -525,7 +553,8 @@ showData(dep: departament){
       if(this.startDate){
         this.advance = false
         this.today = ''
-        this.getOrders()
+        // this.getOrders()
+        this.gerReport(this.start, endDate)
       }
     }
   }
@@ -542,6 +571,10 @@ showData(dep: departament){
 
   formatDate(date: string | undefined){
     return formatedDateToShow(date).split(' ora')[0]
+  }
+
+  roundInHtml(sum: number){
+    return round(sum)
   }
 
 }

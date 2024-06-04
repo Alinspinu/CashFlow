@@ -110,7 +110,11 @@ export class AuthPage implements OnInit {
         const id: any = jwtDecode(res.token);
         this.tableSrv.getTables(res.locatie, id.userId)
         this.disableLogIn = false
-        this.router.navigateByUrl(`/tabs/tables`);
+        if(res.employee.access === 4) {
+          this.router.navigateByUrl(`/tabs/reports`);
+        } else {
+          this.router.navigateByUrl(`/tabs/tables`);
+        }
       }
     }, error => {
       this.disableLogIn = false

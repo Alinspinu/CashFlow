@@ -83,7 +83,7 @@
         <span class="um">{{ing.um}}</span>
         <span class="price">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
         <span class="qty">{{ing.ings.length ? 1 : ing.qty}}</span>
-        <ion-button fill="ghost" (click)="inventary(ing)">
+        <ion-button fill="ghost" (click)="inventary(i)">
           <ion-icon  src="../../assets/icon/tools.svg" class="inv"></ion-icon>
         </ion-button>
         <ion-button fill="ghost" (click)="ingEdit(ing)">

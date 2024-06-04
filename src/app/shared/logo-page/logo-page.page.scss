@@ -1,0 +1,37 @@
+
+
+// .heartbeat-logo {
+//   width: 60%; /* Adjust the size as per your logo's dimensions */
+//   height: 60%;
+//   margin: 19% 0 0 17%;
+//   background-image: url('../../../assets/icon/black-coffee.png'); /* Replace with your logo image file path */
+//   // background-color: #e0cebf;
+//   background-size: cover;
+//   background-position: center;
+//   position: relative;
+//   animation: heartbeat 2s infinite;
+// }
+
+// /* Define the heartbeat animation */
+// @keyframes heartbeat {
+//   0%, 100% { transform: scale(1); } /* Normal size at 0% and 100% */
+//   50% { transform: scale(1.2); } /* Slightly larger size at 50% */
+// }
+
+
+.logo{
+  font-family: NoirPro !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  background-color: #e0cebf;
+  z-index: 1000;
+}
+h1{
+  color: white;
+  font-size: 35px !important;
+}

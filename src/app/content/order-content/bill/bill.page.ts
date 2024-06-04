@@ -385,6 +385,7 @@ export class BillPage implements OnInit, OnDestroy {
             this.billToshow.dont = paymentInfo.dont;
            this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
                   next: (response => {
+                    console.log(response)
                     if(response && response.bill.status === 'done'){
                       this.tableSrv.removeBill(this.tableNumber, this.billIndex)
                       this.billToshow = emptyBill()

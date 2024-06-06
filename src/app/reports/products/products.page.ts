@@ -257,7 +257,7 @@ async pickEndDay(){
   if(result){
     this.endDay = formatedDateToShow(result).split('ora')[0]
   }
-  this.checkDtes(this.startDay, this.endDay) ? 'ss' : this.dateErr()
+  // this.checkDtes(this.startDay, this.endDay) ? 'ss' : this.dateErr()
 }
 
 

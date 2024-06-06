@@ -82,6 +82,6 @@ export class Report {
         procent: number,
         total: number,
         user: string,
-    }
+    }[]
   ){}
 }

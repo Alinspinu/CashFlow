@@ -14,19 +14,18 @@ export class DatePickerPage implements OnInit {
 
   selectedDate!: string;
   date!: any
+  mode!: string
 
   constructor(
     private modalCtrl: ModalController,
-    // private navParams: NavParams
+    private navParams: NavParams
   ) { }
 
   ngOnInit() {
-  //  const mode = this.navParams.get('setDate')
-  //  if(mode){
-  //   const currentDate = new Date();
-  //   currentDate.setHours(currentDate.getHours() + 72); // Add 72 hours
-  //   this.date = currentDate.toISOString().split('T')[0];
-  //  }
+   const mode = this.navParams.get('options')
+   if(mode){
+      this.mode = mode
+   }
   }
 
 

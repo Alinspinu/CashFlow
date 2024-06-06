@@ -618,6 +618,7 @@ async payment(){
     if(response){
       const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
         if(paymentInfo){
+          console.log(paymentInfo)
           this.billToshow.payment = paymentInfo
           this.billToshow.cif = paymentInfo.cif;
          this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({

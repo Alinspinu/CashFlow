@@ -27,4 +27,8 @@ export class ConfigService{
     return this.http.put<{message: string}>(`${environment.BASE_URL}users/loc`, {email, appKey, locId})
   }
 
+  savePosData(ip: string, port: string, locId: string ){
+    return this.http.post<{message: string}>(`${environment.BASE_URL}users/loc`,{ip, port, locId})
+  }
+
 }

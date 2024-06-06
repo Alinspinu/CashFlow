@@ -72,6 +72,14 @@ const routes: Routes = [
     path: 'meniu',
     loadComponent: () => import('./content/order-content/meniu/meniu.page').then( m => m.MeniuPage)
   },
+  {
+    path: 'users-view',
+    loadComponent: () => import('./modals/users-view/users-view.page').then( m => m.UsersViewPage)
+  },
+  {
+    path: 'dep-view',
+    loadComponent: () => import('./modals/dep-view/dep-view.page').then( m => m.DepViewPage)
+  },
 
 
 ];

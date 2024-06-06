@@ -356,8 +356,6 @@ deleteTable(tableId: string, index: number){
  saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string, inOrOut: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
-  console.log(billIndex)
-  console.log(tableIndex)
   const bill = this.tables[tableIndex-1].bills[billIndex];
   console.log(bill)
   bill.masa = tableIndex;

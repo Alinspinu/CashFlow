@@ -14,6 +14,14 @@
        </ion-item>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col>
+       <ion-item lines="none" class="option" (click)="vivaWalletConfig()">
+        <ion-icon slot="start" src="assets/icon/euro.svg"></ion-icon>
+        <ion-label>Viva Wallet</ion-label>
+       </ion-item>
+      </ion-col>
+    </ion-row>
   </ion-grid>
   </ion-content>
   <div class="separator"></div>
@@ -32,6 +40,24 @@
             <ion-note class="note link" (click)="showKeyInfo()">Info Google App Key?</ion-note>
             <div class="button-wrapper">
                 <ion-button  size="large" fill="ghost" expand="block" (click)="saveEmail()">Salvează</ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div class="email-container" *ngIf="show && show.viva">
+      <ion-grid  class="email">
+        <ion-row>
+          <ion-col>
+            <ion-item lines="none" class="input">
+              <ion-input type="text" label="Adresă IP" placeholder="Ex.. 192.168.100.9" labelPlacement="floating" [(ngModel)]="ipValue"></ion-input>
+            </ion-item>
+            <ion-note class="note">Alege adresa de email ce va fi folosită la trimiterea email-urilor catre utilizatori!</ion-note>
+            <ion-item lines="none" class="input">
+              <ion-input type="text" label="PORT" placeholder="Ex.. 9564" labelPlacement="floating" [(ngModel)]="portValue"></ion-input>
+            </ion-item>
+            <div class="button-wrapper">
+                <ion-button  size="large" fill="ghost" expand="block" (click)="saveData()">Salvează</ion-button>
             </div>
           </ion-col>
         </ion-row>

@@ -1,63 +1,136 @@
 
-ion-content {
-  --background: var(--ion-color-tertiary) !important;
-  font-family: NoirProReg !important;
-  height: 90vh;
+
+
+ion-content{
+  --background: var(--ion-color-tertiary);
+}
+
+ion-label{
+  font-family: NoirProSemi !important;
 }
 
 
-ion-toolbar{
 
-  text-align: center;
+
+  .grid-date{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   height: 80vh;
+   width: 100%;
+
+   ion-button{
+    padding: 16px;
+    width: 280px;
+    height: 110px;
+    --border-radius: 20px;
+    font-size: 25px;
+    font-family: NoirProReg;
+
+   }
 }
-.date{
-}
 
 
-.incasari{
+.sum-wrapper {
   display: flex;
   flex-direction: column;
-  text-align: center;
-  font-family: NoirProSemi !important;
-  margin: 50px;
-  .title{
-    font-size: 28px;
-  }
-  .value{
-    font-size: 40px;
-    color: green;
-  }
-}
-
-
-ion-label[slot="start"]{
-  font-family: NoirProReg !important;
-  font-size: 20px;
-}
-ion-label[slot="end"]{
-  font-family: NoirProReg !important;
-  font-size: 20px;
-  color: red;
-}
-
-
-.total{
-  font-family: NoirProSemi !important;
-  display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
-  margin-top: 30px;
-  .title{
+  margin-top: 5%;
+  margin-bottom: 8px;
+  span{
+    color: var(--ion-color-primary);
+  }
+  .total{
+    font-family: NoirProSemi !important;
+    font-size: 30px;
+    align-self: center !important;
+  }
+  .label{
+    font-family: NoirProReg !important;
+    font-size: 30px;
+    align-self: center;
+    margin-bottom: 8px;
+  }
+  .incasat{
+    color: rgb(94, 80, 20);
+    align-self: center;
     font-size: 28px;
   }
-  .value{
-    font-size: 28px;
+  .vat{
+    color: rgb(175, 141, 110);
+    align-self: center;
+    font-size: 26px;
   }
+  .tot{
+    color: rgb(57, 49, 15);
+    // align-self: center !important;
+  }
+  .note{
+    font-family: NoirProReg !important;
+    font-size: 10px;
+    align-self: center;
+    margin-bottom: 8px;
+  }
+  .data{
+    font-family: NoirProReg !important;
+    font-size: 22px;
+    align-self: center;
+    margin-top: 8px;
+    margin-bottom: 12px;
+  }
+
 }
 
-.green{
-  color: green;
-}
-.red{
-  color: red;
+.method-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 5%;
+  border-radius: 6px 6px 0 0;
+  width: 100%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 5px rgba(0, 0, 0, 0.15);
+  background-color: var(--ion-color-secondary);
+  .title {
+    text-align: center;
+    color: white;
+    font-family: NoirProReg !important;
+    font-size: 26px;
+    margin: 8px 0 4px 0;
+    padding: 8px;
+  }
+  .method{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+    color: white;
+    border-bottom: 0.8px solid white;
+    justify-content: space-between;
+    align-items: center;
+    .index{
+      font-family: NoirProReg !important;
+      font-size: 22px;
+      margin-right: 4px;
+      align-self: flex-start;
+    }
+    .label{
+      font-family: NoirProReg !important;
+      font-size: 22px;
+      flex: 40%;
+    }
+    .proc{
+      font-family: NoirProReg !important;
+      font-size: 16px;
+      flex: 20%;
+      text-align: center;
+    }
+    .sum{
+      font-family: NoirProSemi !important;
+      font-size: 22px;
+      flex: 40%;
+      text-align: end;
+    }
+  }
 }

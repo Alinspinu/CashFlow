@@ -1,0 +1,29 @@
+<ion-content [fullscreen]="true">
+  <ion-toolbar>
+    <ion-button size="large" color="primary" (click)="close()">
+     <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
+    </ion-button>
+   </ion-toolbar>
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-item lines="none" class="header">
+        <span class="nr">Nr</span>
+        <span class="data">Produs</span>
+        <span class="discount">Qty</span>
+        <span class="total">Cost</span>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+<ion-row>
+  <ion-col *ngIf="products && products.length">
+    <ion-item lines="none" class="input" *ngFor="let prod of products; let i = index;">
+      <span class="nr">{{i+1}}.</span>
+      <span class="data">{{prod.name}}</span>
+      <span class="discount"> {{prod.qty}}</span>
+      <span class="total">{{roundInHtml(prod.qty * prod.cost)}} Lei</span>
+    </ion-item>
+  </ion-col>
+</ion-row>
+</ion-grid>
+</ion-content>

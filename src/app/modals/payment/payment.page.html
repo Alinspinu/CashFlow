@@ -32,20 +32,21 @@
       </ion-item>
 
       <ion-item lines="none" class="item">
+        <ion-button color="light" size="large" class="close" (click)="reset('viva2')"[disabled]="disablePayButtons">X</ion-button>
+        <ion-item lines="none" class="input">
+          <ion-input type="number" label="Viva Wallet 2" labelPlacement="floating" placeholder="00" formControlName="viva2"></ion-input>
+        </ion-item>
+        <ion-button color="tertiary" size="large" class="button" (click)="vivaTwo()"[disabled]="disablePayButtons" *ngIf="!cancelV2">VIVA 2</ion-button>
+        <ion-button color="danger" size="large" class="button" (click)="abortV2()" *ngIf="cancelV2">ANULEAZĂ</ion-button>
+      </ion-item>
+
+      <ion-item lines="none" class="item">
         <ion-button color="light" size="large" class="close" (click)="reset('online')"[disabled]="true">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Plată Online" labelPlacement="floating" placeholder="00" formControlName="online"></ion-input>
         </ion-item>
         <ion-button color="tertiary" size="large" class="button" (click)="online()"[disabled]="false">ONLINE</ion-button>
       </ion-item>
-<!--
-      <ion-item lines="none" class="item">
-        <ion-button color="light" size="large" class="close" (click)="reset('voucher')"[disabled]="disablePayButtons">X</ion-button>
-        <ion-item lines="none" class="input">
-          <ion-input type="number" label="Voucher" labelPlacement="floating" placeholder="00" formControlName="voucher"></ion-input>
-        </ion-item>
-        <ion-button color="tertiary" size="large" class="button" (click)="voucher()"[disabled]="disablePayButtons">VOUCHER</ion-button>
-      </ion-item> -->
       <ion-item lines="none" class="item">
         <ion-button color="light" size="large" class="close" (click)="reset('cif')">X</ion-button>
         <ion-item lines="none" class="input">

@@ -22,12 +22,11 @@
       <ion-col size-lg="9" size-xs="12" *ngIf="showRep">
         <div class="sum-wrapper">
           <span class="label tot">Încasări</span>
-          <span class="total tot">{{report.cashIn}} Lei</span>
-          <span class="note tot">(Total cu mese deschise, cu discount și cu bacșiș)</span>
-          <span class="incasat"> Lei</span>
-          <span class="note incasat">(Total fară mese deschise, fără discount si fără bacșiș)</span>
-          <span class="vat"> Lei</span>
-          <span class="note vat">(Total fără mese deschise și fără TVA)</span>
+          <span class="total tot">{{report.cashIn - bacsis}} Lei</span>
+          <span class="note tot">(Total Incasat (fară bacșiș))</span>
+
+          <span class="vat">{{report.cashInNoVat}} Lei</span>
+          <span class="note vat">(Total fără TVA)</span>
           <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
           <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
         </div>
@@ -65,9 +64,9 @@
     </ion-row>
   </ion-col>
   </ion-row>
-  <div class="rep" *ngIf="showRep">
+<div class="rep" *ngIf="showRep">
   <ion-row>
-    <ion-col size-lg="6" offset-lg="3" *ngIf="paymentMethods.length">
+    <ion-col size-lg="6" offset-lg="3" *ngIf="report.paymentMethods">
       <div class="method-container">
         <span class="title">Metode de plată</span>
         <div class="method" *ngFor="let paymentMeth of report.paymentMethods; let i = index;" (click)="openRepBills(paymentMeth.bills)">
@@ -80,7 +79,7 @@
     </ion-col>
   </ion-row>
 <ion-row>
-  <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
+  <ion-col size-lg="6" offset-lg="3" *ngIf="report.departaments">
     <div class="method-container">
       <span class="title">Departamente</span>
       <div *ngFor="let dep of report.departaments; let i = index;">
@@ -95,7 +94,7 @@
   </ion-col>
 </ion-row>
 <ion-row>
-  <ion-col size-lg="6" offset-lg="3" *ngIf="hours.length">
+  <ion-col size-lg="6" offset-lg="3" *ngIf="report.hours">
     <div class="method-container">
       <span class="title">Vanzare pe Ore</span>
       <div class="method"  *ngFor="let hour of report.hours; let i = index;">
@@ -107,10 +106,10 @@
   </ion-col>
 </ion-row>
 <ion-row>
-  <ion-col size-lg="6" offset-lg="3" *ngIf="users.length">
+  <ion-col size-lg="6" offset-lg="3" *ngIf="report.users">
     <div class="method-container">
       <span class="title">Utilizatori</span>
-      <div class="method" *ngFor="let user of users; let i = index;">
+      <div class="method" *ngFor="let user of report.users; let i = index;">
         <span class="index">{{i+1}}</span>
         <span class="label">{{user.name}}</span>
         <span class="proc">{{user.procent}}%</span>
@@ -121,8 +120,8 @@
 </ion-row>
 
 <ion-row>
-  <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
-    <div class="method-container" *ngFor="let dep of departaments">
+  <ion-col size-lg="6" offset-lg="3" *ngIf="report.departaments">
+    <div class="method-container" *ngFor="let dep of report.departaments">
       <span class="title">Top 10 produse {{dep.name}}</span>
       <div class="method" *ngFor="let product of dep.products.slice(0, 10); let i = index;">
         <span class="index">{{i+1}}.</span>
@@ -134,9 +133,12 @@
   </ion-col>
 </ion-row>
 </div>
+
+
+
   <div class="day" *ngIf="!showRep">
   <ion-row>
-    <ion-col size-lg="6" offset-lg="3" *ngIf="report.paymentMethods.length">
+    <ion-col size-lg="6" offset-lg="3" *ngIf="paymentMethods.length">
       <div class="method-container">
         <span class="title">Metode de plată</span>
         <div class="method" *ngFor="let paymentMeth of paymentMethods; let i = index;" (click)="openBills(paymentMeth.name)">
@@ -149,7 +151,7 @@
     </ion-col>
   </ion-row>
 <ion-row>
-  <ion-col size-lg="6" offset-lg="3" *ngIf="report.departaments.length">
+  <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
     <div class="method-container">
       <span class="title">Departamente</span>
       <div *ngFor="let dep of departaments; let i = index;">
@@ -198,7 +200,7 @@
 
 <ion-row>
   <ion-col size-lg="6" offset-lg="3" *ngIf="departaments.length">
-    <div class="method-container" *ngFor="let dep of report.departaments">
+    <div class="method-container" *ngFor="let dep of departaments">
       <span class="title">Top 10 produse {{dep.name}}</span>
       <div class="method" *ngFor="let product of dep.products.slice(0, 10); let i = index;">
         <span class="index">{{i+1}}.</span>

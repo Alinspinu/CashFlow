@@ -31,7 +31,7 @@ export class ReportsPage {
     products: boolean
     ingredients: boolean
     finance: boolean
-  } = {sales: true, products: false, ingredients: false, menu: true, finance: false}
+  } = {sales: false, products: false, ingredients: false, menu: true, finance: true}
 
   constructor() {
     this.screenWidth = window.innerWidth

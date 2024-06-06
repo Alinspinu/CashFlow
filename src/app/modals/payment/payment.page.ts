@@ -28,6 +28,8 @@ export class PaymentPage implements OnInit {
 
   paymentForm!: FormGroup
 
+  cancelV2: boolean = false
+
 
   constructor(
     private navPar: NavParams,
@@ -65,6 +67,9 @@ export class PaymentPage implements OnInit {
       viva: new FormControl(null, {
         updateOn: 'change',
       }),
+      viva2: new FormControl(null, {
+        updateOn: 'change',
+      }),
       cif: new FormControl(null, {
         updateOn: 'change',
       }),
@@ -72,19 +77,9 @@ export class PaymentPage implements OnInit {
         updateOn: 'change',
       }),
     })
-    // this.paymentForm.get('online')?.disable()
-    // if(this.order.payment.online > 0 && this.order.total === 0){
-    //   this.paymentForm.get('online')?.setValue(this.order.payment.online)
-    //   this.paymentForm.get('cash')?.disable()
-    //   // this.paymentForm.get('card')?.disable()
-    //   this.paymentForm.get('viva')?.disable()
-    //   // this.paymentForm.get('voucher')?.disable()
-    //   this.disablePayButtons = true
-    // }
     if(this.order.payment.online > 0 && this.order.total > 0){
       this.paymentForm.get('online')?.setValue(this.order.payment.online)
       this.paymentForm.get('online')?.disable()
-      // this.disableOnline = true
     }
 
   }
@@ -97,15 +92,52 @@ export class PaymentPage implements OnInit {
     }
   }
 
+
+  abortV2(){
+    this.paySrv.checkPos2(0, this.order._id, 'abort').subscribe(response => {
+      if(response){
+        this.cancelV2 = false
+      }
+    })
+
+  }
+
+
+
  async cashIn(){
     const posSum = this.paymentForm.value.viva
+    const posSum2 = this.paymentForm.value.viva2
+    const cash = this.paymentForm.value.cash
+    const online = this.paymentForm.value.online
    if(this.checkTotal()){
     const pay = {
-      cash: this.paymentForm.value.cash,
+      cash: cash,
       card: this.paymentForm.value.card,
       viva: posSum,
       cif: this.paymentForm.value.cif,
-      online: this.paymentForm.value.online
+      online: online,
+    }
+    if(posSum2 && posSum2 > 0){
+      this.disableCancelButton = true
+      this.cancelV2 = true
+      this.paySrv.checkPos2(posSum2, this.order._id, '').subscribe({
+        next: (response => {
+          if(response){
+            this.cancelV2 = false
+            this.disableCancelButton = false
+            if(response.state === 'SUCCESS'){
+               showToast(this.toastCtrl, response.payloadData.saleResponse.message, 2000)
+               pay.viva = posSum2
+               this.modalCtrl.dismiss(pay)
+            } else {
+               showToast(this.toastCtrl, response.payloadData.saleResponse.message, 2000)
+            }
+          }
+         }),
+         error: (error => {
+            console.log(error)
+         })
+      })
     }
     if(posSum && posSum > 0){
       this.disableCancelButton = true
@@ -126,7 +158,12 @@ export class PaymentPage implements OnInit {
           return
         }
       })
-    } else {
+    }
+    if((cash && cash > 0 && !posSum && !posSum2) || (online && online > 0 && !posSum && !posSum2)){
+      this.modalCtrl.dismiss(pay)
+    }
+    console.log(cash)
+    if(cash === 0){
       this.modalCtrl.dismiss(pay)
     }
 } else {
@@ -152,6 +189,14 @@ export class PaymentPage implements OnInit {
     const input  = this.paymentForm.get('viva')
     if(input){
       const value = this.total - this.checkInputs('viva')
+      input.setValue(value)
+    }
+  }
+
+  vivaTwo(){
+    const input  = this.paymentForm.get('viva2')
+    if(input){
+      const value = this.total - this.checkInputs('viva2')
       input.setValue(value)
     }
   }
@@ -226,7 +271,6 @@ export class PaymentPage implements OnInit {
         }
       })
     }
-
 
 
 

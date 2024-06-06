@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { PickOptionPage } from '../modals/pick-option/pick-option.page';
 import { SuplierPage } from '../office/CRUD/suplier/suplier.page';
@@ -29,6 +29,8 @@ import { AddToInventaryPage } from '../modals/add-to-inventary/add-to-inventary.
 import { Observable } from 'rxjs';
 import { TogglePage } from '../office/shedule/toggle/toggle.page';
 import { TogglePontPage } from '../office/pontaj/togglePont/toggle-pont.page';
+import { UsersViewPage } from '../modals/users-view/users-view.page';
+import { DepViewPage } from '../modals/dep-view/dep-view.page';
 
 
 
@@ -69,6 +71,7 @@ export class ActionSheetService {
                typeof CustomerCheckPage |
                typeof OrderViewPage |
                typeof OrderAppViewPage |
+               typeof UsersViewPage |
                typeof CashbackPage,
     options: any,
     sub: boolean
@@ -99,6 +102,9 @@ export class ActionSheetService {
                typeof TipsPage |
                typeof TogglePage |
                typeof TogglePontPage |
+               typeof DatePickerPage |
+               typeof UsersViewPage |
+               typeof DepViewPage |
                typeof DelProdViewPage,
     options: any
   ){

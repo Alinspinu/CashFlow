@@ -1,95 +1,67 @@
 <app-logo-page *ngIf="isLoading"></app-logo-page>
-<ion-content [fullscreen]="true" *ngIf="!isLoading">
-  <ion-header>
-    <ion-toolbar>
-      <span class="date" *ngIf="!day">{{startDate + " -- " + endDate}}</span>
-      <span class="date" *ngIf="day">{{today}}</span>
-      <ion-buttons slot="end">
-          <ion-button (click)="selectDate()">
-            <ion-icon src="assets/icon/time.svg"></ion-icon>
-          </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-
-<ion-grid *ngIf="!isLoading">
-  <ion-row>
-    <ion-col size-lg="6" offset-lg="3">
+<ion-content [fullscreen]="true" *ngIf="!isLoading && !showRep">
+  <div class="grid-date">
+    <ion-button fill="outline" mode="md" color="medium" (click)="selectDate()">{{startDate && startDate.length ? startDate : "ZI Început"}}</ion-button>
+    <ion-label color="medium" *ngIf="startDate">LA</ion-label>
+    <ion-label color="medium" *ngIf="!startDate" style="height: 13px"></ion-label>
+    <ion-button fill="outline" mode="md" color="medium" [disabled]="!startDate"> {{endDate && endDate.length ? endDate : "Zi Sfârșit"}}</ion-button>
+  </div>
+</ion-content>
+<ion-content [fullscreen]="true" *ngIf="!isLoading && showRep">
+  <ion-grid>
       <ion-row>
-        <ion-col>
-          <div class="incasari">
-            <span class="title">Încasări</span>
-            <span class="value">{{totalProducta}} Lei</span>
+        <ion-col size-lg="6" offset-lg="3">
+          <div class="sum-wrapper">
+            <span class="label tot">Situație</span>
+            <span class="data tot">{{startDate + " -- " + endDate}}</span>
+            <span class="total tot">{{roundInHtml(report.cashIn - tips)}} Lei</span>
+            <span class="note tot">(Total Incasat)</span>
+            <span class="incasat">{{totalConsum}} Lei</span>
+            <span class="note incasat">(Total cheltuieli)</span>
+            <span class="vat">{{roundInHtml(report.cashIn - totalConsum - tips)}} Lei</span>
+            <span class="note vat">(Rămas)</span>
           </div>
-          <!-- <ion-item lines="none"> -->
-            <!-- <ion-label slot="start">Incasări</ion-label> -->
-            <!-- <ion-label slot="end">{{totalProducta}}</ion-label> -->
-            <!-- <ion-label slot="end">40000</ion-label> -->
-          <!-- </ion-item> -->
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
-          <ion-item lines="none" color="tertiary">
-            <ion-label slot="start">Marfă</ion-label>
-            <!-- <ion-label slot="end">{{totalIngs}}</ion-label> -->
-            <ion-label slot="end">- {{totalIngs}} Lei</ion-label>
-          </ion-item>
+        <ion-col size="6" offset="3">
+          <ion-button fill="outline" (click)="selectDate()" color="medium" style="text-align: center; width: 100%;">
+            <ion-icon src="../../../assets/icon/calendar.svg" class="icon-end"></ion-icon>
+          </ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
-          <ion-item lines="none" color="tertiary">
-            <ion-label slot="start">Chirie și utilități</ion-label>
-            <!-- <ion-label slot="end">{{roundInHtml(rent)}}</ion-label> -->
-            <ion-label slot="end">- {{roundInHtml(rent)}} Lei</ion-label>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row >
-        <ion-col>
-          <ion-item lines="none" color="tertiary">
-            <ion-label slot="start">Personal</ion-label>
-            <!-- <ion-label slot="end">{{roundInHtml(totalWorkDays)}} Lei</ion-label> -->
-            <ion-label slot="end">- {{roundInHtml(totalWorkDays)}} Lei</ion-label>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row >
-        <ion-col>
-          <ion-item lines="none" color="tertiary">
-            <ion-label slot="start">Consumabile</ion-label>
-            <!-- <ion-label slot="end">{{consValue}} Lei</ion-label> -->
-            <ion-label slot="end">- {{consValue}} Lei</ion-label>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row >
-        <ion-col>
-
-          <ion-item lines="none" color="tertiary">
-              <ion-label slot="start">Deprecieri</ion-label>
-              <!-- <ion-label slot="end">{{dep}}</ion-label> -->
-              <ion-label slot="end">- {{dep}} Lei</ion-label>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row >
-        <ion-col>
-          <ion-item lines="none" color="tertiary">
-            <div class="total">
-              <span class="title">Total</span>
-              <span class="value">{{roundInHtml(situation)}} Lei</span>
+        <ion-col size-lg="6" offset-lg="3">
+          <div class="method-container">
+            <span class="title">Cheltuieli</span>
+            <div class="method">
+              <span class="label">Marfă</span>
+              <span class="sum">{{report.ingsValue}} Lei</span>
             </div>
-            <!-- <ion-label slot="start">Situatie</ion-label> -->
-            <!-- <ion-label slot="end">{{roundInHtml(situation)}}</ion-label> -->
-            <!-- <ion-label slot="end">3343</ion-label> -->
-          </ion-item>
+            <div class="method">
+              <span class="label">Chirie și utilități</span>
+              <span class="sum">{{report.rentValue}} Lei</span>
+            </div>
+            <div class="method" (click)="showUsers(report.workValue.users, 'income')">
+              <span class="label">Personal fara taxe</span>
+              <span class="sum">{{report.workValue.total}} Lei</span>
+            </div>
+            <div class="method" (click)="showUsers(report.workValue.users, 'tax')" >
+              <span class="label">Taxe personal</span>
+              <span class="sum">{{report.workValue.tax}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Consumabile</span>
+              <span class="sum">{{report.supliesValue}} Lei</span>
+            </div>
+            <div class="method" (click)="showDep(report.impairment.products)">
+              <span class="label">Deprecieri</span>
+              <span class="sum">{{report.impairment.total}} Lei</span>
+            </div>
+          </div>
         </ion-col>
       </ion-row>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+  </ion-grid>
 
 </ion-content>
 

@@ -14,13 +14,19 @@
     flex: 2%
   }
   .data{
-    flex: 48%;
+    flex: 30%;
   }
   .discount{
-    flex: 25%;
+    flex: 15%;
     // margin-left: 50px;
     text-align: center;
   }
+  .client{
+    font-family: NoirProSemi !important;
+    flex: 38%;
+    text-align: start;
+  }
+
   .total{
     flex: 25%;
     font-family: NoirProSemi !important;
@@ -47,10 +53,15 @@
     flex: 2%
   }
   .data{
-    flex: 48%;
+    flex: 30%;
+  }
+
+  .client{
+    flex: 38%;
+    text-align: start;
   }
   .discount{
-    flex: 25%;
+    flex: 15%;
     // margin-left: 50px;
     text-align: center;
   }

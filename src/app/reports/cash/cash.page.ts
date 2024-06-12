@@ -134,6 +134,7 @@ export class CashPage implements OnInit {
     this.repSrv.getReport(start, end).subscribe(response => {
       if(response){
         this.report = response
+        console.log(this.report)
         this.report.departaments.forEach(dep => {
           dep.products.sort((a,b) => b.qty - a.qty)
           dep.products = dep.products.slice(0, 10)

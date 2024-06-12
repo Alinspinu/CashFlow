@@ -45,6 +45,7 @@ export class AddEntryPage implements OnInit {
   usersNames: any[] = []
   usersId: string[] = []
   bonusName: string[] = []
+  months: string[] = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie']
 
   hide: {
     date: boolean,
@@ -57,6 +58,7 @@ export class AddEntryPage implements OnInit {
     desc: boolean,
     amount: boolean,
     users: boolean,
+    month: boolean,
   } = {
     date: false,
     tip: false,
@@ -67,7 +69,8 @@ export class AddEntryPage implements OnInit {
     docNr: false,
     desc: false,
     amount: false,
-    users: false
+    users: false,
+    month: false,
   }
 
   incomeOp: string[] = [
@@ -149,6 +152,9 @@ export class AddEntryPage implements OnInit {
         updateOn: 'change',
       }),
       description: new FormControl(null, {
+        updateOn: 'change',
+      }),
+      month: new FormControl(null, {
         updateOn: 'change',
       }),
 
@@ -331,10 +337,18 @@ export class AddEntryPage implements OnInit {
                   const choise = this.users.find((usr:any) => usr.employee.fullName === user)
                   this.form.get('user')?.setValue(choise._id)
                   this.description = typeOf + " " + choise.employee.fullName
-                  const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
-                  if(sum){
-                    this.hide.amount = true
-                    this.form.get('price')?.setValue(sum)
+                  const currentMonthIndex = new Date(Date.now()).getMonth()
+                  const currentMonth = this.months[currentMonthIndex]
+                  const montBehind = this.months[currentMonthIndex -1]
+                  const month = await this.actionSheet.entryAlert([montBehind, currentMonth], 'radio', 'Luna', 'Alege luna din care se scade avansul', 'suplier-alert', '')
+                  if(month){
+                    this.hide.month = true
+                    this.form.get('month')?.setValue(month)
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
                   }
                 }
                 return
@@ -346,10 +360,18 @@ export class AddEntryPage implements OnInit {
                   const choise = this.users.find((usr:any) => usr.employee.fullName === employee)
                   this.form.get('user')?.setValue(choise._id)
                   this.description = typeOf + ' ' + choise.employee.fullName
-                  const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
-                  if(sum){
-                    this.hide.amount = true
-                    this.form.get('price')?.setValue(sum)
+                  const currentMonthIndex = new Date(Date.now()).getMonth()
+                  const currentMonth = this.months[currentMonthIndex]
+                  const montBehind = this.months[currentMonthIndex -1]
+                  const month = await this.actionSheet.entryAlert([montBehind, currentMonth], 'radio', 'Luna', 'Alege luna din care se scade salariul', 'suplier-alert', '')
+                  if(month){
+                    this.hide.month = true
+                    this.form.get('month')?.setValue(month)
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
                   }
                 }
                 return
@@ -382,10 +404,18 @@ export class AddEntryPage implements OnInit {
                   const choise = this.users.find((usr:any) => usr.employee.fullName === lucky)
                   this.form.get('user')?.setValue(choise._id)
                   this.description = typeOf + ' ' + lucky
-                  const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
-                  if(sum){
-                    this.hide.amount = true
-                    this.form.get('price')?.setValue(sum)
+                  const currentMonthIndex = new Date(Date.now()).getMonth()
+                  const currentMonth = this.months[currentMonthIndex]
+                  const montBehind = this.months[currentMonthIndex -1]
+                  const month = await this.actionSheet.entryAlert([montBehind, currentMonth], 'radio', 'Luna', 'Alege luna bounsată', 'suplier-alert', '')
+                  if(month){
+                    this.hide.month = true
+                    this.form.get('month')?.setValue(month)
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
                   }
                 }
                 return
@@ -450,7 +480,8 @@ export class AddEntryPage implements OnInit {
         document: {
           tip: this.form.value.document ? this.form.value.document : 'Fara',
           number: this.form.value.docNr
-        }
+        },
+        month: this.months.findIndex(m => m === this.form.value.month)
       }
       this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
         this.modalCtrl.dismiss(response)

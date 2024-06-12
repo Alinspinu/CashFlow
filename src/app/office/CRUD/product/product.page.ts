@@ -103,6 +103,7 @@ export class ProductPage implements OnInit {
             this.form.get('dep')?.setValue(this.product.dep)
             this.form.get('tva')?.setValue(this.product.tva ? this.product.tva.toString() : '')
             this.form.get('printer')?.setValue(this.product.printer)
+            this.form.get('printOut')?.setValue(this.product.printOut)
           }
         })
        }
@@ -231,6 +232,10 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
+      printOut: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
       image: new FormControl(null),
     });
     this.form.get('mainCat')?.valueChanges.subscribe(this.updateValue);
@@ -257,6 +262,7 @@ export class ProductPage implements OnInit {
       productData.append('tva', this.form.value.tva);
       productData.append('image', this.form.value.image);
       productData.append('printer', this.form.value.printer);
+      productData.append('printOut', this.form.value.printOut)
       if(toppings !== 'skip'){
         productData.append('toppings', toppings);
       }

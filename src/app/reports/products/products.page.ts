@@ -11,6 +11,7 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ReportsService } from '../reports.service';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { convertToDateISOString } from '../../shared/utils/functions';
 
 
 ;
@@ -183,7 +184,14 @@ getProducts(){
     goods: this.isGoods,
     prod: this.isProduction
   }
- this.reportsSrv.getHavyOrders(this.startDay, this.endDay, undefined, this.user.locatie, filter, '').subscribe(response => {
+  this.reportsSrv.getHavyOrders(
+      convertToDateISOString(this.startDay),
+      convertToDateISOString(this.endDay),
+      undefined,
+      this.user.locatie,
+      filter,
+      ''
+  ).subscribe(response => {
    this.sections = response.result.sections
    this.dbProducts = response.result.allProd
    this.dbIngs = response.ingredients

@@ -6,6 +6,7 @@ import { CashPage } from './cash/cash.page';
 import { IngredientsPage } from './ingredients/ingredients.page';
 import { ProductsPage } from './products/products.page';
 import { FinancePage } from './finance/finance.page';
+import { CashRegisterPage } from '../office/cash-register/cash-register.page';
 
 
 
@@ -14,7 +15,7 @@ import { FinancePage } from './finance/finance.page';
   templateUrl: 'reports.page.html',
   styleUrls: ['reports.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule, CashPage, IngredientsPage, ProductsPage, FinancePage],
+  imports: [IonicModule, FormsModule, CommonModule, CashPage, IngredientsPage, ProductsPage, FinancePage, CashRegisterPage],
 })
 
 
@@ -29,9 +30,9 @@ export class ReportsPage {
     menu: boolean
     sales: boolean
     products: boolean
-    ingredients: boolean
+    cashRegister: boolean
     finance: boolean
-  } = {sales: false, products: false, ingredients: false, menu: true, finance: true}
+  } = {sales: true, products: false, cashRegister: false, menu: false, finance: false}
 
   constructor() {
     this.screenWidth = window.innerWidth
@@ -40,26 +41,26 @@ export class ReportsPage {
   sales(){
     this.show.sales = true
     this.show.products = false
-    this.show.ingredients = false
+    this.show.cashRegister = false
     this.show.finance = false
   }
 
   products(){
     this.show.products = true
     this.show.sales = false
-    this.show.ingredients = false
+    this.show.cashRegister = false
     this.show.finance = false
   }
 
-  ingredients(){
-    this.show.ingredients = true
+  register(){
+    this.show.cashRegister = true
     this.show.products = false
     this.show.sales = false
     this.show.finance = false
   }
 
   finance(){
-    this.show.ingredients = false
+    this.show.cashRegister = false
     this.show.products = false
     this.show.sales = false
     this.show.finance = true

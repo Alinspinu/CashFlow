@@ -125,12 +125,14 @@ export class CategoryContentPage implements OnInit, OnDestroy {
   async addToBill(product: Product){
     let price: number = product.price;
     let cartProdName: string = product.name;
+    let printOut: boolean = product.printOut;
     let ings: Ing[] = product.ings
     if(product.subProducts.length){
       const result = await this.actionSheet.openMobileModal(PickOptionPage, product.subProducts, true)
       if(result){
         ings = result.ings
         price  = result.price
+        printOut = result.printOut
         cartProdName = product.name + '-' + result.name;
       } else {
        return triggerEscapeKeyPress()
@@ -186,7 +188,8 @@ export class CategoryContentPage implements OnInit, OnDestroy {
         qty: product.qty,
         cantitate: product.qty,
         sgrTax: product.sgrTax,
-        description: product.description
+        description: product.description,
+        printOut: printOut,
       };
       if(product.sgrTax){
         let topping = product.toppings.find(p => p.name === "Taxa SGR")

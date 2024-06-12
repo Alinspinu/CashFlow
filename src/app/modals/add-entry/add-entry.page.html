@@ -54,6 +54,9 @@
         <ion-item lines="none" class="input" *ngIf="hide.desc">
           <ion-input mode="ios" type="text" fill="outline" label="Descriere" labelPlacement="floating" placeholder="Ex. Plata .. ch nr.." formControlName="description"></ion-input>
         </ion-item>
+        <ion-item lines="none" class="input" *ngIf="hide.month">
+          <ion-input mode="ios" type="text" fill="outline" label="Luna din care se scade" labelPlacement="floating"  formControlName="month"></ion-input>
+        </ion-item>
         <ion-item lines="none" class="input" *ngIf="hide.amount">
           <ion-input mode="ios" type="number" fill="outline" label="Sumă" labelPlacement="floating" placeholder="Lei" formControlName="price"></ion-input>
         </ion-item>

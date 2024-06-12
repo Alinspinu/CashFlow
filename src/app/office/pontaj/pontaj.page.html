@@ -151,8 +151,9 @@
             }">
             {{calcTotalsHours(user.employee.workLog)}}</div>
           </ion-col>
-          <ion-col *ngFor="let day of pontaj.days">
+          <ion-col *ngFor="let day of pontaj.days; let i = index">
             <div class="square pointer size"
+            (click)="getIndex(i+1)"
             [ngClass]="{
               'barista' : getPosition(day.users, user._id) === 'Barista',
               'aj-barista' : getPosition(day.users, user._id) === 'Ajutor barman',

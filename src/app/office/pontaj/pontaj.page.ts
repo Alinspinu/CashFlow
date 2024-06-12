@@ -68,8 +68,9 @@ pontSub!: Subscription
 
 openPayments(payments: any){
   console.log(payments)
-
 }
+
+
 
   getPontaj(){
     this.pontSub = this.pontSrv.pontajSend$.subscribe(response => {
@@ -77,7 +78,6 @@ openPayments(payments: any){
           this.pontaj = response
           const month = this.pontaj.month.split(' - ')[0]
           this.monthIndex = this.monhs.findIndex(obj => obj === month)
-          console.log(this.monthIndex)
           this.calcTotalStalary()
           this.calcTesTotal()
         }
@@ -111,6 +111,10 @@ openPayments(payments: any){
         hours += log.hours
     })
     return hours
+  }
+
+  getIndex(index: number){
+    console.log(index)
   }
 
   getWorkLog(workLog: any){
@@ -149,8 +153,8 @@ openPayments(payments: any){
 
   calcPayments(paymentLog: any[]){
     const documentsInTargetMonth = paymentLog.filter(doc => {
-      const docDate = new Date(doc.date);
-      return docDate.getUTCMonth() === this.monthIndex;
+      // const docDate = new Date(doc.date);
+      return doc.workMonth === this.monthIndex;
     });
     let payments = 0
     documentsInTargetMonth.forEach(log => {

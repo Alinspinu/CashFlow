@@ -10,6 +10,7 @@
       <ion-item lines="none" class="header">
         <span class="nr">Nr.</span>
         <span class="data">Data</span>
+        <span class="client" *ngIf="screenWidth > 500">Nume Client</span>
         <span class="discount">Disc %</span>
         <span class="total">Incasat</span>
       </ion-item>
@@ -20,8 +21,9 @@
     <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="showOrder(order)" [ngClass]="{'open': order.status === 'open'}">
       <span class="nr">{{i+1}}.</span>
       <span class="data">{{formatDate(order.createdAt)}}</span>
-      <span class="discount"> {{order.discount}} Lei</span>
-      <span class="total">{{order.total}} Lei</span>
+      <span class="client" *ngIf="order.clientInfo && screenWidth > 500">{{order.clientInfo.name}}</span>
+      <span class="discount"> {{roundInHtml(order.discount)}} Lei</span>
+      <span class="total">{{roundInHtml(order.total)}} Lei</span>
       <!-- <span>{{order.employee.fullName}}</span> -->
       <!-- <span>{{order.clientInfo.name}}</span> -->
     </ion-item>

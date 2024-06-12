@@ -108,12 +108,13 @@ export class TabContentPage implements OnInit {
     let price: number = product.price;
     let cartProdName: string = product.name;
     let ings: Ing[] = product.ings
-
+    let printOut = product.printOut
     if(product.subProducts.length){
       const result = await this.actionSheet.openMobileModal(PickOptionPage, product.subProducts, true)
       if(result){
         ings = result.ings
         price  = result.price
+        printOut = result.printOut
         cartProdName = product.name + '-' + result.name;
       } else {
        return triggerEscapeKeyPress()
@@ -169,7 +170,8 @@ export class TabContentPage implements OnInit {
         qty: product.qty,
         cantitate: product.qty,
         sgrTax: product.sgrTax,
-        description: product.description
+        description: product.description,
+        printOut: printOut
       };
       if(product.sgrTax){
         let topping = product.toppings.find(p => p.name === "Taxa SGR")

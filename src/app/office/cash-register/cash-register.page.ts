@@ -32,6 +32,7 @@ export class CashRegisterPage implements OnInit {
   startDate!: any;
   endDate!: any;
   user!: User
+  screenWidth!: number
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
@@ -41,6 +42,7 @@ export class CashRegisterPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.screenWidth = window.innerWidth
     this.getUser()
   }
 

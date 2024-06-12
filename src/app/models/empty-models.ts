@@ -67,6 +67,7 @@ export function  emptyBillProduct(){
     cantitate: '',
     sgrTax: false,
     description: '',
+    printOut: false,
   }
   return billProduct
  }
@@ -111,6 +112,7 @@ export function emptyBill(){
     paymentMethod: '',
     onlineOrder: false,
     pending: true,
+    out: false,
     payment: {
       card: 0,
       cash: 0,
@@ -171,6 +173,7 @@ export function emptyProduct(){
     longDescription: '',
     ingredients: [],
     mainCat: '',
+    printOut: false,
     nutrition: {
       energy:{kJ: 0, kcal: 0},
       fat: {all: 0, satAcids: 0},

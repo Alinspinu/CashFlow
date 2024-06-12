@@ -30,6 +30,7 @@ export class Bill{
     public onlineOrder: boolean,
     public inOrOut: string,
     public prepStatus: string,
+    public out: boolean,
     public payment: {
         cash: number,
         card: number,
@@ -103,6 +104,7 @@ export class BillProduct{
    public cantitate: string,
    public sgrTax: boolean,
    public description: string,
+   public printOut: boolean
   ){}
 }
 

@@ -83,7 +83,7 @@
   </ion-row>
   <ion-row *ngIf="user.orders.length">
     <ion-col>
-      <ion-item lines="none" class="order-wrapper" *ngFor="let order of user.orders; let i = index" (click)="showOrder(order)">
+      <ion-item lines="none" class="order-wrapper" *ngFor="let order of user.orders.reverse(); let i = index" (click)="showOrder(order)">
           <span class="nr">Nr. {{i+1}}</span>
           <span class="date">{{formatDate(order.createdAt)}}</span>
           <span class="prodLen">{{order.productCount}}  Produse</span>

@@ -6,6 +6,7 @@ import { Bill } from '../../../models/table.model';
 import { formatedDateToShow } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { OrderViewPage } from '../order-view/order-view.page';
+import { round } from '../../../shared/utils/functions';
 
 @Component({
   selector: 'app-orders-view',
@@ -17,6 +18,7 @@ import { OrderViewPage } from '../order-view/order-view.page';
 export class OrdersViewPage implements OnInit {
 
   orders: Bill[] = []
+  screenWidth!: number
 
   constructor(
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
@@ -26,7 +28,8 @@ export class OrdersViewPage implements OnInit {
 
   ngOnInit() {
     this.orders = this.navPar.get('options')
-    console.log(this.orders)
+    this.screenWidth = window.innerWidth
+console.log(this.orders)
   }
 
   close(){
@@ -40,6 +43,10 @@ export class OrdersViewPage implements OnInit {
   formatDate(date:any) {
     const strings = formatedDateToShow(date).split('-2024 ora').join('')
     return strings
+  }
+
+  roundInHtml(num: number){
+    return round(num)
   }
 
 }

@@ -529,6 +529,7 @@ export class BillPage implements OnInit, OnDestroy {
           cantitate: product.qty,
           sgrTax: product.sgrTax,
           description: product.description,
+          printOut: product.printOut,
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){

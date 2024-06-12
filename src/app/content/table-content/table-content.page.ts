@@ -88,6 +88,8 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   comment: string = ''
 
+  outside: boolean = false
+
 
   constructor(
     private route: ActivatedRoute,
@@ -311,14 +313,18 @@ export class TableContentPage implements OnInit, OnDestroy {
 //*********** BILL CONTROLS *******************************************/
 
 async addToBill(product: Product){
+  console.log('hit bill')
   let price: number = product.price;
+  let printOut = product.printOut;
   let cartProdName: string = product.name;
   let ings: Ing[] = product.ings
   if(product.subProducts.length){
     const result = await this.actionSheet.openModal(PickOptionPage, product.subProducts, true)
+    console.log(result)
     if(result){
       ings = result.ings
       price  = result.price
+      printOut = result.printOut
       cartProdName = product.name + '-' + result.name;
     } else {
      return triggerEscapeKeyPress()
@@ -374,6 +380,7 @@ async addToBill(product: Product){
       cantitate: product.qty,
       sgrTax: product.sgrTax,
       description: product.description,
+      printOut: printOut,
     };
     if(product.sgrTax){
       let topping = product.toppings.find(p => p.name === "Taxa SGR")
@@ -550,9 +557,21 @@ async addTips(){
 }
 
 
+sendOrderOutside(){
+  this.outside = true
+  this.sendOrder(true).subscribe(response => {
+    if(response){
+      this.outside = false
+      this.billToshow.out = false
+    }
+  })
+}
+
+
 sendOrder(out: boolean): Observable<boolean> {
   if (this.billToshow) {
     this.disableOrderButton = true;
+    this.billToshow.out = this.outside
     this.billToshow._id.length
       ? (this.billId = this.billToshow._id)
       : (this.billId = 'new');
@@ -945,6 +964,7 @@ async useCashBack(mode: boolean){
           cantitate: product.qty,
           sgrTax: product.sgrTax,
           description: product.description,
+          printOut: product.printOut
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){

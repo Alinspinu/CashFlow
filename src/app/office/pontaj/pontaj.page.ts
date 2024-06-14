@@ -7,7 +7,6 @@ import { Pontaj } from '../../models/shedule.model';
 
 import { UsersService } from '../users/users.service';
 import { environment } from 'src/environments/environment';
-import User from '../../auth/user.model';
 import { round, roundOne } from '../../shared/utils/functions';
 import { ActionSheetService } from '../../shared/action-sheet.service';
 import { TogglePontPage } from './togglePont/toggle-pont.page';
@@ -103,7 +102,7 @@ openPayments(payments: any){
         // console.log('filter',docDate.getUTCMonth())
         return docDate.getUTCMonth() === this.monthIndex;
       } else {
-        return docDate.getDate() > 15
+        return docDate.getDate() <= 15
       }
     });
     let hours = 0
@@ -125,7 +124,7 @@ openPayments(payments: any){
     let earnd = 0
     const date = new Date().getDate()
     if(empl.salary.fix){
-      if(date < 20){
+      if(date > 20){
         earnd = empl.salary.inHeand
       } else {
         earnd = empl.salary.inHeand / 2
@@ -137,8 +136,8 @@ openPayments(payments: any){
       })
       const documentsInTargetMonth = docToFilter.filter((doc: any) => {
         const docDate = new Date(doc.checkIn);
-        if(date > 20){
-          return docDate.getDate() > 15
+        if(date < 20){
+          return docDate.getDate() <= 15
         } else {
           return docDate.getUTCMonth() === this.monthIndex;
         }

@@ -29,7 +29,6 @@ export class OrdersViewPage implements OnInit {
   ngOnInit() {
     this.orders = this.navPar.get('options')
     this.screenWidth = window.innerWidth
-console.log(this.orders)
   }
 
   close(){

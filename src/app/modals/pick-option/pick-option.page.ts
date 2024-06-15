@@ -54,6 +54,7 @@ export class PickOptionPage implements OnInit {
       this.options.splice(index, 1)
     }
     this.sub = this.navPar.get('sub')
+    console.log(this.sub)
   }
 
   onCheckboxChange(option: any, ind: number) {

@@ -11,7 +11,7 @@ export class WebRTCService {
   private getUserTipSubject = new Subject<any>();
   private inviteUserToTipSubject = new Subject<any>();
   private getOnlineOrderIdSubject = new Subject<any>();
-  private setOrderOnlineTime = new Subject<any>();
+  private getOutsideOrder = new Subject<any>();
   private getUpdatadOrder = new Subject<any>();
   private getTableBillId = new Subject<any>();
 
@@ -37,6 +37,9 @@ export class WebRTCService {
     this.socket.on('tableBillId', (data: any) => {
       this.getTableBillId.next(data);
     })
+    this.socket.on('outsideOrder', (data: any) => {
+      this.getOutsideOrder.next(data)
+    })
   }
 
   sendProductData(data: any) {
@@ -51,6 +54,15 @@ export class WebRTCService {
     this.socket.emit('inviteToTip', data);
   }
 
+  sendOrderOutside(data: any) {
+    this.socket.emit('outsideOrder', data)
+  }
+
+
+
+  getOrderToPrint(){
+    return this.getOutsideOrder.asObservable()
+  }
 
   getInviteToTip(){
     return this.inviteUserToTipSubject.asObservable();
@@ -71,7 +83,9 @@ export class WebRTCService {
   getUserTipObservable() {
     return this.getUserTipSubject.asObservable();
   }
+
   getOdrerIdObservable() {
     return this.getOnlineOrderIdSubject.asObservable();
   }
+
 }

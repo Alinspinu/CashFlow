@@ -483,7 +483,6 @@ export class AddEntryPage implements OnInit {
         },
         month: this.months.findIndex(m => m === this.form.value.month)
       }
-      console.log(entry)
       this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
         this.modalCtrl.dismiss(response)
       })

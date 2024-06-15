@@ -290,11 +290,11 @@ export class BillPage implements OnInit, OnDestroy {
             choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
            this.tabSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
               if(choise.upload){
-                const operation = {name: 'intoarcere', details: el.name}
+                const operation = {name: reason, details: el.name}
                 if(el.toppings.length){
-                this.tabSub =  this.tableSrv.uploadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
+                this.tabSub =  this.tableSrv.unloadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
                 }
-                this.tabSub = this.tableSrv.uploadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
+                this.tabSub = this.tableSrv.unloadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
                   if(response) {
                     showToast(this.toastCtrl, response.message, 3000)
                   }
@@ -738,12 +738,12 @@ export class BillPage implements OnInit, OnDestroy {
           delProd.billProduct.total = buc * delProd.billProduct.price
           result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
          this.tabSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-            if(result.upload){
-              const operation = {name: 'intoarcere', details: product.name}
+            if(!result.upload){
+              const operation = {name: reason, details: product.name}
               if(product.toppings.length){
-               this.tabSub = this.tableSrv.uploadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
+               this.tabSub = this.tableSrv.unloadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
               }
-              this.tabSub = this.tableSrv.uploadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
+              this.tabSub = this.tableSrv.unloadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 4000)
                 }

@@ -63,7 +63,6 @@ updateOrder(bill: Bill){
   const table = this.tables.find(obj => obj.index === bill.masa)
   if(table){
     const billIndex = table.bills.findIndex(obj => obj._id === bill._id)
-    console.log(billIndex)
     if(billIndex !== -1){
       table.bills[billIndex] = bill
       this.tableState.next([...this.tables])
@@ -357,7 +356,6 @@ deleteTable(tableId: string, index: number){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
-  console.log(bill)
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
@@ -401,6 +399,11 @@ sendBillToPrint(bill: Bill){
 uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation}, {headers})
+}
+
+unloadIngs(ings: any, quantity: number, operation: any, locatie: string){
+  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/unload-ings?loc=${locatie}`, {ings, quantity, operation}, {headers})
 }
 
 deleteOrders(data: any[]){

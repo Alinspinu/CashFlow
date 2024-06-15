@@ -128,22 +128,6 @@ export class TableContentPage implements OnInit, OnDestroy {
 
 //***************************NG-ON-INIT************************** */
 
-  // getUserTips(){
-  //   this.webRTC.getUserTipObservable().subscribe(response => {
-  //     if(response || response === 0){
-  //       if(this.billToshow){
-  //         this.billToshow.tips = response
-  //         this.billToshow.total += response
-  //         // this.webRTC.sendProductData(JSON.stringify(this.billToshow))
-  //         this.invite = "invite"
-  //       }
-  //       if(response === 0){
-  //         this.showZeroTips = true
-  //       }
-  //     }
-  //   })
-  // }
-
   getTableNumber(){
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -488,7 +472,6 @@ async addToBill(product: Product){
             this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
             this.disableBrakeButton()
           }
-          console.log(product)
           delProd.billProduct = product
           delProd.reason = reason;
           delProd.admin = admin
@@ -498,12 +481,12 @@ async addToBill(product: Product){
           delProd.billProduct.total = buc * delProd.billProduct.price
           result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
          this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-            if(result.upload){
-              const operation = {name: 'intoarcere', details: product.name}
+            if(!result.upload){
+              const operation = {name: reason, details: product.name}
               if(product.toppings.length){
-               this.tableSub = this.tableSrv.uploadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
+               this.tableSub = this.tableSrv.unloadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
               }
-              this.tableSub = this.tableSrv.uploadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
+              this.tableSub = this.tableSrv.unloadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 4000)
                 }
@@ -637,7 +620,6 @@ async payment(){
     if(response){
       const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
         if(paymentInfo){
-          console.log(paymentInfo)
           this.billToshow.payment = paymentInfo
           this.billToshow.cif = paymentInfo.cif;
          this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
@@ -850,12 +832,12 @@ async useCashBack(mode: boolean){
           delProd.billProduct.total = buc * delProd.billProduct.price
           choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
          this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-            if(choise.upload){
-              const operation = {name: 'intoarcere', details: el.name}
+            if(!choise.upload){
+              const operation = {name: reason, details: el.name}
               if(el.toppings.length){
-              this.tableSub =  this.tableSrv.uploadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
+              this.tableSub =  this.tableSrv.unloadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
               }
-              this.tableSub = this.tableSrv.uploadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
+              this.tableSub = this.tableSrv.unloadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 3000)
                 }

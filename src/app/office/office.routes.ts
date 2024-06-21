@@ -60,6 +60,10 @@ export const routes: Routes = [
     redirectTo: '/tabs/office/products',
     pathMatch: 'full',
   },
+  {
+    path: 'show-paymets',
+    loadComponent: () => import('./pontaj/show-paymets/show-paymets.page').then( m => m.ShowPaymetsPage)
+  },
 
   // {
   //   path: 'product-ingredient',

@@ -156,6 +156,7 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
     bill.total = bill.total + product.price
+    table.bills.push(bill)
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
@@ -167,8 +168,8 @@ if(table){
     bill.total= bill.total + product.price
     product.quantity = 1
     bill.products.push(product)
-    this.webRtc.sendProductData(JSON.stringify(bill))
     table.bills.push(bill)
+    this.webRtc.sendProductData(JSON.stringify(bill))
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
@@ -308,6 +309,7 @@ getTables(locatie: string, id: string){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)
       Preferences.set({key: 'tables', value: stringTable})
+      this.tableState.next([...this.tables])
     }
   })
 }
@@ -355,6 +357,7 @@ deleteTable(tableId: string, index: number){
  saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string, inOrOut: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
+  console.log(table)
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
   bill.masaRest = table._id;

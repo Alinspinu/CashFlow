@@ -84,7 +84,7 @@
               {{calcBonus(user.employee.payments)}}</div>
           </ion-col>
           <ion-col size="0.4">
-            <div class="square" (click)="openPayments(user.employee.payments)" style="cursor:pointer;"
+            <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
               'aj-barista' : user.employee.position === 'Ajutor barman',
@@ -99,6 +99,7 @@
           </ion-col>
           <ion-col size="0.4">
             <div class="square"
+            (click)="openPayments(user.employee.payments)" style="cursor:pointer;"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
               'aj-barista' : user.employee.position === 'Ajutor barman',

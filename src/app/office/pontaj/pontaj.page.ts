@@ -65,8 +65,14 @@ pontSub!: Subscription
   })
 }
 
+
+
+
 openPayments(payments: any){
-  console.log(payments)
+  const monthPayments = payments.filter((pay: any) => {
+    return pay.workMonth === this.monthIndex
+  })
+  console.log(monthPayments)
 }
 
 

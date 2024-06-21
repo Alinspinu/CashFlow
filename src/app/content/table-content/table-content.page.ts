@@ -168,9 +168,6 @@ export class TableContentPage implements OnInit, OnDestroy {
         this.disableDeleteOrderButton()
       }
       this.billToshow = this.table.bills[this.billIndex]
-      if(this.billToshow){
-        this.calcBillDiscount(this.billToshow)
-      }
       if(this.billToshow && this.billToshow.payOnline){
         this.billToshow.payment.online= this.billToshow.total
         this.billToshow.total = 0
@@ -186,10 +183,13 @@ export class TableContentPage implements OnInit, OnDestroy {
         this.clientMode = false
       }
      if(this.billToshow){
+      this.calcBillDiscount(this.billToshow)
       this.hideAllBils(this.table)
       this.billToshow.show = true
       this.webRTC.sendProductData(JSON.stringify(this.billToshow))
        this.billProducts = [...this.billToshow.products]
+     } else {
+      this.billProducts = []
      }
     }
     })
@@ -542,14 +542,42 @@ async addTips(){
 
 sendOrderOutside(){
   this.outside = true
-  this.sendOrder(true).subscribe(response => {
-    if(response){
+  this.sendOrder(true).subscribe({
+    next: (response => {
       this.outside = false
       this.billToshow.out = false
-    }
+    }),
+    error: (error => {
+      if(error){
+        this.disableOrderButton = false;
+        if(error.error.data.message === "timeout of 5000ms exceeded" || error.error.data.reason === "timeout" ){
+          showToast(this.toastCtrl, 'Connection timeout! Nu s-a putut realiza conexiunea la imprimanta!', 3000)
+        }
+      }
+    }),
+    complete: () => console.log('complete')
   })
 }
 
+
+
+trimite(){
+    this.sendOrder(true).subscribe({
+      next: (response => {
+          console.log(response)
+      }),
+      error: (error => {
+        console.log(error)
+        if(error){
+          this.disableOrderButton = false;
+            if(error.error.data.message === "timeout of 5000ms exceeded" || error.error.data.reason === "timeout" ){
+              showToast(this.toastCtrl, 'Connection timeout! Nu s-a putut realiza conexiunea la imprimanta!', 3000)
+            }
+        }
+      }),
+      complete: () => console.log('complete')
+    })
+}
 
 sendOrder(out: boolean): Observable<boolean> {
   if (this.billToshow) {

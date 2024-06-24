@@ -132,8 +132,13 @@
          </ion-row>
          <ion-row class="ion-no-margin ion-no-padding">
            <ion-col class="ion-no-margin ion-no-padding">
-             <ion-button size="medium" expand="block" color="secondary" (click)="sendOrder(true).subscribe()" [disabled]="disableOrderButton">
-               Trimite Comanda
+             <ion-button size="medium" expand="block" color="danger" (click)="trimite(true, true)" [disabled]="disableOrderButton">
+               Trimite Terasa
+             </ion-button>
+             </ion-col>
+           <ion-col class="ion-no-margin ion-no-padding">
+             <ion-button size="medium" expand="block" color="secondary" (click)="trimite(true, false)" [disabled]="disableOrderButton">
+               Trimite Interior
              </ion-button>
              </ion-col>
              <ion-col class="ion-no-margin ion-no-padding">

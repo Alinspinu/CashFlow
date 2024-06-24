@@ -49,6 +49,8 @@ export class CashControlPage implements OnInit, OnDestroy {
   isLoading: boolean = true
   message: boolean = false
 
+  disableButtons: boolean = false
+
   users: {name: string, id: string, show: boolean}[] = []
 
 
@@ -124,26 +126,40 @@ export class CashControlPage implements OnInit, OnDestroy {
       })
     }
      if(result && result.message === "fiscal") {
-        this.cashSrv.reprintBill(result.order).subscribe(response => {
+        const order = JSON.stringify(result.order)
+        this.isLoading = true
+        this.cashSrv.reprintBill(order).subscribe(response => {
           if(response) {
+            this.isLoading = false
             showToast(this.toastCtrl, response.message, 3000)
           }
         }, error => {
           if(error) {
-            console.log(error )
-            showToast(this.toastCtrl, error.message, 3000)
+            this.isLoading = false
+            if(error.error && error.error.message === "timeout of 5000ms exceeded"){
+              showToast(this.toastCtrl, 'Nu se poate realiza conexiunea cu inprimanta!', 3000)
+            } else {
+              showToast(this.toastCtrl, error.error.message, 3000)
+            }
           }
         })
      }
      if(result && result.message === "nefiscal"){
-      this.cashSrv.printNefiscal(result.order).subscribe(response => {
+      const order = JSON.stringify(result.order)
+      this.isLoading = true
+      this.cashSrv.printNefiscal(order).subscribe(response => {
         if(response) {
+          this.isLoading = false
           showToast(this.toastCtrl, response.message, 3000)
         }
       }, error => {
         if(error) {
-          console.log(error )
-          showToast(this.toastCtrl, error.message, 3000)
+          this.isLoading = false
+          if(error.error && error.error.message === "timeout of 5000ms exceeded"){
+            showToast(this.toastCtrl, 'Nu se poate realiza conexiunea cu inprimanta!', 3000)
+          } else {
+            showToast(this.toastCtrl, error.error.message, 3000)
+          }
         }
       })
      }
@@ -222,7 +238,6 @@ export class CashControlPage implements OnInit, OnDestroy {
             this.userOnline = round( this.userOnline + order.payment.online)
           }
           if(order.tips > 0){
-            console.log(order.tips)
             this.userTips = round(this.userTips + order.tips)
           }
       })
@@ -280,6 +295,7 @@ export class CashControlPage implements OnInit, OnDestroy {
 
 
 reports(value: string){
+  this.disableButtons = true
   this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
     if(response){
       Preferences.remove({key: 'cashInAndOut'})
@@ -287,6 +303,7 @@ reports(value: string){
   })
   this.cashSrv.raport(value).subscribe(response => {
     if(response){
+      this.disableButtons = false
       if(value === 'z'){
         this.isLoading = true
         this.message = true
@@ -304,7 +321,12 @@ reports(value: string){
     }
   }, error => {
     if(error){
-      showToast(this.toastCtrl, error.message, 3000)
+      this.disableButtons = false
+      if(error.error && error.error.message === 'timeout of 5000ms exceeded'){
+        showToast(this.toastCtrl, 'Conexiunea cu imprimanta nu poate fi stabilită', 3000)
+      } else {
+        showToast(this.toastCtrl, error.error.message, 3000)
+      }
     }
   })
 }
@@ -314,7 +336,6 @@ setZeroDiscount(cats: Category[]){
   let dataToSend: any = []
   cats.forEach(cat => {
     cat.product.forEach(product => {
-
       if(product.discount > 0){
         const data = {
           precent: 0,
@@ -333,25 +354,31 @@ setZeroDiscount(cats: Category[]){
 async inAndOut(value: string){
  const response = await this.actionSheet.openPayment(CashInOutPage, value)
  if(response){
+  this.disableButtons = true
    const data = {
      mode: value,
      sum: response.value
    }
-   if(value === 'in'){
-    this.cashIn += data.sum
-   } else {
-    this.cashOut += data.sum
-   }
-
    this.cashSrv.cashInAndOut(data).subscribe(response => {
     if(response){
+      this.disableButtons = false
+      if(value === 'in'){
+        this.cashIn += data.sum
+       } else {
+        this.cashOut += data.sum
+       }
       const sums = {in: this.cashIn, out: this.cashOut}
       Preferences.set({key: 'cashInAndOut', value: JSON.stringify(sums)})
       showToast(this.toastCtrl, response.message, 3000)
     }
    }, error => {
     if(error){
-      showToast(this.toastCtrl, error.message, 3000)
+      this.disableButtons = false
+      if(error.error && error.error.message === 'timeout of 5000ms exceeded'){
+        showToast(this.toastCtrl, 'Conexiunea cu imprimanta nu poate fi stabilită', 3000)
+      } else {
+        showToast(this.toastCtrl, error.error.message, 3000)
+      }
     }
    })
  }

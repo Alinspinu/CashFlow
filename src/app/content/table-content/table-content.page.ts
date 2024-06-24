@@ -304,7 +304,6 @@ async addToBill(product: Product){
   let ings: Ing[] = product.ings
   if(product.subProducts.length){
     const result = await this.actionSheet.openModal(PickOptionPage, product.subProducts, true)
-    console.log(result)
     if(result){
       ings = result.ings
       price  = result.price
@@ -495,7 +494,7 @@ async addToBill(product: Product){
           })
 
       } else {
-        showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+        showToast(this.toastCtrl, 'Trebuie să dai un motiv pentru care vrei să ștergi produsul!', 3000)
       }
      this.sendOrderSub = this.sendOrder(false).subscribe()
 
@@ -540,49 +539,59 @@ async addTips(){
 }
 
 
-sendOrderOutside(){
-  this.outside = true
-  this.sendOrder(true).subscribe({
-    next: (response => {
-      this.outside = false
-      this.billToshow.out = false
-    }),
-    error: (error => {
-      if(error){
-        this.disableOrderButton = false;
-        if(error.error.data.message === "timeout of 5000ms exceeded" || error.error.data.reason === "timeout" ){
-          showToast(this.toastCtrl, 'Connection timeout! Nu s-a putut realiza conexiunea la imprimanta!', 3000)
-        }
-      }
-    }),
-    complete: () => console.log('complete')
-  })
-}
 
-
-
-trimite(){
-    this.sendOrder(true).subscribe({
-      next: (response => {
-          console.log(response)
-      }),
-      error: (error => {
-        console.log(error)
-        if(error){
+trimite(out: boolean, outside: boolean){
+  if(this.billToshow){
+    this.billToshow.employee.fullName = this.user.employee.fullName
+    this.billToshow.masaRest.index = this.table.index
+    this.disableOrderButton = true
+    this.billToshow.out = outside
+    if(this.billToshow.inOrOut && this.billToshow.inOrOut !== ''){
+      this.tableSrv.printOrders(this.billToshow).subscribe({
+        next: (response => {
+          if(out && response){
+            this.router.navigateByUrl('/tabs/tables');
+          }
+          this.sendOrder(out).subscribe()
           this.disableOrderButton = false;
-            if(error.error.data.message === "timeout of 5000ms exceeded" || error.error.data.reason === "timeout" ){
-              showToast(this.toastCtrl, 'Connection timeout! Nu s-a putut realiza conexiunea la imprimanta!', 3000)
+        }),
+        error: (error => {
+          if(error){
+            this.disableOrderButton = false;
+            showToast(this.toastCtrl, error.message, 3000)
+          }
+        })
+      })
+    } else {
+      this.actionSheet.chosseInOrOut().subscribe(res => {
+        this.billToshow.inOrOut = res.inOrOut
+        this.tableSrv.printOrders(this.billToshow).subscribe({
+          next: (response => {
+            if(out && response){
+              this.router.navigateByUrl('/tabs/tables');
             }
-        }
-      }),
-      complete: () => console.log('complete')
-    })
+            this.disableOrderButton = false;
+              this.sendOrder(out).subscribe()
+          }),
+          error: (error => {
+            if(error){
+              this.disableOrderButton = false;
+              showToast(this.toastCtrl, error.message, 3000)
+            }
+          })
+        })
+      })
+    }
+  }
 }
+
+
+
+
 
 sendOrder(out: boolean): Observable<boolean> {
   if (this.billToshow) {
     this.disableOrderButton = true;
-    this.billToshow.out = this.outside
     this.billToshow._id.length
       ? (this.billId = this.billToshow._id)
       : (this.billId = 'new');
@@ -601,7 +610,7 @@ sendOrder(out: boolean): Observable<boolean> {
         map((res) => {
           this.disableOrderButton = false;
           if (out && res) {
-            this.router.navigateByUrl('/tabs/tables');
+            // this.router.navigateByUrl('/tabs/tables');
           }
           return !!res; // Convert the response to a boolean
         })
@@ -621,7 +630,7 @@ sendOrder(out: boolean): Observable<boolean> {
             map((res) => {
               this.disableOrderButton = false;
               if (out && res) {
-                this.router.navigateByUrl('/tabs/tables');
+                // this.router.navigateByUrl('/tabs/tables');
               }
               return !!res; // Convert the response to a boolean
             })
@@ -636,6 +645,9 @@ sendOrder(out: boolean): Observable<boolean> {
   }
 }
 
+
+
+
 updateProductsQuantity(products: any[]){
   products.forEach(prod => {
     this.contSrv.editProductQuantity(prod._id, prod.quantity, prod.name)
@@ -644,33 +656,84 @@ updateProductsQuantity(products: any[]){
 
 
 async payment(){
-  this.sendOrderSub = this.sendOrder(false).subscribe(async(response) => {
-    if(response){
+  if(this.billToshow.inOrOut && this.billToshow.inOrOut !== ''){
+    this.trimite(false, false)
       const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
         if(paymentInfo){
+          this.disableOrderButton = true;
           this.billToshow.payment = paymentInfo
           this.billToshow.cif = paymentInfo.cif;
-         this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
-                next: (response => {
-                  if(response && response.bill.status === 'done'){
-                    this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-                    this.billToshow = emptyBill()
-                    this.client = null
-                    this.router.navigateByUrl("/tabs/tables")
-                    showToast(this.toastCtrl, response.message, 3000)
-                  }
-                }),
-                error: (error => {
-                  if(error){
-                    this.isLoading = false
-                    showToast(this.toastCtrl, error.error.message, 3000)
-                  }
-                }),
-                complete: () => console.log('complete')
+          this.tableSrv.printBill(this.billToshow).subscribe({
+              next: (response => {
+                this.router.navigateByUrl("/tabs/tables")
+                this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
+                  next: (response => {
+                    if(response && response.bill.status === 'done'){
+                      this.disableOrderButton = false;
+                      this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                      this.billToshow = emptyBill()
+                      this.client = null
+                      showToast(this.toastCtrl, response.message, 3000)
+                    }
+                  }),
+                  error: (error => {
+                    if(error){
+                      showToast(this.toastCtrl, error.error.message, 3000)
+                      console.log(error)
+                    }
+                  }),
+                  complete: () => console.log('complete')
+            })
+              }),
+              error: (error => {
+                this.disableOrderButton = false
+                this.isLoading = false
+                showToast(this.toastCtrl, error.message, 3000)
+              }),
+              complete: () => console.log('complete')
           })
     }
-    }
-  })
+  } else {
+    this.actionSheet.chosseInOrOut().subscribe(async (res) => {
+      this.billToshow.inOrOut = res.inOrOut
+      this.trimite(false, false)
+          const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
+            if(paymentInfo){
+              this.disableOrderButton = true;
+              this.billToshow.payment = paymentInfo
+              this.billToshow.cif = paymentInfo.cif;
+              this.tableSrv.printBill(this.billToshow).subscribe({
+                  next: (response => {
+                    this.router.navigateByUrl("/tabs/tables")
+                    this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
+                      next: (response => {
+                        if(response && response.bill.status === 'done'){
+                          this.disableOrderButton = false;
+                          this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                          this.billToshow = emptyBill()
+                          this.client = null
+                          showToast(this.toastCtrl, response.message, 3000)
+                        }
+                      }),
+                      error: (error => {
+                        if(error){
+                          showToast(this.toastCtrl, error.error.message, 3000)
+                          console.log(error)
+                        }
+                      }),
+                      complete: () => console.log('complete')
+                })
+                  }),
+                  error: (error => {
+                    this.disableOrderButton = false
+                    this.isLoading = false
+                    showToast(this.toastCtrl, error.message, 3000)
+                  }),
+                  complete: () => console.log('complete')
+              })
+        }
+    })
+  }
 }
 
 async addCustomer(clientMode: boolean){
@@ -682,7 +745,7 @@ if(clientMode){
     this.billToshow.clientInfo = this.client
     this.billToshow.name = this.client.name
     this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-    this.sendOrderSub = this.sendOrder(false).subscribe()
+    this.trimite(false, false)
   }
   if(clientInfo.message === "voucher"){
     this.billToshow.voucher = clientInfo.data

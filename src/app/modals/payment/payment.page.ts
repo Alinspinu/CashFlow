@@ -29,6 +29,8 @@ export class PaymentPage implements OnInit {
   paymentForm!: FormGroup
 
   cancelV2: boolean = false
+  ip!: string
+  port!: string
 
 
   constructor(
@@ -54,6 +56,19 @@ export class PaymentPage implements OnInit {
       this.button = "SCHIMBĂ METODA DE PLATĂ"
     }
     this.setUpForm()
+    this.getLocatie()
+  }
+
+  getLocatie(){
+    this.paySrv.getLocatie().subscribe({
+      next: (response => {
+        this.ip = response.ip
+        this.port = response.port
+      }),
+      error: (error => {
+        console.log(error)
+      })
+    })
   }
 
   setUpForm(){
@@ -94,10 +109,19 @@ export class PaymentPage implements OnInit {
 
 
   abortV2(){
-    this.paySrv.checkPos2(0, this.order._id, 'abort').subscribe(response => {
-      if(response){
+    this.paySrv.checkPos2(0, this.order._id, 'abort', this.ip, this.port).subscribe({
+      next: (response => {
         this.cancelV2 = false
-      }
+      }),
+      error: (error => {
+        this.cancelV2 = false
+        this.disableCancelButton = false
+        if(error.error && error.error.message === 'timeout of 5000ms exceeded'){
+          showToast(this.toastCtrl, 'Conexiunea cu POS-ul nu poate fi stabilită', 3000)
+        } else {
+          showToast(this.toastCtrl, error.error.message, 3000)
+        }
+      })
     })
 
   }
@@ -120,7 +144,7 @@ export class PaymentPage implements OnInit {
     if(posSum2 && posSum2 > 0){
       this.disableCancelButton = true
       this.cancelV2 = true
-      this.paySrv.checkPos2(posSum2, this.order._id, '').subscribe({
+      this.paySrv.checkPos2(posSum2, this.order._id, '', this.ip, this.port).subscribe({
         next: (response => {
           if(response){
             this.cancelV2 = false
@@ -135,35 +159,46 @@ export class PaymentPage implements OnInit {
           }
          }),
          error: (error => {
-            console.log(error)
+          this.disableCancelButton = false
+          this.cancelV2 = false
+          if(error.error && error.error.message === 'timeout of 5000ms exceeded'){
+            showToast(this.toastCtrl, 'Conexiunea cu POS-ul nu poate fi stabilită', 3000)
+          } else {
+            showToast(this.toastCtrl, error.error.message, 3000)
+          }
          })
       })
     }
     if(posSum && posSum > 0){
       this.disableCancelButton = true
-      this.paySrv.checkPos(posSum).subscribe(response => {
-        if(response){
+      this.paySrv.checkPos(posSum).subscribe({
+        next: (response => {
           if(response.payment){
             showToast(this.toastCtrl, response.message, 2000)
             this.disableCancelButton = false
             return this.modalCtrl.dismiss(pay)
           } else {
             showToast(this.toastCtrl, response.message, 2000)
-            this.disableCancelButton = false
-            return
+            return this.disableCancelButton = false
           }
-        } else {
-          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000)
-          this.disableCancelButton = false
-          return
-        }
+        }),
+        error: (error => {
+          if(error){
+            this.disableCancelButton = false
+            if(error.error && error.error.message === 'timeout of 5000ms exceeded'){
+              showToast(this.toastCtrl, 'Conexiunea cu POS-ul nu poate fi stabilită', 3000)
+            } else {
+              showToast(this.toastCtrl, error.error.message, 3000)
+            }
+          }
+        }),
+        complete: () => console.log('complete')
       })
     }
     if((cash && cash > 0 && !posSum && !posSum2) || (online && online > 0 && !posSum && !posSum2)){
       this.modalCtrl.dismiss(pay)
     }
-    console.log(cash)
-    if(cash === 0){
+    if(cash === 0 && !posSum && !posSum2 && !online){
       this.modalCtrl.dismiss(pay)
     }
 } else {
@@ -255,22 +290,43 @@ export class PaymentPage implements OnInit {
       }
     }
 
-   checkPos(sum: number){
-      this.paySrv.checkPos(sum).subscribe(response => {
-        if(response){
-          if(response.payment){
-            showToast(this.toastCtrl, response.message, 2000)
-            return true
-          } else {
-            showToast(this.toastCtrl, response.message, 2000)
-            return false
-          }
-        } else {
-          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000)
-          return false
-        }
-      })
-    }
+  //  checkPos(sum: number){
+  //     this.paySrv.checkPos(sum).subscribe(response => {
+  //       if(response){
+  //         if(response.payment){
+  //           showToast(this.toastCtrl, response.message, 2000)
+  //           return true
+  //         } else {
+  //           showToast(this.toastCtrl, response.message, 2000)
+  //           return false
+  //         }
+  //       } else {
+  //         showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000)
+  //         return false
+  //       }
+  //     })
+  //     this.paySrv.checkPos(sum).subscribe({
+  //       next: (response => {
+  //         if(response.payment){
+  //           showToast(this.toastCtrl, response.message, 2000)
+  //           return true
+  //         } else {
+  //           showToast(this.toastCtrl, response.message, 2000)
+  //           return false
+  //         }
+  //       }),
+  //       error: (error => {
+  //         if(error){
+  //           if(error.error && error.error.data.error.message === 'timeout of 5000ms exceeded'){
+  //             showToast(this.toastCtrl, 'Conexiunea cu casa nu poate fi stabilită', 3000)
+  //           } else {
+  //             showToast(this.toastCtrl, error.error.message, 3000)
+  //           }
+  //         }
+  //       }),
+  //       complete: () => console.log('complete')
+  //     })
+  //   }
 
 
 

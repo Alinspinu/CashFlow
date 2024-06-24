@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { io } from 'socket.io-client';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +40,35 @@ export class WebRTCService {
     this.socket.on('outsideOrder', (data: any) => {
       this.getOutsideOrder.next(data)
     })
+  }
+
+
+  printOrder(doc: string): Observable<any> {
+    return new Observable(observer => {
+      this.socket.emit('printOrder', doc);
+      this.socket.on('orderProcessed', (response:any) => {
+        observer.next(response);
+        observer.complete();
+      });
+
+      this.socket.on('connect_error', (error: any) => {
+        observer.error(error);
+      });
+    });
+  }
+
+  printBill(doc: string): Observable<any> {
+    return new Observable(observer => {
+      this.socket.emit('printBill', doc);
+      this.socket.on('billProcessed', (response:any) => {
+        observer.next(response);
+        observer.complete();
+      });
+
+      this.socket.on('connect_error', (error: any) => {
+        observer.error(error);
+      });
+    });
   }
 
   sendProductData(data: any) {

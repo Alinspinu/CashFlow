@@ -47,19 +47,19 @@
         </ion-item>
       </div>
       <div class="button-wrapper">
-        <ion-button expand="block" size="large" color="secondary" (click)="reports('x')">
+        <ion-button expand="block" size="large" color="secondary" (click)="reports('x')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/business.svg"></ion-icon>
          RAPORT X
         </ion-button>
-        <ion-button expand="block" size="large" (click)="reports('z')">
+        <ion-button expand="block" size="large" (click)="reports('z')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
           RAPORT Z
         </ion-button>
-        <ion-button expand="block" size="large" color="success" (click)="inAndOut('in')">
+        <ion-button expand="block" size="large" color="success" (click)="inAndOut('in')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/add-circle-outline.svg"></ion-icon>
          ADAUGA BANI IN CASA
         </ion-button>
-        <ion-button expand="block" size="large" color="danger" (click)="inAndOut('out')">
+        <ion-button expand="block" size="large" color="danger" (click)="inAndOut('out')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/remove-circle-outline.svg"></ion-icon>
         SCOATE BANI DIN CASA
         </ion-button>

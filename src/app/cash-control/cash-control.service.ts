@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { Bill } from "../models/table.model";
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({providedIn: 'root'})
 
@@ -10,12 +11,13 @@ import { Bill } from "../models/table.model";
 export class CashControlService{
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private auth: AuthService,
   ){}
 
 raport(value: string){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.get<{message: string}>(`${environment.PRINT_URL}pay/reports?value=${value}`, {headers})
+  const headers = this.auth.apiAuth()
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {rep: value}, {headers})
 }
 
 saveInventary(){
@@ -24,8 +26,8 @@ saveInventary(){
 }
 
 cashInAndOut(data: any){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/in-and-out`, {data: data}, {headers})
+  const headers = this.auth.apiAuth()
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {inOut: data}, {headers})
 }
 
 getUserOrders(userId: string) {
@@ -43,14 +45,14 @@ changePaymnetMethod(bill: Bill){
   return this.http.post<{message: string}>(`${environment.BASE_URL}pay/change-payment-method`, {bill: bill}, {headers})
 }
 
-reprintBill(bill: Bill){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill}, {headers})
+reprintBill(bill: string){
+  const headers = this.auth.apiAuth()
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {fiscal: bill}, {headers})
 }
 
-printNefiscal(bill: Bill){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/print-unreg`, {bill: bill}, {headers})
+printNefiscal(bill: string){
+  const headers = this.auth.apiAuth()
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {nefiscal: bill}, {headers})
 }
 
 removeProductDiscount(data: any){

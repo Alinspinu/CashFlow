@@ -1,12 +1,14 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Injectable} from "@angular/core";
-import { BehaviorSubject, Observable, of, switchMap, take, tap, firstValueFrom } from "rxjs";
+import { BehaviorSubject, Observable, of, switchMap, take, tap, firstValueFrom, throwError, catchError } from "rxjs";
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../models/empty-models";
 import { WebRTCService } from "../content/webRTC.service";
 import { round } from "../shared/utils/functions";
+import { AuthService } from '../auth/auth.service';
+import { handlePrintErrors } from "../shared/utils/errorHandlers";
 
 
 
@@ -23,9 +25,21 @@ export class TablesService{
 
   user!: any;
 
+  headers: HttpHeaders = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.log(error)
+    const errorMessage = handlePrintErrors(error);
+    // Optionally, log the error to an external service here
+    return throwError(() => new Error(errorMessage));
+  }
+
+
   constructor(
     private http: HttpClient,
-    private webRtc: WebRTCService
+    private webRtc: WebRTCService,
+    private auth: AuthService,
   ){
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
@@ -62,7 +76,9 @@ addOnlineOrder(bill: Bill){
 updateOrder(bill: Bill){
   const table = this.tables.find(obj => obj.index === bill.masa)
   if(table){
-    const billIndex = table.bills.findIndex(obj => obj._id === bill._id)
+    const billIndex = table.bills.findIndex(obj => {
+     return obj._id === bill._id || obj._id === 'new'
+    })
     if(billIndex !== -1){
       table.bills[billIndex] = bill
       this.tableState.next([...this.tables])
@@ -117,12 +133,14 @@ async manageSplitBills(tableIndex: number, billIndex: number, employee: any, loc
 }
 
 removeBill(masa: number, billIndex: number){
+  console.log(masa, billIndex)
   let table = this.tables[masa-1];
   if(billIndex  === -1){
     table.bills.pop()
   } else {
     table.bills.splice(billIndex, 1)
   }
+  console.log('after',table.bills)
   this.webRtc.sendProductData(JSON.stringify(emptyBill()))
   const tables = JSON.stringify(this.tables);
   Preferences.set({key: 'tables', value: tables});
@@ -149,6 +167,7 @@ removeLive(masa: number, billId: string){
 addToBill(product: BillProduct, masa: number, billIndex: number, userName: string){
 const table = this.tables.find((doc) => doc.index === masa)
 if(table){
+  console.log(table)
   let bill: Bill = emptyBill()
   if(table.bills.length){
     bill = table.bills[billIndex]
@@ -156,7 +175,6 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
     bill.total = bill.total + product.price
-    table.bills.push(bill)
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
@@ -168,6 +186,7 @@ if(table){
     bill.total= bill.total + product.price
     product.quantity = 1
     bill.products.push(product)
+    bill._id = 'new'
     table.bills.push(bill)
     this.webRtc.sendProductData(JSON.stringify(bill))
     const tables = JSON.stringify(this.tables);
@@ -357,8 +376,8 @@ deleteTable(tableId: string, index: number){
  saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string, inOrOut: string){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   const table = this.tables[tableIndex-1];
-  console.log(table)
   const bill = this.tables[tableIndex-1].bills[billIndex];
+  console.log('service', table)
   bill.masa = tableIndex;
   bill.masaRest = table._id;
   bill.production = true;
@@ -373,7 +392,7 @@ deleteTable(tableId: string, index: number){
   bill.pending = true
   bill.prepStatus = 'open'
   const billToSend = JSON.stringify(bill);
-  return this.http.post<{billId: string, index: number, products: any, billTotal: number, masa: any}>(`${environment.PRINT_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
+  return this.http.post<{billId: string, index: number, products: any, billTotal: number, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
       .pipe(take(1),
         switchMap(res => {
         bill._id = res.billId;
@@ -393,9 +412,27 @@ deleteTable(tableId: string, index: number){
 );
 };
 
+printOrders(bill: Bill){
+  const headers = this.auth.apiAuth()
+  const billToSend = JSON.stringify(bill);
+  return this.http.post(`${environment.PRINT_URL}orders`, {order: billToSend}, {headers}).pipe(
+    catchError(this.handleError)
+  )
+}
+
+
+printBill(bill: Bill){
+  const headers = this.auth.apiAuth()
+  const billToSend = JSON.stringify(bill);
+  return this.http.post(`${environment.PRINT_URL}print`, {fiscal: billToSend}, {headers}).pipe(
+    catchError(this.handleError)
+  )
+}
+
+
 sendBillToPrint(bill: Bill){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string, bill: Bill}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill}, {headers})
+  return this.http.post<{message: string, bill: Bill}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill}, {headers})
 }
 
 
@@ -433,3 +470,5 @@ setOrderTime(orderId: string, time: number){
 arraysAreEqual = (arr1: Topping[], arr2: Topping[]) => arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 
 }
+
+

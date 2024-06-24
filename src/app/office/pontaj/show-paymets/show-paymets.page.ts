@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavParams} from '@ionic/angular';
 
 @Component({
   selector: 'app-show-paymets',
@@ -10,11 +10,22 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
+
+
+
+
 export class ShowPaymetsPage implements OnInit {
 
-  constructor() { }
+  payments: any[] = []
+
+  constructor(
+    private navPar: NavParams,
+  ) { }
 
   ngOnInit() {
+    this.payments = this.navPar.get('options');
   }
+
+
 
 }

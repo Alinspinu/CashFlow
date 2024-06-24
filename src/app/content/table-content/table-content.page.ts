@@ -542,7 +542,7 @@ async addTips(){
 
 trimite(out: boolean, outside: boolean){
   if(this.billToshow){
-    this.billToshow.employee.fullName = this.user.employee.fullName
+    this.billToshow.employee.fullName = this.user.employee.fullName || 'CLIENT ONLINE'
     this.billToshow.masaRest.index = this.table.index
     this.disableOrderButton = true
     this.billToshow.out = outside

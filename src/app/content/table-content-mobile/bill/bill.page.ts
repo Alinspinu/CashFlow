@@ -502,7 +502,6 @@ disableBrakeButton(){
       this.billToshow.out = outside
       this.billToshow.employee.fullName = this.user.employee.fullName
       this.billToshow.masaRest.index = this.table.index
-      console.log(this.billToshow)
       if(this.billToshow.inOrOut && this.billToshow.inOrOut !== ''){
         const jsonBill = JSON.stringify(this.billToshow)
         this.webRTC.printOrder(jsonBill).subscribe({

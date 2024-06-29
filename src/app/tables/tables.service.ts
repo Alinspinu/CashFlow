@@ -1,11 +1,12 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, NgZone } from "@angular/core";
-import { BehaviorSubject, Observable, of, switchMap, take, tap, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, take, tap, Subscription, throwError, catchError } from 'rxjs';
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../models/empty-models";
-import {AuthService} from "../auth/auth.service"
+import {AuthService} from "../auth/auth.service";
+import { handlePrintErrors } from "../shared/utils/errorHandlers";
 
 
 
@@ -22,10 +23,18 @@ export class TablesService{
   user!: any;
   private orderSub!: Subscription
 
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.log(error)
+    const errorMessage = handlePrintErrors(error);
+    // Optionally, log the error to an external service here
+    return throwError(() => new Error(errorMessage));
+  }
+
+
+
   constructor(
     private http: HttpClient,
-    private authSrv: AuthService,
-    private ngZone: NgZone
+    private auth: AuthService,
   ){
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
@@ -217,18 +226,11 @@ getTables(locatie: string, id: string){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)
       Preferences.set({key: 'tables', value: stringTable})
-      // this.tableState.next([...this.tables])
+      this.tableState.next([...this.tables])
     }
   })
 }
 
-
-
-stopSse() {
-if (this.eventSource) {
-  this.eventSource.close();
-}
-}
 
 
 addTable(name: string, locatie: string){
@@ -271,34 +273,6 @@ deleteTable(tableId: string, index: number){
   }))
 }
 
-// saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
-//   const table = this.tables[tableIndex-1];
-//   const bill = this.tables[tableIndex-1].bills[billIndex];
-//   bill.masa = tableIndex;
-//   bill.masaRest = table._id;
-//   bill.production = true;
-//   bill.employee = employee
-//   bill.locatie = locatie
-//   bill.onlineOrder = false
-//   bill.pending = true
-//   bill.prepStatus = 'open'
-//   const billToSend = JSON.stringify(bill);
-//   const tables = JSON.stringify(this.tables);
-//   Preferences.set({key: 'tables', value: tables});
-//   return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} ).pipe(take(1), tap(res => {
-//     bill._id = res.billId;
-//     bill.index = res.index;
-//     bill.products = res.products
-//     bill.products.forEach(product => {
-//       product.sentToPrint = false
-//       product.sentToPrintOnline = false
-//     })
-//     bill.masaRest = res.masa
-//     this.tableState.next([...this.tables])
-//  }));
-// };
-
-
 
 saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
   const table = this.tables[tableIndex-1];
@@ -319,7 +293,6 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
   return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} )
       .pipe(take(1),
         switchMap(res => {
-          console.log('service res', res)
         bill._id = res.billId;
         bill.index = res.index;
         bill.products = res.products;
@@ -337,10 +310,20 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
 );
 };
 
-
+printBill(bill: Bill){
+  const headers = this.auth.apiAuth()
+  const billToSend = JSON.stringify(bill);
+  return this.http.post(`${environment.PRINT_URL}print`, {fiscal: billToSend}, {headers}).pipe(
+    catchError(this.handleError)
+  )
+}
 
 uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
   return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation})
+}
+
+unloadIngs(ings: any, quantity: number, operation: any, locatie: string){
+  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/unload-ings?loc=${locatie}`, {ings, quantity, operation})
 }
 
 deleteOrders(data: any[]){
@@ -352,8 +335,7 @@ registerDeletetProduct(product: any){
 }
 
 sendBillToPrint(bill: Bill){
-  console.log(bill)
-  return this.http.post<{bill: any, message: string}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill})
+  return this.http.post<{bill: any, message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
 }
 
 setOrderTime(orderId: string, time: number){

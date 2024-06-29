@@ -1,7 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
+import { AuthService } from "../auth/auth.service";
 import { Bill } from "../models/table.model";
+
 
 @Injectable({providedIn: 'root'})
 
@@ -10,11 +12,13 @@ import { Bill } from "../models/table.model";
 export class CashControlService{
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private auth: AuthService
   ){}
 
 raport(value: string){
-  return this.http.get<{message: string}>(`${environment.PRINT_URL}pay/reports?value=${value}`)
+  const headers = this.auth.apiAuth()
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {rep: value}, {headers})
 }
 
 saveInventary(){
@@ -22,7 +26,8 @@ saveInventary(){
 }
 
 cashInAndOut(data: any){
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/in-and-out`, {data: data})
+  const headers = this.auth.apiAuth()
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {inOut: data}, {headers})
 }
 
 getUserOrders(userId: string) {
@@ -34,7 +39,8 @@ changePaymnetMethod(bill: Bill){
 }
 
 reprintBill(bill: Bill){
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}pay/print-bill`, {bill: bill})
+  const headers = this.auth.apiAuth()
+  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {fiscal: bill}, {headers})
 }
 
 removeProductDiscount(data: any){

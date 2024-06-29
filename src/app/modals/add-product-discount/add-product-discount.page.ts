@@ -7,6 +7,8 @@ import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { ProductsService } from 'src/app/office/products/products.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-add-product-discount',
@@ -22,6 +24,7 @@ products: any [] = []
 discountsProd: any [] = []
 deletedDiscounts: any [] = []
 user!: User
+dbProducts: any[] = []
 
   constructor(
     @Inject(ActionSheetService) private actioSrv: ActionSheetService,
@@ -29,11 +32,15 @@ user!: User
     private addProdDiscSrv: AddProductDiscountService ,
     private router: Router,
     private navPar: NavParams,
+    private productService: ProductsService,
   ) { }
 
   ngOnInit() {
     this.getUser()
+    this.getProducts()
     this.getData()
+    this.getProductsFromDb()
+
   }
 
 
@@ -45,6 +52,32 @@ user!: User
     }
 
   }
+
+
+
+  getProductsFromDb(){
+    this.productService.getProducts(environment.LOC).subscribe()
+   }
+
+
+
+  getProducts(){
+      this.productService.productsSend$.subscribe(response => {
+      if(response){
+        this.dbProducts = response
+      }
+    })
+  }
+
+   searchProduct(ev: any){
+    const input = ev.detail.value
+    // console.log(input)
+    this.products = this.dbProducts.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+    if(input === ''){
+     this.products = [...this.dbProducts]
+    }
+   }
+
 
 
   async selectProduct(prod: any){
@@ -77,14 +110,14 @@ user!: User
     })
   }
 
-  searchProduct(ev: any){
-    let search = ev.detail.value
-      this.addProdDiscSrv.searchProduct(search, {}, this.user.locatie).subscribe((response:any) => {
-        if(response) {
-          this.products= response
-        }
-      })
-  }
+  // searchProduct(ev: any){
+  //   let search = ev.detail.value
+  //     this.addProdDiscSrv.searchProduct(search, {}, this.user.locatie).subscribe((response:any) => {
+  //       if(response) {
+  //         this.products= response
+  //       }
+  //     })
+  // }
 
   onSubmit(){
     if(this.deletedDiscounts.length) {

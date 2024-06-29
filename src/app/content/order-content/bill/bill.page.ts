@@ -1,19 +1,17 @@
 import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, IonContent, ToastController, BooleanValueAccessor } from '@ionic/angular';
-
+import { IonicModule, IonContent, ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, Observable, map, switchMap, of } from 'rxjs';
+import { Subscription, Observable, map, of } from 'rxjs';
 import { Bill, BillProduct, deletetBillProduct,  Table, Topping } from 'src/app/models/table.model';
-import { emptyBill, emptyBillProduct, emptyDeletetBillProduct, emptyIng, emptyTable } from 'src/app/models/empty-models';
+import { emptyBill, emptyDeletetBillProduct, emptyIng, emptyTable } from 'src/app/models/empty-models';
 import { TablesService } from 'src/app/tables/tables.service';
 import { round } from 'src/app/shared/utils/functions';
-import { Category, Product } from 'src/app/models/category.model';
+import { Category } from 'src/app/models/category.model';
 import User from 'src/app/auth/user.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
-import { triggerEscapeKeyPress, showToast } from 'src/app/shared/utils/toast-controller';
 import { AuthService } from 'src/app/auth/auth.service';
 import { OrderService } from '../order-content.service';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
@@ -22,6 +20,7 @@ import { ContentService } from '../../content.service';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
 import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
+import { showToast } from 'src/app/shared/utils/toast-controller';
 
 
 @Component({
@@ -124,8 +123,6 @@ export class BillPage implements OnInit, OnDestroy {
     }
 
 
-
-
   getTableNumber(){
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -139,7 +136,6 @@ export class BillPage implements OnInit, OnDestroy {
   getBill(){
     this.tabSub = this.tableSrv.tableSend$.subscribe(response => {
       if(response){
-        console.log("get table")
       const table = response.find(obj => obj.index === this.tableNumber)
       if(table){
         this.table = table;
@@ -147,9 +143,6 @@ export class BillPage implements OnInit, OnDestroy {
         this.disableDeleteOrderButton()
       }
       this.billToshow = this.table.bills[this.billIndex]
-      if(this.billToshow){
-        this.calcBillDiscount(this.billToshow)
-      }
       if(this.billToshow && this.billToshow.payOnline){
         this.billToshow.payment.online= this.billToshow.total
         this.billToshow.total = 0
@@ -165,6 +158,7 @@ export class BillPage implements OnInit, OnDestroy {
         this.clientMode = false
       }
      if(this.billToshow){
+      this.calcBillDiscount(this.billToshow)
       this.hideAllBils(this.table)
       this.billToshow.show = true
        this.billProducts = [...this.billToshow.products]
@@ -177,7 +171,6 @@ export class BillPage implements OnInit, OnDestroy {
     }
     })
   }
-
 
 
   hideAllBils(table: Table){
@@ -252,12 +245,12 @@ export class BillPage implements OnInit, OnDestroy {
           delProd.billProduct.total = buc * delProd.billProduct.price
           choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
           this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-            if(choise.upload){
+            if(!choise.upload){
               const operation = {name: 'intoarcere', details: el.name}
               if(el.toppings.length){
-                this.tableSrv.uploadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
+                this.tableSrv.unloadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
               }
-              this.tableSrv.uploadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
+              this.tableSrv.unloadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
                 if(response) {
                   showToast(this.toastCtrl, response.message, 3000, 'success-toast')
                 }
@@ -341,8 +334,6 @@ export class BillPage implements OnInit, OnDestroy {
   }
 
 
-
-
   sendOrder(out: boolean): Observable<boolean> {
     if (this.billToshow) {
       this.disableOrderButton = true;
@@ -351,7 +342,6 @@ export class BillPage implements OnInit, OnDestroy {
         : (this.billId = 'new');
       const tableIndex = this.tableNumber;
       this.billToshow.locatie = this.user.locatie;
-      console.log('before save',this.billToshow)
       this.calcBillDiscount(this.billToshow);
         return this.tableSrv.saveOrder(
           tableIndex,
@@ -362,7 +352,6 @@ export class BillPage implements OnInit, OnDestroy {
         ).pipe(
           map((res) => {
             this.disableOrderButton = false;
-            console.log(" after save ",res)
             if (out && res) {
               this.router.navigateByUrl('/tabs/tables');
             }
@@ -383,23 +372,33 @@ export class BillPage implements OnInit, OnDestroy {
             this.billToshow.payment = paymentInfo
             this.billToshow.cif = paymentInfo.cif;
             this.billToshow.dont = paymentInfo.dont;
-           this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
-                  next: (response => {
-                    console.log(response)
-                    if(response && response.bill.status === 'done'){
-                      this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-                      this.billToshow = emptyBill()
-                      this.client = null
-                      this.router.navigateByUrl("/tabs/tables")
-                      showToast(this.toastCtrl, response.message, 3000, 'success-toast')
-                    }
-                  }),
-                  error: (error => {
-                    if(error){
-                      showToast(this.toastCtrl, error.error.message, 3000, 'error-toast')
-                    }
-                  }),
-                  complete: () => console.log('complete')
+            this.tableSrv.printBill(this.billToshow).subscribe({
+                next: (response => {
+                  this.router.navigateByUrl("/tabs/tables")
+                  this.disableOrderButton = false
+                  this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
+                         next: (response => {
+                           if(response && response.bill.status === 'done'){
+                             this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                             this.billToshow = emptyBill()
+                             this.client = null
+                             showToast(this.toastCtrl, response.message, 3000, 'success-toast')
+                           }
+                         }),
+                         error: (error => {
+                           if(error){
+                             showToast(this.toastCtrl, error.error.message, 3000, 'error-toast')
+                           }
+                         }),
+                         complete: () => console.log('complete')
+                   })
+                }),
+                error: (error => {
+                  this.disableOrderButton = false
+                  this.isLoading = false
+                  showToast(this.toastCtrl, error.message, 3000, 'error-toast')
+                }),
+                complete: () => console.log('complete')
             })
       }
       }
@@ -632,12 +631,12 @@ async addDiscount(){
               delProd.billProduct.total = buc * delProd.billProduct.price
               result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
               this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-                if(result.upload){
+                if(!result.upload){
                   const operation = {name: 'intoarcere', details: product.name}
                   if(product.toppings.length){
-                    this.tableSrv.uploadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
+                    this.tableSrv.unloadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
                   }
-                  this.tableSrv.uploadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
+                  this.tableSrv.unloadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
                     if(response) {
                       showToast(this.toastCtrl, response.message, 4000, 'success-toast')
                     }

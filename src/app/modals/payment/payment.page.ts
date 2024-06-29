@@ -104,22 +104,28 @@ export class PaymentPage implements OnInit {
     console.log(pay)
     if(posSum && posSum > 0 && !cardManual){
       this.disableCancelButton = true
-      this.paySrv.checkPos(posSum).subscribe(response => {
-        if(response){
+      this.paySrv.checkPos(posSum).subscribe({
+        next: (response => {
           if(response.payment){
             showToast(this.toastCtrl, response.message, 2000, 'success-toast')
             this.disableCancelButton = false
             return this.modalCtrl.dismiss(pay)
           } else {
-            showToast(this.toastCtrl, response.message, 2000, 'error-toast')
-            this.disableCancelButton = false
-            return
+            showToast(this.toastCtrl, response.message, 2000, 'success-toast')
+            return this.disableCancelButton = false
           }
-        } else {
-          showToast(this.toastCtrl, "Eroare de comunicare cu POS-UL", 2000, 'error-toast')
-          this.disableCancelButton = false
-          return
-        }
+        }),
+        error: (error => {
+          if(error){
+            this.disableCancelButton = false
+            if(error.error && error.error.message === 'timeout of 30000ms exceeded'){
+              showToast(this.toastCtrl, 'Conexiunea cu POS-ul nu poate fi stabilită', 3000, 'error-toast')
+            } else {
+              showToast(this.toastCtrl, error.error.message, 3000, 'error-toast')
+            }
+          }
+        }),
+        complete: () => console.log('complete')
       })
     } else {
       this.modalCtrl.dismiss(pay)

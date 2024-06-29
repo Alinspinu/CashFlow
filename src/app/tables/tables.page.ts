@@ -54,7 +54,6 @@ ngOnDestroy(): void {
   if(this.tableSubs){
     this.tableSubs.unsubscribe()
   }
-  this.tableServ.stopSse()
 }
 
 

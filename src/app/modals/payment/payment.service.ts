@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
+import { AuthService } from '../../auth/auth.service';
 
 
 
@@ -12,10 +13,12 @@ export class PaymentService{
 
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private auth: AuthService
   ){}
 
   checkPos(sum: number){
-    return this.http.post<{message: string, payment: boolean}>(`${environment.PRINT_URL}pay/pos`, {sum: sum})
+    const headers = this.auth.apiAuth()
+    return this.http.post<{message: string, payment: boolean}>(`${environment.PRINT_URL}print`, {pos: sum}, {headers})
   }
 }

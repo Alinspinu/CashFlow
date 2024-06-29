@@ -66,6 +66,20 @@ export class AuthService{
 
   constructor(private http: HttpClient){}
 
+
+  apiAuth(){
+    const username = environment.LOC;
+    const password = environment.API_PASS;
+
+    const credentials = btoa(`${username}:${password}`); // Base64 encode username and password
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${credentials}`
+      });
+    return headers
+  }
+
+
   onLogin(email: string, password: string){
     const httpOptions = {
       headers: new HttpHeaders({

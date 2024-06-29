@@ -116,7 +116,6 @@ export class TableContentPage implements OnInit, OnDestroy {
     if(this.tableSub){
       this.tableSub.unsubscribe()
     }
-    this.tableSrv.stopSse()
   }
 
   //***************************NG-ON-INIT************************** */

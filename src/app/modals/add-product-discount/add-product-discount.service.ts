@@ -14,7 +14,7 @@ export class AddProductDiscountService{
     private http: HttpClient
   ){}
 
-  searchProduct(searchInput: string, filter: any, loc: string){
-    return this.http.post<{cat: any[]}>(`${environment.BASE_URL}product/get-products?search=${searchInput}`, {filter:{locatie: loc}})
+  getProducts(){
+    return this.http.post<{cat: any[]}>(`${environment.BASE_URL}product/get-products`, {loc: environment.LOC})
   }
 }

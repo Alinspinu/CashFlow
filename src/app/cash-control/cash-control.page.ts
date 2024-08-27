@@ -176,7 +176,6 @@ export class CashControlPage implements OnInit, OnDestroy {
   getOrders(id: string){
     this.cashSrv.getUserOrders(id).subscribe(response => {
       if(response) {
-
         this.data = response
         this.orders = [...this.data]
         this.calcCashIn()
@@ -200,7 +199,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   getUsers(){
     const uniqUsers = new Set()
     const users = this.data
-      .map(doc => ({id: doc.employee.user, name: doc.employee.fullName, show: false}))
+      .map(doc => ( doc.employee ? {id: doc.employee.user, name: doc.employee.fullName, show: false}: {id: '', name: '', show: false}))
       .filter(user => {
         const userString = JSON.stringify(user)
         if(!uniqUsers.has(userString)){
@@ -246,7 +245,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   }
 
   calcTotal(){
-    this.userTotal = this.userCash + this.userCard +this.userOnline + this.userViva + this.userOnline + this.userVoucher
+    this.userTotal = this.userCash + this.userCard +this.userOnline + this.userViva + this.userVoucher
     this.isLoading = false
   }
 

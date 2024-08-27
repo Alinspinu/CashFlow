@@ -439,7 +439,7 @@ disableBrakeButton(){
   }
 
 
-  sendOrder(out: boolean): Observable<boolean> {
+  sendOrder(out: boolean, outside: boolean): Observable<boolean> {
     if (this.billToshow) {
       this.disableOrderButton = true;
       this.billToshow._id.length
@@ -455,7 +455,8 @@ disableBrakeButton(){
           this.billIndex,
           this.user.employee,
           this.user.locatie,
-          this.billToshow.inOrOut
+          this.billToshow.inOrOut,
+          outside
         ).pipe(
           map((res) => {
             this.disableOrderButton = false;
@@ -475,7 +476,8 @@ disableBrakeButton(){
               this.billIndex,
               this.user.employee,
               this.user.locatie,
-              this.billToshow.inOrOut
+              this.billToshow.inOrOut,
+              outside
             ).pipe(
               map((res) => {
                 this.disableOrderButton = false;
@@ -496,133 +498,40 @@ disableBrakeButton(){
   }
 
 
-  trimite(out: boolean, outside: boolean){
-    if(this.billToshow){
-      this.disableOrderButton = true
-      this.billToshow.out = outside
-      this.billToshow.employee.fullName = this.user.employee.fullName
-      this.billToshow.masaRest.index = this.table.index
-      if(this.billToshow.inOrOut && this.billToshow.inOrOut !== ''){
-        const jsonBill = JSON.stringify(this.billToshow)
-        this.webRTC.printOrder(jsonBill).subscribe({
-          next: (response => {
-            this.disableOrderButton = false;
-              this.sendOrder(out).subscribe()
-          }),
-          error: (error => {
-            if(error){
-              this.disableOrderButton = false;
-              showToast(this.toastCtrl, error.message, 3000)
-            }
-          })
-        })
-      } else {
-        this.actionSheet.chosseInOrOut().subscribe(res => {
-          this.billToshow.inOrOut = res.inOrOut
-          const jsonBill = JSON.stringify(this.billToshow)
-          this.webRTC.printOrder(jsonBill).subscribe({
-            next: (response => {
-              this.disableOrderButton = false;
-                this.sendOrder(out).subscribe()
-            }),
-            error: (error => {
-              if(error){
-                this.disableOrderButton = false;
-                showToast(this.toastCtrl, error.message, 3000)
-              }
-            })
-          })
-        })
-      }
-    }
-  }
-
-
 
   async payment(){
-    if(this.billToshow.inOrOut && this.billToshow.inOrOut !== ''){
-      this.trimite(false, false)
+    this.sendOrder(false, false).subscribe(async (response) => {
+      if(response){
         const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
           if(paymentInfo){
             this.disableOrderButton = true;
             this.billToshow.payment = paymentInfo
             this.billToshow.cif = paymentInfo.cif;
-            const jsonBill = JSON.stringify(this.billToshow)
-            this.webRTC.printBill(jsonBill).subscribe({
-                next: (response => {
-                  this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
-                    next: (response => {
-                      if(response && response.bill.status === 'done'){
-                        this.disableOrderButton = false;
-                        this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-                        this.billToshow = emptyBill()
-                        this.client = null
-                        this.router.navigateByUrl("/tabs/tables")
-                        showToast(this.toastCtrl, response.message, 3000)
-                      }
-                    }),
-                    error: (error => {
-                      if(error){
-                        showToast(this.toastCtrl, error.error.message, 3000)
-                        console.log(error)
-                      }
-                    }),
-                    complete: () => console.log('complete')
-              })
-                }),
-                error: (error => {
-                  this.disableOrderButton = false
-                  this.isLoading = false
-                  showToast(this.toastCtrl, error.message, 3000)
-                }),
-                complete: () => console.log('complete')
-            })
+            this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
+              next: (response => {
+                if(response && response.bill.status === 'done'){
+                  this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                  this.billToshow = emptyBill()
+                  this.client = null
+                  this.router.navigateByUrl("/tabs/tables")
+                  this.disableOrderButton = false;
+                  this.tableSrv.saveBillToCloud(response.bill)
+                  showToast(this.toastCtrl, response.message, 3000)
+                }
+              }),
+              error: (error => {
+                if(error){
+                  showToast(this.toastCtrl, error.error.message, 3000)
+                  console.log(error)
+                }
+              }),
+              complete: () => console.log('complete')
+        })
       }
-    } else {
-      this.actionSheet.chosseInOrOut().subscribe(async (res) => {
-        this.billToshow.inOrOut = res.inOrOut
-        this.trimite(false, false)
-            const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
-              if(paymentInfo){
-                this.disableOrderButton = true;
-                this.billToshow.payment = paymentInfo
-                this.billToshow.cif = paymentInfo.cif;
-                const jsonBill = JSON.stringify(this.billToshow)
-                this.webRTC.printBill(jsonBill).subscribe({
-                    next: (response => {
-                      this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
-                        next: (response => {
-                          console.log(response.bill)
-                          console.log(this.tableNumber, this.billIndex)
-                          if(response && response.bill.status === 'done'){
-                            this.disableOrderButton = false;
-                            this.tableSrv.removeBill(this.tableNumber, this.billIndex)
-                            this.billToshow = emptyBill()
-                            this.client = null
-                            this.router.navigateByUrl("/tabs/tables")
-                            showToast(this.toastCtrl, response.message, 3000)
-                          }
-                        }),
-                        error: (error => {
-                          if(error){
-                            showToast(this.toastCtrl, error.error.message, 3000)
-                            console.log(error)
-                          }
-                        }),
-                        complete: () => console.log('complete')
-                  })
-                    }),
-                    error: (error => {
-                      this.disableOrderButton = false
-                      this.isLoading = false
-                      showToast(this.toastCtrl, error.message, 3000)
-                    }),
-                    complete: () => console.log('complete')
-                })
-          }
-      })
-    }
-  }
+      }
+    })
+}
+
 
 
   async addCustomer(clientMode: boolean){
@@ -634,7 +543,7 @@ disableBrakeButton(){
       this.billToshow.clientInfo = this.client
       this.billToshow.name = this.client.name
       this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-      this.trimite(false, false)
+      this.sendOrder(false, false).subscribe()
     }
     if(clientInfo.message === "voucher"){
       this.billToshow.voucher = clientInfo.data

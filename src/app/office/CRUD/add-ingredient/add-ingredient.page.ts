@@ -84,7 +84,6 @@ getIngToedit(){
   if(ing.length !== 0){
     this.title = 'Modifică ingredient'
     this.ing = ing
-    console.log(this.ing)
   }
 }
 
@@ -100,7 +99,6 @@ saveIng(){
       price: this.ingredientForm.value.price,
       tvaPrice: this.ingredientForm.value.price / ((this.ingredientForm.value.tva / 100) +1)
     }
-    console.log(ingTosave.tvaPrice)
     this.modalCtr.dismiss(ingTosave)
   }
 }

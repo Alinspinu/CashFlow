@@ -1,7 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
 
-    <ion-title class="ion-text-center">{{mode ? 'Înregistrare' : 'Adaugă Furnizor!'}}</ion-title>
+    <ion-title class="ion-text-center" *ngIf="!editMode">{{mode ? 'Înregistrare' : 'Adaugă Furnizor!'}}</ion-title>
+    <ion-title class="ion-text-center" *ngIf="editMode">Editează furnizorul</ion-title>
 
   </ion-toolbar>
 </ion-header>
@@ -9,7 +10,7 @@
 <ion-content [fullscreen]="true">
   <ion-title  class="ion-margin ion-text-center">Detalii Companie</ion-title>
   <ion-item lines="none">
-    <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplierInDb($event)"></ion-searchbar>
+    <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplierInDb($event)" *ngIf="!editMode"></ion-searchbar>
   </ion-item>
   <ion-list>
     <ion-item *ngFor="let suplier of supliers; let i = index" class="fur-name" (click)="selectSuplier(suplier)">
@@ -42,6 +43,9 @@
                   </ion-item>
                   <ion-item  lines="none" class="input">
                     <ion-input mode="ios" type="text" label="Cont" labelPlacement="floating" formControlName="account" placeholder="IBAN..."></ion-input>
+                  </ion-item>
+                  <ion-item  lines="none" class="input" *ngIf="editMode">
+                    <ion-input mode="ios" type="text" label="Sold" labelPlacement="floating" formControlName="sold" placeholder="Sold"></ion-input>
                   </ion-item>
                   <ion-radio-group value="start" formControlName="VAT">
                     <ion-item lines="none" class="input">
@@ -105,5 +109,6 @@
       </ion-content>
 
         <ion-footer [translucent]="false">
-            <ion-button size="large" color="primary" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid">{{mode ? 'Înregistrare': 'Adaugă Furnizor'}}</ion-button>
+            <ion-button size="large" color="primary" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid" *ngIf="!editMode">{{mode ? 'Înregistrare': 'Adaugă Furnizor'}}</ion-button>
+            <ion-button size="large" color="primary" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid" *ngIf="editMode">EDITEAZĂ FURNIZORUL</ion-button>
 </ion-footer>

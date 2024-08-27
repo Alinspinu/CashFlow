@@ -42,9 +42,13 @@ export class CashbackPage implements OnInit {
   }
 
   useCashBack(){
-    if(this.cashBackForm.valid){
+    const clientTotalCashBack = this.data.cashBack
+    const orderTotal = this.data.total
+    const formValue = this.cashBackForm.value.val
+    if(this.cashBackForm.valid && clientTotalCashBack >= formValue && orderTotal >= formValue){
       this.modalCtrl.dismiss(this.cashBackForm.value.val)
-
+  } else {
+    showToast(this.toastCtrl, 'Valoarea nu poate fi mai mare decât banii adunați sau decât nota de plată!', 3000)
   }
 }
 

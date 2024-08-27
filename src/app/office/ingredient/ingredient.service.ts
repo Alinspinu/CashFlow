@@ -27,6 +27,12 @@ export class IngredientService{
     this.ingredientsSend$ =  this.ingredientsState.asObservable();
   }
 
+  addIngredinet(ing: InvIngredient){
+    this.ingredients.push(ing)
+    this.ingredientsState.next([...this.ingredients])
+  }
+
+
   getIngredients(loc: string){
     this.dbService.getData('data', 1).subscribe((data: any) => {
       if(data){

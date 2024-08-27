@@ -1,12 +1,13 @@
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Reducere</ion-title>
-    <ion-buttons slot="start">
-      <ion-button (click)="close()">
-        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 22px;"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-button (click)="close()" color="medium" style="height: 65px; width: 80px;" slot="start">
+      <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 22px;"></ion-icon>
+    </ion-button>
+    <div class="title-wrapper">
+      <div class="title">ADAUGĂ REDUCERE LA PRODUSE</div>
+    </div>
+    <!-- <ion-title class="ion-text-center">Reducere</ion-title> -->
   </ion-toolbar>
 </ion-header>
 
@@ -25,7 +26,7 @@
     <ion-label slot="start">{{discount.name}}</ion-label>
     <ion-buttons slot="end">
         <ion-button (click)="deleteDiscount(i)">
-          <ion-icon src="'../../../../../assets/icon/trash-outline.svg" color="danger"></ion-icon>
+          <ion-icon src="'../../../../../assets/icon/trash-outline.svg" color="medium"></ion-icon>
         </ion-button>
     </ion-buttons>
     <ion-label slot="end">{{discount.precent}} %</ion-label>
@@ -35,6 +36,6 @@
 
 
   <ion-footer>
-    <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">ADAUGĂ</ion-button>
+    <ion-button color="medium" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">ADAUGĂ</ion-button>
   </ion-footer>
 

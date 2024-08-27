@@ -7,6 +7,7 @@ import { IngredientsPage } from './ingredients/ingredients.page';
 import { ProductsPage } from './products/products.page';
 import { FinancePage } from './finance/finance.page';
 import { CashRegisterPage } from '../office/cash-register/cash-register.page';
+import { InventaryPage } from './inventary/inventary.page';
 
 
 
@@ -15,7 +16,17 @@ import { CashRegisterPage } from '../office/cash-register/cash-register.page';
   templateUrl: 'reports.page.html',
   styleUrls: ['reports.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule, CashPage, IngredientsPage, ProductsPage, FinancePage, CashRegisterPage],
+  imports: [
+    IonicModule,
+    FormsModule,
+    CommonModule,
+    CashPage,
+    IngredientsPage,
+    ProductsPage,
+    FinancePage,
+    CashRegisterPage,
+    InventaryPage
+  ],
 })
 
 
@@ -32,7 +43,8 @@ export class ReportsPage {
     products: boolean
     cashRegister: boolean
     finance: boolean
-  } = {sales: true, products: false, cashRegister: false, menu: false, finance: false}
+    inventary: boolean
+  } = {sales: true, products: false, cashRegister: false, menu: false, finance: false, inventary: false}
 
   constructor() {
     this.screenWidth = window.innerWidth
@@ -43,6 +55,7 @@ export class ReportsPage {
     this.show.products = false
     this.show.cashRegister = false
     this.show.finance = false
+    this.show.inventary = false
   }
 
   products(){
@@ -50,6 +63,7 @@ export class ReportsPage {
     this.show.sales = false
     this.show.cashRegister = false
     this.show.finance = false
+    this.show.inventary = false
   }
 
   register(){
@@ -57,6 +71,7 @@ export class ReportsPage {
     this.show.products = false
     this.show.sales = false
     this.show.finance = false
+    this.show.inventary = false
   }
 
   finance(){
@@ -64,6 +79,14 @@ export class ReportsPage {
     this.show.products = false
     this.show.sales = false
     this.show.finance = true
+    this.show.inventary = false
+  }
+  inventary(){
+    this.show.cashRegister = false
+    this.show.products = false
+    this.show.sales = false
+    this.show.finance = false
+    this.show.inventary = true
   }
 
   hideMenu(){

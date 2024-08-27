@@ -187,7 +187,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   }
 
   searchIngredient(ev: any){
-    const searchQuery = ev.detail.value
+    const searchQuery = ev.detail.value.toLowerCase()
     if(!this.ingPage){
     this.ingredients = this.dbIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(searchQuery))
     if(searchQuery === ''){
@@ -234,6 +234,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
    const ing = await this.actionSrv.openModal(AddIngredientPage, [], false)
    if(ing){
      this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
+      this.ingSrv.addIngredinet(response.ing)
       showToast(this.toastCtrl, response.message, 4000)
      })
    }

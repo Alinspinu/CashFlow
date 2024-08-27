@@ -14,28 +14,35 @@ export class CustomerCheckService{
     private http: HttpClient
   ){}
 
+  private createBasicAuthHeader(): HttpHeaders {
+    const credentials = btoa(`${environment.API_USER}:${environment.API_PASSWORD}`);
+    return new HttpHeaders({
+      'Authorization': `Basic ${credentials}`
+    });
+  }
+
   searchCustomer(customerId: string, locatie: string){
-    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    const headers = this.createBasicAuthHeader()
     return this.http.get<{message: string, customer: any}>(`${environment.BASE_URL}users/customer?id=${customerId}&loc=${locatie}`,{headers})
   }
 
   createCustomer(name: string, email: string, cardIndex: number, locatie: string){
-    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    const headers = this.createBasicAuthHeader()
     return this.http.post<{message: string, customer: any}>(`${environment.BASE_URL}users/customer`, {name: name, email: email, cardIndex: cardIndex, loc: locatie},{headers})
   }
 
   saveVoucher(code: string, value: number){
-    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    const headers = this.createBasicAuthHeader()
     return this.http.post<{message: string}>(`${environment.BASE_URL}pay/add-voucher`, {code: code, value: value}, {headers})
   }
 
   verfyVoucher(code: string){
-    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    const headers = this.createBasicAuthHeader()
     return this.http.post<{message: string, voucher: any}>(`${environment.BASE_URL}pay/verify-voucher`, {code: code}, {headers})
   }
 
   useVoucher(id: string){
-    const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+    const headers = this.createBasicAuthHeader()
     return this.http.post<{message: string}>(`${environment.BASE_URL}pay/use-voucher`, {id: id}, {headers})
   }
 }

@@ -25,7 +25,7 @@
             <div *ngFor="let option of options; let i = index;">
               <ion-item  lines="none" class="input" *ngIf="option.available">
                 <ion-radio [value]="option" justify="start" labelPlacement="end">{{option.name+ ' - ' + option.price + ' Lei'}}</ion-radio>
-                <ion-label class="badge" slot="end">{{option.product.dep === "marfa" ? option.ings[0].ing.qty: ''}}</ion-label>
+                <!-- <ion-label class="badge" slot="end">{{option.product.dep === "marfa" ? option.ings[0].ing.qty: ''}}</ion-label> -->
               </ion-item>
             </div>
           </ion-radio-group>

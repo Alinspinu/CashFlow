@@ -62,6 +62,9 @@ export class AddEmployeeDataPage implements OnInit {
       fix: new FormControl(null, {
         updateOn: 'change',
       }),
+      status: new FormControl(null, {
+        updateOn: 'change',
+      }),
     });
     console.log(this.data)
     if(this.data){
@@ -76,12 +79,14 @@ export class AddEmployeeDataPage implements OnInit {
       }
       this.form.get('salary')?.setValue(this.data.salary.inHeand);
       this.form.get('onPaper')?.setValue(this.data.salary.onPaper.salary);
+      this.form.get('status')?.setValue(this.data.active);
       this.form.get('fix')?.setValue(this.data.salary.fix ? this.data.salary.fix : false );
     }
   }
 
   onSubmit(){
     const dataToSend = {
+      active: this.form.value.status,
       fullName: this.form.value.fullName,
       cnp: this.form.value.cnp,
       ciSerial: this.form.value.ciSerial,

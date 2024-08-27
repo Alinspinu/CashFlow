@@ -27,7 +27,9 @@
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
-              'aj-bucatar' : user.employee.position === 'Ajutor bucatar'}">
+              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'tes' : user.employee.position === 'Supervizor'
+            }">
               <span class="name">{{user.employee.fullName}}</span>
               <span class="position">({{user.employee.position}})</span>
             </div>
@@ -41,7 +43,8 @@
               'ospatar' : getPosition(day.users, user._id) === 'Ospatar',
               'bucatar' : getPosition(day.users, user._id) === 'Bucatar',
               'aj-bucatar' : getPosition(day.users, user._id) === 'Ajutor bucatar',
-              'liber' : getPosition(day.users, user._id) === 'LiBER'}">
+              'liber' : getPosition(day.users, user._id) === 'LiBER',
+              'tes' : user.employee.position === 'Supervizor'}">
               {{findUser(day.users, user._id)}}
             </div>
           </ion-col>

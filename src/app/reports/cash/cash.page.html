@@ -1,6 +1,8 @@
 
 
-<app-logo-page *ngIf="isLoading"></app-logo-page>
+<div *ngIf="isLoading" class="spinner-content">
+  <app-spinner class="spinner"></app-spinner>
+</div>
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
 <ion-grid>
 <ion-row>

@@ -11,16 +11,23 @@
       font-weight: 500;
     }
     .nr-doc{
-      flex: 10%;
-    }
-    #data{
       flex: 20%;
+    }
+    .date{
+      flex: 20%;
+      // border: 0.5px solid var(--ion-color-medium);
+      border-radius: 8px;
+      ion-input{
+        display: none !important;
+      }
     }
 }
 
 // .claculator{
 //   color: var(--ion-icon-primary);
 // }
+
+
 
 ion-title{
   font-family: NoirProReg !important;
@@ -120,13 +127,6 @@ span{
     span{
       flex: 12%;
     }
-    // .discount-button{
-    //   margin-right: 8px;
-    //   flex: 12%;
-    //   .precent{
-    //     margin-left: 8px;
-    //   }
-    // }
 }
 
 .footer{

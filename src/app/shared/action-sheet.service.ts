@@ -31,6 +31,11 @@ import { TogglePage } from '../office/shedule/toggle/toggle.page';
 import { TogglePontPage } from '../office/pontaj/togglePont/toggle-pont.page';
 import { UsersViewPage } from '../modals/users-view/users-view.page';
 import { DepViewPage } from '../modals/dep-view/dep-view.page';
+import { PaymentsPage } from '../office/pontaj/payments/payments.page';
+import { HoursPage } from '../office/pontaj/hours/hours.page';
+import { SelectInvPage } from '../reports/inventary/select-inv/select-inv.page';
+import { RecordModalPage } from '../office/supliers/suplier/record-modal/record-modal.page';
+import { SelectDataPage } from '../modals/select-data/select-data.page';
 
 
 
@@ -50,15 +55,33 @@ export class ActionSheetService {
                typeof PaymentPage |
                typeof SuplierPage |
                typeof AddEmployeeDataPage |
+               typeof HoursPage |
                typeof ProductIngredientPage |
+               typeof PaymentsPage |
                typeof AddToInventaryPage,
     options: any,
-    sub: boolean
+    sub: boolean,
                ) {
     const modal = await this.modalCtrl.create({
       component: component,
-      componentProps: {options: options, sub: sub},
+      componentProps: { options, sub},
       cssClass: 'crud-modal'
+    });
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    return data
+  }
+
+
+  async openSelect(
+    component: typeof SelectDataPage,
+    options: any,
+    mode: string,
+               ) {
+    const modal = await this.modalCtrl.create({
+      component: component,
+      componentProps: { options, mode},
+      cssClass: 'billModal'
     });
     modal.present();
     const { data } = await modal.onDidDismiss();
@@ -72,6 +95,8 @@ export class ActionSheetService {
                typeof OrderViewPage |
                typeof OrderAppViewPage |
                typeof UsersViewPage |
+               typeof AddToInventaryPage |
+               typeof SelectInvPage |
                typeof CashbackPage,
     options: any,
     sub: boolean
@@ -105,6 +130,8 @@ export class ActionSheetService {
                typeof DatePickerPage |
                typeof UsersViewPage |
                typeof DepViewPage |
+               typeof SelectInvPage |
+               typeof RecordModalPage |
                typeof DelProdViewPage,
     options: any
   ){
@@ -143,8 +170,8 @@ export class ActionSheetService {
                 ) {
     const modal = await this.modalCtrl.create({
       component: component,
-      backdropDismiss: false,
-      keyboardClose: false,
+      // backdropDismiss: false,
+      // keyboardClose: true,
     });
 
     modal.present();
@@ -159,7 +186,7 @@ export class ActionSheetService {
 
   async pickDiscountValue() {
     const alert = await this.alertController.create({
-      header: 'Procent Discount %',
+      header: 'PROCENT REDUCERE %',
       buttons: [
         {
           text: 'Renunță',
@@ -169,6 +196,7 @@ export class ActionSheetService {
         {
           text: 'Adaugă',
           role: 'confirm',
+          cssClass: 'confirm'
         },
       ],
       inputs:[
@@ -240,6 +268,7 @@ export class ActionSheetService {
         {
           text: 'Confirm',
           role: 'confirm',
+          cssClass: 'confirm'
         },
       ],
       cssClass: "reprint-alert"
@@ -266,11 +295,13 @@ export class ActionSheetService {
         },
         {
           text: 'FSICAL',
-          role: 'fiscal'
+          role: 'fiscal',
+          cssClass: 'confirm'
         },
         {
           text: 'NEFISCAL',
           role: 'nefiscal',
+          cssClass: 'confirm'
         },
       ],
       cssClass: "reprint-alert"
@@ -284,7 +315,6 @@ export class ActionSheetService {
 async reasonAlert(title: string, message: string, label: string){
   const alert = await this.alertController.create({
     header: title,
-    message: message,
     buttons: [
       {
         text: 'RENUNȚĂ',
@@ -294,6 +324,7 @@ async reasonAlert(title: string, message: string, label: string){
       {
         text: 'CONFIRMĂ',
         role: 'confirm',
+        cssClass: 'confirm'
       },
     ],
     inputs: [
@@ -343,8 +374,7 @@ async reasonAlert(title: string, message: string, label: string){
 
 async protocolAlert(){
   const alert = await this.alertController.create({
-    header: 'PROTOCOL',
-    message: 'Alege responsabilul de protocol',
+    header: 'ALEGE RESPONSABILUL DE PROTOCOL',
     buttons: [
       {
         text: 'RENUNȚĂ',
@@ -354,6 +384,7 @@ async protocolAlert(){
       {
         text: 'CONFIRMĂ',
         role: 'confirm',
+        cssClass: 'confirm'
       },
     ],
     inputs:[
@@ -391,8 +422,7 @@ async protocolAlert(){
 
 async detailsAlert(){
   const alert = await this.alertController.create({
-    header: 'ALT MOTIV',
-    message: 'Scrie motivul pentru care ștergi produsul!',
+    header: 'SCRIE MOTIVUL',
     buttons: [
       {
         text: 'RENUNȚĂ',
@@ -402,6 +432,7 @@ async detailsAlert(){
       {
         text: 'CONFIRMĂ',
         role: 'confirm',
+        cssClass: 'confirm'
       },
     ],
     inputs:[
@@ -482,7 +513,6 @@ async detailsAlert(){
   });
     const alert = await this.alertController.create({
       header: 'Unește comenzile',
-      message: `Alege comenzile`,
       buttons: [
         {
           text: 'RENUNȚĂ',
@@ -492,6 +522,7 @@ async detailsAlert(){
         {
           text: 'UNEȘTE',
           role: 'confirm',
+          cssClass: 'confirm'
         },
       ],
       inputs: inputs,
@@ -510,7 +541,6 @@ async detailsAlert(){
   async deleteBill() {
     const alert = await this.alertController.create({
       header: 'ȘTERGE COMANDA',
-      message: `Esi sigur?`,
       buttons: [
         {
           text: 'RENUNTA',
@@ -520,6 +550,7 @@ async detailsAlert(){
         {
           text: 'CONFIRMA',
           role: 'confirm',
+          cssClass: 'confirm'
         },
       ],
       inputs: [
@@ -560,8 +591,7 @@ async detailsAlert(){
       };
   });
     const alert = await this.alertController.create({
-      header: 'SEPARĂ PRODUSE',
-      message: `Alege cantitatea`,
+      header: 'ALEGE CANTITATEA',
       buttons: [
         {
           text: 'RENUNȚA',
@@ -571,6 +601,7 @@ async detailsAlert(){
         {
           text: 'ALEGE',
           role: 'confirm',
+          cssClass: 'confirm'
         },
 
       ],
@@ -608,6 +639,7 @@ async detailsAlert(){
         {
           text: 'CONFIRM',
           role: 'confirm',
+          cssClass: 'confirm'
         },
       ],
       inputs: inputs,
@@ -644,6 +676,36 @@ async detailsAlert(){
       ],
       inputs: inputs,
       cssClass: 'extraAlert'
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm"){
+      return result.data.values
+    } else {
+      return null
+    }
+  }
+
+  async chooseCategory(options: {name: string, _id: string}[]) {
+    const inputs = options.map(option => {
+      return {
+          label: option.name,
+          type: 'radio' as const,
+          value: option,
+          cssClass: 'option'
+      };
+  });
+    const alert = await this.alertController.create({
+      header: 'Alege',
+      message: `Alege o opțiune`,
+      buttons: [
+        {
+          text: 'Alege',
+          role: 'confirm',
+        },
+      ],
+      inputs: inputs,
+      cssClass: ['reprint-alert', 'suplier-alert']
     });
     await alert.present();
     const result = await alert.onDidDismiss();
@@ -694,11 +756,11 @@ async detailsAlert(){
   chosseInOrOut(): Observable<any> {
     return new Observable<any>((observer) => {
       this.alertController.create({
-        header: 'ALEGE LOC',
-        message: `UNDE SERVIM?`,
+        header: 'UNDE SERVIM?',
         buttons: [
           {
             text: 'TERASĂ',
+            cssClass: 'cancel',
             handler: () => {
               observer.next({ inOrOut: 'TERASA' });
               observer.complete();
@@ -706,6 +768,7 @@ async detailsAlert(){
           },
           {
             text: 'INTERIOR',
+            cssClass: 'confirm',
             handler: () => {
               observer.next({ inOrOut: 'INTERIOR' });
               observer.complete();

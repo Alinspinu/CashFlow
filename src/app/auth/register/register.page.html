@@ -69,7 +69,7 @@
 </ion-content>
 
 <ion-footer>
-    <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block" [disabled]="!enableRegister">
+    <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block" [disabled]="!form.valid">
       <ion-label>
        Înregistrează-te
       </ion-label>

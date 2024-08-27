@@ -1,19 +1,102 @@
+ion-content{
+  --background: #fbf0e7 !important;
+}
+
+.main-toolbar{
+  --background: #fbf0e7 !important;
+  --padding-top:12px;
+  padding: 12px;
+}
+
+.second-toolbar{
+  --background: #fbf0e7 !important;
+  padding: 0 12px;
+}
+
+ion-footer{
+  background-color: #fbf0e7 !important;
+  height: 250px;
+
+  ion-button{
+    margin-top: 1rem;
+  }
+}
+
+.header{
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  font-family: NoirProReg !important;
+  font-size: 20px;
+  div{
+    background-color: var(--ion-color-medium);
+    width: 100%;
+    height: 100%;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .value{
+      font-family: NoirProSemi !important;
+      margin-left: 8px
+    }
+  }
+  .client{
+    flex: 63%;
+    margin: 0 28px 0 5px;
+    .name{
+      overflow: hidden;
+      margin-left: 12px;
+      flex: 40%
+    }
+    .email{
+      overflow: hidden;
+      flex: 60%;
+    }
+    div{
+      .value{
+        font-family: NoirProSemi !important;
+        margin-left: 8px
+      }
+    }
+  }
+  .masa{
+    justify-content: center;
+    flex: 12%;
+  }
+  .cashBack{
+    flex: 25%;
+    justify-content: center;
+  }
+}
 
 
-span, ion-title, ion-card-subtitle, ion-label, ion-button{
+.navigation-buttons{
+  width: 300px;
+}
+
+span, ion-title, ion-card-subtitle, ion-label, ion-button, div{
   font-family: NoirProSemi, sans-serif !important;
 }
 
-.dynamic-header-active {
-  background-color: var(--ion-color-danger);
-  --background: var(--ion-color-danger);
-  --color:white;
+
+.title-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.masa{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  color: #fff;
+  font-size: 20px;
+  width: 180px !important;
+  height: 60px;
 }
 
-.accept-button-wrapper{
-  display: flex;
-  flex-direction: row;
-}
 
 .title{
   text-transform: uppercase;
@@ -21,28 +104,13 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
   font-size: 28px;
   color: var(--ion-color-dark);
 }
-.small-title{
-  text-transform: uppercase;
-  text-align: center;
-  font-size: 20px;
-  color: var(--ion-color-dark);
-}
-
-.product-title{
-  text-transform: uppercase;
-  text-align: center;
-  font-size: 18px;
-  color: var(--ion-color-dark);
-}
-
 
 .back-button{
-  --background: var(--ion-color-primary);
-  height: 70px;
+  --background: var(--ion-color-medium);
+  height: 60px;
   width: 100px;
   --color: white;
 }
-
 
 
 .client-button{
@@ -50,102 +118,59 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
 }
 
 
-.input{
-  border: 0.5px solid var(--ion-color-medium);
-  border-radius: 8px;
-  margin: 1rem 0 0.5rem 0.5rem;
-}
-
 .contents-container{
   display: flex;
   flex-direction: row;
   height: 100vh;
+  .menu-content{
+    flex: 45%;
+  }
+  .bill-content{
+    flex: 55%;
+  }
 }
 
 
+
+ion-icon{
+  font-size: 28px;
+  margin-right: 12px;
+}
 
 .icon{
-  font-size: 24px;
-
-}
-.bill{
-  width: 100%;
+  font-size: 28px !important;
+  margin: none !important;
 }
 
-.bill-header{
-  font-size: 23px;
+
+.add-button{
+  --background: var(--ion-color-light);
+  height: 56px;
+  margin: 0 12px 0 12px;
+  font-size: 16px;
+  .add-icon{
+    color: var(--ion-color-medium);
+    font-size: 24px;
+  }
 }
+
 
 .horizontal-scroll {
   display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  white-space: nowrap; /* Prevent content from wrapping to the next line */
-  scrollbar-width: thin; /* Optional: Customize scrollbar width (Firefox) */
-  scrollbar-color: #ccc #f0f0f0; /* Optional: Customize scrollbar colors (Firefox) */
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f0f0f0;
 }
 
-
-// #name{
-//  flex: 60%!important;
-// }
 
 .active-button {
-  background-color: var(--ion-color-primary-shade); /* Change to your desired color */
-  --background: var(--ion-color-primary-shade); /* Change to your desired color */
-  color: #fff; /* Change to your desired text color */
+  background-color: var(--ion-color-medium);
+  --background: var(--ion-color-medium);
+  color: #fff;
+  text-transform: uppercase !important;
 }
 
-  .product-item{
-  display: flex;
-  flex-direction: row;
-  cursor: pointer;
-  .prod-name{
-    flex: 50%;
-    #p-name{
-      font-family: NoirProSemi !important;
-    }
-    .toppings-wrapper{
-      margin-left: 10%;
-      span{
-        font-weight: 400;
-        font-size: 14px;
-        font-family: NoirProReg !important;
-      }
-    }
-  }
-  .price-wrapper{
-    flex: 20%;
-    text-align: start;
-    display: flex;
-    flex-direction: column;
-    .prod-price{
-
-    }
-    .prod-discount{
-      font-size: 12px;
-      color: red;
-      text-align: end;
-    }
-  }
-  .prod-qty{
-    flex: 20%;
-    text-align: center;
-  }
-
-  .prod-total{
-    flex: 20%;
-    text-align: end;
-  }
-  .trash{
-    height: 30px;
-  }
-
-  }
-
-.grey{
-  --background: var(--ion-color-medium-tint);
-  border: none!important;
-}
 
 .client-wrapper{
   display: flex;
@@ -154,22 +179,14 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
   justify-content: space-between;
   text-align: center;
   .client-name{
-    // width: 250px;
     flex: 30%;
     font-size: 18px !important;
   }
   .client-email{
-    // width: 250px;
     flex: 30%;
     font-size: 18px !important;
   }
-  .client-phone{
-    // width: 250px;
-    flex: 20%;
-    font-size: 18px !important;
-  }
   .client-cashBack{
-    // width: 300px;
     margin-left: auto;
     flex: 20%;
     font-size: 18px !important;
@@ -192,52 +209,4 @@ span, ion-title, ion-card-subtitle, ion-label, ion-button{
 
 
 
-.bill{
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-}
 
-
-.red-text{
-  font-size: 22;
-}
-.red-lei{
-  font-size: 20;
-}
-
-.total-lei{
-  font-size: 24px;
-}
-
-.total-text{
-  font-size: 28px;
-}
-
-
-
-
-.badge-wrapper{
-  display: flex;
-  flex-direction: row;
-  width: 100px;
-    position: absolute;
-    right: 75%;
-    bottom: 80%;
-    z-index: 99;
-}
-
-  .badge{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--ion-color-danger);
-    color: var(--ion-color-light);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-    border-radius: 50%;
-    height: 35px;
-    width: 35px;
-    font-size: 16px;
-    text-align: center;
-    margin-left: auto;
-  }

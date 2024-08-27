@@ -83,11 +83,11 @@ export class RegisterPage implements OnInit {
         passwordControl.updateValueAndValidity();
         usernameControl.updateValueAndValidity();
       }
-      if(this.form.valid && this.checkedTerms){
-        this.enableRegister = true
-      } else {
-        this.enableRegister = false
-      }
+      // if(this.form.valid){
+      //   this.enableRegister = true
+      // } else {
+      //   this.enableRegister = false
+      // }
     }
 
 

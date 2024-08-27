@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="ion-text-center">Adaugă Categorie</ion-title>
+    <ion-title class="ion-text-center"> {{editMde ? 'Editează Categoria' : 'Araugă Categoria'}}</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">
         Închide
@@ -8,7 +8,7 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="saveCategory()" color="primary" [disabled]="!catForm.valid">
-        Salvează
+        {{editMde ? 'Editează' : 'Salvează'}}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -24,6 +24,7 @@
           </ion-item>
           <ion-item lines="none" class="input">
             <ion-input  mode="ios" type="number" label="Poziție" labelPlacement="floating" fill="outline" formControlName="order"></ion-input>
+            <ion-input  type="text" style="display: none;" formControlName="catId"></ion-input>
           </ion-item>
         <ion-item lines="none" class="input" *ngIf="!newMainCat">
           <ion-select label="Categorie Parinte" formControlName="mainCat">
@@ -39,7 +40,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button size="medium" expand="block" (click)="saveCategory()" [disabled]="!catForm.valid">
-    Salvează Categoria
+  <ion-button size="large" expand="block" (click)="saveCategory()" [disabled]="!catForm.valid">
+   {{editMde ? 'Editează Categoria' : 'Salvează Categoria'}}
   </ion-button>
 </ion-footer>

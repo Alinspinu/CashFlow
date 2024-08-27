@@ -14,13 +14,13 @@
     <ion-row style="margin-bottom:40px;">
       <ion-col size-lg="6">
         <ion-item lines="none">
-          <ion-searchbar mode="ios" [(ngModel)]="userSearch"  placeholder="Caută Utilizatori"  (ionInput)="searchProduct($event)">
+          <ion-searchbar mode="ios" [(ngModel)]="userSearch"  placeholder="Caută Utilizatori"  (ionInput)="searchUsers($event)">
           </ion-searchbar>
         </ion-item>
       </ion-col>
       <ion-col size-lg="3" size-md="6">
         <ion-item lines="none" class="input">
-          <ion-select placeholder="Alege Utilizatori" (ionChange)="onSelectUser($event)">
+          <ion-select placeholder="Alege Utilizatori" (ionChange)="onSelectUsers($event)">
             <ion-select-option value="">Toți</ion-select-option>
             <ion-select-option value="users">Clienți</ion-select-option>
             <ion-select-option value="employees">Angajați</ion-select-option>
@@ -28,13 +28,13 @@
         </ion-item>
         </ion-col>
     </ion-row>
-    <ion-row class="spinner-container" *ngIf="!users.length">
+    <ion-row class="spinner-container" *ngIf="users.length === 1">
       <ion-col size="6" offset="3">
         <app-spinner></app-spinner>
       </ion-col>
     </ion-row>
-    <ion-row *ngFor="let user of users; let i = index;">
-      <ion-col>
+    <ion-row *ngFor="let user of localUsers; let i = index;">
+      <ion-col *ngIf="users.length > 1">
         <ion-item lines="none" class="content-container input user" (click)="goUserPage(user._id)">
           <span class="index">{{i+1}}.</span>
           <ion-label class="name">{{user.name}}</ion-label>

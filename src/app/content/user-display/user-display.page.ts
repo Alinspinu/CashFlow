@@ -20,7 +20,7 @@ import { BillPage } from './bill/bill.page';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, TipsPage, MeniuPage, BillPage]
 })
-export class UserDisplayPage implements OnInit, AfterViewInit {
+export class UserDisplayPage implements OnInit {
 
   bill!: Bill | null
   hideBill: boolean = false
@@ -37,14 +37,11 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
     this.getInvite()
   }
 
-  ngAfterViewInit(): void {
-
-  }
-
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
       if(response){
         this.bill = JSON.parse(response)
+        console.log(this.bill)
       }
       if(response === null){
         this.bill = null
@@ -55,6 +52,7 @@ export class UserDisplayPage implements OnInit, AfterViewInit {
 
   getInvite(){
     this.webRTC.getInviteToTip().subscribe(response => {
+      console.log(response)
       if(response === 'invite'){
         this.hideBill = true
       } else {

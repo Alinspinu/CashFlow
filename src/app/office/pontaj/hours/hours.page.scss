@@ -1,0 +1,27 @@
+
+
+.container{
+  height: 80vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  div{
+    font-family: NoirProSemi !important;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    .period{
+      font-size: 50px;
+      margin-bottom: 2rem;
+    }
+    .hour{
+      font-size: 100px;
+    }
+    .cash{
+      font-size: 70px;
+    }
+  }
+}

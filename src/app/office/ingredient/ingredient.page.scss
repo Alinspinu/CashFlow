@@ -125,3 +125,9 @@ app-spinner{
   flex-direction: column;
   justify-content: center;
 }
+
+@media(max-width: 500px){
+  .name, .gestiune{
+    font-size: 13px !important;
+  }
+}

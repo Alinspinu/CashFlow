@@ -11,6 +11,26 @@
     <ion-col [size]="menuColSize">
       <ion-grid>
         <ion-row *ngIf="mainCats" class="main-cat-row">
+          <div class="header" *ngIf="showHeader">
+            <div class="masa">
+              <span class="label">Masa:</span>
+              <span class="value">{{bill.masaRest.index}}</span>
+            </div>
+            <div class="client" *ngIf="bill.clientInfo.name.length">
+              <div class="name">
+                <span class="label">Nume:</span>
+                <span class="value">{{bill.clientInfo.name}}</span>
+              </div>
+              <div class="email">
+                <span class="label">E-mail:</span>
+                <span class="value">{{bill.clientInfo.email}}</span>
+              </div>
+            </div>
+            <div class="cashBack" *ngIf="bill.clientInfo.name.length">
+              <span class="label">CashBack:</span>
+              <span class="value">{{bill.clientInfo.cashBack}} Lei</span>
+            </div>
+          </div>
           <ion-col size="3"   *ngFor="let mainCat of cats; let i= index;">
             <div class="main-cat" (click)="selectMainCat(mainCat.name, i)" [ngClass]="{'selected': i === 0}">
               <img [src]=" i === 0 ? mainCat.urlW : mainCat.url" color="primary">
@@ -32,7 +52,7 @@
             </ion-col>
             <ion-col size="9">
                 <div class="products-content" #scrollableElement>
-                  <ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" class="scroll-products" [scrollEvents]="true"  >
+                  <ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" class="scroll-products" [scrollEvents]="true">
                         <div class="category-product" *ngFor="let product of productsToShow" #myCard [attr.data-cat]="product.category._id" [attr.data-main]="product.mainCat" [id]="product._id">
                           <ion-card class="product-card" >
                             <ion-card-content class="ion-no-padding">

@@ -1,10 +1,35 @@
+
+ion-content, ion-toolbar{
+  --background: #fbf0e7 !important;
+}
+
+
+.title-wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.title{
+  font-family: NoirProSemi !important;
+  text-align: center;
+  background-color: black;
+  padding: 12px;
+  color: white;
+  font-size: 32px;
+  margin-top: 12px;
+}
+
 .input{
-  border: 1px solid var(--ion-color-medium);
-  border-radius: 8px;
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1rem 0 0.5rem 0.5rem;
   ion-input{
+    font-family: NoirProSemi !important;
     height: 130px;
     font-size: 32px;
+    --highlight-color-focused: black !important;
   }
 }
 

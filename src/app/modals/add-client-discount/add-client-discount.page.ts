@@ -33,6 +33,70 @@ export class AddClientDiscountPage implements OnInit {
   deletedDiscounts: any [] = []
   categories: any [] = []
 
+
+  baseDiscounts: {
+    general: number,
+    category: {
+      cat: string,
+      name: string,
+      precent: number
+    }[]
+  } = {
+    general: 50,
+    category: [
+      {
+        cat: "64c8071c378605eb04628210",
+        name: "BLACK COFFEE",
+        precent: 100
+      },
+      {
+        cat: "64c8074e378605eb04628212",
+        name: "WITH MILK",
+        precent: 100
+      },
+      {
+        cat: "64be6a3e3ef7bd6552c84608",
+        name: "PATISERIE",
+        precent: 0
+      },
+      {
+        cat: "64e08e29b8172e11bbd2eb80",
+        name: "SOFT DRINKS",
+        precent: 0
+      },
+      {
+        cat: "64c8e34248b61f91a0d45e60",
+        name: "BEER",
+        precent: 0
+      },
+      {
+        cat: "64e0ffdbed3e938e2230747a",
+        name: "MERCH",
+        precent: 0
+      },
+      {
+        cat: "64e0ffbded3e938e22307477",
+        name: "CIOCOLATA",
+        precent: 0
+      },
+      {
+        cat: "64e0fecaed3e938e22307471",
+        name: "CAFEA ȘI CEAI PENTRU ACASĂ",
+        precent: 0
+      },
+      {
+        cat: "66103400a872beae03ee4913",
+        name: "IQOS",
+        precent: 0
+      },
+      {
+        cat: "64be6a593ef7bd6552c8460a",
+        name: "DESERT",
+        precent: 0
+      }
+    ]
+  }
+
   constructor(
     @Inject(ActionSheetService) private actioSrv: ActionSheetService,
     private modalCtrl: ModalController,
@@ -58,6 +122,7 @@ export class AddClientDiscountPage implements OnInit {
   }
   getData(){
     const data = this.navPar.get('options');
+    console.log(data)
     if(data && data.user){
       this.discountsCats = data.data.discount.category
       this.generalDiscount = data.data.discount.general
@@ -69,6 +134,12 @@ export class AddClientDiscountPage implements OnInit {
     }
   }
 
+
+  adBasDsicounts(){
+    this.generalDiscount = this.baseDiscounts.general
+    this.discountsCats = this.baseDiscounts.category
+    this.form.get('generalDiscount')?.setValue(this.generalDiscount);
+  }
 
   searchCategory(ev: any){
     let search = ev.detail.value

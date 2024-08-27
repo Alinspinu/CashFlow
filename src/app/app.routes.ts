@@ -25,62 +25,13 @@ const routes: Routes = [
     loadChildren: () => import('./content/table-content-mobile/table-content-mobile.routes').then( m => m.routes)
   },
   {
-    path: 'scan-qr',
-    loadComponent: () => import('./modals/scan-qr/scan-qr.page').then( m => m.ScanQrPage)
-  },
-  {
-    path: 'spinner',
-    loadComponent: () => import('./modals/spinner/spinner.page').then( m => m.SpinnerPage)
-  },
-  {
-    path: 'add-to-inventary',
-    loadComponent: () => import('./modals/add-to-inventary/add-to-inventary.page').then( m => m.AddToInventaryPage)
-  },
-  {
     path: 'user-display',
     loadComponent: () => import('./content/user-display/user-display.page').then( m => m.UserDisplayPage)
-  },
-  {
-    path: 'tips',
-    loadComponent: () => import('./content/user-display/tips/tips.page').then( m => m.TipsPage)
-  },
-  {
-    path: 'meniu',
-    loadComponent: () => import('./content/user-display/meniu/meniu.page').then( m => m.MeniuPage)
-  },
-  {
-    path: 'bill',
-    loadComponent: () => import('./content/user-display/bill/bill.page').then( m => m.BillPage)
-  },
-  {
-    path: 'meniu',
-    loadComponent: () => import('./content/order-content/meniu/meniu.page').then( m => m.MeniuPage)
-  },
-  {
-    path: 'bill',
-    loadComponent: () => import('./content/order-content/bill/bill.page').then( m => m.BillPage)
   },
   {
     path: 'order-content/:id',
     loadComponent: () => import('./content/order-content/order-content.page').then( m => m.OrderContentPage)
   },
-  {
-    path: 'bill',
-    loadComponent: () => import('./content/order-content/bill/bill.page').then( m => m.BillPage)
-  },
-  {
-    path: 'meniu',
-    loadComponent: () => import('./content/order-content/meniu/meniu.page').then( m => m.MeniuPage)
-  },
-  {
-    path: 'users-view',
-    loadComponent: () => import('./modals/users-view/users-view.page').then( m => m.UsersViewPage)
-  },
-  {
-    path: 'dep-view',
-    loadComponent: () => import('./modals/dep-view/dep-view.page').then( m => m.DepViewPage)
-  },
-
 
 ];
 

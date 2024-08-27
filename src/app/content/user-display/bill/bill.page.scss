@@ -26,7 +26,7 @@
       .bill{
         overflow-y: scroll;
         background-color: white;
-        height: 883px;
+        height: 913px;
         width: 400px;
         .product-container{
           direction: ltr;
@@ -52,14 +52,28 @@
                 font-size: 16px;
             }
           }
-          .price{
+          .price-wrapper{
             margin-top: 8px;
-            font-family: NoirProSemi !important;
-            font-size: 34px;
+            display: flex;
+            flex-direction: column;
+            .price{
+              font-family: NoirProSemi !important;
+              font-size: 34px;
+            }
+            .discount{
+              color: rgb(251, 63, 63);
+              font-family: NoirProSemi !important;
+              font-size: 22px;
+            }
           }
         }
 
       }
+    }
+    .cashBack{
+      color: rgb(251, 63, 63);
+      font-family: NoirProSemi !important;
+      font-size: 22px !important;
     }
 
 

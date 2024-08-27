@@ -51,13 +51,21 @@
         <ion-input  mode="ios" type="number" label="Valoare TVA" labelPlacement="floating" fill="outline" formControlName="tvaValue" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
       </ion-item>
       <ion-item lines="none" class="input">
-        <ion-input  mode="ios" type="number" label="Total" labelPlacement="floating" fill="outline" formControlName="total" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
+        <ion-input  mode="ios" [type]="totalInputType" label="Total" labelPlacement="floating" fill="outline" formControlName="total" (keyup.enter)="totalInputType === 'text' ? evalTotal() : null" (keydown)="calc($event)"></ion-input>
+        <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="totalCalcColor" (click)="switchCalcMode('total')"></ion-icon>
       </ion-item>
       <ion-item lines="none" class="input" (keyup.enter)="ingredientForm.valid ? addToNir(): null">
         <ion-select label="Departament" placeholder="Materie Prima" formControlName="dep">
           <ion-select-option value="materie">Materie Primă</ion-select-option>
           <ion-select-option value="marfa">Marfă</ion-select-option>
           <ion-select-option value="consumabil">Consumabile</ion-select-option>
+          <ion-select-option value="servicii">Servicii</ion-select-option>
+          <ion-select-option value="marketing">Marketing</ion-select-option>
+          <ion-select-option value="ob-inventar">Obiecte inventar</ion-select-option>
+          <ion-select-option value="amenajari">Amenajări</ion-select-option>
+          <ion-select-option value="combustibil">Combustibil</ion-select-option>
+          <ion-select-option value="utilitati">Utilități</ion-select-option>
+          <ion-select-option value="chirie">Chirie</ion-select-option>
         </ion-select>
     </ion-item>
     <ion-item lines="none" class="input">
@@ -90,13 +98,18 @@
         <ion-item lines="none" class="nirForm">
           <ion-label class="furz-name" *ngIf="suplier">{{suplier.name}}</ion-label>
           <ion-label class="fur-cif" *ngIf="suplier">{{suplier.vatNumber.toUpperCase()}}</ion-label>
+          <ion-input mode="ios" type="text" label="Document" class="nr-doc" labelPlacement="floating" fill="outline" formControlName="document" #documentInput></ion-input>
           <ion-input mode="ios" type="text" label="Nr Doc" class="nr-doc" labelPlacement="floating" fill="outline" formControlName="nrDoc" #docInput></ion-input>
-            <ion-datetime-button datetime="datetime" id="data"></ion-datetime-button>
+          <ion-item lines="none" class="date" (click)="openDateModal()">
+            <ion-input mode="ios" type="text" label="Alege Data" labelPlacement="floating" fill="outline" formControlName="date"></ion-input>
+            <span style="cursor: pointer;">{{date ? formatDate(date) :'Alege ziua'}}</span>
+          </ion-item>
+            <!-- <ion-datetime-button datetime="datetime" id="data" #dateButton></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
                 <ion-datetime id="datetime" presentation="date" formControlName="date" [showDefaultButtons]="true"></ion-datetime>
               </ng-template>
-            </ion-modal>
+            </ion-modal> -->
             <ion-buttons class="discount-button">
               <ion-button class="input" (click)="openDiscount()">
                 Adaugă Reducere

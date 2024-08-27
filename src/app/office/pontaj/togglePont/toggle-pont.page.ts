@@ -39,7 +39,7 @@ export class TogglePontPage implements OnInit {
 
   addPontaj(){
     this.isLoading = true
-    this.pontSrv.addPont(5, 2024).subscribe(response => {
+    this.pontSrv.addPont(8, 2024).subscribe(response => {
       if(response){
         this.pontaj.push(response)
         this.isLoading = false

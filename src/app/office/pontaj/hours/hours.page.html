@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">{{userName}} -- {{firstHous + secondHous}} ore --- {{roundInHtml(firstCash + secondCash)}} Lei</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="firts">
+      <span class="period">1 - 15</span>
+      <span class="hour">{{firstHous}} ore</span>
+      <span class="cash">{{roundInHtml(firstCash)}} Lei</span>
+    </div>
+    <div class="second">
+      <span class="period">16 - {{lastDay}}</span>
+      <span class="hour">{{secondHous}} ore</span>
+      <span class="cash">{{roundInHtml(secondCash)}} Lei</span>
+    </div>
+  </div>
+</ion-content>

@@ -1,5 +1,5 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
     <!-- <ion-title *ngIf="user">{{user.employee.fullName}}</ion-title> -->
     <ion-buttons>
       <ion-button *ngFor="let user of users" (click)="showOrders(user)" [ngClass]="{ 'active-button': user.show }">
@@ -47,19 +47,19 @@
         </ion-item>
       </div>
       <div class="button-wrapper">
-        <ion-button expand="block" size="large" color="secondary" (click)="reports('x')" [disabled]="disableButtons">
+        <ion-button expand="block" size="large" color="medium" (click)="reports('x')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/business.svg"></ion-icon>
          RAPORT X
         </ion-button>
-        <ion-button expand="block" size="large" (click)="reports('z')" [disabled]="disableButtons">
+        <ion-button expand="block" size="large" color="medium" (click)="reports('z')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
           RAPORT Z
         </ion-button>
-        <ion-button expand="block" size="large" color="success" (click)="inAndOut('in')" [disabled]="disableButtons">
+        <ion-button expand="block" size="large" color="medium" (click)="inAndOut('in')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/add-circle-outline.svg"></ion-icon>
          ADAUGA BANI IN CASA
         </ion-button>
-        <ion-button expand="block" size="large" color="danger" (click)="inAndOut('out')" [disabled]="disableButtons">
+        <ion-button expand="block" size="large" color="medium" (click)="inAndOut('out')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/remove-circle-outline.svg"></ion-icon>
         SCOATE BANI DIN CASA
         </ion-button>

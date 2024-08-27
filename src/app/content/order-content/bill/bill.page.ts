@@ -391,7 +391,7 @@ export class BillPage implements OnInit, OnDestroy {
   }
 
 
-  sendOrder(out: boolean): Observable<boolean> {
+  sendOrder(out: boolean, outside: boolean): Observable<boolean> {
     if (this.billToshow) {
       this.disableOrderButton = true;
       this.billToshow._id.length
@@ -407,7 +407,8 @@ export class BillPage implements OnInit, OnDestroy {
           this.billIndex,
           this.user.employee,
           this.user.locatie,
-          this.billToshow.inOrOut
+          this.billToshow.inOrOut,
+          outside
         ).pipe(
           map((res) => {
             this.disableOrderButton = false;
@@ -427,7 +428,8 @@ export class BillPage implements OnInit, OnDestroy {
               this.billIndex,
               this.user.employee,
               this.user.locatie,
-              this.billToshow.inOrOut
+              this.billToshow.inOrOut,
+              outside
             ).pipe(
               map((res) => {
                 this.disableOrderButton = false;
@@ -449,7 +451,7 @@ export class BillPage implements OnInit, OnDestroy {
 
 
   async payment(){
-    this.orderSub = this.sendOrder(false).subscribe(async(response) => {
+    this.orderSub = this.sendOrder(false, false).subscribe(async(response) => {
       if(response){
         const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billToshow)
           if(paymentInfo){
@@ -655,7 +657,7 @@ export class BillPage implements OnInit, OnDestroy {
           this.billToshow.name = this.client.name
           this.billToshow.inOrOut = '',
           this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-          this.orderSub = this.sendOrder(false).subscribe()
+          this.orderSub = this.sendOrder(false, false).subscribe()
         }
         if(clientInfo.message === "voucher"){
           this.billToshow.voucher = clientInfo.data
@@ -754,7 +756,7 @@ export class BillPage implements OnInit, OnDestroy {
       } else {
         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
       }
-      this.orderSub = this.sendOrder(false).subscribe()
+      this.orderSub = this.sendOrder(false, false).subscribe()
 
     }
   }

@@ -1,4 +1,7 @@
-<app-logo-page *ngIf="isLoading"></app-logo-page>
+<div *ngIf="isLoading" class="spinner-content">
+  <app-spinner class="spinner"></app-spinner>
+</div>
+
 <ion-content [fullscreen]="true" *ngIf="!isLoading && !showRep">
   <div class="grid-date">
     <ion-button fill="outline" mode="md" color="medium" (click)="selectDate()">{{startDate && startDate.length ? startDate : "ZI Început"}}</ion-button>
@@ -53,6 +56,34 @@
             <div class="method">
               <span class="label">Consumabile</span>
               <span class="sum">{{report.supliesValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Servicii</span>
+              <span class="sum">{{report.serviceValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Marketing</span>
+              <span class="sum">{{report.marketingValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Obiecte de inventar</span>
+              <span class="sum">{{report.inventarySpendings}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Benzina</span>
+              <span class="sum">{{report.gasValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Chirie (facturi)</span>
+              <span class="sum">{{report.constructionsValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Utilitati (facturi)</span>
+              <span class="sum">{{report.rent}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Consumabile</span>
+              <span class="sum">{{report.utilities}} Lei</span>
             </div>
             <div class="method" (click)="showDep(report.impairment.products)">
               <span class="label">Deprecieri</span>

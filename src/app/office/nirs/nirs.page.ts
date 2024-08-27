@@ -109,7 +109,6 @@ searchNir(ev: any){
 
 
 suplier(){
-  console.log(this.nirs)
   this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
 
   this.suplierColor = 'primary'
@@ -146,6 +145,11 @@ suplier(){
           if(response){
             this.dbNirs = response
             this.nirs = [...this.dbNirs]
+            this.dbNirs.forEach(nir => {
+              if(nir.index === 1449){
+                console.log(nir)
+              }
+            })
           }
         })
       }

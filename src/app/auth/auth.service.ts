@@ -7,6 +7,8 @@ import {environment} from "../../environments/environment"
 import User from "./user.model";
 import { emptyUser } from "../models/empty-models";
 import { IndexDbService } from "../shared/indexDb.service";
+import { Bill } from '../models/table.model';
+import { Category } from '../models/category.model';
 
 
 
@@ -42,9 +44,26 @@ export class AuthService{
             status: string,
             telephone: string,
             locatie: string,
+            cardIndex: number,
+            cardName: string,
+            survey: string,
+            orders: Bill[],
+            discount: {
+              general: number,
+              category: {
+                precent: number,
+                name: string,
+                cat: Category
+              }[]
+            },
             employee: {
+              active: boolean,
               position: string,
               fullName: string,
+              cnp: number,
+              ciSerial: string,
+              ciNumber: number,
+              address: string,
               user: string,
               access: number,
               salary: {
@@ -52,17 +71,25 @@ export class AuthService{
                 onPaper: {
                   salary: number,
                   tax: number
-                }
-              }
+                },
+                fix: boolean
+              },
+              workLog: {
+                day: Date,
+                checkIn: Date,
+                checkOut: Date,
+                hours: number,
+                earnd: number,
+                position: string,
+              }[],
+              payments: {
+                date: string,
+                amount: number,
+                tip: string,
+                workMonth: number
+              }[],
             },
-            workLog: {
-              day: Date,
-              checkIn: Date,
-              checkOut: Date,
-              hours: number,
-              earnd: number,
-              position: string,
-            }[]
+
           };
           const tokenDate = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
           if(tokenDate <= 0){
@@ -152,7 +179,8 @@ export class AuthService{
           user: decodedToken.userId,
           salary: userData.employee.salary
         },
-        workLog: userData.workLog
+        workLog: userData.employee.workLog,
+        payments: userData.employee.payments
       });
       const tokenDate = new Date(expirationDate).getTime() - new Date().getTime();
       this.aoutoLogout(tokenDate);

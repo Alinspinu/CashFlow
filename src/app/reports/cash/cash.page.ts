@@ -15,6 +15,7 @@ import { ReportsService } from '../reports.service';
 import { LogoPagePage } from '../../shared/logo-page/logo-page.page';
 import { Report } from 'src/app/models/report.model';
 import { filter } from 'rxjs';
+import { SpinnerPage } from '../../modals/spinner/spinner.page';
 
 
  interface paymentMethod {
@@ -62,7 +63,7 @@ interface user{
   templateUrl: './cash.page.html',
   styleUrls: ['./cash.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, LogoPagePage]
+  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, SpinnerPage]
 })
 export class CashPage implements OnInit {
 

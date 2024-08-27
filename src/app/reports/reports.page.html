@@ -38,6 +38,14 @@
       </ion-button>
     </ion-menu-toggle>
     </div>
+    <div class="button-container" [ngClass]="{'selected': show.inventary}">
+    <ion-menu-toggle [ngClass]="{'selected': show.inventary}">
+      <ion-button (click)="inventary()" fill="ghost">
+        <ion-icon slot="start" src="assets/icon/inventary.svg"></ion-icon>
+        <ion-label>Inventar</ion-label>
+      </ion-button>
+    </ion-menu-toggle>
+    </div>
 </ion-content>
 </ion-menu>
 <div class="ion-page" id="main-content">
@@ -46,4 +54,5 @@
 <app-products *ngIf="show.products"></app-products>
 <app-cash-register *ngIf="show.cashRegister"></app-cash-register>
 <app-finance *ngIf="show.finance"></app-finance>
+<app-inventary *ngIf="show.inventary"></app-inventary>
 </div>

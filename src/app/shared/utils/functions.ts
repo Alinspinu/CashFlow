@@ -67,6 +67,13 @@ export function formatedDateToShow(date: any){
     })
   }
 
+  export function getDaysInMonth(date: string): number {
+    const newDate = new Date(date)
+    const year = newDate.getFullYear()
+    const month = newDate.getMonth()
+    return new Date(year, month -1, 0).getDate();
+  }
+
 
   export function getSection(product: Product){
     let section = ''

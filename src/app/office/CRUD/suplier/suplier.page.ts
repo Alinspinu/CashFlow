@@ -29,8 +29,11 @@ export class SuplierPage implements OnInit {
   supliers!: any
   furnizorSearch: string = ''
 
+  editMode: boolean = false
+
   saveSuplier: boolean = true
   suplierId: string = ''
+
 
   showPassword = false;
   checkedTerms: boolean = false;
@@ -46,6 +49,7 @@ export class SuplierPage implements OnInit {
    private router: Router,
    private route: ActivatedRoute,
    private nirSrv: NirService,
+   private navParams: NavParams,
   ) {
     this.suplierForm = fb.group({
       ownerEmail: fb.control('', [Validators.required]),
@@ -61,6 +65,7 @@ export class SuplierPage implements OnInit {
       VAT: fb.control('', [Validators.required]),
       bank: fb.control('', [Validators.required]),
       account: fb.control('', [Validators.required]),
+      sold: fb.control(''),
     });
 
     this.passwordControl = this.suplierForm.get('password');
@@ -69,8 +74,10 @@ export class SuplierPage implements OnInit {
       this.createCompareValidator(this.passwordControl, this.confirmPasswordControl));
    };
 
+
+
+
    selectSuplier(suplier: any){
-    console.log(suplier)
     if(suplier){
       this.suplierForm.get('bussinessName')?.setValue(suplier.name)
       this.suplierForm.get('vatNumber')?.setValue(suplier.vatNumber)
@@ -78,6 +85,7 @@ export class SuplierPage implements OnInit {
       this.suplierForm.get('address')?.setValue(suplier.address)
       this.suplierForm.get('bank')?.setValue(suplier.bank)
       this.suplierForm.get('account')?.setValue(suplier.account)
+      this.suplierForm.get('sold')?.setValue(suplier.sold)
       this.suplierId = suplier._id
       this.supliers = []
       this.furnizorSearch = ''
@@ -160,6 +168,7 @@ export class SuplierPage implements OnInit {
     this.getUser()
     this.getMode()
     this.validateForm()
+    this.getSuplierToEdit()
   }
 
   getUser(){
@@ -172,9 +181,16 @@ export class SuplierPage implements OnInit {
     })
   }
 
+  getSuplierToEdit(){
+    const suplier = this.navParams.get('options')
+    if(suplier && suplier.name){
+      this.selectSuplier(suplier)
+      this.editMode = true
+    }
+  }
+
   getMode(){
     const mode = this.route.snapshot.paramMap.get('value')
-    console.log(mode)
     if(mode){
       this.mode = mode
       this.size = '6'
@@ -203,6 +219,7 @@ export class SuplierPage implements OnInit {
   addSuplier(){
     if(this.suplierForm.valid && this.saveSuplier){
       const suplier: Suplier = {
+        _id: '',
         name: this.suplierForm.value.name,
         bussinessName: this.suplierForm.value.bussinessName,
         vatNumber: this.suplierForm.value.vatNumber,
@@ -211,8 +228,9 @@ export class SuplierPage implements OnInit {
         bank: this.suplierForm.value.bank ? this.suplierForm.value.bank : '',
         account: this.suplierForm.value.account ? this.suplierForm.value.account : '',
         VAT: this.suplierForm.value.VAT === 'yes'? true : false,
+        sold: 0,
+        records: []
       }
-
         this.suplierSrv.saveSuplier(suplier, this.mode, this.user.locatie).subscribe((response: any) => {
           if(response){
             if(this.mode ){
@@ -251,13 +269,14 @@ export class SuplierPage implements OnInit {
 
     } else if(!this.saveSuplier) {
       const suplier = {
-        name: this.suplierForm.value.name,
+        name: this.suplierForm.value.bussinessName,
         bussinessName: this.suplierForm.value.bussinessName,
         vatNumber: this.suplierForm.value.vatNumber,
         register: this.suplierForm.value.register,
         address: this.suplierForm.value.address,
         bank: this.suplierForm.value.bank ? this.suplierForm.value.bank : '',
         account: this.suplierForm.value.account ? this.suplierForm.value.account : '',
+        sold: this.suplierForm.value.sold,
         _id: this.suplierId
       }
       this.modalCtrl.dismiss(suplier)
@@ -276,41 +295,5 @@ export class SuplierPage implements OnInit {
     })
   }
 
-
-
-
-  //  setUpForm(){
-  //   this.suplierForm = new FormGroup({
-  //     name: new FormControl(null, {
-  //       updateOn: 'change',
-  //     }),
-  //     bussinessName: new FormControl(null, {
-  //       updateOn: 'change',
-  //       validators: [Validators.required]
-  //     }),
-  //     vatNumber: new FormControl(null, {
-  //       updateOn: 'change',
-  //       validators: [Validators.required]
-  //     }),
-  //     register: new FormControl(null, {
-  //       updateOn: 'change',
-  //       validators: [Validators.required]
-  //     }),
-  //       address: new FormControl(null, {
-  //       updateOn: 'change',
-  //       validators: [Validators.required]
-  //     }),
-  //       VAT: new FormControl(null, {
-  //       updateOn: 'change',
-  //       validators: [Validators.required]
-  //     }),
-  //       bank: new FormControl(null, {
-  //       updateOn: 'change',
-  //     }),
-  //       account: new FormControl(null, {
-  //       updateOn: 'change',
-  //     }),
-  //   })
-  // }
 
 }

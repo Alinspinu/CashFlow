@@ -1,17 +1,17 @@
 
 
-<ion-header [translucent]="true">
-  <ion-toolbar [class.dynamic-header-active]="dynamicColorChange">
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
     <ion-buttons slot="start">
       <ion-button (click)="logout()" class="back-button">
         <ion-icon src="../../assets/icon/log-out-outline.svg"></ion-icon>
       </ion-button>
-      <ion-button (click)="toggleMode(mode)" class="mode" [color]="modeColor">
+      <!-- <ion-button (click)="toggleMode(mode)" class="mode" [color]="modeColor">
         {{mode ? 'Intefață veche' : 'Interfață nouă'}}
       </ion-button>
       <ion-button (click)="goToUser()" class="mode">
         Monitor Utilizator
-      </ion-button>
+      </ion-button> -->
     </ion-buttons>
     <!-- <div class="accept-button-wrapper">
       <ion-title  class="ion-text-center" style="flex: 70%; font-size: 23px;" *ngIf="onlineOrder">Comandă Online</ion-title>
@@ -19,18 +19,18 @@
     </div> -->
 
     <ion-buttons slot="end">
-      <ion-button (click)="addTable()">
+      <ion-button (click)="addTable()" class="header-buttons">
         <ion-icon src="../../assets/icon/add-outline.svg"></ion-icon>
         ADAUGĂ MASĂ
       </ion-button>
-      <ion-button (click)="activateEditMode()">
+      <ion-button (click)="activateEditMode()" class="header-buttons">
         <ion-icon [src]="this.editMode ? '../../assets/icon/checkmark-outline.svg' : '../../assets/icon/create-outline.svg'"></ion-icon>
       {{this.editMode ? 'TERMINAT': 'MODIFICĂ'}}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<div class="container" [ngStyle]="{ 'background-image': backgroundImageUrl }">
+<div class="container">
 <ion-content [fullscreen]="true" >
   <ion-grid>
     <ion-row *ngIf="isLoadding" class="loading">
@@ -43,14 +43,15 @@
         <ion-icon *ngIf="editMode" src="../../assets/icon/create-outline.svg" (click)="editTable(table.index)" class="edit"></ion-icon>
         <ion-icon *ngIf="editMode" src="../../assets/icon/trash-outline.svg" (click)="deleteTable(table)" class="delete"></ion-icon>
         <div class="badges-wrapper">
-          <div class="badge-waiter" *ngIf="table && table.bills && table.bills.length  && waiterBills(table.bills) > 0">
+          <!-- <div class="badge-waiter" *ngIf="table && table.bills && table.bills.length  && waiterBills(table.bills) > 0">
             <span *ngIf="table && table.bills && table.bills.length && waiterBills(table.bills) > 0" class="badge-waiter-content">{{waiterBills(table.bills)}}</span>
-          </div>
-          <div class="badge" *ngIf="table && table.bills && table.bills.length  && userBills(table.bills) > 0">
-            <span *ngIf="table && table.bills && table.bills.length && userBills(table.bills) > 0" class="badge-content">{{userBills(table.bills)}}</span>
+          </div> -->
+          <div class="badge" *ngIf="table && table.bills && table.bills.length ">
+            <span *ngIf="table && table.bills && table.bills.length > 0" class="badge-content">{{table.bills.length}}</span>
           </div>
         </div>
-        <div class="table ion-activatable" [ngClass]="{ 'bussy': table.bills.length > 0}"  (click)="openTable(table.index)">
+        <div class="table ion-activatable" [ngClass]="{'bussy': table.bills.length > 0}"
+            (click)="openTable(table.index)">
           <span class="index" *ngIf="!table.name">
            {{table.index}}
           </span>

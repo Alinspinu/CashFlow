@@ -1,6 +1,6 @@
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
-  <ion-item lines="none" class="header content-container" slot="fixed">
+  <ion-item lines="none" class="header content-container" slot="fixed"  *ngIf="screenWidth > 500">
     <span class="nr">Nr</span>
     <span class="name">Nume</span>
     <span class="compus">Compus</span>
@@ -16,7 +16,7 @@
   <ion-grid>
     <ion-grid>
       <ion-row>
-        <ion-col size="4">
+        <ion-col [size]="screenWidth > 500 ? 4 : 12">
           <app-recipe-maker
           (ingsSend)="onIngRecive($event)"
           (toppSend)="onTopRecive($event)"
@@ -27,7 +27,7 @@
           [ings]="ingsToEdit"
           </app-recipe-maker>
         </ion-col>
-        <ion-col size="2">
+        <ion-col size="2" *ngIf="screenWidth > 500">
           <ion-item lines="none" class="input">
             <ion-select placeholder="Alege Gestiunea" (ionChange)="onSelectGestiune($event)">
               <ion-select-option  class="font" value="">Toate</ion-select-option>
@@ -35,7 +35,7 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="2">
+        <ion-col size="2" *ngIf="screenWidth > 500">
           <ion-item lines="none" class="input">
             <ion-select placeholder="Alege tipul de ingrediet" (ionChange)="onSelectType($event)">
               <ion-select-option class="font" value="">Toate</ion-select-option>
@@ -43,7 +43,7 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="2">
+        <ion-col size="2" *ngIf="screenWidth > 500">
           <ion-item lines="none" class="input">
             <ion-select placeholder="Alege departamentul" (ionChange)="onSelectDep($event)">
               <ion-select-option class="font" value="">Toate</ion-select-option>
@@ -51,7 +51,7 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="2">
+        <ion-col size="2" *ngIf="screenWidth > 500">
           <ion-buttons>
             <ion-button class="input" (click)="exportIngsList()">
               PRINT
@@ -74,26 +74,26 @@
   <ion-row *ngFor="let ing of ingredients; let i= index;">
     <ion-col>
       <ion-item class="content-container product input" lines="none" (click)="showIngs(i)">
-        <span class="nr">{{i+1}}.</span>
+        <span class="nr" *ngIf="screenWidth > 500">{{i+1}}.</span>
         <span class="name">{{ing.name}}</span>
-        <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="ing.ings.length" class="arrow"></ion-icon>
-        <ion-icon  *ngIf="!ing.ings.length" class="arrow"></ion-icon>
+        <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="ing.ings.length  && screenWidth > 500" class="arrow"></ion-icon>
+        <ion-icon  *ngIf="!ing.ings.length && screenWidth > 500" class="arrow"></ion-icon>
         <span class="gestiune">{{ing.gestiune}}</span>
-        <span class="dep">{{ing.dep}}</span>
-        <span class="um">{{ing.um}}</span>
-        <span class="price">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
-        <span class="qty">{{ing.ings.length ? 1 : ing.qty}}</span>
+        <span class="dep" *ngIf="screenWidth > 500">{{ing.dep}}</span>
+        <span class="um" *ngIf="screenWidth > 500">{{ing.um}}</span>
+        <span class="price" *ngIf="screenWidth > 500">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
+        <span class="qty" *ngIf="screenWidth > 500">{{ing.ings.length ? 1 : ing.qty}}</span>
         <ion-button fill="ghost" (click)="inventary(i)">
           <ion-icon  src="../../assets/icon/tools.svg" class="inv"></ion-icon>
         </ion-button>
-        <ion-button fill="ghost" (click)="ingEdit(ing)">
+        <ion-button fill="ghost" (click)="ingEdit(ing)" *ngIf="screenWidth > 500">
           <ion-icon  src="../../assets/icon/create-outline.svg"  class="edit"></ion-icon>
         </ion-button>
-        <ion-button fill="ghost" (click)="deleteIng(ing._id, ing.name)">
+        <ion-button fill="ghost" (click)="deleteIng(ing._id, ing.name)" *ngIf="screenWidth > 500">
           <ion-icon  src="../../assets/icon/trash-outline.svg" class="delete"></ion-icon>
         </ion-button>
       </ion-item>
-      <div *ngIf="ing.ings.length && ing.showIngs" class="sub-container">
+      <div *ngIf="ing.ings.length && ing.showIngs && screenWidth > 500" class="sub-container">
         <ion-item *ngFor="let ingr of ing.ings" lines="none" class="content-container" (click)="ingEdit(ing._id)" color="tertiary">
           <span class="name">{{ingr.ing.name}}</span>
           <span class="gestiune">{{ingr.ing.gestiune}}</span>

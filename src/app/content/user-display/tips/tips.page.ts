@@ -54,6 +54,9 @@ export class TipsPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('hit on it')
+    console.log(this.isVisible)
+    console.log(this.total)
   }
 
   sendTips(tipsProc: number) {

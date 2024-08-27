@@ -8,6 +8,7 @@ import { take, tap } from 'rxjs';
 import { BillPage } from '../bill/bill.page';
 import { WebRTCService } from '../../webRTC.service';
 import { Bill } from 'src/app/models/table.model';
+import { emptyBillProduct } from '../../../models/empty-models';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class MeniuPage implements OnInit {
 
   sideColSize: number = 1
   menuColSize: number = 10
+  showHeader: boolean = false
 
   fullScreenUrl: string = 'assets/icon/arrows.svg'
 
@@ -87,7 +89,6 @@ export class MeniuPage implements OnInit {
       if(catId === cardEl.id){
           cardEl.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
       }
-
     })
 
   }
@@ -96,7 +97,19 @@ export class MeniuPage implements OnInit {
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
       if(response){
-        this.bill = JSON.parse(response)
+       this.bill = JSON.parse(response)
+        if(this.bill.cashBack > 0){
+          const product = emptyBillProduct()
+          product.name = 'Cash Back'
+          product.quantity = 1
+          product.total = - this.bill.cashBack
+          this.bill.products.push(product)
+        } else {
+          const index = this.bill.products.findIndex(product => product.name === 'Cash Back')
+          if(index !== -1){
+            this.bill.products.splice(index, 1)
+          }
+        }
         if(this.bill.products.length){
           this.bill.products.reverse()
           this.sideColSize = 0.7
@@ -105,7 +118,9 @@ export class MeniuPage implements OnInit {
           this.sideColSize = 1
           this.menuColSize = 10
         }
+        this.showHeader = true
       } else {
+        this.showHeader = false
         this.sideColSize = 1
         this.menuColSize = 10
         const foodIndex = this.cats.findIndex((cat: any) => cat.name = 'food')
@@ -158,7 +173,6 @@ export class MeniuPage implements OnInit {
 
 
   selectCategory(cat: string){
-    console.log(cat)
     this.enableScrollChange = false
     const catIndex = this.categories.findIndex(category => category._id === cat)
     const cardId = this.categories[catIndex].product[0]._id
@@ -173,7 +187,9 @@ export class MeniuPage implements OnInit {
     this.mainCategoryToShowName = name
     this.selectedMainCat.forEach((cat:any) => {
       cat.product.forEach((prod: any) => {
-        this.productsToShow.push(prod)
+        if(prod.available){
+          this.productsToShow.push(prod)
+        }
       })
     })
     this.categoryToShowId = this.selectedMainCat[0]._id
@@ -198,6 +214,8 @@ export class MeniuPage implements OnInit {
       tap(response => {
         if(response.length > 1){
           this.categories = [...response]
+          const index = this.categories.findIndex(cat => cat.name === 'Produse de Paște')
+          this.categories.splice(index, 1)
           let tempMainCats: any = []
           for (const document of this.categories) {
             const category = document.mainCat;

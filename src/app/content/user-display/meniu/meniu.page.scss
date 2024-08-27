@@ -5,7 +5,7 @@
 }
 
   .category-wrapper{
-    height: 950px;
+    height: 900px;
     width: 100%;
     padding-top: 18px ;
     overflow: hidden;
@@ -29,7 +29,7 @@
     .products-content{
       border-radius: 12px;
       margin-top: 18px;
-      height: 860px;
+      height: 800px;
       width: 100%;
       display: flex;
       overflow: hidden;
@@ -41,10 +41,64 @@
 
     }
 
+    .header{
+      height: 60px;
+      margin: 24px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      div{
+        background-color: rgb(42, 39, 39);
+        border-radius: 8px;
+        width: 100%;
+        height: 100%;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        // justify-content: center;
+        .value{
+          font-family: NoirProSemi !important;
+          margin-left: 8px
+        }
+      }
+      .client{
+        // display: none;
+        flex: 63%;
+        margin: 0 28px 0 28px;
+        .name{
+          overflow: hidden;
+          margin-left: 12px;
+          flex: 40%
+        }
+        .email{
+          overflow: hidden;
+          flex: 60%;
+        }
+        div{
+          .value{
+            font-family: NoirProSemi !important;
+            margin-left: 8px
+          }
+        }
+      }
+      .masa{
+        justify-content: center;
+        flex: 12%;
+      }
+      .cashBack{
+        flex: 25%;
+        justify-content: center;
+        // display: none;
+      }
+    }
+
 
   .main-cat-row{
     position: relative;
-    margin-top: 75px;
+    margin-top: 55px;
     left: -22px;
     ion-col{
       padding: 0 24px;

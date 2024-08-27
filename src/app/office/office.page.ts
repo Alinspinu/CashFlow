@@ -8,7 +8,7 @@ import { ProductsService } from './products/products.service';
 import { IngredientService } from './ingredient/ingredient.service';
 import { AuthService } from '../auth/auth.service';
 import User from '../auth/user.model';
-import { PontajService } from './pontaj/pontaj.service';
+import { UsersService } from './users/users.service';
 
 
 
@@ -26,18 +26,22 @@ export class OfficePage implements OnInit, OnDestroy {
   private ingSub!: Subscription;
    user!: User
   private userSub!: Subscription
+  screenWidth!: number
 
   constructor(
     private productsSrv: ProductsService,
     private ingSrv: IngredientService,
     private authSrv: AuthService,
+    private userSrv: UsersService,
   ) {
+    this.screenWidth = window.innerWidth
   }
 
   ngOnInit(): void {
     this.getUser()
     this.productSub =  this.productsSrv.getProducts(environment.LOC).subscribe()
     this.ingSub = this.ingSrv.getIngredients(environment.LOC).subscribe()
+    this.userSrv.getUsers().subscribe()
 
   }
 

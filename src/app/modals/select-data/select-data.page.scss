@@ -1,0 +1,40 @@
+ion-content{
+  --background: var(--ion-color-tertiary);
+}
+
+ion-radio-group{
+  --background: var(--ion-color-tertiary);
+}
+
+.input{
+  border: 0.5px solid var(--ion-color-medium);
+  border-radius: 8px;
+  margin: 1rem 0 0.5rem 0.5rem;
+}
+
+// ion-ckeckbox{
+//   --font-family: NoirProReg !important;
+//   --size: 32px !important;
+// }
+
+ion-checkbox {
+  font-family: NoirProReg !important;
+  font-size: 28px;
+  --size: 32px;
+}
+
+ion-radio {
+  font-family: NoirProReg !important;
+  font-size: 28px;
+  --size: 32px;
+}
+
+// ion-checkbox::part(label) {
+
+// }
+
+
+ion-checkbox::part(container) {
+  border-radius: 6px;
+  border: 2px solid black;
+}

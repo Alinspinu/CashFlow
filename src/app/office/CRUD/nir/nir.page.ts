@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, IonSearchbar, NavParams, ToastController } from '@ionic/angular';
@@ -8,7 +8,7 @@ import { NirService } from './nir.service';
 import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { SuplierPage } from '../suplier/suplier.page';
-import { IonInput } from '@ionic/angular/standalone';
+import { IonDatetimeButton, IonInput } from '@ionic/angular/standalone';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { DiscountPage } from 'src/app/modals/discount/discount.page';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +16,8 @@ import { NirsService } from '../../nirs/nirs.service';
 import User from 'src/app/auth/user.model';
 import { Subscription } from 'rxjs';
 import { IngredientService } from '../../ingredient/ingredient.service';
+import { formatedDateToShow } from '../../../shared/utils/functions';
+import { DatePickerPage } from '../../../modals/date-picker/date-picker.page';
 
 
 @Component({
@@ -31,13 +33,18 @@ export class NirPage implements OnInit, OnDestroy {
   @ViewChild('docInput', { static: false }) docInput!: IonInput;
   @ViewChild('searchBar', {static: false}) searchBar!: IonSearchbar
   @ViewChild('searchBarSuplier', {static: false}) searchBarSuplier!: IonSearchbar
+  @ViewChild('dateButton', {static: false}) dateButton!: ElementRef
 
 nirIngredients: NirIngredient[] = []
 ingredients: any = [];
 ingredient!: any;
 supliers: any = [];
 suplier!: any
-nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [] }
+nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], document: '' , totalDoc: 0}
+
+date!: string
+
+totalDoc: number = 0
 
 allIngs!: InvIngredient[]
 ingSub!: Subscription
@@ -60,9 +67,11 @@ isTva: boolean = true
 user!: User;
 qtyCalcColor!: string
 valCalcColor!: string
+totalCalcColor!: string
 qtyInputType: string = 'number'
 valInputType: string = 'number'
 inputType: string = 'number'
+totalInputType: string = 'number'
 
   constructor(
     @Inject(NirService) private nirSrv: NirService,
@@ -89,9 +98,9 @@ inputType: string = 'number'
 
   ngOnInit() {
     this.getUser()
-    this.getNirToEdit()
-    this.setupIngForm()
     this.setupNirForm()
+    this.setupIngForm()
+    this.getNirToEdit()
     // this.getIngs()
     this.setTvaValidators()
   }
@@ -99,7 +108,6 @@ inputType: string = 'number'
   getIngredients(){
     this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
       this.allIngs = response
-      console.log(response)
       if(response.length > 1){
 
         this.disableIngredientSearch = false
@@ -120,7 +128,6 @@ inputType: string = 'number'
 
   getNirToEdit(){
     const id = this.route.snapshot.paramMap.get('id')
-    console.log(id)
     if(id && id !== "new") {
       this.nirSrv.getNir(id).subscribe(response => {
         if(response) {
@@ -128,8 +135,14 @@ inputType: string = 'number'
           this.nir = response.nir
           this.nirIngredients = this.nir.ingredients
           this.suplier = this.nir.suplier
+          this.totalDoc = this.nir.totalDoc
           this.calcTotalsAftDiscount(this.nirIngredients)
           this.editMode = true
+          this.nirForm.get('date')?.setValue(this.nir.documentDate)
+          this.nirForm.get('document')?.setValue(this.nir.document)
+          this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
+          this.date = this.nir.documentDate
+          // console.log(this.nir)
         }
       })
     }
@@ -159,13 +172,17 @@ inputType: string = 'number'
       date: new FormControl(null,{
         updateOn:'change',
       }),
+      document: new FormControl(null,{
+        updateOn:'change',
+      }),
     })
 
-    this.nirForm.get('date')?.setValue(new Date(Date.now()).toISOString())
+    // this.nirForm.get('date')?.setValue(new Date(Date.now()).toISOString())
     setTimeout(()=> {
       if(this.editMode){
         this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
         this.nirForm.get('date')?.setValue(this.nir.documentDate)
+        this.nirForm.get('documen')?.setValue(this.nir.document)
       }
     }, 200)
   }
@@ -187,6 +204,14 @@ inputType: string = 'number'
         this.qtyInputType = 'text'
       }
     }
+    if(id === 'total'){
+      if(this.totalCalcColor === 'primary'){
+        this.evalTotal()
+      } else {
+        this.totalCalcColor = 'primary';
+        this.totalInputType = 'text'
+      }
+    }
 
 
   }
@@ -205,6 +230,14 @@ inputType: string = 'number'
       this.evalExpresssion(input)
       this.qtyCalcColor = ''
       this.qtyInputType = 'number'
+    }
+  }
+  evalTotal(){
+    let input = this.ingredientForm.get('total')
+    if(input){
+      this.evalExpresssion(input)
+      this.totalCalcColor = ''
+      this.totalInputType = 'number'
     }
   }
 
@@ -299,7 +332,6 @@ inputType: string = 'number'
           const qty = +qtyControl.value
           const value = +valueControl.value
           const tva = +tvaControl.value
-          console.log(qty, value, tva)
           priceControl.setValue(round(value/qty))
           tvaValueControl?.setValue(round(value * tva / 100))
           totalControl?.setValue(round(value + (value * tva / 100)))
@@ -309,6 +341,14 @@ inputType: string = 'number'
       this.switchCalcMode('value')
     }
   }
+
+
+  calc(ev: KeyboardEvent){
+    if( ev.key === 'c'){
+      this.switchCalcMode('total')
+    }
+  }
+
 
 
   async openDiscount(){
@@ -370,6 +410,7 @@ inputType: string = 'number'
       sellPrice: this.ingredientForm.value.sellPrice ? this.ingredientForm.value.sellPrice : 0
     }
     if(this.ingredientForm.valid){
+      this.totalDoc += ingredient.total
       this.nirIngredients.push(ingredient)
       this.ingredientForm.reset()
       this.searchBar.setFocus()
@@ -423,8 +464,15 @@ inputType: string = 'number'
       if(this.editMode) {
         this.nirSrv.deleteNir(this.nirId).subscribe(response => {
           if(response && response.message){
+            this.nir.documentDate = this.nirForm.value.date;
+            this.nir.nrDoc = this.nirForm.value.nrDoc
+            this.nir.suplier = this.suplier._id
+            this.nir.document = this.nirForm.value.document
+            this.nir.ingredients = this.nirIngredients
+            this.nir.totalDoc = this.totalDoc
+            console.log(this.nir)
             this.nirSrv.saveNir(this.nir, this.user.locatie).subscribe(response => {
-            this.reserNirData()
+              this.reserNirData()
               showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
               this.router.navigateByUrl('/tabs/office/nirs')
             })
@@ -434,7 +482,9 @@ inputType: string = 'number'
         this.nir.documentDate = this.nirForm.value.date;
         this.nir.nrDoc = this.nirForm.value.nrDoc
         this.nir.suplier = this.suplier._id
+        this.nir.document = this.nirForm.value.document
         this.nir.ingredients = this.nirIngredients
+        this.nir.totalDoc = this.totalDoc
         this.nirSrv.saveNir(this.nir, this.user.locatie).subscribe(response=> {
           this.reserNirData()
           this.router.navigateByUrl('/tabs/office/nirs')
@@ -445,23 +495,17 @@ inputType: string = 'number'
   }
 
   reserNirData(){
-    this.nir =  {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [] }
+    this.nir =  {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], document: '', totalDoc: 0}
     this.nirIngredients = []
     this.val = 0
     this.suplier = undefined
     this.valTotal = 0
     this.valTva = 0
     this.valVanzare = 0
+    this.totalDoc = 0
     this.nirForm.reset()
   }
 
-  // getIngs(){
-  //   Preferences.get({key: 'ings'}).then(result => {
-  //     if(result && result.value){
-  //       this.nirIngredients = JSON.parse(result.value)
-  //     }
-  //   })
-  // }
 
 
   searchIngredient(ev: any){
@@ -503,15 +547,35 @@ inputType: string = 'number'
     })
   }
 
-  selectSuplier(suplier: any){
+  async selectSuplier(suplier: any){
    this.suplier = suplier;
     this.supliers = []
     this.furnizorSearch = ''
-    this.docInput.setFocus()
+    const doc = await this.actionSht.entryAlert(['factura', 'bonFiscal'], 'radio', 'Document ','Alege tipul de document', '', '')
+      if(doc){
+        this.nirForm.get('document')?.setValue(doc)
+        const number = await this.actionSht.textAlert('Numar document', 'Introdu numarul și seria documentului', 'nr', '')
+        if(number){
+          this.nirForm.get('nrDoc')?.setValue(number)
+          this.openDateModal()
+        }
+      }
+  }
+
+ async openDateModal(){
+    const date = await this.actionSht.openAuth(DatePickerPage)
+    if(date){
+     this.nirForm.get('date')?.setValue(date)
+     this.date = date
+    }
   }
 
 roundFor(num: number){
   return Math.round((num + Number.EPSILON) * 10000) / 10000;
+}
+
+formatDate(date: string){
+  return formatedDateToShow(date).split('ora')[0]
 }
 
 }

@@ -1,0 +1,33 @@
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">{{title}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 22px;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="auth-wrapper">
+  <ion-grid>
+    <ion-searchbar mode="ios"  [placeholder]="searchPlaceholder"  (ionInput)="searchData($event)" #searchbar>
+    </ion-searchbar>
+    <div *ngIf="mode === 'bonus'">
+      <ion-item *ngFor="let user of users; let i = index" class="ing-name" lines="none" color="transparent">
+        <ion-checkbox (ionChange)="onChange($event, user)" slot="start" [checked]="user.checked" labelPlacement="end">{{user.name}}</ion-checkbox>
+      </ion-item>
+    </div>
+    <ion-radio-group [(ngModel)]="selectedValue"  *ngIf="mode === 'data'">
+      <ion-item *ngFor="let choice of data; let i = index" class="ing-name" lines="none" color="transparent">
+        <ion-radio slot="start" [value]="choice" labelPlacement="end">{{choice}}</ion-radio>
+      </ion-item>
+    </ion-radio-group>
+    </ion-grid>
+  </ion-content>
+
+
+  <ion-footer>
+    <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">Alege</ion-button>
+  </ion-footer>

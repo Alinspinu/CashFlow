@@ -32,7 +32,7 @@
       </ion-col>
       <ion-col size-lg="2" size-md="6">
         <ion-item lines="none" class="input">
-          <ion-select placeholder="Alege Categorie Parinte" (ionChange)="onSelectMainCat($event)">
+          <ion-select placeholder="Alege Categorie Parinte" (ionChange)="onSelectMainCat($event)" class="reprint-alert' suplier-alert">
             <ion-select-option value="">Toate</ion-select-option>
             <ion-select-option *ngFor="let mainCat of mainCats" [value]="mainCat.name">{{mainCat.name | capitalize}}</ion-select-option>
           </ion-select>
@@ -40,11 +40,12 @@
         </ion-col>
         <ion-col size-lg="2" size-md="6">
         <ion-item lines="none" class="input">
-          <ion-select placeholder="Alege Categorie Produs" (ionChange)="onCatSelect($event)">
+          <ion-select placeholder="Alege Categorie Produs" (ionChange)="onCatSelect($event)" class="reprint-alert' suplier-alert">
             <ion-select-option value="">Toate Categoriile</ion-select-option>
             <ion-select-option *ngFor="let cat of categoriesToShow" [value]="cat._id">{{cat.name}}</ion-select-option>
           </ion-select>
           <img src="assets/icon/add-circle.svg" id="add-cat" (click)="addCat()">
+          <img src="assets/icon/create-outline.svg" style="margin-left: 12px;" (click)="editCat()">
         </ion-item>
       </ion-col>
     </ion-row>

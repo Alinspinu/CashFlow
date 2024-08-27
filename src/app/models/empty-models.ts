@@ -18,8 +18,21 @@ export function emptyUser(){
     status: '',
     telephone: '',
     locatie: '',
+    cardIndex: 0,
+    cardName: '',
+    survey: '',
+    orders: [],
+    discount: {
+      general: 0,
+      category: []
+    },
     employee: {
+      active: false,
       fullName: '',
+      cnp: 0,
+      ciSerial: '',
+      ciNumber: 0,
+      address: '',
       position: '',
       user: '',
       access: 0,
@@ -28,10 +41,13 @@ export function emptyUser(){
         onPaper: {
           salary: 0,
           tax: 0
-        }
-      }
+        },
+        fix: false,
+      },
+      workLog: [],
+      payments: []
     },
-    workLog: []
+
   };
     return user
 }
@@ -125,6 +141,7 @@ export function emptyBill(){
       telephone: '',
       userId: '',
       cashBack: 0,
+      email: '',
       discount: {
         general: 0,
         category: [],

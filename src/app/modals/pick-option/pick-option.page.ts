@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import {triggerEscapeKeyPress} from '../../shared/utils/toast-controller'
-import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-pick-option',
@@ -29,6 +28,7 @@ export class PickOptionPage implements OnInit {
   private modalCtrl: ModalController
   ) { }
 
+
   ngOnInit() {
     this.getOptions()
   }
@@ -48,13 +48,11 @@ export class PickOptionPage implements OnInit {
 
   getOptions(){
     this.options = this.navPar.get('options');
-    console.log(this.options)
     const index = this.options.findIndex(el => el.name === 'fake')
     if(index !== -1){
       this.options.splice(index, 1)
     }
     this.sub = this.navPar.get('sub')
-    console.log(this.sub)
   }
 
   onCheckboxChange(option: any, ind: number) {
@@ -78,6 +76,11 @@ export class PickOptionPage implements OnInit {
         comment: this.comment,
         qty: this.qty
       }
+      this.options.forEach(option => {
+        if(option.checked === true){
+          option.checked = false
+        }
+      })
       this.modalCtrl.dismiss(extra)
     } else {
       triggerEscapeKeyPress()

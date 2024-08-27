@@ -41,6 +41,10 @@ export class PontajService{
     return this.http.get<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}&month=${month}`)
   }
 
+  paySalary(entry: any){
+    return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
+  }
+
 
 
   addPont(month: number, year: number){

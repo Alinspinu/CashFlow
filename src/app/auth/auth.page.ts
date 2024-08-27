@@ -11,6 +11,7 @@ import { ActionSheetService } from '../shared/action-sheet.service';
 import { RegisterPage } from './register/register.page';
 import { TablesService } from '../tables/tables.service';
 import { jwtDecode } from 'jwt-decode';
+import { SpinnerPage } from '../modals/spinner/spinner.page';
 
 
 export interface AuthResData {
@@ -25,7 +26,7 @@ export interface AuthResData {
   templateUrl: './auth.page.html',
   styleUrls: ['./auth.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, SpinnerPage]
 })
 export class AuthPage implements OnInit {
 
@@ -88,12 +89,14 @@ export class AuthPage implements OnInit {
 
 
   onSubmit(){
+    this.isLoading = true
     const email = this.form.value.email;
     const password = this.form.value.password;
     this.disableLogIn = true
     this.authService.onLogin(email, password).subscribe(res => {
       if(res){
         this.form.reset()
+        this.isLoading = false
       }
       if(res.message === 'Email sent'){
         const data = JSON.stringify({
@@ -119,6 +122,7 @@ export class AuthPage implements OnInit {
     }, error => {
       this.disableLogIn = false
       if(error.status === 401){
+        this.isLoading = false
         showToast(this.toastCtrl, 'Nume sau parola incorectă!', 5000);
         setTimeout(() => {
           this.resetPassword = true;
@@ -143,6 +147,7 @@ export class AuthPage implements OnInit {
   }
 
   sendNewPassword(){
+    this.isLoading = true
     this.authService.sendResetEmail(this.emailValue).subscribe(res => {
       if(res){
         const data = JSON.stringify({
@@ -152,11 +157,13 @@ export class AuthPage implements OnInit {
           message: 'Resetare Parola',
           text: 'resetare a parolei',
         })
+        this.isLoading = false
         Preferences.set({key: 'tempUserData', value: data });
         this.router.navigateByUrl('/email-sent');
         triggerEscapeKeyPress();
       }
     }, error => {
+      this.isLoading = false
       console.log('error', error);
       if(error.status === 404){
         showToast(this.toastCtrl, error.error.message, 4000 );

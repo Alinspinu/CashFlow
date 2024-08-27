@@ -1,0 +1,30 @@
+
+ion-title{
+  font-family: NoirProReg !important;
+}
+
+ion-row{
+  margin: 2rem;
+}
+ion-title{
+  font-size: 30px !important;
+}
+
+
+.box{
+  font-family: NoirProReg !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 12px;
+  margin-top: 12px;
+  border: 2px solid var(--ion-color-primary);
+  border-radius: 6px;
+  font-size: 24px;
+}
+
+
+.total{
+  margin-top: 2rem;
+  font-family: NoirProSemi !important;
+}

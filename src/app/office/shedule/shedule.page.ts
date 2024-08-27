@@ -46,11 +46,12 @@ export class ShedulePage implements OnInit, OnDestroy {
   }
 
   getUsers(){
-    this.usersSrv.getUsers('employees', '', environment.LOC).subscribe(response => {
+    this.usersSrv.usersSend$.subscribe(response => {
       if(response) {
-        this.users = response
+        const employees = response.filter(user => user.employee.active === true)
+        this.users = employees
        const sortedUsers = this.users.sort((a, b):any => {
-          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Ospatar: 4, ospatar: 4, Bucatar: 5, 'Ajutor bucatar': 6, 'Asistent Manager': 7, Manager: 8, Asociat: 9, Administrator: 10 };
+          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Bucatar: 6, 'Ajutor bucatar': 7, 'Asistent Manager': 8, Manager: 9, Asociat: 10, Administrator: 11 };
           return rolesOrder[a.employee.position] - rolesOrder[b.employee.position];
         });
         this.users = sortedUsers.slice(0,-4)
@@ -82,11 +83,14 @@ async addOnShedule(day: any, empl: User){
   const options = [
     'Dimineata 7:30 - 15:30',
     'Seara 15:30 - 22:30',
+    'Seara 15:30 - 23:30',
     'Full 7:30 - 22:30',
     'Custom',
     'LiBER',
+    'Concediu'
   ]
   const choise = await this.actSrv.entryAlert(options,'radio','Perioadă', 'Alege perioadă', '', '')
+  let con = choise === 'Concediu' ? true : false
   if(choise){
     const dayDate = new Date(day.date)
     const monthNumber = dayDate.getMonth()
@@ -99,9 +103,19 @@ async addOnShedule(day: any, empl: User){
       end = dayDate.setHours(15, 30, 0, 0)
       hours = (end-start) / 1000 / 60 / 60
     }
+    if(choise === 'Concediu'){
+      start = dayDate.setHours(7, 30, 0, 0)
+      end = dayDate.setHours(15, 30, 0, 0)
+      hours = (end-start) / 1000 / 60 / 60
+    }
     if(choise === 'Seara 15:30 - 22:30'){
       start = dayDate.setHours(15, 30, 0, 0)
       end = dayDate.setHours(22, 30, 0, 0)
+      hours = 1 + (end-start) / 1000 / 60 / 60
+    }
+    if(choise === 'Seara 15:30 - 23:30'){
+      start = dayDate.setHours(15, 30, 0, 0)
+      end = dayDate.setHours(23, 30, 0, 0)
       hours = 1 + (end-start) / 1000 / 60 / 60
     }
     if(choise === 'Full 7:30 - 22:30'){
@@ -110,7 +124,7 @@ async addOnShedule(day: any, empl: User){
       hours = 1 + (end-start) / 1000 / 60 / 60
     }
     if(choise === 'Custom'){
-      const hourss = ['7:00','7:30','8:00','8:30','9:00','9:30','10:00','10:30','11:00', '11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00', '16:30','17:00', '17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30','22:00','22:30','23:00']
+      const hourss = ['7:00','7:30','8:00','8:30','9:00','9:30','10:00','10:30','11:00', '11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00', '16:30','17:00', '17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30','22:00','22:30','23:00', '23:30']
       const  startHour = await this.actSrv.entryAlert(hourss, 'radio', 'Intrare în tură', 'Alege oră', 'time-alert', '')
       if(startHour){
         const endHour = await this.actSrv.entryAlert(hourss, 'radio', 'Ieșire din tură', 'Alege oră', 'time-alert', '')
@@ -138,7 +152,7 @@ async addOnShedule(day: any, empl: User){
       this.shedSrv.deleteEntry(empl._id, day.day, `${this.months[monthNumber]} - ${year}`, day.date).subscribe()
       this.shedSrv.deleteUserWorkEntry(empl._id, dayDate.setHours(0,0,0,0)).subscribe()
     } else {
-      const positions = ['Barista', 'Ajutor barman', 'Casier', 'Ospatar', 'Bucatar', 'Ajutor bucatar']
+      const positions = ['Barista', 'Ajutor barman', 'Casier', 'Ospatar', 'Bucatar', 'Ajutor bucatar', 'Supervizor']
       const choise = await this.actSrv.entryAlert(positions,'radio','Poziție', 'Alege poziția', '', `${empl.employee.position}`)
       if(choise){
         const user = {
@@ -146,7 +160,8 @@ async addOnShedule(day: any, empl: User){
             start: start,
             end: end,
             hours: hours,
-            position: choise
+            position: choise,
+            concediu: con
           },
           employee: empl._id
         }
@@ -157,9 +172,9 @@ async addOnShedule(day: any, empl: User){
           checkOut: end,
           hours: hours,
           position: choise,
-          earnd: workValue
+          earnd: workValue,
+          concediu: con
         }
-        console.log(`${this.months[monthNumber]} - ${year}`)
         this.shedSrv.updateUserWorkLog(empl._id, userWorkLog).subscribe()
         this.shedSrv.addEntry(user, day, `${this.months[monthNumber]} - ${year}`, workValue).subscribe()
       }
@@ -185,7 +200,11 @@ getPosition(users: any[], userId: string){
 findUser(users: any[], userId: string){
   const user = users.find(usr => usr.employee === userId)
     if(user) {
-      return formatPeriod(user.workPeriod.start, user.workPeriod.end)
+      if(user.workPeriod.concediu){
+        return 'Concediu'
+      } else{
+        return formatPeriod(user.workPeriod.start, user.workPeriod.end)
+      }
     } else {
       return 'LiBER'
     }

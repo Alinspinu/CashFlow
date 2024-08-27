@@ -11,6 +11,9 @@ import { round, roundOne } from '../../shared/utils/functions';
 import { ActionSheetService } from '../../shared/action-sheet.service';
 import { TogglePontPage } from './togglePont/toggle-pont.page';
 import { Subscription } from 'rxjs';
+import { PaymentsPage } from './payments/payments.page';
+import { HoursPage } from './hours/hours.page';
+import User from '../../auth/user.model';
 
 @Component({
   selector: 'app-pontaj',
@@ -22,7 +25,7 @@ import { Subscription } from 'rxjs';
 export class PontajPage implements OnInit, OnDestroy {
 
 pontaj!: Pontaj
-users: any[] = []
+users: User[] = []
 monhs: string[] = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie']
 monthIndex!: number
 
@@ -51,11 +54,12 @@ pontSub!: Subscription
   }
 
   getUsers(){
-    this.usersSrv.getUsers('employees', '', environment.LOC).subscribe(response => {
+    this.usersSrv.usersSend$.subscribe(response => {
       if(response) {
-        this.users = response
+        const employees = response.filter(user => user.employee.active === true)
+        this.users = employees
        const sortedUsers = this.users.sort((a, b):any => {
-          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Ospatar: 4, ospatar: 4, Bucatar: 5, 'Ajutor bucatar': 6, 'Asistent Manager': 7, Manager: 8, Designer: 9, Asociat: 10, Administrator: 11 };
+          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Bucatar: 6, 'Ajutor bucatar': 7, 'Asistent Manager': 8, Manager: 9, Designer: 10, Asociat: 11, Administrator: 12 };
           return rolesOrder[a.employee.position] - rolesOrder[b.employee.position];
         });
         this.users = sortedUsers.slice(0,-2)
@@ -68,13 +72,34 @@ pontSub!: Subscription
 
 
 
-openPayments(payments: any){
+openPayments(payments: any, userName: string){
   const monthPayments = payments.filter((pay: any) => {
     return pay.workMonth === this.monthIndex
   })
-  console.log(monthPayments)
+  this.actSrv.openModal(PaymentsPage, {name: userName, logs: monthPayments}, false)
 }
 
+
+async paySalary(user: any){
+  const total = this.calcBonus(user.employee.payments) + this.calcIncome(user.employee) - this.calcPayments(user.employee.payments)
+  const entry = {
+    tip: 'expense',
+    date: new Date(),
+    description: `Salariu ${user.employee.fullName}`,
+    amount: total,
+    locatie: environment.LOC,
+    typeOf: 'Salariu',
+    user: [user._id],
+    month: this.monthIndex
+  }
+  const response = await this.actSrv.deleteAlert(`Plătește salariul lui ${user.employee.fullName} pentru luna ${this.pontaj.month.split('-')[0]}`, `${total} Lei`)
+  if(response){
+    this.pontSrv.paySalary(entry).subscribe((res: any) => {
+      console.log(res)
+    })
+  }
+  console.log(entry)
+}
 
 
   getPontaj(){
@@ -96,6 +121,14 @@ openPayments(payments: any){
     }
   }
 
+  hours(workLog: any, name: string) {
+    const docToFilter = workLog.filter((doc: any) => {
+      const docDate = new Date(doc.checkIn);
+      return docDate.getUTCMonth() === this.monthIndex
+    })
+    this.actSrv.openModal(HoursPage, {logs: docToFilter, name: name}, false)
+  }
+
   calcTotalsHours(workLog: any[]){
     const date = new Date().getDate()
     const docToFilter = workLog.filter(doc => {
@@ -104,12 +137,7 @@ openPayments(payments: any){
     })
     const documentsInTargetMonth = docToFilter.filter(doc => {
       const docDate = new Date(doc.checkIn);
-      if(date > 20) {
-        // console.log('filter',docDate.getUTCMonth())
-        return docDate.getUTCMonth() === this.monthIndex;
-      } else {
-        return docDate.getDate() <= 15
-      }
+      return docDate.getUTCMonth() === this.monthIndex;
     });
     let hours = 0
     documentsInTargetMonth.forEach(log => {
@@ -170,8 +198,9 @@ openPayments(payments: any){
 
   calcBonus(paymentLog: any[]){
     const documentsInTargetMonth = paymentLog.filter(doc => {
-      const docDate = new Date(doc.date);
-      return docDate.getUTCMonth() === this.monthIndex;
+      // const docDate = new Date(doc.date);
+      // return docDate.getUTCMonth() === this.monthIndex;
+      return doc.workMonth === this.monthIndex;
     });
     let payments = 0
     documentsInTargetMonth.forEach(log => {

@@ -1,0 +1,51 @@
+
+<ion-content [fullscreen]="true">
+  <ion-item lines="none" slot="fixed" class="suplier">
+    <div>
+      <span class="index">Nr.</span>
+      <span class="name">Denumire</span>
+      <span class="address">Adresă</span>
+      <span class="vat">CIF</span>
+      <span class="account">Cont bancar</span>
+      <span class="sold">Sold</span>
+    </div>
+          <ion-buttons solt="end" style="margin-right: 10px;">
+            <ion-button>
+              <ion-icon  size="large" color="success"></ion-icon>
+            </ion-button>
+            <ion-button>
+              <ion-icon size="large" color="danger"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+  </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-searchbar  style="margin-bottom: 48px;" mode="ios" [(ngModel)]="suplierSearch"  placeholder="Caută furnizor.."  (ionInput)="searchSuplier($event)" #searchbar>
+        </ion-searchbar>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none" *ngFor="let suplier of localSupliers; let i = index" class="suplier input">
+          <div (click)="openRecords(suplier._id)">
+            <span class="index">{{i+1}}.</span>
+            <span class="name">{{suplier.name}}</span>
+            <span class="address">{{suplier.address}}</span>
+            <span class="vat">{{suplier.vatNumber}}</span>
+            <span class="account">{{suplier.account}}</span>
+            <span class="sold">{{suplier.sold}} Lei</span>
+          </div>
+          <ion-buttons solt="end">
+            <ion-button (click)="editSuplier(suplier, i)">
+              <ion-icon  src="../../assets/icon/create-outline.svg"  size="large" color="success"></ion-icon>
+            </ion-button>
+            <ion-button (click)="deleteSuplier(suplier._id, i)">
+              <ion-icon  src="../../assets/icon/trash-outline.svg" size="large" color="danger"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

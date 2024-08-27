@@ -37,6 +37,8 @@ export class IngredientPage implements OnInit, OnDestroy {
   ingsToEdit!: any;
   user!: User
 
+  screenWidth!: number;
+
   ingSub!: Subscription
 
   allIngs!: InvIngredient[]
@@ -47,9 +49,8 @@ export class IngredientPage implements OnInit, OnDestroy {
   productIngredients!: any;
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingTypes: string[] = ["simplu", "compus"]
-  ingDep: string[] = ["materie", "marfa", 'consumabil']
+  ingDep: string[] = ["materie", "marfa", "consumabil", "servicii", "ob-inventar", "amenajari", "combustibil", "utilitati", "chirie", 'marketing']
   isLoading: boolean = true
-
 
   filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
 
@@ -59,7 +60,9 @@ export class IngredientPage implements OnInit, OnDestroy {
     private ingSrv: IngredientService,
     private router: Router,
     @Inject(ActionSheetService) private actionSh: ActionSheetService
-  ) { }
+  ) {
+    this.screenWidth = window.innerWidth
+  }
 
 
   ionViewWillEnter(){
@@ -217,7 +220,9 @@ updateProductIng(){
     }
     if(!this.selectDate){
       let data = {date: this.inventaryDate, ing: this.ingredients[this.ind]}
-      const ingToUpdate = await this.actionSh.openModal(AddToInventaryPage, data, false)
+      const ingToUpdate = this.screenWidth > 500 ?
+                          await this.actionSh.openModal(AddToInventaryPage, data, false) :
+                          await this.actionSh.openMobileModal(AddToInventaryPage, data, false)
       if(ingToUpdate){
         this.ingSrv.updateIngredientInventary(ingToUpdate).subscribe(async response => {
           this.ind += 1

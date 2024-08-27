@@ -1,6 +1,8 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">{{total}} LEI</ion-title>
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="title-wrapper">
+      <div class="title">{{total}} Lei</div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -8,13 +10,13 @@
 <ion-grid>
   <ion-row>
     <ion-col>
-      <form [formGroup]="paymentForm">
-      <ion-item lines="none" class="item">
-        <ion-button color="light" size="large" class="close" (click)="reset('cash')"[disabled]="disablePayButtons">X</ion-button>
+      <form [formGroup]="paymentForm" class="form">
+      <ion-item lines="none" class="item" color="transparent">
+        <ion-button color="tertiary" size="large" class="close" (click)="reset('cash')" [disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Numerar" labelPlacement="floating" placeholder="00" formControlName="cash"></ion-input>
         </ion-item>
-        <ion-button color="tertiary" size="large"  class="button" (click)="cash()" [disabled]="disablePayButtons">CASH</ion-button>
+        <ion-button color="medium" size="large"  class="button" (click)="cash()" [disabled]="disablePayButtons">CASH</ion-button>
       </ion-item>
       <!-- <ion-item lines="none" class="item">
         <ion-button color="light" size="large" class="close" (click)="reset('card')"[disabled]="disablePayButtons">X</ion-button>
@@ -23,36 +25,36 @@
         </ion-item>
         <ion-button color="tertiary" size="large" class="button" (click)="card()"[disabled]="disablePayButtons">CARD</ion-button>
       </ion-item> -->
-      <ion-item lines="none" class="item">
-        <ion-button color="light" size="large" class="close" (click)="reset('viva')"[disabled]="disablePayButtons">X</ion-button>
+      <ion-item lines="none" class="item" color="transparent">
+        <ion-button color="tertiary" size="large" class="close" (click)="reset('viva')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Viva Wallet" labelPlacement="floating" placeholder="00" formControlName="viva"></ion-input>
         </ion-item>
-        <ion-button color="tertiary" size="large" class="button" (click)="viva()"[disabled]="disablePayButtons">VIVA</ion-button>
+        <ion-button color="medium" size="large" class="button" (click)="viva()"[disabled]="disablePayButtons">VIVA</ion-button>
       </ion-item>
 
-      <ion-item lines="none" class="item">
-        <ion-button color="light" size="large" class="close" (click)="reset('viva2')"[disabled]="disablePayButtons">X</ion-button>
+      <ion-item lines="none" class="item" color="transparent">
+        <ion-button color="tertiary" size="large" class="close" (click)="reset('viva2')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Viva Wallet 2" labelPlacement="floating" placeholder="00" formControlName="viva2"></ion-input>
         </ion-item>
-        <ion-button color="tertiary" size="large" class="button" (click)="vivaTwo()"[disabled]="disablePayButtons" *ngIf="!cancelV2">VIVA 2</ion-button>
-        <ion-button color="danger" size="large" class="button" (click)="abortV2()" *ngIf="cancelV2">ANULEAZĂ</ion-button>
+        <ion-button color="medium" size="large" class="button" (click)="vivaTwo()"[disabled]="disablePayButtons" *ngIf="!cancelV2">VIVA 2</ion-button>
+        <ion-button color="light" size="large" class="button" (click)="abortV2()" *ngIf="cancelV2">ANULEAZĂ</ion-button>
       </ion-item>
 
-      <ion-item lines="none" class="item">
-        <ion-button color="light" size="large" class="close" (click)="reset('online')"[disabled]="true">X</ion-button>
+      <ion-item lines="none" class="item" color="transparent">
+        <ion-button color="tertiary" size="large" class="close" (click)="reset('online')"[disabled]="true">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Plată Online" labelPlacement="floating" placeholder="00" formControlName="online"></ion-input>
         </ion-item>
-        <ion-button color="tertiary" size="large" class="button" (click)="online()"[disabled]="false">ONLINE</ion-button>
+        <ion-button color="medium" size="large" class="button" (click)="online()"[disabled]="false">ONLINE</ion-button>
       </ion-item>
-      <ion-item lines="none" class="item">
-        <ion-button color="light" size="large" class="close" (click)="reset('cif')">X</ion-button>
+      <ion-item lines="none" class="item" color="transparent">
+        <ion-button color="tertiary" size="large" class="close" (click)="reset('cif')">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="text" label="Cod Fiscal" labelPlacement="floating" placeholder="ex.RO123232" formControlName="cif" #cifInp></ion-input>
         </ion-item>
-        <ion-button color="tertiary" size="large" class="button" (click)="cif()">RO</ion-button>
+        <ion-button color="medium" size="large" class="button" (click)="cif()">RO</ion-button>
       </ion-item>
     </form>
     </ion-col>
@@ -60,14 +62,14 @@
 </ion-grid>
 </ion-content>
 
-<ion-footer>
+<ion-footer class="ion-no-border">
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-button size="large" expand="block" color="danger"(click)="cancel()" [disabled]="disableCancelButton">Renunță</ion-button>
+        <ion-button size="large" expand="block" color="light"(click)="cancel()" [disabled]="disableCancelButton" style="height: 100px;">Renunță</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button size="large" expand="block" color="primary" (click)="cashIn()" [disabled]="disableCancelButton">{{button}}</ion-button>
+        <ion-button size="large" expand="block" color="medium" (click)="cashIn()" [disabled]="disableCancelButton" style="height: 100px;">{{button}}</ion-button>
         </ion-col>
     </ion-row>
   </ion-grid>

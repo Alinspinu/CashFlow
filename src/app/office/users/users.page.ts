@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { UsersService } from './users.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil, firstValueFrom } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
 import User from 'src/app/auth/user.model';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
@@ -20,8 +20,12 @@ import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 export class UsersPage implements OnInit, OnDestroy {
 
   userSearch: string = ''
-  users: any = []
+  users: User[] = []
   user!: User
+  localUsers: User[] = []
+
+  select: string = ''
+
 
   private unsubscribe$ = new Subject<void>();
 
@@ -37,7 +41,13 @@ export class UsersPage implements OnInit, OnDestroy {
         )
         .subscribe(() => {
           if (this.activatedRoute.snapshot.routeConfig?.path === 'users') {
-            this.getUsers('', '')
+            if(this.select === 'employees'){
+              this.localUsers = this.users.filter(users => users.employee.active === true)
+            } else if(this.select === 'users'){
+              this.localUsers = this.users.filter(users => users.employee.active === false)
+            } else {
+              this.localUsers = this.users
+            }
           }
         });
 
@@ -53,7 +63,6 @@ getUser(){
   Preferences.get({key: 'authData'}).then(data  => {
     if(data.value) {
      this.user = JSON.parse(data.value)
-     console.log(this.user)
     } else{
       this.router.navigateByUrl('/auth')
     }
@@ -63,22 +72,33 @@ getUser(){
 
   ngOnInit() {
    this.getUser()
+   this.getUsers()
   }
 
-  onSelectUser(ev: CustomEvent){
-    this.getUsers(ev.detail.value, '');
+  onSelectUsers(ev: CustomEvent){
+    const select = ev.detail.value
+    this.select = select
+    if(select === 'employees'){
+      this.localUsers = this.users.filter(users => users.employee.active === true)
+    } else if(select === 'users'){
+      this.localUsers = this.users.filter(users => users.employee.active === false)
+    } else {
+      this.localUsers = this.users
+    }
   }
 
-  searchProduct(ev: CustomEvent){
-   this.getUsers('', ev.detail.value)
+  searchUsers(ev: CustomEvent){
+    const searchInput = ev.detail.value
+    this.localUsers = this.users.filter(users => users.name.toLowerCase().includes(searchInput.toLowerCase()))
   }
 
-  getUsers(filter:string, search: string){
-    setTimeout(() => {
-      this.usersSrv.getUsers(filter, search, this.user.locatie).subscribe(response => {
+  getUsers(){
+    this.usersSrv.usersSend$.subscribe(response => {
+      if(response){
         this.users = response
-      } )
-    }, 200)
+        this.localUsers = this.users
+      }
+    })
   }
 
   goUserPage(userId: string){

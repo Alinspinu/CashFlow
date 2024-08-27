@@ -1,6 +1,6 @@
 
-ion-content{
-  --background: tranasparent;
+ion-content, ion-toolbar{
+  --background: #fae2ce !important;
   font-family: NoirProSemi;
 }
 
@@ -31,34 +31,30 @@ ion-title{
 
 
 
-.container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-}
+// .container::before {
+//   content: "";
+//   position: absolute;
+//   top: 0;
+//   right: 0;
+//   bottom: 0;
+//   left: 0;
+//   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+// }
 
-
-.dynamic-header-active {
-  // background-color: var(--ion-color-danger);
-  --background: var(--ion-color-danger);
-  --color:white;
-}
-
-.accept-button-wrapper{
-  display: flex;
-  flex-direction: row;
-}
 
 
 .back-button{
-  --background: var(--ion-color-danger);
+  --background: var(--ion-color-medium);
   height: 50px;
   width: 70px;
   --color: white;
+}
+
+.header-buttons{
+  --background: var(--ion-color-medium);
+  color: #fff;
+  height: 50px;
+  text-transform: uppercase !important;
 }
 
 
@@ -72,7 +68,7 @@ ion-title{
     width: 90px;
     height: 90px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-    background-color: var(--ion-color-tertiary);
+    background-color: var(--ion-color-light);
     border-radius: 8px;
     font-size: 30px;
     position: relative;
@@ -113,8 +109,8 @@ ion-title{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--ion-color-danger);
-    color: var(--ion-color-light);
+    background-color: var(--ion-color-light);
+    color: var(--ion-color-medium);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
     border-radius: 50%;
     height: 25px;
@@ -128,7 +124,7 @@ ion-title{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--ion-color-success-shade);
+    background-color: rgb(56, 56, 56);
     color: var(--ion-color-light);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
     border-radius: 50%;
@@ -139,14 +135,14 @@ ion-title{
   }
 
   .edit{
-    font-size: 30px;
-    color: rgb(32, 160, 239);
+    font-size: 20px;
+    color: var(--ion-color-medium);
     cursor: pointer
   }
 
   .delete{
-    font-size: 30px;
-    color: var(--ion-color-danger);
+    font-size: 20px;
+    color: var(--ion-color-medium);
     margin-left: 30%;
     cursor: pointer;
   }
@@ -155,7 +151,12 @@ ion-title{
 
 
 .bussy{
-  background-color: var(--ion-color-primary) !important;
+  background-color: var(--ion-color-medium) !important;
+  color: white !important;
+}
+.waiter{
+  background-color: rgb(56, 56, 56) !important;
+  color: white !important;
 }
 
 

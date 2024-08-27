@@ -17,7 +17,7 @@ export class CashControlService{
 
 raport(value: string){
   const headers = this.auth.apiAuth()
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {rep: value}, {headers})
+  return this.http.get<{message: string}>(`${environment.SAVE_URL}pay/reports?value=${value}`)
 }
 
 saveInventary(){
@@ -27,7 +27,7 @@ saveInventary(){
 
 cashInAndOut(data: any){
   const headers = this.auth.apiAuth()
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {inOut: data}, {headers})
+  return this.http.post<{message: string}>(`${environment.SAVE_URL}pay/in-and-out`, {data: data}, {headers})
 }
 
 getUserOrders(userId: string) {
@@ -47,12 +47,12 @@ changePaymnetMethod(bill: Bill){
 
 reprintBill(bill: string){
   const headers = this.auth.apiAuth()
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {fiscal: bill}, {headers})
+  return this.http.post<{message: string}>(`${environment.SAVE_URL}pay/print-bill`, {bill: bill}, {headers})
 }
 
 printNefiscal(bill: string){
   const headers = this.auth.apiAuth()
-  return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {nefiscal: bill}, {headers})
+  return this.http.post<{message: string}>(`${environment.SAVE_URL}pay/print-unreg`, {bill: bill}, {headers})
 }
 
 removeProductDiscount(data: any){

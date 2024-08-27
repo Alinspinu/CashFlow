@@ -9,10 +9,10 @@
 <ion-grid>
   <ion-row>
     <ion-col>
-      <ion-item lines="none">
-        <ion-button size="large" class="maxim" color="primary"(click)="maxim()">MAXIM</ion-button>
+      <ion-item line="none" class="item">
+        <ion-button size="large" class="close" color="primary"(click)="maxim()">MAXIM</ion-button>
         <form [formGroup]="cashBackForm">
-        <ion-item lines="none" class="input">
+        <ion-item class="input">
           <ion-input type="number" label="Valoare" labelPlacement="floating" placeholder="00" formControlName="val"></ion-input>
         </ion-item>
         </form>

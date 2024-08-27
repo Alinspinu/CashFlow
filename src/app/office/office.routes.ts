@@ -34,6 +34,16 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'supliers',
+        loadComponent: () => import('./supliers/supliers.page').then( m => m.SupliersPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'suplier/:id',
+        loadComponent: () => import('./supliers/suplier/suplier.page').then( m => m.SuplierPage),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'shedule',
         loadComponent: () => import('./shedule/shedule.page').then( m => m.ShedulePage),
         canActivate: [AuthGuard]
@@ -61,9 +71,11 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'show-paymets',
-    loadComponent: () => import('./pontaj/show-paymets/show-paymets.page').then( m => m.ShowPaymetsPage)
+    path: 'record-modal',
+    loadComponent: () => import('./supliers/suplier/record-modal/record-modal.page').then( m => m.RecordModalPage)
   },
+
+
 
   // {
   //   path: 'product-ingredient',

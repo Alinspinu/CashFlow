@@ -3,6 +3,7 @@
 
 ion-content{
   --background: var(--ion-color-tertiary);
+  // height: 100vw;
 }
 
 ion-label{
@@ -10,25 +11,32 @@ ion-label{
 }
 
 
+.spinner-content{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 
-  .grid-date{
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex-direction: column;
-   height: 80vh;
-   width: 100%;
+.grid-date{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  width: 100%;
 
-   ion-button{
-    padding: 16px;
-    width: 280px;
-    height: 110px;
-    --border-radius: 20px;
-    font-size: 25px;
-    font-family: NoirProReg;
+  ion-button{
+  padding: 16px;
+  width: 280px;
+  height: 110px;
+  --border-radius: 20px;
+  font-size: 25px;
+  font-family: NoirProReg;
 
-   }
+  }
 }
 
 

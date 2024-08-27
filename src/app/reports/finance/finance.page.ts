@@ -1,18 +1,18 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
-import { convertToDateISOString, formatedDateToShow, getUserFromLocalStorage, round } from '../../shared/utils/functions';
+import { IonicModule} from '@ionic/angular';
+import { formatedDateToShow, getUserFromLocalStorage, round } from '../../shared/utils/functions';
 import { ActionSheetService } from '../../shared/action-sheet.service';
 import { DatePickerPage } from '../../modals/date-picker/date-picker.page';
 import { ReportsService } from '../reports.service';
 import User from '../../auth/user.model';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.prod';
-import { LogoPagePage } from '../../shared/logo-page/logo-page.page';
 import { Report } from '../../models/report.model';
 import { UsersViewPage } from '../../modals/users-view/users-view.page';
 import { DepViewPage } from '../../modals/dep-view/dep-view.page';
+import { SpinnerPage } from '../../modals/spinner/spinner.page';
 
 
 @Component({
@@ -20,7 +20,7 @@ import { DepViewPage } from '../../modals/dep-view/dep-view.page';
   templateUrl: './finance.page.html',
   styleUrls: ['./finance.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, LogoPagePage]
+  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
 })
 export class FinancePage implements OnInit {
 
@@ -105,10 +105,11 @@ createReport(){
     goods: true,
     prod: true
   }
-  const date = new Date(2024, 5 , 6).toISOString()
-  this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, filter, 'report').subscribe()
-  // for(let day = 4; day <= 5; day++){
-  // }
+
+  for(let day = 2; day <= 6; day++){
+    const date = new Date(2024, 7 , day).toISOString()
+    this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, filter, 'report').subscribe()
+  }
 }
 
 

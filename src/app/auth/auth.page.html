@@ -3,11 +3,11 @@
 
  <ion-content class="auth-wrapper">
    <div class="header">
-
      <h4 class="subtitle"*ngIf="!resetPasswordMode">Login</h4>
      <h4 class="subtitle"*ngIf="resetPasswordMode">Schimbă parola</h4>
     </div>
-    <ion-grid>
+    <app-spinner *ngIf="isLoading" class="spinner"></app-spinner>
+    <ion-grid *ngIf="!isLoading">
         <form [formGroup]="form">
         <ion-row *ngIf="!resetPasswordMode">
           <ion-col size-lg="6" offset-lg="3">
@@ -32,7 +32,7 @@
         </ion-row>
           <ion-row *ngIf="!resetPasswordMode">
             <ion-col size-lg="6" offset-lg="3">
-              <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid || disableLogIn">
+              <ion-button color="medium" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid || disableLogIn">
                 <ion-label style="color:white;">
                   Login
                 </ion-label>
@@ -55,7 +55,7 @@
         </ion-row>
         <ion-row *ngIf="resetPasswordMode">
           <ion-col size-lg="6" offset-lg="3">
-            <ion-button color="danger" (click)="sendNewPassword()" class="ion-padding" size="medium" expand="full" [disabled]="!validEmail">
+            <ion-button color="medium" (click)="sendNewPassword()" class="ion-padding" size="medium" expand="full" [disabled]="!validEmail">
               <ion-label>
                 Resetează
               </ion-label>
@@ -64,7 +64,7 @@
         </ion-row>
         <ion-row *ngIf="resetPassword && !resetPasswordMode">
           <ion-col size-lg="6" offset-lg="3">
-            <ion-button color="danger" (click)="onResetPassword()" class="ion-padding" size="small" expand="full">
+            <ion-button color="light" (click)="onResetPassword()" class="ion-padding" size="small" expand="full">
               <ion-label>
                 Resetează parola!
               </ion-label>

@@ -8,6 +8,13 @@ export class Report {
     public ingsValue: number,
     public rentValue: number,
     public supliesValue: number,
+    public serviceValue: number,
+    public marketingValue: number,
+    public inventarySpendings: number,
+    public gasValue: number,
+    public constructionsValue: number,
+    public rent: number,
+    public utilities: number,
     public impairment: {
         total: number,
         products: {

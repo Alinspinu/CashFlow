@@ -47,7 +47,6 @@ getIngToedit(){
     const invDay = this.ing.inventary.find((inv:any) => {
       return this.setDateToZero(inv.day) === this.setDateToZero(ing.date)
     })
-    console.log(invDay)
     if(invDay){
       this.invDayIndex = invDay.index
       this.dateQty = invDay.qty

@@ -1,12 +1,12 @@
 
 <ion-tabs>
-  <ion-tab-bar slot="top">
+  <ion-tab-bar slot="top" *ngIf="screenWidth > 500">
     <ion-tab-button tab="products" href="/office/products">
       <ion-icon aria-hidden="true" src="../../assets/icon/food.svg"></ion-icon>
       <ion-label>Produse</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="ingredient" href="/office/ingredient" *ngIf="user && user.employee.access > 3">
+    <ion-tab-button tab="ingredient" href="/office/ingredient" *ngIf="user && user.employee.access > 2">
       <ion-icon aria-hidden="true" src="../../assets/icon/plant.svg"></ion-icon>
       <ion-label>Materii Prime</ion-label>
     </ion-tab-button>
@@ -16,9 +16,14 @@
       <ion-label>Live Stoc</ion-label>
     </ion-tab-button> -->
 
-    <ion-tab-button tab="nirs" href="/office/nirs" *ngIf="user && user.employee.access > 3">
+    <ion-tab-button tab="nirs" href="/office/nirs" *ngIf="user && user.employee.access > 2">
       <ion-icon aria-hidden="true" src="../../assets/icon/document.svg"></ion-icon>
       <ion-label>NIR</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="supliers" href="/office/supliers" *ngIf="user && user.employee.access > 2">
+      <ion-icon aria-hidden="true" src="../../assets/icon/document.svg"></ion-icon>
+      <ion-label>Furnizori</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="cash-register" href="/office/cash-register">

@@ -67,7 +67,7 @@ export class ContentService{
     }
 
     get categoriesNameId$(){
-      return  this.category.map(({_id, name, mainCat}) => ({_id, name, mainCat}))
+      return  this.category.map(({_id, name, mainCat, order}) => ({_id, name, mainCat, order}))
       }
 
       setDiscount(data: any[]){
@@ -108,6 +108,17 @@ export class ContentService{
       }
     }
 
+
+  editCategory(formData: any){
+    return this.http.put<{message: string, category: Category}>(`${environment.BASE_URL}cat/cat`, formData)
+      .pipe(tap(response => {
+        if(response){
+          const catIndex = this.category.findIndex(cat => cat._id === response.category._id)
+          this.category[catIndex] = response.category
+          this.categoryState.next([...this.category])
+        }
+      }))
+  }
 
 
 }

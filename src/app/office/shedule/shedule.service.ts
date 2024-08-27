@@ -24,6 +24,14 @@ export class SheduleService{
     this.sheduleSend$ =  this.sheduleState.asObservable();
   }
 
+
+  private createBasicAuthHeader(): HttpHeaders {
+    const credentials = btoa(`${environment.API_USER}:${environment.API_PASSWORD}`);
+    return new HttpHeaders({
+      'Authorization': `Basic ${credentials}`
+    });
+  }
+
 getLastShedule(){
   return this.http.get<Shedule>(`${environment.BASE_URL}shedule?loc=${environment.LOC}&shedule=last`)
       .pipe(tap(response => {
@@ -67,11 +75,13 @@ deleteEntry(userId: any, day: string, month: string, dateStr: string){
 }
 
 updateUserWorkLog(userId: string, workLog: any){
-  return this.http.put(`${environment.BASE_URL}users/work-log`,{userId, workLog})
+  const headers = this.createBasicAuthHeader()
+  return this.http.put(`${environment.BASE_URL}users/work-log`,{userId, workLog}, {headers})
 }
 
 deleteUserWorkEntry(userId: string, day: any){
-    return this.http.post(`${environment.BASE_URL}users/work-log`, {userId, day})
+  const headers = this.createBasicAuthHeader()
+    return this.http.post(`${environment.BASE_URL}users/work-log`, {userId, day}, {headers})
 }
 
 

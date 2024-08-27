@@ -10,6 +10,7 @@ import { DatePickerPage } from '../date-picker/date-picker.page';
 import { formatedDateToShow } from 'src/app/shared/utils/functions';
 import { NirService } from '../../office/CRUD/nir/nir.service';
 import { UsersService } from '../../office/users/users.service';
+import { SelectDataPage } from '../select-data/select-data.page';
 
 // interface Data {
 //   ing: {
@@ -92,8 +93,8 @@ export class AddEntryPage implements OnInit {
   ]
 
   documents: string[] = [
-    'Bon fiscal',
-    'Chitanta',
+    'bon fiscal',
+    'chitanta',
     'Dispozitie de plata',
     'Dispozitie de incasare',
     'Fara'
@@ -175,8 +176,9 @@ export class AddEntryPage implements OnInit {
   }
 
   getUsers(){
-    this.usersSrv.getUsers('employees', '', environment.LOC).subscribe(response => {
-      this.users = response
+    this.usersSrv.usersSend$.subscribe(response => {
+      const employees = response.filter(user => user.employee.active === true)
+      this.users = employees
       this.users.forEach((user: any) => {
           if(user.name === 'sergiu' || user.name === 'Adrian Piticariu'){
               this.admin.push(user)
@@ -249,6 +251,7 @@ export class AddEntryPage implements OnInit {
                   return
               }
             }
+
         } else {
           this.operations = this.expenseOp
           const typeOf = await this.actionSheet.entryAlert(this.expenseOp, 'radio','Tip de Încasare','Alege o opțiune','', '')
@@ -257,7 +260,8 @@ export class AddEntryPage implements OnInit {
             this.form.get('typeOf')?.setValue(typeOf)
             switch(typeOf){
               case 'Plata furnizor':
-                const suplierName = await this.actionSheet.entryAlert(this.supliersToSend, 'radio', 'Furnizori', 'Alege un furnizor','suplier-alert','')
+                // const suplierName = await this.actionSheet.entryAlert(this.supliersToSend, 'radio', 'Furnizori', 'Alege un furnizor','suplier-alert','')
+                const suplierName = await this.actionSheet.openSelect(SelectDataPage, this.supliersToSend, 'data')
                 if(suplierName){
                   if(suplierName === "Altul"){
                     const desc = await this.actionSheet.textAlert('Nume furnizor', 'Scrie numele furnizorului', 'nr', 'Descriere')
@@ -331,7 +335,7 @@ export class AddEntryPage implements OnInit {
                 return
               case 'Avans':
                 this.usersToShow = this.users
-                const user = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert', '')
+                const user = await this.actionSheet.openSelect(SelectDataPage, this.usersNames, 'data')
                 if(user){
                   this.hide.user = true
                   const choise = this.users.find((usr:any) => usr.employee.fullName === user)
@@ -354,7 +358,7 @@ export class AddEntryPage implements OnInit {
                 return
               case 'Salariu':
                 this.usersToShow = this.users
-                const employee = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert', '')
+                const employee = await this.actionSheet.openSelect(SelectDataPage, this.usersNames, 'data')
                 if(employee){
                   this.hide.user = true
                   const choise = this.users.find((usr:any) => usr.employee.fullName === employee)
@@ -377,7 +381,7 @@ export class AddEntryPage implements OnInit {
                 return
               case 'Bonus vanzari':
                 this.usersToShow = this.users
-                const users = await this.actionSheet.entryAlert(this.usersNames, 'checkbox', 'Angajați', 'Alege angajați', 'suplier-alert', '')
+                const users = await this.actionSheet.openSelect(SelectDataPage, this.usersNames, 'bonus')
                 if(users){
                   this.hide.users = true
                   this.bonusName = users
@@ -389,16 +393,24 @@ export class AddEntryPage implements OnInit {
                         }
                     })
                   })
-                  const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
-                  if(sum){
-                    this.hide.amount = true
-                    this.form.get('price')?.setValue(sum)
+                  const currentMonthIndex = new Date(Date.now()).getMonth()
+                  const currentMonth = this.months[currentMonthIndex]
+                  const montBehind = this.months[currentMonthIndex -1]
+                  const month = await this.actionSheet.entryAlert([montBehind, currentMonth], 'radio', 'Luna', 'Alege luna din care se scade bonusul', 'suplier-alert', '')
+                  if(month){
+                    this.hide.month = true
+                    this.form.get('month')?.setValue(month)
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
                   }
                 }
                 return
               case 'Bonus excelenta':
                 this.usersToShow = this.users
-                const lucky = await this.actionSheet.entryAlert(this.usersNames, 'radio', 'Angajat', 'Alege Angajat', 'suplier-alert', '')
+                const lucky = await this.actionSheet.openSelect(SelectDataPage, this.usersNames, 'data')
                 if(lucky){
                   this.hide.user = true
                   const choise = this.users.find((usr:any) => usr.employee.fullName === lucky)

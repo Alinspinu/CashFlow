@@ -26,7 +26,7 @@ export class ProductsPage implements OnInit {
   productSearch: any
   productIngSearch: any
   recipeIcon: string = ''
-  categories: any = []
+  categories: {name: string, _id: string, order: number, mainCat: string}[] = []
   mainCats: any = []
   categoriesToShow: any = []
   filter: any = {
@@ -228,6 +228,21 @@ searchIngProduct(ev: any){
        })
      }
 
+    }
+
+    async editCat(){
+      const sortedCategories = this.categories.sort((a,b) => a.name.localeCompare(b.name))
+      const categoryId = await this.actionSrv.chooseCategory(sortedCategories)
+      if(categoryId) {
+        const response = await this.actionSrv.openModal(CategoryPage, categoryId, false)
+        if(response){
+          this.contentSrv.editCategory(response).subscribe(response => {
+            if(response){
+             showToast(this.toastCtrl, response.message, 2000)
+            }
+          })
+        }
+      }
     }
 
     calcProductionPrice(product: any){

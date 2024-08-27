@@ -52,6 +52,7 @@ export class Bill{
       telephone: string,
       userId: string,
       cashBack: number,
+      email: string,
       discount: {
         general: number,
         category: {

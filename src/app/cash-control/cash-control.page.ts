@@ -91,13 +91,14 @@ export class CashControlPage implements OnInit, OnDestroy {
         }
       }, error => {
         if(error) {
-          console.log(error )
+          console.log(error)
           showToast(this.toastCtrl, error.message, 3000, 'error-toast')
         }
       })
     }
      if(result && result.message === "reprint") {
-        this.cashSrv.reprintBill(result.order).subscribe(response => {
+      const order = JSON.stringify(result.order)
+        this.cashSrv.reprintBill(order).subscribe(response => {
           if(response) {
             showToast(this.toastCtrl, response.message, 3000, 'success-toast')
           }

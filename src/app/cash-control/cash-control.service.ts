@@ -38,7 +38,7 @@ changePaymnetMethod(bill: Bill){
   return this.http.post<{message: string}>(`${environment.BASE_URL}pay/change-payment-method`, {bill: bill})
 }
 
-reprintBill(bill: Bill){
+reprintBill(bill: string){
   const headers = this.auth.apiAuth()
   return this.http.post<{message: string}>(`${environment.PRINT_URL}print`, {fiscal: bill}, {headers})
 }

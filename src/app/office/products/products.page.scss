@@ -6,6 +6,7 @@ ion-content, ion-toolbar{
 ion-searchbar{
   font-family: NoirProReg !important;
   padding: 8px;
+  --background: var(--ion-color-light);
 }
 
 ion-select{

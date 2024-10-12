@@ -69,12 +69,12 @@
    */
 
   body {
-    --ion-color-primary: #fc9037;
-    --ion-color-primary-rgb: 255,160,82;
-    --ion-color-primary-contrast: #ffffff;
-    --ion-color-primary-contrast-rgb: 0,0,0;
-    --ion-color-primary-shade: #e08d48;
-    --ion-color-primary-tint: #ffaa63;
+    --ion-color-primary: #b56b28; /* Darkened version of #fc9037 */
+    --ion-color-primary-rgb: 181,107,40; /* Adjusted RGB for darker tone */
+    --ion-color-primary-contrast: #ffffff; /* Keep white contrast for dark backgrounds */
+    --ion-color-primary-contrast-rgb: 255,255,255;
+    --ion-color-primary-shade: #9c5d23; /* Darkened version of #e08d48 */
+    --ion-color-primary-tint: #d07e3b;
 
     --ion-color-secondary: #f7b57f;
     --ion-color-secondary-rgb: 255,216,184;

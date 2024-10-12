@@ -10,7 +10,11 @@
         cursor: pointer;
       }
       .option:hover{
-       --background: var(--ion-color-medium-shade);
+       --background: var(--ion-color-medium-tint);
+       --color: var(--ion-color-light);
+       ion-icon{
+        color: var(--ion-color-light)
+       }
       }
     }
 

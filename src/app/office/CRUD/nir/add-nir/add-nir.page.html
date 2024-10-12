@@ -4,7 +4,7 @@
       <ion-title class="ion-text-center" style="margin: 8px 0;">Adaugă Nir</ion-title>
       <div class="searchbar-wrapper">
         <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplier($event)" #searchBarSuplier></ion-searchbar>
-        <img src="assets/icon/add-circle.svg" id="add-cat"  (click)="addSuplier()">
+        <ion-icon src="assets/icon/add-circle.svg"  (click)="addSuplier()" color="medium" size="large" class="searcbar-icon"></ion-icon>
       </div>
       <ion-list *ngIf="supliers.length">
         <ion-item *ngFor="let suplier of supliers; let i = index" class="fur-name" (click)="selectSuplier(suplier)">

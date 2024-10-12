@@ -3,7 +3,7 @@ font-size: 18px;
 }
 
 ion-content, ion-toolbar {
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 
 ion-card{

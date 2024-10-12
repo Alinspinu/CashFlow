@@ -6,17 +6,17 @@
           <ion-buttons slot="start" *ngIf="screenWidth > 500">
             <ion-button class="input" (click)="openDateModal('start')">
               DE LA
-              <img src="../../../assets/png/date-in.png" class="icon-start" alt="date-in-logo">
+              <ion-icon src="../../../assets/png/date-in.png" class="icon-start" alt="date-in-logo" color="medium" size="large"></ion-icon>
             </ion-button>
             <span class="display-date">{{startDate ? formatDate(startDate) : "..."}}</span>
             <ion-button class="input" (click)="openDateModal('end')">
               PÂNĂ LA
-              <img src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo">
+              <ion-icon src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo" color="medium" size="large"></ion-icon>
             </ion-button>
             <span class="display-date">{{endDate ? formatDate(endDate) : "..."}}</span>
             <ion-button class="input" style="margin-left: 90px;" (click)="export()" [disabled]="!startDate || !endDate">
               Export Xcel
-              <img src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo">
+              <ion-icon src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo" color="medium" size="large"></ion-icon>
             </ion-button>
             <!-- <ion-button class="input" style="margin-left: 90px;" (click)="loadMore()">
               Load
@@ -26,7 +26,7 @@
           <ion-buttons slot="end">
             <ion-button class="input" (click)="addEntry()">
               ADAUGĂ INTRARE
-              <img src="assets/icon/add-circle.svg" class="add">
+              <ion-icon src="assets/icon/add-circle.svg" class="add" color="medium" size="large"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-item>

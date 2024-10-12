@@ -59,12 +59,12 @@
 
 body ion-alert.reprint-alert{
   font-family: NoirProReg !important;
-  --background: #fbf0e7;
+  --background: var(--ion-color-tertiary);
   --max-width: none !important;
   --width: 700px !important;
   .alert-title{
-    background-color: black;
-    color: white;
+    background-color: var(--ion-color-light);
+    color: var(--ion-color-medium);
     padding: 12px;
     text-align: center;
     font-size: 32px;
@@ -77,7 +77,8 @@ body ion-alert.reprint-alert{
     font-size: 30px;
     padding-left: 12px;
     height: 100px;
-    background-color: white;
+    background-color: var(--ion-color-light);
+    color: var(--ion-color-medium);
     box-shadow:
     0 -2px 4px rgba(0, 0, 0, 0.1),
     0 2px 4px rgba(0, 0, 0, 0.1);
@@ -166,11 +167,11 @@ body ion-alert.deleteAlert{
   body ion-alert.discountAlert {
     --max-width: none!important;
     --width: 400px!important;
-    --background: #fbf0e7;
+    --background: var(--ion-color-tertiary) !important;
     font-family: NoirProReg !important;
     .alert-title{
-      background-color: black;
-      color: white;
+      background-color: var(--ion-color-medium) !important;
+      color:  var(--ion-color-light) !important;
       padding: 12px;
       text-align: center;
     }
@@ -185,21 +186,21 @@ body ion-alert.deleteAlert{
       0 -2px 4px rgba(0, 0, 0, 0.1),
       0 2px 4px rgba(0, 0, 0, 0.1);
       padding: 12px;
-      background-color: white;
-      --highlight-color-focused: black !important;
-      --color: black !important;
+      background-color: var(--ion-color-light);
+      --highlight-color-focused: var(--ion-color-medium) !important;
+      --color: var(--ion-color-medium) !important;
     }
   }
 
 
   body ion-alert{
-    --background: #fbf0e7 !important;
+    --background:  var(--ion-color-tertiary) !important;
     --max-width: none!important;
     --width: 500px;
     font-family: NoirProReg !important;
     .alert-title{
-      background-color: black;
-      color: white !important;
+      background-color: var(--ion-color-medium) !important;
+      color: var(--ion-color-light) !important;
       padding: 12px !important;
       font-size: 26px !important;
       text-align: center;
@@ -224,7 +225,6 @@ body ion-alert.deleteAlert{
       font-size: 22px !important;
     }
   }
-
   ion-date-time{
     .datetime-button-cancel{
       color: var(--ion-color-light) !important;

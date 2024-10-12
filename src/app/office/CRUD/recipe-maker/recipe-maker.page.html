@@ -1,10 +1,10 @@
 
 
     <ion-item lines="none" [color]="color">
-      <ion-label src="assets/icon/art.svg" alt="" class="searchbar-icon"(click)="switchMode()" size="large"></ion-label>
+      <ion-icon src="assets/icon/art.svg" alt="" class="searchbar-icon" (click)="switchMode()" size="large"></ion-icon>
       <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)" #searchbar (keyup.enter)="setIng()"[disabled]="isLoading">
       </ion-searchbar>
-      <ion-label src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()" size="large"></ion-label>
+      <ion-icon src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()" size="large"></ion-icon>
     </ion-item>
     <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
       <div>

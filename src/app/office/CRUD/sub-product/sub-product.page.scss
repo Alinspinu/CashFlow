@@ -1,6 +1,6 @@
 
 ion-content, ion-toolbar, ion-footer{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 
 
@@ -17,7 +17,7 @@ ion-button{
   0 -2px 4px rgba(0, 0, 0, 0.1),
   0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  background-color: white;
+  background-color: var(--ion-color-light);
   padding-left: 24px;
   border-radius: 8px;
   margin: 1rem 0 0.5rem 0.5rem;
@@ -31,9 +31,9 @@ ion-button{
   .title{
     font-family: NoirProSemi !important;
     text-align: center;
-    background-color: black;
+    background-color: var(--ion-color-medium);
     padding: 18px;
-    color: white;
+    color: var(--ion-color-light);
     font-size: 24px;
     margin-top: 8px;
   }

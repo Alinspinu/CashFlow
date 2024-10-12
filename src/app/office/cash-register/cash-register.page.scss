@@ -18,12 +18,9 @@ ion-title{
   --color: var(--ion-color-primary-contrast) !important;
 }
 
-ion-toolbar{
-  --background: #f4ede6;
-}
 
 ion-content, ion-toolbar {
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 
 .trash{
@@ -74,22 +71,16 @@ ion-content, ion-toolbar {
 .date{
   font-family: NoirProSemi !important;
   font-size: 14px;
-  color: rgb(76, 74, 74);
+  color: var(--ion-color-medium)
 }
 
 .cash{
   text-align: end;
   font-family: NoirProSemi !important;
   font-size: 20px;
-  color: rgb(76, 74, 74);
+  color: var(--ion-color-light-tint)
 }
 
-
-@media(max-width: 300px) {
-    ion-label{
-      font-size: 13px !important;
-    }
-}
 
 .icon-start{
   height: 18px;
@@ -107,7 +98,7 @@ ion-content, ion-toolbar {
 
 .input{
   height: 45px;
-  border: 0.5px solid var(--ion-color-medium);
+  border: 0.5px solid var(--ion-color-light-tint);
   border-radius: 8px;
   margin: 0.1rem 0 0.1rem 0.2rem;
 }
@@ -115,8 +106,15 @@ ion-content, ion-toolbar {
 
 .display-date{
   height: 45px;
-  border: 0.5px solid var(--ion-color-medium);
+  border: 0.5px solid var(--ion-color-light-tint);
   border-radius: 8px;
   padding: 10px;
   margin: 0.1rem 0 0.1rem 0.2rem;
+}
+
+
+@media(max-width: 300px) {
+  ion-label{
+    font-size: 13px !important;
+  }
 }

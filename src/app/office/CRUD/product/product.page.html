@@ -18,7 +18,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
   <ion-grid>
     <ion-row>
       <ion-col size="3">
@@ -35,7 +35,7 @@
           <ion-select placeholder="Alege Categorie Produs" formControlName="cat">
             <ion-select-option *ngFor="let cat of categoriesToshow" [value]="cat._id">{{cat.name}}</ion-select-option>
           </ion-select>
-          <img src="assets/icon/add-circle.svg" id="add-cat" (click)="addCat()">
+          <ion-icon src="assets/icon/add-circle.svg" color="medium" (click)="addCat()"></ion-icon>
         </ion-item>
         <ion-item lines="none" class="input">
           <ion-input mode="ios" type="text" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty"></ion-input>

@@ -1,10 +1,21 @@
+ion-content, ion-toolbar {
+  --background: var(--ion-color-tertiary) !important;
+}
+
 .input{
   cursor: pointer;
-  height: 40px;
-  border: 0.5px solid var(--ion-color-medium);
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  border-radius: 4px;
   margin: 0.4rem 0 0.4rem 0.2rem;
   font-family: NoirProLight !important;
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--ion-color-light);
+  color: var(--ion-color-medium);
+  padding-left: 24px;
   display: flex;
   flex-direction: row;
   span{
@@ -14,13 +25,19 @@
     flex: 2%
   }
   .data{
-    flex: 48%;
+    flex: 30%;
   }
   .discount{
-    flex: 25%;
+    flex: 15%;
     // margin-left: 50px;
     text-align: center;
   }
+  .client{
+    font-family: NoirProSemi !important;
+    flex: 38%;
+    text-align: start;
+  }
+
   .total{
     flex: 25%;
     font-family: NoirProSemi !important;
@@ -47,10 +64,15 @@
     flex: 2%
   }
   .data{
-    flex: 48%;
+    flex: 30%;
+  }
+
+  .client{
+    flex: 38%;
+    text-align: start;
   }
   .discount{
-    flex: 25%;
+    flex: 15%;
     // margin-left: 50px;
     text-align: center;
   }

@@ -1,37 +1,79 @@
-.header{
-  font-size: 17px !important;
-  margin-left: 0.5rem;
-}
-img{
+
+.searchbar-icon{
   height: 35px;
   cursor: pointer
 }
-img:active{
-  background-color: rgb(239, 239, 239);
+.searchbar-icon:active{
+  background-color: var(--ion-color-light);
   border-radius: 4px;
   padding: 3px;
 }
 
-.input{
-  border: 0.5px solid var(--ion-color-medium);
-  border-radius: 8px;
-  margin: 1rem 0 0.5rem 0.5rem;
+
+.content-container{
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  padding-left: 24px;
+  height: 60px;
+  .name{
+    margin-left: 0.6rem;
+    flex: 30%;
+  };
+  .gestiune{
+    flex: 20%;
+    text-align: center;
+  };
+  .cant{
+    flex: 22%;
+    text-align: center;
+  };
+  .price{
+    flex: 18%;
+    text-align: end;
+  };
+  .total{
+    flex: 40%;
+  };
+  .total-price{
+    text-align: end;
+  };
+  .val{
+    flex: 10%;
+  }
 }
+
+
 .input1{
-  border: 0.5px solid var(--ion-color-medium);
+  width: 50% !important;
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  background-color: var(--ion-color-light);
+  padding-left: 12px;
   margin: 1rem 0 0.5rem 0.5rem;
-  padding-left: 12px!important;
+  font-family: NoirProReg !important;
 }
+
+
 .input2{
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  background-color: var(--ion-color-light);
   margin: 1rem 0 0.5rem 0.5rem;
+  font-family: NoirProReg !important;
+  font-size: 18px !important;
 }
 
 .select{
   width: 900px !important;
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--ion-color-light);
   border-radius: 8px;
   height: 60px !important;
   margin: 1rem 0 0.5rem 0.5rem;
@@ -39,23 +81,20 @@ img:active{
   padding-right: 12px!important;
 }
 
-ion-title{
-  font-family: NoirProReg !important;
+
+
+ion-content, ion-toolbar, ion-footer{
+  --background: var(--ion-color-tertiary) !important;
+  background-color: var(--ion-color-tertiary);
 }
-ion-select{
+
+
+ ion-title, span, ion-item, ion-input, ion-select, ion-searchbar{
   font-family: NoirProReg !important;
 }
 
-ion-input{
-  font-family: NoirProReg !important;
-}
-
-ion-button{
-  font-family: NoirProReg !important;
-}
-
-ion-searchbar{
-  font-family: NoirProReg !important;
+ion-button, h1{
+  font-family: NoirProSemi !important;
 }
 
 
@@ -77,38 +116,36 @@ ion-searchbar{
     margin-left: 8px;
   }
 }
-.name{
-  font-weight: 500;
-  font-size: 18px;
+
+
+.title-wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .title{
+    font-family: NoirProSemi !important;
+    text-align: center;
+    background-color: var(--ion-color-medium);
+    padding: 18px;
+    color: var(--ion-color-light);
+    font-size: 24px;
+    margin-top: 8px;
+  }
 }
 
-.gst{
-
-}
-
-.stc{
-
-}
 
 
-.ionicon{
-  height: 25px;
 
-}
-
-.sep{
-  width: 10px;
-  margin-right: 9%;
-}
 
 
 .ing-name{
   cursor: pointer;
-  --background: var(--ion-color-warning-shade);
+  --background: var(--ion-color-light);
   border-radius: 8px;
   margin: 4px;
   span{
-    color: var(--ion-color-warning-contrast);
+    color: var(--ion-color-warning-medium);
   }
 }
 
@@ -116,43 +153,5 @@ ion-searchbar{
   --background: var(--ion-color-danger)
 }
 
-.total{
-  font-size: 19px;
-  margin-left: 0.5rem;
-}
 
-.content-container{
-  display: flex;
-  flex-direction: row;
-  font-weight: 400;
-  font-size: 16px;
-  .name{
-    margin-left: 0.6rem;
-    flex: 30%;
-  };
-  .cant{
-    flex: 22%;
-    text-align: center;
-  };
-  .gestiune{
-    flex: 20%;
-    text-align: center;
-  };
-  .price{
-    flex: 18%;
-    text-align: end;
-    font-weight: 600;
-  };
-  .total{
-    margin-left: 0.6rem;
-    flex: 40%;
-    font-weight: 500;
-  };
-  .total-price{
-    text-align: end;
-    font-weight: 600;
-  };
-  .val{
-    flex: 10%;
-  }
-}
+

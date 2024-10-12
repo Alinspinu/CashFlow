@@ -1,5 +1,5 @@
 ion-content, ion-datetime{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 
 
@@ -25,9 +25,9 @@ ion-title{
   .title{
     font-family: NoirProSemi !important;
     text-align: center;
-    background-color: black;
+    background-color: var(--ion-color-medium);
     padding: 18px;
-    color: white;
+    color: var(--ion-color-light);
     font-size: 24px;
     margin-bottom: 24px;
   }

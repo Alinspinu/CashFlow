@@ -1,6 +1,6 @@
 
 ion-content, ion-toolbar{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 ion-select{
   font-family: NoirProReg !important;
@@ -10,6 +10,10 @@ ion-select{
   font-family: NoirProReg !important;
 }
 
+// ion-searcbar{
+//   padding: 8px;
+// }
+
 
 .input{
   height: 45px;
@@ -17,7 +21,8 @@ ion-select{
   0 -2px 4px rgba(0, 0, 0, 0.1),
   0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  background-color: white;
+  background-color: var(--ion-color-light);
+  padding-left: 14px;
   margin: 0.1rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
 }
@@ -73,7 +78,7 @@ img{
 
 
 .sub-container{
-  background-color: #fbf0e7 !important;
+  background-color: var(--ion-color-tertiary) !important;
   padding-left: 32px;
   .content-container{
     span{
@@ -89,6 +94,16 @@ img{
 .product:hover{
   --background: var(--ion-color-medium-shade);
   background-color: var(--ion-color-medium-shade);
+  .arrow{
+    color: var(--ion-color-light)
+  }
+  span{
+    color: var(--ion-color-light)
+  }
+  .button{
+    color: var(--ion-color-light)
+  }
+
 }
 
 

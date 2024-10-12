@@ -1,6 +1,6 @@
 
 ion-content, ion-toolbar{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 
 span{
@@ -9,6 +9,7 @@ span{
 
 ion-searchbar{
   padding: 0 36px!important;
+  font-family: NoirProReg !important;
 }
 
 ion-button, .font{
@@ -18,13 +19,13 @@ ion-button, .font{
 .icon-start{
   height: 18px;
   margin-left: 4px;
-  color: white !important;
+  color: var(--ion-color-light) !important;
 }
 
 .icon-end{
   height: 19px;
   margin-left: 4px;
-  color: white !important;
+  color: var(--ion-color-light) !important;
 }
 
 .header-buttons{
@@ -52,6 +53,19 @@ ion-button, .font{
     text-align: left;
     flex: 10%;
   }
+  ion-icon{
+    color: var(--ion-color-medium) !important;
+  }
+}
+
+.nir-entry:hover{
+  background-color: var(--ion-color-medium-shade);
+  span{
+    color: var(--ion-color-light);
+  }
+  ion-icon{
+    color: var(--ion-color-light) !important;
+  }
 }
 
 .spinner-container{
@@ -76,7 +90,7 @@ ion-button, .font{
   0 -2px 4px rgba(0, 0, 0, 0.1),
   0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  background-color: white;
+  background-color: var(--ion-color-light);
   margin: 0.5rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
 }

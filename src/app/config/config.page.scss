@@ -4,16 +4,18 @@
   height: 100vh;
 
 
-
-    .menu{
-      .option{
-        cursor: pointer;
-      }
-      .option:hover{
-       --background: var(--ion-color-medium);
-      }
+  .menu{
+    .option{
+      cursor: pointer;
     }
-
+    .option:hover{
+     --background: var(--ion-color-medium-tint);
+     --color: var(--ion-color-light);
+     ion-icon{
+      color: var(--ion-color-light)
+     }
+    }
+  }
 
 
   .separator{

@@ -5,3 +5,7 @@ font-size: 18px;
 ion-card{
   font-family: NoirProReg !important;
 }
+
+ion-content{
+  --background: var(--ion-color-tetiary);
+}

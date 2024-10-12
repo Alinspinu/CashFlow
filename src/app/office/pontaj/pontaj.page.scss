@@ -1,7 +1,11 @@
 
 ion-content{
   height: 60vh !important;
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
+}
+
+ion-header{
+  background-color: var(--ion-color-tertiary) !important;
 }
 
 
@@ -47,6 +51,7 @@ ion-content{
 
 .pointer{
   cursor: pointer;
+  user-select: none;
   // border: 5px solid green;
 }
 
@@ -102,4 +107,40 @@ ion-content{
   .day{
     font-size: 14px!important;
   }
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .barista {
+    background-color: rgb(30, 79, 95); /* Darkened version of rgb(61, 158, 190) */
+  }
+  .aj-barista {
+    background-color: rgb(64, 98, 109); /* Darkened version of rgb(129, 196, 218) */
+  }
+  .casier {
+    background-color: rgb(112, 57, 54); /* Darkened version of rgb(225, 115, 109) */
+  }
+  .ospatar {
+    background-color: rgb(122, 88, 54); /* Darkened version of rgb(225, 177, 109) */
+  }
+  .bucatar {
+    background-color: rgb(58, 84, 54); /* Darkened version of rgb(116, 169, 107) */
+  }
+  .aj-bucatar {
+    background-color: rgb(77, 91, 75); /* Darkened version of rgb(155, 182, 150) */
+  }
+  .days {
+    background-color: rgb(10, 41, 58); /* Darkened version of rgb(19, 82, 116) */
+    color: white;
+  }
+  .liber {
+    background-color: rgb(49, 46, 46) !important; /* Darkened version of rgb(98, 91, 91) */
+    color: white !important;
+  }
+  .tes {
+    background-color: rgb(106, 52, 13); /* Darkened version of rgb(212, 104, 27) */
+    color: white;
+  }
+
+
 }

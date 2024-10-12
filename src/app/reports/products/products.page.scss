@@ -4,7 +4,7 @@ ion-content{
 }
 
 ion-toolbar, ion-content, ion-footer{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary)!important;
 }
 
 ion-label, ion-title{
@@ -12,6 +12,11 @@ ion-label, ion-title{
 }
 ion-button{
   font-family: NoirProSemi !important;
+}
+
+ion-searchbar{
+  padding: 8px !important;
+  font-family: NoirProReg !important;
 }
 
 
@@ -31,9 +36,9 @@ ion-title{
   .title{
     font-family: NoirProSemi !important;
     text-align: center;
-    background-color: black;
     padding: 12px;
-    color: white;
+    background-color: var(--ion-color-medium);
+    color: var(--ion-color-light);
     font-size: 16px;
     margin-top: 8px;
   }
@@ -164,7 +169,8 @@ ion-title{
   0 -2px 4px rgba(0, 0, 0, 0.1),
   0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  background-color: white;
+  background-color: var(--ion-color-light);
+  color: var(--ion-color-medium);
   margin: 0.5rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
   width: 100%;
@@ -227,13 +233,13 @@ ion-title{
   align-self: center;
   display: flex;
   flex-direction: column;
-  background-color: var(--ion-color-medium-tint);
+  background-color: var(--ion-color-light-tint);
   box-shadow:
   0 -2px 4px rgba(0, 0, 0, 0.1),
   0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   cursor: pointer;
-  color: white;
+  color: var(--ion-color-medium);
   padding: 8px;
   text-align: center;
   .title{

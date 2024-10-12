@@ -162,12 +162,8 @@ export class MobilePage implements OnInit {
  getUser(){
   this.userSub = this.authSrv.user$.subscribe(response => {
     if(response) {
-      response.subscribe(user => {
-        if(user) {
-          this.user = user
-          this.getOrders()
-        }
-      })
+      this.user = response
+      this.getOrders()
     }
   })
  }

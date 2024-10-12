@@ -253,12 +253,8 @@ export class CashControlPage implements OnInit, OnDestroy {
  getUser(){
   this.userSub = this.authSrv.user$.subscribe(response => {
     if(response) {
-      response.subscribe(user => {
-        if(user) {
-          this.user = user
-          this.getAllOrders()
-        }
-      })
+      this.user = response
+      this.getAllOrders()
     }
   })
  }
@@ -291,6 +287,18 @@ export class CashControlPage implements OnInit, OnDestroy {
     }
     return method
  }
+
+
+async onReports(value: string){
+  if(value === 'z'){
+    const response = await this.actionSheet.deleteAlert('Ești sigur că vrei să scoți raportul Z?... Ai scos toate notele?', 'RAPORT Z')
+    if(response){
+      this.reports(value)
+    }
+  } else {
+    this.reports(value)
+  }
+}
 
 
 reports(value: string){

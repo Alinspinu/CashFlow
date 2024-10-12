@@ -1,17 +1,15 @@
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Reducere</ion-title>
-    <ion-buttons slot="start">
-      <ion-button (click)="close()">
-        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 22px;"></ion-icon>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+      <ion-button (click)="close()" slot="start" color="medium">
+        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 35px;"color="light"></ion-icon>
       </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="adBasDsicounts()">
-        <ion-icon src="../../../assets/icon/add-circle.svg" style="font-size: 22px;"></ion-icon>
+      <div class="title-wrapper">
+        <div class="title">REDUCERE</div>
+      </div>
+      <ion-button (click)="adBasDsicounts()" slot="end" color="light">
+        <ion-icon src="../../../assets/icon/add-circle.svg" style="font-size: 35px;"color="medium"></ion-icon>
       </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -55,6 +53,6 @@
   </ion-content>
 
 
-  <ion-footer>
-    <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">ADAUGĂ</ion-button>
+  <ion-footer class="ion-no-border">
+    <ion-button color="medium" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">ADAUGĂ</ion-button>
   </ion-footer>

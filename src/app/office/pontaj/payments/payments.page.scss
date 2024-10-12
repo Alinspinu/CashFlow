@@ -3,6 +3,12 @@ ion-title{
   font-family: NoirProReg !important;
 }
 
+
+
+ion-content, ion-toolbar{
+  --background: #fbf0e7 !important;
+}
+
 ion-row{
   margin: 2rem;
 }
@@ -11,6 +17,22 @@ ion-title{
 }
 
 
+.title-wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .title{
+    font-family: NoirProSemi !important;
+    text-align: center;
+    background-color: black;
+    padding: 18px;
+    color: white;
+    font-size: 24px;
+    margin-top: 8px;
+  }
+}
+
 .box{
   font-family: NoirProReg !important;
   display: flex;
@@ -18,7 +40,11 @@ ion-title{
   justify-content: space-between;
   padding: 12px;
   margin-top: 12px;
-  border: 2px solid var(--ion-color-primary);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: white;
   border-radius: 6px;
   font-size: 24px;
 }

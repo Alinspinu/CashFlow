@@ -22,13 +22,13 @@ ion-toolbar{
   --background: #f4ede6;
 }
 
-ion-content {
-  --background: var(--ion-color-tertiary) !important;
+ion-content, ion-toolbar {
+  --background: #fbf0e7 !important;
 }
 
 .trash{
   height: 30px !important;
-  color: var(--ion-color-primary) !important;
+  color: var(--ion-color-medium) !important;
 }
 
 

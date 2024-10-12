@@ -36,6 +36,9 @@ totalTesDay: number = 0
 totalTes: number = 0
 pontSub!: Subscription
 
+period: string = '1-30'
+periodMark: boolean = false
+
   constructor(
     private pontSrv: PontajService,
     private usersSrv: UsersService,
@@ -76,7 +79,21 @@ openPayments(payments: any, userName: string){
   const monthPayments = payments.filter((pay: any) => {
     return pay.workMonth === this.monthIndex
   })
+  console.log(monthPayments)
+  console.log(payments)
   this.actSrv.openModal(PaymentsPage, {name: userName, logs: monthPayments}, false)
+}
+
+hours(workLog: any, name: string, payments: any) {
+  const docToFilter = workLog.filter((doc: any) => {
+    const docDate = new Date(doc.checkIn);
+    return docDate.getUTCMonth() === this.monthIndex
+  })
+  const monthPayments = payments.filter((pay: any) => {
+    return pay.workMonth === this.monthIndex
+  })
+  console.log(monthPayments)
+  this.actSrv.openModal(HoursPage, {logs: docToFilter, name: name, payments: monthPayments}, false)
 }
 
 
@@ -106,6 +123,8 @@ async paySalary(user: any){
     this.pontSub = this.pontSrv.pontajSend$.subscribe(response => {
         if(response) {
           this.pontaj = response
+          this.period = `1 - ${this.pontaj.days.length}`
+          this.periodMark = false
           const month = this.pontaj.month.split(' - ')[0]
           this.monthIndex = this.monhs.findIndex(obj => obj === month)
           this.calcTotalStalary()
@@ -115,19 +134,13 @@ async paySalary(user: any){
   }
 
  async selectPontaj(){
-    const pontaj = await this.actSrv.openPayment(TogglePontPage, '')
+    const pontaj = await this.actSrv.openModal(TogglePontPage, '', false)
     if(pontaj){
       this.pontSrv.selectPontaj(pontaj)
     }
   }
 
-  hours(workLog: any, name: string) {
-    const docToFilter = workLog.filter((doc: any) => {
-      const docDate = new Date(doc.checkIn);
-      return docDate.getUTCMonth() === this.monthIndex
-    })
-    this.actSrv.openModal(HoursPage, {logs: docToFilter, name: name}, false)
-  }
+
 
   calcTotalsHours(workLog: any[]){
     const date = new Date().getDate()
@@ -150,15 +163,23 @@ async paySalary(user: any){
     console.log(index)
   }
 
-  getWorkLog(workLog: any){
-    console.log(workLog)
+
+  selectPeriod(){
+    if(this.periodMark){
+      this.periodMark = false;
+      this.period = `1 - ${this.pontaj.days.length}`
+    } else {
+      this.periodMark = true;
+      this.period = '1-15'
+    }
   }
 
   calcIncome(empl: any){
     let earnd = 0
-    const date = new Date().getDate()
+
+    const month = new Date().getUTCMonth()
     if(empl.salary.fix){
-      if(date > 20){
+      if(!this.periodMark){
         earnd = empl.salary.inHeand
       } else {
         earnd = empl.salary.inHeand / 2
@@ -170,10 +191,10 @@ async paySalary(user: any){
       })
       const documentsInTargetMonth = docToFilter.filter((doc: any) => {
         const docDate = new Date(doc.checkIn);
-        if(date < 20){
-          return docDate.getDate() <= 15
-        } else {
+        if(!this.periodMark){
           return docDate.getUTCMonth() === this.monthIndex;
+        } else {
+          return docDate.getDate() <= 15
         }
       });
 

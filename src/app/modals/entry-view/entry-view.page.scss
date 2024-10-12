@@ -1,0 +1,89 @@
+ion-content, ion-toolbar{
+  --background: #fbf0e7 !important;
+}
+
+
+ion-botton, ion-title, span, ion-item, ion-input{
+  font-family: NoirProReg !important;
+}
+
+.input{
+  cursor: pointer;
+  height: 70px;
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 8px;
+  margin: 0.4rem 0 0.4rem 0.2rem;
+  font-family: NoirProLight !important;
+  display: flex;
+  flex-direction: row;
+  span{
+    margin: 10px 5px 10px 5px;
+  }
+  .nr{
+    flex: 5%
+  }
+  .data{
+    flex: 30%;
+  }
+  .discount{
+    flex: 35%;
+    // margin-left: 50px;
+    text-align: center;
+  }
+  .total{
+    flex: 30%;
+    font-family: NoirProSemi !important;
+    text-align: end;
+  }
+
+}
+
+
+.header{
+  height: 40px;
+  border-radius: 8px;
+  margin: 0.4rem 0 0 0.2rem;
+  font-family: NoirProLight !important;
+  display: flex;
+  flex-direction: row;
+  span{
+    margin: 10px 5px 10px 5px;
+  }
+  .nr{
+    flex: 5%
+  }
+  .data{
+    flex: 30%;
+  }
+  .discount{
+    flex: 35%;
+    // margin-left: 50px;
+    text-align: center;
+  }
+  .total{
+    flex: 30%;
+    font-family: NoirProSemi !important;
+    text-align: end;
+  }
+}
+
+
+
+.title-wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .title{
+    font-family: NoirProSemi !important;
+    text-align: center;
+    background-color: black;
+    padding: 18px;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+}

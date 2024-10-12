@@ -7,6 +7,8 @@ export class Inventary {
     public date: string,
     public ingredients: ing[],
     public locatie: string,
+    public _id: string,
+    public updated: boolean,
 
   ){}
 }
@@ -16,7 +18,9 @@ export class ing {
     public ing: InvIngredient,
     public  name: string,
     public  faptic: number,
-    public  scriptic: number
+    public  scriptic: number,
+    public gestiune: string,
+    public dep: string
 
   ){}
 }

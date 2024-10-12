@@ -179,7 +179,7 @@ if(table){
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
-    this.webRtc.sendProductData(JSON.stringify(bill))
+    // this.webRtc.sendProductData(JSON.stringify(bill))
   } else {
     bill.masaRest.index = masa;
     bill.name = userName
@@ -189,7 +189,7 @@ if(table){
     bill.products.push(product)
     bill._id = 'new'
     table.bills.push(bill)
-    this.webRtc.sendProductData(JSON.stringify(bill))
+    // this.webRtc.sendProductData(JSON.stringify(bill))
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
@@ -213,7 +213,7 @@ sendBill(bill: Bill){
       if(product.quantity === 0){
         bill.products.splice(billProdIndex, 1)
       }
-      this.webRtc.sendProductData(JSON.stringify(bill))
+      // this.webRtc.sendProductData(JSON.stringify(bill))
       const tables = JSON.stringify(this.tables);
       Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
@@ -230,7 +230,7 @@ addOne(masa: number, billProdIndex: number, billindex: number){
       product.quantity++
       product.total = product.quantity * product.price
       bill.total = bill.total + product.price
-      this.webRtc.sendProductData(JSON.stringify(bill))
+      // this.webRtc.sendProductData(JSON.stringify(bill))
       const tables = JSON.stringify(this.tables);
       Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
@@ -260,7 +260,7 @@ addTopping(masa: number, billProdIndex: number, billIndex: number, product: any)
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
-    this.webRtc.sendProductData(JSON.stringify(bill))
+    // this.webRtc.sendProductData(JSON.stringify(bill))
 }
 }
 
@@ -289,7 +289,7 @@ addCustomer(customer: any, masa: number, billIndex: number){
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = customer;
-      this.webRtc.sendProductData(JSON.stringify(bill))
+      // this.webRtc.sendProductData(JSON.stringify(bill))
       const tables = JSON.stringify(this.tables);
       Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
@@ -428,6 +428,7 @@ deleteTable(tableId: string, index: number){
 
 saveBillToCloud(bill: Bill){
   this.http.post(`${environment.BASE_URL}pay/save-bill-cloud`, {bill: bill}).subscribe(res => {
+    console.log(res)
   })
 }
 

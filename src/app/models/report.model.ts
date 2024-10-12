@@ -15,6 +15,15 @@ export class Report {
     public constructionsValue: number,
     public rent: number,
     public utilities: number,
+    public diverse: {
+      total: number,
+      entry: {
+        value: number,
+        reason: string,
+        index: number,
+        date: string
+      }[]
+    },
     public impairment: {
         total: number,
         products: {

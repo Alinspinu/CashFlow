@@ -60,7 +60,7 @@ export class ShedulePage implements OnInit, OnDestroy {
 }
 
 async selectShedule(){
-  const shedule = await this.actSrv.openPayment(TogglePage, '')
+  const shedule = await this.actSrv.openModal(TogglePage, '', false)
   if(shedule){
     this.shedSrv.selectShedule(shedule)
   }

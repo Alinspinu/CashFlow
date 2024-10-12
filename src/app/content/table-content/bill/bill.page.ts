@@ -1,14 +1,14 @@
-import { Component, Inject, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, Input, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, ToastController, IonContent } from '@ionic/angular';
 import { TablesService } from '../../../tables/tables.service';
 import { AuthService } from '../../../auth/auth.service';
 import { ActionSheetService } from '../../../shared/action-sheet.service';
 import { BillProduct, Topping, Bill, deletetBillProduct, Table } from '../../../models/table.model';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { round } from '../../../shared/utils/functions';
-import { emptyDeletetBillProduct, emptyBill } from '../../../models/empty-models';
+import { emptyDeletetBillProduct, emptyBill, emptyTable } from '../../../models/empty-models';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { Subscription, Observable, map, switchMap, of, Subject } from 'rxjs';
 import User from '../../../auth/user.model';
@@ -33,7 +33,16 @@ interface billData{
 })
 export class BillPage implements OnInit, OnDestroy {
 
-  @Input() billData!: billData
+  billData!: billData
+
+
+  @Input() billData$!: Observable<billData>
+
+  private billSub!: Subscription;
+
+
+  @ViewChild('billContent') content!: IonContent;
+
 
   billIndex!: number;
   billId!: string;
@@ -43,7 +52,6 @@ export class BillPage implements OnInit, OnDestroy {
   tableSub!: Subscription
   userSub!: Subscription
   sendOrderSub!: Subscription
-  tabSub!: Subscription
 
   user!: User
   client!: any
@@ -63,22 +71,28 @@ export class BillPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getUser()
+    this.billSub = this.billData$.subscribe(billData => {
+      if(billData){
+        this.billData = billData
+        if(this.billData.billProducts.length > 5){
+          setTimeout(()=>{
+            this.content.scrollToBottom(300);
+          }, 200)
+        }
+      }
+    })
   }
 
 
-
   ngOnDestroy(): void {
-    if(this.tabSub){
-      this.tabSub.unsubscribe();
-    }
     if(this.userSub){
       this.userSub.unsubscribe()
     }
     if(this.tableSub){
       this.tableSub.unsubscribe()
     }
-    if(this.sendOrderSub){
-      this.sendOrderSub.unsubscribe()
+    if(this.billSub){
+      this.billSub.unsubscribe()
     }
   }
 
@@ -86,14 +100,17 @@ export class BillPage implements OnInit, OnDestroy {
   getUser(){
     this.userSub = this.authSrv.user$.subscribe(response => {
       if(response){
-        this.userSub = response.subscribe(user => {
-          if(user){
-            this.user = user;
-            // this.incommingOrders()
-          }
-        })
+        this.user = response;
       }
     })
+  }
+
+
+  addDisc(index: number) {
+    const product =  this.billData.billToshow.products[index]
+    product.discount = product.total
+    this.billData.billToshow.discount = this.billData.billToshow.discount + product.discount
+    this.billData.billToshow.total = this.billData.billToshow.total - product.discount
   }
 
 

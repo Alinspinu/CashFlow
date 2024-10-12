@@ -1,87 +1,93 @@
 
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-grid>
+      <ion-row>
+        <ion-col col="12">
+          <div class="header-buttons">
+              <ion-button (click)="openDateModal('start')" color="medium">
+                Start
+                <!-- <ion-icon src="../../../assets/png/date-in.png" class="icon-start" alt="date-in-logo"></ion-icon> -->
+              </ion-button>
+              <div class="display-date">
+                <span>{{startDate ? formatedDate(startDate) : "..."}}</span>
+              </div>
+              <ion-button (click)="openDateModal('end')" color="medium">
+                End
+                <!-- <ion-icon src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo"></ion-icon> -->
+              </ion-button>
+              <div class="display-date">
+                <span>{{endDate ? formatedDate(endDate) : "..."}}</span>
+              </div>
+              <ion-button  style="margin-left: 90px;" (click)="export()" [disabled]="!startDate || !endDate" color="medium">
+                Export
+                <ion-icon src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo"></ion-icon>
+              </ion-button>
+            <ion-searchbar mode="ios" [(ngModel)]="nirSearch"  placeholder="Caută document după furnizor.."  (ionInput)="searchNir($event)" #searchbar>
+            </ion-searchbar>
+              <ion-button  (click)="addNir()" color="medium">
+                ADD
+                <ion-icon src="assets/icon/add-circle.svg" color="light"></ion-icon>
+              </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div class="nir-entry">
+      <span class="nr start font" (click)="index()">
+        Nr
+        <ion-icon src="assets/icon/arrows-down.svg" [color]="indexColor"></ion-icon>
+      </span>
+      <span class="date font" (click)="date()">
+        Data
+        <ion-icon src="assets/icon/arrows-down.svg"  [color]="dateColor"></ion-icon>
+      </span>
+      <span class="suplier font" (click)="suplier()">
+        Furnizor
+        <ion-icon src="assets/icon/arrows-down.svg"  [color]="suplierColor"></ion-icon>
+      </span>
+      <span class="docNumber font">Nr Document</span>
+      <ion-buttons solt="end">
+        <ion-button>
+          <ion-icon   size="large"></ion-icon>
+        </ion-button>
+        <ion-button>
+          <ion-icon   size="large"></ion-icon>
+        </ion-button>
+        <ion-button>
+          <ion-icon  size="large"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-item lines="none" class="nir-entry" slot="fixed">
-    <span class="nr start" (click)="index()">
-      Nr
-      <ion-icon src="assets/icon/arrows-down.svg" [color]="indexColor"></ion-icon>
-    </span>
-    <span class="date" (click)="date()">
-      Data
-      <ion-icon src="assets/icon/arrows-down.svg"  [color]="dateColor"></ion-icon>
-    </span>
-    <span class="suplier" (click)="suplier()">
-      Furnizor
-      <ion-icon src="assets/icon/arrows-down.svg"  [color]="suplierColor"></ion-icon>
-    </span>
-    <span class="docNumber">Nr Document</span>
-    <ion-buttons solt="end">
-      <ion-button>
-        <ion-icon   size="large"></ion-icon>
-      </ion-button>
-      <ion-button>
-        <ion-icon   size="large"></ion-icon>
-      </ion-button>
-      <ion-button >
-        <ion-icon  size="large"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-item>
 <ion-grid>
-  <ion-row>
-    <ion-col col="12">
-      <ion-item lines="none" color="tertiary">
-        <ion-buttons slot="start">
-          <ion-button class="input" (click)="openDateModal('start')">
-            Start
-            <img src="../../../assets/png/date-in.png" class="icon-start" alt="date-in-logo">
-          </ion-button>
-          <span class="display-date">{{startDate ? formatedDate(startDate) : "..."}}</span>
-          <ion-button class="input" (click)="openDateModal('end')">
-            End
-            <img src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo">
-          </ion-button>
-          <span class="display-date">{{endDate ? formatedDate(endDate) : "..."}}</span>
-          <ion-button class="input" style="margin-left: 90px;" (click)="export()" [disabled]="!startDate || !endDate">
-            Export
-            <img src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo">
-          </ion-button>
-        </ion-buttons>
-        <ion-searchbar mode="ios" [(ngModel)]="nirSearch"  placeholder="Caută document după furnizor.."  (ionInput)="searchNir($event)" #searchbar>
-        </ion-searchbar>
-        <ion-buttons slot="end">
-          <ion-button class="input" (click)="addNir()">
-            ADD
-            <img src="assets/icon/add-circle.svg" class="add">
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
-    </ion-col>
-  </ion-row>
   <ion-row class="spinner-container" *ngIf="!nirs.length">
     <ion-col size="6" offset="3">
       <app-spinner></app-spinner>
     </ion-col>
   </ion-row>
-  <ion-row style="margin-top: 45px;">
+  <ion-row style="margin-top: 6px;">
     <ion-col size="12">
-      <ion-item lines="none" class="nir-entry input" *ngFor="let nir of nirs; let i = index">
+      <div class="nir-entry input" *ngFor="let nir of nirs; let i = index">
         <span class="nr">{{nir.index}}</span>
         <span class="date">{{formatedDate(nir.documentDate)}}</span>
         <span class="suplier">{{nir.suplier.name}}</span>
         <span class="docNumber">{{nir.nrDoc}}</span>
         <ion-buttons solt="end">
           <ion-button (click)="editNir(nir._id)">
-            <ion-icon  src="../../assets/icon/create-outline.svg"  size="large" color="success"></ion-icon>
+            <ion-icon  src="../../assets/icon/create-outline.svg"  size="large" color="medium"></ion-icon>
           </ion-button>
           <ion-button (click)="printNir(nir._id)">
             <ion-icon  src="../../assets/icon/print.svg" size="large"></ion-icon>
           </ion-button>
           <ion-button (click)="deleteNir(nir._id, i)">
-            <ion-icon  src="../../assets/icon/trash-outline.svg" size="large" color="danger"></ion-icon>
+            <ion-icon  src="../../assets/icon/trash-outline.svg" size="large" color="medium"></ion-icon>
           </ion-button>
         </ion-buttons>
-      </ion-item>
+      </div>
     </ion-col>
   </ion-row>
 </ion-grid>

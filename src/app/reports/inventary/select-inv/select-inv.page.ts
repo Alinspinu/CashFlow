@@ -52,6 +52,10 @@ export class SelectInvPage implements OnInit {
     return formatedDateToShow(date).split('ora')[0]
   }
 
+  close(){
+    this.modalCtrl.dismiss(null)
+  }
+
   async createInventary(){
     this.isLoading = true
     const response = await this.actService.openAuth(DatePickerPage)
@@ -75,10 +79,13 @@ export class SelectInvPage implements OnInit {
             this.isLoading = false
           } else{
             this.inventaries.push(inventary)
+            this.isLoading = false
             showToast(this.toast, response.message, 2000)
           }
         }
       })
+    } else{
+      this.isLoading = false
     }
   }
 

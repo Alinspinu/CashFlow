@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { Preferences } from "@capacitor/preferences";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 import { Product, SubProduct } from "src/app/models/category.model";
 import { emptyProduct } from "src/app/models/empty-models";

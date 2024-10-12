@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController, NavParams } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams, IonSearchbar } from '@ionic/angular';
 import { AddProductDiscountService } from './add-product-discount.service';
 import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
@@ -19,6 +19,8 @@ import { environment } from '../../../environments/environment';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class AddProductDiscountPage implements OnInit {
+
+  @ViewChild('searchbar', {static: false}) searchbar!: IonSearchbar
 
 productSearch: string = ''
 products: any [] = []
@@ -44,6 +46,10 @@ proDbSub!: Subscription
     this.getProducts()
     this.getData()
     this.getProductsFromDb()
+    setTimeout(() => {
+      this.searchbar.setFocus()
+    }, 400)
+
   }
 
 
@@ -89,21 +95,12 @@ proDbSub!: Subscription
     })
   }
 
-  // searchProduct(ev: any){
-  //   let search = ev.detail.value
-  //     this.addProdDiscSrv.searchProduct(search, {}, this.user.locatie).subscribe((response:any) => {
-  //       if(response) {
-  //         this.products= response
-  //       }
-  //     })
-  // }
+
 
   getProducts(){
     this.prodSub = this.productService.productsSend$.subscribe(response => {
       if(response){
         this.dbProducts = response
-        console.log(response)
-
       }
     })
   }

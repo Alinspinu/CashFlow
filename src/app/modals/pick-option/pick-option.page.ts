@@ -14,7 +14,7 @@ import {triggerEscapeKeyPress} from '../../shared/utils/toast-controller'
 export class PickOptionPage implements OnInit {
 
   options!: any[]
-  selectedOption!: any;
+  selectedOption!: string;
   selectedO: string[] = []
   sub!: any
   comment!: string
@@ -55,7 +55,17 @@ export class PickOptionPage implements OnInit {
     this.sub = this.navPar.get('sub')
   }
 
+  selectOption(value: string){
+      this.selectedOption = value
+  }
+
+  isChecked(value: string): boolean {
+    return this.selectedO.includes(value);
+  }
+
+
   onCheckboxChange(option: any, ind: number) {
+
     const index = this.selectedO.indexOf(option);
     const opt = this.options[ind]
     if (index === -1) {

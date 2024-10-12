@@ -1,13 +1,13 @@
 <ion-content [fullscreen]="true">
-  <ion-toolbar>
-    <ion-button size="large" color="primary" (click)="close()">
+  <ion-toolbar class="ion-no-border">
+    <ion-button size="large" color="medium" (click)="close()">
      <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
     </ion-button>
    </ion-toolbar>
 <ion-grid>
   <ion-row>
     <ion-col>
-      <ion-item lines="none" class="header">
+      <ion-item lines="none" class="header" color="transparent">
         <span class="nr">Nr.</span>
         <span class="data">Data</span>
         <span class="client" *ngIf="screenWidth > 500">Nume Client</span>
@@ -18,7 +18,7 @@
   </ion-row>
 <ion-row>
   <ion-col *ngIf="orders && orders.length">
-    <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="showOrder(order)" [ngClass]="{'open': order.status === 'open'}">
+    <div class="input" *ngFor="let order of orders; let i = index;" (click)="showOrder(order)" [ngClass]="{'open': order.status === 'open'}">
       <span class="nr">{{i+1}}.</span>
       <span class="data">{{formatDate(order.createdAt)}}</span>
       <span class="client" *ngIf="order.clientInfo && screenWidth > 500">{{order.clientInfo.name}}</span>
@@ -26,7 +26,7 @@
       <span class="total">{{roundInHtml(order.total)}} Lei</span>
       <!-- <span>{{order.employee.fullName}}</span> -->
       <!-- <span>{{order.clientInfo.name}}</span> -->
-    </ion-item>
+    </div>
   </ion-col>
 </ion-row>
 </ion-grid>

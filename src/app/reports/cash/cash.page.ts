@@ -110,7 +110,7 @@ export class CashPage implements OnInit {
   delProducts: any = []
   user!: User
 
-
+  patiserieId: string = '64be6a3e3ef7bd6552c84608'
 
   snitzel: number = 0
   hummus: number = 0
@@ -119,13 +119,24 @@ export class CashPage implements OnInit {
   report!: Report
   bacsis: number = 0
 
+  repStart!: string
+  repEnd!: string
+
   ngOnInit() {
+    this.getRepDates()
     getUserFromLocalStorage().then(user => {
       if(user){
         this.user = user
         this.getOrders()
-      } else {
-        this.router.navigateByUrl('/auth')
+      }
+    })
+  }
+
+  getRepDates(){
+    this.repSrv.getReportsDate().subscribe(response => {
+      if(response){
+        this.repStart = response.start
+        this.repEnd = response.end
       }
     })
   }
@@ -135,10 +146,16 @@ export class CashPage implements OnInit {
     this.repSrv.getReport(start, end).subscribe(response => {
       if(response){
         this.report = response
-        console.log(this.report)
+        const depIndex = this.report.departaments.findIndex(dep => dep.name === 'food')
+
+        const foodProducts = this.report.departaments[depIndex].products
+        const filtredFoodProducts = foodProducts.filter(prod => {
+          return prod.dep !== 'marfa'
+        })
+        this.report.departaments[depIndex].products = filtredFoodProducts
         this.report.departaments.forEach(dep => {
           dep.products.sort((a,b) => b.qty - a.qty)
-          dep.products = dep.products.slice(0, 10)
+          dep.products = dep.products.slice(0, 20)
           })
         const tipsObj = this.report.paymentMethods.find(p=> p.name === 'Bacsis')
         if(tipsObj){
@@ -171,6 +188,7 @@ getOrders(){
     }
   })
 }
+
 
 
 calcTva(){
@@ -451,7 +469,12 @@ calcProcents(){
 
 
 createDeps(){
-  this.billProducts.forEach(prod => {
+  const patiserieId = '64be6a3e3ef7bd6552c84608'
+  const filtredProducts = this.billProducts.filter(prod => {
+    return prod.category !== patiserieId
+  })
+
+  filtredProducts.forEach(prod => {
     const price = round(prod.price * prod.quantity)
     if(!prod.mainCat){
       prod.mainCat = 'Nedefinit'
@@ -527,7 +550,6 @@ createDeps(){
   })
 
   this.departaments.sort((a,b) => b.procent - a.procent)
-  console.log(this.departaments)
   this.calcTypeProcents(this.departaments)
 }
 
@@ -548,14 +570,14 @@ showData(dep: departament){
 
  async selectDate(mode: string){
   if(mode === "start"){
-    const startDate = await this.actionSheet.openAuth(DatePickerPage)
+    const startDate = await this.actionSheet.openPayment(DatePickerPage, {min: this.repStart, max: this.repEnd})
     this.start = startDate
     if(startDate){
       this.startDate = startDate
     }
   }
   if(mode === "end"){
-    const endDate = await this.actionSheet.openAuth(DatePickerPage)
+    const endDate = await this.actionSheet.openPayment(DatePickerPage, {min: this.repStart, max: this.repEnd})
     if(endDate){
       this.endDate = endDate
       this.day = undefined

@@ -60,7 +60,7 @@
 
 <div class="contents-container">
       <app-meniu class="menu-content" [(data)]="data"></app-meniu>
-      <app-bill [billData]="billData" class="bill-content"></app-bill>
+      <app-bill [billData$]="billData$" class="bill-content"></app-bill>
 </div>
 
 <ion-footer class="ion-no-border">
@@ -88,8 +88,8 @@
             </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button class="client-button" (click)="addCustomer(clientMode)" color="light" expand="block" size="medium" [disabled]="!billData.billToshow.products.length" style="height:45px;">
-              <ion-icon [src]=" clientMode ? '../../../assets/icon/add-outline.svg': '../../../assets/icon/scoate_client.svg'"></ion-icon>
+            <ion-button class="client-button" (click)="addCustomer(clientMode)" color="light" expand="block" size="medium" [disabled]="billData.billToshow && !billData.billToshow.products.length" style="height:45px;">
+              <ion-icon [src]=" clientMode ? '../../../assets/icon/adauga_client.svg': '../../../assets/icon/scoate_client.svg'"></ion-icon>
               {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE CLIENT"}}
             </ion-button>
             <ion-button size="medium" expand="block" color="light" (click)="useCashBack(cashBackMode)" *ngIf="client" style="height:45px;">

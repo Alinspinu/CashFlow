@@ -116,7 +116,7 @@ export class ProductPage implements OnInit {
   }
 
   async addCat(){
-    const response = await this.actSheet.openModal(CategoryPage, null, false)
+    const response = await this.actSheet.openPayment(CategoryPage, null)
     if(response){
       this.prodSrv.saveCategory(response, this.user.locatie).subscribe(response => {
         console.log(response)

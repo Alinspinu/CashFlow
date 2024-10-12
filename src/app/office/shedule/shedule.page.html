@@ -1,23 +1,24 @@
 
-
+        <ion-header class="ion-no-border">
+          <ion-row>
+            <ion-col>
+              <ion-item lines="none" class="date-wrapper pointer" color="primary" (click)="selectShedule()">
+                <ion-icon src="assets/icon/create-outline.svg" slot="start"></ion-icon>
+                <span class="date">{{editPeriod(shedule.period)}}</span>
+              </ion-item>
+            </ion-col>
+            <ion-col *ngFor="let day of shedule.days">
+              <div class="square days">
+                <span class="day">{{day.day}}</span>
+                <span class="date">{{formatDateInHtml(day.date).split('ora')[0]}}</span>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-header>
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row>
       <ion-col *ngIf="shedule && users">
-        <ion-row>
-          <ion-col>
-            <ion-item lines="none" class="date-wrapper pointer" color="primary" (click)="selectShedule()">
-              <ion-icon src="assets/icon/create-outline.svg" slot="start"></ion-icon>
-              <span class="date">{{editPeriod(shedule.period)}}</span>
-            </ion-item>
-          </ion-col>
-          <ion-col *ngFor="let day of shedule.days">
-            <div class="square days">
-              <span class="day">{{day.day}}</span>
-              <span class="date">{{formatDateInHtml(day.date).split('ora')[0]}}</span>
-            </div>
-          </ion-col>
-        </ion-row>
         <ion-row *ngFor="let user of users">
           <ion-col>
             <div class="square"

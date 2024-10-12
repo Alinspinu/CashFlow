@@ -42,8 +42,6 @@ getuser(){
   getUserFromLocalStorage().then(user => {
     if(user) {
       this.user = user
-    } else {
-      this.router.navigateByUrl('/auth')
     }
   })
 }

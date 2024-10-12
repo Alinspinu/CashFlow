@@ -1,19 +1,7 @@
 
-<ion-content [fullscreen]="true" *ngIf="!isLoading">
-  <ion-item lines="none" class="header content-container" slot="fixed"  *ngIf="screenWidth > 500">
-    <span class="nr">Nr</span>
-    <span class="name">Nume</span>
-    <span class="compus">Compus</span>
-    <span class="gestiune">Gestiune</span>
-    <span class="dep">Dep</span>
-    <span class="um">UM</span>
-    <span class="price">Pret de intare cu TVA</span>
-    <span class="qty">Cantitate Inv</span>
-    <ion-icon  class="edit"></ion-icon>
-    <ion-icon  class="edit"></ion-icon>
-    <ion-icon  class="delete"></ion-icon>
-  </ion-item>
-  <ion-grid>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
     <ion-grid>
       <ion-row>
         <ion-col [size]="screenWidth > 500 ? 4 : 12">
@@ -70,40 +58,55 @@
       </ion-row>
     </ion-grid>
 
-<div style="margin-top:50px;">
+    <div class="content-container" style="padding-left: 24px; font-family: NoirProSemi !important;"  *ngIf="screenWidth > 500">
+      <span class="nr">Nr</span>
+      <span class="name">Nume</span>
+      <span class="compus">Compus</span>
+      <span class="gestiune">Gestiune</span>
+      <span class="dep">Dep</span>
+      <span class="um">UM</span>
+      <span class="price">Pret de intare cu TVA</span>
+      <span class="qty">Cantitate Inv</span>
+      <ion-icon  class="button"></ion-icon>
+      <ion-icon  class="button"></ion-icon>
+      <ion-icon  class="button"></ion-icon>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+
+<div>
   <ion-row *ngFor="let ing of ingredients; let i= index;">
-    <ion-col>
-      <ion-item class="content-container product input" lines="none" (click)="showIngs(i)">
+    <ion-col *ngIf="ing.name.length > 1">
+      <div class="content-container product input">
         <span class="nr" *ngIf="screenWidth > 500">{{i+1}}.</span>
         <span class="name">{{ing.name}}</span>
-        <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="ing.ings.length  && screenWidth > 500" class="arrow"></ion-icon>
+        <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="ing.ings.length  && screenWidth > 500" (click)="showIngs(i)" class="arrow"></ion-icon>
         <ion-icon  *ngIf="!ing.ings.length && screenWidth > 500" class="arrow"></ion-icon>
         <span class="gestiune">{{ing.gestiune}}</span>
         <span class="dep" *ngIf="screenWidth > 500">{{ing.dep}}</span>
         <span class="um" *ngIf="screenWidth > 500">{{ing.um}}</span>
         <span class="price" *ngIf="screenWidth > 500">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
         <span class="qty" *ngIf="screenWidth > 500">{{ing.ings.length ? 1 : ing.qty}}</span>
-        <ion-button fill="ghost" (click)="inventary(i)">
-          <ion-icon  src="../../assets/icon/tools.svg" class="inv"></ion-icon>
-        </ion-button>
-        <ion-button fill="ghost" (click)="ingEdit(ing)" *ngIf="screenWidth > 500">
-          <ion-icon  src="../../assets/icon/create-outline.svg"  class="edit"></ion-icon>
-        </ion-button>
-        <ion-button fill="ghost" (click)="deleteIng(ing._id, ing.name)" *ngIf="screenWidth > 500">
-          <ion-icon  src="../../assets/icon/trash-outline.svg" class="delete"></ion-icon>
-        </ion-button>
-      </ion-item>
+        <ion-icon  src="../../assets/icon/tools.svg" class="button" (click)="inventary(i)"></ion-icon>
+        <ion-icon  src="../../assets/icon/create-outline.svg"  (click)="ingEdit(ing)" *ngIf="screenWidth > 500" class="button"></ion-icon>
+        <ion-icon  src="../../assets/icon/trash-outline.svg" (click)="deleteIng(ing._id, ing.name)" *ngIf="screenWidth > 500" class="button"></ion-icon>
+      </div>
       <div *ngIf="ing.ings.length && ing.showIngs && screenWidth > 500" class="sub-container">
-        <ion-item *ngFor="let ingr of ing.ings" lines="none" class="content-container" (click)="ingEdit(ing._id)" color="tertiary">
+        <div *ngFor="let ingr of ing.ings" lines="none" class="content-container" (click)="ingEdit(ing._id)" color="transparent">
           <span class="name">{{ingr.ing.name}}</span>
           <span class="gestiune">{{ingr.ing.gestiune}}</span>
           <span class="dep">{{ingr.ing.dep}}</span>
           <span class="um">{{ingr.ing.um}}</span>
           <span class="price">{{ingr.ing.ings.length ? calcProductIngredientPrice(ingr.ing.ings) : roundInHtml(ingr.ing.price + (ingr.ing.price * ingr.ing.tva / 100))}} Lei</span>
           <span class="qty">{{ingr.qty}}</span>
-          <ion-icon   class="edit"></ion-icon>
-          <ion-icon  class="delete"></ion-icon>
-        </ion-item>
+          <ion-icon   class="button"></ion-icon>
+          <ion-icon  class="button"></ion-icon>
+          <ion-icon  class="button"></ion-icon>
+        </div>
       </div>
     </ion-col>
   </ion-row>
@@ -111,4 +114,3 @@
   </ion-grid>
 </ion-content>
 
-<app-spinner *ngIf="isLoading"></app-spinner>

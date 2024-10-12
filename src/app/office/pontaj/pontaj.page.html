@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-grid>
     <ion-row *ngIf="pontaj && users">
       <ion-col size="1">
@@ -20,7 +20,10 @@
         <div class="square days">Plătit</div>
       </ion-col>
       <ion-col size="0.5">
-        <div class="square days">De Plată</div>
+        <div class="square days pointer" (click)="selectPeriod()">
+          <span>De Plată</span>
+          <span>{{period}}</span>
+        </div>
       </ion-col>
       <ion-col size="0.3">
         <div class="square days">lei/h</div>
@@ -139,7 +142,7 @@
             }">
             {{roundInHtml(user.employee.salary.inHeand / 176)}}</div>
           </ion-col>
-          <ion-col size="0.3" (click)="hours(user.employee.workLog, user.employee.fullName)" style="cursor: pointer;">
+          <ion-col size="0.3" (click)="hours(user.employee.workLog, user.employee.fullName, user.employee.payments)" style="cursor: pointer;">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',

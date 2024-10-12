@@ -108,11 +108,7 @@ ngOnDestroy(): void {
   getUser(){
     this.userSub = this.authSrv.user$.subscribe(response => {
       if(response){
-       this.userSub = response.subscribe(user => {
-          if(user){
-            this.user = user;
-          }
-        })
+        this.user = response
       }
     })
     }

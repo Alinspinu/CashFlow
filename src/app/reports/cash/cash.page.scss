@@ -1,8 +1,10 @@
 ion-content {
-  --background: var(--ion-color-tertiary) !important;
+  --background: #fbf0e7 !important;
   font-family: NoirProReg !important;
   height: 90vh;
 }
+
+
 
 .toolbar{
   // position: absolute;
@@ -25,6 +27,7 @@ ion-button{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: #fbf0e7;
 }
 
 .buttons-wrapper{
@@ -51,6 +54,23 @@ ion-button{
   width: 100%;
   margin-top: 5%;
   margin-bottom: 8px;
+
+  .refresh{
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    margin-top: 8px;
+    border: 0.5px, solid, var(--ion-color-medium);
+    span{
+      color: black !important;
+      margin-right: 6px;
+    }
+    ion-icon{
+      color: var(--ion-color-medium) !important;
+    }
+  }
   span{
     color: var(--ion-color-primary);
   }
@@ -94,6 +114,16 @@ ion-button{
 
 }
 
+.refresh:active{
+  background-color: var(--ion-color-medium-shade);
+  span{
+    color: white !important;
+  }
+  ion-icon{
+    color: var(--ion-color-light) !important;
+  }
+}
+
 .method-container{
   display: flex;
   flex-direction: column;
@@ -102,7 +132,8 @@ ion-button{
   border-radius: 6px 6px 0 0;
   width: 100%;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 5px rgba(0, 0, 0, 0.15);
-  background-color: var(--ion-color-secondary);
+  // background-color: rgb(248, 181, 161);
+  background-color: var(--ion-color-medium-tint);
   .title {
     text-align: center;
     color: white;

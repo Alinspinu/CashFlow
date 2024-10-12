@@ -97,8 +97,6 @@ export class IngredientPage implements OnInit, OnDestroy {
       if(user) {
         this.user = user
         this.getIngredients()
-      } else {
-        this.router.navigateByUrl('/auth')
       }
     })
   }
@@ -199,7 +197,7 @@ updateProductIng(){
       // this.getIngredients()
     }
   } else {
-    const ingToEdit = await this.actionSh.openModal(AddIngredientPage, ing, false)
+    const ingToEdit = await this.actionSh.openPayment(AddIngredientPage, ing)
     if(ingToEdit){
       this.ingSrv.editIngredient(ing._id, ingToEdit).subscribe(response => {
         if(response){

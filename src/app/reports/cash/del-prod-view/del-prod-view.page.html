@@ -1,13 +1,12 @@
 <ion-content [fullscreen]="true">
-  <ion-toolbar>
-    <ion-button size="large" color="primary" (click)="close()">
+  <ion-toolbar class="ion-no-border">
+    <ion-button size="large" color="medium" (click)="close()">
      <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
     </ion-button>
    </ion-toolbar>
 <ion-grid>
 <ion-row>
   <ion-col *ngIf="products && products.length">
-
     <ion-card *ngFor="let product of products; let i = index;">
       <ion-card-header>
         <ion-card-title>{{product.reason}}</ion-card-title>

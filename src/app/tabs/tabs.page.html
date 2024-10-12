@@ -1,5 +1,5 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom" *ngIf="screenWidth > 500">
+  <ion-tab-bar slot="bottom" >
     <ion-tab-button [tab]="screenWidth > 500 ? 'cash-control' : 'mobile' " [href]=" screenWidth > 500 ? '/tabs/cash-control': '/tabs/mobile'">
       <ion-icon aria-hidden="true" src="../../assets/icon/home-outline.svg"></ion-icon>
       <ion-label>Casa</ion-label>
@@ -10,17 +10,17 @@
       <ion-label>Vanzare</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="office" href="/tabs/office" *ngIf="this.user && this.user.employee.access > 2">
+    <ion-tab-button tab="office" href="/tabs/office" *ngIf="this.user && this.user.employee.access > 2 && screenWidth > 500">
       <ion-icon aria-hidden="true" src="../../assets/icon/office-worker.svg"></ion-icon>
       <ion-label>Office</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="reports" href="/tabs/reports" *ngIf="this.user && this.user.employee.access > 3">
+    <ion-tab-button tab="reports" href="/tabs/reports" *ngIf="this.user && this.user.employee.access > 3 && screenWidth > 500">
       <ion-icon aria-hidden="true" src="../../assets/icon/line.svg"></ion-icon>
       <ion-label>Rapoarte</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="config" href="/tabs/config">
+    <ion-tab-button tab="config" href="/tabs/config" *ngIf="screenWidth > 500">
       <ion-icon aria-hidden="true" src="../../assets/icon/settings.svg"></ion-icon>
       <ion-label>Config</ion-label>
     </ion-tab-button>

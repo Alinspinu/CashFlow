@@ -1,6 +1,6 @@
 
 ion-content, ion-toolbar{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 
 
@@ -13,9 +13,9 @@ ion-content, ion-toolbar{
 .title{
   font-family: NoirProSemi !important;
   text-align: center;
-  background-color: black;
+  background-color: var(--ion-color-medium);
   padding: 12px;
-  color: white;
+  color: var(--ion-color-light);
   font-size: 32px;
   margin-top: 12px;
 }
@@ -29,7 +29,7 @@ ion-content, ion-toolbar{
     font-family: NoirProSemi !important;
     height: 130px;
     font-size: 32px;
-    --highlight-color-focused: black !important;
+    --highlight-color-focused: var(--ion-color-medium) !important;
   }
 }
 

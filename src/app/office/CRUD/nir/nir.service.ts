@@ -2,10 +2,11 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {environment} from '../../../../environments/environment'
 import { Suplier } from "../../../models/suplier.model";
-import { Nir, InvIngredient } from "../../../models/nir.model";
+import { Nir, InvIngredient, NirIngredient } from '../../../models/nir.model';
 import { BehaviorSubject, Observable, take, tap } from "rxjs";
 import { emptyIng } from "src/app/models/empty-models";
 import { Preferences } from "@capacitor/preferences";
+import { emptyNirIng } from '../../../models/empty-models';
 
 
 
@@ -18,11 +19,40 @@ import { Preferences } from "@capacitor/preferences";
 
 export class NirService{
 
+  private nirIngState!: BehaviorSubject<NirIngredient[]>;
+  public nirIngSend$!: Observable<NirIngredient[]>;
+  nirIngredients: NirIngredient[] = [emptyNirIng()];
 
   constructor(
     private http: HttpClient
   ){
+    this.nirIngState = new BehaviorSubject<NirIngredient[]>([emptyNirIng()]);
+    this.nirIngSend$ =  this.nirIngState.asObservable();
   }
+
+
+  addNirIngs(ing: NirIngredient){
+    this.nirIngredients.push(ing)
+    console.log(this.nirIngredients)
+    this.nirIngState.next([...this.nirIngredients])
+  }
+
+  redNirIng(index: number){
+    this.nirIngredients.splice(index, 1)
+    this.nirIngState.next(this.nirIngredients)
+  }
+
+  resetProducts(){
+    this.nirIngredients = [emptyNirIng()]
+    this.nirIngState.next(this.nirIngredients)
+  }
+
+  setIngredients(ings: NirIngredient[]){
+    this.nirIngredients = ings
+    console.log(this.nirIngredients)
+    this.nirIngState.next(this.nirIngredients)
+  }
+
 
 
   getSuplier(input: any, loc: string){

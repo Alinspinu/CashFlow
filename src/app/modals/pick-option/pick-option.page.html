@@ -1,18 +1,11 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="back()">
-        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" class="icon"></ion-icon>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+      <ion-button (click)="back()" slot="start" color="medium">
+        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" color="light" size="large"></ion-icon>
       </ion-button>
-    </ion-buttons>
-    <ion-title class="ion-text-center">
-     {{sub ? 'Alege o Opțiune': 'Alege Extra'}}
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="pick()">
-       <ion-button>Alege</ion-button>
-      </ion-button>
-    </ion-buttons>
+    <div class="title-wrapper">
+      <div class="title">{{sub ? 'Alege o Opțiune': 'Alege Extra'}}</div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -22,11 +15,11 @@
       <ion-col  size-lg="8" offset-lg="2">
         <ion-list>
           <ion-radio-group value="end" [(ngModel)]="selectedOption">
-            <div *ngFor="let option of options; let i = index;">
-              <ion-item  lines="none" class="input" *ngIf="option.available">
+            <div *ngFor="let option of options; let i = index;" (click)="selectOption(option)" class="radio-wrapper  wrapper">
+              <div class="input" *ngIf="option.available">
                 <ion-radio [value]="option" justify="start" labelPlacement="end">{{option.name+ ' - ' + option.price + ' Lei'}}</ion-radio>
                 <!-- <ion-label class="badge" slot="end">{{option.product.dep === "marfa" ? option.ings[0].ing.qty: ''}}</ion-label> -->
-              </ion-item>
+              </div>
             </div>
           </ion-radio-group>
         </ion-list>
@@ -38,45 +31,48 @@
       <ion-col size-lg="8" offset-lg="2">
         <ion-list>
           <div class="input wrapper" *ngFor="let option of options; let i=index;">
-            <ion-item  lines="none" class="topping-name">
-                <ion-checkbox [value]="option"  justify="start" labelPlacement="end" (ionChange)="onCheckboxChange(option, i)" [disabled]="option.counter > 1">{{option.name.split('/')[0]}}{{ option.price > 0 ? ' + ' + option.price + ' Lei' : '' }}</ion-checkbox>
-              </ion-item>
-              <ion-button size="medium" color="secondary"(click)="redTopping(i)" *ngIf="option.counter && option.counter > 1">-</ion-button>
-              <span class="qty" *ngIf="option.counter && option.counter > 1">{{option.counter}}</span>
-              <ion-button size="medium" color="secondary"(click)="addTopping(i)" *ngIf="option.checked">+</ion-button>
+              <div style="width:100%;" (click)="onCheckboxChange(option, i)">
+                <ion-checkbox [value]="option"  justify="start" labelPlacement="end"  [checked]="isChecked(option)" [disabled]="option.counter > 1">{{option.name.split('/')[0]}}{{ option.price > 0 ? ' + ' + option.price + ' Lei' : '' }}</ion-checkbox>
+              </div>
+              <div>
+                <ion-button size="medium" color="secondary"(click)="redTopping(i)" *ngIf="option.counter && option.counter > 1">-</ion-button>
+                <span class="qty" *ngIf="option.counter && option.counter > 1">{{option.counter}}</span>
+                <ion-button size="medium" color="secondary"(click)="addTopping(i)" *ngIf="option.checked">+</ion-button>
+              </div>
           </div>
         </ion-list>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="!sub">
       <ion-col size-lg="8" offset-lg="2">
-        <ion-item lines="none" class="text-input">
+        <div class="text-input">
           <ion-textarea placeholder="Ex. Cu dragoste" label="Comentarii" labelPlacement="floating" [(ngModel)]="comment"></ion-textarea>
-        </ion-item>
+        </div>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="!sub">
       <ion-col size-lg="8" offset-lg="2">
-        <ion-item lines="none" class="text-input" >
+        <div class="input">
           <ion-input  placeholder="Ex. 1.25 buc" label="Cantitate" labelPlacement="floating" [(ngModel)]="qty"></ion-input>
-        </ion-item>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
-<ion-footer>
+
+<ion-footer class="ion-no-border">
   <ion-grid>
     <ion-row class="button-row" *ngIf="sub">
-      <ion-col size-lg="8" offset-lg="2">
-        <ion-button color="primary" expand="block" size="large"(click)="pick()" [disabled]="!selectedOption">Alege</ion-button>
+      <ion-col>
+        <ion-button color="medium" expand="block" size="large"(click)="pick()" [disabled]="!selectedOption" style="height: 100px;">Alege</ion-button>
       </ion-col>
     </ion-row>
   <ion-row class="button-row" *ngIf="!sub">
-    <ion-col size-lg="8" offset-lg="2">
-      <ion-button color="danger" expand="block" size="large"(click)="back()">Renunță</ion-button>
+    <ion-col size="6">
+      <ion-button color="light"  expand="block" size="large"(click)="back()" style="height: 100px;">Renunță</ion-button>
     </ion-col>
-    <ion-col size-lg="8" offset-lg="2">
-      <ion-button color="primary" expand="block" size="large"(click)="pick()">Alege</ion-button>
+    <ion-col size="6">
+      <ion-button color="medium" expand="block" size="large"(click)="pick()" style="height: 100px;">Alege</ion-button>
     </ion-col>
   </ion-row>
 </ion-grid>

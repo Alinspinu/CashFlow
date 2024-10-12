@@ -32,6 +32,10 @@ const routes: Routes = [
     path: 'order-content/:id',
     loadComponent: () => import('./content/order-content/order-content.page').then( m => m.OrderContentPage)
   },
+  {
+    path: 'entry-view',
+    loadComponent: () => import('./modals/entry-view/entry-view.page').then( m => m.EntryViewPage)
+  },
 
 ];
 

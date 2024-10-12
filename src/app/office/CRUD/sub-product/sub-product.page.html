@@ -1,17 +1,16 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-button (click)="onClose()">
-        Close
-      </ion-button>
-    </ion-buttons>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
     <ion-grid>
       <ion-row>
-        <ion-col size="3">
-          <ion-title class="ion-text-center">Adaugă Sub Produs</ion-title>
+        <ion-col size="4">
+          <div class="title-wrapper">
+            <div class="title">Adaugă Sub Produs</div>
+          </div>
         </ion-col>
-        <ion-col size="9">
-          <ion-title class="ion-text-center">Adaugă Ingredient / Topping</ion-title>
+        <ion-col size="8">
+          <div class="title-wrapper">
+            <div class="title">Adaugă Ingredient / Topping</div>
+          </div>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -19,40 +18,39 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
   <ion-grid>
     <ion-row>
       <ion-col size="4">
         <form [formGroup]="form">
-        <ion-item lines="none" class="input">
+        <div class="input">
           <ion-input mode="ios" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name"></ion-input>
-        </ion-item>
-        <ion-item lines="none" class="input">
+        </div>
+        <div class="input">
           <ion-input mode="ios" type="text" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty"></ion-input>
-        </ion-item>
-        <ion-item lines="none" class="input">
+        </div>
+        <div class="input">
           <ion-input  mode="ios" type="number" label="Preț" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
-        </ion-item>
-        <ion-item lines="none" class="input">
+        </div>
+        <div class="input">
           <ion-input  mode="ios" type="number" label="Poziție" labelPlacement="floating" fill="outline" formControlName="order"></ion-input>
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="isTva">
+        </div>
+        <div class="input" *ngIf="isTva">
             <ion-select label="TVA la vanzare" placeholder="TVA" formControlName="tva">
               <ion-select-option value="19">19%</ion-select-option>
               <ion-select-option value="9">9%</ion-select-option>
               <ion-select-option value="5">5%</ion-select-option>
               <ion-select-option value="0">0%</ion-select-option>
             </ion-select>
-        </ion-item>
-        <ion-item lines="none" class="input">
+        </div>
+        <div class="input">
           <ion-select label="Se printează pe terasă"  formControlName="printOut">
             <ion-select-option [value]="true">Da</ion-select-option>
             <ion-select-option [value]="false">Nu</ion-select-option>
           </ion-select>
-      </ion-item>
-        <ion-item lines="none" class="input">
+      </div>
+        <div class="input">
           <ion-textarea  mode="ios" type="text" label="Descriere" labelPlacement="floating" fill="outline" formControlName="description"></ion-textarea>
-        </ion-item>
+        </div>
       </form>
 
 
@@ -70,7 +68,18 @@
       </ion-row>
       </ion-grid>
 
-</ion-content>
-<ion-footer>
-  <ion-button expand="block" color="primary" size="large" (click)="addToProduct()" [disabled]="!form.valid">Salvează Sub Produs</ion-button>
+    </ion-content>
+<ion-footer class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block"  (click)="onClose()" color="light" size="large">
+          Renunță
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" color="medium" size="large" (click)="addToProduct()" [disabled]="!form.valid" color="medium">Salvează Sub Produs</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-footer>

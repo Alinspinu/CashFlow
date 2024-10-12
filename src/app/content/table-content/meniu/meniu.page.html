@@ -3,7 +3,9 @@
     <ion-row *ngIf="data.showMainCats">
         <ion-col size="6" *ngFor="let mainCat of getObjectKeys(data.mainCats)">
           <ion-card (click)="showCategories(mainCat.name)" class="main-card">
-            <img alt="main category image" class="main-img" [src]="mainCat.img"/>
+            <div class="image-wrapper">
+              <ion-icon alt="main category image" class="main-img" [src]="mainCat.img"></ion-icon>
+            </div>
             <ion-title  class="title">{{mainCat.name}}</ion-title>
           </ion-card>
         </ion-col>

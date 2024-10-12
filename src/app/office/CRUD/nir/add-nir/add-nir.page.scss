@@ -1,0 +1,163 @@
+
+ion-content, ion-toolbar, ion-footer, ion-list{
+  --background: #fbf0e7 !important;
+  background-color: #fbf0e7 !important;
+}
+
+
+ ion-title, span, ion-item, ion-input, ion-select, ion-searchbar{
+  font-family: NoirProReg !important;
+}
+
+.button, ion-label, .footer, .header{
+  font-family: NoirProSemi !important;
+}
+
+.discount-button{
+  font-size: 18px;
+  height: 55px;
+  margin-top: 10px;
+}
+
+.wrapper{
+  display: flex;
+  .add-wrapper{
+    flex: 30%;
+    height: 83.5vh;
+  }
+  .nir-wrapper{
+    flex: 70%;
+    height: 57.5vh;
+    // height: 100%;
+  }
+}
+
+
+
+.nirForm{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .input{
+      height: 55px !important;
+    }
+    .furz-name{
+      flex: 40%;
+      height: 58px;
+    }
+    .fur-cif{
+      flex: 20%;
+      height: 58px;
+    }
+    .nr-doc{
+      flex: 20%;
+      ion-input{
+        font-family: NoirProSemi !important;
+      }
+    }
+    .date{
+      flex: 20%;
+      height: 58px;
+      margin-right: 8px;
+      span{
+        font-family: NoirProSemi !important;
+      }
+      ion-input{
+        display: none !important;
+      }
+    }
+}
+
+.searchbar-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  ion-searchbar{
+    padding-bottom: 0 !important;
+  }
+  img{
+    margin-right: 18px;
+    height: 25px;
+    cursor: pointer
+  }
+}
+
+
+
+.input{
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0 12px;
+  background-color: white;
+  border-radius: 8px;
+  margin: 1rem 0 0.5rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header{
+  text-align: left;
+  font-size: 15px;
+}
+.name-h{
+  padding-left: 18px;
+  flex: 14% !important;
+}
+
+
+
+.content-container{
+  display: flex;
+  align-items: center;
+  background-color: white;
+  height: 50px;
+  border-radius: 8px;
+    span{
+      flex: 5%;
+    }
+    .name{
+      flex: 14% !important;
+    }
+}
+
+.head{
+  margin: 24px 0 12px 0;
+}
+
+
+
+.footer-container{
+  display: flex;
+  align-items: center;
+  background-color: white;
+  height: 50px;
+  padding-left: 24px;
+  border-radius: 8px;
+
+  .name{
+    flex: 14% !important;
+  }
+    span{
+      flex: 12%;
+    }
+}
+
+.fur-name{
+  cursor: pointer;
+  --background: var(--ion-color-medium-tint);
+  border-radius: 8px;
+  margin: 4px;
+  span{
+    color: var(--ion-color-light);
+  }
+}
+
+
+.spinner-container{
+  height: 45vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

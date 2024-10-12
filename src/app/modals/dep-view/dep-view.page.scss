@@ -1,7 +1,19 @@
+ion-content, ion-toolbar{
+  --background: #fbf0e7 !important;
+}
+
+
+ion-botton, ion-title, span, ion-item, ion-input{
+  font-family: NoirProReg !important;
+}
+
 .input{
   cursor: pointer;
   height: 70px;
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
   border-radius: 8px;
   margin: 0.4rem 0 0.4rem 0.2rem;
   font-family: NoirProLight !important;
@@ -28,6 +40,8 @@
   }
 
 }
+
+
 .header{
   height: 40px;
   border-radius: 8px;

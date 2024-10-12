@@ -19,6 +19,10 @@
           <span class="note vat">(Total fără mese deschise și fără TVA)</span>
           <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
           <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
+          <div class="refresh" (click)="refresh()">
+            <span>REFRESH</span>
+            <ion-icon src="../../../assets/icon/refresh-outline.svg" ></ion-icon>
+          </div>
         </div>
       </ion-col>
       <ion-col size-lg="9" size-xs="12" *ngIf="showRep">
@@ -31,6 +35,10 @@
           <span class="note vat">(Total fără TVA)</span>
           <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
           <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
+          <div class="refresh" (click)="refresh()">
+            <span>REFRESH</span>
+            <ion-icon src="../../../assets/icon/refresh-outline.svg" ></ion-icon>
+          </div>
         </div>
       </ion-col>
       <ion-col size-lg="3">
@@ -124,8 +132,8 @@
 <ion-row>
   <ion-col size-lg="6" offset-lg="3" *ngIf="report.departaments">
     <div class="method-container" *ngFor="let dep of report.departaments">
-      <span class="title">Top 10 produse {{dep.name}}</span>
-      <div class="method" *ngFor="let product of dep.products.slice(0, 10); let i = index;">
+      <span class="title">Top 20 produse {{dep.name}}</span>
+      <div class="method" *ngFor="let product of dep.products.slice(0, 20); let i = index;">
         <span class="index">{{i+1}}.</span>
         <span class="label">{{product.name}}</span>
         <span class="proc">{{product.qty}} buc</span>

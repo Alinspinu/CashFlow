@@ -51,6 +51,10 @@ export class PontajService{
     return this.http.post<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}`, {month, year, loc: environment.LOC})
   }
 
+  deletePont(id: string){
+    return this.http.delete<{message: string}>(`${environment.BASE_URL}shedule/pontaj?id=${id}`)
+  }
+
   selectPontaj(pontaj: Pontaj){
     this.pontaj = pontaj
     this.pontajState.next(this.pontaj)

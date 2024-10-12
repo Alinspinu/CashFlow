@@ -51,7 +51,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   productIngUm: string = '';
   productIngQty: string = '';
   productIngGest: string = 'magazie'
-  color: string = ""
+  color: string = "transparent"
 
   recipeTotal: number = 0;
 
@@ -153,7 +153,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   }
 
   setDataToEdit(){
-    this.ingPage ? this.color = "tertiary": this.color = ''
+    // this.ingPage ? this.color = "tertiary": this.color = 'transparent'
     if(this.top && this.top.length){
       this.toppings = this.top
       this.toppSend.emit(this.toppings)
@@ -231,7 +231,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   }
 
   async addIng(){
-   const ing = await this.actionSrv.openModal(AddIngredientPage, [], false)
+   const ing = await this.actionSrv.openPayment(AddIngredientPage, [])
    if(ing){
      this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
       this.ingSrv.addIngredinet(response.ing)

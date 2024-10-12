@@ -2,8 +2,8 @@
 
 
 ion-content{
-  --background: var(--ion-color-tertiary);
-  // height: 100vw;
+  --background: #fbf0e7 !important;
+  background-color: #fbf0e7 !important;
 }
 
 ion-label{
@@ -17,6 +17,7 @@ ion-label{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: #fbf0e7 !important;
 }
 
 
@@ -30,10 +31,10 @@ ion-label{
 
   ion-button{
   padding: 16px;
-  width: 280px;
+  width: 400px;
   height: 110px;
   --border-radius: 20px;
-  font-size: 25px;
+  font-size: 22px;
   font-family: NoirProReg;
 
   }
@@ -99,7 +100,7 @@ ion-label{
   border-radius: 6px 6px 0 0;
   width: 100%;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 5px rgba(0, 0, 0, 0.15);
-  background-color: var(--ion-color-secondary);
+  background-color: var(--ion-color-medium-tint);
   .title {
     text-align: center;
     color: white;

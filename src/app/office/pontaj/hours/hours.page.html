@@ -1,6 +1,8 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">{{userName}} -- {{firstHous + secondHous}} ore --- {{roundInHtml(firstCash + secondCash)}} Lei</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="title-wrapper">
+      <div class="title">{{userName}} -- {{firstHous + secondHous}} ore --- {{roundInHtml(firstCash + secondCash)}} Lei</div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -8,13 +10,17 @@
   <div class="container">
     <div class="firts">
       <span class="period">1 - 15</span>
-      <span class="hour">{{firstHous}} ore</span>
+      <span class="hour">{{firstHous}} ore x {{hour}} Lei</span>
       <span class="cash">{{roundInHtml(firstCash)}} Lei</span>
+      <span class="avans" *ngIf="firstAvans > 0"> - {{roundInHtml(firstAvans)}} Lei Avans</span>
+      <span class="total" *ngIf="firstAvans > 0">{{roundInHtml(firstCash - firstAvans)}} Lei</span>
     </div>
     <div class="second">
       <span class="period">16 - {{lastDay}}</span>
-      <span class="hour">{{secondHous}} ore</span>
+      <span class="hour">{{secondHous}} ore x {{hour}} Lei</span>
       <span class="cash">{{roundInHtml(secondCash)}} Lei</span>
+      <span class="avans" *ngIf="secondAvans > 0"> - {{roundInHtml(secondAvans)}} Lei Avans</span>
+      <span class="total" *ngIf="secondAvans > 0">{{roundInHtml(secondCash - secondAvans)}} Lei</span>
     </div>
   </div>
 </ion-content>

@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BreadcrumbCollapsedClickEventDetail, IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
-import { triggerEscapeKeyPress, showToast } from 'src/app/shared/utils/toast-controller';
+import { FormControl, FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms';
+import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
+import { showToast } from 'src/app/shared/utils/toast-controller';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
@@ -169,7 +169,6 @@ export class AddEntryPage implements OnInit {
         response.forEach(suplier => {
           this.supliersToSend.push(suplier.name)
         })
-        this.supliersToSend.push('Altul')
         this.supliersToSend.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
       }
     })
@@ -260,36 +259,8 @@ export class AddEntryPage implements OnInit {
             this.form.get('typeOf')?.setValue(typeOf)
             switch(typeOf){
               case 'Plata furnizor':
-                // const suplierName = await this.actionSheet.entryAlert(this.supliersToSend, 'radio', 'Furnizori', 'Alege un furnizor','suplier-alert','')
                 const suplierName = await this.actionSheet.openSelect(SelectDataPage, this.supliersToSend, 'data')
                 if(suplierName){
-                  if(suplierName === "Altul"){
-                    const desc = await this.actionSheet.textAlert('Nume furnizor', 'Scrie numele furnizorului', 'nr', 'Descriere')
-                    if(desc){
-                      this.hide.desc = true
-                      this.form.get('description')?.setValue(desc)
-                      const document = await this.actionSheet.entryAlert(this.documents, 'radio', 'Tip de Document', 'Alege o opțiune', '', '')
-                      if(document) {
-                        this.hide.document = true
-                        this.form.get('document')?.setValue(document)
-                        if(document === 'Fara'){
-                          this.description = typeOf + ' ' + desc + ' Fara document de plata'
-                        } else {
-                          const docNumber = await this.actionSheet.textAlert('Numar Document', 'Introdu numarul documentului', 'nr', 'Numad document')
-                          if(docNumber){
-                            this.description = typeOf + ' ' + desc + ' ' + document + ' ' + docNumber
-                            this.hide.docNr = true
-                            this.form.get('docNr')?.setValue(docNumber)
-                        }
-                      }
-                      const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
-                        if(sum){
-                          this.hide.amount = true
-                          this.form.get('price')?.setValue(sum)
-                        }
-                      }
-                    }
-                  } else {
                     const suplier = this.supliers.find((suplier: any) => suplier.name === suplierName)
                     if(suplier){
                       this.hide.suplier = true
@@ -315,7 +286,6 @@ export class AddEntryPage implements OnInit {
                       this.form.get('price')?.setValue(sum)
                     }
                     }
-                  }
                 }
                 return
               case 'Plata catre administrator':

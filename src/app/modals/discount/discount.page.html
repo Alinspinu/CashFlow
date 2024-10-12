@@ -1,6 +1,9 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="sum ion-text-center">{{title}}</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <!-- <ion-title class="sum ion-text-center">{{title}}</ion-title> -->
+    <div class="title-wrapper">
+      <div class="title">{{title}}</div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -9,29 +12,29 @@
   <form [formGroup]="discountForm">
   <ion-row class="input-row">
     <ion-col>
-      <ion-item lines="none" class="input">
+      <div class="input">
         <ion-input type="number" [label]="valLabel" labelPlacement="floating" placeholder="00" (ionInput)="onValChange($event)" formControlName="val"></ion-input>
-      </ion-item>
-      <ion-item lines="none" class="input">
+      </div>
+      <div class="input">
         <ion-input type="number" label="Reducere procentuală %" labelPlacement="floating" placeholder="%" (ionInput)="onProcentChange($event)"  formControlName="procent"></ion-input>
-      </ion-item>
-      <ion-item lines="none" class="input" *ngIf="tva">
+      </div>
+      <div class="input" *ngIf="tva">
         <ion-input type="number" label="Alege cota TVA" labelPlacement="floating" placeholder="19% 9% 5% 0%"  formControlName="tva"></ion-input>
-      </ion-item>
+      </div>
     </ion-col>
   </ion-row>
 </form>
 </ion-grid>
 </ion-content>
 
-<ion-footer>
+<ion-footer class="ion-no-border">
   <ion-grid>
     <ion-row>
       <ion-col>
-      <ion-button size="large" expand="block" color="danger" (click)="close()">RENUNȚĂ</ion-button>
+      <ion-button size="large" expand="block" color="light" (click)="close()">RENUNȚĂ</ion-button>
     </ion-col>
       <ion-col>
-        <ion-button size="large" expand="block" color="primary"(click)="addDiscount()">ADAUGĂ</ion-button>
+        <ion-button size="large" expand="block" color="medium"(click)="addDiscount()">ADAUGĂ</ion-button>
         </ion-col>
     </ion-row>
   </ion-grid>

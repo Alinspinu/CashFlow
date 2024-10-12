@@ -32,7 +32,6 @@ export const environment = {
   BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/',
 
 
-
   API_USER: 'uewmdhdA@&*939NSDOO73ns',
   API_PASSWORD: 'JSHFBJDS7323423MBDSF7SHUI!7^4WEW@92MNSDSHDYSY2KS93BWSYQJ3NQBE>/QW3Q312HSDNMASU2UD',
 

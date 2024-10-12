@@ -1,29 +1,42 @@
 
-ion-content{
-  --background: var(--ion-color-tertiary);
+ion-content, ion-toolbar{
+  --background: #fbf0e7 !important;
 }
 
 span{
   font-family: NoirProReg !important;
 }
 
+ion-searchbar{
+  padding: 0 36px!important;
+}
+
+ion-button, .font{
+  font-family: NoirProSemi !important;
+}
+
 .icon-start{
   height: 18px;
   margin-left: 4px;
+  color: white !important;
 }
 
 .icon-end{
   height: 19px;
   margin-left: 4px;
+  color: white !important;
 }
-.add{
-  height: 35px;
+
+.header-buttons{
+  display: flex;
+  align-items: center;
 }
 
 .nir-entry{
   cursor: pointer;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  padding-left: 24px;
   .nr{
     flex: 2%;
   }
@@ -48,9 +61,9 @@ span{
   align-items: center;
 }
 
-// .input:hover{
-//   --background: var(--ion-color-medium);
-// }
+.input:hover{
+  --background: var(--ion-color-medium-shade);
+}
 
 .data{
   flex: 8%;
@@ -59,27 +72,25 @@ span{
 
 .input{
   height: 45px;
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  background-color: white;
   margin: 0.5rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
 }
 
 .display-date{
-  height: 45px;
+  display: flex;
+  width: 300px;
+  height: 38px;
   border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   padding: 10px;
-  margin: 0.5rem 0 0.1rem 0.2rem;
+  margin: 0.5rem 0.5rem 0.5rem 0.7rem;
 }
 
 .start{
   margin-left: 12px;
-}
-
-ion-item[slot="fixed"]{
-  top: 8%;
-  width: 100%;
-  opacity: 60%;
-  // --backgound: transparent;
 }

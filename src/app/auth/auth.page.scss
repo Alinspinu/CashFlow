@@ -3,7 +3,7 @@
   font-family: NoirProReg !important;
   display: flex;
   position: absolute;
-  --background: #f4ede6;
+  --background: var(--ion-color-tertiary);
   background-size: cover;
   height: 100vh;
 }
@@ -42,6 +42,7 @@ ion-input, ion-button{
 .subtitle{
   margin: 8px 0 8px 0;
   font-size: 40px;
+  color: var(--ion-color-medium);
 }
 
 .submit ion-label{

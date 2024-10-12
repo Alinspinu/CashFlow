@@ -9,11 +9,23 @@ export const routes: Routes = [
     children: [
       {
         path: 'cash',
-        loadComponent: () => import('./cash/cash.page').then( m => m.CashPage)
+        loadComponent: () => import('./cash/cash.page').then( m => m.CashPage),
+        canActivate: [AuthGuard]
       },
       {
         path: 'products',
-        loadComponent: () => import('./products/products.page').then( m => m.ProductsPage)
+        loadComponent: () => import('./products/products.page').then( m => m.ProductsPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'finance',
+        loadComponent: () => import('./finance/finance.page').then( m => m.FinancePage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'inventary',
+        loadComponent: () => import('./inventary/inventary.page').then( m => m.InventaryPage),
+        canActivate: [AuthGuard]
       },
       {
         path: '',
@@ -27,17 +39,14 @@ export const routes: Routes = [
     redirectTo: '/tabs/reports/cash',
     pathMatch: 'full',
   },
-  {
-    path: 'finance',
-    loadComponent: () => import('./finance/finance.page').then( m => m.FinancePage)
-  },
-  {
-    path: 'inventary',
-    loadComponent: () => import('./inventary/inventary.page').then( m => m.InventaryPage)
-  },
+
   {
     path: 'select-inv',
     loadComponent: () => import('./inventary/select-inv/select-inv.page').then( m => m.SelectInvPage)
+  },
+  {
+    path: 'add-report',
+    loadComponent: () => import('./add-report/add-report.page').then( m => m.AddReportPage)
   },
 
 ];

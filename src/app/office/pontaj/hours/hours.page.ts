@@ -20,9 +20,14 @@ export class HoursPage implements OnInit {
   firstCash: number = 0
   secondCash: number = 0
 
+  firstAvans: number = 0
+  secondAvans: number = 0
+
   lastDay: number = 0
 
   userName!: string
+
+  hour: number = 0
 
   constructor(
     private navPar: NavParams,
@@ -32,6 +37,7 @@ export class HoursPage implements OnInit {
 
     const data = this.navPar.get('options')
     if(data){
+      this.hour = round(data.logs[0].earnd / data.logs[0].hours)
       this.userName = data.name
      this.lastDay = getDaysInMonth(data.logs[0].checkIn)
       data.logs.forEach((log:any) => {
@@ -43,6 +49,22 @@ export class HoursPage implements OnInit {
           this.secondHous += log.hours
           this.secondCash += log.earnd
         }
+      })
+
+      data.payments.filter( (doc: any) =>{
+        const docDate = new Date(doc.date).getDate();
+        const docMonth = new Date(doc.date).getUTCMonth();
+        return (docDate <= 15 && doc.workMonth >= docMonth) && doc.tip === "Avans"
+      }).forEach((pay: any) => {
+        this.firstAvans += pay.amount
+      })
+
+      data.payments.filter( (doc: any) =>{
+        const docDate = new Date(doc.date).getDate();
+        const docMonth = new Date(doc.date).getUTCMonth();
+        return (docDate >= 15 || doc.workMonth < docMonth) && doc.tip === "Avans"
+      }).forEach((pay: any) => {
+        this.secondAvans += pay.amount
       })
     }
   }

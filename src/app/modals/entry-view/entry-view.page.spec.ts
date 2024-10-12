@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ModalsPage } from './modals.page';
+import { EntryViewPage } from './entry-view.page';
 
-describe('ModalsPage', () => {
-  let component: ModalsPage;
-  let fixture: ComponentFixture<ModalsPage>;
+describe('EntryViewPage', () => {
+  let component: EntryViewPage;
+  let fixture: ComponentFixture<EntryViewPage>;
 
   beforeEach(async(() => {
-    fixture = TestBed.createComponent(ModalsPage);
+    fixture = TestBed.createComponent(EntryViewPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

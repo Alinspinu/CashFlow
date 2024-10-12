@@ -44,6 +44,17 @@ export class ReportsService{
  getReport(startDate: string | undefined, endDate: string | undefined){
   return this.http.get<any>(`${environment.BASE_URL}report?startDate=${startDate}&endDate=${endDate}&loc=${environment.LOC}`)
  }
+ getReports(){
+  return this.http.get<any[]>(`${environment.BASE_URL}report/all?loc=${environment.LOC}`)
+ }
+
+ deleteReport(reportId: string){
+  return this.http.delete<{message: string}>(`${environment.BASE_URL}report/delete?id=${reportId}`)
+ }
+
+ getReportsDate(){
+  return this.http.get<{start: string, end: string}>(`${environment.BASE_URL}report/dates?loc=${environment.LOC}`)
+ }
 
 
 

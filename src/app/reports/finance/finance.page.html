@@ -4,10 +4,11 @@
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading && !showRep">
   <div class="grid-date">
-    <ion-button fill="outline" mode="md" color="medium" (click)="selectDate()">{{startDate && startDate.length ? startDate : "ZI Început"}}</ion-button>
-    <ion-label color="medium" *ngIf="startDate">LA</ion-label>
+    <ion-button fill="outline" mode="md" color="medium" (click)="selectDate()" [disabled]="reports.length === 0">SELECTEAZĂ PERIOADA</ion-button>
+    <!-- <ion-label color="medium" *ngIf="startDate">LA</ion-label>
     <ion-label color="medium" *ngIf="!startDate" style="height: 13px"></ion-label>
-    <ion-button fill="outline" mode="md" color="medium" [disabled]="!startDate"> {{endDate && endDate.length ? endDate : "Zi Sfârșit"}}</ion-button>
+    <ion-button fill="outline" mode="md" color="medium" [disabled]="!startDate"> {{endDate && endDate.length ? endDate : "Raport Sfârșit"}}</ion-button> -->
+    <ion-button fill="outline" mode="md" color="medium" (click)="createReport()"[disabled]="reports.length === 0">CREAZĂ RAPOARTE</ion-button>
   </div>
 </ion-content>
 <ion-content [fullscreen]="true" *ngIf="!isLoading && showRep">
@@ -42,8 +43,12 @@
               <span class="sum">{{report.ingsValue}} Lei</span>
             </div>
             <div class="method">
-              <span class="label">Chirie și utilități</span>
-              <span class="sum">{{report.rentValue}} Lei</span>
+              <span class="label">Chirie (facturi)</span>
+              <span class="sum">{{report.rent}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Utilitati (facturi)</span>
+              <span class="sum">{{report.utilities}} Lei</span>
             </div>
             <div class="method" (click)="showUsers(report.workValue.users, 'income')">
               <span class="label">Personal fara taxe</span>
@@ -74,20 +79,16 @@
               <span class="sum">{{report.gasValue}} Lei</span>
             </div>
             <div class="method">
-              <span class="label">Chirie (facturi)</span>
+              <span class="label">Constructii(facturi)</span>
               <span class="sum">{{report.constructionsValue}} Lei</span>
-            </div>
-            <div class="method">
-              <span class="label">Utilitati (facturi)</span>
-              <span class="sum">{{report.rent}} Lei</span>
-            </div>
-            <div class="method">
-              <span class="label">Consumabile</span>
-              <span class="sum">{{report.utilities}} Lei</span>
             </div>
             <div class="method" (click)="showDep(report.impairment.products)">
               <span class="label">Deprecieri</span>
               <span class="sum">{{report.impairment.total}} Lei</span>
+            </div>
+            <div class="method" (click)="showEntry(report.diverse.entry)">
+              <span class="label">Diverse</span>
+              <span class="sum">{{report.diverse.total}} Lei</span>
             </div>
           </div>
         </ion-col>

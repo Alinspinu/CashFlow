@@ -296,4 +296,8 @@ export class SuplierPage implements OnInit {
   }
 
 
+  close(){
+    this.modalCtrl.dismiss(null)
+  }
+
 }

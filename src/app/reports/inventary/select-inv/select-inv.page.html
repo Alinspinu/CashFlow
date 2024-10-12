@@ -4,8 +4,15 @@
 </div>
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
-  <ion-header>
-    <ion-title class="ion-text-center">Alege Inventar</ion-title>
+  <ion-header class="ion-no-border">
+    <ion-toolbar class="ion-no-border">
+      <ion-button slot="start" color="medium" (click)="close()" size="large">
+        <ion-icon src="../../../../assets//icon/close-outline.svg" size="large"></ion-icon>
+      </ion-button>
+      <div class="title-wrapper">
+        <div class="title">Alege Inventar</div>
+      </div>
+    </ion-toolbar>
   </ion-header>
 <ion-grid>
   <ion-row>
@@ -15,14 +22,13 @@
       </div>
     </ion-col>
   </ion-row>
-  <ion-row>
-    <ion-col siz-lg="2" offset-lg="10">
-      <ion-button fill="outline" size="large" expand="block" color="primary" (click)="createInventary()">
-        <ion-icon src="assets/icon/create-outline.svg"></ion-icon>
-        Crează
-      </ion-button>
-    </ion-col>
-  </ion-row>
 </ion-grid>
 </ion-content>
+
+<ion-footer  *ngIf="!isLoading">
+  <ion-button size="large" expand="block" color="medium" (click)="createInventary()">
+    <ion-icon src="assets/icon/create-outline.svg"></ion-icon>
+    Crează
+  </ion-button>
+</ion-footer>
 

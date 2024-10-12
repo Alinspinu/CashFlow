@@ -207,11 +207,9 @@ export class CategoryContentPage implements OnInit, OnDestroy {
 getUser(){
     this.userSub = this.authSrv.user$.subscribe((res: any ) => {
       if(res){
-        res.subscribe((userData: any) => {
-            this.user = userData;
-            this.isLoggedIn = this.user.name === '' ? false : true;
-            this.isAdmin = this.user.admin === 1 ? true : false;
-        });
+        this.user = res;
+        this.isLoggedIn = this.user.name === '' ? false : true;
+        this.isAdmin = this.user.admin === 1 ? true : false;
       };
     });
     };

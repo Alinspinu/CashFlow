@@ -1,7 +1,11 @@
 
 ion-content{
   height: 60vh !important;
+  --background: #fbf0e7 !important;
 }
+
+
+
 
 .date{
   font-family: NoirProSemi !important;
@@ -43,6 +47,7 @@ ion-content{
 
 .pointer{
   cursor: pointer;
+  user-select: none;
   // border: 5px solid green;
 }
 

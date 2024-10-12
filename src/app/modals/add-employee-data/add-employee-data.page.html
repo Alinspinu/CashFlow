@@ -1,11 +1,11 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Adaugă date angajat</ion-title>
-    <ion-buttons slot="start">
-      <ion-button (click)="close()">
-        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 22px;"></ion-icon>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="title-wrapper">
+      <div class="title">ADAUGĂ DATE ANGAJAT</div>
+    </div>
+      <ion-button (click)="close()" slot="start" color="medium">
+        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 35px;" color="light"></ion-icon>
       </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -48,21 +48,21 @@
       </ion-item>
       <ion-item lines="none" class="input">
         <ion-select label="Cuantificare" placeholder="Level" formControlName="fix">
-          <ion-select-option [value]="true">Fix</ion-select-option>
-          <ion-select-option [value]="false">Ore</ion-select-option>
+          <ion-select-option class="font" [value]="true">Fix</ion-select-option>
+          <ion-select-option class="font" [value]="false">Ore</ion-select-option>
         </ion-select>
         </ion-item>
       <ion-item lines="none" class="input">
         <ion-select label="Acces aplicatie" placeholder="Level" formControlName="access">
-          <ion-select-option value="1">Level 1</ion-select-option>
-          <ion-select-option value="2">Level 2</ion-select-option>
-          <ion-select-option value="3">Level 3</ion-select-option>
+          <ion-select-option class="font" value="1">Level 1</ion-select-option>
+          <ion-select-option class="font" value="2">Level 2</ion-select-option>
+          <ion-select-option class="font" value="3">Level 3</ion-select-option>
         </ion-select>
         </ion-item>
       <ion-item lines="none" class="input">
         <ion-select label="Stare" placeholder="Level" formControlName="status">
-          <ion-select-option [value]="true">Activ</ion-select-option>
-          <ion-select-option [value]="false">Inactiv</ion-select-option>
+          <ion-select-option class="font" [value]="true">Activ</ion-select-option>
+          <ion-select-option class="font" [value]="false">Inactiv</ion-select-option>
         </ion-select>
         </ion-item>
 
@@ -71,7 +71,7 @@
 
     <ion-row>
       <ion-col>
-        <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">
+        <ion-button color="medium" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">
           <ion-label>
             ADAUGĂ
           </ion-label>

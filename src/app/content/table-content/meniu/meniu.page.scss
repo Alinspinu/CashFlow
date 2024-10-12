@@ -1,5 +1,5 @@
 ion-content{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
   // font-family: NoirProSemi !important;
 }
 
@@ -13,9 +13,16 @@ ion-content{
   justify-items: center;
   justify-content: center;
   border-radius: 12px;
-  .main-img{
-    height: 200px;
-    padding: 36px;
+  .image-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .main-img{
+      // color: var(--ion-color-light) !important;
+      font-size: 90px;
+      height: 200px;
+      padding: 36px;
+    }
   }
   ion-title{
     font-family: NoirProSemi !important;

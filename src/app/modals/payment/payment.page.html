@@ -12,7 +12,7 @@
     <ion-col>
       <form [formGroup]="paymentForm" class="form">
       <ion-item lines="none" class="item" color="transparent">
-        <ion-button color="tertiary" size="large" class="close" (click)="reset('cash')" [disabled]="disablePayButtons">X</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('cash')" [disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Numerar" labelPlacement="floating" placeholder="00" formControlName="cash"></ion-input>
         </ion-item>
@@ -26,7 +26,7 @@
         <ion-button color="tertiary" size="large" class="button" (click)="card()"[disabled]="disablePayButtons">CARD</ion-button>
       </ion-item> -->
       <ion-item lines="none" class="item" color="transparent">
-        <ion-button color="tertiary" size="large" class="close" (click)="reset('viva')"[disabled]="disablePayButtons">X</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('viva')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Viva Wallet" labelPlacement="floating" placeholder="00" formControlName="viva"></ion-input>
         </ion-item>
@@ -34,7 +34,7 @@
       </ion-item>
 
       <ion-item lines="none" class="item" color="transparent">
-        <ion-button color="tertiary" size="large" class="close" (click)="reset('viva2')"[disabled]="disablePayButtons">X</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('viva2')"[disabled]="disablePayButtons">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Viva Wallet 2" labelPlacement="floating" placeholder="00" formControlName="viva2"></ion-input>
         </ion-item>
@@ -43,14 +43,14 @@
       </ion-item>
 
       <ion-item lines="none" class="item" color="transparent">
-        <ion-button color="tertiary" size="large" class="close" (click)="reset('online')"[disabled]="true">X</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('online')">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="number" label="Plată Online" labelPlacement="floating" placeholder="00" formControlName="online"></ion-input>
         </ion-item>
         <ion-button color="medium" size="large" class="button" (click)="online()"[disabled]="false">ONLINE</ion-button>
       </ion-item>
       <ion-item lines="none" class="item" color="transparent">
-        <ion-button color="tertiary" size="large" class="close" (click)="reset('cif')">X</ion-button>
+        <ion-button color="light" size="large" class="close" (click)="reset('cif')">X</ion-button>
         <ion-item lines="none" class="input">
           <ion-input type="text" label="Cod Fiscal" labelPlacement="floating" placeholder="ex.RO123232" formControlName="cif" #cifInp></ion-input>
         </ion-item>

@@ -40,9 +40,11 @@ export class IngredientService{
         this.ingredientsState.next([...this.ingredients])
       }
     })
+    console.log(loc)
     return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
         .pipe(tap(response => {
           this.ingredients = response
+          console.log(this.ingredients.length)
           const stringIngs = JSON.stringify(this.ingredients)
           this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
           this.ingredientsState.next([...this.ingredients])

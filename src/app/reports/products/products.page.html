@@ -1,8 +1,5 @@
 
 
-
-
-
 <ion-content [fullscreen]="true" *ngIf="!showProducts && !isLoading">
   <ion-title class="ion-text-center">Alege Perioada</ion-title>
   <div class="grid-date">
@@ -23,48 +20,43 @@
     <ion-button fill="outline" mode="md" color="primary" (click)="search()" *ngIf="endDay && endDay.length">CAUTĂ</ion-button>
   </div>
 </ion-content>
+
 <ion-content [fullscreen]="true" *ngIf="isLoading">
   <div class="grid-date">
     <app-spinner></app-spinner>
   </div>
 </ion-content>
-<ion-header  *ngIf="showProducts && !isLoading">
-  <ion-toolbar>
-    <ion-buttons slot="start" class="time">
-      <ion-button (click)="hide()"  >
+
+<ion-header  *ngIf="showProducts && !isLoading" class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+      <ion-button (click)="hide()" slot="start" class="time" color="medium" size="medium">
         ALEGE PERIOADA
       </ion-button>
-      </ion-buttons>
-      <div class="label">
-        <ion-label *ngIf="startDay === endDay">
-          {{startDay}}
-        </ion-label>
-        <ion-label *ngIf="startDay !== endDay">
-          {{startDay}} -- {{endDay}}
-        </ion-label>
+      <div class="title-wrapper">
+        <div class="title" *ngIf="startDay === endDay"> {{startDay}}</div>
+        <div class="title" *ngIf="startDay !== endDay">{{startDay}} -- {{endDay}}</div>
       </div>
-      <ion-buttons slot="end">
-        <ion-button (click)="printProducts()">
+
+        <ion-button (click)="printProducts()" slot="end" color="medium" size="medium">
          <span class="but">Produse vândute</span>
           <ion-icon src="./assets/icon/download.svg"></ion-icon>
         </ion-button>
-        <ion-button (click)="printConsuption()">
+        <ion-button (click)="printConsuption()" slot="end" color="medium" size="medium">
           <span class="but">Centralizator consum</span>
           <ion-icon src="./assets/icon/download.svg"></ion-icon>
         </ion-button>
-        <ion-button (click)="printProduction()">
+        <ion-button (click)="printProduction()" slot="end" color="medium" size="medium">
          <span class="but"> Raport de productie</span>
           <ion-icon src="./assets/icon/download.svg"></ion-icon>
         </ion-button>
-      <ion-button (click)="showConsumption()">
+      <ion-button (click)="showConsumption()" slot="end" color="medium" size="medium">
         {{showProductIngs ? "ARATĂ VÂNZĂRILE" : "ARATĂ CONSUMUL"}}
       </ion-button>
-    </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
-  <ion-content [fullscreen]="true" class="products-content" *ngIf="showProducts && !isLoading && !showProductIngs">
-    <ion-grid *ngIf="sections">
+<ion-toolbar class="ion-no-border" *ngIf="showProducts && !isLoading && sections">
+  <ion-header class="ion-no-border">
+    <ion-grid>
       <ion-row class="totals-row">
         <ion-col [size]="colSize['buc']" >
           <div class="section" (click)="showMain('buc')" [ngClass]="{'main': colSize['buc'] === 2.2}">
@@ -212,8 +204,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-title class="ion-text-center title">Produse Vândute</ion-title>
-    <ion-item lines="none" slot="fixed" [ngClass]="{'cons': showProductIngs}">
+    <ion-item lines="none" class="header" [ngClass]="{'cons': showProductIngs}">
       <div class="name head" (click)="filter('name')">
         <ion-icon src="assets/icon/arrows-down.svg" [color]="nameColor"></ion-icon>
         <span>Nume Produs</span>
@@ -259,8 +250,12 @@
         <ion-icon src="assets/icon/arrows-down.svg" [color]="surplusColor"></ion-icon>
       </div>
     </ion-item>
+  </ion-header>
+</ion-toolbar>
+  <ion-content [fullscreen]="true" class="products-content" *ngIf="showProducts && !isLoading && !showProductIngs">
+
     <div class="product-wrapper" *ngFor="let product of products; let i = index">
-      <ion-item lines="none" class="ing-input" (click)="showRecipe(i, product)" [ngClass]="{'selected': i === selected}">
+      <div class="input" (click)="showRecipe(i, product)" [ngClass]="{'selected': i === selected}">
         <ion-label class="index">{{i+1}}.</ion-label>
         <ion-label class="name">{{product.name}}</ion-label>
         <ion-label  class="qty" *ngIf="!product.showSub"></ion-label>
@@ -272,10 +267,11 @@
         <ion-label  class="qty">{{roundInHtml(product.price*product.quantity - product.discount)}} Lei</ion-label>
         <ion-label  class="qty">{{calcConsInHtml(product)}} Lei</ion-label>
         <ion-label  class="qty">{{roundInHtml(((product.price*product.quantity - product.discount) - calcConsInHtml(product)) / calcConsInHtml(product) * 100)}} %</ion-label>
-      </ion-item>
+      </div>
       <div class="recipe-wrapper" *ngIf="product.showSub">
         <div class="ings-wrapper" *ngFor="let ing of product.ingr">
-          <ion-item lines="none" class="input" *ngIf="ing.ing">
+          <div class="input" *ngIf="ing.ing">
+            <ion-label class="index"></ion-label>
             <ion-label class="name">{{ing.ing.name}} (Ingredient)</ion-label>
             <ion-label  class="qty">{{roundInHtml(ing.qty / product.quantity)}} {{ing.ing.um}}</ion-label>
             <ion-label  class="qty">{{roundInHtml(ing.qty)}} {{ing.ing.um}}</ion-label>
@@ -285,9 +281,9 @@
             <ion-label  class="qty"></ion-label>
             <ion-label  class="qty"></ion-label>
             <ion-label  class="qty"></ion-label>
-          </ion-item>
+          </div>
         </div>
-        <ion-item lines="none" class="input">
+        <div class="input">
           <ion-label  class="name bold">Total consum</ion-label>
           <ion-label  class="qty"></ion-label>
           <ion-label  class="qty"></ion-label>
@@ -298,10 +294,11 @@
           <ion-label  class="qty"></ion-label>
           <ion-label  class="qty"></ion-label>
           <ion-label  class="qty"></ion-label>
-        </ion-item>
+        </div>
       </div>
     </div>
   </ion-content>
+
   <ion-content [fullscreen]="true" class="reports-content" *ngIf="showProductIngs">
     <ion-title class="ion-text-center">Ingrediente Consumate</ion-title>
     <ion-item lines="none" slot="fixed" id="cons">

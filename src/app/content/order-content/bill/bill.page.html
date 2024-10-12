@@ -49,6 +49,7 @@
             <ion-button (click)="break(i)" size="large" color="tertiary">
               <ion-icon src="../../../assets/icon/beak.svg"></ion-icon>
             </ion-button>
+
           </ion-buttons>
             <span class="prod-price">{{product.price}} Lei</span>
             <ion-button size="medium" color="secondary" (click)="redProd(i)" *ngIf="product.sentToPrint">-</ion-button>
@@ -58,6 +59,7 @@
               <span class="prod-total">{{product.total}} Lei</span>
               <span class="prod-discount"*ngIf="product.discount > 0">-{{product.discount}} Lei</span>
             </div>
+
         </ion-item>
       </ion-content>
       <div class="extra-bill" *ngIf="billToshow">

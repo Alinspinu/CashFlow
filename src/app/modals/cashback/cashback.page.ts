@@ -14,6 +14,7 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 export class CashbackPage implements OnInit {
 
   cashBackForm!: FormGroup
+  cashBackValue: number = 0
   data!: any
 
   constructor(
@@ -44,9 +45,9 @@ export class CashbackPage implements OnInit {
   useCashBack(){
     const clientTotalCashBack = this.data.cashBack
     const orderTotal = this.data.total
-    const formValue = this.cashBackForm.value.val
-    if(this.cashBackForm.valid && clientTotalCashBack >= formValue && orderTotal >= formValue){
-      this.modalCtrl.dismiss(this.cashBackForm.value.val)
+    const formValue = this.cashBackValue
+    if(clientTotalCashBack >= formValue && orderTotal >= formValue){
+      this.modalCtrl.dismiss(this.cashBackValue)
   } else {
     showToast(this.toastCtrl, 'Valoarea nu poate fi mai mare decât banii adunați sau decât nota de plată!', 3000)
   }
@@ -54,7 +55,7 @@ export class CashbackPage implements OnInit {
 
   maxim(){
     const value = this.data.cashBack > this.data.total ? this.data.total  : this.data.cashBack
-    this.cashBackForm.get('val')?.setValue(value)
+    this.cashBackValue = value
   }
 
 

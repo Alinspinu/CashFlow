@@ -40,7 +40,6 @@ export class UsersService{
     return this.http.post<User[]>(`${environment.BASE_URL}users?loc=${environment.LOC}`, {}, {headers})
             .pipe(tap(response => {
               if(response){
-                console.log(response)
                 this.users = response
                 this.usersState.next(this.users)
               }

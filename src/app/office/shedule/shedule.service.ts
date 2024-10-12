@@ -45,7 +45,7 @@ getAllShedules(){
 }
 
 addEntry(user: any, day: any, month: string, dayValue: number){
-    return this.http.put<Shedule>(`${environment.BASE_URL}shedule`, {sheduleId: this.shedule._id, day, user, month, dayValue})
+    return this.http.put<Shedule>(`${environment.BASE_URL}shedule`, {sheduleId: this.shedule._id, day, user, month, dayValue, loc: environment.LOC})
     .pipe(tap(response => {
       if(response){
         this.shedule = response
@@ -64,7 +64,7 @@ selectShedule(shedule: Shedule){
 }
 
 deleteEntry(userId: any, day: string, month: string, dateStr: string){
-  return this.http.delete<Shedule>(`${environment.BASE_URL}shedule?sheduleId=${this.shedule._id}&userId=${userId}&day=${day}&month=${month}&dateStr=${dateStr}`)
+  return this.http.delete<Shedule>(`${environment.BASE_URL}shedule?sheduleId=${this.shedule._id}&userId=${userId}&day=${day}&month=${month}&dateStr=${dateStr}&loc=${environment.LOC}`)
   .pipe(tap(response => {
     if(response){
       this.shedule = response

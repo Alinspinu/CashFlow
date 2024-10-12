@@ -36,6 +36,8 @@ import { HoursPage } from '../office/pontaj/hours/hours.page';
 import { SelectInvPage } from '../reports/inventary/select-inv/select-inv.page';
 import { RecordModalPage } from '../office/supliers/suplier/record-modal/record-modal.page';
 import { SelectDataPage } from '../modals/select-data/select-data.page';
+import { AddReportPage } from '../reports/add-report/add-report.page';
+import { EntryViewPage } from '../modals/entry-view/entry-view.page';
 
 
 
@@ -49,15 +51,15 @@ export class ActionSheetService {
   async openModal(
     component: typeof PickOptionPage |
                typeof SuplierPage |
-               typeof AddIngredientPage |
                typeof SubProductPage |
-               typeof CategoryPage |
                typeof PaymentPage |
                typeof SuplierPage |
                typeof AddEmployeeDataPage |
                typeof HoursPage |
                typeof ProductIngredientPage |
                typeof PaymentsPage |
+               typeof TogglePage |
+               typeof TogglePontPage |
                typeof AddToInventaryPage,
     options: any,
     sub: boolean,
@@ -123,8 +125,10 @@ export class ActionSheetService {
                typeof AddProductDiscountPage |
                typeof OrdersViewPage |
                typeof OrderAppViewPage |
+               typeof CategoryPage |
                typeof AddEntryPage |
                typeof TipsPage |
+               typeof AddIngredientPage |
                typeof TogglePage |
                typeof TogglePontPage |
                typeof DatePickerPage |
@@ -132,6 +136,8 @@ export class ActionSheetService {
                typeof DepViewPage |
                typeof SelectInvPage |
                typeof RecordModalPage |
+               typeof AddReportPage |
+               typeof EntryViewPage |
                typeof DelProdViewPage,
     options: any
   ){
@@ -240,9 +246,9 @@ export class ActionSheetService {
         {
           label: 'Alege Nume',
           type: 'text',
+          cssClass: 'input'
         }
     ],
-      cssClass: 'extraAlert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();

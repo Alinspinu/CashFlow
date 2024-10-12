@@ -2,7 +2,7 @@
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 import { Category, Product } from "./category.model";
-import { InvIngredient } from "./nir.model";
+import { InvIngredient, NirIngredient } from './nir.model';
 import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
 
@@ -235,11 +235,30 @@ export function emptyIng(){
    gestiune: '',
    locatie: '',
    ings: [],
+   productIngredient: false,
    inventary: [],
    uploadLog: [],
    unloadLog: []
   }
   return emptyIng
+}
+
+
+export function emptyNirIng(){
+  const emptyNirIng: NirIngredient = {
+   name: '',
+   price: 0,
+   um: '',
+   qty: 0,
+   value: 0,
+   tva: 0,
+   dep: 0,
+   gestiune: '',
+   tvaValue: 0,
+   sellPrice: 0,
+   total: 0,
+  }
+  return emptyNirIng
 }
 
 

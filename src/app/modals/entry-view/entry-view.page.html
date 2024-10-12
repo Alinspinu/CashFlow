@@ -1,0 +1,32 @@
+<ion-content>
+  <ion-toolbar class="ion-no-border">
+    <ion-button size="large" color="medium" (click)="close()" slot="start">
+     <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
+    </ion-button>
+    <div class="title-wrapper">
+      <div class="title">Total {{total}} Lei</div>
+    </div>
+   </ion-toolbar>
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <div class="header">
+        <span class="nr">Index</span>
+        <span class="data">Data</span>
+        <span class="discount">Descriere</span>
+        <span class="total">Valoare</span>
+      </div>
+    </ion-col>
+  </ion-row>
+<ion-row>
+  <ion-col *ngIf="entries && entries.length">
+    <div class="input" *ngFor="let entry of entries;">
+      <span class="nr">{{entry.index}}.</span>
+      <span class="data">{{formateDate(entry.date)}}</span>
+      <span class="discount"> {{entry.reason}}</span>
+      <span class="total">{{entry.value}} Lei</span>
+    </div>
+  </ion-col>
+</ion-row>
+</ion-grid>
+</ion-content>

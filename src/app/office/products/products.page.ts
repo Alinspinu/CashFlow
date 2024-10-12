@@ -55,6 +55,7 @@ export class ProductsPage implements OnInit {
   }
 
 getuser(){
+  this.isLoading = true
   getUserFromLocalStorage().then(user => {
     if(user) {
       this.user = user
@@ -202,6 +203,7 @@ searchIngProduct(ev: any){
   getCategories(){
     this.categories = this.contentSrv.categoriesNameId$;
     this.categoriesToShow = this.categories;
+    this.isLoading = false
     this.setMainCats(this.categories);
     }
 
@@ -221,7 +223,7 @@ searchIngProduct(ev: any){
     }
 
    async addCat(){
-     const response = await this.actionSrv.openModal(CategoryPage, null, false)
+     const response = await this.actionSrv.openPayment(CategoryPage, null)
      if(response){
        this.productsSrv.saveCat(response, this.user.locatie).subscribe(response => {
         console.log(response)
@@ -234,7 +236,7 @@ searchIngProduct(ev: any){
       const sortedCategories = this.categories.sort((a,b) => a.name.localeCompare(b.name))
       const categoryId = await this.actionSrv.chooseCategory(sortedCategories)
       if(categoryId) {
-        const response = await this.actionSrv.openModal(CategoryPage, categoryId, false)
+        const response = await this.actionSrv.openPayment(CategoryPage, categoryId)
         if(response){
           this.contentSrv.editCategory(response).subscribe(response => {
             if(response){
@@ -253,12 +255,12 @@ searchIngProduct(ev: any){
         }
         )
       }
-      return total
+      return `${total} Lei`
     }
 
     calcComercialSurplus(product: any){
-      const productionPrice = this.calcProductionPrice(product)
-      if(productionPrice > 0){
+      const productionPrice = +this.calcProductionPrice(product).split('')[0]
+      if(productionPrice> 0){
         const procentSurplus =  (( product.price - productionPrice ) / productionPrice ) * 100
         return  round(procentSurplus) + "%"
       } else {

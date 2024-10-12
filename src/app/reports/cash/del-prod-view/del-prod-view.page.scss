@@ -2,6 +2,10 @@
 font-size: 18px;
 }
 
+ion-content, ion-toolbar {
+  --background: #fbf0e7 !important;
+}
+
 ion-card{
   font-family: NoirProReg !important;
 }

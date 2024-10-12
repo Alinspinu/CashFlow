@@ -177,7 +177,7 @@ showRecipe(index: number, prod: any){
 
 
 getProducts(){
-  // this.isLoading = true
+  this.isLoading = true
   const filter = {
     inreg: this.isInreg,
     unreg: this.isUnreg,

@@ -7,10 +7,19 @@ ion-title{
   font-family: NoirProReg !important;
 }
 
+
+ion-content{
+  --background: #fbf0e7 !important;
+}
+
+
 .input{
   height: 50px;
   width: 100%;
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
   border-radius: 8px;
   margin: 0.5rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;

@@ -74,6 +74,14 @@ export const routes: Routes = [
     path: 'record-modal',
     loadComponent: () => import('./supliers/suplier/record-modal/record-modal.page').then( m => m.RecordModalPage)
   },
+  {
+    path: 'add-nir',
+    loadComponent: () => import('./CRUD/nir/add-nir/add-nir.page').then( m => m.AddNirPage)
+  },
+  {
+    path: 'add-ing',
+    loadComponent: () => import('./CRUD/nir/add-ing/add-ing.page').then( m => m.AddIngPage)
+  },
 
 
 

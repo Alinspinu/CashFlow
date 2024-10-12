@@ -1,35 +1,49 @@
 .header{
+  font-family: NoirProSemi !important;
   font-size: 17px !important;
-  margin-left: 0.5rem;
+  padding-left: 24px;
+  margin: 24px 0;
 }
-img{
+.searchbar-icon{
   height: 35px;
   cursor: pointer
 }
-img:active{
-  background-color: rgb(239, 239, 239);
+.searchbar-icon:active{
+  background-color: var(--ion-color-light);
   border-radius: 4px;
   padding: 3px;
 }
 
 .input{
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   margin: 1rem 0 0.5rem 0.5rem;
 }
 
-.input1{
-  border: 0.5px solid var(--ion-color-medium);
+.input1, .input2{
+  display: flex;
+  align-items: center;
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  height: 50px;
+  background-color: var(--ion-color-light);
   margin: 1rem 0 0.5rem 0.5rem;
   padding-left: 12px!important;
 }
 
-.input2{
-  border: 0.5px solid var(--ion-color-medium);
-  border-radius: 8px;
-  margin: 1rem 0 0.5rem 0.5rem;
-}
+// .input2{
+//   box-shadow:
+//   0 -2px 4px rgba(0, 0, 0, 0.1),
+//   0 2px 4px rgba(0, 0, 0, 0.1);
+//   border-radius: 8px;
+//   height: 50px;
+//   background-color: white;
+//   margin: 1rem 0 0.5rem 0.5rem;
+// }
 ion-title{
   font-family: NoirProReg !important;
 }
@@ -41,12 +55,14 @@ ion-input{
   font-family: NoirProReg !important;
 }
 
-ion-button{
-  font-family: NoirProReg !important;
+ion-button, h3{
+  font-family: NoirProSemi !important;
 }
 
 ion-searchbar{
   font-family: NoirProReg !important;
+  --background: var(--ion-color-light);
+  // color: var(--ion-color-medium)
 }
 
 
@@ -72,7 +88,7 @@ ion-searchbar{
 
 .select{
   width: 700px !important;
-  border: 0.5px solid var(--ion-color-medium);
+  border: 0.5px solid var(--ion-color-medium-tint);
   border-radius: 8px;
   height: 60px !important;
   margin: 1rem 0 0.5rem 0.5rem;
@@ -85,15 +101,6 @@ ion-searchbar{
   font-size: 18px;
 }
 
-.gst{
-
-}
-
-.stc{
-
-}
-
-
 .ionicon{
   height: 25px;
 
@@ -104,14 +111,13 @@ ion-searchbar{
   margin-right: 9%;
 }
 
-
 .ing-name{
   cursor: pointer;
-  --background: var(--ion-color-warning-shade);
+  --background: var(--ion-color-light);
   border-radius: 8px;
   margin: 4px;
   span{
-    color: var(--ion-color-warning-contrast);
+    color: var(--ion-color-medium)
   }
 }
 
@@ -119,16 +125,19 @@ ion-searchbar{
   --background: var(--ion-color-danger)
 }
 
-.total{
-  font-size: 19px;
-  margin-left: 0.5rem;
+.prouct-ing-wrapper{
+  display: flex;
 }
+
+
 
 .content-container{
   display: flex;
   flex-direction: row;
   font-weight: 400;
   font-size: 16px;
+  background-color: var(--ion-color-light);
+  color: var(--ion-color-medium);
   .name{
     margin-left: 0.6rem;
     flex: 30%;
@@ -158,4 +167,20 @@ ion-searchbar{
   .val{
     flex: 10%;
   }
+}
+
+.total-wrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 19px;
+  font-family: NoirProSemi !important;
+  padding: 0 28px;
+  margin: 24px 0;
+}
+
+.header{
+  background-color: var(--ion-color-tertiary) !important;
+  color: var(--ion-color-loght) !important;
 }

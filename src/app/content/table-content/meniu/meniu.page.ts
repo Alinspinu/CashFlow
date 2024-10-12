@@ -75,12 +75,7 @@ export class MeniuPage implements OnInit, OnDestroy {
   getUser(){
     this.userSub = this.authSrv.user$.subscribe(response => {
       if(response){
-        this.userSub = response.subscribe(user => {
-          if(user){
-            this.user = user;
-            // this.incommingOrders()
-          }
-        })
+        this.user = response
       }
     })
     }
@@ -125,6 +120,7 @@ export class MeniuPage implements OnInit, OnDestroy {
       options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
       if(options.length){
           const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
+          console.log(extra)
             if(extra && extra.toppings) {
                pickedToppings = extra.toppings
                pickedToppings.forEach(el => {
@@ -201,26 +197,6 @@ export class MeniuPage implements OnInit, OnDestroy {
     this.dataChange.emit(this.data)
   }
 
-  // goBack(){
-  //   if(this.showCats){
-  //     this.showCats = false;
-  //     this.showMainCats = true;
-  //     this.showProd = false;
-  //   } else if(this.showProd){
-  //     this.showProd = false;
-  //     this.showCats = true;
-  //     this.showMainCats = false;
-  //   }
-  // }
-
-  //  home(){
-  //   this.showCats = false;
-  //   this.showMainCats = true;
-  //   this.showProd = false
-  // }
-
-
-
 
   modifyImageURL(url: string): string {
     const parts = url.split('/v1');
@@ -239,28 +215,28 @@ export class MeniuPage implements OnInit, OnDestroy {
          case 'bar':
            const bar = {
              name: 'bar',
-             img: '../../../assets/icon/bar.svg'
+             img: this.detectDarkMode() ? '../../../assets/icon/bar-w.svg' : '../../../assets/icon/bar.svg'
            }
            cats.push(bar)
            return
          case 'coffee':
            const coffee = {
              name: 'coffee',
-             img: '../../../assets/icon/coffee.svg'
+             img: this.detectDarkMode() ? '../../../assets/icon/coffee-w.svg' : '../../../assets/icon/coffee.svg'
            }
            cats.push(coffee)
            return
          case 'food':
            const food = {
              name: 'food',
-             img: '../../../assets/icon/food.svg'
+             img: this.detectDarkMode() ?  '../../../assets/icon/food-w.svg' :'../../../assets/icon/food.svg'
            }
            cats.push(food)
            return
          case 'shop':
            const shop = {
              name: 'shop',
-             img: '../../../assets/icon/shop.svg'
+             img: this.detectDarkMode() ? '../../../assets/icon/shop-w.svg' :'../../../assets/icon/shop.svg'
            }
            cats.push(shop)
            return
@@ -268,5 +244,9 @@ export class MeniuPage implements OnInit, OnDestroy {
      })
      return cats
    }
+
+   detectDarkMode(): boolean {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
 
 }

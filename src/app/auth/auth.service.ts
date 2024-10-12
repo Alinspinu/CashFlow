@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import {  BehaviorSubject, from, map, tap } from "rxjs";
+import { BehaviorSubject, from, map, tap, Observable } from 'rxjs';
 import  {jwtDecode } from 'jwt-decode'
 import { Preferences } from "@capacitor/preferences";
 import {environment} from "../../environments/environment"
@@ -28,83 +28,23 @@ export class AuthService{
   activeLogoutTimer!: any;
 
 
-  private user = new BehaviorSubject<User>(emptyUser());
+  private user = new BehaviorSubject<User | null>(null);
 
-  get user$() {
+  get user$(): Observable<User | null>{
       return from(Preferences.get({key: 'authData'})).pipe(map(data => {
         if(data.value){
-          const userData = JSON.parse(data.value) as {
-            _id: string,
-            name: string,
-            token: string,
-            admin: number,
-            cashBack: number,
-            email: string,
-            tokenExpirationDate: any,
-            status: string,
-            telephone: string,
-            locatie: string,
-            cardIndex: number,
-            cardName: string,
-            survey: string,
-            orders: Bill[],
-            discount: {
-              general: number,
-              category: {
-                precent: number,
-                name: string,
-                cat: Category
-              }[]
-            },
-            employee: {
-              active: boolean,
-              position: string,
-              fullName: string,
-              cnp: number,
-              ciSerial: string,
-              ciNumber: number,
-              address: string,
-              user: string,
-              access: number,
-              salary: {
-                inHeand: number,
-                onPaper: {
-                  salary: number,
-                  tax: number
-                },
-                fix: boolean
-              },
-              workLog: {
-                day: Date,
-                checkIn: Date,
-                checkOut: Date,
-                hours: number,
-                earnd: number,
-                position: string,
-              }[],
-              payments: {
-                date: string,
-                amount: number,
-                tip: string,
-                workMonth: number
-              }[],
-            },
-
-          };
+          const userData = JSON.parse(data.value) as User
           const tokenDate = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
           if(tokenDate <= 0){
-            return this.user.asObservable();
-          } else if(tokenDate > 0) {
-            this.user.next(userData);
-            this.aoutoLogout(tokenDate);
-            return this.user.asObservable();
-          } else if(this.user.value.cashBack < userData.cashBack && this.user.value.cashBack !== -1){
-            userData.cashBack = this.user.value.cashBack;
-            this.user.next(userData);
-            return this.user.asObservable();
+            return null
           }else {
+            if(this.user.value){
+              if(this.user.value.cashBack < userData.cashBack && this.user.value.cashBack !== -1){
+                userData.cashBack = this.user.value.cashBack;
+              }
+            }
             this.user.next(userData);
-            return this.user.asObservable();
+            return userData
           };
         } else {
           return null

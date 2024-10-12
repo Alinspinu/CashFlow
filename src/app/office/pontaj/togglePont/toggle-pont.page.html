@@ -1,22 +1,34 @@
 
 
 <ion-content [fullscreen]="true">
-    <ion-title class="ion-text-center">Alege Program</ion-title>
+    <div class="title-wrapper">
+      <div class="title">Alege Pontaj</div>
+    </div>
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let pont of pontaj" size="4" >
-        <div class="shedule" (click)="choisePont(pont)">
-          {{pont.month}}
+      <ion-col *ngFor="let pont of pontaj" size="3" >
+        <div class="shedule" >
+          <span (click)="choisePont(pont)" class="date">
+            {{pont.month}}
+          </span>
+          <div class="icon-wrapper" (click)="deletePontaj(pont._id)">
+            <ion-icon src="assets/icon/trash-outline.svg"></ion-icon>
+          </div>
         </div>
       </ion-col>
     </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-grid>
     <ion-row>
-      <ion-col size="2" offset="10">
-        <ion-button fill="outline" size="large" expand="block" color="primary" (click)="addPontaj()"[disabled]="isLoading">
+      <ion-col>
+        <ion-button size="large" expand="block" color="medium" (click)="addPontaj()"[disabled]="isLoading">
           <ion-icon src="assets/icon/add-outline.svg"></ion-icon>
           ADAUGĂ
         </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-content>
+</ion-footer>

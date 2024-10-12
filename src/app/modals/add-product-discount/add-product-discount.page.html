@@ -13,9 +13,9 @@
 
 <ion-content [fullscreen]="true" class="auth-wrapper">
   <ion-grid>
-    <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută Produs"  (ionInput)="searchProduct($event)">
+    <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută Produs"  (ionInput)="searchProduct($event)" #searchbar>
     </ion-searchbar>
-    <ion-item *ngFor="let product of products; let i = index" class="ing-name" (click)="selectProduct(product)">
+    <ion-item *ngFor="let product of products; let i = index" class="ing-name" lines="none" (click)="selectProduct(product)">
       <div>
         <span class="name">{{product.name}}</span>
       </div>
@@ -23,13 +23,13 @@
 
   <ion-title class="ion-text-center" *ngIf="discountsProd.length">Discount pe produse</ion-title>
   <ion-item *ngFor="let discount of discountsProd; let i = index" lines="none" class="input">
-    <ion-label slot="start">{{discount.name}}</ion-label>
+    <ion-label slot="start" color="light">{{discount.name}}</ion-label>
     <ion-buttons slot="end">
         <ion-button (click)="deleteDiscount(i)">
-          <ion-icon src="'../../../../../assets/icon/trash-outline.svg" color="medium"></ion-icon>
+          <ion-icon src="'../../../../../assets/icon/trash-outline.svg" color="light"></ion-icon>
         </ion-button>
     </ion-buttons>
-    <ion-label slot="end">{{discount.precent}} %</ion-label>
+    <ion-label slot="end" color="light">{{discount.precent}} %</ion-label>
   </ion-item>
     </ion-grid>
   </ion-content>

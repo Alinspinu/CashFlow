@@ -93,9 +93,9 @@ loadDocuments(event?: any) {
   });
 }
 
-loadMore(event: any) {
+loadMore() {
   this.page++;
-  this.loadDocuments(event);
+  this.loadDocuments();
 }
 
 

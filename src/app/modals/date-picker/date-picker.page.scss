@@ -1,3 +1,8 @@
+ion-content, ion-datetime{
+  --background: #fbf0e7 !important;
+}
+
+
 ion-datetime{
   position: fixed;
   top: 50%;
@@ -9,4 +14,21 @@ ion-title{
   font-family: NoirProReg;
   font-size: 28px;
   text-align: center;
+}
+
+
+.title-wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .title{
+    font-family: NoirProSemi !important;
+    text-align: center;
+    background-color: black;
+    padding: 18px;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
 }

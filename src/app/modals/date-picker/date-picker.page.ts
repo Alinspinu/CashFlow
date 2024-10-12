@@ -13,7 +13,8 @@ import { IonDatetime, IonicModule, ModalController, NavParams } from '@ionic/ang
 export class DatePickerPage implements OnInit {
 
   selectedDate!: string;
-  date!: any
+  minDate!: string
+  maxDate!: string
   mode!: string
 
   constructor(
@@ -23,8 +24,13 @@ export class DatePickerPage implements OnInit {
 
   ngOnInit() {
    const mode = this.navParams.get('options')
-   if(mode){
+   if(mode && typeof mode === 'string'){
       this.mode = mode
+   }
+   if(mode && typeof mode === 'object' ){
+    this.minDate = mode.min
+    this.maxDate = mode.max
+    this.mode = mode.mode
    }
   }
 

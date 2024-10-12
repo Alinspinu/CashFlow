@@ -1,31 +1,15 @@
-
-<ion-content [fullscreen]="true" *ngIf="!isLoading">
-  <ion-item lines="none" class="header container" slot="fixed">
-    <ion-label class="nr">Nr</ion-label>
-    <ion-label class="name">Nume Produs</ion-label>
-    <ion-label class="mainCat">Categorie Parinte</ion-label>
-    <ion-label class="cat">Categorie Produs</ion-label>
-    <ion-label class="dep">Departament</ion-label>
-    <ion-label class="tva">Tva %</ion-label>
-    <ion-label class="price-prod">Preț producție</ion-label>
-    <ion-label class="sale-price">Preț vanzare</ion-label>
-    <ion-label class="price">Adaos %</ion-label>
-    <ion-label class="recipe">Rețetă</ion-label>
-    <ion-icon class="edit"></ion-icon>
-    <ion-icon class="delete"></ion-icon>
-    <ion-label class="status">Status</ion-label>
-  </ion-item>
-  <ion-grid>
-    <ion-row style="margin-bottom:48px;">
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-row style="margin-bottom:8px;">
       <ion-col size-lg="4">
-        <ion-item lines="none" color="tertiary">
+        <ion-item lines="none" color="transparent">
           <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută Produs"  (ionInput)="searchProduct($event)">
           </ion-searchbar>
-          <img src="assets/icon/add-circle.svg" id="add-ing" (click)="addProduct()">
+          <ion-icon  src="assets/icon/add-circle.svg" color="medium" (click)="addProduct()"></ion-icon>
         </ion-item>
       </ion-col>
       <ion-col size-lg="4">
-        <ion-item lines="none" color="tertiary">
+        <ion-item lines="none" color="transparent">
           <ion-searchbar mode="ios" [(ngModel)]="productIngSearch"  placeholder="Caută Produs după ingredient..."  (ionInput)="searchIngProduct($event)">
           </ion-searchbar>
         </ion-item>
@@ -44,11 +28,37 @@
             <ion-select-option value="">Toate Categoriile</ion-select-option>
             <ion-select-option *ngFor="let cat of categoriesToShow" [value]="cat._id">{{cat.name}}</ion-select-option>
           </ion-select>
-          <img src="assets/icon/add-circle.svg" id="add-cat" (click)="addCat()">
-          <img src="assets/icon/create-outline.svg" style="margin-left: 12px;" (click)="editCat()">
+          <ion-icon src="assets/icon/add-circle.svg" id="add-cat" (click)="addCat()" color="medium"></ion-icon>
+          <ion-icon src="assets/icon/create-outline.svg" style="margin-left: 12px;" (click)="editCat()" color="medium"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
+    <div class="product-container" style="font-family: NoirProSemi !important;">
+      <div class="container" id="header">
+        <span class="nr">Nr</span>
+        <span class="name">Nume Produs</span>
+        <span class="mainCat">Categorie Parinte</span>
+        <span class="cat">Categorie Produs</span>
+        <span class="dep">Departament</span>
+        <span class="tva">Tva %</span>
+        <span class="price-prod">Preț producție</span>
+        <span class="sale-price">Preț vanzare</span>
+        <span class="price">Adaos %</span>
+        <span class="recipe">Rețetă</span>
+        <ion-icon class="edit"></ion-icon>
+        <ion-icon class="delete" style="margin-right: 12px;"></ion-icon>
+      </div>
+      <div class="status-wrapper">
+        <span class="status">Status</span>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
+
+  <ion-grid>
     <ion-row class="spinner-container" *ngIf="!products.length">
       <ion-col size="6" offset="3">
         <app-spinner></app-spinner>
@@ -57,45 +67,45 @@
     <ion-row *ngFor="let product of products; let i=index;">
       <ion-col>
         <div class="product-container">
-        <ion-item class="container product input" lines="none" (click)="showSubs(i)">
+        <div class="container product input" lines="none" (click)="showSubs(i)">
           <ion-label class="nr">{{i+1}}.</ion-label>
           <ion-label class="name">{{product.name}}</ion-label>
-          <ion-label class="mainCat">{{product.mainCat | capitalize}}</ion-label>
+          <ion-label class="mainCat" >{{product.mainCat | capitalize}}</ion-label>
           <ion-label class="cat">{{product.category.name}}</ion-label>
           <ion-label class="dep">{{product.dep ? product.dep : "dep" }}</ion-label>
           <ion-label class="tva">{{product.tva ? product.tva : "Tva"}} %</ion-label>
-          <ion-label class="price-prod">{{product.subProducts.length ? '' : calcProductionPrice(product) }}</ion-label>
-          <ion-label class="sale-price">{{product.subProducts.length ? '' : product.price }}</ion-label>
+          <ion-label class="price-prod">{{product.subProducts.length ? '' : calcProductionPrice(product) }} </ion-label>
+          <ion-label class="sale-price">{{product.subProducts.length ? '' : product.price + ' Lei' }} </ion-label>
           <ion-label class="price">{{product.subProducts.length ? '' : calcComercialSurplus(product)}}</ion-label>
-          <ion-label class="recipe">
+          <ion-label class="recipe" style="text-align: center !important;">
             <ion-icon src="../../../assets/icon/success.svg" *ngIf="!product.subProducts.length && product.ings.length" color="success"></ion-icon>
             <ion-icon src="../../../assets/icon/not.svg" *ngIf="!product.subProducts.length && !product.ings.length" color="danger"></ion-icon>
             <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="product.subProducts.length"></ion-icon>
           </ion-label>
-          <ion-icon  src="../../assets/icon/create-outline.svg" (click)="productEdit(product._id)" class="edit"></ion-icon>
-          <ion-icon  src="../../assets/icon/trash-outline.svg" class="delete" (click)="deleteProduct(product)"></ion-icon>
-        </ion-item>
-        <ion-item lines="none" color="tertiary" class="toggle-wrapper">
-          <ion-toggle [enableOnOffLabels]="true" labelPlacement="end" (ionChange)="productStatus($event, product._id, i)" [checked]="product.available"></ion-toggle>
+          <ion-icon class="edit" src="../../assets/icon/create-outline.svg" (click)="productEdit(product._id)" color="medium"></ion-icon>
+          <ion-icon class="delete" src="../../assets/icon/trash-outline.svg"  (click)="deleteProduct(product)" color="medium"></ion-icon>
+        </div>
+        <ion-item lines="none" color="transparent" class="toggle-wrapper">
+          <ion-toggle color="medium" [enableOnOffLabels]="true" labelPlacement="end" (ionChange)="productStatus($event, product._id, i)" [checked]="product.available"></ion-toggle>
           <span>{{product.available ? "Active" : "Inactive"}}</span>
         </ion-item>
       </div>
         <div *ngIf="product.subProducts.length && product.showSub" class="sub-container">
-          <ion-item *ngFor="let subProduct of product.subProducts; let s = index;" lines="none" class="content-container" color="tertiary">
+          <ion-item *ngFor="let subProduct of product.subProducts; let s = index;" lines="none" class="container" color="transparent">
             <ion-label class="name">{{subProduct.name}}</ion-label>
             <ion-label class="mainCat"></ion-label>
             <ion-label class="cat">Sub Produs</ion-label>
             <ion-label class="dep"></ion-label>
-            <ion-label class="tva"></ion-label>
+            <!-- <ion-label class="tva"></ion-label> -->
             <ion-label class="price-prod">{{calcProductionPrice(subProduct)}}</ion-label>
-            <ion-label class="sale-price">{{subProduct.price}}</ion-label>
+            <ion-label class="sale-price">{{subProduct.price + ' Lei'}}</ion-label>
             <ion-label class="price">{{calcComercialSurplus(subProduct)}}</ion-label>
             <ion-label class="recipe">
-              <ion-icon src="../../../assets/icon/success.svg" *ngIf="subProduct.ings.length" color="success"></ion-icon>
+              <ion-icon src="../../../assets/icon/success.svg" *ngIf="subProduct.ings.length" color="succes"></ion-icon>
               <ion-icon src="../../../assets/icon/not.svg" *ngIf="!subProduct.ings.length" color="danger"></ion-icon>
             </ion-label>
-            <ion-item lines="none" color="tertiary" class="toggle-wrapper">
-              <ion-toggle [enableOnOffLabels]="true" labelPlacement="end" (ionChange)="subStatus($event, subProduct._id, s, i)" [checked]="subProduct.available"></ion-toggle>
+            <ion-item lines="none" class="toggle-wrapper" color="transparent">
+              <ion-toggle color="medium" [enableOnOffLabels]="true" labelPlacement="end" (ionChange)="subStatus($event, subProduct._id, s, i)" [checked]="subProduct.available"></ion-toggle>
               <span>{{subProduct.available ? "Active" : "Inactive"}}</span>
             </ion-item>
           </ion-item>
@@ -105,4 +115,7 @@
   </ion-grid>
 </ion-content>
 
-<app-spinner *ngIf="isLoading"></app-spinner>
+
+ <!-- <app-spinner class="spinner-container"></app-spinner> -->
+
+

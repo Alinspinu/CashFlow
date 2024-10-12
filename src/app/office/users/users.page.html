@@ -1,41 +1,37 @@
 
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="search-wrapper">
+      <ion-searchbar mode="ios" [(ngModel)]="userSearch"  placeholder="Caută Utilizatori"  (ionInput)="searchUsers($event)">
+      </ion-searchbar>
+        <ion-select placeholder="Alege Utilizatori" (ionChange)="onSelectUsers($event)" class="input">
+          <ion-select-option value="">Toți</ion-select-option>
+          <ion-select-option value="users">Clienți</ion-select-option>
+          <ion-select-option value="employees">Angajați</ion-select-option>
+        </ion-select>
+    </div>
+    <div class="header content-container" >
+      <span class="index-h font">Nr.</span>
+      <ion-label class="name font">Nume</ion-label>
+      <ion-label class="email font">Email</ion-label>
+      <ion-label class="tel font">Telefon</ion-label>
+      <ion-label class="cashBack font">Cash Back</ion-label>
+      <ion-label class="orders font">Comenzi</ion-label>
+      <ion-label class="status font">Status</ion-label>
+    </div>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-item lines="none" class="header content-container" slot="fixed">
-    <span class="index-h">Nr.</span>
-    <ion-label class="name">Nume</ion-label>
-    <ion-label class="email">Email</ion-label>
-    <ion-label class="tel">Telefon</ion-label>
-    <ion-label class="cashBack">Cash Back</ion-label>
-    <ion-label class="orders">Comenzi</ion-label>
-    <ion-label class="status">Status</ion-label>
-  </ion-item>
   <ion-grid>
-    <ion-row style="margin-bottom:40px;">
-      <ion-col size-lg="6">
-        <ion-item lines="none">
-          <ion-searchbar mode="ios" [(ngModel)]="userSearch"  placeholder="Caută Utilizatori"  (ionInput)="searchUsers($event)">
-          </ion-searchbar>
-        </ion-item>
-      </ion-col>
-      <ion-col size-lg="3" size-md="6">
-        <ion-item lines="none" class="input">
-          <ion-select placeholder="Alege Utilizatori" (ionChange)="onSelectUsers($event)">
-            <ion-select-option value="">Toți</ion-select-option>
-            <ion-select-option value="users">Clienți</ion-select-option>
-            <ion-select-option value="employees">Angajați</ion-select-option>
-          </ion-select>
-        </ion-item>
-        </ion-col>
-    </ion-row>
     <ion-row class="spinner-container" *ngIf="users.length === 1">
       <ion-col size="6" offset="3">
         <app-spinner></app-spinner>
       </ion-col>
     </ion-row>
-    <ion-row *ngFor="let user of localUsers; let i = index;">
-      <ion-col *ngIf="users.length > 1">
-        <ion-item lines="none" class="content-container input user" (click)="goUserPage(user._id)">
+    <ion-row *ngFor="let user of localUsers; let i = index;"  class="ion-no-padding ion-no-margin">
+      <ion-col *ngIf="users.length > 1" class="ion-no-padding ion-no-margin">
+        <div class="content-container input user" (click)="goUserPage(user._id)">
           <span class="index">{{i+1}}.</span>
           <ion-label class="name">{{user.name}}</ion-label>
           <ion-label class="email">{{user.email}}</ion-label>
@@ -43,10 +39,9 @@
           <ion-label class="cashBack">{{user.cashBack}}</ion-label>
           <ion-label class="orders">{{user.orders.length}}</ion-label>
           <ion-label class="status">{{user.status}}</ion-label>
-        </ion-item>
+        </div>
       </ion-col>
     </ion-row>
 
   </ion-grid>
-
 </ion-content>

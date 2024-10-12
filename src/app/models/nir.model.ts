@@ -21,6 +21,7 @@ export class Nir{
     public suplier: string,
     public nrDoc: number,
     public documentDate: string,
+    public receptionDate: string,
     public ingredients: NirIngredient[],
     public document: string,
     public totalDoc: number,
@@ -42,6 +43,7 @@ export class InvIngredient {
     public gestiune: string,
     public locatie: string,
     public ings: InvIngredient[],
+    public productIngredient: boolean,
     public inventary: {
       index: number,
       day: string,

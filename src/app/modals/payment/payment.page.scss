@@ -1,10 +1,10 @@
 
 
 ion-toolbar, ion-content, ion-footer{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 .form{
-  background-color:  #fbf0e7 !important;
+  background-color: var(--ion-color-tertiary) !important;
 }
 
 ion-title{
@@ -55,9 +55,9 @@ ion-button, ion-label, ion-input{
 .title{
   font-family: NoirProSemi !important;
   text-align: center;
-  background-color: black;
+  background-color: var(--ion-color-medium);
   padding: 18px;
-  color: white;
+  color: var(--ion-color-light);
   font-size: 38px;
   margin-top: 12px;
 }

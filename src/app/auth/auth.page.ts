@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Preferences } from '@capacitor/preferences';
 import { showToast, triggerEscapeKeyPress } from '../shared/utils/toast-controller';
@@ -40,6 +40,8 @@ export class AuthPage implements OnInit {
   validEmail: boolean = false;
   disableLogIn: boolean = false;
 
+  returnUrl: string = '/tabs/tables'
+
   iconSrc: string = 'assets/icon/eye-outline.svg'
 
   constructor(
@@ -48,6 +50,7 @@ export class AuthPage implements OnInit {
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
     private tableSrv: TablesService,
+    private route: ActivatedRoute,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
   ) { }
 
@@ -74,6 +77,7 @@ export class AuthPage implements OnInit {
 
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tabs/tables';
     this.getCurrentTab();
     this.form = new FormGroup({
       email: new FormControl(null, {
@@ -113,11 +117,7 @@ export class AuthPage implements OnInit {
         const id: any = jwtDecode(res.token);
         this.tableSrv.getTables(res.locatie, id.userId)
         this.disableLogIn = false
-        if(res.employee.access === 4) {
-          this.router.navigateByUrl(`/tabs/reports`);
-        } else {
-          this.router.navigateByUrl(`/tabs/tables`);
-        }
+        this.router.navigateByUrl(this.returnUrl);
       }
     }, error => {
       this.disableLogIn = false

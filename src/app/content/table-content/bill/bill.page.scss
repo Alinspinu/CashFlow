@@ -1,5 +1,5 @@
 ion-content{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 
 
@@ -14,7 +14,7 @@ ion-content{
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: var(--ion-color-light);
   height: 70px;
   font-family: NoirProSemi !important;
   cursor: pointer;
@@ -99,7 +99,7 @@ ion-content{
     border-radius: 8px;
     margin-top: 12px;
     padding: 24px 18px 8px 18px;
-    background:  #fff;
+    background:  var(--ion-color-light);
     font-family: NoirProSemi !important;
     .bill-total-row{
       .value{

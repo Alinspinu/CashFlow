@@ -1,0 +1,33 @@
+<ion-header class="ion-no-border">
+  <div class="title-wrapper">
+    <div class="title">ULTIMELE {{reports.length}} RAPOARTE</div>
+  </div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="input" *ngFor="let report of reports">
+    <span>Raport din data de {{formatDate(report.day)}}</span>
+    <ion-button fill="outline" (click)="deleteReport(report)">
+      <ion-icon src="../../../assets/icon/trash-outline.svg"></ion-icon>
+    </ion-button>
+  </div>
+
+
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button color="medium" (click)="close()" class="ion-padding submit" size="large" expand="block" [disabled]="isLoading">Închide</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button color="medium" (click)="addReport()" class="ion-padding submit" size="large" expand="block" [disabled]="isLoading">ADAUGĂ</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button color="medium" (click)="update()" class="ion-padding submit" size="large" expand="block" [disabled]="isLoading || newReports.length === 0">UPDATE</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

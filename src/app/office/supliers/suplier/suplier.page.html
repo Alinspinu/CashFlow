@@ -17,7 +17,7 @@
     <ion-col>
       <div class="sold-wrapper">
         <span class="title">SOLD</span>
-        <span class="sum">{{round(suplier.sold)}}</span>
+        <span class="sum">{{round(in) - round(out)}}</span>
       </div>
     </ion-col>
   </ion-row>
@@ -33,7 +33,7 @@
            <span class="date">{{formateDate(record.date)}}</span>
            <span class="doc-type">{{record.document.typeOf}}</span>
            <span class="doc-number">{{record.document.docId}}</span>
-           <span class="amount">{{record.document.amount}} Lei</span>
+           <span class="amount">{{round(record.document.amount)}} Lei</span>
          </div>
        </div>
     </ion-col>
@@ -51,9 +51,11 @@
           <span class="doc-type">{{record.document.typeOf}}</span>
           <span class="doc-number">{{record.document.docId}}</span>
           <span class="amount">{{record.document.amount}} Lei</span>
-          <ion-button fill="ghost" (click)="deleteRecord(record.document.docId, record.document.amount, i)">
-            <ion-icon src="../../../../assets/icon/trash-outline.svg" color="danger"></ion-icon>
-          </ion-button>
+          <ion-buttons>
+            <ion-button (click)="deleteRecord(record.document.docId, record.document.amount, i)">
+              <ion-icon src="../../../../assets/icon/sterge comanda.svg" color="medium" size="large"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </div>
       </div>
     </ion-col>

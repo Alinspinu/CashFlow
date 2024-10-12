@@ -48,8 +48,6 @@ export class AppComponent implements OnInit, OnDestroy {
          this.getUpdatedOrder()
          this.removeLive()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
-        } else{
-          this.router.navigateByUrl('/auth')
         }
       })
     }

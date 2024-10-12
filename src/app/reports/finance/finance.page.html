@@ -1,0 +1,95 @@
+<div *ngIf="isLoading" class="spinner-content">
+  <app-spinner class="spinner"></app-spinner>
+</div>
+
+<ion-content [fullscreen]="true" *ngIf="!isLoading && !showRep">
+  <div class="grid-date">
+    <ion-button fill="outline" mode="md" color="medium" (click)="selectDate()" [disabled]="reports.length === 0">{{startDate && startDate.length ? startDate : "Raport Început"}}</ion-button>
+    <ion-label color="medium" *ngIf="startDate">LA</ion-label>
+    <ion-label color="medium" *ngIf="!startDate" style="height: 13px"></ion-label>
+    <ion-button fill="outline" mode="md" color="medium" [disabled]="!startDate"> {{endDate && endDate.length ? endDate : "Raport Sfârșit"}}</ion-button>
+    <ion-button fill="outline" mode="md" color="medium" (click)="createReport()"[disabled]="reports.length === 0">CREAZĂ RAPOARTE</ion-button>
+  </div>
+</ion-content>
+<ion-content [fullscreen]="true" *ngIf="!isLoading && showRep">
+  <ion-grid>
+      <ion-row>
+        <ion-col size-lg="6" offset-lg="3">
+          <div class="sum-wrapper">
+            <span class="label tot">Situație</span>
+            <span class="data tot">{{startDate + " -- " + endDate}}</span>
+            <span class="total tot">{{roundInHtml(report.cashIn - tips)}} Lei</span>
+            <span class="note tot">(Total Incasat)</span>
+            <span class="incasat">{{totalConsum}} Lei</span>
+            <span class="note incasat">(Total cheltuieli)</span>
+            <span class="vat">{{roundInHtml(report.cashIn - totalConsum - tips)}} Lei</span>
+            <span class="note vat">(Rămas)</span>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" offset="3">
+          <ion-button fill="outline" (click)="selectDate()" color="medium" style="text-align: center; width: 100%;">
+            <ion-icon src="../../../assets/icon/calendar.svg" class="icon-end"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-lg="6" offset-lg="3">
+          <div class="method-container">
+            <span class="title">Cheltuieli</span>
+            <div class="method">
+              <span class="label">Marfă</span>
+              <span class="sum">{{report.ingsValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Chirie (facturi)</span>
+              <span class="sum">{{report.rent}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Utilitati (facturi)</span>
+              <span class="sum">{{report.utilities}} Lei</span>
+            </div>
+            <div class="method" (click)="showUsers(report.workValue.users, 'income')">
+              <span class="label">Personal fara taxe</span>
+              <span class="sum">{{report.workValue.total}} Lei</span>
+            </div>
+            <div class="method" (click)="showUsers(report.workValue.users, 'tax')" >
+              <span class="label">Taxe personal</span>
+              <span class="sum">{{report.workValue.tax}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Consumabile</span>
+              <span class="sum">{{report.supliesValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Servicii</span>
+              <span class="sum">{{report.serviceValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Marketing</span>
+              <span class="sum">{{report.marketingValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Obiecte de inventar</span>
+              <span class="sum">{{report.inventarySpendings}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Benzina</span>
+              <span class="sum">{{report.gasValue}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Constructii(facturi)</span>
+              <span class="sum">{{report.constructionsValue}} Lei</span>
+            </div>
+            <div class="method" (click)="showDep(report.impairment.products)">
+              <span class="label">Deprecieri</span>
+              <span class="sum">{{report.impairment.total}} Lei</span>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+  </ion-grid>
+
+</ion-content>
+

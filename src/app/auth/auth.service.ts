@@ -22,7 +22,18 @@ user: {
 @Injectable({providedIn: 'root'})
 
 export class AuthService{
+
+  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+
   activeLogoutTimer!: any;
+
+  // async getUrl(){
+  //   Preferences.get({key: 'serverUrl'}).then( async (data)  => {
+  //     if(data.value) {
+  //       this.url = data.value
+  //     }
+  //   })
+  // }
 
 
   private user = new BehaviorSubject<User>(emptyUser());
@@ -30,33 +41,18 @@ export class AuthService{
   get user$() {
       return from(Preferences.get({key: 'authData'})).pipe(map(data => {
         if(data.value){
-          const userData = JSON.parse(data.value) as {
-            _id: string,
-            name: string,
-            token: string,
-            admin: number,
-            cashBack: number,
-            email: string,
-            tokenExpirationDate: any,
-            status: string,
-            telephone: string,
-            locatie: string,
-            employee: {position: string, fullName: string, user: string, access: number}
-          };
+          const userData = JSON.parse(data.value) as User
           const tokenDate = new Date(userData.tokenExpirationDate).getTime() - new Date().getTime();
           if(tokenDate <= 0){
-            return this.user.asObservable();
-          } else if(tokenDate > 0) {
-            this.user.next(userData);
-            this.aoutoLogout(tokenDate);
-            return this.user.asObservable();
-          } else if(this.user.value.cashBack < userData.cashBack && this.user.value.cashBack !== -1){
-            userData.cashBack = this.user.value.cashBack;
-            this.user.next(userData);
-            return this.user.asObservable();
+            return null
           }else {
+            if(this.user.value){
+              if(this.user.value.cashBack < userData.cashBack && this.user.value.cashBack !== -1){
+                userData.cashBack = this.user.value.cashBack;
+              }
+            }
             this.user.next(userData);
-            return this.user.asObservable();
+            return userData
           };
         } else {
           return null
@@ -64,7 +60,8 @@ export class AuthService{
       }));
   };
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient){
+  }
 
 
   apiAuth(){
@@ -74,6 +71,7 @@ export class AuthService{
     const credentials = btoa(`${username}:${password}`); // Base64 encode username and password
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
+        'bypass-tunnel-reminder': 'true',
         Authorization: `Basic ${credentials}`
       });
     return headers
@@ -83,33 +81,53 @@ export class AuthService{
   onLogin(email: string, password: string){
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'bypass-tunnel-reminder': 'true'
       })
     };
-    return this.http.post<any>(`${environment.BASE_URL_CLOUD}auth/login`,{email, password, loc: environment.LOC, adminEmail: environment.ADMIN_EMAIL}, httpOptions)
+    return this.http.post<any>(`${this.url}auth/login`,{email, password, loc: environment.LOC, adminEmail: environment.ADMIN_EMAIL}, httpOptions)
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   }
 
   onRegister(name: string, email: string, tel: string, password: string, confirmPassword: string, firstCart: string, survey: string){
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'bypass-tunnel-reminder': 'true'
       })
     };
-    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL_CLOUD}auth/register`,{name, email, password, confirmPassword, firstCart, survey, tel, loc: environment.LOC}, httpOptions);
+    return this.http.post<{message: string, id: string}>(`${this.url}auth/register`,{name, email, password, confirmPassword, firstCart, survey, tel, loc: environment.LOC}, httpOptions);
   };
 
   verifyToken(token: string){
-    return this.http.post<any>(`${environment.BASE_URL_CLOUD}auth/verify-token`, {token: token})
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'bypass-tunnel-reminder': 'true'
+      })
+    };
+    return this.http.post<any>(`${this.url}auth/verify-token`, {token: token}, httpOptions)
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   };
 
   sendResetEmail(email: string){
-   return this.http.post<AuthResData>(`${environment.BASE_URL_CLOUD}auth/send-reset-email`, {email});
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'bypass-tunnel-reminder': 'true'
+      })
+    };
+   return this.http.post<AuthResData>(`${this.url}auth/send-reset-email`, {email}, httpOptions);
   };
 
   resetPassword(token: string, password: string, confirmPassword: string){
-    return this.http.post(`${environment.BASE_URL_CLOUD}auth/reset-password`, {token, password, confirmPassword})
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'bypass-tunnel-reminder': 'true'
+      })
+    };
+    return this.http.post(`${this.url}auth/reset-password`, {token, password, confirmPassword}, httpOptions)
         .pipe(tap(this.setAndStoreUserData.bind(this)));
   }
 
@@ -133,8 +151,11 @@ export class AuthService{
           fullName: userData.employee.fullName,
           position: userData.employee.position,
           access: userData.employee.access,
-          user: decodedToken.userId
-        }
+          user: decodedToken.userId,
+          salary: userData.employee.salary
+        },
+        workLog: userData.employee.workLog,
+        payments: userData.employee.payments
       });
       const tokenDate = new Date(expirationDate).getTime() - new Date().getTime();
       console.log(tokenDate)

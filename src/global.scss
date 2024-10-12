@@ -57,74 +57,18 @@
   src: url('./assets/fonts/NoirPro-Light.woff2');
 }
 
-// body ion-alert.extraAlert{
-//   .alert-input{
-//     border: 0.5px solid var(--ion-color-medium);
-//     border-radius: 8px;
-//   }
-//   --width: 100% !important;
-
-// }
-
-// body ion-alert.deleteAlert{
-//   --max-width: none!important;
-//   --width: 500px!important;
-//   .alert-button-group-vertical{
-//     flex-direction: row !important;
-//     justify-content: center;
-//   }
-//   .inStoc{
-//     width: 150px !important;
-//     text-align: start !important;
-//   }
-//   .outStoc{
-//     text-align: start !important;
-//     width: 150px !important;
-//   }
-//   .cancel{
-//     text-align: start !important;
-//     width: 100px !important;
-//   }
-// }
-
-// .crud-modal{
-//   --width: 80%;
-//   --height: 80%;
-//   --max-width: none;
-//   --min-width: none;
-//   --min-height: none;
-
-//   }
-
-//   .billModal{
-//     --height: 95%;
-//     --min-width: none !important;
-//     --width: 60% !important;
-//   }
-
-// @font-face {
-//   font-family: 'NoirProMed';    //This is what we are going to call
-//   src: url('./assets/fonts/NoirPro-Medium.woff2');
-// }
-
-body ion-alert.extraAlert{
-  .alert-input{
-    border: 0.5px solid var(--ion-color-medium);
-    border-radius: 8px;
-  }
-  --width: 100% !important;
-
-}
-
 body ion-alert.reprint-alert{
   font-family: NoirProReg !important;
+  --background: #fbf0e7;
   --max-width: none !important;
   --width: 700px !important;
   .alert-title{
+    background-color: black;
+    color: white;
+    padding: 12px;
+    text-align: center;
     font-size: 32px;
-  }
-  .alert-message{
-    font-size: 25px;
+    margin-bottom: 24px;
   }
   .alert-radio-label{
     font-size: 25px;
@@ -133,8 +77,10 @@ body ion-alert.reprint-alert{
     font-size: 30px;
     padding-left: 12px;
     height: 100px;
-    border: 1px solid var(--ion-color-primary);
-    border-radius: 12px;
+    background-color: white;
+    box-shadow:
+    0 -2px 4px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
   }
   .alert-button-group{
     flex-direction: row !important;
@@ -142,8 +88,35 @@ body ion-alert.reprint-alert{
     .alert-button{
       padding: 18px;
       font-size: 25px;
-      border: 1.5px solid var(--ion-color-primary);
-      border-radius: 8px;
+    }
+  }
+}
+
+body ion-alert.suplier-alert{
+  --max-height: none !important;
+  --height: 900px !important;
+  .alert-radio-group{
+    max-height: none !important;
+    height: 900px !important;
+  }
+  .alert-checkbox-group{
+    max-height: none !important;
+    height: 900px !important;
+  }
+}
+
+body ion-alert.time-alert{
+  --max-height: none !important;
+  --width: 900px !important;
+  --height: 600px !important;
+  .alert-radio-group{
+    max-height: none !important;
+    height: 600px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    .alert-radio-button{
+      width: 180px !important;
     }
   }
 }
@@ -166,8 +139,14 @@ body ion-alert.deleteAlert{
   }
 }
 .cancel{
-  color: var(--ion-color-danger) !important;
-  border: 2px solid var(--ion-color-danger) !important;
+  color: var(--ion-color-medium) !important;
+  background-color: var(--ion-color-light) !important;;
+}
+.confirm{
+  color: var(--ion-color-light) !important;
+  --color: var(--ion-color-light) !important;
+  --background:  var(--ion-color-medium) !important ;
+  background-color:  var(--ion-color-medium) !important ;
 }
 
 .crud-modal{
@@ -187,13 +166,75 @@ body ion-alert.deleteAlert{
   body ion-alert.discountAlert {
     --max-width: none!important;
     --width: 400px!important;
+    --background: #fbf0e7;
+    font-family: NoirProReg !important;
+    .alert-title{
+      background-color: black;
+      color: white;
+      padding: 12px;
+      text-align: center;
+    }
+    .alert-button-group{
+      flex-direction: row !important;
+      justify-content: space-between;
+    }
     .custom-input {
       height: 55px;
-      background-color: var(--ion-color-tertiary);
       font-size: 20px;
-      border: 0.5px solid black;
-      border-radius: 8px;
+      box-shadow:
+      0 -2px 4px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.1);
       padding: 12px;
+      background-color: white;
+      --highlight-color-focused: black !important;
+      --color: black !important;
+    }
+  }
+
+
+  body ion-alert{
+    --background: #fbf0e7 !important;
+    --max-width: none!important;
+    --width: 500px;
+    font-family: NoirProReg !important;
+    .alert-title{
+      background-color: black;
+      color: white !important;
+      padding: 12px !important;
+      font-size: 26px !important;
+      text-align: center;
+    }
+    .alert-button-group{
+      display: flex;
+      flex-direction: row !important;
+      justify-content: space-between !important;
+      button:nth-child(1){
+        color: var(--ion-color-medium) !important;
+        background-color: var(--ion-color-light) !important;
+      }
+      button:nth-child(2){
+        color: var(--ion-color-light) !important;
+        --color: var(--ion-color-light) !important;
+        --background:  var(--ion-color-medium) !important ;
+        background-color:  var(--ion-color-medium) !important ;
+        padding: 0 24px;
+      }
+    }
+    .alert-radio-label{
+      font-size: 22px !important;
+    }
+  }
+
+  ion-date-time{
+    .datetime-button-cancel{
+      color: var(--ion-color-light) !important;
+      --color: var(--ion-color-light) !important;
+      --background:  var(--ion-color-medium) !important ;
+      background-color:  var(--ion-color-medium) !important ;
+    }
+    .datetime-button-confirm {
+      color: var(--ion-color-medium) !important;
+      background-color: var(--ion-color-light) !important;
     }
   }
 
@@ -209,18 +250,6 @@ body ion-alert.deleteAlert{
 
 
 
-  // body ion-alert.discountAlert {
-  //   --max-width: none!important;
-  //   --width: 400px!important;
-  //   .custom-input {
-  //     height: 55px;
-  //     background-color: var(--ion-color-tertiary);
-  //     font-size: 20px;
-  //     border: 0.5px solid black;
-  //     border-radius: 8px;
-  //     padding: 12px;
-  //   }
-  // }
 
   @media (max-width: 700px) {
     .billModal{

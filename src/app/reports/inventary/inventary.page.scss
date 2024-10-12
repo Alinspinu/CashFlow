@@ -1,0 +1,140 @@
+// ion-content{
+//   height: 150vh;
+// }
+
+ion-content, ion-toolbar{
+  --background: #fbf0e7 !important;
+}
+
+
+ion-searchbar{
+  // margin-bottom: 1.2rem;
+  font-family: NoirProReg !important;
+}
+
+ion-button{
+  font-family: NoirProSemi !important;
+  // color: var(--ion-color-medium) !important;
+}
+
+.title-wrapper{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .title{
+    font-family: NoirProSemi !important;
+    text-align: center;
+    background-color: black;
+    padding: 8px;
+    color: white;
+    font-size: 18px;
+    margin: 8px 0 24px 0;
+  }
+  .dif{
+    font-size: 22px;
+    background-color: transparent !important;
+    color: black !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+.spinner-content{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header{
+  padding-left: 12px;
+  font-family: NoirProSemi !important;
+}
+
+
+
+.title{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-family: NoirProReg !important;
+}
+
+ .input{
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 8px;
+  margin: 0.5rem 0 0 0;
+  font-family: NoirProReg !important;
+  padding-left: 12px;
+  height: 50px;
+  font-size: 16px;
+}
+
+ .ing-wrapper{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+    .name{
+      flex: 30%;
+      text-align:left;
+      font-family: NoirProSemi !important;
+      .um{
+        margin-left: 4px;
+        font-family: NoirProReg !important;
+        font-size: 14px;
+      }
+    }
+    .dep,.gest{
+      flex: 10%;
+      text-align: left;
+    }
+    .scriptic{
+      flex: 10%;
+      text-align: center;
+    }
+    .faptic{
+      flex: 10%;
+      text-align: center;
+    }
+    .dif{
+      flex: 15%;
+      text-align: center;
+    }
+    .dif-value{
+      flex: 15%;
+      text-align: right;
+      padding-right: 18px;
+    }
+ }
+
+
+
+ @media (max-width: 500px) {
+  .name{
+    font-size: 12px;
+  }
+  .um{
+    font-size: 10px !important;
+  }
+  .scriptic{
+    font-size: 12px;
+  }
+  .faptic{
+    font-size: 12px;
+  }
+  .dif{
+    font-size: 12px;
+  }
+  .dif-value{
+    font-size: 12px;
+  }
+ }
+
+

@@ -1,6 +1,5 @@
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading">
-  <!-- <ion-menu-button></ion-menu-button> -->
 <ion-grid>
   <ion-row>
     <ion-col size-lg="6" offset-lg="3">
@@ -12,10 +11,12 @@
             <span class="note tot">(Total)</span>
             <span class="incasat">{{totalIncasat}} Lei</span>
             <span class="note incasat">(Încasat)</span>
-            <span class="vat">{{totalNoTax}} Lei</span>
-            <span class="note vat">(Unreg)</span>
             <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>
             <span class="data tot" *ngIf="day">{{formatDate(day)}}</span>
+            <div class="refresh" (click)="refresh()">
+              <span>REFRESH</span>
+              <ion-icon src="../../../assets/icon/refresh-outline.svg" ></ion-icon>
+            </div>
           </div>
         </ion-col>
         <ion-col size-lg="3">
@@ -46,6 +47,10 @@
               PRODUSE STERSE
               <ion-badge class="badge">{{delProducts.length}}</ion-badge>
             </ion-button>
+            <!-- <ion-button fill="outline" (click)="refresh()" color="medium">
+              REFRESH
+
+            </ion-button> -->
           </div>
         </ion-col>
       </ion-row>

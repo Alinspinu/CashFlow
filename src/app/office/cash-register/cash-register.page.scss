@@ -21,24 +21,23 @@ ion-title{
 ion-toolbar{
   --background: #f4ede6;
 }
-ion-content {
-  --background: var(--ion-color-tertiary) !important;
+
+ion-content, ion-toolbar {
+  --background: #fbf0e7 !important;
 }
 
 .trash{
   height: 30px !important;
-  color: var(--ion-color-primary) !important;
+  color: var(--ion-color-medium) !important;
 }
-
-// .day{
-//   background: var(--ion-color-secondary);
-// }
 
 
 .entry{
   display: flex;
   flex-direction: row;
 }
+
+
 .description{
   font-family: NoirProLight !important;
   flex: 50%;
@@ -52,6 +51,8 @@ ion-content {
   flex: 20%;
   color: var(--ion-color-success-shade);
 }
+
+
 .amount{
   font-family: NoirProSemi !important;
   text-align: end;
@@ -99,6 +100,7 @@ ion-content {
   height: 19px;
   margin-left: 4px;
 }
+
 .add{
   height: 35px;
 }
@@ -109,6 +111,8 @@ ion-content {
   border-radius: 8px;
   margin: 0.1rem 0 0.1rem 0.2rem;
 }
+
+
 .display-date{
   height: 45px;
   border: 0.5px solid var(--ion-color-medium);

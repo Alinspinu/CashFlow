@@ -1,14 +1,24 @@
 
-ion-content{
-  --background: var(--ion-color-tertiary);
+ion-content, ion-toolbar{
+  --background: var(--ion-color-tertiary) !important;
 }
 
 ion-searchbar{
   font-family: NoirProReg !important;
+  padding: 8px;
 }
 
 ion-select{
   font-family: NoirProReg !important;
+}
+
+
+
+
+#header{
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 8px;
 }
 
 ion-label{
@@ -17,9 +27,12 @@ ion-label{
 
 .input{
   height: 45px;
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0.1rem 0 0.1rem 0rem;
+  background-color: var(--ion-color-light);
   border-radius: 8px;
-  margin: 0.1rem 0 0.1rem 0.2rem;
 }
 
 img{
@@ -27,107 +40,96 @@ img{
   cursor: pointer
 }
 
-.header{
-  font-size: 17px;
-  font-weight: 500;
-}
-
-.toggle-wrapper{
-  display: flex;
-  span{
-    font-size: 11px;
-    margin-left: 8px;
-  }
-}
-
-ion-item[slot="fixed"]{
-  top: 8%;
-  width: 100%;
-  opacity: 60%;
-  font-family: NoirProReg !important;
-  // --backgound: transparent;
-}
-
-#all{
-  font-weight: 500;
-}
 
 .input-wrapper{
   display: flex;
   flex-direction: row;
 }
-.edit{
-  color: var(--ion-color-primary);
-  margin: 10px;
- }
-
- .delete{
-   color: var(--ion-color-danger);
-   margin: 10px;
- }
 
  .product-container{
   display: flex;
   flex-direction: row;
+.container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  flex:92%;
+  padding-left: 12px;
+  .nr{
+    flex: 2%;
+    text-align: start !important;
+  }
+  .name{
+    flex: 16%;
+    text-align: start !important;
+  }
+  .mainCat{
+    flex: 15%;
+    text-align: start !important;
+  }
+  .cat{
+    flex: 15%;
+    text-align: start !important;
+  }
+  .dep{
+    flex: 10%;
+    text-align: start !important;
+  }
+  .tva{
+    flex: 7%;
+    text-align: start !important;
+  }
+  .price-prod{
+    flex: 8%;
+    text-align: start !important;
+  }
+  .sale-price{
+    flex: 8%;
+    text-align: start !important;
+  }
+  .price{
+    flex: 8%;
+    text-align: start !important;
+  }
+  .recipe{
+    flex: 3%;
+    text-align: start !important;
+    ion-icon{
+      font-size: 22px !important;
+    }
+  }
+
+  .edit{
+    flex: 4%;
+    text-align: start !important;
+    font-size: 24px !important;
+  }
+
+  .delete{
+    flex: 4%;
+    text-align: start !important;
+    font-size: 24px !important;
+  }
+  }
+  .status-wrapper{
+   flex: 8%;
+    text-align: center;
+    .status{
+      margin-right: 20px;
+    }
+  }
+  .toggle-wrapper{
+    flex: 8%;
+    --background: var(--ion-color-tertiary) !important;
+    display: flex;
+    span{
+      font-size: 11px;
+      margin-left: 8px;
+    }
+  }
  }
-
-.content-container{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  text-align: center;
-  flex:90%;
-  .name{
-    flex: 10%;
-    text-align: start !important;
-  }
-  .mainCat{
-    flex:5%;
-  }
-  .cat{
-    flex: 7%;
-  }
-  .price-prod{
-    flex: 5%;
-  }
-  .dep{
-    flex: 5%;
-  }
-  .sale-price{
-    flex: 5%
-  }
-}
-
-
-.header-container{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  text-align: center;
-  .name{
-    flex: 10%;
-    text-align: start !important;
-  }
-  .mainCat{
-    flex:5%;
-  }
-  .cat{
-    flex: 7%;
-  }
-  .price-prod{
-    flex: 5%;
-  }
-  .dep{
-    flex: 5%;
-  }
-  .sale-price{
-    flex: 5%
-  }
-  .status{
-    flex: 6%;
-    text-align: end;
-  }
-}
 
 .sub-container{
   margin-left: 2rem;
@@ -143,16 +145,21 @@ ion-item[slot="fixed"]{
 }
 
 .product:hover{
-  --background: var(--ion-color-medium);
+  --background: var(--ion-color-medium-shade);
 }
 
-// .spinner-container{
-//   height: 100;
+// app-spinner{
+//   background-color: #fbf0e7;
+//   height: 100vh;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
 // }
-app-spinner{
-  background-color: var(--ion-color-tertiary);
+
+.spinner-container{
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }
+

@@ -1,0 +1,68 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="title-wrapper">
+      <div class="title">{{userName}} -- {{avansTot + salaryTot}} Lei</div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngIf="saleBonus.length">
+        <ion-title class="ion-text-center">Bonus vanzari</ion-title>
+        <div class="box" *ngFor="let log of saleBonus">
+          <span class="date">{{formatDateInHtml(log.date)}}</span>
+          <span> {{log.amount}} lei</span>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="bonus.length">
+        <ion-title class="ion-text-center">Bonus excelență</ion-title>
+        <div class="box" *ngFor="let log of bonus">
+          <span class="date">{{formatDateInHtml(log.date)}}</span>
+          <span> {{log.amount}} lei</span>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="avans.length">
+        <ion-title class="ion-text-center">Avans</ion-title>
+        <div class="box" *ngFor="let log of avans">
+          <span class="date">{{formatDateInHtml(log.date)}}</span>
+          <span> {{log.amount}} lei</span>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="salary.length">
+        <ion-title class="ion-text-center">Salariu</ion-title>
+        <div class="box" *ngFor="let log of salary">
+          <span class="date">{{formatDateInHtml(log.date)}}</span>
+          <span> {{log.amount}} lei</span>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col *ngIf="saleBonus.length">
+        <div class="box total">
+          <span>Total Bonus </span>
+          <span> {{saleBonusTot}} lei</span>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="bonus.length">
+        <div class="box total">
+          <span>Total Bonus</span>
+          <span> {{bonusTot}} lei</span>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="avans.length">
+        <div class="box total">
+          <span>Total Avans</span>
+          <span> {{avansTot}} lei</span>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="salary.length">
+        <div class="box total">
+          <span>Total Salariu</span>
+          <span> {{salaryTot}} lei</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 
 @Component({
   selector: 'app-tips',
@@ -14,11 +14,25 @@ export class TipsPage implements OnInit {
 
   tipsValue!: number
 
+  discountMode: boolean = false
+
   constructor(
     private modalCtrl: ModalController,
+    private navPar: NavParams
   ) { }
 
   ngOnInit() {
+    this.getMode()
+  }
+
+  getMode(){
+   const mode = this.navPar.get('options')
+  //  console.log(mode)
+   if(mode === 'discount'){
+    this.discountMode = true
+   } else {
+    this.discountMode = false
+   }
   }
 
 

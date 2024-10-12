@@ -1,0 +1,23 @@
+
+ion-header, ion-content{
+  --background: rgb(243, 201, 162);
+}
+
+.container{
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+ion-title{
+  margin-top: 24px;
+  font-family: NoirProSemi !important;
+  font-size: 28px;
+}
+
+ion-radio{
+  font-family: NoirProReg !important;
+  font-size: 26px;
+}

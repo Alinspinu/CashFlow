@@ -13,20 +13,24 @@ import { IonDatetime, IonicModule, ModalController, NavParams } from '@ionic/ang
 export class DatePickerPage implements OnInit {
 
   selectedDate!: string;
-  date!: any
+  minDate!: string
+  maxDate!: string
+  mode!: string
 
   constructor(
     private modalCtrl: ModalController,
-    // private navParams: NavParams
+    private navParams: NavParams
   ) { }
 
   ngOnInit() {
-  //  const mode = this.navParams.get('setDate')
-  //  if(mode){
-  //   const currentDate = new Date();
-  //   currentDate.setHours(currentDate.getHours() + 72); // Add 72 hours
-  //   this.date = currentDate.toISOString().split('T')[0];
-  //  }
+   const mode = this.navParams.get('options')
+   if(mode && typeof mode === 'string'){
+      this.mode = mode
+   }
+   if(mode && typeof mode === 'object' ){
+    this.minDate = mode.min
+    this.maxDate = mode.max
+   }
   }
 
 

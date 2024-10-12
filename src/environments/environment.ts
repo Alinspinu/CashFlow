@@ -21,11 +21,14 @@ export const environment = {
 
   BASE_URL_CAFETISH: 'http://localhost:8090/',
 
-  BASE_URL: 'http://localhost:8080/',
-  PRINT_URL: 'http://localhost:8081/',
+  // PRINT_URL: 'http://localhost:8081/',
   API_PASS: 'afara-ploua',
 
-  // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
+  // BASE_URL: 'http://localhost:8080/',
+  BASE_URL: 'https://cafetish-server.ew.r.appspot.com/',
+
+  SAVE_URL: 'http://localhost:8080/',
+
 
   API_USER: 'uewmdhdA@&*939NSDOO73ns',
   API_PASSWORD: 'JSHFBJDS7323423MBDSF7SHUI!7^4WEW@92MNSDSHDYSY2KS93BWSYQJ3NQBE>/QW3Q312HSDNMASU2UD',

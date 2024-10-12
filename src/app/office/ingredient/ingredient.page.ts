@@ -16,6 +16,7 @@ import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { InvIngredient } from 'src/app/models/nir.model';
 import { Subscription, take } from 'rxjs';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { AddToInventaryPage } from 'src/app/modals/add-to-inventary/add-to-inventary.page';
 
 @Component({
   selector: 'app-ingredient',
@@ -28,34 +29,45 @@ export class IngredientPage implements OnInit, OnDestroy {
 
   ingredients: any = [];
 
+  selectDate: boolean = true
+  inventaryDate!: string
   ingPage: boolean = true
 
   topToEdit!: any;
   ingsToEdit!: any;
   user!: User
 
+  screenWidth!: number;
+
   ingSub!: Subscription
 
   allIngs!: InvIngredient[]
+  ind: number = 0
 
   dep: string = ""
   toppings!: any;
   productIngredients!: any;
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingTypes: string[] = ["simplu", "compus"]
-  ingDep: string[] = ["materie", "marfa", 'consumabil']
-
-
-  filter: {gestiune: string, type: string, dep: string, date: string} = {gestiune: '', type: '', dep: '', date: ''}
-
+  ingDep: string[] = ["materie", "marfa", "consumabil", "servicii", "ob-inventar", "amenajari", "combustibil", "utilitati", "chirie", 'marketing']
   isLoading: boolean = true
+
+  filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
+
 
   constructor(
     private toastCtrl: ToastController,
     private ingSrv: IngredientService,
     private router: Router,
     @Inject(ActionSheetService) private actionSh: ActionSheetService
-  ) { }
+  ) {
+    this.screenWidth = window.innerWidth
+  }
+
+
+  ionViewWillEnter(){
+
+  }
 
   ngOnInit() {
     this.getUser()
@@ -67,15 +79,8 @@ export class IngredientPage implements OnInit, OnDestroy {
     }
   }
 
-  async openDateModal(){
-   const date = await this.actionSh.openAuth(DatePickerPage)
-  const dateToSend = new Date(date)
-  this.filter.date = dateToSend.toISOString().split('T')[0]
-  console.log(this.filter.date)
-  }
 
   exportIngsList(){
-    console.log(this.filter)
     this.ingSrv.printIngredientsList(this.filter, this.user.locatie).subscribe(response => {
       const url = window.URL.createObjectURL(response);
       const a = document.createElement('a');
@@ -167,12 +172,12 @@ export class IngredientPage implements OnInit, OnDestroy {
   getIngredients(){
    this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
     if(response){
-      if(response.length > 1){
+      this.allIngs = response
+      this.ingredients = [...this.allIngs]
+      this.filterIngredients()
+      if(this.allIngs.length > 1){
         this.isLoading = false
       }
-      this.allIngs = response
-      console.log(this.allIngs[0])
-      this.ingredients = [...this.allIngs]
     }
    })
   }
@@ -193,7 +198,7 @@ updateProductIng(){
       // this.getIngredients()
     }
   } else {
-    const ingToEdit = await this.actionSh.openModal(AddIngredientPage, ing, false)
+    const ingToEdit = await this.actionSh.openPayment(AddIngredientPage, ing)
     if(ingToEdit){
       this.ingSrv.editIngredient(ing._id, ingToEdit).subscribe(response => {
         if(response){
@@ -204,12 +209,33 @@ updateProductIng(){
   }
   }
 
+  async inventary(index: number){
+    this.ind = index
+    if(this.selectDate){
+      this.inventaryDate = await this.actionSh.openAuth(DatePickerPage)
+      if(this.inventaryDate){
+        this.selectDate = false
+      }
+    }
+    if(!this.selectDate){
+      let data = {date: this.inventaryDate, ing: this.ingredients[this.ind]}
+      const ingToUpdate = await this.actionSh.openModal(AddToInventaryPage, data, false)
+      if(ingToUpdate){
+        this.ingSrv.updateIngredientInventary(ingToUpdate).subscribe(async response => {
+          this.ind += 1
+          // await this.inventary(this.ind)
+          showToast(this.toastCtrl, response.message, 3000, '')
+        })
+      }
+    }
+  }
+
   async deleteIng(id: string, name: string){
     const result = await this.actionSh.deleteAlert(`Ești sigur ca vrei să ștergi ingredinetul ${name}! Cand stergi un ingredient il stergi din toate rețetele în care a fost folosit!`, "Sterge")
     if(result){
       this.ingSrv.deleteIngredient(id).pipe(take(1)).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 3000, 'success-toast')
+          showToast(this.toastCtrl, response.message, 3000, '')
         }
       })
     }

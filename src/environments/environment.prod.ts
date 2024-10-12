@@ -21,11 +21,13 @@ export const environment = {
   LOC: '65ba7dcf1694ff43f52d44ed',
   ADMIN_EMAIL: 'alinz.spinu@gmail.com',
 
-  PRINT_URL: 'http://localhost:8081/',
+  // PRINT_URL: 'http://localhost:8081/',
   API_PASS: 'afara-ploua',
 
-  BASE_URL: 'http://localhost:8080/',
-  // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
+  // BASE_URL: 'http://localhost:8080/',
+
+  BASE_URL: 'https://cafetish-server.ew.r.appspot.com/',
+  SAVE_URL: 'http://localhost:8080/',
 
 
   API_USER: 'uewmdhdA@&*939NSDOO73ns',

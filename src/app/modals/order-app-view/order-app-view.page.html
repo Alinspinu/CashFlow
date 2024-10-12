@@ -3,8 +3,8 @@
 </ion-header> -->
 
 <ion-content [fullscreen]="true">
-  <ion-toolbar>
-    <ion-button size="large" color="primary" (click)="close()">
+  <ion-toolbar class="ion-no-border">
+    <ion-button size="large" color="medium" (click)="close()">
      <ion-icon src="../../../assets/icon/close-outline.svg"></ion-icon>
     </ion-button>
    </ion-toolbar>
@@ -13,12 +13,14 @@
     <ion-col>
       <ion-card *ngIf="order">
         <ion-card-header>
+          <ion-card-title class="ion-text-center" style="color: red;" *ngIf="order.pending">COMANDĂ ONLINE</ion-card-title>
           <ion-card-title>{{formatDate(order.createdAt)}}</ion-card-title>
+          <ion-card-subtitle>Masa {{order.masa}} </ion-card-subtitle>
           <ion-card-subtitle>Nr. {{order.index}} </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <ion-list>
-            <ion-item lines="none" color="tertiary" class="input" *ngFor="let product of order.products">
+            <ion-item lines="none" class="input" *ngFor="let product of order.products">
               <ion-thumbnail slot="start">
                 <img alt="Product Image" [src]="product.imgUrl" />
               </ion-thumbnail>
@@ -33,83 +35,84 @@
                 </div>
               </div>
             </ion-item>
-            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.cashBack > 0 || order.discount > 0">
-              <div class="total-wrapper">
-                <span class="total-text">VALOARE PRODUSE</span>
-                <span class="total">{{order.cashBack + order.total+ order.discount}} Lei</span>
-              </div>
-            </ion-item>
-            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.cashBack > 0">
-              <div class="total-wrapper">
-                <span class="total-text">CASH BACK</span>
-                <span class="total"> - {{order.cashBack}} Lei</span>
-              </div>
-            </ion-item>
-            <ion-item lines="none" color="tertiary" class="input" *ngIf="order.discount > 0">
-              <div class="total-wrapper">
-                <span class="total-text">DISCOUNT</span>
-                <span class="total"> - {{order.discount}} Lei</span>
-              </div>
-            </ion-item>
-            <ion-item lines="none" color="tertiary" class="input" *ngFor="let pay of paymentMethod">
-              <div class="total-wrapper">
-                <span class="total-text">{{pay.method | capitalize}}</span>
-                <span class="total">{{pay.value}} Lei</span>
-              </div>
-            </ion-item>
-            <ion-item lines="none" color="tertiary" class="input">
-              <div class="total-wrapper">
-                <span class="total-text">TOTAL</span>
-                <span class="total">{{order.total}} Lei</span>
-              </div>
-            </ion-item>
           </ion-list>
+          <div class="buttons-container">
+            <ion-row class="bill-extra-row"  *ngIf="order.employee">
+              <ion-col size="8">
+                <span class="label">CASIER</span>
+              </ion-col>
+              <ion-col size="4" class="ion-text-end">
+                <span class="value"> {{order.employee.fullName}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="bill-extra-row"  *ngIf="order.clientInfo.name.length">
+              <ion-col size="8">
+                <span class="label">CLIENT</span>
+              </ion-col>
+              <ion-col size="4" class="ion-text-end">
+                <span class="value">{{order.clientInfo.name}}</span>
+              </ion-col>
+            </ion-row>
+          </div>
+          <div class="buttons-container">
+            <ion-row class="bill-extra-row" *ngIf="order.discount !== 0">
+              <ion-col size="10">
+                <span class="label">TOTAL PRODUSE</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-end">
+                <span class="value">{{order.cashBack + order.total+ order.discount}} Lei</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="bill-extra-row" *ngIf="order.discount !== 0">
+              <ion-col size="10">
+                <span class="label">REDUCERE</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-end">
+                <span class="value">- {{order.discount}} Lei</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="bill-extra-row" *ngIf="order.cashBack !== 0">
+              <ion-col size="10">
+                <span class="label">CASH BACK</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-end">
+                <span class="value"> - {{order.cashBack}} Lei</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="bill-extra-row" *ngIf="order.tips > 0">
+              <ion-col size="10">
+                <span class="label">BACSIS</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-end">
+                <span class="value"> + {{order.tips}} Lei</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="bill-extra-row" *ngFor="let pay of paymentMethod">
+              <ion-col size="10">
+                <span class="label" style="text-transform:uppercase;">{{pay.method}}</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-end">
+                <span class="value">- {{pay.value}} Lei</span>
+              </ion-col>
+            </ion-row>
+            <ion-row class="bill-total-row">
+              <ion-col size="10">
+                <span class="label">TOTAL</span>
+              </ion-col>
+              <ion-col size="2" class="ion-text-end">
+                <span class="value">{{order.total}} Lei</span>
+              </ion-col>
+            </ion-row>
+          </div>
+
         </ion-card-content>
       </ion-card>
     </ion-col>
   </ion-row>
 </ion-grid>
 </ion-content>
-
-<ion-footer *ngIf="order && order.pending">
-  <ion-grid>
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('10')" class="ion-no-padding ion-no-margin">10 Minute</ion-button>
-      </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('15')" class="ion-no-padding ion-no-margin">15 Minute</ion-button>
-      </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('20')" class="ion-no-padding ion-no-margin">20 Minute</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('25')" class="ion-no-padding ion-no-margin">25 Minute</ion-button>
-      </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('30')" class="ion-no-padding ion-no-margin">30 Minute</ion-button>
-      </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('35')" class="ion-no-padding ion-no-margin">35 Minute</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-no-padding ion-no-margin">
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('40')" class="ion-no-padding ion-no-margin">40 Minute</ion-button>
-      </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('45')" class="ion-no-padding ion-no-margin">45 Minute</ion-button>
-      </ion-col>
-      <ion-col class="ion-no-padding ion-no-margin">
-        <ion-button color="secondary" size="large" expand="block" (click)="sendTime('50')" class="ion-no-padding ion-no-margin">50 Minute</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-footer>
 <ion-footer *ngIf="order.status === 'done'">
-  <ion-button color="secondary" size="large" expand="block"(click)="reprint()">RRTIPĂREȘTE NOTA FISCALA</ion-button>
-  <ion-button color="primary" size="large" expand="block"(click)="changePaymentMethod()">SHIMBĂ METODA DE PLATĂ</ion-button>
-  <ion-button color="primary" size="large" expand="block"(click)="createBill()">TIPARESTE FACTURA</ion-button>
+  <ion-button color="medium" size="large" expand="block"(click)="reprint()">RRTIPĂREȘTE NOTA FISCALA</ion-button>
+  <ion-button color="medium" size="large" expand="block"(click)="changePaymentMethod()">SHIMBĂ METODA DE PLATĂ</ion-button>
+  <ion-button color="medium" size="large" expand="block"(click)="createBill()">TIPARESTE FACTURA</ion-button>
 </ion-footer>

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, ToastButton, ToastController } from '@ionic/angular';
@@ -6,7 +6,7 @@ import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { NirsService } from './nirs.service';
 import { Router } from '@angular/router';
-import { formatedDateToShow, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
@@ -23,18 +23,15 @@ export class NirsPage implements OnInit {
   nirs: any[] = []
   dbNirs: any[] = []
 
-  nirSearch!: string
-
-  suplierColor!: string
-  indexColor!: string
-  dateColor!: string
-
   startDate!: any
   endDate!: any
   user!: User
-  total: number = 0
+  suplierColor: string = 'none'
+  dateColor: string = 'none'
+  indexColor: string = 'primary'
 
-  isLoading: boolean = true
+  nirSearch!: string
+
 
   constructor(
     public nirSrv: NirsService,
@@ -48,9 +45,10 @@ export class NirsPage implements OnInit {
    this.getUser()
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.getNirs()
   }
+
 
 getUser(){
   getUserFromLocalStorage().then(user => {
@@ -62,6 +60,7 @@ getUser(){
     }
   })
 }
+
 
 
 index(){
@@ -90,9 +89,6 @@ date(){
 getNirs(){
   this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
     if(response){
-      if(response.length > 1){
-        this.isLoading = false
-      }
       this.dbNirs = response
       this.nirs = [...this.dbNirs]
     }
@@ -114,6 +110,7 @@ searchNir(ev: any){
 
 suplier(){
   this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
+
   this.suplierColor = 'primary'
   this.dateColor = 'none'
   this.indexColor = 'none'
@@ -121,6 +118,7 @@ suplier(){
 
   export(){
     if(this.startDate && this.endDate){
+      console.log('hit')
       this.nirSrv.exportNirs(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
@@ -134,7 +132,6 @@ suplier(){
   }
 
 
-
   async openDateModal(mode: string){
     const response = await this.actionSheetService.openAuth(DatePickerPage)
     if(response && mode === 'start'){
@@ -142,45 +139,23 @@ suplier(){
     }
     if(response && mode === 'end'){
       this.endDate = response
+      if(this.startDate){
+        console.log(this.startDate, this.endDate)
+        this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
+          if(response){
+            this.dbNirs = response
+            this.nirs = [...this.dbNirs]
+            this.dbNirs.forEach(nir => {
+              if(nir.index === 1449){
+                console.log(nir)
+              }
+            })
+          }
+        })
+      }
     }
   }
 
-  async payCash(id: string, index: number,  total: number){
-    const nir = this.nirs[index]
-    const name = nir.suplier.name
-    const result = await this.actionSheetService.payAlert(`Plătește ${total} Lei`, 'Plată', 'Număr document')
-    if(result && result !== 'banca'){
-      let entry = {
-        tip: 'expense',
-        date: new Date(Date.now()).toISOString(),
-        description: `Plata ${name}, ${result}`,
-        amount: total,
-        locatie: this.user.locatie
-      }
-      this.nirSrv.registerEntry(entry).subscribe(response => {
-        if( response){
-          showToast(this.toastCtrl, 'Pata efectuata registrul a fost actualizat', 2000, 'success-toast')
-          entry.locatie = '65c221374c46336d1e6ac423';
-          this.nirSrv.registerEntry(entry).subscribe()
-          this.nirSrv.payNir(true, 'cash', id).subscribe(response => {
-            if(response) {
-              nir.payd = true
-              nir.type = 'cash'
-              showToast(this.toastCtrl, response.message, 2000, 'success-toast')
-            }
-          })
-        }
-      })
-    } else if(result && result === 'banca'){
-      this.nirSrv.payNir(true, "bank" ,id).subscribe(response => {
-        if(response) {
-          nir.payd = true
-          nir.type = 'bank'
-          showToast(this.toastCtrl, response.message, 2000, 'success-toast')
-        }
-      })
-    }
-  }
 
 
   pushNirs(nir: any){
@@ -197,7 +172,7 @@ suplier(){
       this.nirSrv.deleteNir(id).subscribe(response => {
         if(response){
           this.nirs.splice(index, 1)
-          showToast(this.toastCtrl, response.message, 2000, 'success-toast')
+          showToast(this.toastCtrl, response.message, 2000, '')
         }
       })
     }

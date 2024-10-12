@@ -1,6 +1,6 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from "@angular/core";
-import { environment } from "src/environments/environment";
+
 
 
 
@@ -10,11 +10,17 @@ import { environment } from "src/environments/environment";
 
 export class AddClientDiscountService{
 
+  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+
   constructor(
     private http: HttpClient
-  ){}
+  ){
+  }
 
   searchCat(search: string, locatie: string){
-    return this.http.get<{cat: any[]}>(`${environment.BASE_URL}cat/search-cat?search=${search}&loc=${locatie}`)
+    const  headers: HttpHeaders = new HttpHeaders({
+      'bypass-tunnel-reminder': 'true'
+    });
+    return this.http.get<{cat: any[]}>(`${this.url}cat/search-cat?search=${search}&loc=${locatie}`, {headers})
   }
 }

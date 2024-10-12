@@ -1,0 +1,41 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Adaugă Plată</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form">
+    <ion-row>
+      <ion-col size-s>
+        <ion-item lines="none" class="input date" (click)="openDateModal()" *ngIf="hide.date">
+          <ion-label slot="start">{{date ? formatDate(date) :'Alege ziua'}}</ion-label>
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="hide.document">
+        <ion-select aria-label="entry" label="Document" labelPlacement="floating" formControlName="document">
+          <ion-select-option *ngFor="let doc of documents" [value]='doc'>{{doc}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+        <ion-item lines="none" class="input" *ngIf="hide.docNr">
+          <ion-input mode="ios" type="text" fill="outline" label="Număr Document" labelPlacement="floating" formControlName="docNr"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="hide.desc">
+          <ion-input mode="ios" type="text" fill="outline" label="Descriere" labelPlacement="floating" placeholder="Ex. Plata .. ch nr.." formControlName="description"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="input" *ngIf="hide.amount">
+          <ion-input mode="ios" type="number" fill="outline" label="Sumă" labelPlacement="floating" placeholder="Lei" formControlName="price"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-button (click)="confirm()" type="submit" [disabled]="!form.valid" [strong]="true" expand="block" size="large">ADAUGĂ INTRARE
+  </ion-button>
+</ion-footer>

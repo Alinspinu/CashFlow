@@ -24,6 +24,19 @@ import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { TipsPage } from '../modals/tips/tips.page';
 import { AddProductDiscountPage } from '../modals/add-product-discount/add-product-discount.page';
 import { DelProdViewPage } from '../reports/cash/del-prod-view/del-prod-view.page';
+import { TogglePontPage } from '../office/pontaj/togglePont/toggle-pont.page';
+import { PaymentsPage } from '../office/pontaj/payments/payments.page';
+import { HoursPage } from '../office/pontaj/hours/hours.page';
+import { TogglePage } from '../office/shedule/toggle/toggle.page';
+import { RecordModalPage } from '../office/supliers/suplier/record-modal/record-modal.page';
+import { AddToInventaryPage } from '../modals/add-to-inventary/add-to-inventary.page';
+import { StartUrlPage } from '../modals/start-url/start-url.page';
+import { SelectInvPage } from '../reports/inventary/select-inv/select-inv.page';
+import { AddReportPage } from '../reports/add-report/add-report.page';
+import { DepViewPage } from '../modals/dep-view/dep-view.page';
+import { UsersViewPage } from '../modals/users-view/users-view.page';
+import { SelectDataPage } from '../modals/select-data/select-data.page';
+
 
 
 
@@ -42,7 +55,13 @@ export class ActionSheetService {
                typeof CategoryPage |
                typeof PaymentPage |
                typeof SuplierPage |
+               typeof PaymentsPage |
+               typeof HoursPage |
+               typeof TogglePage |
+               typeof AddIngredientPage |
+               typeof TogglePontPage |
                typeof AddEmployeeDataPage |
+               typeof AddToInventaryPage |
                typeof ProductIngredientPage,
     options: any,
     sub: boolean
@@ -57,6 +76,24 @@ export class ActionSheetService {
     return data
   }
 
+  async openSelect(
+    component: typeof SelectDataPage,
+    options: any,
+    mode: string,
+               ) {
+    const modal = await this.modalCtrl.create({
+      component: component,
+      componentProps: { options, mode},
+      cssClass: 'billModal'
+    });
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    return data
+  }
+
+
+
+
   async openPayment(
     component: typeof PaymentPage |
                typeof CustomerCheckPage |
@@ -68,8 +105,16 @@ export class ActionSheetService {
                typeof AddClientDiscountPage |
                typeof AddProductDiscountPage |
                typeof OrdersViewPage |
-               typeof OrderAppViewPage |
                typeof AddEntryPage |
+               typeof CategoryPage |
+               typeof OrderAppViewPage |
+               typeof TipsPage |
+               typeof RecordModalPage |
+               typeof AddIngredientPage |
+               typeof SelectInvPage |
+               typeof DatePickerPage |
+               typeof AddReportPage |
+               typeof DepViewPage |
                typeof DelProdViewPage,
     options: any
   ){
@@ -103,6 +148,7 @@ export class ActionSheetService {
     component: typeof AuthPage |
                typeof RegisterPage |
                typeof DatePickerPage |
+               typeof StartUrlPage |
                typeof TipsPage,
                 ) {
     const modal = await this.modalCtrl.create({
@@ -117,6 +163,113 @@ export class ActionSheetService {
   };
 
 
+  async entryAlert(options: string[], tip: string, title: string, message: string, cssClass: string, choise: string){
+    const inputs = options.map(option => {
+      return {
+          label: option,
+          type: `radio` as const,
+          value: option,
+          checked: option === choise
+
+
+      };
+  });
+    const inputsC = options.map(option => {
+      return {
+          label: option,
+          type: `checkbox` as const,
+          value: option,
+          checked: option === choise
+
+      };
+  });
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: [
+        {
+          text: 'Alege',
+          role: 'confirm',
+        },
+      ],
+      inputs: tip === 'radio' ? inputs : inputsC,
+      cssClass: ['reprint-alert', cssClass],
+      backdropDismiss: false,
+      keyboardClose: false,
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === 'confirm'){
+      return result.data.values
+    } else {
+      return null
+    }
+  }
+
+
+
+  async textAlert(title: string, message: string, name: string, label: string){
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: [
+        {
+          text: 'ADAUGĂ',
+          role: 'confirm',
+        },
+      ],
+      inputs:[
+        {
+          name: name,
+          label: label,
+          type: 'text',
+        },
+
+      ],
+      backdropDismiss: false,
+      keyboardClose: false,
+      cssClass: 'reprint-alert'
+    })
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === 'confirm' && result.data.values) {
+      return result.data.values.nr
+    } else {
+      return null
+    }
+  }
+
+  async numberAlert(title: string, message: string, name: string, label: string){
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: [
+        {
+          text: 'ADAUGĂ',
+          role: 'confirm',
+        },
+      ],
+      inputs:[
+        {
+          name: name,
+          label: label,
+          type: 'number',
+        },
+
+      ],
+      backdropDismiss: false,
+      keyboardClose: false,
+      cssClass: 'reprint-alert'
+    })
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === 'confirm' && result.data.values) {
+      return result.data.values.val
+    } else {
+      return null
+    }
+  }
 
 
 
@@ -187,6 +340,28 @@ export class ActionSheetService {
     }
   }
 
+  async openMobileModal(
+    component: typeof PickOptionPage |
+               typeof PaymentPage |
+               typeof CustomerCheckPage |
+               typeof OrderViewPage |
+               typeof OrderAppViewPage |
+               typeof UsersViewPage |
+               typeof AddToInventaryPage |
+               typeof SelectInvPage |
+               typeof CashbackPage,
+    options: any,
+    sub: boolean
+  ){
+    const modal = await this.modalCtrl.create({
+      component: component,
+      componentProps: {options: options, sub: sub},
+    });
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    return data
+
+  }
 
 
   async deleteAlert(message: string, title: string){
@@ -584,6 +759,38 @@ async payAlert(title: string, message: string, label: string){
     await alert.present();
     const result = await alert.onDidDismiss();
     if(result.role === 'confirm'){
+      return result.data.values
+    } else {
+      return null
+    }
+  }
+
+
+
+  async chooseCategory(options: {name: string, _id: string}[]) {
+    const inputs = options.map(option => {
+      return {
+          label: option.name,
+          type: 'radio' as const,
+          value: option,
+          cssClass: 'option'
+      };
+  });
+    const alert = await this.alertController.create({
+      header: 'Alege',
+      message: `Alege o opțiune`,
+      buttons: [
+        {
+          text: 'Alege',
+          role: 'confirm',
+        },
+      ],
+      inputs: inputs,
+      cssClass: ['reprint-alert', 'suplier-alert']
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if(result.role === "confirm"){
       return result.data.values
     } else {
       return null

@@ -1,0 +1,34 @@
+
+<div *ngIf="isLoading" class="spinner-content">
+  <app-spinner class="spinner"></app-spinner>
+</div>
+
+<ion-content [fullscreen]="true" *ngIf="!isLoading">
+  <ion-header class="ion-no-border">
+    <ion-toolbar class="ion-no-border">
+      <ion-button slot="start" color="medium" (click)="close()" size="large">
+        <ion-icon src="../../../../assets//icon/close-outline.svg" size="large"></ion-icon>
+      </ion-button>
+      <div class="title-wrapper">
+        <div class="title">Alege Inventar</div>
+      </div>
+    </ion-toolbar>
+  </ion-header>
+<ion-grid>
+  <ion-row>
+    <ion-col size-xs="6" size-lg="4" *ngFor="let inv of inventaries"  >
+      <div class="inv" (click)="choiseInv(inv)">
+        {{editDate(inv.date)}}
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>
+
+<ion-footer  *ngIf="!isLoading">
+  <ion-button size="large" expand="block" color="medium" (click)="createInventary()">
+    <ion-icon src="assets/icon/create-outline.svg"></ion-icon>
+    Crează
+  </ion-button>
+</ion-footer>
+

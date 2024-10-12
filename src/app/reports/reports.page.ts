@@ -5,6 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { CashPage } from './cash/cash.page';
 import { IngredientsPage } from './ingredients/ingredients.page';
 import { ProductsPage } from './products/products.page';
+import { FinancePage } from './finance/finance.page';
+import { CashRegisterPage } from '../office/cash-register/cash-register.page';
+import { InventaryPage } from './inventary/inventary.page';
 
 
 
@@ -13,40 +16,78 @@ import { ProductsPage } from './products/products.page';
   templateUrl: 'reports.page.html',
   styleUrls: ['reports.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule, CashPage, IngredientsPage, ProductsPage],
+  imports: [
+    IonicModule,
+    FormsModule,
+    CommonModule,
+    CashPage,
+    IngredientsPage,
+    ProductsPage,
+    FinancePage,
+    CashRegisterPage,
+    InventaryPage
+  ],
 })
 
 
+
+
 export class ReportsPage {
+
+  screenWidth!: number
 
   show:
   {
     menu: boolean
     sales: boolean
     products: boolean
-    ingredients: boolean
-  } = {sales: true, products: false, ingredients: false, menu: false}
+    cashRegister: boolean
+    finance: boolean
+    inventary: boolean
+  } = {sales: true, products: false, cashRegister: false, menu: false, finance: false, inventary: false}
 
-  constructor() {}
+  constructor() {
+    this.screenWidth = window.innerWidth
+  }
 
   sales(){
     this.show.sales = true
     this.show.products = false
-    this.show.ingredients = false
+    this.show.cashRegister = false
+    this.show.finance = false
+    this.show.inventary = false
   }
 
   products(){
     this.show.products = true
     this.show.sales = false
-    this.show.ingredients = false
+    this.show.cashRegister = false
+    this.show.finance = false
+    this.show.inventary = false
   }
 
-  ingredients(){
-    this.show.ingredients = true
+  register(){
+    this.show.cashRegister = true
     this.show.products = false
     this.show.sales = false
+    this.show.finance = false
+    this.show.inventary = false
   }
 
+  finance(){
+    this.show.cashRegister = false
+    this.show.products = false
+    this.show.sales = false
+    this.show.finance = true
+    this.show.inventary = false
+  }
+  inventary(){
+    this.show.cashRegister = false
+    this.show.products = false
+    this.show.sales = false
+    this.show.finance = false
+    this.show.inventary = true
+  }
 
   hideMenu(){
     this.show.menu = false

@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -12,7 +12,6 @@ import { CategoryPage } from '../CRUD/category/category.page';
 import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
-import { Subscription } from 'rxjs';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 
 @Component({
@@ -22,12 +21,12 @@ import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule, CapitalizePipe, FormsModule, SpinnerPage]
 })
-export class ProductsPage implements OnInit, OnDestroy {
+export class ProductsPage implements OnInit {
 
-  productSearch: any = ''
-
+  productSearch: any
+  productIngSearch: any
   recipeIcon: string = ''
-  categories: any = []
+  categories: {name: string, _id: string, order: number, mainCat: string}[] = []
   mainCats: any = []
   categoriesToShow: any = []
   filter: any = {
@@ -35,8 +34,6 @@ export class ProductsPage implements OnInit, OnDestroy {
     cat: ''
   }
   user!: User
-
-  prodSub!:Subscription
 
   showSubProducts: boolean = false
   products: Product[] = []
@@ -57,14 +54,8 @@ export class ProductsPage implements OnInit, OnDestroy {
     this.getuser()
   }
 
-  ngOnDestroy(): void {
-    if(this.prodSub){
-      this.prodSub.unsubscribe()
-    }
-  }
-
-
 getuser(){
+  this.isLoading = true
   getUserFromLocalStorage().then(user => {
     if(user) {
       this.user = user
@@ -75,17 +66,39 @@ getuser(){
   })
 }
 
-
-
-
-
-  searchProduct(ev: any){
-   const input = ev.detail.value
-   this.products = this.products.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
-   if(input === ''){
-    this.products = [...this.dbProducts]
-   }
+searchProduct(ev: any){
+  const input = ev.detail.value
+  this.products = this.products.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+  if(input === ''){
+   this.products = [...this.dbProducts]
   }
+ }
+
+searchIngProduct(ev: any){
+  const input = ev.detail.value
+  this.products = this.dbProducts.filter(parentItem =>
+    parentItem.ings.some(child => {
+      if(child.ing.name){
+        return child.ing.name.toLowerCase().includes(input.toLowerCase())
+      } else {
+        console.log(parentItem)
+        return false
+      }
+    }) ||
+    parentItem.subProducts.some(sub => {
+      return sub.ings.some(child => {
+        if (child.ing && child.ing.name) {
+          return child.ing.name.toLowerCase().includes(input.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+    })
+  );
+  if(input === ''){
+   this.products = [...this.dbProducts]
+  }
+ }
 
 
 
@@ -103,15 +116,13 @@ getuser(){
         const product = this.products[index]
         if(product){
           product.available = response.available
-          showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000, 'success-toast')
+          showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000, '')
         } else {
-          showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000, 'error-toast')
+          showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000, '')
         }
       }
     })
   }
-
-
 
   subStatus(ev: any, id: string, subIndex: number, prodIndex: number){
     let status
@@ -126,9 +137,9 @@ getuser(){
           const subProduct = this.products[prodIndex].subProducts[subIndex]
           if(subProduct){
             subProduct.available = response.available
-            showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000, 'success-toast')
+            showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000, '')
           } else {
-            showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000, 'error-toast')
+            showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000, '')
           }
         }
       })
@@ -143,30 +154,32 @@ getuser(){
       this.router.navigate([`tabs/add-product/${id}`])
   }
 
+
   async deleteProduct(product: Product){
-      const message = `Ești sigur ca vrei să ștergi produsul ${product.name}?`
-      const title = 'ȘTERGE!'
-      const result = await this.actionSrv.deleteAlert(message, title)
-      if(result){
-        this.productsSrv.deleteProduct(product._id).subscribe(response => {
-          if(response){
-            showToast(this.toastCtrl, response.message, 3000, 'success-toast')
-          }
-        }, (err) => {
-          if(err){
-            showToast(this.toastCtrl, err.error.message, 3000 , 'error-toast')
-          }
-        })
-      }
-  }
+    const message = `Ești sigur ca vrei să ștergi produsul ${product.name}?`
+    const title = 'ȘTERGE!'
+    const result = await this.actionSrv.deleteAlert(message, title)
+    if(result){
+      this.productsSrv.deleteProduct(product._id).subscribe(response => {
+        if(response){
+          showToast(this.toastCtrl, response.message, 3000, '')
+        }
+      }, (err) => {
+        if(err){
+          showToast(this.toastCtrl, err.error.message, 3000, '')
+        }
+      })
+    }
+
+}
 
   showSubs(index: number){
     const product = this.products[index]
       product.showSub = !product.showSub
   }
 
-
   onSelectMainCat(ev: CustomEvent){
+    this.filter.cat = ''
     this.filter.mainCat = ev.detail.value;
     this.categoriesToShow =  this.categories.filter((cat: any) => cat.mainCat === this.filter.mainCat);
     this.filterProducts()
@@ -187,10 +200,10 @@ getuser(){
     }
   }
 
-
   getCategories(){
     this.categories = this.contentSrv.categoriesNameId$;
     this.categoriesToShow = this.categories;
+    this.isLoading = false
     this.setMainCats(this.categories);
     }
 
@@ -199,24 +212,39 @@ getuser(){
      this.mainCats = uniqueKeys.map(name => ({ name }));
     }
 
-
     getProducts(){
       this.productsSrv.productsSend$.subscribe(response => {
-        if(response.length > 1){
-          this.isLoading = false
-        }
         this.dbProducts = response
         this.products = this.dbProducts
+        if(this.dbProducts.length > 1){
+            this.isLoading = false
+        }
       });
     }
 
    async addCat(){
-     const response = await this.actionSrv.openModal(CategoryPage, null, false)
+     const response = await this.actionSrv.openPayment(CategoryPage, null)
      if(response){
        this.productsSrv.saveCat(response, this.user.locatie).subscribe(response => {
+        console.log(response)
        })
      }
 
+    }
+
+    async editCat(){
+      const sortedCategories = this.categories.sort((a,b) => a.name.localeCompare(b.name))
+      const categoryId = await this.actionSrv.chooseCategory(sortedCategories)
+      if(categoryId) {
+        const response = await this.actionSrv.openPayment(CategoryPage, categoryId)
+        if(response){
+          this.contentSrv.editCategory(response).subscribe(response => {
+            if(response){
+             showToast(this.toastCtrl, response.message, 2000, '')
+            }
+          })
+        }
+      }
     }
 
     calcProductionPrice(product: any){
@@ -227,20 +255,18 @@ getuser(){
         }
         )
       }
-      return total
+      return `${total} Lei`
     }
 
     calcComercialSurplus(product: any){
-      const productionPrice = this.calcProductionPrice(product)
-      if(productionPrice > 0){
+      const productionPrice = +this.calcProductionPrice(product).split('')[0]
+      if(productionPrice> 0){
         const procentSurplus =  (( product.price - productionPrice ) / productionPrice ) * 100
         return  round(procentSurplus) + "%"
       } else {
         return 'Infint %'
       }
     }
-
-
 
 }
 

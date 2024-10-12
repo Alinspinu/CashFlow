@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChildren, QueryList, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, IonSearchbar } from '@ionic/angular';
 import { ContentService } from '../../content.service';
 import { take, tap, Subscription } from 'rxjs';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
@@ -27,6 +27,8 @@ import { OrderService } from '../order-content.service';
 })
 export class MeniuPage implements OnInit, OnDestroy {
 
+  @ViewChild('searchbar', {static: false}) searchBar!: IonSearchbar
+
   @ViewChildren('myCard') myCards!: QueryList<any>;
   @ViewChildren('categoryChip') myCats!: QueryList<any>;
 
@@ -34,10 +36,17 @@ export class MeniuPage implements OnInit, OnDestroy {
   tabSub!: Subscription
   orderSub!: Subscription
 
+  catName: string = 'Cafea'
+  catId!: string
+
   mainCategoryToShowName!: string;
   categoryToShowId!: string;
 
   productsToShow: any [] = []
+
+  productSearch: string = '';
+  allProducts: any[] = []
+
 
   user!: User
 
@@ -62,6 +71,11 @@ export class MeniuPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    setTimeout(() => {
+      if(this.searchBar){
+        this.searchBar.setFocus()
+      }
+    }, 400)
     this.getUser()
     this.getTableNumber()
     this.getCategories()
@@ -81,18 +95,37 @@ export class MeniuPage implements OnInit, OnDestroy {
       }
   }
 
+  searchProduct(ev: any){
+    const input = ev.detail.value.toLowerCase()
+    this.productsToShow = this.allProducts.filter((obj: any) => obj.name.toLowerCase().includes(input))
+    if(this.productSearch === ''){
+      this.selectMainCat(this.catName)
+    }
+
+  }
+
+  setProduct(){
+
+  }
+
+  setProducts(cats: any[]){
+    cats.forEach(cat => {
+      cat.product.forEach((product: any) => {
+        this.allProducts.push(product)
+      })
+    })
+  }
+
 
   getUser(){
     this.userSub = this.authSrv.user$.subscribe(response => {
       if(response){
-        this.userSub = response.subscribe(user => {
-          if(user){
-            this.user = user;
-          }
-        })
+        this.user = response
       }
     })
     }
+
+
     getOrderIndex(){
       this.orderSub = this.orderService.orderIndexSend$.subscribe(response => {
         if(response || response === 0){
@@ -116,11 +149,13 @@ export class MeniuPage implements OnInit, OnDestroy {
 
 
   selectCategory(cat: string){
+    this.categoryToShowId = cat
     this.enableScrollChange = false
     const catIndex = this.categories.findIndex(category => category._id === cat)
     this.productsToShow = this.categories[catIndex].product
-    this.categoryToShowId = cat
   }
+
+
 
   scrollToCard(cardId: string) {
     const cardElement = this.myCards.find(card => card.nativeElement.id === cardId);
@@ -133,12 +168,15 @@ export class MeniuPage implements OnInit, OnDestroy {
   }
 
   selectMainCat(name: string){
-    this.selectedMainCat = this.mainCats[name]
-    this.productsToShow = []
-    this.selectedMainCat.show = true
-    this.mainCategoryToShowName = name
-    this.productsToShow = this.selectedMainCat[0].product
-    this.categoryToShowId = this.selectedMainCat[0]._id
+    if(this.mainCats){
+      this.catName = name
+      this.selectedMainCat = this.mainCats[name]
+      this.productsToShow = []
+      this.selectedMainCat.show = true
+      this.mainCategoryToShowName = name
+      this.productsToShow = this.selectedMainCat[0].product
+      this.categoryToShowId = this.selectedMainCat[0]._id
+    }
   }
 
 
@@ -149,6 +187,8 @@ export class MeniuPage implements OnInit, OnDestroy {
       tap(response => {
         if(response.length > 1){
           this.categories = [...response]
+          console.log(this.categories)
+          this.setProducts(this.categories)
           let tempMainCats: any = []
           for (const document of this.categories) {
             const category = document.mainCat;
@@ -235,6 +275,7 @@ export class MeniuPage implements OnInit, OnDestroy {
         qty: product.qty,
         sgrTax: product.sgrTax,
         cantitate: product.qty,
+        description: product.description
       };
       console.log(product.sgrTax)
       if(product.sgrTax){

@@ -1,6 +1,10 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="sum ion-text-center">Adaugă Bacsis</ion-title>
+
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="title-wrapper">
+      <span class="title">{{discountMode ? 'Adaugă reducere' : 'Adaugă Bacsiș'}}</span>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -9,21 +13,21 @@
   <ion-row class="input-row">
     <ion-col>
       <ion-item lines="none" class="input">
-        <ion-input type="number" label='Bacsis' labelPlacement="floating" placeholder="00"  [(ngModel)]="tipsValue"></ion-input>
+        <ion-input type="number" [label]="discountMode ? 'Reducere %' : 'Bacsiș'" labelPlacement="floating" [placeholder]="discountMode ? '%' : '00'"  [(ngModel)]="tipsValue"></ion-input>
       </ion-item>
     </ion-col>
   </ion-row>
 </ion-grid>
 </ion-content>
 
-<ion-footer>
+<ion-footer class="ion-no-border">
   <ion-grid>
     <ion-row>
       <ion-col>
-      <ion-button size="large" expand="block" color="danger" (click)="close()">RENUNȚĂ</ion-button>
+      <ion-button size="large" expand="block" color="light" (click)="close()" style="height: 100px;">RENUNȚĂ</ion-button>
     </ion-col>
       <ion-col>
-        <ion-button size="large" expand="block" color="primary"(click)="addTips()" [disabled]="!tipsValue">ADAUGĂ BACSIS</ion-button>
+        <ion-button size="large" expand="block" color="medium"(click)="addTips()" style="height: 100px;" [disabled]="!tipsValue">{{discountMode ? 'Adaugă reducere' : 'Adaugă Bacsiș'}}</ion-button>
         </ion-col>
     </ion-row>
   </ion-grid>

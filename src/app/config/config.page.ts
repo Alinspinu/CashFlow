@@ -42,12 +42,8 @@ export class ConfigPage implements OnInit {
   getUser(){
     this.auth.user$.subscribe(response => {
       if(response){
-        response.subscribe(user => {
-          if(user){
-            this.locId = user.locatie
-            this.getLoc()
-          }
-        })
+        this.locId = response.locatie
+        this.getLoc()
       }
     })
   }

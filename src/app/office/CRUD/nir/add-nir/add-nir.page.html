@@ -1,0 +1,121 @@
+
+  <ion-header class="ion-no-border">
+    <ion-toolbar class="ion-no-border">
+      <ion-title class="ion-text-center" style="margin: 8px 0;">Adaugă Nir</ion-title>
+      <div class="searchbar-wrapper">
+        <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplier($event)" #searchBarSuplier></ion-searchbar>
+        <img src="assets/icon/add-circle.svg" id="add-cat"  (click)="addSuplier()">
+      </div>
+      <ion-list *ngIf="supliers.length">
+        <ion-item *ngFor="let suplier of supliers; let i = index" class="fur-name" (click)="selectSuplier(suplier)">
+          <span>{{suplier.name}}</span>
+        </ion-item>
+      </ion-list>
+      <form [formGroup]="nirForm">
+      <ion-item lines="none" class="nirForm" color="transparent">
+        <div class="input furz-name"  *ngIf="suplier">
+          <ion-label class="">{{suplier.name}}</ion-label>
+        </div>
+        <div class="input fur-cif" *ngIf="suplier">
+          <ion-label class="" >{{suplier.vatNumber.toUpperCase()}}</ion-label>
+        </div>
+        <div class="input nr-doc">
+          <ion-input mode="ios" type="text" label="Document" class="" labelPlacement="floating" fill="outline" formControlName="document" #documentInput required></ion-input>
+        </div>
+        <div class="input nr-doc">
+          <ion-input mode="ios" type="text" label="Nr Document" class="" labelPlacement="floating" fill="outline" formControlName="nrDoc" #docInput required></ion-input>
+        </div>
+        <div class="input date" (click)="openDateModal(true)">
+          <ion-input mode="ios" type="text" label="Alege Data" labelPlacement="floating" fill="outline" formControlName="docDate" required></ion-input>
+          <span style="cursor: pointer;">{{docDate ? formatDate(docDate) :'Document Date'}}</span>
+        </div>
+        <div class="input date" (click)="openDateModal(false)">
+          <ion-input mode="ios" type="text" label="Alege Data" labelPlacement="floating" fill="outline" formControlName="receptionDate" required></ion-input>
+          <span style="cursor: pointer;">{{receptionDate ? formatDate(receptionDate) :'Reception Date'}}</span>
+        </div>
+        <ion-button class="discount-button" size="default" color="light" (click)="openDiscount()">
+          Adaugă Reducere
+          <ion-icon color="medium" src="../../../../assets/icon/discount.svg" style="font-size: 18px; margin-left: 8px;"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </form>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="content-container head">
+            <span class="header name-h">Nume</span>
+            <span class="header um">UM</span>
+            <span class="header cant">Cant</span>
+            <span class="header p-um">Preț/Um</span>
+            <span class="header val">Valoare</span>
+            <span class="header tva">Cota TVA</span>
+            <span class="header val-tva">Valoare TVA</span>
+            <span class="header tot">Total</span>
+            <span class="header dep">Departament</span>
+            <span class="header gst">Gestiune</span>
+            <span class="header p-v">Preț Vanzare</span>
+            <ion-icon color="danger" size="lage"></ion-icon>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content [fullscreen]="true">
+    <div class="spinner-container" *ngIf="isLoading">
+      <app-spinner></app-spinner>
+    </div>
+    <ion-grid *ngIf="!isLoading">
+      <ion-row>
+      <ion-col>
+            <div *ngFor="let ing of nirIngredients; let i = index;">
+              <div  class="content-container input" *ngIf="ing.total !== 0">
+                <span class="content name">{{ing.name}}</span>
+                <span class="content um">{{ing.um}}</span>
+                <span class="content cant">{{ing.qty}}</span>
+                <span class="content p-um">{{ing.price}} Lei</span>
+                <span class="content val">{{ing.value}} Lei</span>
+                <span class="content tva">{{ing.tva}}%</span>
+                <span class="content val-tva">{{ing.tvaValue}}</span>
+                <span class="content tot">{{ing.total}} Lei</span>
+                <span class="content dep">{{ing.dep}}</span>
+                <span class="content gst">{{ing.gestiune}}</span>
+                <span class="content p-v">{{ing.sellPrice}} Lei</span>
+                <ion-icon color="medium" size="lage" src="../../../assets/icon/trash-outline.svg" (click)="deleteEntry(i)" style="cursor:pointer;"></ion-icon>
+              </div>
+            </div>
+      </ion-col>
+    </ion-row>
+    </ion-grid>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="footer-container">
+            <span class="footer name">Total</span>
+            <span class="footer"></span>
+            <span class="footer"></span>
+            <span class="footer"></span>
+            <span class="footer">{{val}} Lei</span>
+            <span class="footer"></span>
+            <span class="footer"></span>
+            <span class="footer">{{valTva}} Lei</span>
+            <span class="footer">{{valTotal}} Lei</span>
+            <span class="footer"></span>
+            <span class="footer"></span>
+            <span class="footer">{{valVanzare}} lei</span>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" (click)="saveNir()" size="large" [disabled]="!nirIngredients.length && !nirForm.valid" color="medium" class="button">
+            Salvează NIR
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+<!--
+  <ion-footer class="ion-no-border">
+
+  </ion-footer> -->

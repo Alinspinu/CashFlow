@@ -1,0 +1,23 @@
+<ion-header class="ion-no-border">
+  <ion-title class="ion-text-center">Alege Server</ion-title>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <ion-radio-group [(ngModel)]="selectedUrl">
+      <ion-item class="ing-name" lines="none" color="transparent">
+        <ion-radio slot="start" [value]="localUrl" labelPlacement="end">Local</ion-radio>
+      </ion-item>
+      <ion-item class="ing-name" lines="none" color="transparent">
+        <ion-radio slot="start" [value]="onlineUrl" labelPlacement="end">Online</ion-radio>
+        </ion-item>
+    </ion-radio-group>
+  </div>
+
+</ion-content>
+
+
+
+<ion-footer class="ion-no-border">
+  <ion-button color="medium" (click)="onSubmit()" size="large" expand="block" style="font-family: NoirProSemi !important;" [disabled]="!selectedUrl">Alege</ion-button>
+</ion-footer>

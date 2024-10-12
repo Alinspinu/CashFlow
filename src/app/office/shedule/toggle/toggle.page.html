@@ -1,0 +1,29 @@
+
+
+<ion-content [fullscreen]="true">
+    <div class="title-wrapper">
+      <div class="title">Alege Program</div>
+    </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let shedule of shedules" size="3" >
+        <div class="shedule" (click)="choiseShedule(shedule)">
+          {{shedule.period}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button size="large" expand="block" color="medium" (click)="addShedule()"[disabled]="isLoading">
+          <ion-icon src="assets/icon/add-outline.svg"></ion-icon>
+          ADAUGĂ
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

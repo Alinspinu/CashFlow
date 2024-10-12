@@ -59,6 +59,8 @@ export class BillPage implements OnInit, OnDestroy {
   cashBackMode: boolean = false
   clientMode: boolean = true
 
+  discountMode: boolean = false
+
 
   disableAction: boolean = true
   disableMerge: boolean = true
@@ -113,11 +115,7 @@ export class BillPage implements OnInit, OnDestroy {
   getUser(){
     this.userSub = this.authSrv.user$.subscribe(response => {
       if(response){
-        this.userSub = response.subscribe(user => {
-          if(user){
-            this.user = user;
-          }
-        })
+        this.user = response
       }
     })
     }
@@ -131,6 +129,28 @@ export class BillPage implements OnInit, OnDestroy {
         this.getBill()
       }
     })
+  }
+
+
+  async addDisc(mode: boolean){
+    if(this.discountMode) {
+      this.billToshow.total = this.billToshow.total + this.billToshow.discount
+      this.billToshow.discount = 0
+      this.discountMode = false
+    } else {
+      const discValue = await this.actionSheet.openPayment(TipsPage, 'discount')
+      if(discValue){
+        const total = this.billToshow.total
+        const discount = total * discValue / 100
+        if(discount > this.billToshow.total){
+            return showToast(this.toastCtrl, 'Valoarea reducerii nu trebuie să depășească valoarea notei de plată!', 2500, 'error-toast')
+        } else {
+          this.billToshow.total = this.billToshow.total - discount
+          this.billToshow.discount = discount
+          this.discountMode = true
+        }
+    }
+    }
   }
 
   getBill(){
@@ -158,7 +178,7 @@ export class BillPage implements OnInit, OnDestroy {
         this.clientMode = false
       }
      if(this.billToshow){
-      this.calcBillDiscount(this.billToshow)
+      // this.calcBillDiscount(this.billToshow)
       this.hideAllBils(this.table)
       this.billToshow.show = true
        this.billProducts = [...this.billToshow.products]
@@ -323,7 +343,7 @@ export class BillPage implements OnInit, OnDestroy {
     // this.billToshow.masaRest.index = this.tableNumber
     this.billToshow.show = true
     this.disableBrakeButton()
-    this.calcBillDiscount(this.billToshow)
+    // this.calcBillDiscount(this.billToshow)
   }
 
 
@@ -342,7 +362,7 @@ export class BillPage implements OnInit, OnDestroy {
         : (this.billId = 'new');
       const tableIndex = this.tableNumber;
       this.billToshow.locatie = this.user.locatie;
-      this.calcBillDiscount(this.billToshow);
+      // this.calcBillDiscount(this.billToshow);
         return this.tableSrv.saveOrder(
           tableIndex,
           this.billId,
@@ -371,18 +391,16 @@ export class BillPage implements OnInit, OnDestroy {
           if(paymentInfo){
             this.billToshow.payment = paymentInfo
             this.billToshow.cif = paymentInfo.cif;
-            this.billToshow.dont = paymentInfo.dont;
-            this.tableSrv.printBill(this.billToshow).subscribe({
-                next: (response => {
-                  this.router.navigateByUrl("/tabs/tables")
-                  this.disableOrderButton = false
                   this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
                          next: (response => {
                            if(response && response.bill.status === 'done'){
                              this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                             this.tableSrv.saveBillToCloud(response.bill)
                              this.billToshow = emptyBill()
                              this.client = null
+                             this.disableOrderButton = false
                              showToast(this.toastCtrl, response.message, 3000, 'success-toast')
+                             this.router.navigateByUrl("/tabs/tables")
                            }
                          }),
                          error: (error => {
@@ -392,14 +410,6 @@ export class BillPage implements OnInit, OnDestroy {
                          }),
                          complete: () => console.log('complete')
                    })
-                }),
-                error: (error => {
-                  this.disableOrderButton = false
-                  this.isLoading = false
-                  showToast(this.toastCtrl, error.message, 3000, 'error-toast')
-                }),
-                complete: () => console.log('complete')
-            })
       }
       }
     })
@@ -481,7 +491,8 @@ async addDiscount(){
           sentToPrintOnline: true,
           sgrTax: product.sgrTax,
           qty: product.qty,
-          cantitate: product.qty
+          cantitate: product.qty,
+          description: product.description
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){
@@ -500,7 +511,7 @@ async addDiscount(){
 
 
   async addTips(){
-    const tipsValue = await this.actionSheet.openAuth(TipsPage)
+    const tipsValue = await this.actionSheet.openPayment(TipsPage, '')
     if(tipsValue || tipsValue === 0){
       if(this.billToshow.tips > 0){
         this.billToshow.total =   this.billToshow.total - this.billToshow.tips
@@ -544,7 +555,7 @@ async addDiscount(){
         const itemsToSort = [...product.toppingsToSend]
         options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
       } else {
-        const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: emptyIng()}
+        const fakeTopping = {name: 'fake', price: 0, qty: 1, ingPrice: 0, um: 's', ing: ''}
         options.push(fakeTopping)
       }
       if(options.length){

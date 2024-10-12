@@ -2,7 +2,9 @@
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 import { Category, Product } from "./category.model";
-import { InvIngredient } from "./nir.model";
+import { InvIngredient, NirIngredient } from './nir.model';
+import { Shedule, Pontaj } from './shedule.model';
+import { environment } from '../../environments/environment';
 
 export function emptyUser(){
   const user: User = {
@@ -16,7 +18,36 @@ export function emptyUser(){
     status: '',
     telephone: '',
     locatie: '',
-    employee: {fullName: '', position: '', user: '', access: 0}
+    cardIndex: 0,
+    cardName: '',
+    survey: '',
+    orders: [],
+    discount: {
+      general: 0,
+      category: []
+    },
+    employee: {
+      active: false,
+      fullName: '',
+      cnp: 0,
+      ciSerial: '',
+      ciNumber: 0,
+      address: '',
+      position: '',
+      user: '',
+      access: 0,
+      salary: {
+        inHeand: 0,
+        onPaper: {
+          salary: 0,
+          tax: 0
+        },
+        fix: false,
+      },
+      workLog: [],
+      payments: []
+    },
+
   };
     return user
 }
@@ -45,11 +76,12 @@ export function  emptyBillProduct(){
     tva: '',
     discount: 0,
     dep: '',
-    sgrTax: false,
     toppingsToSend: [],
     sentToPrintOnline: true,
     qty: '',
     cantitate: '',
+    sgrTax: false,
+    description: '',
   }
   return billProduct
  }
@@ -58,6 +90,7 @@ export function  emptyBillProduct(){
   const deletetBillProduct: deletetBillProduct = {
     billProduct: emptyBillProduct(),
     reason: '',
+    admin: '',
     employee: {fullName: '', position: '', user: ''},
     locatie: '',
     inv: '',
@@ -84,14 +117,16 @@ export function emptyBill(){
     totalProducts: 0,
     total: 0,
     discount: 0,
+    voucher: 0,
     status: 'open',
     toGo: false,
     pickUp: false,
+    inOrOut: '',
     completetime: 0,
     paymentMethod: '',
     onlineOrder: false,
     pending: true,
-    dont: false,
+    out: false,
     payment: {
       card: 0,
       cash: 0,
@@ -104,6 +139,7 @@ export function emptyBill(){
       telephone: '',
       userId: '',
       cashBack: 0,
+      email: '',
       discount: {
         general: 0,
         category: [],
@@ -124,31 +160,11 @@ export function emptyBill(){
     name: 'COMANDA',
     products: [],
     createdAt: '',
+    updatedAt: '',
     locatie: '',
     prepStatus: 'open'
   }
   return emptyBill
-}
-
-
-export function emptyIng(){
-  const emptyIng: InvIngredient = {
-   _id: '',
-   name: '',
-   price: 0,
-   um: '',
-   qty: 0,
-   tvaPrice: 0,
-   tva: 0,
-   dep: '',
-   gestiune: '',
-   locatie: '',
-   ings: [],
-   inventary: [],
-   uploadLog: [],
-   unloadLog: []
-  }
-  return emptyIng
 }
 
 
@@ -168,9 +184,11 @@ export function emptyProduct(){
     category: {_id: '', mainCat: '', name: '', product: [], image: {path: '', filename:''}, order: 0},
     available: false,
     total: 0,
+    sgrTax: false,
     longDescription: '',
     ingredients: [],
     mainCat: '',
+    printOut: false,
     nutrition: {
       energy:{kJ: 0, kcal: 0},
       fat: {all: 0, satAcids: 0},
@@ -181,7 +199,6 @@ export function emptyProduct(){
     additives: [],
     allergens: [],
     paring: [],
-    sgrTax: false,
     toppings: [],
     ings: [],
     printer: 'main',
@@ -201,3 +218,69 @@ export function emptyCategory(){
   }
   return emptyCategory
 }
+
+
+export function emptyIng(){
+  const emptyIng: InvIngredient = {
+   _id: '',
+   name: '',
+   price: 0,
+   um: '',
+   qty: 0,
+   tvaPrice: 0,
+   tva: 0,
+   dep: '',
+   gestiune: '',
+   locatie: '',
+   ings: [],
+   productIngredient: false,
+   inventary: [],
+   uploadLog: [],
+   unloadLog: []
+  }
+  return emptyIng
+}
+
+
+export function emptyNirIng(){
+  const emptyNirIng: NirIngredient = {
+   name: '',
+   price: 0,
+   um: '',
+   qty: 0,
+   value: 0,
+   tva: 0,
+   dep: 0,
+   gestiune: '',
+   tvaValue: 0,
+   sellPrice: 0,
+   total: 0,
+  }
+  return emptyNirIng
+}
+
+
+export function  emptyShedule(){
+  const emptyShedule: Shedule = {
+    _id: '',
+    locatie: environment.LOC,
+    period: '',
+    days: []
+  }
+  return emptyShedule
+}
+
+
+export function emptyPontaj(){
+  const emptyPont: Pontaj = {
+    _id: '',
+    locatie: '',
+    month: '',
+    workValue: '',
+    days: []
+  }
+  return emptyPont
+}
+
+
+

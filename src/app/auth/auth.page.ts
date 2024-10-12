@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Preferences } from '@capacitor/preferences';
 import { showToast, triggerEscapeKeyPress } from '../shared/utils/toast-controller';
@@ -11,6 +11,9 @@ import { ActionSheetService } from '../shared/action-sheet.service';
 import { RegisterPage } from './register/register.page';
 import { TablesService } from '../tables/tables.service';
 import { jwtDecode } from 'jwt-decode';
+import { SpinnerPage } from '../modals/spinner/spinner.page';
+
+
 
 
 export interface AuthResData {
@@ -25,7 +28,7 @@ export interface AuthResData {
   templateUrl: './auth.page.html',
   styleUrls: ['./auth.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, SpinnerPage]
 })
 export class AuthPage implements OnInit {
 
@@ -38,6 +41,9 @@ export class AuthPage implements OnInit {
   emailValue!: string;
   validEmail: boolean = false;
   disableSubmit: boolean = false
+  disableLogIn: boolean = false;
+
+  returnUrl: string = '/tabs/tables'
 
   iconSrc: string = 'assets/icon/eye-outline.svg'
 
@@ -47,6 +53,7 @@ export class AuthPage implements OnInit {
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
     private tableSrv: TablesService,
+    private route: ActivatedRoute,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
   ) { }
 
@@ -73,6 +80,7 @@ export class AuthPage implements OnInit {
 
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tabs/tables';
     this.getCurrentTab();
     this.form = new FormGroup({
       email: new FormControl(null, {
@@ -87,15 +95,16 @@ export class AuthPage implements OnInit {
   };
 
   onSubmit(){
-    this.disableSubmit = true
+    this.isLoading = true
     const email = this.form.value.email;
     const password = this.form.value.password;
+    this.disableLogIn = true
     this.authService.onLogin(email, password).subscribe(res => {
       if(res){
         this.form.reset()
+        this.isLoading = false
       }
       if(res.message === 'Email sent'){
-        this.disableSubmit = false
         const data = JSON.stringify({
           name: res.user.name,
           email: res.user.email,
@@ -104,15 +113,20 @@ export class AuthPage implements OnInit {
           text: 'confirmare',
         });
         Preferences.set({key: 'tempUserData', value: data });
+        this.disableLogIn = false
+        this.isLoading = false
         this.router.navigateByUrl('/tabs/tables');
       } else {
-        this.disableSubmit = false
         const id: any = jwtDecode(res.token);
         this.tableSrv.getTables(res.locatie, id.userId)
-        this.router.navigateByUrl(`/tabs/tables`);
+        this.isLoading = false
+        this.disableLogIn = false
+        this.router.navigateByUrl(this.returnUrl);
       }
     }, error => {
+      this.disableLogIn = false
       if(error.status === 401){
+        this.isLoading = false
         showToast(this.toastCtrl, 'Nume sau parola incorectă!', 5000, 'error-toast');
         setTimeout(() => {
           this.resetPassword = true;

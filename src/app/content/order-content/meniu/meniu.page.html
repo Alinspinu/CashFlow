@@ -18,6 +18,10 @@
     </div>
   </div>
   <div class="menu-wrapper">
+    <div class="searcbar-wrapper">
+      <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută Produs"  (ionInput)="searchProduct($event)" #searchbar (keyup.enter)="setProduct()">
+      </ion-searchbar>
+    </div>
     <div class="main-cat-content" *ngIf="mainCats">
       <div class="main-cat shadow" *ngFor="let mainCat of getObjectKeys(mainCats)" (click)="selectMainCat(mainCat)" [ngClass]="{'selected': mainCategoryToShowName === mainCat}">
           {{mainCat | capitalize}}

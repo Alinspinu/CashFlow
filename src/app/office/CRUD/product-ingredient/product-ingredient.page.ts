@@ -133,7 +133,7 @@ export class ProductIngredientPage implements OnInit, OnDestroy {
       this.recipeTotal = +prodIng.price
       this.ingSrv.editIngredient(this.productId, prodIng).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 3000, 'success-toast')
+          showToast(this.toastCtrl, response.message, 3000, '')
           this.modalCtrl.dismiss("done")
         }
       })
@@ -184,10 +184,10 @@ export class ProductIngredientPage implements OnInit, OnDestroy {
   }
 
   async addIng(){
-   const ing = await this.actionSrv.openModal(AddIngredientPage, [], false)
+   const ing = await this.actionSrv.openPayment(AddIngredientPage, [])
    if(ing){
      this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
-      showToast(this.toastCtrl, response.message, 4000, 'success-toast')
+      showToast(this.toastCtrl, response.message, 4000, '')
      })
    }
   }

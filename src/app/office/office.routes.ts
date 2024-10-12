@@ -34,8 +34,28 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'supliers',
+        loadComponent: () => import('./supliers/supliers.page').then( m => m.SupliersPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'suplier/:id',
+        loadComponent: () => import('./supliers/suplier/suplier.page').then( m => m.SuplierPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'shedule',
+        loadComponent: () => import('./shedule/shedule.page').then( m => m.ShedulePage),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'nir/:id',
         loadComponent: () => import('./CRUD//nir/nir.page').then( m => m.NirPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pontaj',
+        loadComponent: () => import('./pontaj/pontaj.page').then( m => m.PontajPage),
         canActivate: [AuthGuard]
       },
       {
@@ -51,7 +71,23 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'product-ingredient',
-    loadComponent: () => import('./CRUD/product-ingredient/product-ingredient.page').then( m => m.ProductIngredientPage)
+    path: 'record-modal',
+    loadComponent: () => import('./supliers/suplier/record-modal/record-modal.page').then( m => m.RecordModalPage)
   },
+  {
+    path: 'add-nir',
+    loadComponent: () => import('./CRUD/nir/add-nir/add-nir.page').then( m => m.AddNirPage)
+  },
+  {
+    path: 'add-ing',
+    loadComponent: () => import('./CRUD/nir/add-ing/add-ing.page').then( m => m.AddIngPage)
+  },
+
+
+
+  // {
+  //   path: 'product-ingredient',
+  //   loadComponent: () => import('./CRUD/product-ingredient/product-ingredient.page').then( m => m.ProductIngredientPage)
+  // },
+
 ];

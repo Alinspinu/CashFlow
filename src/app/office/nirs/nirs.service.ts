@@ -1,6 +1,7 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import {environment} from '../../../environments/environment'
+import { Preferences } from '@capacitor/preferences';
 
 
 
@@ -11,36 +12,48 @@ import {environment} from '../../../environments/environment'
 
 export class NirsService{
 
+  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+
   constructor(
     private http: HttpClient
-  ){}
+  ){
+  }
+
+
 
 
   printNir(id: string){
-    return this.http.get(`${environment.BASE_URL}nir/print-nir?id=${id}`, { responseType: 'arraybuffer' })
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.get(`${this.url}nir/print-nir?id=${id}`, { responseType: 'arraybuffer', headers: headers})
   }
 
   getNirs(loc: string){
-    return this.http.post<{nir: any}[]>(`${environment.BASE_URL}nir/get-nirs`, {loc: loc})
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.post<{nir: any}[]>(`${this.url}nir/get-nirs`, {loc: loc}, {headers})
   }
 
   deleteNir(id: string) {
-    return this.http.delete<{message: string}>(`${environment.BASE_URL}nir/nir?id=${id}&loc=${environment.LOC}`)
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.delete<{message: string}>(`${this.url}nir/nir?id=${id}&loc=${environment.LOC}`, {headers})
   }
 
   exportNirs(startDate: any, endDate: any, loc: string){
-    return this.http.post(`${environment.BASE_URL}nir/export-xcel`, {startDate: startDate, endDate: endDate, loc: loc}, { responseType: 'blob',})
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.post(`${this.url}nir/export-xcel`, {startDate: startDate, endDate: endDate, loc: loc}, { responseType: 'blob', headers: headers})
   }
-
-  registerEntry(entry: any){
-    return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
-  }
-  payNir(update: boolean, type: string, id: string){
-    return this.http.post<{message: string}>(`${environment.BASE_URL}nir/pay`, {update: update, id: id, type: type})
-  }
-
 
   getNirsByDate(startDate: any, endDate: any, loc: string){
-    return this.http.post<{nir: any}[]>(`${environment.BASE_URL}nir/get-nirs-by-date`, {startDate, endDate, loc})
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.post<{nir: any}[]>(`${this.url}nir/get-nirs-by-date`, {startDate, endDate, loc}, {headers})
   }
 }

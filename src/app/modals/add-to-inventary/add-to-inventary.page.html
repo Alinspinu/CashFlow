@@ -1,0 +1,40 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <!-- <ion-title class="ion-text-center">{{ing.name}}</ion-title> -->
+    <div class="title-wrapper">
+      <div class="title">{{ing.name}}</div>
+    </div>
+      <ion-button (click)="cancel()" slot="end" color="medium" size="large">
+        Închide
+      </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="content-container">
+    <div class="container">
+      <span class="date">Stoc scriptic la data - {{date}}</span>
+      <span class="qty">{{dateQty}} {{ing.um}}</span>
+    </div>
+  <ion-grid>
+    <ion-row class="ion-padding">
+      <ion-col size-lg="4" offset-lg="4">
+        <div class="input">
+          <ion-input  mode="ios" type="number" [(ngModel)]="qty"  fill="outline" (keyup.enter)="saveInvIng()" #qtyInput></ion-input>
+        </div>
+        <span class="label">Completeaza valoarea faptică la {{date}}</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div class="container" *ngIf="qty || +qty === 0">
+    <span class="dif">Diferente: <span [ngClass]="{'green': +qty-dateQty > 0, 'red':  +qty-dateQty < 0}">{{+qty-dateQty > 0  && +qty !== 0 ? '+': ''}} {{roundInhtml(+qty-dateQty)}}</span> {{ing.um}}</span>
+  </div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-button size="large" expand="block" (click)="saveInvIng()" color="medium">
+    Update Inventary
+  </ion-button>
+</ion-footer>

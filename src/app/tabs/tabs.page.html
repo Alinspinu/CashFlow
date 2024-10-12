@@ -10,7 +10,7 @@
       <ion-label>Vanzare</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="office" href="/tabs/office" *ngIf="this.user && this.user.employee.access > 2">
+    <ion-tab-button tab="office" href="/tabs/office" *ngIf="this.user && this.user.employee.access > 1">
       <ion-icon aria-hidden="true" src="../../assets/icon/office-worker.svg"></ion-icon>
       <ion-label>Office</ion-label>
     </ion-tab-button>

@@ -2,76 +2,74 @@
 
 
  <ion-content class="auth-wrapper">
-   <div class="header">
-
-     <h4 class="subtitle"*ngIf="!resetPasswordMode">Login</h4>
-     <h4 class="subtitle"*ngIf="resetPasswordMode">Reset</h4>
-    </div>
-    <ion-grid>
-        <form [formGroup]="form">
-        <ion-row *ngIf="!resetPasswordMode">
-          <ion-col size-lg="6" offset-lg="3">
-              <ion-item lines="none">
-                <ion-input label="Email" labelPlacement="floating"  type="email" name="email" formControlName="email">
-                </ion-input>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-input
-                (keyup.enter)="onSubmit()"
-                label="Password"
-                labelPlacement="floating"
-                type="password"
-                formControlName="password"
-                name="password"
-                minlength="6" required
-                [type]="getInputType()"
-                ></ion-input>
-                <ion-icon [src]="iconSrc" slot="end" (click)="togglePassword()"></ion-icon>
-              </ion-item>
-          </ion-col>
-        </ion-row>
-          <ion-row *ngIf="!resetPasswordMode">
-            <ion-col size-lg="6" offset-lg="3">
-              <ion-button color="primary" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid || disableSubmit">
-                <ion-label style="color:white;">
-                  Login
-                </ion-label>
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </form>
-        <ion-row *ngIf="resetPasswordMode">
-          <ion-col class="ion-text-center" size-lg="6" offset-lg="3">
-            <ion-item lines="none">
-              <ion-input label="Email" labelPlacement="floating"  type="text" [(ngModel)]="emailValue" (input)="validateEmail()" (keyup.enter)="sendNewPassword()" >
-              </ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="resetPasswordMode">
-          <ion-col size-lg="6" offset-lg="3">
-            <ion-note class="note">Introdu adersa de mail folosită!</ion-note>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="resetPasswordMode">
-          <ion-col size-lg="6" offset-lg="3">
-            <ion-button color="danger" (click)="sendNewPassword()" class="ion-padding" size="medium" expand="full" [disabled]="!validEmail">
-              <ion-label>
-                Resetează
-              </ion-label>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="resetPassword && !resetPasswordMode">
-          <ion-col size-lg="6" offset-lg="3">
-            <ion-button color="danger" (click)="onResetPassword()" class="ion-padding" size="small" expand="full">
-              <ion-label>
-                Resetează parola!
-              </ion-label>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-      </ion-content>
+  <div class="header">
+    <h4 class="subtitle"*ngIf="!resetPasswordMode">Login</h4>
+    <h4 class="subtitle"*ngIf="resetPasswordMode">Schimbă parola</h4>
+   </div>
+   <app-spinner *ngIf="isLoading" class="spinner"></app-spinner>
+   <ion-grid *ngIf="!isLoading">
+       <form [formGroup]="form">
+       <ion-row *ngIf="!resetPasswordMode">
+         <ion-col size-lg="6" offset-lg="3">
+             <ion-item lines="none">
+               <ion-input label="Email" labelPlacement="floating"  type="email" name="email" formControlName="email">
+               </ion-input>
+             </ion-item>
+             <ion-item lines="none">
+               <ion-input
+               label="Password"
+               labelPlacement="floating"
+               type="password"
+               formControlName="password"
+               name="password"
+               minlength="6" required
+               [type]="getInputType()"
+               (keyup.enter)="onSubmit()"
+               ></ion-input>
+               <ion-icon [src]="iconSrc" slot="end" (click)="togglePassword()"></ion-icon>
+             </ion-item>
+         </ion-col>
+       </ion-row>
+         <ion-row *ngIf="!resetPasswordMode">
+           <ion-col size-lg="6" offset-lg="3">
+             <ion-button color="medium" (click)="onSubmit()" class="ion-padding submit" size="large" expand="full" [disabled]="!form.valid || disableLogIn">
+                 Login
+             </ion-button>
+           </ion-col>
+         </ion-row>
+       </form>
+       <ion-row *ngIf="resetPasswordMode">
+         <ion-col size-lg="6" offset-lg="3" class="ion-text-center">
+           <ion-item lines="none">
+             <ion-input label="Email" labelPlacement="floating"  type="text" [(ngModel)]="emailValue" (input)="validateEmail()" >
+             </ion-input>
+           </ion-item>
+         </ion-col>
+       </ion-row>
+       <ion-row *ngIf="resetPasswordMode">
+         <ion-col size-lg="6" offset-lg="3">
+           <ion-note class="note">Introdu adersa de e-mail folosită!</ion-note>
+         </ion-col>
+       </ion-row>
+       <ion-row *ngIf="resetPasswordMode">
+         <ion-col size-lg="6" offset-lg="3">
+           <ion-button color="medium" (click)="sendNewPassword()" class="ion-padding" size="medium" expand="full" [disabled]="!validEmail">
+             <ion-label>
+               Resetează
+             </ion-label>
+           </ion-button>
+         </ion-col>
+       </ion-row>
+       <ion-row *ngIf="resetPassword && !resetPasswordMode">
+         <ion-col size-lg="6" offset-lg="3">
+           <ion-button color="light" (click)="onResetPassword()" class="ion-padding" size="small" expand="full">
+             <ion-label>
+               Resetează parola!
+             </ion-label>
+           </ion-button>
+         </ion-col>
+       </ion-row>
+     </ion-grid>
+     </ion-content>
 
 

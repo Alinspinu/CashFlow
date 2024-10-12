@@ -1,6 +1,8 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="sum ion-text-center">{{title}}</ion-title>
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="title-wrapper">
+      <div class="title">{{title}}</div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -19,14 +21,14 @@
 </ion-grid>
 </ion-content>
 
-<ion-footer>
+<ion-footer class="ion-no-border">
   <ion-grid>
     <ion-row>
       <ion-col>
-      <ion-button size="large" expand="block" color="danger" (click)="close()">RENUNȚĂ</ion-button>
+      <ion-button size="large" expand="block" color="light" (click)="close()">RENUNȚĂ</ion-button>
     </ion-col>
       <ion-col>
-        <ion-button size="large" expand="block" color="primary"(click)="addCash()">{{button}}</ion-button>
+        <ion-button size="large" expand="block" color="medium"(click)="addCash()">{{button}}</ion-button>
         </ion-col>
     </ion-row>
   </ion-grid>

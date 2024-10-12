@@ -36,7 +36,6 @@ export class CashControlPage implements OnInit, OnDestroy {
   userVoucher: number = 0;
   userOnline: number = 0;
   userTotal: number = 0;
-  userUnreg: number = 0
 
   cashIn: number = 0;
   cashOut: number = 0;
@@ -45,7 +44,12 @@ export class CashControlPage implements OnInit, OnDestroy {
   message: boolean  = false
 
   catSubs!: Subscription
-  show: boolean = false
+
+  disableButtons: boolean = false
+
+  data: Bill[] = []
+  users: {name: string, id: string, show: boolean}[] = []
+
 
 
   constructor(
@@ -69,7 +73,21 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.getCashInandOut()
     this.getUser()
     this.getData()
-    console.log("some")
+  }
+
+  showOrders(user: any){
+    if(user.id === 'total'){
+      this.getAllOrders()
+    } else{
+      this.getOrders(user.id)
+      user.show = true
+      this.users.forEach(obj => {
+        if(obj.id !== user.id){
+          obj.show = false
+        }
+      })
+    }
+
   }
 
 
@@ -118,40 +136,60 @@ export class CashControlPage implements OnInit, OnDestroy {
        }
   }
 
-  getOrders(){
-    this.cashSrv.getUserOrders(this.user._id).subscribe(response => {
+  getOrders(id: string){
+    this.cashSrv.getUserOrders(id).subscribe(response => {
       if(response) {
-        this.orders = response
-        this.isLoading = false
+        this.data = response
+        this.orders = [...this.data]
         this.calcCashIn()
+        this.isLoading = false
       }
     })
   }
 
-  showHideUnreg(){
-    this.show = !this.show
-    if(this.show){
-      this.userTotal = round(this.userCash + this.userCard + this.userUnreg)
-    } else {
-      this.userTotal = round(this.userCash + this.userCard)
 
-    }
+  getAllOrders(){
+    this.cashSrv.getAllorders().subscribe(response => {
+      if(response) {
+        this.data = response
+        this.orders = [...this.data]
+        this.calcCashIn()
+        this.getUsers()
+        this.isLoading = false
+      }
+    })
   }
+
+
+  getUsers(){
+    const uniqUsers = new Set()
+    const users = this.data
+      .map(doc => ( doc.employee ? {id: doc.employee.user, name: doc.employee.fullName, show: false}: {id: '', name: '', show: false}))
+      .filter(user => {
+        const userString = JSON.stringify(user)
+        if(!uniqUsers.has(userString)){
+          uniqUsers.add(userString)
+          return true
+        }
+        return false
+      })
+      this.users = users
+      this.users.unshift({id: 'total', name: 'total', show: true})
+  }
+
+
+
 
   calcCashIn(){
     this.userCash = 0
     this.userCard = 0
-    this.userUnreg = 0
     if(this.orders){
       this.orders.forEach((order: Bill) => {
-        if(order.payment.cash && !order.dont){
+        if(order.payment.cash){
           this.userCash = round(this.userCash + order.payment.cash)
         }
         if(order.payment.card){
           this.userCard = round(this.userCard + order.payment.card)
-        }
-        if(order.payment.cash && order.dont){
-          this.userUnreg = round(this.userUnreg + order.payment.cash)
         }
       })
       this.calcTotal()
@@ -163,18 +201,14 @@ export class CashControlPage implements OnInit, OnDestroy {
   }
 
 
- getUser(){
-  this.userSub = this.authSrv.user$.subscribe(response => {
-    if(response) {
-      response.subscribe(user => {
-        if(user) {
-          this.user = user
-          this.getOrders()
-        }
-      })
-    }
-  })
- }
+  getUser(){
+    this.userSub = this.authSrv.user$.subscribe(response => {
+      if(response) {
+        this.user = response
+        this.getAllOrders()
+      }
+    })
+   }
 
  today(){
   return formatedDateToShow(Date.now()).split('ora')[0]
@@ -199,13 +233,14 @@ export class CashControlPage implements OnInit, OnDestroy {
 
 reports(value: string){
   this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
-    console.log(response)
     if(response){
       Preferences.remove({key: 'cashInAndOut'})
     }
   })
+  this.disableButtons = true
   this.cashSrv.raport(value).subscribe(response => {
     if(response){
+      this.disableButtons = false
       if(value === 'z'){
         this.cashIn = 0
         this.cashOut = 0
@@ -216,40 +251,17 @@ reports(value: string){
           amount: this.userCash,
           locatie: this.user.locatie
         }
-         this.cashSrv.registerEntry(entryR).subscribe(response => {
+        this.cashSrv.registerEntry(entryR).subscribe()
+        this.isLoading = true
+        this.message = true
+        this.cashSrv.saveInventary().subscribe(response => {
           if(response){
-            const entry = {
-              tip: 'income',
-              date: new Date(Date.now()),
-              description: 'Încasare Unreg',
-              amount: this.userUnreg,
-              locatie: '65c221374c46336d1e6ac423',
-            }
-            this.cashSrv.registerEntry(entry).subscribe(res =>{
-              if(res){
-                const entryR = {
-                  tip: 'income',
-                  date: new Date(Date.now()),
-                  description: 'Încasare Raport Z',
-                  amount: this.userCash,
-                  locatie: '65c221374c46336d1e6ac423',
-                }
-                this.cashSrv.registerEntry(entryR).subscribe()
-              }
-            })
+            this.isLoading = false
+            this.message = false
+            showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000, 'success-toast')
           }
-
-         })
+        })
       }
-      this.isLoading = true
-      this.message = true
-      this.cashSrv.saveInventary().subscribe(response => {
-        if(response){
-          this.isLoading = false
-          this.message = false
-          showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000, 'success-toast')
-        }
-      })
       showToast(this.toastCtrl, response.message, 3000, 'success-toast')
     }
   }, error => {
@@ -283,6 +295,7 @@ setZeroDiscount(cats: Category[]){
 async inAndOut(value: string){
  const response = await this.actionSheet.openPayment(CashInOutPage, value)
  if(response){
+  this.disableButtons = true
    const data = {
      mode: value,
      sum: response.value
@@ -295,6 +308,7 @@ async inAndOut(value: string){
 
    this.cashSrv.cashInAndOut(data).subscribe(response => {
     if(response){
+      this.disableButtons = false
       const sums = {in: this.cashIn, out: this.cashOut}
       Preferences.set({key: 'cashInAndOut', value: JSON.stringify(sums)})
       showToast(this.toastCtrl, response.message, 3000, 'success-toast')

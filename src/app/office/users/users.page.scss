@@ -1,63 +1,96 @@
+
+ion-content, ion-toolbar{
+  --background: #fbf0e7 !important;
+}
+
+
 .input{
   height: 45px;
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin: 0.1rem 0 0.1rem 0.2rem;
+
+  background-color: white;
+  margin: 0.5rem 0 0.5rem 0;
   font-family: NoirProReg !important;
 }
 
 ion-label{
   font-family: NoirProReg !important;
 }
-ion-select{
-  font-family: NoirProReg !important;
-}
-ion-searchbar{
-  font-family: NoirProReg !important;
+
+
+
+.search-wrapper{
+  display: flex;
+  align-items: center;
+  ion-searchbar{
+    flex: 70%;
+    font-family: NoirProReg !important;
+    padding: 0 24px;
+  }
+  ion-select{
+    flex: 30%;
+    padding: 0 24px;
+    margin-right: 24px;
+    font-family: NoirProReg !important;
+  }
+
+
 }
 
-.header{
+.font{
+  font-family: NoirProSemi !important;
   font-size: 17px;
-  font-weight: 500;
+  margin-bottom: 12px;
 }
 
-ion-item[slot="fixed"]{
-  top: 9%;
-  width: 100%;
-  opacity: 60%;
-  font-family: NoirProReg !important;
+
+
+.spinner-container{
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .content-container{
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  text-align: center;
+  align-items: center;
+  padding-left: 18px;
   .index{
-    width: 30px !important;
+    flex: 2%;
     text-align: start !important;
-    margin: 10px 0 10px 0;
   }
   .index-h{
-    width: 40px !important;
+    flex: 2%;
     text-align: start !important;
-    margin: 10px 0 10px 5px;
   }
   .name{
-    flex: 10%;
+    flex: 22%;
     text-align: start !important;
   }
   .email{
-    flex:10%;
+    text-align: start !important;
+    flex: 25%;
   }
   .tel{
-    flex: 7%;
+    text-align: start !important;
+    flex: 18%;
   }
   .cashBack{
-    flex: 5%;
+    text-align: start !important;
+    flex: 12%;
   }
   .orders{
-    flex: 5%;
+    text-align: start !important;
+    flex: 11%;
+  }
+  .status{
+    text-align: start !important;
+    flex: 10%
   }
 }
 
@@ -66,5 +99,5 @@ ion-item[slot="fixed"]{
 }
 
 .user:hover{
-  --background: var(--ion-color-medium);
+  --background: var(--ion-color-medium-shade);
 }

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
+import { IonInput } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-addingredient',
@@ -13,7 +14,7 @@ import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 export class AddIngredientPage implements OnInit {
 
   ingredientForm!: FormGroup
-    title: string = 'Adaugă Ingredient'
+  title: string = 'Adaugă Ingredient'
   ing!: any
 
   constructor(
@@ -57,24 +58,24 @@ export class AddIngredientPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      sellPrice: new FormControl(null, {
+      invQty: new FormControl(null, {
         updateOn: 'change',
-        validators: [Validators.required]
       }),
     });
     if(this.ing){
+
       this.ingredientForm.get('name')?.setValue(this.ing.name);
       this.ingredientForm.get('um')?.setValue(this.ing.um);
       this.ingredientForm.get('tva')?.setValue(this.ing.tva.toString());
       this.ingredientForm.get('price')?.setValue(this.ing.price);
       this.ingredientForm.get('qty')?.setValue(this.ing.qty);
-      this.ingredientForm.get('sellPrice')?.setValue(this.ing.sellPrice);
       if(this.ing.gestiune){
         this.ingredientForm.get('gestiune')?.setValue(this.ing.gestiune)
       }
       if(this.ing.dep){
         this.ingredientForm.get('dep')?.setValue(this.ing.dep)
       }
+      // this.ingredientForm.get('invQty')?.setValue(this.ing.inventary[19].qty - this.ing.qty);
     }
 }
 
@@ -96,7 +97,7 @@ saveIng(){
       dep: this.ingredientForm.value.dep ? this.ingredientForm.value.dep : this.ing.dep,
       qty: this.ingredientForm.value.qty,
       price: this.ingredientForm.value.price,
-      sellPrice: this.ingredientForm.value.sellPrice,
+      tvaPrice: this.ingredientForm.value.price / ((this.ingredientForm.value.tva / 100) +1)
     }
     this.modalCtr.dismiss(ingTosave)
   }

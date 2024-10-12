@@ -1,16 +1,11 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Adaugă Categorie</ion-title>
-    <ion-buttons slot="start">
-      <ion-button (click)="cancel()">
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-button slot="start" color="medium" (click)="cancel()" size="large" class="button">
         Închide
       </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="saveCategory()" color="primary" [disabled]="!catForm.valid">
-        Salvează
-      </ion-button>
-    </ion-buttons>
+    <div class="title-wrapper">
+      <div class="title">{{editMde ? 'Editează Categoria' : 'Araugă Categoria'}}</div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -19,18 +14,19 @@
     <ion-row class="ion-padding">
       <ion-col size-lg="6" offset-lg="3">
         <form [formGroup]="catForm">
-          <ion-item lines="none" class="input">
+          <div class="input">
             <ion-input mode="ios" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
-          </ion-item>
-          <ion-item lines="none" class="input">
+          </div>
+          <div class="input">
             <ion-input  mode="ios" type="number" label="Poziție" labelPlacement="floating" fill="outline" formControlName="order"></ion-input>
-          </ion-item>
-        <ion-item lines="none" class="input" *ngIf="!newMainCat">
+            <ion-input  type="text" style="display: none;" formControlName="catId"></ion-input>
+          </div>
+        <div class="input wrapper" *ngIf="!newMainCat">
           <ion-select label="Categorie Parinte" formControlName="mainCat">
             <ion-select-option *ngFor="let cat of mainCats" [value]="cat.name">{{cat.name}}</ion-select-option>
           </ion-select>
           <img src="assets/icon/add-circle.svg" id="add-cat" (click)="addMainCat()">
-        </ion-item>
+        </div>
       <app-image-picker (imagePick)="onImagePicked($event)"></app-image-picker>
     </form>
       </ion-col>
@@ -38,8 +34,8 @@
   </ion-grid>
 </ion-content>
 
-<ion-footer>
-  <ion-button size="medium" expand="block" (click)="saveCategory()" [disabled]="!catForm.valid">
-    Salvează Categoria
+<ion-footer class="ion-no-border">
+  <ion-button size="large" expand="block" (click)="saveCategory()" [disabled]="!catForm.valid" class="button" color="medium">
+   {{editMde ? 'Editează Categoria' : 'Salvează Categoria'}}
   </ion-button>
 </ion-footer>

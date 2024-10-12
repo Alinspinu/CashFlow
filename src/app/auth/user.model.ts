@@ -1,3 +1,7 @@
+import { Category } from "../models/category.model"
+import { Bill } from "../models/table.model"
+
+
 export default class User {
   constructor(
     public _id: string,
@@ -10,7 +14,51 @@ export default class User {
     public email: string,
     public locatie: string,
     public tokenExpirationDate: string,
-    public employee: {fullName: string, position: string, user: string, access: number},
+    public cardIndex: number,
+    public cardName: string,
+    public survey: string,
+    public orders: Bill[],
+    public discount: {
+      general: number,
+      category: {
+        precent: number,
+        name: string,
+        cat: Category
+      }[]
+    },
+    public employee: {
+      active: boolean,
+      fullName: string,
+      cnp: number,
+      ciSerial: string,
+      ciNumber: number,
+      address: string,
+      position: string,
+      user: string,
+      access: number,
+      salary: {
+        inHeand: number,
+        onPaper: {
+          salary: number,
+          tax: number
+        },
+        fix: boolean
+      }
+      payments: {
+        date: string,
+        amount: number,
+        tip: string,
+        workMonth: number
+      }[],
+      workLog: {
+        day: Date,
+        checkIn: Date,
+        checkOut: Date,
+        hours: number,
+        earnd: number,
+        position: string,
+      }[]
+    },
   ){}
   };
 

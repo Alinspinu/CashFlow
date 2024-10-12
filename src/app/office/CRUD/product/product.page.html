@@ -1,10 +1,7 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="tabs/office/products">
-
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+      <ion-back-button defaultHref="tabs/office/products" slot="start">
       </ion-back-button>
-    </ion-buttons>
     <ion-grid>
       <ion-row>
         <ion-col size="3">
@@ -64,23 +61,16 @@
             </ion-select>
         </ion-item>
         <ion-item lines="none" class="input">
-            <ion-select label="Imprimantă"  formControlName="printer">
-              <ion-select-option value="kitchen">Bucătarie</ion-select-option>
-              <ion-select-option value="barista">Barista</ion-select-option>
-              <ion-select-option value="main">Principală</ion-select-option>
+            <ion-select label="Aplică taxă ambalaj"  formControlName="sgrTax">
+              <ion-select-option [value]="true">Da</ion-select-option>
+              <ion-select-option [value]="false">Nu</ion-select-option>
             </ion-select>
         </ion-item>
         <ion-item lines="none" class="input">
-          <ion-select label="Aplică taxă ambalaj"  formControlName="sgrTax">
-            <ion-select-option [value]="true">Da</ion-select-option>
-            <ion-select-option [value]="false">Nu</ion-select-option>
-          </ion-select>
-          </ion-item>
-        <ion-item lines="none" class="input">
-          <ion-textarea  mode="ios" type="text" label="Descriere" labelPlacement="floating" fill="outline" formControlName="description" class="big"></ion-textarea>
+          <ion-textarea  mode="ios" type="text" label="Descriere" labelPlacement="floating" fill="outline" formControlName="description"></ion-textarea>
         </ion-item>
         <ion-item lines="none" class="input">
-          <ion-textarea  mode="ios" type="text" label="Descriere detaliată" labelPlacement="floating" fill="outline" formControlName="longDescription" class="big"></ion-textarea>
+          <ion-textarea  mode="ios" type="text" label="Descriere detaliată" labelPlacement="floating" fill="outline" formControlName="longDescription"></ion-textarea>
         </ion-item>
         <div class="input">
         <app-image-picker (imagePick)="onImagePicked($event)"></app-image-picker>
@@ -100,7 +90,7 @@
       </ion-col>
       <ion-col size="3">
 
-        <div class = "sub-product-container">
+        <div class="sub-product-container">
             <ion-button expand="block" color="medium" (click)="addSubProduct()">
               Adaugă Sub Produs
               <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 176v160M336 256H176"/></svg>
@@ -133,6 +123,6 @@
   </ion-grid>
 </ion-content>
 
-<ion-footer>
-  <ion-button size="large" expand="block"(click)="saveProduct()" [disabled]="!form.valid">{{editMode ? "Editează" : "Salvează"}} Produsl</ion-button>
+<ion-footer class="ion-no-border">
+  <ion-button size="large" expand="block"(click)="saveProduct()" color="medium" [disabled]="!form.valid">{{editMode ? "Editează" : "Salvează"}} Produsl</ion-button>
 </ion-footer>

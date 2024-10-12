@@ -17,6 +17,8 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { ProductsService } from '../../products/products.service';
+import { SubProduct } from '../../../models/category.model';
+import { ing } from '../../../../../../../CashFlowFresh/CashFlow/src/app/models/inventary.model';
 
 
 @Component({
@@ -54,26 +56,26 @@ export class ProductPage implements OnInit {
     @Inject(ContentService) private contentSrv: ContentService,
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
     @Inject(ProductService) private prodSrv: ProductService,
-    @Inject(ProductsService) private productsSrv: ProductsService,
+    @Inject(ProductsService) private prodsSrv: ProductsService,
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
     private router: Router,
   ) { }
 
   ngOnInit() {
-    this.getUser()
-    this.getProductToEdit()
-    this.setupForm()
-    this.getCategories()
-    this.setTvaValidators()
+    // setTimeout(() => {
+      this.getUser()
+      this.getProductToEdit()
+      this.setupForm()
+      this.getCategories()
+      this.setTvaValidators()
+    // }, 300)
   }
 
   getUser(){
     getUserFromLocalStorage().then(user => {
       if(user){
         this.user = user
-      } else {
-        this.router.navigateByUrl('/auth')
       }
     })
   }
@@ -85,12 +87,15 @@ export class ProductPage implements OnInit {
         this.prodSrv.getProduct(id).subscribe(response => {
           if(response){
             response.subProducts.length ? this.hideIng = true : this.hideIng = false
+            let tva: any = response.tva
+            tva = tva || tva === 0 ? tva.toString() : ''
             this.product = response;
             this.editMode = true
             this.topToEdit = this.product.toppings;
             this.ingsToEdit = this.product.ings;
             this.subProducts = this.product.subProducts;
             this.toppings = this.product.toppings;
+            this.form.get('tva')?.setValue(tva)
             this.form.get('name')?.setValue(this.product.name)
             this.form.get('price')?.setValue(this.product.price)
             this.form.get('cat')?.setValue(this.product.category._id)
@@ -98,11 +103,9 @@ export class ProductPage implements OnInit {
             this.form.get('description')?.setValue(this.product.description)
             this.form.get('longDescription')?.setValue(this.product.longDescription)
             this.form.get('qty')?.setValue(this.product.qty)
+            this.form.get('sgrTax')?.setValue(this.product.sgrTax)
             this.form.get('order')?.setValue(this.product.order)
             this.form.get('dep')?.setValue(this.product.dep)
-            this.form.get('sgrTax')?.setValue(this.product.sgrTax)
-            this.form.get('tva')?.setValue(this.product.tva.toString())
-            this.form.get('printer')?.setValue(this.product.printer)
           }
         })
        }
@@ -115,7 +118,7 @@ export class ProductPage implements OnInit {
   }
 
   async addCat(){
-    const response = await this.actSheet.openModal(CategoryPage, null, false)
+    const response = await this.actSheet.openPayment(CategoryPage, null)
     if(response){
       this.prodSrv.saveCategory(response, this.user.locatie).subscribe(response => {
         console.log(response)
@@ -176,6 +179,7 @@ export class ProductPage implements OnInit {
   async onSubEdit(index: number){
     const subToEdit = this.subProducts[index]
     const editedSub = await this.actSheet.openModal(SubProductPage, subToEdit, false)
+    console.log(editedSub)
     if(editedSub){
       this.subProducts[index] = editedSub
     }
@@ -199,10 +203,6 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      printer: new FormControl(null, {
-        updateOn: 'change',
-        validators: [Validators.required]
-      }),
       description: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
@@ -215,11 +215,11 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      order: new FormControl(null, {
+        sgrTax: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      sgrTax: new FormControl(null, {
+      order: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
@@ -242,7 +242,7 @@ export class ProductPage implements OnInit {
       const productData = new FormData()
       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
-      const sub = JSON.stringify(this.subProducts);
+      const sub = JSON.stringify(this.mapIngs());
       const tempSubs = JSON.stringify(this.tempSubArray);
       productData.append('name', this.form.value.name);
       productData.append('price', this.form.value.price);
@@ -252,11 +252,10 @@ export class ProductPage implements OnInit {
       productData.append('longDescription', this.form.value.longDescription);
       productData.append('qty', this.form.value.qty);
       productData.append('order', this.form.value.order);
+      productData.append('sgrTax', this.form.value.sgrTax);
       productData.append('dep', this.form.value.dep);
       productData.append('tva', this.form.value.tva);
-      productData.append('sgrTax', this.form.value.sgrTax);
       productData.append('image', this.form.value.image);
-      productData.append('printer', this.form.value.printer);
       if(toppings !== 'skip'){
         productData.append('toppings', toppings);
       }
@@ -265,12 +264,12 @@ export class ProductPage implements OnInit {
       }
       productData.append('sub', sub);
       if(this.editMode){
-        this.productsSrv.editProduct(productData, this.product._id).subscribe(response => {
-          showToast(this.toastCtrl, response.message, 3000, 'success-toast');
+        this.prodsSrv.editProduct(productData, this.product._id).subscribe(response => {
+          showToast(this.toastCtrl, response.message, 3000, '');
           this.router.navigateByUrl('/tabs/office/products')
         })
       } else {
-        this.productsSrv.saveProduct(productData, this.user.locatie).subscribe(response => {
+        this.prodsSrv.saveProduct(productData, this.user.locatie).subscribe(response => {
           const product = response.product
           if(product){
             this.tempSubArray.map((obj:any) => {
@@ -291,6 +290,17 @@ export class ProductPage implements OnInit {
     }
   }
 
+  mapIngs(){
+    const subs = [ ...this.subProducts]
+    const modifySubs = subs.map(sub => {
+      const modifyIngs = sub.ings.map((ing: any) => {
+        return {qty: ing.qty, ing: ing.ing._id}
+      })
+      sub.ings = modifyIngs
+      return sub
+    })
+    return modifySubs
+  }
 
 
   onImagePicked(imageData: string | File){

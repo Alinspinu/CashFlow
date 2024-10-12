@@ -36,6 +36,65 @@ export function formatedDateToShow(date: any){
   }
 
 
+  export function  convertToDateISOString(dateString: string | undefined) {
+    // Define month mappings
+    const monthMap: any = {
+      'Ianuarie': '01',
+      'Februarie': '02',
+      'Martie': '03',
+      'Aprilie': '04',
+      'Mai': '05',
+      'Iunie': '06',
+      'Iulie': '07',
+      'August': '08',
+      'Septembrie': '09',
+      'Octombrie': '10',
+      'Noiembrie': '11',
+      'Decembrie': '12'
+    };
+    if(dateString){
+      const trimmedDateString = dateString.trim();
+      const parts = trimmedDateString.split('-');
+
+      // Extract day, month, and year
+      const day = parts[0].padStart(2, '0');
+      const month = monthMap[parts[1]];
+      const year = parts[2];
+      // Return the date string in ISO 8601 format
+      return `${year}-${month}-${day}T00:00:00.000Z`;
+    } else {
+      return ''
+    }
+  }
+
+
+  export function formatPeriod(start: number, end: number){
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    const options: Intl.DateTimeFormatOptions = {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Europe/Bucharest" // Set the time zone to match the Romanian locale
+    };
+
+    const startt = startDate.toLocaleString("ro-RO", options);
+    const endd = endDate.toLocaleString("ro-RO", options);
+    return `${startt} -- ${endd}`
+  }
+
+  export function roundOne(num: number): number {
+    return Math.round((num + Number.EPSILON) * 1) / 1;
+  }
+
+  export function getDaysInMonth(date: string): number {
+    const newDate = new Date(date)
+    const year = newDate.getFullYear()
+    const month = newDate.getMonth()
+    return new Date(year, month -1, 0).getDate();
+  }
+
+
   export function getPaymentMethod(paymentObject: any){
       let paymentMethod: {method: string, value: number}[] = []
       Object.keys(paymentObject).forEach(key => {

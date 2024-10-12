@@ -17,8 +17,8 @@ export class PaymentService{
     private auth: AuthService
   ){}
 
-  checkPos(sum: number){
-    const headers = this.auth.apiAuth()
-    return this.http.post<{message: string, payment: boolean}>(`${environment.PRINT_URL}print`, {pos: sum}, {headers})
-  }
+  // checkPos(sum: number){
+  //   const headers = this.auth.apiAuth()
+  //   return this.http.post<{message: string, payment: boolean}>(`${environment.BASE_URL}pay/print-bill`, {pos: sum}, {headers})
+  // }
 }

@@ -1,5 +1,5 @@
 import { InvIngredient } from "./nir.model";
-import { Topping } from "./table.model";
+import { Ing, Topping } from "./table.model";
 
 export class Category{
   constructor(
@@ -31,6 +31,8 @@ export class Product {
   public tva: string,
   public mainCat: string,
   public printer: string,
+  public sgrTax: boolean,
+  public printOut: boolean,
   public longDescription: string,
   public allergens: {name: string, _id: string}[],
   public additives: {name: string, _id: string}[],
@@ -41,9 +43,8 @@ export class Product {
     salts: number,
     protein: number,
   },
-  public sgrTax: boolean,
   public toppings: Topping[],
-  public ings: InvIngredient[],
+  public ings: {qty: number, ing:InvIngredient}[],
   public ingredients:{quantity: number, ingredient: Ingredient}[],
   public paring: Product[],
   public showSub: boolean,
@@ -60,7 +61,8 @@ export class SubProduct{
     public quantity: number,
     public product: Product,
     public available: boolean,
-    public ings: InvIngredient[],
+    public printOut: boolean,
+    public ings: {qty: number, ing:InvIngredient}[],
   ){};
 };
 

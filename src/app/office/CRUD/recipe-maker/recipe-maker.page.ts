@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { IonicModule, NavParams, ToastController } from '@ionic/angular';
@@ -13,7 +13,6 @@ import User from 'src/app/auth/user.model';
 import { Preferences } from '@capacitor/preferences';
 import { InvIngredient } from 'src/app/models/nir.model';
 import { IngredientService } from '../../ingredient/ingredient.service';
-import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -24,7 +23,7 @@ import { Subscription } from 'rxjs';
   providers: [NavParams],
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
+export class RecipeMakerPage implements OnInit, OnChanges {
 
   @Input() top: any
   @Input() ings: any
@@ -52,17 +51,14 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
   productIngUm: string = '';
   productIngQty: string = '';
   productIngGest: string = 'magazie'
-  color: string = ""
-
-  isLoading: boolean = true
+  color: string = "transparent"
 
   recipeTotal: number = 0;
 
+  user!: User
   dbIngs!: any
 
-  ingSub!: Subscription
-
-  user!: User
+  isLoading: boolean = true
 
 
   constructor(
@@ -91,12 +87,6 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
     setTimeout(()=>{
       this.setDataToEdit()
     }, 1100)
-  }
-
-  ngOnDestroy(): void {
-    if(this.ingSub){
-      this.ingSub.unsubscribe()
-    }
   }
 
   getUser(){
@@ -137,7 +127,7 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
       this.recipeTotal = +prodIng.price
       this.recipeService.saveIng(prodIng, this.user.locatie).subscribe(response => {
         if(response){
-          showToast(this.toastCtrl, response.message, 3000, 'success-toast')
+          showToast(this.toastCtrl, response.message, 3000, '')
           this.displayIngs = [];
           this.ingredientsToSend = [];
           this.productIngredientMode = false,
@@ -163,7 +153,7 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
   }
 
   setDataToEdit(){
-    this.ingPage ? this.color = "tertiary": this.color = ''
+    // this.ingPage ? this.color = "tertiary": this.color = 'transparent'
     if(this.top && this.top.length){
       this.toppings = this.top
       this.toppSend.emit(this.toppings)
@@ -173,7 +163,7 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
       this.displayIngs.forEach(el => {
         const ing = {
           qty: el.qty,
-          ing: el.ing._id
+          ing: el.ing
         }
         this.ingredientsToSend.push(ing)
         this.ingsSend.emit(this.ingredientsToSend)
@@ -182,14 +172,13 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-
   setIng(){
     this.selectIngredient(this.ingredients[0])
   }
 
 
   getIngredients(){
-   this.ingSub =  this.ingSrv.ingredientsSend$.subscribe(response => {
+    this.ingSrv.ingredientsSend$.subscribe(response => {
       if(response){
         this.dbIngs = response
         this.isLoading = false
@@ -198,7 +187,7 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
   }
 
   searchIngredient(ev: any){
-    const searchQuery = ev.detail.value
+    const searchQuery = ev.detail.value.toLowerCase()
     if(!this.ingPage){
     this.ingredients = this.dbIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(searchQuery))
     if(searchQuery === ''){
@@ -229,7 +218,7 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
         this.ingredients = [];
         this.ingredientSearch = '';
       } else if(data.mode === 'ingredient'){
-        const ingToSend = {qty: +data.qty, ing: ing._id}
+        const ingToSend = {qty: +data.qty, ing: ing}
         const ingToShow = {qty: +data.qty, ing: ing}
         this.displayIngs.push(ingToShow);
         this.ingredientsToSend.push(ingToSend)
@@ -242,10 +231,11 @@ export class RecipeMakerPage implements OnInit, OnChanges, OnDestroy {
   }
 
   async addIng(){
-   const ing = await this.actionSrv.openModal(AddIngredientPage, [], false)
+   const ing = await this.actionSrv.openPayment(AddIngredientPage, [])
    if(ing){
      this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
-      showToast(this.toastCtrl, response.message, 4000, 'success-toast')
+      this.ingSrv.addIngredinet(response.ing)
+      showToast(this.toastCtrl, response.message, 4000, '')
      })
    }
   }

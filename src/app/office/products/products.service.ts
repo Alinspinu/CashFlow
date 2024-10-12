@@ -1,5 +1,6 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from "@angular/core";
+import { Preferences } from "@capacitor/preferences";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 import { Product, SubProduct } from "src/app/models/category.model";
 import { emptyProduct } from "src/app/models/empty-models";
@@ -21,29 +22,43 @@ export class ProductsService{
   public productsSend$!: Observable<Product[]>;
   products: Product[] = [emptyProduct()];
 
+  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+
   constructor(
     private http: HttpClient,
     @Inject(ProductService) private productService: ProductService,
     private dbService: IndexDbService,
   ){
+    this.getUrl()
     this.productsState = new BehaviorSubject<Product[]>([emptyProduct()]);
     this.productsSend$ =  this.productsState.asObservable();
   }
 
+  async getUrl(){
+    Preferences.get({key: 'serverUrl'}).then( async (data)  => {
+      if(data.value) {
+        this.url = data.value
+      }
+    })
+  }
+
 
   getProducts(loc: string){
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
     this.dbService.getData('data', 2).subscribe((response: any) => {
       if(response){
         this.products = [...JSON.parse(response.products)]
-        this.productsState.next([...this.products])
+        this.productsState.next(this.products)
       }
     })
-    return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products`, {loc: loc})
+    return this.http.post<Product[]>(`${this.url}product/get-products`, {loc: loc}, {headers})
           .pipe(tap(response => {
             if(response){
               this.products = response
               const stringProducts = JSON.stringify(this.products)
-              this.dbService.addOrUpdateIngredient({id: 2, products: stringProducts })
+              this.dbService.addOrUpdateIngredient({id: 2, products: stringProducts }).subscribe()
               this.productsState.next([...this.products])
             }
           }))
@@ -53,12 +68,18 @@ export class ProductsService{
   }
 
   changeProductStatus(stat: string, id: string){
-    return this.http.post<Product | SubProduct>(`${environment.BASE_URL}product/change-status`, {stat: stat, id: id})
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.post<Product | SubProduct>(`${this.url}product/change-status`, {stat: stat, id: id}, {headers})
   }
 
 
   editProduct(product: any, id: string) {
-    return this.http.put<{message: string, product: any}>(`${environment.BASE_URL}product/product?id=${id}`, product)
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.put<{message: string, product: any}>(`${this.url}product/product?id=${id}`, product, {headers})
         .pipe(tap(response => {
           if(response && response.product){
             const newProduct = response.product
@@ -73,7 +94,10 @@ export class ProductsService{
   }
 
   saveProduct(product: any, loc: string){
-    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?loc=${loc}`, product)
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.post<{message: string, product: any}>(`${this.url}product/prod-add?loc=${loc}`, product, {headers})
     .pipe(tap(response => {
       if(response && response.product){
         const newProduct = response.product
@@ -85,7 +109,10 @@ export class ProductsService{
   }
 
   deleteProduct(id: string){
-    return this.http.delete<{message: string}>(`${environment.BASE_URL}product/product?id=${id}`)
+     const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+    return this.http.delete<{message: string}>(`${this.url}product/product?id=${id}`, {headers})
         .pipe(tap(response => {
           if(response){
             const productIndex = this.products.findIndex(product => product._id === id)
@@ -96,5 +123,6 @@ export class ProductsService{
           }
         }))
   }
+
 
 }

@@ -25,6 +25,10 @@ const routes: Routes = [
     path: 'register-locatie/:value',
     loadComponent: () => import('./office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
   },
+  {
+    path: 'start-url',
+    loadComponent: () => import('./modals/start-url/start-url.page').then( m => m.StartUrlPage)
+  },
 
 ];
 

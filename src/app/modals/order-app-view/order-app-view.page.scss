@@ -1,6 +1,8 @@
 .input{
   height: 100%;
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   margin: 0.4rem 0 0.4rem 0.2rem;
   // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
@@ -12,8 +14,18 @@ ion-button{
 }
 
 span{
-  font-family: NoirProReg !important;
+  font-family: NoirProSemi !important;
 }
+
+ion-content, ion-card, ion-list, ion-toolbar{
+  --background: #fbf0e7 !important;
+  background-color: #fbf0e7 !important;
+}
+
+ion-card{
+  box-shadow: none !important;
+}
+
 ion-card-header{
   font-family: NoirProReg !important;
 }
@@ -22,21 +34,22 @@ ion-card-header{
 .prod-info-wrapper{
   display: flex;
   flex-direction: column;
+  width: 100% !important;
   .prod-info {
     display: flex;
     flex-direction: row;
     align-content: space-between;
     width: 100% !important;
+    font-size: 24px;
     .name{
       flex: 60%;
-      width: 300px;
     }
     .qty{
       flex: 20%;
     }
     .price{
       flex: 20%;
-      margin-left: auto;
+      text-align: end;
     }
   }
 
@@ -56,4 +69,40 @@ ion-card-header{
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+}
+
+
+.buttons-container{
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 12px;
+  padding: 24px 18px 8px 18px;
+  background:  #fff;
+  font-family: NoirProSemi !important;
+  .bill-total-row{
+    .value{
+      text-align: end;
+      font-size: 28px;
+      color: black;
+    }
+
+    .label{
+      font-size: 34px;
+      color: black;
+    }
+  }
+
+  .bill-extra-row{
+    .label{
+      font-size: 20px;
+      color: black;
+    }
+    .value{
+      text-align: end;
+      font-size: 20px;
+      color: black;
+    }
+  }
 }

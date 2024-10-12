@@ -1,0 +1,56 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-row>
+      <ion-col>
+        <ion-searchbar mode="ios" [(ngModel)]="suplierSearch"  placeholder="Caută furnizor.."  (ionInput)="searchSuplier($event)" #searchbar>
+        </ion-searchbar>
+      </ion-col>
+    </ion-row>
+    <div class="suplier">
+      <div>
+        <span class="index font">Nr.</span>
+        <span class="name font">Denumire</span>
+        <span class="address font" style="font-size: 16px;">Adresă</span>
+        <span class="vat font">CIF</span>
+        <span class="account font">Cont bancar</span>
+        <span class="sold font">Sold</span>
+      </div>
+            <ion-buttons solt="end" style="margin-right: 10px;">
+              <ion-button>
+                <ion-icon  size="large" color="success"></ion-icon>
+              </ion-button>
+              <ion-button>
+                <ion-icon size="large" color="danger"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+        </div>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div *ngFor="let suplier of localSupliers; let i = index" class="suplier input">
+          <div (click)="openRecords(suplier._id)">
+            <span class="index">{{i+1}}.</span>
+            <span class="name">{{suplier.name}}</span>
+            <span class="address">{{suplier.address}}</span>
+            <span class="vat">{{suplier.vatNumber}}</span>
+            <span class="account">{{suplier.account}}</span>
+            <span class="sold">{{suplier.sold}} Lei</span>
+          </div>
+          <ion-buttons solt="end">
+            <ion-button (click)="editSuplier(suplier, i)">
+              <ion-icon  src="../../assets/icon/create-outline.svg"  size="large" color="medium"></ion-icon>
+            </ion-button>
+            <ion-button (click)="deleteSuplier(suplier._id, i)">
+              <ion-icon  src="../../assets/icon/trash-outline.svg" size="large" color="medium"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,145 @@
+
+
+
+ion-content{
+  --background: #fbf0e7 !important;
+  background-color: #fbf0e7 !important;
+}
+
+ion-label{
+  font-family: NoirProSemi !important;
+}
+
+
+.spinner-content{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fbf0e7 !important;
+}
+
+
+.grid-date{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  width: 100%;
+
+  ion-button{
+  padding: 16px;
+  width: 300px;
+  height: 110px;
+  --border-radius: 20px;
+  font-size: 25px;
+  font-family: NoirProReg;
+
+  }
+}
+
+
+.sum-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-top: 5%;
+  margin-bottom: 8px;
+  span{
+    color: var(--ion-color-primary);
+  }
+  .total{
+    font-family: NoirProSemi !important;
+    font-size: 30px;
+    align-self: center !important;
+  }
+  .label{
+    font-family: NoirProReg !important;
+    font-size: 30px;
+    align-self: center;
+    margin-bottom: 8px;
+  }
+  .incasat{
+    color: rgb(94, 80, 20);
+    align-self: center;
+    font-size: 28px;
+  }
+  .vat{
+    color: rgb(175, 141, 110);
+    align-self: center;
+    font-size: 26px;
+  }
+  .tot{
+    color: rgb(57, 49, 15);
+    // align-self: center !important;
+  }
+  .note{
+    font-family: NoirProReg !important;
+    font-size: 10px;
+    align-self: center;
+    margin-bottom: 8px;
+  }
+  .data{
+    font-family: NoirProReg !important;
+    font-size: 22px;
+    align-self: center;
+    margin-top: 8px;
+    margin-bottom: 12px;
+  }
+
+}
+
+.method-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 5%;
+  border-radius: 6px 6px 0 0;
+  width: 100%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 5px rgba(0, 0, 0, 0.15);
+  background-color: var(--ion-color-medium-tint);
+  .title {
+    text-align: center;
+    color: white;
+    font-family: NoirProReg !important;
+    font-size: 26px;
+    margin: 8px 0 4px 0;
+    padding: 8px;
+  }
+  .method{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+    color: white;
+    border-bottom: 0.8px solid white;
+    justify-content: space-between;
+    align-items: center;
+    .index{
+      font-family: NoirProReg !important;
+      font-size: 22px;
+      margin-right: 4px;
+      align-self: flex-start;
+    }
+    .label{
+      font-family: NoirProReg !important;
+      font-size: 22px;
+      flex: 40%;
+    }
+    .proc{
+      font-family: NoirProReg !important;
+      font-size: 16px;
+      flex: 20%;
+      text-align: center;
+    }
+    .sum{
+      font-family: NoirProSemi !important;
+      font-size: 22px;
+      flex: 40%;
+      text-align: end;
+    }
+  }
+}

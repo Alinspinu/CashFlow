@@ -155,7 +155,7 @@
               ȘTERGE
             </ion-label>
         </ion-button>
-        <ion-button
+        <!-- <ion-button
         class=""
         (click)="addDiscount()"
         >
@@ -163,14 +163,14 @@
           <ion-icon src="assets/icon/discount.svg"></ion-icon>
           REDUCERE
         </ion-label>
-    </ion-button>
+    </ion-button> -->
     <ion-button
     class=""
-    (click)="addCustomer(clientMode)"
+    (click)="addDisc(discountMode)"
     >
     <ion-label>
-      <ion-icon src="assets/icon/person-outline.svg"></ion-icon>
-      {{clientMode ? 'CLIENT' : "SCOATE"}}
+      <ion-icon src="assets/icon/discount.svg"></ion-icon>
+      {{discountMode ? 'SCOATE' : 'DISCOUNT'}}
     </ion-label>
     </ion-button>
 

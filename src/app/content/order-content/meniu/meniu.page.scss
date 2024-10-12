@@ -3,6 +3,15 @@ div, ion-card-title{
   font-family: NoirProSemi !important;
 }
 
+.searcbar-wrapper{
+  background-color: white;
+  border-radius: 8px;
+  margin-top: 36px;
+  ion-searchbar{
+    font-family: NoirProreg !important;
+  }
+}
+
 .contents-container{
   display: flex;
   flex-direction: row;

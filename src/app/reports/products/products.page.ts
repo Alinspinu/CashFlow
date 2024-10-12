@@ -11,6 +11,7 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ReportsService } from '../reports.service';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { convertToDateISOString } from '../../shared/utils/functions';
 
 
 ;
@@ -183,7 +184,14 @@ getProducts(){
     goods: this.isGoods,
     prod: this.isProduction
   }
- this.reportsSrv.getHavyOrders(this.startDay, this.endDay, undefined, this.user.locatie, filter).subscribe(response => {
+  this.reportsSrv.getHavyOrders(
+      convertToDateISOString(this.startDay),
+      convertToDateISOString(this.endDay),
+      undefined,
+      this.user.locatie,
+      filter,
+      ''
+  ).subscribe(response => {
    this.sections = response.result.sections
    this.dbProducts = response.result.allProd
    this.dbIngs = response.ingredients
@@ -257,6 +265,7 @@ async pickEndDay(){
   if(result){
     this.endDay = formatedDateToShow(result).split('ora')[0]
   }
+  // console.log(this.startDay, this.endDay)
   // this.checkDtes(this.startDay, this.endDay) ? 'ss' : this.dateErr()
 }
 
@@ -272,27 +281,11 @@ checkDtes(start: string | undefined, end: string | undefined){
 }
 
 dateErr(){
-  showToast(this.toastCtrl, 'DATA DE ÎNCEPUT TREBUIE SĂ FIE MAI MICĂ DECÂT CEA DE SFÂRȘIT!', 3000, 'error-toast')
+  showToast(this.toastCtrl, 'DATA DE ÎNCEPUT TREBUIE SĂ FIE MAI MICĂ DECÂT CEA DE SFÂRȘIT!', 3000, '')
   this.startDay  = ''
   this.endDay = ''
 }
 
-
-async openDownload(){
-  const file = await this.actionSrv.download()
-  console.log(file)
-  if(file){
-    if(file === 'products'){
-      this.printProducts()
-    }
-    if(file === 'consumption') {
-      this.printConsuption()
-    }
-    if(file === 'production'){
-      this.printProduction()
-    }
-  }
-}
 
 
 printProducts(){

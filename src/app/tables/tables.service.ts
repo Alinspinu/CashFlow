@@ -20,6 +20,8 @@ export class TablesService{
   public tableSend$!: Observable<Table[]>;
   tables: Table[] = [emptyTable()];
 
+  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+
   user!: any;
   private orderSub!: Subscription
 
@@ -39,6 +41,7 @@ export class TablesService{
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
   }
+
 
   private eventSource!: EventSource
 
@@ -214,6 +217,9 @@ redCustomer(masa: number, billIndex: number, billId: string, employee: any, loca
 
 
 getTables(locatie: string, id: string){
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
   Preferences.get({key: 'tables'}).then(response =>{
     if(response && response.value){
       const parsedTables = JSON.parse(response.value)
@@ -221,7 +227,7 @@ getTables(locatie: string, id: string){
       this.tableState.next([...this.tables])
     }
   })
-  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
+  this.http.get<Table[]>(`${environment.SAVE_URL}table/get-tables?loc=${locatie}&user=${id}`, {headers}).subscribe(response => {
     if(response){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)
@@ -234,7 +240,10 @@ getTables(locatie: string, id: string){
 
 
 addTable(name: string, locatie: string){
-  return this.http.post<{message: string, table: Table}>(`${environment.BASE_URL}table?loc=${locatie}`, {name: name})
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
+  return this.http.post<{message: string, table: Table}>(`${environment.SAVE_URL}table?loc=${locatie}`, {name: name}, {headers})
     .pipe(take(1), tap(response => {
     if(response){
       this.tables.push(response.table)
@@ -246,8 +255,11 @@ addTable(name: string, locatie: string){
 }
 
 editTable(tableIndex: number, name: string){
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
   const table = this.tables[tableIndex-1];
-  return this.http.put<{message: string, table: Table}>(`${environment.BASE_URL}table`,{name: name, tableId: table._id})
+  return this.http.put<{message: string, table: Table}>(`${environment.SAVE_URL}table`,{name: name, tableId: table._id}, {headers})
   .pipe(take(1), tap(response => {
     if(response){
       const table = this.tables[response.table.index-1]
@@ -261,7 +273,10 @@ editTable(tableIndex: number, name: string){
 
 
 deleteTable(tableId: string, index: number){
-  return this.http.delete<{message: string}>(`${environment.BASE_URL}table?tableId=${tableId}`)
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
+  return this.http.delete<{message: string}>(`${environment.SAVE_URL}table?tableId=${tableId}`, {headers})
   .pipe(take(1), tap(response => {
     if(response){
       const indexToDelete = this.tables.findIndex(obj => obj.index === index)
@@ -275,6 +290,9 @@ deleteTable(tableId: string, index: number){
 
 
 saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, locatie: string){
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.masa = tableIndex;
@@ -290,7 +308,7 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
   bill.pending = true
   bill.prepStatus = 'open'
   const billToSend = JSON.stringify(bill);
-  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} )
+  return this.http.post<{billId: string, index: number, products: any, masa: any}>(`${environment.SAVE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend} , {headers})
       .pipe(take(1),
         switchMap(res => {
         bill._id = res.billId;
@@ -304,42 +322,58 @@ saveOrder(tableIndex:number, billId: string, billIndex: number, employee: any, l
         const tables = JSON.stringify(this.tables);
         Preferences.set({key: 'tables', value: tables});
         this.tableState.next([...this.tables]);
-        // Return the original observable
         return of(res);
       })
 );
 };
 
-printBill(bill: Bill){
-  const headers = this.auth.apiAuth()
-  const billToSend = JSON.stringify(bill);
-  return this.http.post(`${environment.PRINT_URL}print`, {fiscal: billToSend}, {headers}).pipe(
-    catchError(this.handleError)
-  )
+saveBillToCloud(bill: Bill){
+  this.http.post<{message: string, bill: any}>(`${this.url}pay/save-bill-cloud`, {bill: bill}).subscribe(res => {
+    console.log(res.message + " billId:  " + bill._id)
+  })
 }
 
 uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation})
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
+  return this.http.post<{message: string}>(`${this.url}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation}, {headers})
 }
 
 unloadIngs(ings: any, quantity: number, operation: any, locatie: string){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/unload-ings?loc=${locatie}`, {ings, quantity, operation})
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
+  return this.http.post<{message: string}>(`${this.url}orders/unload-ings?loc=${locatie}`, {ings, quantity, operation}, {headers})
 }
 
 deleteOrders(data: any[]){
-  return this.http.put<{message: string}>(`${environment.BASE_URL}orders/bill`, {data: data})
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
+  return this.http.put<{message: string}>(`${environment.SAVE_URL}orders/bill`, {data: data}, {headers})
 }
 
 registerDeletetProduct(product: any){
-  return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product})
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
+  return this.http.post(`${this.url}orders/register-del-prod`, {product: product}, {headers})
 }
 
 sendBillToPrint(bill: Bill){
-  return this.http.post<{bill: any, message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill})
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
+  return this.http.post<{bill: any, message: string}>(`${environment.SAVE_URL}pay/print-bill`, {bill: bill}, {headers})
 }
 
+
 setOrderTime(orderId: string, time: number){
-  return this.http.get(`${environment.BASE_URL}orders/set-order-time?orderId=${orderId}&time=${time}`)
+  const  headers: HttpHeaders = new HttpHeaders({
+    'bypass-tunnel-reminder': 'true'
+  });
+  return this.http.get(`${this.url}orders/set-order-time?orderId=${orderId}&time=${time}`, {headers})
 }
 
 //********************EMPTY MODELS**************************** */

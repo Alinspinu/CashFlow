@@ -89,7 +89,6 @@ export class CashPage implements OnInit {
   cashBack: number = 0
   discounts: number = 0
   totalIncasat: number = 0;
-  totalNoTax: number = 0;
   tips: number = 0;
 
   openTotal: number = 0
@@ -113,13 +112,16 @@ export class CashPage implements OnInit {
     getUserFromLocalStorage().then(user => {
       if(user){
         this.user = user
-        this.getOrders()
-      } else {
-        this.router.navigateByUrl('/auth')
+        setTimeout(() => {
+          this.getOrders()
+        }, 300)
       }
     })
   }
 
+  refresh(){
+    window.location.reload()
+  }
 
   search(){
     this.today = ''
@@ -146,9 +148,6 @@ getOrders(){
     await this.actionSheet.openPayment(DelProdViewPage, this.delProducts)
 }
 
-refresh(){
-  window.location.reload()
-}
 
 advSearch(){
   this.advance = true
@@ -190,10 +189,6 @@ calcTotals(){
    if(bill.tips > 0) {
     this.tips += bill.tips
    }
-   if(bill.dont){
-    this.totalNoTax += bill.total
-   }
-
    if(bill.discount > 0){
     this.discountBills.push(bill)
    }

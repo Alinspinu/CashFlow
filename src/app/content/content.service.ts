@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { Preferences } from "@capacitor/preferences";
 import { BehaviorSubject, from, map, Observable, take, tap } from "rxjs";
@@ -16,6 +16,7 @@ import { emptyCategory } from "../models/empty-models";
 export class ContentService{
 
   user!: User
+  url: string ='https://cafetish-server.ew.r.appspot.com/'
 
   private categoryState!: BehaviorSubject<Category[]>;
   public categorySend$!: Observable<Category[]>;
@@ -23,9 +24,20 @@ export class ContentService{
 
 
   constructor(private http: HttpClient, private authSrv: AuthService){
+    // this.getUrl()
     this.categoryState = new BehaviorSubject<Category[]>([emptyCategory()]);
     this.categorySend$ =  this.categoryState.asObservable();
   }
+
+
+  // async getUrl(){
+  //   Preferences.get({key: 'serverUrl'}).then( async (data)  => {
+  //     if(data.value) {
+  //       this.url = data.value
+  //     }
+  //   })
+  // }
+
 
 
 
@@ -37,9 +49,13 @@ export class ContentService{
           this.categoryState.next([...this.category])
         }
       })
-      return this.http.get<Category[]>(`${environment.BASE_URL}cat/get-cats?loc=${locatie}`).pipe(take(1), tap(res => {
+      const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+      return this.http.get<Category[]>(`${this.url}cat/get-cats?loc=${locatie}`, {headers}).pipe(take(1), tap(res => {
         this.category = this.sortData(res)
         this.categoryState.next([...this.category]);
+        console.log(this.category)
         Preferences.set({key: 'categories', value: JSON.stringify(this.category)})
       }));
     }
@@ -66,15 +82,21 @@ export class ContentService{
     }
 
     get categoriesNameId$(){
-      return  this.category.map(({_id, name, mainCat}) => ({_id, name, mainCat}))
+      return  this.category.map(({_id, name, order, mainCat}) => ({_id, name, order, mainCat}))
       }
 
       setDiscount(data: any[]){
-        return this.http.post<{message: string}>(`${environment.BASE_URL}product/discount`, {data: data})
+             const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+        return this.http.post<{message: string}>(`${this.url}product/discount`, {data: data}, {headers})
       }
 
       setProdDisc(data: any[]){
-        return this.http.post<{message: string}>(`${environment.BASE_URL}product/disc-prod`, {data: data})
+             const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+        return this.http.post<{message: string}>(`${this.url}product/disc-prod`, {data: data}, {headers})
       }
 
     private sortData(data: Category[]){
@@ -88,6 +110,21 @@ export class ContentService{
           sortedCategories.push(category);
       }
       return sortedCategories;
+    }
+
+
+    editCategory(formData: any){
+      const  headers: HttpHeaders = new HttpHeaders({
+        'bypass-tunnel-reminder': 'true'
+      });
+      return this.http.put<{message: string, category: Category}>(`${this.url}cat/cat`, formData, {headers})
+        .pipe(tap(response => {
+          if(response){
+            const catIndex = this.category.findIndex(cat => cat._id === response.category._id)
+            this.category[catIndex] = response.category
+            this.categoryState.next([...this.category])
+          }
+        }))
     }
 
 

@@ -1,0 +1,33 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+      <ion-button (click)="close()" slot="start" color="medium">
+        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" color="light" style="font-size: 32px;"></ion-icon>
+      </ion-button>
+      <!-- <div class="title-wrapper">
+        <div class="title">{{title}}</div>
+      </div> -->
+      <ion-searchbar mode="ios"  [placeholder]="searchPlaceholder"  (ionInput)="searchData($event)" #searchbar style="margin-top:18px;">
+      </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="auth-wrapper">
+  <ion-grid>
+    <div *ngIf="mode === 'bonus'">
+      <ion-item *ngFor="let user of users; let i = index" class="ing-name" lines="none" color="transparent">
+        <ion-checkbox (ionChange)="onChange($event, user)" slot="start" [checked]="user.checked" labelPlacement="end">{{user.name}}</ion-checkbox>
+      </ion-item>
+    </div>
+    <ion-radio-group [(ngModel)]="selectedValue"  *ngIf="mode === 'data'">
+      <ion-item *ngFor="let choice of data; let i = index" class="ing-name" lines="none" color="transparent">
+        <ion-radio slot="start" [value]="choice" labelPlacement="end">{{choice}}</ion-radio>
+      </ion-item>
+    </ion-radio-group>
+    </ion-grid>
+  </ion-content>
+
+
+  <ion-footer class="ion-no-border">
+    <ion-button color="medium" (click)="onSubmit()" size="large" expand="block" style="font-family: NoirProSemi !important;">Alege</ion-button>
+  </ion-footer>

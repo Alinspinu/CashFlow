@@ -1,4 +1,3 @@
-import { InvIngredient } from "./nir.model"
 
 
 export class Table{
@@ -22,14 +21,16 @@ export class Bill{
     public totalProducts: number,
     public total: number,
     public discount: number,
+    public voucher: number,
     public status: string,
     public toGo: boolean,
     public pickUp: boolean,
     public completetime: number,
     public paymentMethod: string,
     public onlineOrder: boolean,
+    public inOrOut: string,
     public prepStatus: string,
-    public dont: boolean,
+    public out: boolean,
     public payment: {
         cash: number,
         card: number,
@@ -51,6 +52,7 @@ export class Bill{
       telephone: string,
       userId: string,
       cashBack: number,
+      email: string,
       discount: {
         general: number,
         category: {
@@ -67,6 +69,7 @@ export class Bill{
     public name: string,
     public products: BillProduct[],
     public createdAt: any,
+    public updatedAt: string,
     public locatie: string,
     public pending: boolean
   ){}
@@ -87,7 +90,7 @@ export class BillProduct{
    public discount: number,
    public sub: boolean,
    public toppings: Topping[],
-   public ings: InvIngredient[],
+   public ings: Ing[],
    public payToGo: boolean,
    public imgUrl: string,
    public printer: string,
@@ -95,11 +98,12 @@ export class BillProduct{
    public comment: string,
    public tva: string,
    public dep: string,
-   public sgrTax: boolean,
    public toppingsToSend: Topping[],
    public sentToPrintOnline: boolean,
    public qty: string,
    public cantitate: string,
+   public sgrTax: boolean,
+   public description: string,
   ){}
 }
 
@@ -111,16 +115,16 @@ export class Topping {
     public qty: number,
     public ingPrice: number,
     public um: string,
-    public ing: InvIngredient
+    public ing: string
   ){}
 }
 
-// export class Ing{
-//   constructor(
-//     public qty: number,
-//     public ing: string,
-//   ){}
-// }
+export class Ing{
+  constructor(
+    public qty: number,
+    public ing: {_id: string, name: string, qty: number},
+  ){}
+}
 
 export class deletetBillProduct{
   constructor(
@@ -131,6 +135,7 @@ export class deletetBillProduct{
     user: string,
    },
    public reason: string,
+   public admin: string,
    public locatie: string,
    public inv: string,
   ){}

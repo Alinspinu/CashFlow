@@ -1,29 +1,43 @@
 
 ion-content{
-  --background: var(--ion-color-tertiary);
   height: 85vh;
+}
+
+ion-toolbar, ion-content, ion-footer{
+  --background: #fbf0e7 !important;
 }
 
 ion-label, ion-title{
   font-family: NoirProReg !important;
 }
+ion-button{
+  font-family: NoirProSemi !important;
+}
 
 
-.title{
+ion-title{
   font-size: 25px;
-  width: 100%;
   margin-top: 2rem;
   margin-bottom: 5rem;
-  text-align: center;
-  font-family: NoirProReg !important;
   color: var(--ion-color-medium)
+
 }
 
-.ing{
-  margin-top: 9rem;
-  margin-bottom: 10rem;
+.title-wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .title{
+    font-family: NoirProSemi !important;
+    text-align: center;
+    background-color: black;
+    padding: 12px;
+    color: white;
+    font-size: 16px;
+    margin-top: 8px;
+  }
 }
-
 
 
 .filter-wrapper{
@@ -49,6 +63,16 @@ ion-label, ion-title{
   }
 }
 
+.but{
+  margin-right: 4px;
+}
+
+.time{
+  margin-left: 60px;
+}
+
+
+
   .grid-date{
    display: flex;
    justify-content: center;
@@ -69,8 +93,8 @@ ion-label, ion-title{
 }
 
 
-ion-item[slot="fixed"]{
-  top: 30.0%;
+.header{
+  top: 43.5%;
   width: 100%;
   opacity: 60%;
   border-radius: 8px;
@@ -108,6 +132,10 @@ ion-item[slot="fixed"]{
   }
 }
 
+#cons{
+  top: 9.3% !important;
+}
+
 
 .total{
   height: 45px;
@@ -121,31 +149,28 @@ ion-item[slot="fixed"]{
   }
 }
 
-.input{
-  height: 45px;
-  --background: var(--ion-color-tertiary);
-  border-radius: 8px;
-  margin: 0.5rem 0 0.1rem 0.2rem;
-  font-family: NoirProReg !important;
-  .qty{
-    font-family: NoirProSemi !important;
-    flex: 10%;
-    text-align: center;
-  }
-  .name{
-    flex: 50%;
-  }
+
+.bold{
+  font-size: 17px;
+  font-family: NoirProSemi !important;
 }
 
 
-.ing-input{
+
+.input{
   cursor: pointer;
   height: 45px;
-  border: 0.5px solid var(--ion-color-medium);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  background-color: white;
   margin: 0.5rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
   width: 100%;
+  padding-left: 12px;
+  display: flex;
+  align-items: center;
   .qty{
     font-family: NoirProSemi !important;
     flex: 10%;
@@ -159,6 +184,16 @@ ion-item[slot="fixed"]{
     flex: 6%;
     text-align: start;
   }
+}
+
+
+.label{
+  width: 100%;
+  text-align: center;
+}
+
+.input:hover{
+  --background: var(--ion-color-medium);
 }
 
 .production-content{
@@ -180,6 +215,11 @@ ion-item[slot="fixed"]{
   --background: var(--ion-color-medium);
 }
 
+.totals-row{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 
 .section {
@@ -187,11 +227,23 @@ ion-item[slot="fixed"]{
   align-self: center;
   display: flex;
   flex-direction: column;
-  background-color: rgb(26, 20, 20);
+  background-color: var(--ion-color-medium-tint);
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
+  cursor: pointer;
   color: white;
   padding: 8px;
   text-align: center;
+  .title{
+    font-size: 24px;
+    padding: 8px;
+
+  }
+  .proc{
+    font-size: 20px;
+  }
   div{
     display: flex;
     flex-direction: column;
@@ -222,50 +274,36 @@ ion-item[slot="fixed"]{
   }
 }
 
-.product-mobile{
-  display: none;
-}
-
-.ing-mobile{
-  display: none;
-}
-
-@media screen and (max-width: 400px) {
-
-  body {
-    font-size: 14px !important;
+.main{
+  height: 280px;
+  justify-content: center;
+  .title{
+    font-size: 40px;
+    padding: 8px;
   }
-  .product-mobile{
-    display: contents;
-  }
-  .ing-mobile{
-    display: contents;
-  }
-
-  .hide{
-    display: none;
-  }
-  ion-item[slot="fixed"]{
-    display: none;
-  }
-  .grid-date{
-    ion-button{
-      width: 300px !important;
+  .sales{
+    .value{
+      font-size: 38px;
+    }
+    .note{
+      font-size: 16px;
     }
   }
-  .filter-wrapper{
-    width: 300px !important;
+  .consumption{
+    .value{
+      font-size: 24px;
+    }
+    .note{
+      font-size: 12px;
+    }
   }
-
-  .label{
-    font-family: NoirProReg !important;
-    font-size: 12px !important;
-    cursor: pointer;
-  }
-  .mobile-input{
-    border: 0.5px solid var(--ion-color-medium);
-    margin-top: 2px;
-    border-radius: 12px;
+  .surplus{
+    .value{
+      font-size: 23px;
+    }
+    .note{
+      font-size: 12px;
+    }
   }
 
 }

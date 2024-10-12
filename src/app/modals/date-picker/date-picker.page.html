@@ -1,13 +1,22 @@
-
 <ion-content [fullscreen]="true">
+  <!-- <ion-title class="ion-text-center">ALEGE ZIUA {{mode ? mode : ''}}</ion-title> -->
+  <div class="title-wrapper">
+    <div class="title">ALEGE ZIUA {{mode ? mode : ''}}</div>
+  </div>
   <ion-datetime
   presentation="date-time"
   [showDefaultButtons]="true"
   [(ngModel)]="selectedDate"
   locale="ro-RO"
-  [min]="date"
+  [min]="minDate"
+  [max]="maxDate"
   (ionCancel)="onCancel()"
-  (ionChange)="onDateChange($event)">
+  (ionChange)="onDateChange($event)"
+  #datetime>
+  <ion-buttons slot="buttons">
+    <ion-button color="medium"  (click)="datetime.cancel()">CANCEL</ion-button>
+    <ion-button color="medium"  (click)="datetime.confirm()">CONFIRM</ion-button>
+  </ion-buttons>
   </ion-datetime>
 
 </ion-content>

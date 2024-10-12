@@ -1,15 +1,17 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-
-    <ion-title class="ion-text-center">{{mode ? 'Înregistrare' : 'Adaugă Furnizor!'}}</ion-title>
-
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="title-wrapper" *ngIf="!editMode">
+      <div class="title">{{mode ? 'Înregistrare' : 'Adaugă Furnizor!'}}</div>
+    </div>
+    <div class="title-wrapper" *ngIf="editMode">
+      <div class="title">Editează furnizorul</div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-title  class="ion-margin ion-text-center">Detalii Companie</ion-title>
-  <ion-item lines="none">
-    <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplierInDb($event)"></ion-searchbar>
+  <ion-item lines="none" color="transparent">
+    <ion-searchbar mode="ios" [(ngModel)]="furnizorSearch"  placeholder="Caută Furnizor" (keyup.enter)="selectSuplier(supliers[0])" (ionInput)="searchSuplierInDb($event)" *ngIf="!editMode"></ion-searchbar>
   </ion-item>
   <ion-list>
     <ion-item *ngFor="let suplier of supliers; let i = index" class="fur-name" (click)="selectSuplier(suplier)">
@@ -20,55 +22,58 @@
   <ion-grid>
     <ion-row>
             <ion-col [size]="size">
-                <ion-item lines="none" class="input">
+                <div class="input">
                   <ion-input mode="ios" type="text" label="CUI Complanie" labelPlacement="floating" formControlName="vatNumber" placeholder="Ex. RO12343219"></ion-input>
                   <ion-buttons slot="end">
                     <ion-button (click)="searchSuplier()"color="primary">
                       <ion-icon src="../../../../assets/icon/search-outline.svg"></ion-icon>
                     </ion-button>
                   </ion-buttons>
-                  </ion-item>
-                  <ion-item lines="none" class="input">
+                  </div>
+                  <div class="input">
                   <ion-input mode="ios" type="text" label="Denumire Firmă" labelPlacement="floating" formControlName="bussinessName" placeholder="SC CEVA FRUMOS S.R.L."></ion-input>
-                  </ion-item>
-                  <ion-item lines="none" class="input">
+                  </div>
+                  <div class="input">
                     <ion-input mode="ios" type="text" label="Nr înregistrare" labelPlacement="floating" formControlName="register" placeholder="Ex. J32/234/2024"></ion-input>
-                  </ion-item>
-                  <ion-item  lines="none" class="input">
+                  </div>
+                  <div class="input">
                     <ion-textarea mode="ios" type="text" label="Adresa" labelPlacement="floating" formControlName="address" placeholder="Ex. Str... Nr... bl... Oras.. Loc.."></ion-textarea>
-                  </ion-item>
-                  <ion-item  lines="none" class="input">
+                  </div>
+                  <div class="input">
                     <ion-input mode="ios" type="text" label="Bancă" labelPlacement="floating" formControlName="bank" placeholder="Ex. Transilvana, ING, etc..."></ion-input>
-                  </ion-item>
-                  <ion-item  lines="none" class="input">
+                  </div>
+                  <div class="input">
                     <ion-input mode="ios" type="text" label="Cont" labelPlacement="floating" formControlName="account" placeholder="IBAN..."></ion-input>
+                  </div>
+                  <ion-item  lines="none" class="input" *ngIf="editMode">
+                    <ion-input mode="ios" type="text" label="Sold" labelPlacement="floating" formControlName="sold" placeholder="Sold"></ion-input>
                   </ion-item>
                   <ion-radio-group value="start" formControlName="VAT">
-                    <ion-item lines="none" class="input">
-                      <ion-radio value="yes" justify="start" labelPlacement="end">Plătitor de TVA</ion-radio>
-                      <ion-radio value="no" justify="start" labelPlacement="end">Neplătitor de TVA</ion-radio>
-                    </ion-item>
+                    <div class="wrapper">
+                      <ion-radio value="yes" justify="start" labelPlacement="end" class="input input1">Plătitor de TVA</ion-radio>
+                      <ion-radio value="no" justify="start" labelPlacement="end" class="input input1">Neplătitor de TVA</ion-radio>
+                    </div>
                   </ion-radio-group>
-                  <ion-item *ngIf="mode" lines="none" class="input">
+                  <div *ngIf="mode" class="input">
                     <ion-input mode="ios" type="text" label="Nume Locatie" labelPlacement="floating" formControlName="name" placeholder="Ex. Cafenea, Magazin, Nume Brand..."></ion-input>
-                  </ion-item>
+                  </div>
                 </ion-col>
               <ion-col size="6" *ngIf="mode">
                   <ion-title class="ion-margin ion-text-center">Detalii Utilizator Principal</ion-title>
-                  <ion-item lines="none" class="input">
+                  <div class="input">
                     <ion-input label="Nume și prenume" labelPlacement="floating" placeholder="Ex. Ana Marian"  type="text" name="name" formControlName="ownerName">
                     </ion-input>
-              </ion-item>
-              <ion-item lines="none" class="input">
+              </div>
+              <div class="input">
                 <ion-input label="Email" labelPlacement="floating"  type="email" placeholder="Ex anamarian@gmail.com" name="email" email formControlName="ownerEmail">
                 </ion-input>
-              </ion-item>
+              </div>
               <ion-note *ngIf="!suplierForm.get('email')?.valid && suplierForm.get('email')?.touched" color="primary">Invalid email</ion-note>
-              <ion-item lines="none" class="input">
+              <div class="input">
                 <ion-input label="Telefon" placeholder="Ex. 076393939" labelPlacement="floating"  type="text" name="tel"  formControlName="tel">
                 </ion-input>
-              </ion-item>
-              <ion-item lines="none" class="input">
+              </div>
+              <div class="input">
                 <ion-input
                 label="Parolă"
                 labelPlacement="floating"
@@ -80,8 +85,8 @@
                 [type]="getInputType()"
                 ></ion-input>
                 <ion-icon [src]="iconSrc" slot="end" (click)="togglePassword()"></ion-icon>
-              </ion-item>
-              <ion-item lines="none" class="input">
+              </div>
+              <div class="input">
                   <ion-input
                   label="Confirmă parola"
                   labelPlacement="floating"
@@ -94,7 +99,7 @@
                   #confirmPassword
                   ></ion-input>
                   <ion-icon [src]="iconSrc" slot="end" (click)="togglePassword()"></ion-icon>
-                </ion-item>
+              </div>
                 <ion-note *ngIf="suplierForm.hasError('match_error')" color="primary">
                   Passwords don't match
                 </ion-note>
@@ -104,6 +109,16 @@
         </form>
       </ion-content>
 
-        <ion-footer [translucent]="false">
-            <ion-button size="large" color="primary" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid">{{mode ? 'Înregistrare': 'Adaugă Furnizor'}}</ion-button>
+        <ion-footer  class="ion-no-border">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button size="large" color="light" expand="block" (click)="close()">Renunță</ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button size="large" color="medium" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid" *ngIf="!editMode">{{mode ? 'Înregistrare': 'Adaugă Furnizor'}}</ion-button>
+                <ion-button size="large" color="medium" expand="block" (click)="addSuplier()" [disabled]="!suplierForm.valid" *ngIf="editMode">EDITEAZĂ FURNIZORUL</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
 </ion-footer>

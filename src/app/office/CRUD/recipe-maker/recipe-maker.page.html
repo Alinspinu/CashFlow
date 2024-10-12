@@ -1,10 +1,10 @@
 
 
     <ion-item lines="none" [color]="color">
-      <img src="assets/icon/art.svg" alt="" id="add-ing" (click)="switchMode()">
-      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)" #searchbar (keyup.enter)="setIng()" [disabled]="isLoading">
+      <ion-label src="assets/icon/art.svg" alt="" class="searchbar-icon"(click)="switchMode()" size="large"></ion-label>
+      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)" #searchbar (keyup.enter)="setIng()"[disabled]="isLoading">
       </ion-searchbar>
-      <img src="assets/icon/add-circle.svg" id="add-ing" (click)="addIng()">
+      <ion-label src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()" size="large"></ion-label>
     </ion-item>
     <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
       <div>
@@ -16,25 +16,25 @@
         </div>
       </div>
     </ion-item>
-    <ion-item lines="none"  *ngIf="productIngredientMode">
+    <div  *ngIf="productIngredientMode" class="prouct-ing-wrapper">
       <ion-input class="input1" type="text" label="Nume" labelPlacement="floating" [(ngModel)]="productIngName"></ion-input>
       <ion-input class="input1" type="text" label="UM" labelPlacement="floating" [(ngModel)]="productIngUm"></ion-input>
       <ion-input class="input1" type="text" label="Cantitate" labelPlacement="floating" [(ngModel)]="productIngQty"></ion-input>
-      <ion-select label="Gestiune" labelPlacement="floating" placeholder="Gestiune" class="select" [(ngModel)]="productIngGest">
+      <ion-select label="Gestiune" labelPlacement="floating" placeholder="Gestiune" class="input1" [(ngModel)]="productIngGest">
         <ion-select-option value="magazie">Magazie</ion-select-option>
         <ion-select-option value="bucatarie">Bucătărie</ion-select-option>
         <ion-select-option value="bar">Bar</ion-select-option>
       </ion-select>
-    </ion-item>
+    </div>
     <h3 class="ion-text-center subtitle"  *ngIf="displayIngs.length">Rețetă produs</h3>
-    <ion-item class="content-container header" *ngIf="displayIngs.length" lines="none">
+    <div class="content-container header" *ngIf="displayIngs.length">
       <span class="name">Nume</span>
       <span class="gestiune">Gestiune</span>
       <span class="cant" style="margin-right: 15px;">Cantitate / Preț cu TVA</span>
       <span class="price">Valoare</span>
       <div class="sep"></div>
-    </ion-item>
-    <ion-item  *ngFor="let ing of displayIngs; let i = index" class="content-container input2" lines="none">
+    </div>
+    <div  *ngFor="let ing of displayIngs; let i = index" class="content-container input2">
       <span class="name">{{ing.ing.name}}</span>
       <span class="gestiune">{{ing.ing.gestiune}}</span>
       <span class="cant">{{ing.qty + ' '+ ing.ing.um + ' ' + 'X' + ' ' + (ing.ing.price + (ing.ing.price * ing.ing.tva / 100))}} Lei</span>
@@ -44,22 +44,22 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/><path d="M192 112V72h0a23.93 23.93 0 0124-24h80a23.93 23.93 0 0124 24h0v40M256 176v224M184 176l8 224M328 176l-8 224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
         </ion-button>
       </ion-buttons>
-    </ion-item>
-    <ion-item lines="none" *ngIf="displayIngs.length" class="content-container total">
+    </div>
+    <div *ngIf="displayIngs.length" class="total-wrapper">
       <span class="total">Total Rețetă</span>
       <span class="total-price">{{round(recipeTotal)}} Lei</span>
-    </ion-item>
-    <ion-button size="large" expland="block" style="width: 100%;" (click)="saveProdIng()" *ngIf="productIngredientMode" [disabled]="!productIngName.length || !productIngUm.length || !productIngQty.length || !displayIngs.length">SALVEAZĂ INGREDIENTUL COMPUS</ion-button>
+    </div>
+    <ion-button color="medium" size="large" expland="block" style="width: 100%;" (click)="saveProdIng()" *ngIf="productIngredientMode" [disabled]="!productIngName.length || !productIngUm.length || !productIngQty.length || !displayIngs.length">SALVEAZĂ INGREDIENTUL COMPUS</ion-button>
     <h3 class="ion-text-center subtitle"  *ngIf="toppings.length">Toppings</h3>
-    <ion-item class="content-container header"  *ngIf="toppings.length" lines="none">
+    <div class="content-container header"  *ngIf="toppings.length">
       <span class="name">Nume</span>
       <span class="gestiune">Gestiune</span>
       <span class="cant">Cantitate</span>
       <span class="val">Valoare</span>
       <span class="price">Vanzare</span>
       <div class="sep"></div>
-    </ion-item>
-    <ion-item  *ngFor="let top of toppings; let i = index;" class="content-container input" lines="none">
+    </div>
+    <div  *ngFor="let top of toppings; let i = index;" class="content-container input1">
       <span class="name">{{top.name}}</span>
       <span class="gestiune">{{top.ing.gestiune}}</span>
       <span class="cant">{{top.qty + ' '+ top.um}}</span>
@@ -70,6 +70,6 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/><path d="M192 112V72h0a23.93 23.93 0 0124-24h80a23.93 23.93 0 0124 24h0v40M256 176v224M184 176l8 224M328 176l-8 224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
         </ion-button>
       </ion-buttons>
-    </ion-item>
+    </div>
 
 

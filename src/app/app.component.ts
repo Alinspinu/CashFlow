@@ -1,14 +1,14 @@
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import User from './auth/user.model';
 import { ContentService } from './content/content.service';
 import { CashRegisterService } from './office/cash-register/cash-register.service';
-import { IngredientService } from './office/ingredient/ingredient.service';
-import { ProductsService } from './office/products/products.service';
 import { TablesService } from './tables/tables.service';
 import { Subscription } from 'rxjs';
+import { StartUrlPage } from './modals/start-url/start-url.page';
+import { ActionSheetService } from './shared/action-sheet.service';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private contService: ContentService,
     private tablesService: TablesService,
     private cashReg: CashRegisterService,
+    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private router: Router,
     ) {}
 
@@ -37,17 +38,28 @@ export class AppComponent implements OnInit, OnDestroy {
          this.contSub = this.contService.getData(this.user.locatie).subscribe()
          this.tablesService.getTables(this.user.locatie, this.user._id)
          this.cashReg.getDocuments(1, this.user.locatie).subscribe()
-
-        //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
-        } else{
-          this.router.navigateByUrl('/auth')
         }
       })
     }
 
-  ngOnInit(): void {
-   this.getUser()
+    async selectServerUrl(){
+      Preferences.get({key: 'serverUrl'}).then( async (data)  => {
+        if(!data.value) {
+          const url = await this.actionSheet.openAuth(StartUrlPage)
+          if(url){
+            Preferences.set({key: 'serverUrl', value: url });
+            this.getUser()
+          }
+        } else {
 
+
+        }
+      })
+    }
+
+
+  ngOnInit(): void {
+    this.getUser()
   }
 
   ngOnDestroy(): void {

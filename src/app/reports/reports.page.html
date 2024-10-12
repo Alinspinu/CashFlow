@@ -1,41 +1,58 @@
 
-
 <ion-menu contentId="main-content">
 
-    <ion-header class="header">
-        <ion-title>Menu </ion-title>
-    </ion-header>
+  <ion-header class="header">
+      <ion-title>Menu </ion-title>
+  </ion-header>
 
-  <ion-content [fullscreen]="true">
-    <div class="button-container" [ngClass]="{'selected': show.sales}">
-      <ion-menu-toggle [ngClass]="{'selected': show.sales}">
-        <ion-button (click)="sales()" fill="ghost">
-          <ion-icon slot="start" src="assets/icon/business.svg"></ion-icon>
-          <ion-label>Vanzari</ion-label>
+<ion-content [fullscreen]="true">
+  <div class="button-container" [ngClass]="{'selected': show.sales}">
+    <ion-menu-toggle [ngClass]="{'selected': show.sales}">
+      <ion-button (click)="sales()" fill="ghost">
+        <ion-icon slot="start" src="assets/icon/business.svg"></ion-icon>
+        <ion-label>Vanzari</ion-label>
+      </ion-button>
+    </ion-menu-toggle>
+    </div>
+    <div class="button-container" [ngClass]="{'selected': show.products}" *ngIf="screenWidth && screenWidth > 500">
+      <ion-menu-toggle [ngClass]="{'selected': show.products}">
+        <ion-button  (click)="products()" fill="ghost">
+          <ion-icon slot="start" src="assets/icon/food.svg"></ion-icon>
+          <ion-label>Produse</ion-label>
         </ion-button>
       </ion-menu-toggle>
-      </div>
-      <div class="button-container" [ngClass]="{'selected': show.products}">
-        <ion-menu-toggle [ngClass]="{'selected': show.products}">
-          <ion-button  (click)="products()" fill="ghost">
-            <ion-icon slot="start" src="assets/icon/food.svg"></ion-icon>
-            <ion-label>Produse</ion-label>
-          </ion-button>
-        </ion-menu-toggle>
-      </div>
-      <div class="button-container" [ngClass]="{'selected': show.ingredients}">
-      <ion-menu-toggle [ngClass]="{'selected': show.ingredients}">
-        <ion-button (click)="ingredients()" fill="ghost">
-          <ion-icon slot="start" src="assets/icon/plant.svg"></ion-icon>
-          <ion-label>Materii Prime</ion-label>
-        </ion-button>
-      </ion-menu-toggle>
-      </div>
-  </ion-content>
+    </div>
+    <div class="button-container" [ngClass]="{'selected': show.cashRegister}">
+    <ion-menu-toggle [ngClass]="{'selected': show.cashRegister}">
+      <ion-button (click)="register()" fill="ghost">
+        <ion-icon slot="start" src="assets/icon/business.svg"></ion-icon>
+        <ion-label>Registru de casă</ion-label>
+      </ion-button>
+    </ion-menu-toggle>
+    </div>
+    <div class="button-container" [ngClass]="{'selected': show.finance}">
+    <ion-menu-toggle [ngClass]="{'selected': show.finance}">
+      <ion-button (click)="finance()" fill="ghost">
+        <ion-icon slot="start" src="assets/icon/cash-back.svg"></ion-icon>
+        <ion-label>Situație financiară</ion-label>
+      </ion-button>
+    </ion-menu-toggle>
+    </div>
+    <div class="button-container" [ngClass]="{'selected': show.inventary}">
+    <ion-menu-toggle [ngClass]="{'selected': show.inventary}">
+      <ion-button (click)="inventary()" fill="ghost">
+        <ion-icon slot="start" src="assets/icon/inventary.svg"></ion-icon>
+        <ion-label>Inventar</ion-label>
+      </ion-button>
+    </ion-menu-toggle>
+    </div>
+</ion-content>
 </ion-menu>
 <div class="ion-page" id="main-content">
-  <ion-menu-button class="menu"></ion-menu-button>
-  <app-cash *ngIf="show.sales"></app-cash>
-  <app-products *ngIf="show.products"></app-products>
-  <app-ingredients *ngIf="show.ingredients"></app-ingredients>
+<ion-menu-button class="menu" color="meduim"></ion-menu-button>
+<app-cash *ngIf="show.sales"></app-cash>
+<app-products *ngIf="show.products"></app-products>
+<app-cash-register *ngIf="show.cashRegister"></app-cash-register>
+<app-finance *ngIf="show.finance"></app-finance>
+<app-inventary *ngIf="show.inventary"></app-inventary>
 </div>

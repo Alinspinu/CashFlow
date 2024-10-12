@@ -190,11 +190,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   getUser(){
   this.userSub = this.authSrv.user$.subscribe(response => {
     if(response){
-      response.subscribe(user => {
-        if(user){
-          this.user = user;
-        }
-      })
+      this.user = response
     }
   })
   }
@@ -288,7 +284,7 @@ export class TableContentPage implements OnInit, OnDestroy {
 async addToBill(product: Product){
   let price: number = product.price;
   let cartProdName: string = product.name;
-  let ings: InvIngredient[] = product.ings
+  let ings: any[] = product.ings
   if(product.subProducts.length){
     const result = await this.actionSheet.openModal(PickOptionPage, product.subProducts, true)
     if(result){
@@ -326,6 +322,7 @@ async addToBill(product: Product){
       qty: product.qty,
       cantitate: product.qty,
       sgrTax: product.sgrTax,
+      description: product.description
     };
     this.disableBrakeButton()
     this.disableDeleteOrderButton()
@@ -367,7 +364,7 @@ async addToBill(product: Product){
         const itemsToSort = [...product.toppingsToSend]
         options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
       } else {
-        const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: emptyIng()}
+        const fakeTopping = {name: 'fake',price: 0, qty: 1, ingPrice: 0, um: 's',ing: ''}
         options.push(fakeTopping)
       }
       if(options.length){
@@ -525,7 +522,6 @@ async payment(){
         if(paymentInfo){
           this.billToshow.payment = paymentInfo
           this.billToshow.cif = paymentInfo.cif;
-          this.billToshow.dont = paymentInfo.dont;
          this.tabSub = this.tableSrv.sendBillToPrint(this.billToshow).subscribe({
                 next: (response => {
                   if(response && response.bill.status === 'done'){
@@ -813,7 +809,8 @@ async useCashBack(mode: boolean){
           toppingsToSend: product.toppings,
           sentToPrintOnline: true,
           qty: product.qty,
-          cantitate: product.qty
+          cantitate: product.qty,
+          description: product.description
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){

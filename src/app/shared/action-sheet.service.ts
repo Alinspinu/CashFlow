@@ -38,6 +38,8 @@ import { RecordModalPage } from '../office/supliers/suplier/record-modal/record-
 import { SelectDataPage } from '../modals/select-data/select-data.page';
 import { AddReportPage } from '../reports/add-report/add-report.page';
 import { EntryViewPage } from '../modals/entry-view/entry-view.page';
+import { CloseDayPage } from '../cash-control/close-day/close-day.page';
+import { MonetarPage } from '../cash-control/monetar/monetar.page';
 
 
 
@@ -138,6 +140,8 @@ export class ActionSheetService {
                typeof RecordModalPage |
                typeof AddReportPage |
                typeof EntryViewPage |
+               typeof MonetarPage |
+               typeof CloseDayPage |
                typeof DelProdViewPage,
     options: any
   ){

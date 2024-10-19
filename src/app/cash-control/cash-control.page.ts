@@ -15,6 +15,19 @@ import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { ContentService } from '../content/content.service';
 import { Category } from '../models/category.model';
 import { SpinnerPage } from '../modals/spinner/spinner.page';
+import { AddEntryPage } from '../modals/add-entry/add-entry.page';
+import { UsersService } from '../office/users/users.service';
+import { CloseDayPage } from './close-day/close-day.page';
+import { environment } from '../../environments/environment.prod';
+
+
+interface payment {
+  description: string,
+  amount: number
+  date: string,
+  document: {tip: string, number: string},
+  users: string[]
+}
 
 @Component({
   selector: 'app-cash-control',
@@ -30,6 +43,7 @@ export class CashControlPage implements OnInit, OnDestroy {
 
   orders: Bill[] = []
   data: Bill[] = []
+  users: {name: string, id: string, show: boolean}[] = []
 
   userCash: number = 0;
   userCard: number = 0;
@@ -51,7 +65,9 @@ export class CashControlPage implements OnInit, OnDestroy {
 
   disableButtons: boolean = false
 
-  users: {name: string, id: string, show: boolean}[] = []
+  payments: payment[] = []
+  paymentsTotal: number = 0
+
 
 
   constructor(
@@ -59,6 +75,7 @@ export class CashControlPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController,
     private authSrv: AuthService,
     private contSrv: ContentService,
+    private userSrv: UsersService,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
   ) { }
 
@@ -73,8 +90,10 @@ export class CashControlPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getCashInandOut()
+    this.getPaymentsFromLocalStorage()
     this.getUser()
     this.getData()
+    this.userSrv.getUsers().subscribe()
   }
 
 
@@ -109,6 +128,67 @@ export class CashControlPage implements OnInit, OnDestroy {
       )
     );
   }
+
+
+
+
+ async closeDay(){
+    const data = await this.actionSheet.openPayment(CloseDayPage,
+      {
+        pay: this.payments,
+        payTotal: this.paymentsTotal,
+        cashTotal: this.userCash,
+        card: this.userTotal - this.userCash,
+        name: this.user.employee.fullName
+      })
+      if(data){
+        showToast(this.toastCtrl, data, 1500)
+        this.onReports('z')
+
+      }
+
+  }
+
+
+
+
+  async adPayment(){
+      const data = await this.actionSheet.openPayment(AddEntryPage, 'user')
+      if(data && data.entry){
+       const tip = data.entry.typeOf
+       const payment: payment = {
+        description: data.entry.description,
+        amount: +data.entry.amount,
+        date: data.entry.date,
+        document: data.entry.document,
+        users: []
+       }
+
+       if(tip === 'Bonus vanzari'){
+         const users = data.entry.description.split(',')
+         users.shift()
+          payment.description = 'Bonus vanzari'
+          payment.users = users
+       }
+
+       this.payments.push(payment)
+       this.paymentsTotal += payment.amount
+       Preferences.set({key: 'payments', value: JSON.stringify({pay: this.payments, total: this.paymentsTotal})})
+      }
+  }
+
+  getPaymentsFromLocalStorage(){
+    Preferences.get({key: 'payments'}).then(data => {
+      if(data.value){
+        const payments = JSON.parse(data.value)
+        this.payments =  payments.pay
+        this.paymentsTotal = payments.total
+      }
+   })
+  }
+
+
+
 
 
   async openBill(bill: Bill){
@@ -196,6 +276,15 @@ export class CashControlPage implements OnInit, OnDestroy {
     })
   }
 
+  getUser(){
+    this.userSub = this.authSrv.user$.subscribe(response => {
+      if(response) {
+        this.user = response
+        this.getAllOrders()
+      }
+    })
+   }
+
   getUsers(){
     const uniqUsers = new Set()
     const users = this.data
@@ -250,14 +339,7 @@ export class CashControlPage implements OnInit, OnDestroy {
   }
 
 
- getUser(){
-  this.userSub = this.authSrv.user$.subscribe(response => {
-    if(response) {
-      this.user = response
-      this.getAllOrders()
-    }
-  })
- }
+
 
  today(){
   return formatedDateToShow(Date.now()).split('ora')[0]
@@ -291,7 +373,7 @@ export class CashControlPage implements OnInit, OnDestroy {
 
 async onReports(value: string){
   if(value === 'z'){
-    const response = await this.actionSheet.deleteAlert('Ești sigur că vrei să scoți raportul Z?... Ai scos toate notele?', 'RAPORT Z')
+    const response = await this.actionSheet.deleteAlert('PRINTEAZĂ RAPORTUL Z', 'RAPORT Z')
     if(response){
       this.reports(value)
     }
@@ -305,7 +387,7 @@ reports(value: string){
   this.disableButtons = true
   this.cashSrv.removeProductDiscount(this.setZeroDiscount(this.allCats)).subscribe(response => {
     if(response){
-      Preferences.remove({key: 'cashInAndOut'})
+
     }
   })
   this.cashSrv.raport(value).subscribe(response => {
@@ -314,13 +396,44 @@ reports(value: string){
       if(value === 'z'){
         this.isLoading = true
         this.message = true
-        this.cashSrv.saveInventary().subscribe(response => {
-          if(response){
+        const entry = {
+          tip: 'income',
+          date: new Date().toISOString(),
+          description: 'Incasare Raport Z',
+          amount: this.userCash,
+          locatie: environment.LOC,
+          typeOf: 'Incasare raport Z'
+        }
+
+        this.cashSrv.saveEntry(entry).subscribe({
+          next: (response) => {
+            this.cashSrv.saveInventary().subscribe({
+              next: (response) => {
+                if(response){
+                  this.isLoading = false
+                  this.message = false
+                  Preferences.remove({key: 'payments'})
+                  Preferences.remove({key: 'cashInAndOut'})
+                  showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
+                }
+              },
+              error: (error) => {
+                console.log(error)
+                this.isLoading = false
+                this.message = false
+                showToast(this.toastCtrl, error.message, 2000)
+              }
+            })
+          },
+          error: (error) => {
+            console.log(error)
             this.isLoading = false
             this.message = false
-            showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
+            showToast(this.toastCtrl, error.message, 2000)
           }
         })
+
+
         this.cashIn = 0
         this.cashOut = 0
       }

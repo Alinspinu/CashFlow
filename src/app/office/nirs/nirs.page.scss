@@ -53,6 +53,9 @@ ion-button, .font{
     text-align: left;
     flex: 10%;
   }
+  ion-icon{
+    color: var(--ion-color-medium) !important;
+  }
 }
 
 .nir-entry:hover{
@@ -62,7 +65,6 @@ ion-button, .font{
   }
   ion-icon{
     color: var(--ion-color-light) !important;
-
   }
 }
 

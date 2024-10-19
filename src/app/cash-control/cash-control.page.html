@@ -18,43 +18,67 @@
     </ion-title>
     <div class="col">
       <div class="cash-info-wrappr">
-        <ion-item lines="none" class="input" *ngIf="userCash > 0">
-          Cash: {{userCash}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="userCard > 0">
-          Card: {{userCard}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="userViva > 0">
-          Viva Wallet: {{userViva}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="userTips > 0">
-          Bacșiș: {{userTips}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="userVoucher > 0">
-          Voucher: {{userVoucher}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="userOnline > 0">
-          Plata Online: {{userOnline}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input bold" *ngIf="userTotal > 0">
-          Total: {{userTotal}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="cashIn > 0">
-          Bani Adăugați: {{cashIn}} Lei
-        </ion-item>
-        <ion-item lines="none" class="input" *ngIf="cashOut > 0">
-          Bani Scoși: {{cashOut}} Lei
-        </ion-item>
+        <div class="input" *ngIf="userCash > 0">
+          <span class="description"> Cash</span>
+          <span class="amount">{{userCash}} Lei</span>
+        </div>
+        <div class="input" *ngIf="userCard > 0">
+          <span class="description">Card</span>
+          <span class="amount">{{userCard}} Lei</span>
+        </div>
+        <div class="input" *ngIf="userViva > 0">
+          <span class="description">Viva Wallet</span>
+          <span class="amount">{{userViva}} Lei</span>
+        </div>
+        <div class="input" *ngIf="userTips > 0">
+          <span class="description">Bacșiș</span>
+          <span class="amount">{{userTips}} Lei</span>
+        </div>
+        <div class="input" *ngIf="userVoucher > 0">
+          <span class="description">Voucher</span>
+          <span class="amount">{{userVoucher}} Lei</span>
+        </div>
+        <div class="input" *ngIf="userOnline > 0">
+          <span class="description">Plată Online</span>
+          <span class="amount">{{userOnline}} Lei</span>
+        </div>
+        <div class="input" *ngIf="userTotal > 0">
+          <span class="description bold">Total încasari</span>
+          <span class="amount bold">{{userTotal}} Lei</span>
+        </div>
+        <div class="input" *ngIf="cashIn > 0">
+          <span class="description">Bani Adăugați</span>
+          <span class="amount">{{cashIn}} Lei</span>
+        </div>
+        <div class="input" *ngIf="cashOut > 0">
+          <span class="description">Bani Scoși</span>
+          <span class="amount">{{cashOut}} Lei</span>
+        </div>
+      </div>
+      </div>
+    <ion-title class="title" *ngIf="payments.length">
+      Plăti
+    </ion-title>
+    <div class="col">
+      <div class="cash-info-wrappr" *ngIf="payments.length">
+        <div class="input payment" *ngFor="let payment of payments">
+          <span class="description">{{payment.description}}</span>
+          <span class="amount">{{payment.amount}} Lei</span>
+        </div>
+        <div  class="input">
+          <span class="description bold">Total plăți</span>
+          <span class="amount bold">{{paymentsTotal}} Lei</span>
+        </div>
       </div>
       <div class="button-wrapper">
         <ion-button expand="block" size="large" color="medium" (click)="onReports('x')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/business.svg"></ion-icon>
          RAPORT X
         </ion-button>
-        <ion-button expand="block" size="large" color="medium" (click)="onReports('z')" [disabled]="disableButtons">
+        <!-- <ion-button expand="block" size="large" color="medium" (click)="onReports('z')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
           RAPORT Z
-        </ion-button>
+        </ion-button> -->
         <ion-button expand="block" size="large" color="medium" (click)="inAndOut('in')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/add-circle-outline.svg"></ion-icon>
          ADAUGA BANI IN CASA
@@ -62,6 +86,14 @@
         <ion-button expand="block" size="large" color="medium" (click)="inAndOut('out')" [disabled]="disableButtons">
           <ion-icon src="../../../assets/icon/remove-circle-outline.svg"></ion-icon>
         SCOATE BANI DIN CASA
+        </ion-button>
+        <ion-button expand="block" size="large" color="medium" (click)="closeDay()">
+          <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
+       INCHIDERE ZI
+        </ion-button>
+        <ion-button expand="block" size="large" color="medium" (click)="adPayment()">
+          <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
+       INREGISTREAZĂ O PLATĂ
         </ion-button>
       </div>
     </div>
@@ -73,13 +105,13 @@
     </ion-title>
     <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută notă după produs"  (ionInput)="searchProduct($event)" #searchbar>
     </ion-searchbar>
-  <ion-item lines="none" class="input" *ngFor="let order of orders; let i = index;" (click)="openBill(order)">
-    <span>Nr.{{order.index}} | </span>
-    <span>Ora - {{orderTime(order.updatedAt)}} |</span>
-    <span>{{showPaymentMethod(order.payment)}} |</span>
-    <span>Masa: {{order.masa}} |</span>
-    <span *ngIf="order.employee">Casier: {{order.employee.fullName}} |</span>
-  </ion-item>
+  <div class="input order" *ngFor="let order of orders; let i = index;" (click)="openBill(order)">
+    <span>Nr.{{order.index}}</span>
+    <span>Ora - {{orderTime(order.updatedAt)}}</span>
+    <span>{{showPaymentMethod(order.payment)}}</span>
+    <span>Masa: {{order.masa}}</span>
+    <span *ngIf="order.employee">Casier: {{order.employee.fullName}}</span>
+  </div>
 </ion-content>
 </div>
 

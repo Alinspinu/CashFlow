@@ -74,10 +74,11 @@ export class CashRegisterPage implements OnInit {
   }
 
   async addEntry(){
-    const data = await this.actionSheet.openPayment(AddEntryPage, this.user.locatie)
-    if(data){
-      const dayIndex = this.documents.findIndex(el => el.date === data.date)
-      this.documents[dayIndex] = data
+    const data = await this.actionSheet.openPayment(AddEntryPage, 'register')
+    console.log(data)
+    if(data && data.day){
+      const dayIndex = this.documents.findIndex(el => el.date === data.day.date)
+      this.documents[dayIndex] = data.day
     }
   }
 

@@ -1,5 +1,5 @@
 ion-content, ion-toolbar, ion-footer{
-  --background: #fbf0e7 !important;
+  --background: var(--ion-color-tertiary) !important;
 }
 
 
@@ -16,7 +16,7 @@ ion-botton, ion-title, span, ion-item, ion-input{
     border-radius: 8px;
     margin: 1rem 0 0.5rem 0.5rem;
     width: 100%;
-    background-color: white;
+    background-color: var(--ion-color-light);
     padding-left: 24px;
     ion-input{
       font-size: 26px;
@@ -40,9 +40,9 @@ ion-botton, ion-title, span, ion-item, ion-input{
   .title{
     font-family: NoirProSemi !important;
     text-align: center;
-    background-color: black;
+    background-color: var(--ion-color-medium);
     padding: 18px;
-    color: white;
+    color: var(--ion-color-light);
     font-size: 24px;
     margin-top: 8px;
   }

@@ -65,8 +65,6 @@ export class MobilePage implements OnInit {
     this.getUser()
   }
 
-
-
     searchProduct(ev: any){
       this.productSearch = ev.target.value;
       this.orders = this.data.filter(parentItem =>

@@ -113,11 +113,15 @@ export class AddEntryPage implements OnInit {
 
 
   ngOnInit() {
-   this.locatie = this.navPar.get('options')
+   const mode = this.navPar.get('options')
    this.setForm()
-   this.startEntryFlow()
    this.getSupliers()
    this.getUsers()
+   if(mode === 'register'){
+     this.startEntryFlow()
+   } else {
+    this.startEntryFlowUser()
+   }
   }
 
 
@@ -178,6 +182,7 @@ export class AddEntryPage implements OnInit {
     this.usersSrv.usersSend$.subscribe(response => {
       const employees = response.filter(user => user.employee.active === true)
       this.users = employees
+
       this.users.forEach((user: any) => {
           if(user.name === 'sergiu' || user.name === 'Adrian Piticariu'){
               this.admin.push(user)
@@ -455,7 +460,7 @@ export class AddEntryPage implements OnInit {
         date: this.date,
         description: this.description,
         amount: this.form.value.price,
-        locatie: this.locatie,
+        locatie: environment.LOC,
         typeOf: this.form.value.typeOf,
         suplier: this.form.value.suplier,
         user: this.usersId.length ? this.usersId : [this.form.value.user],
@@ -466,9 +471,194 @@ export class AddEntryPage implements OnInit {
         month: this.months.findIndex(m => m === this.form.value.month)
       }
       this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
-        this.modalCtrl.dismiss(response)
+        this.modalCtrl.dismiss({day: response, entry: entry})
       })
     }
+  }
+
+
+
+
+
+
+  async startEntryFlowUser(){
+      this.hide.date = true
+      this.date = new Date().toISOString()
+        this.hide.tip = true
+        this.form.get('typeOfEntry')?.setValue('expense' )
+          this.operations = this.expenseOp
+          const typeOf = await this.actionSheet.entryAlert(this.expenseOp, 'radio','Tip de Cheltuială','Alege o opțiune','', '')
+          if(typeOf){
+            this.hide.typeOf = true
+            this.form.get('typeOf')?.setValue(typeOf)
+            switch(typeOf){
+              case 'Plata furnizor':
+                const suplierName = await this.actionSheet.openSelect(SelectDataPage, this.supliersToSend, 'data')
+                if(suplierName){
+                    const suplier = this.supliers.find((suplier: any) => suplier.name === suplierName)
+                    if(suplier){
+                      this.hide.suplier = true
+                      this.form.get('suplier')?.setValue(suplier._id)
+                    }
+                    const document = await this.actionSheet.entryAlert(this.documents, 'radio', 'Tip de Document', 'Alege o opțiune', '', '')
+                    if(document) {
+                      if(document === 'Fara'){
+                        this.description = typeOf + ': ' + suplier.name + ' Fara document de plata'
+                      } else {
+                        this.hide.document = true
+                        this.form.get('document')?.setValue(document)
+                        const docNumber = await this.actionSheet.textAlert('Numar Document', 'Introdu numarul documentului', 'nr', 'Numad document')
+                        if(docNumber){
+                          this.description = typeOf + ': ' + suplier.name + ' ' + document + ' ' + docNumber
+                          this.hide.docNr = true
+                          this.form.get('docNr')?.setValue(docNumber)
+                      }
+                    }
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
+                    }
+                }
+                return
+              case 'Plata catre administrator':
+                this.usersToShow = this.admin
+                const admin = await this.actionSheet.entryAlert([this.admin[0].employee.fullName, this.admin[1].employee.fullName], 'radio', 'Tip de Document', 'Alege o opțiune', '', '')
+                if(admin){
+                  this.hide.user = true
+                  const user = this.admin.find(user => user.employee.fullName === admin)
+                  this.form.get('user')?.setValue(user._id)
+                  this.description = typeOf + ' ' + user.employee.fullName
+                  const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                  if(sum){
+                    this.hide.amount = true
+                    this.form.get('price')?.setValue(sum)
+                  }
+                }
+                return
+              case 'Avans':
+                this.usersToShow = this.users
+                const user = await this.actionSheet.openSelect(SelectDataPage, this.usersNames, 'data')
+                if(user){
+                  this.hide.user = true
+                  const choise = this.users.find((usr:any) => usr.employee.fullName === user)
+                  this.form.get('user')?.setValue(choise._id)
+                  this.description = typeOf + " " + choise.employee.fullName
+                  const currentMonthIndex = new Date(Date.now()).getMonth()
+                  const currentMonth = this.months[currentMonthIndex]
+                  const montBehind = this.months[currentMonthIndex -1]
+                  const month = await this.actionSheet.entryAlert([montBehind, currentMonth], 'radio', 'Luna', 'Alege luna din care se scade avansul', 'suplier-alert', '')
+                  if(month){
+                    this.hide.month = true
+                    this.form.get('month')?.setValue(month)
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
+                  }
+                }
+                return
+              case 'Salariu':
+                this.usersToShow = this.users
+                const employee = await this.actionSheet.openSelect(SelectDataPage, this.usersNames, 'data')
+                if(employee){
+                  this.hide.user = true
+                  const choise = this.users.find((usr:any) => usr.employee.fullName === employee)
+                  this.form.get('user')?.setValue(choise._id)
+                  this.description = typeOf + ' ' + choise.employee.fullName
+                  const currentMonthIndex = new Date(Date.now()).getMonth()
+                  const currentMonth = this.months[currentMonthIndex]
+                  const montBehind = this.months[currentMonthIndex -1]
+                  const month = await this.actionSheet.entryAlert([montBehind, currentMonth], 'radio', 'Luna', 'Alege luna din care se scade salariul', 'suplier-alert', '')
+                  if(month){
+                    this.hide.month = true
+                    this.form.get('month')?.setValue(month)
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
+                  }
+                }
+                return
+              case 'Bonus vanzari':
+                this.usersToShow = this.users
+                const users = await this.actionSheet.openSelect(SelectDataPage, this.usersNames, 'bonus')
+                if(users){
+                  this.hide.users = true
+                  this.bonusName = users
+                  this.description = typeOf + ', ' + users.join(', ');
+                  users.forEach((name: string) => {
+                    this.users.forEach((user:any) => {
+                        if(name === user.employee.fullName){
+                          this.usersId.push(user._id)
+                        }
+                    })
+                  })
+                  const currentMonthIndex = new Date(Date.now()).getMonth()
+                  const currentMonth = this.months[currentMonthIndex]
+                  const montBehind = this.months[currentMonthIndex -1]
+                  const month = await this.actionSheet.entryAlert([montBehind, currentMonth], 'radio', 'Luna', 'Alege luna din care se scade bonusul', 'suplier-alert', '')
+                  if(month){
+                    this.hide.month = true
+                    this.form.get('month')?.setValue(month)
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
+                  }
+                }
+                return
+              case 'Bonus excelenta':
+                this.usersToShow = this.users
+
+                const lucky = await this.actionSheet.openSelect(SelectDataPage, this.usersNames, 'data')
+                if(lucky){
+                  this.hide.user = true
+                  const choise = this.users.find((usr:any) => usr.employee.fullName === lucky)
+                  this.form.get('user')?.setValue(choise._id)
+                  this.description = typeOf + ' ' + lucky
+                  const currentMonthIndex = new Date(Date.now()).getMonth()
+                  const currentMonth = this.months[currentMonthIndex]
+                  const montBehind = this.months[currentMonthIndex -1]
+                  const month = await this.actionSheet.entryAlert([montBehind, currentMonth], 'radio', 'Luna', 'Alege luna bounsată', 'suplier-alert', '')
+                  if(month){
+                    this.hide.month = true
+                    this.form.get('month')?.setValue(month)
+                    const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                    if(sum){
+                      this.hide.amount = true
+                      this.form.get('price')?.setValue(sum)
+                    }
+                  }
+                }
+                return
+              case 'Tips Card':
+                this.description = typeOf
+                const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                if(sum){
+                  this.hide.amount = true
+                  this.form.get('price')?.setValue(sum)
+                }
+                return
+              case 'Altele':
+                const desc = await this.actionSheet.textAlert('Descriere', 'Adaugă informații suplimentare', 'nr', 'Descriere')
+                if(desc){
+                  this.hide.desc = true
+                  this.description ='Alte plati: ' + desc
+                  this.form.get('description')?.setValue(desc)
+                }
+                const val = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                if(val){
+                  this.hide.amount = true
+                  this.form.get('price')?.setValue(val)
+                }
+                return
+            }
+          }
   }
 
 

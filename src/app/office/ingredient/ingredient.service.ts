@@ -33,23 +33,74 @@ export class IngredientService{
   }
 
 
-  getIngredients(loc: string){
-    this.dbService.getData('data', 1).subscribe((data: any) => {
-      if(data){
-        this.ingredients = [...JSON.parse(data.ings)]
-        this.ingredientsState.next([...this.ingredients])
-      }
-    })
-    console.log(loc)
-    return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
-        .pipe(tap(response => {
-          this.ingredients = response
-          console.log(this.ingredients.length)
-          const stringIngs = JSON.stringify(this.ingredients)
-          this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
+  getIngredient(page: number){
+    if(page === 1){
+      this.dbService.getData('data', 1).subscribe((data: any) => {
+        if(data){
+          this.ingredients = [...JSON.parse(data.ings)]
           this.ingredientsState.next([...this.ingredients])
-        }))
+        }
+      })
+    }
+    return this.http.get<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {params: { page: page.toString(), loc: environment.LOC }},)
   }
+
+
+  getAllIngredients(): Observable<any[]> {
+    const allItems: any[] = [];
+    let currentPage = 1;
+
+    const fetchNextPage = (): Observable<any> => {
+      return this.getIngredient(currentPage);
+    };
+
+    return new Observable((observer) => {
+      const fetchData = () => {
+        fetchNextPage().subscribe(
+          (data) => {
+            allItems.push(...data.items); // Collect items
+            if (currentPage < data.totalPages) {
+              currentPage++;
+                fetchData(); // Fetch the next page
+            } else {
+              console.log(allItems.length)
+               const sortedIngs = allItems.sort((a, b) => a.name.localeCompare(b.name))
+               const stringIngs = JSON.stringify(sortedIngs)
+               this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
+              this.ingredientsState.next([...sortedIngs]); // Emit all collected items
+              observer.complete(); // Complete the observable
+            }
+          },
+          (error) => {
+            observer.error(error); // Handle any errors
+          }
+        );
+      };
+      fetchData(); // Start fetching data
+    });
+  }
+
+
+
+
+
+
+  // getIngredients(loc: string){
+    // this.dbService.getData('data', 1).subscribe((data: any) => {
+    //   if(data){
+    //     this.ingredients = [...JSON.parse(data.ings)]
+    //     this.ingredientsState.next([...this.ingredients])
+    //   }
+    // })
+  //   return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
+  //       .pipe(tap(response => {
+  //         this.ingredients = response
+  //         console.log(this.ingredients.length)
+  //         const stringIngs = JSON.stringify(this.ingredients)
+  //         this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
+  //         this.ingredientsState.next([...this.ingredients])
+  //       }))
+  // }
 
   deleteIngredient(id: string){
     return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)

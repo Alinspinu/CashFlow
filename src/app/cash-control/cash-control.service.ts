@@ -65,4 +65,12 @@ createInvoice(orderId: string, userId: string, clientId: string, locId: string){
   return this.http.post(`${environment.BASE_URL}orders/invoice`, {orderId, userId, clientId, locId}, { responseType: 'arraybuffer', headers })
 }
 
+printReport(report: any){
+  return this.http.post<{message: string}>(`${environment.BASE_URL}print/report`, {report: report})
+}
+
+saveEntry(entry: any){
+  return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
+}
+
 }

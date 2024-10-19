@@ -71,20 +71,47 @@ ion-title{
 
 
 .input{
-  height: 48px;
   box-shadow:
   0 -2px 4px rgba(0, 0, 0, 0.1),
   0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 20px;
   margin: 0.7rem 0 0.1rem 0.2rem;
   font-family: NoirProReg !important;
-  span{
-    margin: 8px;
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+  padding: 0 18px ;
+  justify-content: space-between;
+  height: 60px !important;
+  background-color: var(--ion-color-light);
+  .description{
+    flex: 75%;
+    font-size: 22px;
+  }
+  .amount{
+    text-align: end;
+    flex: 25%;
+    font-size: 22px;
+    font-family: NoirProSemi !important;
+  }
+}
+
+.order{
+  font-size: 22px;
+}
+
+.payment{
+  .description{
+    font-size: 16px;
+  }
+  .amount{
+    font-size: 20px;
   }
 }
 
 .bold{
   font-family: NoirProSemi !important;
+  font-size: 24px !important;
+  flex: 50% !important;
 }
 
 .col{

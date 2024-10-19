@@ -1,0 +1,150 @@
+
+
+
+  <ion-header class="ion-no-border">
+    <ion-button (click)="close()" slot="start" color="medium">
+      <ion-icon src="assets/icon/close-outline.svg" style="font-size: 35px;"color="light"></ion-icon>
+    </ion-button>
+    <ion-toolbar class="ion-no-border">
+      <div class="title-wrapper">
+        <div class="title">MONETAR</div>
+      </div>
+      <div class="title-wrapper">
+        <div class="title">VALOARE DE PREDAT {{remainingSum}} Lei</div>
+      </div>
+    </ion-toolbar>
+  </ion-header>
+
+
+
+<ion-content [fullscreen]="true">
+
+  <ion-grid style="margin-top: 2rem;">
+    <div [formGroup]="monetaryForm" class="form">
+    <ion-row>
+      <ion-col>
+          <ion-row>
+            <ion-col size="2" offset="4">
+              <div class="input">
+                <span class="description bold">500 X</span>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div class="input">
+                <ion-input type="number" formControlName="fiveH"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2" offset="4">
+              <div class="input">
+                <span class="description bold">200 X</span>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div class="input">
+                <ion-input type="number" formControlName="twoH"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2" offset="4">
+              <div class="input">
+                <span class="description bold">100 X</span>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div class="input">
+                <ion-input type="number" formControlName="oneH"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2" offset="4">
+              <div class="input">
+                <span class="description bold">50 X</span>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div class="input">
+                <ion-input type="number" formControlName="fiveT"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2" offset="4">
+              <div class="input">
+                <span class="description bold">10 X</span>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div class="input">
+                <ion-input type="number" formControlName="ten"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2" offset="4">
+              <div class="input">
+                <span class="description bold">5 X</span>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div class="input">
+                <ion-input type="number" formControlName="five"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2" offset="4">
+              <div class="input">
+                <span class="description bold">1 X</span>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div class="input">
+                <ion-input type="number" formControlName="one"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2" offset="4">
+              <div class="input">
+                <span class="description bold">0.5 X</span>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div class="input">
+                <ion-input type="number" formControlName="oneByTwo"></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2" offset="4">
+        <div class="input">
+          <span class="description bold">TOTAL</span>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="input">
+          <span class="bold">{{monetaryTotal}}</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  </ion-grid>
+
+</ion-content>
+
+
+<ion-footer class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="light" size="large" (click)="save()">SALVEAZA MONETARUL</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

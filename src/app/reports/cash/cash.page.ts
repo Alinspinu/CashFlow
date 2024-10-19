@@ -227,7 +227,7 @@ calcTva(){
     })
   })
   this.tvaValue = round(tvaDiscountBills + tvaFullBills)
-  this.totalIncasat = round(this.vivaWallet+this.cash)
+  this.totalIncasat = round(this.vivaWallet+this.cash+this.payOnline)
   this.totalNoTax = round(this.totalIncasat - this.tvaValue)
 }
 
@@ -298,7 +298,10 @@ calcTotals(){
    if(bill.status === "open"){
     this.openTotal += (bill.total - bill.discount)
    }
+
   })
+  console.log(this.openTotal)
+  console.log(this.total)
   this.calcProcents()
   this.calcHours()
   this.calcUsers()

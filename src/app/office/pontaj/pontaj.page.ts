@@ -168,9 +168,11 @@ async paySalary(user: any){
     if(this.periodMark){
       this.periodMark = false;
       this.period = `1 - ${this.pontaj.days.length}`
+      this.calcTotalStalary()
     } else {
       this.periodMark = true;
       this.period = '1-15'
+      this.calcTotalStalary()
     }
   }
 

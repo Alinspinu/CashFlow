@@ -1,0 +1,89 @@
+
+
+  <ion-header class="ion-no-border">
+    <ion-button (click)="close()" slot="start" color="medium">
+      <ion-icon src="assets/icon/close-outline.svg" style="font-size: 35px;"color="light"></ion-icon>
+    </ion-button>
+    <ion-toolbar class="ion-no-border">
+      <div class="title-wrapper">
+        <div class="title">ICHIDERE ZI</div>
+      </div>
+    </ion-toolbar>
+  </ion-header>
+
+
+
+<ion-content [fullscreen]="true" *ngIf="data">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="input">
+          <span class="description bold">Sume încasate numerar</span>
+          <span class="amount">{{data.cashTotal}} Lei</span>
+        </div>
+        <!-- <div class="input">
+          <span class="description bold">Sume încasate online</span>
+          <span class="amount">{{data.card}} Lei</span>
+        </div> -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="input" *ngFor="let payment of data.pay">
+          <span class="description">{{payment.description}}</span>
+          <span class="amount">-{{payment.amount}} Lei</span>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="input">
+          <span class="description bold">Total plăți numerar</span>
+          <span class="amount">{{data.payTotal}} Lei</span>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="input">
+          <span class="description bold">Total de predat numerar</span>
+          <span class="amount">{{data.cashTotal - data.payTotal}} Lei</span>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="3" *ngIf="monetary">
+        <div class="title-wrapper">
+          <div class="title">MONETAR</div>
+        </div>
+        <div class="monetary">
+          <span *ngIf="monetary.fiveH > 0">500 Lei X {{monetary.fiveH}}  = {{500*monetary.fiveH}} Lei</span>
+          <span *ngIf="monetary.twoH > 0">200 Lei X {{monetary.twoH}}  = {{200* monetary.twoH}} Lei</span>
+          <span *ngIf="monetary.oneH > 0">100 Lei X {{monetary.oneH}}  = {{100 * monetary.oneH}} Lei</span>
+          <span *ngIf="monetary.fiveT > 0">50 Lei X {{monetary.fiveT}}  = {{50*monetary.fiveT}} Lei</span>
+          <span *ngIf="monetary.ten > 0">10 Lei X {{monetary.ten}}  = {{10*monetary.ten}} Lei</span>
+          <span *ngIf="monetary.five > 0">5 Lei X {{monetary.five}}  = {{5*monetary.five}} Lei</span>
+          <span *ngIf="monetary.one > 0">1 Leu X {{monetary.one}}  = {{monetary.one}} Lei</span>
+          <span *ngIf="monetary.oneByTwo> 0">0.5 Lei X {{monetary.oneByTwo}}  = {{0.5* monetary.oneByTwo}} Lei</span>
+          <span class="total">TOTAL = {{monetary.total}} Lei</span>
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+
+<ion-footer class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" color="light" size="large" (click)="addMonetary()">Monetar</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" size="large" color="medium" (click)="closeDay()" [disabled]="!monetary">Printează Raport</ion-button>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

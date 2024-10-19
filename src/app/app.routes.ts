@@ -36,6 +36,14 @@ const routes: Routes = [
     path: 'entry-view',
     loadComponent: () => import('./modals/entry-view/entry-view.page').then( m => m.EntryViewPage)
   },
+  {
+    path: 'close-day',
+    loadComponent: () => import('./cash-control/close-day/close-day.page').then( m => m.CloseDayPage)
+  },
+  {
+    path: 'monetar',
+    loadComponent: () => import('./cash-control/monetar/monetar.page').then( m => m.MonetarPage)
+  },
 
 ];
 

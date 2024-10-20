@@ -79,15 +79,17 @@ addOnlineOrder(bill: Bill){
 
 updateOrder(bill: Bill){
   const table = this.tables.find(obj => obj.index === bill.masa)
+  const tableIndex = this.tables.findIndex(obj => obj.index === bill.masa)
   if(table){
-    const billIndex = table.bills.findIndex(obj => {
-     return obj._id === bill._id || obj._id === 'new'
-    })
+    const billIndex = table.bills.findIndex(obj => obj.soketId === bill.soketId)
     if(billIndex !== -1){
       table.bills[billIndex] = bill
+      const index = table.bills.findIndex(obj => obj.soketId === bill.soketId)
+      this.saveOrder(tableIndex, bill._id, index, bill.employee, bill.inOrOut, bill.out)
       this.tableState.next([...this.tables])
     } else {
       table.bills.push(bill)
+      this.saveOrder(tableIndex, bill._id, billIndex, bill.employee, bill.inOrOut, bill.out)
       this.tableState.next([...this.tables])
     }
   }
@@ -115,7 +117,7 @@ async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee
     mergedBills.total = total;
     table.bills.push(mergedBills);
     let newIndex = bills.findIndex(obj => obj.name === 'UNITE')
-    const response = await firstValueFrom(this.saveOrder(masa, 'new', newIndex, employee, locatie, '', false))
+    const response = await firstValueFrom(this.saveOrder(masa, 'new', newIndex, employee, '', false))
     if(response) {
       return true
     } else {
@@ -128,7 +130,7 @@ async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee
 async manageSplitBills(tableIndex: number, billIndex: number, employee: any, locatie: string){
   let bill = this.tables[tableIndex-1].bills[billIndex]
   bill._id.length ? bill._id = bill._id : bill._id = 'new'
-  const response = await firstValueFrom(this.saveOrder(tableIndex, bill._id, billIndex, employee, locatie, '', false))
+  const response = await firstValueFrom(this.saveOrder(tableIndex, bill._id, billIndex, employee, '', false))
   if(response) {
     return true
   } else {
@@ -255,7 +257,6 @@ addTopping(masa: number, billProdIndex: number, billIndex: number, product: any)
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
     const bill = table.bills[billIndex]
-    console.log(table)
     bill.products[billProdIndex] = product
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
@@ -304,7 +305,7 @@ addCustomer(customer: any, masa: number, billIndex: number){
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = emptyBill().clientInfo
-      const response = await firstValueFrom(this.saveOrder(masa, billId, billIndex, employee, locatie, '', false))
+      const response = await firstValueFrom(this.saveOrder(masa, billId, billIndex, employee, '', false))
       if(response) {
         return true
       } else {
@@ -320,7 +321,6 @@ addCustomer(customer: any, masa: number, billIndex: number){
 
 
 getTables(locatie: string, id: string){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
   Preferences.get({key: 'tables'}).then(response =>{
     if(response && response.value){
       const parsedTables = JSON.parse(response.value)
@@ -328,7 +328,7 @@ getTables(locatie: string, id: string){
       this.tableState.next([...this.tables])
     }
   })
-  this.http.get<Table[]>(`${this.baseUrl}table/get-tables?loc=${locatie}&user=${id}`, { headers }).subscribe(response => {
+  this.http.get<Table[]>(`${this.baseUrl}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)
@@ -383,11 +383,10 @@ deleteTable(tableId: string, index: number){
   billId: string,
   billIndex: number,
   employee: any,
-  locatie: string,
   inOrOut: string,
   outside: boolean
   ){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
+
   const table = this.tables[tableIndex-1];
   const bill = this.tables[tableIndex-1].bills[billIndex];
   bill.out = outside
@@ -400,12 +399,12 @@ deleteTable(tableId: string, index: number){
   } else {
     bill.employee = employee
   }
-  bill.locatie = locatie
+  bill.locatie = environment.LOC
   bill.onlineOrder = false
   bill.pending = true
   bill.prepStatus = 'open'
   const billToSend = JSON.stringify(bill);
-  return this.http.post<{billId: string, index: number, products: any, billTotal: number, masa: any}>(`${this.baseUrl}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend}, {headers} )
+  return this.http.post<{billId: string, index: number, products: any, billTotal: number, masa: any}>(`${this.baseUrl}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend})
       .pipe(take(1),
         switchMap(res => {
         bill._id = res.billId;

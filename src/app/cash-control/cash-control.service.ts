@@ -66,7 +66,7 @@ createInvoice(orderId: string, userId: string, clientId: string, locId: string){
 }
 
 printReport(report: any){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}print/report`, {report: report})
+  return this.http.post<{message: string}>(`${environment.SAVE_URL}print/report`, {report: report})
 }
 
 saveEntry(entry: any){

@@ -12,6 +12,7 @@ export class Table{
 export class Bill{
   constructor(
     public _id: string,
+    public soketId: string,
     public index: number,
     public masaRest: any,
     public production: boolean,

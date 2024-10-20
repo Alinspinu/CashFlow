@@ -33,28 +33,34 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-card *ngFor="let day of documents; let z = index" class="day">
-    <ion-card-header>
-      <span class="cash">Cash in  {{round(day.cashIn)}} Lei</span>
-      <span class="date">DATA  {{formatDate(day.date)}}</span>
-    </ion-card-header>
-    <ion-card-content class="ion-no-padding">
-      <ion-list>
-        <ion-item *ngFor="let entry of day.entry; let i = index" class="entry" class="ion-no-margin ion-no-padding">
-          <span class="description">{{entry.description | capitalize}}</span>
-          <span class="tip" [class.red]="entry.tip === 'expense'">{{entry.tip === 'expense' ? 'out' : 'in'}}</span>
-          <span class="amount" [class.red]="entry.tip === 'expense'">{{showEntryAmount(entry)}}</span>
-          <ion-buttons slot="end">
-            <ion-button (click)="deleteEntry(entry._id, i, z)">
-              <ion-icon src="../../assets/icon/trash-outline.svg" class="trash"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-    <ion-card-header>
-      <span class="cash">Cash left  {{round(day.cashOut)}} Lei</span>
-    </ion-card-header>
-  </ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-lg="8" offset-lg="2">
+        <ion-card *ngFor="let day of documents; let z = index" class="day">
+          <ion-card-header>
+            <span class="cash">Cash in  {{round(day.cashIn)}} Lei</span>
+            <span class="date">DATA  {{formatDate(day.date)}}</span>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding">
+            <ion-list>
+              <ion-item *ngFor="let entry of day.entry; let i = index" class="entry" class="ion-no-margin ion-no-padding">
+                <span class="description">{{entry.description | capitalize}}</span>
+                <span class="tip" [class.red]="entry.tip === 'expense'">{{entry.tip === 'expense' ? 'out' : 'in'}}</span>
+                <span class="amount" [class.red]="entry.tip === 'expense'">{{showEntryAmount(entry)}}</span>
+                <ion-buttons slot="end">
+                  <ion-button (click)="deleteEntry(entry._id, i, z)">
+                    <ion-icon src="../../assets/icon/trash-outline.svg" class="trash"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+          <ion-card-header>
+            <span class="cash">Cash left  {{round(day.cashOut)}} Lei</span>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 

@@ -8,7 +8,7 @@ import { ActionSheetService } from '../shared/action-sheet.service';
 import { CashInOutPage } from '../modals/cash-in-out/cash-in-out.page';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
-import { formatedDateToShow, round } from '../shared/utils/functions';
+import { formatedDateToShow, round, roundOne } from '../shared/utils/functions';
 import { Bill } from '../models/table.model';
 import { Preferences } from '@capacitor/preferences';
 import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
@@ -136,9 +136,9 @@ export class CashControlPage implements OnInit, OnDestroy {
     const data = await this.actionSheet.openPayment(CloseDayPage,
       {
         pay: this.payments,
-        payTotal: this.paymentsTotal,
-        cashTotal: this.userCash,
-        card: this.userTotal - this.userCash,
+        payTotal: roundOne(this.paymentsTotal),
+        cashTotal: roundOne(this.userCash),
+        card: roundOne(this.userTotal - this.userCash),
         name: this.user.employee.fullName
       })
       if(data){
@@ -206,9 +206,9 @@ export class CashControlPage implements OnInit, OnDestroy {
       })
     }
      if(result && result.message === "fiscal") {
-        const order = JSON.stringify(result.order)
+        // const order = JSON.stringify(result.order)
         this.isLoading = true
-        this.cashSrv.reprintBill(order).subscribe(response => {
+        this.cashSrv.reprintBill(result.order).subscribe(response => {
           if(response) {
             this.isLoading = false
             showToast(this.toastCtrl, response.message, 3000)

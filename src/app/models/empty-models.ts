@@ -110,6 +110,7 @@ export function  emptyBillProduct(){
 export function emptyBill(){
    const emptyBill: Bill = {
     _id: '',
+    soketId: '',
     production: true,
     index: 0,
     masaRest: emptyTable(),

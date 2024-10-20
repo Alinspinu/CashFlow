@@ -392,7 +392,6 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
         this.billId,
         this.billIndex,
         this.user.employee,
-        this.user.locatie,
         this.billData.billToshow.inOrOut,
         outside
       ).pipe(
@@ -413,7 +412,6 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
             this.billId,
             this.billIndex,
             this.user.employee,
-            this.user.locatie,
             this.billData.billToshow.inOrOut,
             outside
           ).pipe(

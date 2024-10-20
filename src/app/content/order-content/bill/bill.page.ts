@@ -402,7 +402,6 @@ export class BillPage implements OnInit, OnDestroy {
           this.billId,
           this.billIndex,
           this.user.employee,
-          this.user.locatie,
           this.billToshow.inOrOut,
           outside
         ).pipe(
@@ -423,7 +422,6 @@ export class BillPage implements OnInit, OnDestroy {
               this.billId,
               this.billIndex,
               this.user.employee,
-              this.user.locatie,
               this.billToshow.inOrOut,
               outside
             ).pipe(

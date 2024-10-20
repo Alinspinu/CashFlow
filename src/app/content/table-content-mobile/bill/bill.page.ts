@@ -450,7 +450,6 @@ disableBrakeButton(){
           this.billId,
           this.billIndex,
           this.user.employee,
-          this.user.locatie,
           this.billToshow.inOrOut,
           outside
         ).pipe(
@@ -471,7 +470,6 @@ disableBrakeButton(){
               this.billId,
               this.billIndex,
               this.user.employee,
-              this.user.locatie,
               this.billToshow.inOrOut,
               outside
             ).pipe(

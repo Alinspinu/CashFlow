@@ -168,7 +168,7 @@ export class BillPage implements OnInit, OnDestroy {
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){
             this.tableSrv.addToBill(cartProduct,this.billData.tableNumber, newBillIndex, this.user.name)
-            this.tableSrv.redOne(this.billData.tableNumber, index, this.billData.billIndex)
+            this.tableSrv.redOneProg(this.billData.tableNumber, index, this.billData.billIndex)
           }
           // this.showOrder(newBillIndex);
           // this.disableOrderButton = true
@@ -272,7 +272,7 @@ export class BillPage implements OnInit, OnDestroy {
             }
           }
           for(let i=0; i<buc; i++){
-            this.tableSrv.redOne(this.billData.tableNumber, index, this.billData.billIndex)
+            this.tableSrv.redOneProg(this.billData.tableNumber, index, this.billData.billIndex)
             // this.disableBrakeButton()
           }
           delProd.billProduct = product

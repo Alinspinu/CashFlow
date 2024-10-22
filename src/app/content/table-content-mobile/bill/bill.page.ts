@@ -317,7 +317,7 @@ async break(index: number){
       if(newBillIndex){
         for(let i=0; i<qtyChioise; i++){
           this.tableSrv.addToBill(cartProduct,this.tableNumber, newBillIndex, this.user.name)
-          this.tableSrv.redOne(this.tableNumber, index, this.billIndex)
+          this.tableSrv.redOneProg(this.tableNumber, index, this.billIndex)
         }
         this.showOrder(newBillIndex);
         this.disableOrderButton = true

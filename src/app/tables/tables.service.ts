@@ -231,6 +231,26 @@ sendBill(bill: Bill){
       if(product.quantity === 0){
         bill.products.splice(billProdIndex, 1)
       }
+      this.webRtc.sendProductData(JSON.stringify(bill))
+      const tables = JSON.stringify(this.tables);
+      Preferences.set({key: 'tables', value: tables});
+      this.tableState.next([...this.tables])
+    }
+    }
+}
+
+ redOneProg(masa: number, billProdIndex: number, billIdex: number){
+  const table = this.tables.find((doc) => doc.index === masa)
+  if(table){
+    const bill = table.bills[billIdex]
+    if(bill){
+      const product =  bill.products[billProdIndex]
+      product.quantity--
+      product.total = product.quantity * product.price
+      bill.total = bill.total - product.price
+      if(product.quantity === 0){
+        bill.products.splice(billProdIndex, 1)
+      }
       this.webRtc.sendBill(JSON.stringify(bill))
       this.webRtc.sendProductData(JSON.stringify(bill))
       const tables = JSON.stringify(this.tables);

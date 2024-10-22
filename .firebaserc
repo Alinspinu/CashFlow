@@ -13,7 +13,8 @@
     "osp": "dentaflow-df68f",
     "est": "cash-test-6f218",
     "caf": "cash-flow-8a7f4",
-    "waiters": "cash-flow-waiters"
+    "waiters": "cash-flow-waiters",
+    "wai": "cash-flow-waiters"
   },
   "targets": {},
   "etags": {}

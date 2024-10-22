@@ -46,7 +46,6 @@ monetary!: Monetary
 
   getData(){
     this.data = this.navPar.get('options')
-    console.log(this.data)
   }
 
 

@@ -123,7 +123,7 @@ export class BillPage implements OnInit, OnDestroy {
     }
     const qtyChioise = await this.actionSheet.breakBillProduct(qty)
     if(qtyChioise){
-      this.tableSrv.addNewBill(this.billData.tableNumber, 'COMANDĂ NOUĂ', false)
+      this.tableSrv.addNewBill(this.billData.tableNumber, 'COMANDA SEPARATA', false)
       const oldBillIndex = this.tableSrv.getBillIndex(this.billData.tableNumber-1, this.billData.billToshow._id)
       const bills = this.billData.table.bills;
       if(bills.length > 1){
@@ -172,12 +172,12 @@ export class BillPage implements OnInit, OnDestroy {
           }
           // this.showOrder(newBillIndex);
           // this.disableOrderButton = true
-          const response = await this.tableSrv.manageSplitBills(this.billData.tableNumber, oldBillIndex, this.user.employee, this.user.locatie)
+          const response = await this.tableSrv.manageSplitBills(this.billData.tableNumber, oldBillIndex, this.user.employee, true)
           if(response){
             // this.disableOrderButton = false
           }
           // this.disableOrderButton = true
-         const resp = await this.tableSrv.manageSplitBills(this.billData.tableNumber, newBillIndex, this.user.employee, this.user.locatie)
+         const resp = await this.tableSrv.manageSplitBills(this.billData.tableNumber, newBillIndex, this.user.employee, false)
          if(response){
           // this.disableOrderButton = false
          }

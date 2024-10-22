@@ -11,10 +11,10 @@
       <ion-col size-lg="9" size-xs="12" *ngIf="!showRep">
         <div class="sum-wrapper">
           <span class="label tot">Încasări</span>
-          <span class="total tot">{{roundInHtml(total)}} Lei</span>
-          <span class="note tot">(Total cu mese deschise, cu discount și cu bacșiș)</span>
-          <span class="incasat">{{roundInHtml(totalIncasat - tips)}} Lei</span>
-          <span class="note incasat">(Total fară mese deschise, fără discount si fără bacșiș)</span>
+          <span class="total tot">{{roundInHtml(totalIncasat - tips)}} Lei</span>
+          <span class="note tot">(Total fară mese deschise, fără discount si fără bacșiș)</span>
+          <span class="incasat">{{roundInHtml(total)}} Lei</span>
+          <span class="note incasat">(Total cu mese deschise, cu discount și cu bacșiș)</span>
           <span class="vat">{{totalNoTax}} Lei</span>
           <span class="note vat">(Total fără mese deschise și fără TVA)</span>
           <span class="data tot" *ngIf="!day">{{today.length ? today : formatDate(startDate) + " -- " +  formatDate(endDate)}}</span>

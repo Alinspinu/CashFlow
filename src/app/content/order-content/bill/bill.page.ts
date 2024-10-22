@@ -534,12 +534,12 @@ export class BillPage implements OnInit, OnDestroy {
           }
           this.showOrder(newBillIndex);
           this.disableOrderButton = true
-          const response = await this.tableSrv.manageSplitBills(this.tableNumber, oldBillIndex, this.user.employee, this.user.locatie)
+          const response = await this.tableSrv.manageSplitBills(this.tableNumber, oldBillIndex, this.user.employee, true)
           if(response){
             this.disableOrderButton = false
           }
           this.disableOrderButton = true
-         const resp = await this.tableSrv.manageSplitBills(this.tableNumber, newBillIndex, this.user.employee, this.user.locatie)
+         const resp = await this.tableSrv.manageSplitBills(this.tableNumber, newBillIndex, this.user.employee, false)
          if(response){
           this.disableOrderButton = false
          }

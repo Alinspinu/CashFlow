@@ -7,8 +7,6 @@ import { environment } from "src/environments/environment";
 import { emptyBill, emptyTable } from "../models/empty-models";
 import { WebRTCService } from "../content/webRTC.service";
 import { round } from "../shared/utils/functions";
-import { AuthService } from '../auth/auth.service';
-import { handlePrintErrors } from "../shared/utils/errorHandlers";
 
 
 
@@ -29,24 +27,14 @@ export class TablesService{
 
   headers: HttpHeaders = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
 
-
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    console.log(error)
-    const errorMessage = handlePrintErrors(error);
-    // Optionally, log the error to an external service here
-    return throwError(() => new Error(errorMessage));
-  }
-
-
   constructor(
     private http: HttpClient,
     private webRtc: WebRTCService,
-    private auth: AuthService,
   ){
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
     this.screenWidth = window.innerWidth
-    // this.screenWidth < 300 ? this.baseUrl = environment.SAVE_URL_MOBILE : this.baseUrl = environment.SAVE_URL
+    this.screenWidth < 450 ? this.baseUrl = environment.SAVE_URL_MOBILE : this.baseUrl = environment.SAVE_URL
   }
 
 //******************************ORDERS************************* */
@@ -60,7 +48,7 @@ addNewBill(masa: number, name: string, newOrder: boolean){
   bill.name = name
   const table = this.tables.find((doc) => doc.index === masa)
   if(table){
-    const index = table.bills.findIndex(obj => obj.name === "COMANDA NOUA")
+    const index = table.bills.findIndex(obj => obj.name === "COMANDA SEPARATA")
     if(index === -1 || newOrder){
       table.bills.push(bill)
     }
@@ -82,17 +70,34 @@ updateOrder(bill: Bill){
   const tableIndex = this.tables.findIndex(obj => obj.index === bill.masa)
   if(table){
     const billIndex = table.bills.findIndex(obj => obj.soketId === bill.soketId)
-    if(billIndex !== -1){
-      table.bills[billIndex] = bill
-      const index = table.bills.findIndex(obj => obj.soketId === bill.soketId)
-      this.saveOrder(tableIndex, bill._id, index, bill.employee, bill.inOrOut, bill.out)
-      this.tableState.next([...this.tables])
-    } else {
-      table.bills.push(bill)
-      this.saveOrder(tableIndex, bill._id, billIndex, bill.employee, bill.inOrOut, bill.out)
-      this.tableState.next([...this.tables])
+    console.log('update order--', bill.status, 'bill index--', billIndex, 'masa--', bill.masa)
+      if(billIndex !== -1){
+          if(bill.status == 'done'){
+            this.removeBill(bill.masa, billIndex)
+          } else {
+          table.bills[billIndex] = bill
+          this.saveOrder(tableIndex +1, bill._id, billIndex, bill.employee, bill.inOrOut, bill.out).subscribe(response => {
+            if(response){
+              this.tableState.next([...this.tables])
+            }
+          })
+         }
+      } else {
+        const index = table.bills.findIndex(obj => obj.soketId === '')
+        if(index === -1){
+          if(bill._id !== 'new'){
+            table.bills.push(bill)
+            const index = table.bills.findIndex(obj => obj.soketId === bill.soketId)
+            this.saveOrder(tableIndex +1, bill._id, index, bill.employee, bill.inOrOut, bill.out).subscribe(response => {
+              if(response){
+                this.tableState.next([...this.tables])
+              }
+            })
+          }
+        }
+      }
     }
-  }
+
 }
 
 async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any, locatie: string){
@@ -127,8 +132,11 @@ async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee
   return null
 }
 
-async manageSplitBills(tableIndex: number, billIndex: number, employee: any, locatie: string){
+async manageSplitBills(tableIndex: number, billIndex: number, employee: any, old: boolean){
   let bill = this.tables[tableIndex-1].bills[billIndex]
+  this.webRtc.sendBill(JSON.stringify(bill))
+  if(old){
+  }
   bill._id.length ? bill._id = bill._id : bill._id = 'new'
   const response = await firstValueFrom(this.saveOrder(tableIndex, bill._id, billIndex, employee, '', false))
   if(response) {
@@ -139,7 +147,7 @@ async manageSplitBills(tableIndex: number, billIndex: number, employee: any, loc
 }
 
 removeBill(masa: number, billIndex: number){
-  console.log(masa, billIndex)
+  console.log('remove function', billIndex)
   let table = this.tables[masa-1];
   if(billIndex  === -1){
     table.bills.pop()
@@ -153,15 +161,23 @@ removeBill(masa: number, billIndex: number){
 }
 
 
-removeLive(masa: number, billId: string){
+removeLive(masa: number, soketId: string){
   let table = this.tables[masa-1];
-  const billIndex = table.bills.findIndex(obj => obj._id === billId)
+  const billIndex = table.bills.findIndex(obj =>{
+      if(obj && obj.soketId){
+        return obj.soketId === soketId
+      } else{
+        return -1
+      }
+  })
   if(billIndex !== -1){
+    // console.log('remove live function', billIndex)
     table.bills.splice(billIndex, 1)
     this.webRtc.sendProductData(JSON.stringify(emptyBill()))
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
+    this.deleteOrders([{id: soketId, stopSend: true}]).subscribe()
   }
 }
 
@@ -181,7 +197,7 @@ if(table){
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
-    // this.webRtc.sendProductData(JSON.stringify(bill))
+    this.webRtc.sendProductData(JSON.stringify(bill))
   } else {
     bill.masaRest.index = masa;
     bill.name = userName
@@ -191,7 +207,7 @@ if(table){
     bill.products.push(product)
     bill._id = 'new'
     table.bills.push(bill)
-    // this.webRtc.sendProductData(JSON.stringify(bill))
+    this.webRtc.sendProductData(JSON.stringify(bill))
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
@@ -215,7 +231,8 @@ sendBill(bill: Bill){
       if(product.quantity === 0){
         bill.products.splice(billProdIndex, 1)
       }
-      // this.webRtc.sendProductData(JSON.stringify(bill))
+      this.webRtc.sendBill(JSON.stringify(bill))
+      this.webRtc.sendProductData(JSON.stringify(bill))
       const tables = JSON.stringify(this.tables);
       Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
@@ -232,7 +249,7 @@ addOne(masa: number, billProdIndex: number, billindex: number){
       product.quantity++
       product.total = product.quantity * product.price
       bill.total = bill.total + product.price
-      // this.webRtc.sendProductData(JSON.stringify(bill))
+      this.webRtc.sendProductData(JSON.stringify(bill))
       const tables = JSON.stringify(this.tables);
       Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
@@ -290,7 +307,7 @@ addCustomer(customer: any, masa: number, billIndex: number){
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = customer;
-      // this.webRtc.sendProductData(JSON.stringify(bill))
+      this.webRtc.sendProductData(JSON.stringify(bill))
       const tables = JSON.stringify(this.tables);
       Preferences.set({key: 'tables', value: tables});
       this.tableState.next([...this.tables])
@@ -331,6 +348,7 @@ getTables(locatie: string, id: string){
   this.http.get<Table[]>(`${this.baseUrl}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
+      console.log('get table service',this.tables[0])
       const stringTable = JSON.stringify(this.tables)
       Preferences.set({key: 'tables', value: stringTable})
       this.tableState.next([...this.tables])
@@ -388,7 +406,7 @@ deleteTable(tableId: string, index: number){
   ){
 
   const table = this.tables[tableIndex-1];
-  const bill = this.tables[tableIndex-1].bills[billIndex];
+  let bill: Bill = this.tables[tableIndex-1].bills[billIndex];
   bill.out = outside
   bill.masa = tableIndex;
   bill.masaRest = table._id;
@@ -404,18 +422,11 @@ deleteTable(tableId: string, index: number){
   bill.pending = true
   bill.prepStatus = 'open'
   const billToSend = JSON.stringify(bill);
-  return this.http.post<{billId: string, index: number, products: any, billTotal: number, masa: any}>(`${this.baseUrl}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend})
+  return this.http.post<{bill: Bill, masa: any}>(`${this.baseUrl}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend})
       .pipe(take(1),
         switchMap(res => {
-        bill._id = res.billId;
-        bill.index = res.index;
-        bill.products = res.products;
-        bill.products.forEach(product => {
-          product.sentToPrint = false;
-          product.sentToPrintOnline = false;
-        });
-        bill.total = res.billTotal
-        bill.masaRest = res.masa;
+          console.log(res)
+        this.tables[tableIndex-1].bills[billIndex] = res.bill
         this.tableState.next([...this.tables]);
         const tables = JSON.stringify(this.tables);
         Preferences.set({key: 'tables', value: tables});
@@ -427,7 +438,6 @@ deleteTable(tableId: string, index: number){
 
 saveBillToCloud(bill: Bill){
   this.http.post(`${environment.BASE_URL}pay/save-bill-cloud`, {bill: bill}).subscribe(res => {
-    console.log(res)
   })
 }
 

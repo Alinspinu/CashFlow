@@ -89,6 +89,7 @@ export class MeniuPage implements OnInit, OnDestroy {
           this.table = table;
         }
         this.billToshow = this.table.bills[this.billIndex]
+        console.log(this.billIndex)
       }
       })
     }

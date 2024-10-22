@@ -19,9 +19,10 @@ export const environment = {
   // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
 
   SAVE_URL:'http://localhost:8080/',
-  // SAVE_URL:'https://www.flowmanager.ro:8080/',
+  // SAVE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
 
-  SAVE_URL_MOBILE: 'https://flow-app-now-cash-true-mobile.loca.lt/',
+
+  SAVE_URL_MOBILE: 'https://flow-api-394209.lm.r.appspot.com/',
 
 
 

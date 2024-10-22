@@ -257,7 +257,11 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.cashSrv.getUserOrders(id).subscribe(response => {
       if(response) {
         this.data = response
-        this.orders = [...this.data]
+        this.data.forEach(order => {
+          if(order.status === 'done'){
+              this.orders.push(order)
+          }
+        })
         this.calcCashIn()
         this.isLoading = false
       }
@@ -268,7 +272,11 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.cashSrv.getAllorders().subscribe(response => {
       if(response) {
         this.data = response
-        this.orders = [...this.data]
+        this.data.forEach(order => {
+          if(order.status === 'done'){
+              this.orders.push(order)
+          }
+        })
         this.calcCashIn()
         this.getUsers()
         this.isLoading = false

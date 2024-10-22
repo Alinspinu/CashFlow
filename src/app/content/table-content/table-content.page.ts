@@ -204,8 +204,15 @@ export class TableContentPage implements OnInit, OnDestroy {
       if(response){
       const table = response.find(obj => obj.index === this.tableNumber)
       if(table){
+        let bills: Bill[] = []
         this.table = table;
+        this.table.bills.forEach(bill => {
+          if(bill){
+            bills.push(bill)
+          }
+        })
         this.billData.table = this.table
+        this.billData.table.bills = bills
         this.disableMergeButton()
         this.disableDeleteOrderButton()
       }
@@ -301,7 +308,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   }
 
   showOrder(orderIndex: number){
-    console.log(orderIndex)
+    this.data.billIndex = orderIndex
     this.hideAllBils(this.billData.table)
     this.billData.billToshow = this.billData.table.bills[orderIndex]
     if(this.billData.billToshow){
@@ -318,6 +325,7 @@ export class TableContentPage implements OnInit, OnDestroy {
       this.billData.billToshow.payOnline = false
     }
     // this.billToshow.masaRest.index = this.tableNumber
+
     this.billDataSubject.next(this.billData)
     this.webRTC.sendProductData(JSON.stringify(this.billData.billToshow))
     this.disableBrakeButton()
@@ -452,7 +460,7 @@ async payment(){
               this.tabSub = this.tableSrv.sendBillToPrint(this.billData.billToshow).subscribe({
                 next: (response => {
                   if(response && response.bill.status === 'done'){
-                    this.tableSrv.removeBill(this.tableNumber, this.billIndex)
+                    // this.tableSrv.removeBill(this.tableNumber, this.billIndex)
                     this.billData.billToshow = emptyBill()
                     this.client = null
                     this.router.navigateByUrl("/tabs/tables")
@@ -624,7 +632,6 @@ async useCashBack(mode: boolean){
     this.cashBackMode = true
     this.billData.billToshow.cashBack = 0
     if(this.workCashBack > 0){
-      console.log('hit')
       this.billData.billToshow.clientInfo.cashBack = round(this.billData.billToshow.clientInfo.cashBack + this.workCashBack)
       this.billDataSubject.next(this.billData)
     }
@@ -673,6 +680,7 @@ async useCashBack(mode: boolean){
           delProd.billProduct.quantity = buc
           delProd.billProduct.total = buc * delProd.billProduct.price
           choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
+
           this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
             if(!choise.upload){
               const operation = {name: reason, details: el.name}
@@ -692,7 +700,7 @@ async useCashBack(mode: boolean){
           return
         }
 
-          data.push({id: this.billData.billToshow._id})
+          data.push({id: this.billData.billToshow.soketId})
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.tableSub = this.tableSrv.deleteOrders(data).subscribe()
           this.billData.billProducts = []
@@ -720,7 +728,7 @@ async useCashBack(mode: boolean){
       let billIndex: number[] = [];
       bills.forEach((el, i) => {
        el.name === "COMANDA" ? name.push(el.name + ` ${i+1}`) : name.push(el.name)
-       id.push(el._id)
+       id.push(el.soketId)
        billIndex.push(i)
       })
       let options = name.map((val, index) =>({name: val, data: {id: id[index], billIndex: billIndex[index]}}))
@@ -729,10 +737,12 @@ async useCashBack(mode: boolean){
         this.disableOrderButton = true
         const response = await this.tableSrv.mergeBills(this.tableNumber, orders, this.user.employee, this.user.locatie)
         if(response) {
-          this.tableSub = this.tableSrv.deleteOrders(orders).subscribe()
-          let index = bills.findIndex(obj => obj.name === 'UNITE')
-          this.showOrder(index)
-          this.disableOrderButton = false
+          setTimeout(() => {
+            this.tableSub = this.tableSrv.deleteOrders(orders).subscribe()
+            let index = bills.findIndex(obj => obj.name === 'UNITE')
+            this.showOrder(index)
+            this.disableOrderButton = false
+          }, 1000)
         }
       }
     }

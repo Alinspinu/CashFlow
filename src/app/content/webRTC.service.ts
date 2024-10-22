@@ -31,7 +31,7 @@ export class WebRTCService {
     this.socket.on('orderId', (data: any) => {
       this.getOnlineOrderIdSubject.next(data);
     });
-    this.socket.on('bill', (data: any) => {
+    this.socket.on('billl', (data: any) => {
       this.getUpdatadOrder.next(data);
     })
     this.socket.on('tableBillId', (data: any) => {
@@ -42,33 +42,19 @@ export class WebRTCService {
     })
   }
 
-
-  printOrder(doc: string): Observable<any> {
-    return new Observable(observer => {
-      this.socket.emit('printOrder', doc);
-      this.socket.on('orderProcessed', (response:any) => {
-        observer.next(response);
-        observer.complete();
-      });
-
-      this.socket.on('connect_error', (error: any) => {
-        observer.error(error);
-      });
-    });
+  printOrder(doc: string) {
+    this.socket.emit('printOrder', doc);
   }
 
-  printBill(doc: string): Observable<any> {
-    return new Observable(observer => {
-      this.socket.emit('printBill', doc);
-      this.socket.on('billProcessed', (response:any) => {
-        observer.next(response);
-        observer.complete();
-      });
+  printBill(doc: string) {
+    this.socket.emit('printBill', doc);
+  }
 
-      this.socket.on('connect_error', (error: any) => {
-        observer.error(error);
-      });
-    });
+
+
+
+  sendBill(doc: string) {
+    this.socket.emit('billl', doc);
   }
 
   sendProductData(data: any) {
@@ -102,6 +88,7 @@ export class WebRTCService {
   }
 
   getProductAddedObservable() {
+
     return this.productAddedSubject.asObservable();
   }
 
@@ -118,3 +105,33 @@ export class WebRTCService {
   }
 
 }
+
+
+
+  // printOrder(doc: string): Observable<any> {
+  //   return new Observable(observer => {
+  //     this.socket.emit('printOrder', doc);
+  //     this.socket.on('orderProcessed', (response:any) => {
+  //       observer.next(response);
+  //       observer.complete();
+  //     });
+
+  //     this.socket.on('connect_error', (error: any) => {
+  //       observer.error(error);
+  //     });
+  //   });
+  // }
+
+  // printBill(doc: string): Observable<any> {
+  //   return new Observable(observer => {
+  //     this.socket.emit('printBill', doc);
+  //     this.socket.on('billProcessed', (response:any) => {
+  //       observer.next(response);
+  //       observer.complete();
+  //     });
+
+  //     this.socket.on('connect_error', (error: any) => {
+  //       observer.error(error);
+  //     });
+  //   });
+  // }

@@ -298,7 +298,7 @@ addTopping(masa: number, billProdIndex: number, billIndex: number, product: any)
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
-    // this.webRtc.sendProductData(JSON.stringify(bill))
+    this.webRtc.sendProductData(JSON.stringify(bill))
 }
 }
 

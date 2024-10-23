@@ -59,7 +59,7 @@
 </ion-header>
 
 <div class="contents-container">
-      <app-meniu class="menu-content" [(data)]="data"></app-meniu>
+      <app-meniu class="menu-content" [(data)]="data" [ngClass]="{'tablet': hideTips}"></app-meniu>
       <app-bill [billData$]="billData$" class="bill-content"></app-bill>
 </div>
 
@@ -67,59 +67,59 @@
   <ion-row>
     <ion-col>
         <ion-row class="ion-no-margin ion-no-padding">
-          <ion-col size="1.5">
-            <ion-button expand="block" size="large" color="light" (click)="inviteUserToTip(invite)" style="height: 167px;">
+          <ion-col [size]="tipsCol" [ngClass]="{'hide': hideTips}">
+            <ion-button expand="block" size="large" color="light" (click)="inviteUserToTip(invite)" class="big">
               <ion-icon src="../../../assets/icon/business.svg" style="margin-right:12px;"></ion-icon>
-           {{invite === 'invite' ? 'ÎNTREABĂ TIPS' : 'ANULEAZĂ'}}
+           {{invite === 'invite' ? 'TIPS ?' : 'ANULEAZĂ'}}
             </ion-button>
           </ion-col>
-          <ion-col>
-            <ion-button expand="block" size="medium" color="light" (click)="mergeOrders()" [disabled]="disableMerge" style="height:45px;">
-              <ion-icon src="../../../assets/icon/hug.svg" style="font-size:18px;"></ion-icon>
+          <ion-col [size]="smallCol">
+            <ion-button expand="block" size="small" color="light" (click)="mergeOrders()" [disabled]="disableMerge"  class="smalll">
+              <ion-icon src="../../../assets/icon/hug.svg" style="font-size:18px; padding: 5px;"></ion-icon>
               UNEȘTE COMENZI
             </ion-button>
-            <ion-button expand="block" size="medium" color="light" (click)="breakOrder()" [disabled]="disableAction" style="height:45px;">
+            <ion-button expand="block" size="small" color="light" (click)="breakOrder()" [disabled]="disableAction"  class="small">
               <ion-icon src="../../../assets/icon/separa_comanda.svg"></ion-icon>
               SEPARĂ COMANDA
             </ion-button>
-            <ion-button expand="block" size="medium" color="light" (click)="deleteOrder()">
+            <ion-button expand="block" size="small" color="light" (click)="deleteOrder()" class="small">
               <ion-icon src="../../../assets/icon/sterge comanda.svg"></ion-icon>
               STERGE COMANDA
             </ion-button>
           </ion-col>
-          <ion-col>
-            <ion-button class="client-button" (click)="addCustomer(clientMode)" color="light" expand="block" size="medium" [disabled]="billData.billToshow && !billData.billToshow.products.length" style="height:45px;">
+          <ion-col [size]="smallCol">
+            <ion-button class="client-button" (click)="addCustomer(clientMode)" color="light" expand="block" size="small" [disabled]="billData.billToshow && !billData.billToshow.products.length">
               <ion-icon [src]=" clientMode ? '../../../assets/icon/adauga_client.svg': '../../../assets/icon/scoate_client.svg'"></ion-icon>
               {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE CLIENT"}}
             </ion-button>
-            <ion-button size="medium" expand="block" color="light" (click)="useCashBack(cashBackMode)" *ngIf="client" style="height:45px;">
+            <ion-button size="small" expand="block" color="light" (click)="useCashBack(cashBackMode)" *ngIf="client" class="small">
               <ion-icon src="../../../assets/icon/foloseste_cashback.svg"></ion-icon>
               {{ cashBackMode ? 'FOLOSEȘTE CASHBACK' : 'ELIMINĂ CASH BACK'}}
              </ion-button>
-             <ion-button size="medium" expand="block" (click)="addDiscount()" color="light" style="height:45px;">
+             <ion-button size="small" expand="block" (click)="addDiscount()" color="light" class="small">
               <ion-icon src="../../../assets/icon/adauga_reducere.svg"></ion-icon>
               {{ discountMode ? 'ADAUGĂ REDUCERE' : 'ELIMINĂ REDUCEREA'}}
              </ion-button>
-             <ion-button size="medium" expand="block"color="light" (click)="addTips()" style="height:45px;">
+             <ion-button size="small" expand="block"color="light" (click)="addTips()" class="small">
               <ion-icon src="../../../assets/icon/adauga_bacsis.svg"></ion-icon>
              ADAUGA BACSIS
              </ion-button>
           </ion-col>
 
-          <ion-col size="3">
-            <ion-button size="large" expand="block" color="medium"  (click)="sendOrder(true, true).subscribe()" [disabled]="disableOrderButton" style="height: 76px;">
-              <ion-icon src="../../../assets/icon/trimite_comanda.svg"></ion-icon>
-              Trimite terasa
+          <ion-col [size]="sendCol">
+            <ion-button size="small" expand="block" color="medium"  (click)="sendOrder(true, true).subscribe()" [disabled]="disableOrderButton" class="medium">
+              <!-- <ion-icon src="../../../assets/icon/trimite_comanda.svg"></ion-icon> -->
+              TERASĂ
             </ion-button>
-            <ion-button size="large" expand="block" color="medium" (click)="sendOrder(false, false).subscribe()" [disabled]="disableOrderButton" style="height: 76px;">
-              <ion-icon src="../../../assets/icon/trimite_comanda.svg"></ion-icon>
-             Trimite interior
+            <ion-button size="small" expand="block" color="medium" (click)="sendOrder(false, false).subscribe()" [disabled]="disableOrderButton" class="medium">
+              <!-- <ion-icon src="../../../assets/icon/trimite_comanda.svg" size="large" color="light"></ion-icon> -->
+             INTERIOR
             </ion-button>
           </ion-col>
-          <ion-col size="2">
-            <ion-button size="large" expand="block"  color="medium" (click)="payment()" [disabled]="disableOrderButton" style="height: 167px;">
+          <ion-col [size]="billCol">
+            <ion-button size="large" expand="block"  color="medium" (click)="payment()" [disabled]="disableOrderButton" class="big">
               <ion-icon src="../../../assets/icon/nota de plata.svg" color="light"></ion-icon>
-              Nota de plată
+              NOTĂ DE PLATĂ
             </ion-button>
           </ion-col>
         </ion-row>

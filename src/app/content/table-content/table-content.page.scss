@@ -20,6 +20,15 @@ ion-footer{
   ion-button{
     margin-top: 1rem;
   }
+  .medium{
+    height: 76px !important;
+  }
+  .big{
+    height: 167px !important;
+  }
+  .small, .smalll{
+    height: 45px !important;
+  }
 }
 
 .header{
@@ -207,6 +216,60 @@ ion-icon{
   }
 }
 
+.hide{
+  display: none;
+}
 
+.tablet{
+  flex: 35% !important;
+}
+
+
+
+@media(max-width: 1200px){
+  ion-footer{
+    height: 130px !important;
+  
+    ion-button{
+      margin-top: 0.3rem !important;
+    }
+    .medium{
+      height: 52px !important;
+      font-size: 18px !important;
+    }
+    .big{
+      height: 110px !important;
+      font-size: 16px !important;
+    }
+    .small, .smalll{
+      height: 33px !important;
+    }
+  }
+  .back-button{
+    height: 45px;
+    width: 65px;
+  }
+
+  .masa{
+    font-size: 16px;
+    width: 100px !important;
+    height: 40px !important;
+  }
+
+  .add-button{
+    height: 38px;
+    margin: 0 8px 0 8px;
+    font-size: 12px;
+    .add-icon{
+      font-size: 16px;
+    }
+  }
+  .active-button{
+    height: 38px !important;
+    // width: 140px !important;
+    font-size: 12px !important;
+  }
+
+}
 
 

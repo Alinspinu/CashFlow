@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonicModule, ToastController } from '@ionic/angular';
+import { IonButton, IonCol, IonContent, IonicModule, ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ContentService } from '../content.service';
 import { Category, Product } from '../../models/category.model';
@@ -27,6 +27,7 @@ import { WebRTCService } from '../webRTC.service';
 import { MeniuPage} from './meniu/meniu.page';
 import { BillPage } from './bill/bill.page';
 import { emptyBillProduct } from '../../models/empty-models';
+import { ScreenSizeService } from 'src/app/shared/screen-size.service';
 
 
 interface billData{
@@ -50,6 +51,8 @@ export class TableContentPage implements OnInit, OnDestroy {
   @ViewChild('addNameInput') nameInput!: IonInput;
   @ViewChild('billContent') content!: IonContent;
 
+  @ViewChild('menuCont') menuCont!: HTMLDivElement
+  
   invite: string = 'invite'
    order!: Bill
   onlineOrder: boolean = false
@@ -95,6 +98,7 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   userSub!: Subscription;
   tableSub!: Subscription;
+  screenSub!: Subscription
   user!: User;
 
   comment: string = ''
@@ -102,6 +106,12 @@ export class TableContentPage implements OnInit, OnDestroy {
   outside: boolean = false
 
   workCashBack: number = 0
+  hideTips: boolean =false
+
+  tipsCol: number = 1.5
+  smallCol: number = 2.75
+  sendCol: number = 3
+  billCol: number = 2
 
 
   data: {
@@ -141,6 +151,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     private authSrv: AuthService,
     private router: Router,
     private webRTC: WebRTCService,
+    private screenSizeService: ScreenSizeService,
     ) { }
 
 
@@ -149,6 +160,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getTableNumber();
     this.getData();
     this.getBill();
+    this.getScreenSize()
   }
 
   ngOnDestroy(): void {
@@ -164,6 +176,9 @@ export class TableContentPage implements OnInit, OnDestroy {
     if(this.sendOrderSub){
       this.sendOrderSub.unsubscribe()
     }
+    if(this.screenSub){
+      this.screenSub.unsubscribe()
+    }
   }
 
 //***************************NG-ON-INIT************************** */
@@ -173,6 +188,19 @@ export class TableContentPage implements OnInit, OnDestroy {
       const id = params.get('id');
       if(id){
         this.tableNumber = parseFloat(id);
+      }
+    })
+  }
+
+
+  getScreenSize(){
+    this.screenSub = this.screenSizeService.screenSize$.subscribe(screen => {
+      if(screen === 'Tablet'){
+      this.hideTips = true
+       this.billCol = 3.5
+      } else if( screen === 'TabletWide'){
+       this.hideTips = false
+       this.billCol = 2
       }
     })
   }

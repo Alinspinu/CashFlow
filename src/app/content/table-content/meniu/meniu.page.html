@@ -1,7 +1,7 @@
 <ion-content [fullscreen]="false" class="menu-content">
   <ion-grid  class="grid-meniu">
     <ion-row *ngIf="data.showMainCats">
-        <ion-col size="6" *ngFor="let mainCat of getObjectKeys(data.mainCats)">
+        <ion-col [size]="mainCatCol" *ngFor="let mainCat of getObjectKeys(data.mainCats)">
           <ion-card (click)="showCategories(mainCat.name)" class="main-card">
             <div class="image-wrapper">
               <ion-icon alt="main category image" class="main-img" [src]="mainCat.img"></ion-icon>
@@ -11,7 +11,7 @@
         </ion-col>
     </ion-row>
      <ion-row *ngIf="data.showCats">
-        <ion-col size="3" *ngFor="let cat of categoriesToShow; let i = index">
+        <ion-col [size]="catCol" *ngFor="let cat of categoriesToShow; let i = index">
           <ion-card (click)="showProducts(i, cat.mainCat)" class="cat-card">
             <img alt="category image" [src]="cat.image.path" />
             <ion-card-subtitle class="small-title">{{cat.name}}</ion-card-subtitle>
@@ -19,7 +19,7 @@
         </ion-col>
       </ion-row>
       <ion-row *ngIf="data.showProd">
-        <ion-col size="3" *ngFor="let product of productsToShow">
+        <ion-col [size]="catCol" *ngFor="let product of productsToShow">
           <ion-card (click)="addToBill(product)" class="prod-card">
               <img alt="image" class="prod-img" [src]="modifyImageURL(product.image.path)" />
             <ion-card-subtitle class="product-title">{{product.name}}</ion-card-subtitle>

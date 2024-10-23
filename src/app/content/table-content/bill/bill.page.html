@@ -31,11 +31,9 @@
                 <span class="prod-price">{{product.price}} Lei</span>
 
                 <div class="buttons-wrapper">
-                 <div style="width: 24px;"></div>
                  <div class="button"  (click)="redProd(i)" *ngIf="product.sentToPrint">-</div>
                  <span class="prod-qty">{{product.quantity}}</span>
                  <div class="button"  (click)="addProd(i)" *ngIf="product.sentToPrint">+</div>
-                 <div style="width: 24px;"></div>
                 </div>
 
                 <div class="price-wrapper">
@@ -47,7 +45,7 @@
                 </ion-button> -->
                 <ion-buttons slot="end" *ngIf="!product.sentToPrint">
                   <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings, product)">
-                    <ion-icon src="../../../assets/icon/sterge comanda.svg" style="font-size:36px;"></ion-icon>
+                    <ion-icon src="../../../assets/icon/sterge comanda.svg" id="trash"></ion-icon>
                   </ion-button>
                 </ion-buttons>
 

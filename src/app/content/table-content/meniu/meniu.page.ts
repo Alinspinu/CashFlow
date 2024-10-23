@@ -13,6 +13,7 @@ import { triggerEscapeKeyPress } from '../../../shared/utils/toast-controller';
 import { round, getSection } from '../../../shared/utils/functions';
 import User from '../../../auth/user.model';
 import { AuthService } from '../../../auth/auth.service';
+import { ScreenSizeService } from 'src/app/shared/screen-size.service';
 
 interface data{
   mainCats: any, billIndex: number, tableNumber: number, showMainCats: boolean, showCats: boolean, showProd: boolean
@@ -40,6 +41,12 @@ export class MeniuPage implements OnInit, OnDestroy {
   categoriesToShow!: Category[];
   productsToShow!: Product[];
 
+  mainCatCol: number = 6
+  catCol: number = 3
+  screenType: string = 'Web';
+
+  screenSub!: Subscription
+
 
   billToshow!: Bill
   table!: Table
@@ -52,13 +59,15 @@ export class MeniuPage implements OnInit, OnDestroy {
   constructor(
     private tableSrv: TablesService,
     private authSrv: AuthService,
-    @Inject(ActionSheetService) private actionSheet: ActionSheetService
+    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
+    private screenSizeService: ScreenSizeService
   ) { }
 
 
 
   ngOnInit() {
     this.getUser()
+    this.getScreenSize()
   }
 
   ngOnDestroy(): void {
@@ -68,6 +77,21 @@ export class MeniuPage implements OnInit, OnDestroy {
     if(this.userSub){
       this.userSub.unsubscribe()
     }
+    if(this.screenSub){
+      this.screenSub.unsubscribe()
+    }
+  }
+
+  getScreenSize(){
+    this.screenSub = this.screenSizeService.screenSize$.subscribe(screen => {
+      if(screen === 'Tablet'){
+        this.mainCatCol = 12
+        this.catCol = 6
+      } else if( screen === 'TabletWide'){
+        this.mainCatCol = 6
+        this.catCol = 3
+      }
+    })
   }
 
 

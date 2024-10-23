@@ -43,34 +43,34 @@ export class WebRTCService {
   }
 
   printOrder(doc: string) {
-    this.socket.emit('printOrder', doc);
+    // this.socket.emit('printOrder', doc);
   }
 
   printBill(doc: string) {
-    this.socket.emit('printBill', doc);
+    // this.socket.emit('printBill', doc);
   }
 
 
 
 
   sendBill(doc: string) {
-    this.socket.emit('billl', doc);
+    // this.socket.emit('billl', doc);
   }
 
   sendProductData(data: any) {
-    this.socket.emit('productAdded', data);
+    // this.socket.emit('productAdded', data);
   }
 
   getUserTip(data: any) {
-    this.socket.emit('getUserTip', data);
+    // this.socket.emit('getUserTip', data);
   }
 
   inviteUserToTip(data: any) {
-    this.socket.emit('inviteToTip', data);
+    // this.socket.emit('inviteToTip', data);
   }
 
   sendOrderOutside(data: any) {
-    this.socket.emit('outsideOrder', data)
+    // this.socket.emit('outsideOrder', data)
   }
 
 

@@ -15,7 +15,7 @@ ion-content{
   justify-content: center;
   align-items: center;
   background-color: var(--ion-color-light);
-  height: 70px;
+  height: fit-content !important;
   font-family: NoirProSemi !important;
   cursor: pointer;
   .prod-name{
@@ -49,10 +49,11 @@ ion-content{
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px, solid, black;
+        border: 1px, solid, var(--ion-color-medium);
         border-radius: 50%;
         user-select: none;
-        font-weight: 900;
+        font-family: NoirProSemi !important;
+        margin: 0 8px;
         height: 30px !important;
         width: 30px !important;
       }
@@ -86,10 +87,10 @@ ion-content{
     flex: 20%;
     text-align: end;
   }
-  .trash{
-    height: 30px;
+  #trash{
+    font-size: 36px;
   }
-  }
+}
 
 
   .buttons-container{
@@ -119,6 +120,107 @@ ion-content{
       .value{
         text-align: end;
         font-size: 20px;
+      }
+    }
+  }
+
+
+  @media(max-width: 1200px){
+    .product-item{
+      ion-thumbnail{
+        height: 40px !important;
+        width: 40px !important;
+      }
+      padding: 8px !important;
+      .prod-name{
+        flex: 35% !important;
+        margin-left: 10px !important;
+        #p-name{
+         font-size: 10px !important;
+        }
+        .toppings-wrapper{
+          margin-left: 6%;
+          span{
+            font-family: NoirProReg !important;
+            font-size: 8px !important;
+          }
+        }
+      }
+      .prod-price{
+        font-size: 18px !important;
+      }
+        .buttons-wrapper{
+          flex: 6%;
+          .prod-qty{
+            font-size: 18px !important;
+          }
+        }
+      .price-wrapper{
+        .prod-total{
+          font-size: 18px !important;
+        }
+        .prod-discount{
+          font-size: 12px !important;
+          margin-left: 12px !important;
+        }
+      }
+      .trash{
+        height: 12px !important;
+      }
+    }
+
+    .buttons-container{
+      margin-top: 8px;
+      padding: 10px 8px 2px 8px;
+      .bill-total-row{
+        .value{
+          font-size: 22px;
+        }
+  
+        .label{
+          font-size: 18px;
+        }
+      }
+      .bill-extra-row{
+        .label{
+          font-family: NoirProReg !important;
+          font-size: 14px;
+        }
+        .value{ 
+          font-size: 16px;
+        }
+      }
+    }
+  
+  }
+
+  @media(max-width: 900px){
+    .product-item{
+    .prod-price{
+      display: none !important;
+    }
+    .prod-name{
+      flex: 50% !important;
+    }
+    .prod-price{
+      font-size: 18px !important;
+    }
+      .buttons-wrapper{
+        .prod-qty{
+          font-size: 14px !important;
+        }
+      }
+      .price-wrapper{
+        .prod-total{
+          font-size: 14px !important;
+        }
+        .prod-discount{
+          font-size: 9px !important;
+          margin-left: 9px !important;
+        }
+      }
+      #trash{
+        display: none !important;
       }
     }
   }

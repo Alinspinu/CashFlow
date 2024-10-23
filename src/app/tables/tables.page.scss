@@ -162,5 +162,27 @@ ion-title{
 }
 
 
+@media(max-width: 1200px){
 
+  .table{
+    width: 75px !important;
+    height: 75px !important;
+    font-size: 20px !important;
+    .name {
+      font-size: 14px !important;
+    }
+  }
+
+  .badges-wrapper{
+      right: 18% !important;
+      top: 11% !important;
+      bottom: 0;
+  }
+    .badge{
+      height: 19px !important;
+      width: 19px !important;
+      font-size: 10px !important;
+    }
+
+}
 

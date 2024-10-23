@@ -1,16 +1,15 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonCol, IonContent, IonicModule, ToastController } from '@ionic/angular';
+import { IonContent, IonicModule, ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ContentService } from '../content.service';
 import { Category, Product } from '../../models/category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
+import { showToast} from 'src/app/shared/utils/toast-controller';
 import { Bill, BillProduct, deletetBillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
 import { map, Observable, of, Subscription, switchMap, BehaviorSubject } from 'rxjs';
-import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
 import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
@@ -19,7 +18,7 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { AuthService } from 'src/app/auth/auth.service';
 import User from 'src/app/auth/user.model';
 import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
-import { getSection, round } from 'src/app/shared/utils/functions';
+import { round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
@@ -52,7 +51,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   @ViewChild('billContent') content!: IonContent;
 
   @ViewChild('menuCont') menuCont!: HTMLDivElement
-  
+
   invite: string = 'invite'
    order!: Bill
   onlineOrder: boolean = false
@@ -413,6 +412,7 @@ async addTips(){
 
 
 sendOrder(out: boolean, outside: boolean): Observable<boolean> {
+  console.log('before orders',this.clientMode)
   if (this.billData.billToshow) {
     this.billData.billToshow.out = outside
     this.disableOrderButton = true;
@@ -432,6 +432,7 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
         outside
       ).pipe(
         map((res) => {
+          console.log('after orders',this.clientMode)
           this.disableOrderButton = false;
           if (out && res) {
             this.router.navigateByUrl('/tabs/tables');
@@ -452,6 +453,7 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
             outside
           ).pipe(
             map((res) => {
+              console.log('after orders',this.clientMode)
               this.disableOrderButton = false;
               if (out && res) {
                 this.router.navigateByUrl('/tabs/tables');
@@ -516,11 +518,11 @@ async addCustomer(clientMode: boolean){
       if(clientInfo && clientInfo.message === "client"){
         this.client = clientInfo.data
         this.clientMode = false
+
         this.billData.billToshow.clientInfo = this.client
         this.billData.billToshow.name = this.client.name
         this.calcBillDiscount(this.billData.billToshow);
         this.tableSrv.addCustomer(this.client, this.tableNumber, this.billIndex)
-        this.sendOrder(false, true).subscribe()
       }
       if( clientInfo && clientInfo.message === "voucher"){
         this.billData.billToshow.voucher = clientInfo.data
@@ -532,11 +534,9 @@ async addCustomer(clientMode: boolean){
       }
       this.billDataSubject.next(this.billData)
     } else {
-      if(this.billData.billToshow.cashBack > 0){
         this.billData.billToshow.total = this.billData.billToshow.total + this.billData.billToshow.cashBack
         this.billData.billToshow.cashBack = 0
         this.cashBackMode = true
-      }
       if(this.billData.billToshow){
         this.billData.billToshow.products.forEach(el => {
           el.discount = 0

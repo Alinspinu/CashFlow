@@ -63,14 +63,16 @@
       <ion-col size-lg="6" offset-lg="3" *ngIf="inventary">
           <ion-row>
             <ion-col>
-              <div *ngFor="let ing of ingredients; let i = index" class="ing-wrapper input">
-                <span class="name">{{ing.name}} /<span class="um">{{ing.ing.um}}</span></span>
-                <span class="gest">{{ing.gestiune}}</span>
-                <span class="dep">{{ing.dep}}</span>
-                <span class="scriptic">{{roundInHtml(ing.scriptic)}}</span>
-                <span class="faptic">{{ing.faptic}}</span>
-                <span class="dif">{{roundInHtml(ing.faptic - ing.scriptic)}}</span>
-                <span class="dif-value">{{roundInHtml((ing.faptic - ing.scriptic) * ing.ing.price)}}</span>
+              <div *ngFor="let ing of ingredients; let i = index" >
+                <div class="ing-wrapper input" *ngIf="ing.ing">
+                  <span class="name">{{ing.name}} /<span class="um">{{ing.ing.um}}</span></span>
+                  <span class="gest">{{ing.gestiune}}</span>
+                  <span class="dep">{{ing.dep}}</span>
+                  <span class="scriptic">{{roundInHtml(ing.scriptic)}}</span>
+                  <span class="faptic">{{ing.faptic}}</span>
+                  <span class="dif">{{roundInHtml(ing.faptic - ing.scriptic)}}</span>
+                  <span class="dif-value">{{roundInHtml((ing.faptic - ing.scriptic) * ing.ing.price)}}</span>
+                </div>
               </div>
             </ion-col>
           </ion-row>

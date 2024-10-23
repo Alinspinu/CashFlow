@@ -18,11 +18,14 @@
     </div>
     <ion-buttons slot="end" class="horizontal-scroll">
       <ion-button class="ion-text-end" *ngFor="let bill of table.bills; let i = index;"  [ngClass]="{ 'active-button': bill.show }">
-        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }"  *ngIf="!bill.setName" class='ion-no-padding ion-no-margin'>
+        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }"  *ngIf="!bill.setName && !hideTips" class='ion-no-padding ion-no-margin'>
           <ion-icon src="../../../assets/icon/create-outline.svg"  [ngClass]="{ 'active-button': bill.show }" (click)="editOrderName(i)"></ion-icon>
         </ion-item>
-        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }" style="text-transform: uppercase;" (click)="showOrder(i)" *ngIf="!bill.setName">
-          <ion-label [id]="'orderName-' + i">{{bill.name === 'COMANDA' ? bill.name + ' ' + (i+1) : bill.name}}</ion-label>
+        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }" style="text-transform: uppercase;" (click)="showOrder(i)" *ngIf="!bill.setName && !hideTips">
+          <ion-label [id]="'orderName-' + i">{{bill.name === 'COMANDĂ' ? bill.name + ' ' + (i+1) : bill.name}}</ion-label>
+        </ion-item>
+        <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }" style="text-transform: uppercase;" (click)="showOrder(i)" *ngIf="hideTips">
+          <ion-label [id]="'orderName-' + i">{{'C' + ' ' + (i+1)}}</ion-label>
         </ion-item>
         <ion-item lines="none" [ngClass]="{ 'active-button': bill.show }"  *ngIf="bill.setName" class='ion-no-padding ion-no-margin'>
           <ion-input type="text" placeholder="Alege nume" *ngIf="bill.setName" [(ngModel)]="orderName" #addNameInput>
@@ -90,7 +93,7 @@
           <ion-col [size]="smallCol">
             <ion-button class="client-button" (click)="addCustomer(clientMode)" color="light" expand="block" size="small" [disabled]="billData.billToshow && !billData.billToshow.products.length">
               <ion-icon [src]=" clientMode ? '../../../assets/icon/adauga_client.svg': '../../../assets/icon/scoate_client.svg'"></ion-icon>
-              {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE CLIENT"}}
+              {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE  CLIENT"}}
             </ion-button>
             <ion-button size="small" expand="block" color="light" (click)="useCashBack(cashBackMode)" *ngIf="client" class="small">
               <ion-icon src="../../../assets/icon/foloseste_cashback.svg"></ion-icon>

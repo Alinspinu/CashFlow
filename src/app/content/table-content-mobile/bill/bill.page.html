@@ -5,7 +5,7 @@
   <ion-grid>
   <ion-row class="bill-content-row">
     <ion-col size="12">
-        <div lines="none" *ngFor="let product of billProducts; let i = index" class="product-item" [ngClass]="{'grey': !product.sentToPrint}">
+        <div lines="none" *ngFor="let product of billProducts; let i = index" class="product-item">
         <img [src]="product.imgPath" class="prod-img" (click)="openComments(product, i)">
         <div class="prod">
           <div class="product" (click)="openComments(product, i)">
@@ -98,7 +98,7 @@
 </ion-grid>
 </ion-content>
 
-<ion-footer [translucent]="true" *ngIf="!isLoading">
+<ion-footer class="ion-no-border" *ngIf="!isLoading">
   <ion-row class="ion-no-margin ion-no-padding">
     <ion-col class="ion-no-margin ion-no-padding" style="width: 100vw; display:flex;">
       <ion-icon src="assets/icon/seting.svg" class="setting" [color]="color" (click)="showSettings()"></ion-icon>
@@ -131,19 +131,19 @@
           </ion-col>
          </ion-row>
          <ion-row class="ion-no-margin ion-no-padding">
-           <ion-col class="ion-no-margin ion-no-padding">
+           <!-- <ion-col class="ion-no-margin ion-no-padding">
              <ion-button size="medium" expand="block" color="danger" (click)="sendOrder(true, true).subscribe()" [disabled]="disableOrderButton">
                Trimite Terasa
              </ion-button>
-             </ion-col>
+             </ion-col> -->
            <ion-col class="ion-no-margin ion-no-padding">
              <ion-button size="medium" expand="block" color="secondary" (click)="sendOrder(true, false).subscribe()" [disabled]="disableOrderButton">
-               Trimite Interior
+               TRIMITE
              </ion-button>
              </ion-col>
              <ion-col class="ion-no-margin ion-no-padding">
              <ion-button size="medium" expand="block" color="primary" (click)="payment()" [disabled]="disableOrderButton">
-               Nota de plată
+              NOTĂ
              </ion-button>
            </ion-col>
          </ion-row>

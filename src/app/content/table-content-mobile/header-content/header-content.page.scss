@@ -3,6 +3,10 @@ ion-title{
   margin-left: 30px;
 }
 
+ion-header, ion-toolbar{
+    --background: var(--ion-color-light-tint) !important;
+}
+
 .horizontal-scroll {
   width: 70%;
   display: flex;

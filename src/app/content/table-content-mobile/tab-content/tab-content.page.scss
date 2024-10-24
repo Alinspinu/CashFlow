@@ -4,6 +4,9 @@ span, p{
   font-family: NoirProReg !important;
 }
 
+ion-toolbar{
+  --background: var(--ion-color-tertiary);
+}
 
 
 .prod-wrapper{

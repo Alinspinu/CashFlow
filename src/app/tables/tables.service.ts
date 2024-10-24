@@ -194,10 +194,11 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
     bill.total = bill.total + product.price
+    console.log('add bill', table.bills)
+    this.webRtc.sendProductData(JSON.stringify(bill))
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
     this.tableState.next([...this.tables])
-    this.webRtc.sendProductData(JSON.stringify(bill))
   } else {
     bill.masaRest.index = masa;
     bill.name = userName
@@ -207,6 +208,7 @@ if(table){
     bill.products.push(product)
     bill._id = 'new'
     table.bills.push(bill)
+    console.log('add bill', table.bills)
     this.webRtc.sendProductData(JSON.stringify(bill))
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});

@@ -110,17 +110,17 @@
           </ion-col>
 
           <ion-col [size]="sendCol">
-            <ion-button size="small" expand="block" color="medium"  (click)="sendOrder(true, true).subscribe()" [disabled]="disableOrderButton" class="medium">
-              <!-- <ion-icon src="../../../assets/icon/trimite_comanda.svg"></ion-icon> -->
+            <!-- <ion-button size="small" expand="block" color="medium"  (click)="sendOrder(true, true).subscribe()" [disabled]="disableOrderButton" class="medium">
+              <ion-icon src="../../../assets/icon/trimite_comanda.svg"></ion-icon>
               TERASĂ
-            </ion-button>
-            <ion-button size="small" expand="block" color="medium" (click)="sendOrder(false, false).subscribe()" [disabled]="disableOrderButton" class="medium">
-              <!-- <ion-icon src="../../../assets/icon/trimite_comanda.svg" size="large" color="light"></ion-icon> -->
-             INTERIOR
+            </ion-button> -->
+            <ion-button size="large" expand="block" color="medium" (click)="sendOrder(true, false).subscribe()" [disabled]="disableOrderButton || !billData.billToshow.products.length" class="big">
+              <ion-icon src="../../../assets/icon/trimite_comanda.svg" size="large" color="light"></ion-icon>
+             TRIMITE
             </ion-button>
           </ion-col>
           <ion-col [size]="billCol">
-            <ion-button size="large" expand="block"  color="medium" (click)="payment()" [disabled]="disableOrderButton" class="big">
+            <ion-button size="large" expand="block"  color="medium" (click)="payment()" [disabled]="disableOrderButton || !billData.billToshow.products.length" class="big">
               <ion-icon src="../../../assets/icon/nota de plata.svg" color="light"></ion-icon>
               NOTĂ DE PLATĂ
             </ion-button>

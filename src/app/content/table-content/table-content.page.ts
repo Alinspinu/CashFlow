@@ -109,8 +109,8 @@ export class TableContentPage implements OnInit, OnDestroy {
 
   tipsCol: number = 1.5
   smallCol: number = 2.75
-  sendCol: number = 3
-  billCol: number = 2
+  sendCol: number = 2.5
+  billCol: number = 2.5
 
 
   data: {
@@ -196,10 +196,10 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.screenSub = this.screenSizeService.screenSize$.subscribe(screen => {
       if(screen === 'Tablet'){
       this.hideTips = true
-       this.billCol = 3.5
+       this.billCol = 4
       } else if( screen === 'TabletWide'){
        this.hideTips = false
-       this.billCol = 2
+       this.billCol = 2.5
       }
     })
   }
@@ -671,7 +671,7 @@ async useCashBack(mode: boolean){
 
   async deleteOrder(){
     let data = []
-    if(this.billData.billProducts && this.billData.billProducts.length && !this.billData.billProducts[0].sentToPrint){
+    if(this.billData.billToshow._id !== 'new'){
       const choise = await this.actionSheet.deleteBill()
       if(choise){
         const title = "MOTIVUL ȘTERGERII"
@@ -698,37 +698,40 @@ async useCashBack(mode: boolean){
               return showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi nota!', 3000)
             }
           }
-          this.billData.billProducts.forEach((el: BillProduct) => {
-          let delProd: deletetBillProduct = emptyDeletetBillProduct()
-          const buc = el.quantity;
-          delProd.billProduct = el
-          delProd.reason = reason;
-          delProd.employee = this.user.employee
-          delProd.locatie = this.user.locatie
-          delProd.billProduct.quantity = buc
-          delProd.billProduct.total = buc * delProd.billProduct.price
-          choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
+          if(this.billData.billProducts.length){
+            this.billData.billProducts.forEach((el: BillProduct) => {
+            let delProd: deletetBillProduct = emptyDeletetBillProduct()
+            const buc = el.quantity;
+            delProd.billProduct = el
+            delProd.reason = reason;
+            delProd.employee = this.user.employee
+            delProd.locatie = this.user.locatie
+            delProd.billProduct.quantity = buc
+            delProd.billProduct.total = buc * delProd.billProduct.price
+            choise.upload ? delProd.inv = 'in' : delProd.inv = 'out'
 
-          this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-            if(!choise.upload){
-              const operation = {name: reason, details: el.name}
-              if(el.toppings.length){
-              this.tableSub =  this.tableSrv.unloadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
-              }
-              this.tableSub = this.tableSrv.unloadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
-                if(response) {
-                  showToast(this.toastCtrl, response.message, 3000)
+            this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
+              if(!choise.upload){
+                const operation = {name: reason, details: el.name}
+                if(el.toppings.length){
+                this.tableSub =  this.tableSrv.unloadIngs(el.toppings, buc, operation, this.user.locatie).subscribe()
                 }
-              })
-            }
+                this.tableSub = this.tableSrv.unloadIngs(el.ings, buc, operation, this.user.locatie).subscribe(response => {
+                  if(response) {
+                    showToast(this.toastCtrl, response.message, 3000)
+                  }
+                })
+              }
+            })
           })
-        })
+          }
         } else {
           showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
           return
         }
 
           data.push({id: this.billData.billToshow.soketId})
+          console.log(data)
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.tableSub = this.tableSrv.deleteOrders(data).subscribe()
           this.billData.billProducts = []

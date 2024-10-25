@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { ing, Inventary } from '../../models/inventary.model';
+import { CompareInv, ing, Inventary } from '../../models/inventary.model';
 import { InventaryService } from './inventary.service';
 import { formatedDateToShow, round } from '../../shared/utils/functions';
 import { ActionSheetService } from '../../shared/action-sheet.service';
@@ -10,6 +10,7 @@ import { SelectInvPage } from './select-inv/select-inv.page';
 import { SpinnerPage } from '../../modals/spinner/spinner.page';
 import { CapitalizePipe } from '../../shared/utils/capitalize.pipe';
 import { showToast } from 'src/app/shared/utils/toast-controller';
+import { UploadLogPage } from './upload-log/upload-log.page';
 
 @Component({
   selector: 'app-inventary',
@@ -26,10 +27,17 @@ export class InventaryPage implements OnInit {
   ingredients!: ing[]
   screenWidth!: number
 
+  compareTable!: CompareInv
+
   diferenceTotal: number = 0
 
   isLoading: boolean = false
   allIngs!: ing[]
+  
+  ingsComp: any[] = []
+  allIngsComp: any[] = []
+
+  mode: string = 'inventary'
 
   gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingDep: string[] = ["materie", "marfa"]
@@ -99,6 +107,35 @@ export class InventaryPage implements OnInit {
         this.editInventary(inventary)
       }
     }
+  }
+
+  async selectInventaries(){
+    let start
+    let end 
+    const startInventary = await this.actService.openPayment(SelectInvPage, '')
+    if(startInventary){
+      start = startInventary.date
+      const secondInventary = await this.actService.openPayment(SelectInvPage, '')
+      if(secondInventary){
+        end = secondInventary.date
+      }
+    }
+    if(start && end){
+      this.isLoading = true
+      this.invService.compareInventary(start, end).subscribe(response => {
+        this.mode = 'compare'
+        this.compareTable = response.compareInv
+        this.ingsComp = this.compareTable.ingredients
+        this.allIngsComp = this.ingsComp
+        this.ingsComp.sort((a, b) => a.name.localeCompare(b.name));
+        this.isLoading = false
+        console.log(response)
+      })
+    }
+  }
+
+  async showlog(logs: any[], ingName: string){
+    await this.actService.openPayment(UploadLogPage, {logs, ingName} )
 
   }
 
@@ -115,34 +152,65 @@ export class InventaryPage implements OnInit {
     })
   }
 
-  searchIngredient(ev: any){
+  searchIngredient(ev: any, comp: boolean){
+    if(comp){
+      const searchQuery = ev.detail.value.toLowerCase()
+      this.ingsComp = this.allIngsComp.filter((obj: ing) => obj.name.toLowerCase().includes(searchQuery))
+    } else {
       const searchQuery = ev.detail.value.toLowerCase()
       this.ingredients = this.allIngs.filter((obj: ing) => obj.name.toLowerCase().includes(searchQuery))
-  }
-
-
-  onSelectGestiune(event: any){
-    this.filter.gestiune = event.detail.value
-    this.ingredients = [...this.allIngs]
-    this.filterIngredients()
-  }
-
-  onSelectDep(event: any){
-    this.filter.dep = event.detail.value
-    this.ingredients = [...this.allIngs]
-    this.filterIngredients()
-  }
-
-
-
-  filterIngredients(){
-    if(this.filter.dep !== ''){
-      const ings = this.ingredients.filter((ing: any) => ing.dep === this.filter.dep)
-      this.ingredients = [...ings]
     }
-    if(this.filter.gestiune !== ''){
-      const ings = this.ingredients.filter((ing: any) => ing.gestiune === this.filter.gestiune)
-      this.ingredients = [...ings]
+  }
+
+
+
+  onSelectGestiune(event: any, comp: boolean){
+    if(comp){
+      this.filter.gestiune = event.detail.value
+      this.ingsComp = [...this.allIngsComp]
+      this.filterIngredients(true)
+
+    } else {
+      this.filter.gestiune = event.detail.value
+      this.ingredients = [...this.allIngs]
+      this.filterIngredients(false)
+    }
+  }
+
+  onSelectDep(event: any, comp: boolean){
+    if(comp){
+      this.filter.dep = event.detail.value
+      this.ingsComp = [...this.allIngsComp]
+      this.filterIngredients(true)
+
+    } else{
+      this.filter.dep = event.detail.value
+      this.ingredients = [...this.allIngs]
+      this.filterIngredients(false)
+    }
+  }
+
+
+
+  filterIngredients(comp: boolean){
+    if(comp) {
+      if(this.filter.dep !== ''){
+        const ings = this.ingsComp.filter((ing: any) => ing.dep === this.filter.dep)
+        this.ingsComp = [...ings]
+      }
+      if(this.filter.gestiune !== ''){
+        const ings = this.ingsComp.filter((ing: any) => ing.gestiune === this.filter.gestiune)
+        this.ingsComp = [...ings]
+      }
+    } else {
+      if(this.filter.dep !== ''){
+        const ings = this.ingredients.filter((ing: any) => ing.dep === this.filter.dep)
+        this.ingredients = [...ings]
+      }
+      if(this.filter.gestiune !== ''){
+        const ings = this.ingredients.filter((ing: any) => ing.gestiune === this.filter.gestiune)
+        this.ingredients = [...ings]
+      }
     }
   }
 
@@ -151,6 +219,10 @@ export class InventaryPage implements OnInit {
 
   roundInHtml(num: number){
     return round(num)
+  }
+
+  formatDate(date: string){
+   return formatedDateToShow(date).split('ora')[0]
   }
 
 

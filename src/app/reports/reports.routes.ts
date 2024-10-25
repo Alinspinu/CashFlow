@@ -47,6 +47,10 @@ export const routes: Routes = [
   {
     path: 'add-report',
     loadComponent: () => import('./add-report/add-report.page').then( m => m.AddReportPage)
+  },  {
+    path: 'upload-log',
+    loadComponent: () => import('./inventary/upload-log/upload-log.page').then( m => m.UploadLogPage)
   },
+
 
 ];

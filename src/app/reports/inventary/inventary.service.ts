@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 
 import { environment } from "src/environments/environment";
 import { Observable, tap } from "rxjs";
-import { Inventary } from '../../models/inventary.model';
+import { CompareInv, Inventary } from '../../models/inventary.model';
 
 
 
@@ -38,5 +38,9 @@ export class InventaryService{
 
     exportInv(inventaryId: string){
       return this.http.get(`${environment.BASE_URL}print/inventary?id=${inventaryId} `, {responseType: 'blob'})
+    }
+
+    compareInventary(start: string, end: string){
+      return this.http.post<{compareInv: CompareInv}>(`${environment.BASE_URL}ing/compare-inv`, {start, end, loc: environment.LOC})
     }
 }

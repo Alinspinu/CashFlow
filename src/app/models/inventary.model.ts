@@ -24,3 +24,41 @@ export class ing {
 
   ){}
 }
+
+
+export class CompareInv {
+  constructor(
+    public dateFirst: string,
+    public dateSecond: string,
+    public ingredients: CompareIng[],
+  ){}
+}
+
+ class CompareIng{
+  constructor(
+    public  name: string,
+    public  um: string,
+    public  first: number,
+    public  second: number,
+    public  scripticUnload: number,
+    public  saleUnload: number,
+    public gestiune: string,
+    public dep: string,
+    public  upload: {
+      value: 0,
+      entries: log[]
+    }
+
+  ){}
+}
+
+class log{
+  constructor(
+    public  date: string,
+    public  qty: number,
+    public  operation: {
+      name: string,
+      details: string,
+      }
+  ){}
+}

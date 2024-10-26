@@ -34,6 +34,8 @@ export class AddEntryPage implements OnInit {
   date!:any
   locatie!: string
 
+  mode: string = 'register'
+
   operations: string[] = []
   supliers!: any
   users!: any
@@ -113,11 +115,11 @@ export class AddEntryPage implements OnInit {
 
 
   ngOnInit() {
-   const mode = this.navPar.get('options')
+  this.mode = this.navPar.get('options')
    this.setForm()
    this.getSupliers()
    this.getUsers()
-   if(mode === 'register'){
+   if(this.mode === 'register'){
      this.startEntryFlow()
    } else {
     this.startEntryFlowUser()
@@ -470,10 +472,15 @@ export class AddEntryPage implements OnInit {
         },
         month: this.months.findIndex(m => m === this.form.value.month)
       }
-      this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
-        this.modalCtrl.dismiss({day: response, entry: entry})
-      })
+      if(this.mode === 'register'){
+        this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
+          this.modalCtrl.dismiss({day: response, entry: entry})
+        })
+      } else {
+        this.modalCtrl.dismiss({entry: entry})
+      }
     }
+
   }
 
 

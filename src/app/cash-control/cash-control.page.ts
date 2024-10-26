@@ -404,17 +404,6 @@ reports(value: string){
       if(value === 'z'){
         this.isLoading = true
         this.message = true
-        const entry = {
-          tip: 'income',
-          date: new Date().toISOString(),
-          description: 'Incasare Raport Z',
-          amount: this.userCash,
-          locatie: environment.LOC,
-          typeOf: 'Incasare raport Z'
-        }
-
-        this.cashSrv.saveEntry(entry).subscribe({
-          next: (response) => {
             this.cashSrv.saveInventary().subscribe({
               next: (response) => {
                 if(response){
@@ -432,16 +421,6 @@ reports(value: string){
                 showToast(this.toastCtrl, error.message, 2000)
               }
             })
-          },
-          error: (error) => {
-            console.log(error)
-            this.isLoading = false
-            this.message = false
-            showToast(this.toastCtrl, error.message, 2000)
-          }
-        })
-
-
         this.cashIn = 0
         this.cashOut = 0
       }

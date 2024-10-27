@@ -35,6 +35,11 @@ export class TogglePontPage implements OnInit {
   getPont(){
     this.pontSrv.getAllPont().subscribe(response => {
       this.pontaj = response
+      this.pontaj.sort( (a, b) => {
+        const dateA = new Date(a.days[0].date).getTime()
+        const dateB = new Date(b.days[0].date).getTime()
+        return dateA - dateB
+      })
     })
   }
 

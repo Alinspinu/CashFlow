@@ -9,6 +9,9 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
+      <ion-button (click)="testSound()" color="medium">
+        <ion-icon [src]="volumeSrc" ></ion-icon>
+      </ion-button>
       <ion-button (click)="addTable()" class="header-buttons">
         <ion-icon src="../../assets/icon/add-outline.svg"></ion-icon>
         ADAUGĂ MASĂ

@@ -17,6 +17,7 @@ import { InvIngredient } from 'src/app/models/nir.model';
 import { Subscription, take } from 'rxjs';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 import { AddToInventaryPage } from 'src/app/modals/add-to-inventary/add-to-inventary.page';
+import { IngredientContentPage } from './ingredient-content/ingredient-content.page';
 
 @Component({
   selector: 'app-ingredient',
@@ -77,6 +78,10 @@ export class IngredientPage implements OnInit, OnDestroy {
     if(this.ingSub){
       this.ingSub.unsubscribe()
     }
+  }
+
+  async showContent(ing: InvIngredient){
+    await this.actionSh.openPayment(IngredientContentPage, ing)
   }
 
 

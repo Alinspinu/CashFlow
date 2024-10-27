@@ -151,3 +151,31 @@ export function  convertToDateISOString(dateString: string | undefined) {
 }
 
 
+export function findCommonNumber(arr: number[]): number | null {
+  // Check if the array is empty
+  if (arr.length === 0) return null;
+
+  // Calculate the sum of the array elements
+  const sum = arr.reduce((acc, num) => acc + num, 0);
+
+  // Calculate the mean by dividing the sum by the number of elements
+  const mean = sum / arr.length;
+
+  return round(mean);
+}
+
+
+export function sortByDate(arr: any[], ascending: boolean = true): any[] {
+  return arr.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      // Compare dates
+      if (ascending) {
+          return dateA.getTime() - dateB.getTime(); // Ascending order
+      } else {
+          return dateB.getTime() - dateA.getTime(); // Descending order
+      }
+  });
+}
+

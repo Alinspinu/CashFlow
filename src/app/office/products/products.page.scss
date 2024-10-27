@@ -21,10 +21,31 @@ ion-select{
   font-size: 17px;
   font-weight: 500;
   margin-bottom: 8px;
+  .name{
+    cursor: pointer;
+  }
+  .price-prod{
+    cursor: pointer;
+  }
+  .sale-price{
+    cursor: pointer;
+  }
+  .price{
+    cursor: pointer;
+  }
+  .recipe{
+    cursor: pointer;
+  }
 }
 
 ion-label{
   font-family: NoirProReg !important;
+}
+
+.selected{
+  background-color: var(--ion-color-medium);
+  color: var(--ion-color-light);
+  padding: 6px 2px;
 }
 
 .input{

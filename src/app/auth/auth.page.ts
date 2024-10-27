@@ -40,7 +40,7 @@ export class AuthPage implements OnInit {
   validEmail: boolean = false;
   disableLogIn: boolean = false;
 
-  returnUrl: string = '/tabs/tables'
+  returnUrl: string = '/sale/tables'
 
   iconSrc: string = 'assets/icon/eye-outline.svg'
 

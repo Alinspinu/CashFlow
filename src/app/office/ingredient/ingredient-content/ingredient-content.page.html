@@ -1,0 +1,25 @@
+
+<ion-header class="ion-no-border" *ngIf="ing">
+  <ion-toolbar class="ion-no-border">
+    <ion-button slot="start" color="medium" (click)="close()" size="large">
+      <ion-icon src="../../../../assets//icon/close-outline.svg" size="large"></ion-icon>
+    </ion-button>
+    <div class="title-wrapper">
+      <div class="title">Intrari {{ing.name}}</div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" *ngIf="ing">
+<ion-grid>
+  <ion-row *ngFor="let log of ing.uploadLog">
+      <ion-col size="12"*ngIf="log.operation.name === 'intrare'">
+        <div class="log" >
+          <span class="date">{{editDate(log.date)}}</span>
+          <span class="suplier">{{log.operation.details}}</span>
+          <span class="quantity">{{log.qty}} {{ing.um}}</span>
+          <span class="quantity">{{log.uploadPrice}} Lei / {{ing.um}}</span>
+        </div>
+      </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>

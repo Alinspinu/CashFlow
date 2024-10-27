@@ -52,6 +52,7 @@ export class InvIngredient {
     public uploadLog: {
       date: string,
       qty: number,
+      uploadPrice: number,
       operation: {
         name: string,
         details: string,

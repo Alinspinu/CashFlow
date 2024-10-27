@@ -4,7 +4,6 @@ import { Preferences } from '@capacitor/preferences';
 import User from './auth/user.model';
 import { ContentService } from './content/content.service';
 import { WebRTCService } from './content/webRTC.service';
-import { OrderAppViewPage } from './modals/order-app-view/order-app-view.page';
 import { ActionSheetService } from './shared/action-sheet.service';
 import { TablesService } from './tables/tables.service';
 import { Subscription } from 'rxjs';
@@ -37,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
          this.user = JSON.parse(data.value)
         this.contentSub = this.contService.getData(this.user.locatie).subscribe()
         this.tablesService.getTables(this.user.locatie, this.user._id)
-         this.getIncommingOrders()
+        //  this.getIncommingOrders()
          this.getUpdatedOrder()
          this.removeLive()
         //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
@@ -46,18 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
 
-   getIncommingOrders(){
-      this.webRTC.getOdrerIdObservable().subscribe(async order => {
-        if(order){
-          const parsedOrder = JSON.parse(order)
-          const time = await this.actSrv.openPayment(OrderAppViewPage, parsedOrder)
-          this.tablesService.addOnlineOrder(parsedOrder)
-          if(time){
-            this.tablesService.setOrderTime(parsedOrder._id, +time).subscribe()
-          }
-        }
-      })
-    }
+ 
 
     getUpdatedOrder(){
       this.webRTC.getUpdatedOrderObservable().subscribe(order => {

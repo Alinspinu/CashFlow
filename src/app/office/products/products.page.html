@@ -36,15 +36,15 @@
     <div class="product-container" style="font-family: NoirProSemi !important;">
       <div class="container" id="header">
         <span class="nr">Nr</span>
-        <span class="name">Nume Produs</span>
+        <span class="name" (click)="filters('name')" [ngClass]="{selected: nameColor}">Nume Produs</span>
         <span class="mainCat">Categorie Parinte</span>
         <span class="cat">Categorie Produs</span>
         <span class="dep">Departament</span>
         <span class="tva">Tva %</span>
-        <span class="price-prod">Preț producție</span>
-        <span class="sale-price">Preț vanzare</span>
-        <span class="price">Adaos %</span>
-        <span class="recipe">Rețetă</span>
+        <span class="price-prod" (click)="filters('in-price')" [ngClass]="{selected: inPriceColor}">Preț producție</span>
+        <span class="sale-price" (click)="filters('out-price')" [ngClass]="{selected: outPriceColor}">Preț vanzare</span>
+        <span class="price" (click)="filters('surplus')" [ngClass]="{selected: surplusColor}">Adaos %</span>
+        <span class="recipe" (click)="filters('recipe')" [ngClass]="{selected: recipeColor}">Rețetă</span>
         <ion-icon class="edit"></ion-icon>
         <ion-icon class="delete" style="margin-right: 12px;"></ion-icon>
       </div>
@@ -74,13 +74,12 @@
           <ion-label class="cat">{{product.category.name}}</ion-label>
           <ion-label class="dep">{{product.dep ? product.dep : "dep" }}</ion-label>
           <ion-label class="tva">{{product.tva ? product.tva : "Tva"}} %</ion-label>
-          <ion-label class="price-prod">{{product.subProducts.length ? '' : calcProductionPrice(product) }} </ion-label>
+          <ion-label class="price-prod">{{product.subProducts.length ? '~ap ' + calcProductionPrice(product) : calcProductionPrice(product)}} </ion-label>
           <ion-label class="sale-price">{{product.subProducts.length ? '' : product.price + ' Lei' }} </ion-label>
-          <ion-label class="price">{{product.subProducts.length ? '' : calcComercialSurplus(product)}}</ion-label>
+          <ion-label class="price">{{calcComercialSurplus(product)}}</ion-label>
           <ion-label class="recipe" style="text-align: center !important;">
-            <ion-icon src="../../../assets/icon/success.svg" *ngIf="!product.subProducts.length && product.ings.length" color="success"></ion-icon>
-            <ion-icon src="../../../assets/icon/not.svg" *ngIf="!product.subProducts.length && !product.ings.length" color="danger"></ion-icon>
-            <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="product.subProducts.length"></ion-icon>
+            <ion-icon src="../../../assets/icon/success.svg" *ngIf="showProducsAndSubsRecipe(product)" color="success"></ion-icon>
+            <ion-icon src="../../../assets/icon/not.svg" *ngIf="!showProducsAndSubsRecipe(product)" color="danger"></ion-icon>
           </ion-label>
           <ion-icon class="edit" src="../../assets/icon/create-outline.svg" (click)="productEdit(product._id)" color="medium"></ion-icon>
           <ion-icon class="delete" src="../../assets/icon/trash-outline.svg"  (click)="deleteProduct(product)" color="medium"></ion-icon>

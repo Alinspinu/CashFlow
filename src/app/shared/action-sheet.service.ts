@@ -41,6 +41,7 @@ import { EntryViewPage } from '../modals/entry-view/entry-view.page';
 import { CloseDayPage } from '../cash-control/close-day/close-day.page';
 import { MonetarPage } from '../cash-control/monetar/monetar.page';
 import { UploadLogPage } from '../reports/inventary/upload-log/upload-log.page';
+import { IngredientContentPage } from '../office/ingredient/ingredient-content/ingredient-content.page';
 
 
 
@@ -143,6 +144,7 @@ export class ActionSheetService {
                typeof EntryViewPage |
                typeof MonetarPage |
                typeof CloseDayPage |
+               typeof IngredientContentPage |
                typeof UploadLogPage |
                typeof DelProdViewPage,
     options: any

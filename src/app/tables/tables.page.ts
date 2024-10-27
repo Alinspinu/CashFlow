@@ -12,6 +12,8 @@ import { Preferences } from '@capacitor/preferences';
 import { Subscription, filter } from 'rxjs';
 import { SpinnerPage } from '../modals/spinner/spinner.page';
 import { WebRTCService } from '../content/webRTC.service';
+import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
+import { AudioService } from '../shared/audio.service';
 
 
 @Component({
@@ -46,6 +48,8 @@ export class TablesPage implements OnInit, OnDestroy {
 
   screenWidth!: number
 
+  volumeSrc: string = 'assets/icon/volume-mute-outline.svg'
+
   constructor(
     private router: Router,
     private tableServ: TablesService,
@@ -53,6 +57,7 @@ export class TablesPage implements OnInit, OnDestroy {
     private actionSheet: ActionSheetService,
     private authSrv: AuthService,
     private webRTC: WebRTCService,
+    private audioSrv: AudioService,
     ) {
       this.screenWidth = window.innerWidth
     }
@@ -60,6 +65,7 @@ export class TablesPage implements OnInit, OnDestroy {
 ngOnInit(): void {
   this.getUser()
   this.hideBill()
+  this.getIncommingOrders()
 }
 
 
@@ -70,6 +76,30 @@ ngOnDestroy(): void {
     this.tableSubs.unsubscribe()
   }
 
+}
+
+testSound(){
+  this.audioSrv.play()
+  setTimeout(() => {
+    this.volumeSrc = 'assets/icon/volume-high-outline.svg'
+    this.audioSrv.stop()
+  }, 1500)
+}
+
+
+getIncommingOrders(){
+  this.webRTC.getOdrerIdObservable().subscribe(async order => {
+    if(order){
+      this.audioSrv.play()
+      const parsedOrder = JSON.parse(order)
+      const time = await this.actionSheet.openPayment(OrderAppViewPage, parsedOrder)
+      this.tableServ.addOnlineOrder(parsedOrder)
+      if(time){
+        this.audioSrv.stop()
+        this.tableServ.setOrderTime(parsedOrder._id, +time).subscribe()
+      }
+    }
+  })
 }
 
 

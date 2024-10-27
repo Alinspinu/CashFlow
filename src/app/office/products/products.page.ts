@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { Product } from 'src/app/models/category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { CategoryPage } from '../CRUD/category/category.page';
-import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
+import { findCommonNumber, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
@@ -40,6 +40,14 @@ export class ProductsPage implements OnInit {
   dbProducts: Product[] = []
 
   isLoading: boolean = true
+
+
+
+  inPriceColor: boolean = false
+  outPriceColor: boolean = false
+  recipeColor: boolean = false
+  surplusColor: boolean = false
+  nameColor: boolean = true
 
   constructor(
     @Inject(ProductsService) private productsSrv: ProductsService,
@@ -248,25 +256,126 @@ searchIngProduct(ev: any){
     }
 
     calcProductionPrice(product: any){
-      let total = 0
-      if(product.ings.length){
-        product.ings.forEach((el:any) => {
-          total = round(total + (el.qty * el.ing.price))
+      if(product.subProducts && product.subProducts.length){
+        let subSurplus: number[] = []
+        product.subProducts.forEach((sub: any) => {
+          const productionPrice =  +this.calcProductionPrice(sub).split(' ')[0]
+          if(product.name == 'Catena Chardonnay Tupungato'){
+          }
+          if(productionPrice > 0){
+            subSurplus.push(round(productionPrice)) 
+          } else {
+            subSurplus.push(0) 
+          }
+        })
+       
+        const modeSubSurplus = findCommonNumber(subSurplus)
+        return `${modeSubSurplus} Lei`
+      } else {
+        let total = 0
+        if(product.ings.length){
+          product.ings.forEach((el:any) => {
+            if(el.ing){
+              total = round(total + (el.qty * el.ing.price))
+            } else {
+              console.log(product)
+            }
+          }
+          )
         }
-        )
+        return `${total} Lei`
       }
-      return `${total} Lei`
     }
 
     calcComercialSurplus(product: any){
-      const productionPrice = +this.calcProductionPrice(product).split('')[0]
-      if(productionPrice> 0){
-        const procentSurplus =  (( product.price - productionPrice ) / productionPrice ) * 100
-        return  round(procentSurplus) + "%"
+      if(product.subProducts && product.subProducts.length){
+        let subSurplus: number[] = []
+          product.subProducts.forEach((sub: any) => {
+            const productionPrice =  +this.calcProductionPrice(sub).split(' ')[0]
+            if(productionPrice> 0){
+              const procentSurplus =  (( sub.price - productionPrice ) / productionPrice ) * 100
+              subSurplus.push(round(procentSurplus)) 
+            } else {
+              subSurplus.push(0)
+            }
+          })
+          const modeSubSurplus = findCommonNumber(subSurplus)
+          if(modeSubSurplus && modeSubSurplus > 0){
+              return '~ap ' + modeSubSurplus+ " %"
+          } else {
+             return 'Infint %'
+          }
       } else {
-        return 'Infint %'
+        const productionPrice = +this.calcProductionPrice(product).split(' ')[0]
+        if(productionPrice> 0){
+          const procentSurplus =  (( product.price - productionPrice ) / productionPrice ) * 100
+          return  round(procentSurplus) + "%"
+        } else {
+          return 'Infint %'
+        }
       }
     }
+
+
+
+
+showProducsAndSubsRecipe(product: Product) {
+    if(product.subProducts.length){
+      const noRecipe = product.subProducts.filter(sub => !sub.ings.length)
+      if(noRecipe.length){
+        return false
+      } else {
+        return true
+      }
+    } else if(product.ings.length){
+      return true
+    } else {
+      return false
+    }
+}
+
+
+    
+filters(option: string){
+  switch (option) {
+    case 'name':
+      this.resetAllColors()
+      this.products.sort((a,b) => a.name.localeCompare(b.name))
+      this.nameColor = true;
+      return;
+    case 'out-price':
+      this.resetAllColors()
+      this.products.sort((a,b) => b.price - a.price)
+      this.outPriceColor = true;
+      return
+    case 'in-price':
+      this.resetAllColors()
+      this.products.sort((a,b) => (+this.calcProductionPrice(b).split(' ')[0]) - (+this.calcProductionPrice(a).split(' ')[0]))
+      this.inPriceColor = true;
+      return;
+    case 'recipe':
+      this.resetAllColors()
+      this.products.sort((a,b) => +this.showProducsAndSubsRecipe(a) - +this.showProducsAndSubsRecipe(b))
+      this.recipeColor = true;
+      return;
+    case 'surplus':
+      this.resetAllColors()
+      this.products.sort((a,b) => ((b.price - +this.calcProductionPrice(b).split(' ')[0]) / +this.calcProductionPrice(b).split(' ')[0] * 100) - ((a.price -+this.calcProductionPrice(a).split(' ')[0] ) / +this.calcProductionPrice(a).split(' ')[0]* 100))
+      this.surplusColor = true;
+      return;
+    default:
+      return;
+}
+}
+
+
+resetAllColors(){
+  this.recipeColor = false
+  this.inPriceColor = false
+  this.outPriceColor = false
+  this.surplusColor = false
+  this.nameColor = false
+}
 
 }
 

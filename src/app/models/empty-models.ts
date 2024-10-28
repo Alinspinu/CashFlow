@@ -84,6 +84,8 @@ export function  emptyBillProduct(){
     sgrTax: false,
     description: '',
     printOut: false,
+    subProductId: '',
+    productId: ''
   }
   return billProduct
  }
@@ -199,6 +201,7 @@ export function emptyProduct(){
       salts: 0,
       protein: 0,
     },
+    saleLog: [],
     additives: [],
     allergens: [],
     paring: [],

@@ -312,7 +312,9 @@ async break(index: number){
         cantitate: product.qty,
         sgrTax: product.sgrTax,
         description: product.description,
-        printOut: product.printOut
+        printOut: product.printOut,
+        subProductId: product.subProductId,
+        productId: product.subProductId
       };
       if(newBillIndex){
         for(let i=0; i<qtyChioise; i++){

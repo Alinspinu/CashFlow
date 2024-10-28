@@ -177,6 +177,7 @@ export class MeniuPage implements OnInit, OnDestroy {
     let cartProdName: string = product.name;
     let printOut: boolean = product.printOut
     let ings: Ing[] = product.ings
+    let subProductId = ''
     if(product.subProducts.length){
       const result = await this.actionSheet.openModal(PickOptionPage, product.subProducts, true)
       if(result){
@@ -184,6 +185,7 @@ export class MeniuPage implements OnInit, OnDestroy {
         price  = result.price
         printOut = result.printOut
         cartProdName = product.name + '-' + result.name;
+        subProductId = result._id
       } else {
        return triggerEscapeKeyPress()
       }
@@ -239,6 +241,8 @@ export class MeniuPage implements OnInit, OnDestroy {
         sgrTax: product.sgrTax,
         description: product.description,
         printOut: printOut,
+        subProductId,
+        productId: product._id
       };
       if(product.sgrTax){
         let topping = product.toppings.find(p => p.name === "Taxa SGR")

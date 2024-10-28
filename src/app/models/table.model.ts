@@ -106,7 +106,9 @@ export class BillProduct{
    public cantitate: string,
    public sgrTax: boolean,
    public description: string,
-   public printOut: boolean
+   public printOut: boolean,
+   public subProductId: string,
+   public productId: string,
   ){}
 }
 

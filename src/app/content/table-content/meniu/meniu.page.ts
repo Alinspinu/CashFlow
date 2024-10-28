@@ -125,13 +125,16 @@ export class MeniuPage implements OnInit, OnDestroy {
     let printOut = product.printOut;
     let cartProdName: string = product.name;
     let ings: Ing[] = product.ings
+    let subProductId = ''
     if(product.subProducts.length){
       const result = await this.actionSheet.openModal(PickOptionPage, product.subProducts, true)
       if(result){
+        console.log(result)
         ings = result.ings
         price  = result.price
         printOut = result.printOut
         cartProdName = product.name + '-' + result.name;
+        subProductId = result._id
       } else {
        return triggerEscapeKeyPress()
       }
@@ -188,6 +191,8 @@ export class MeniuPage implements OnInit, OnDestroy {
         sgrTax: product.sgrTax,
         description: product.description,
         printOut: printOut,
+        subProductId: subProductId,
+        productId: product._id
       };
       if(product.sgrTax){
         let topping = product.toppings.find(p => p.name === "Taxa SGR")

@@ -10,9 +10,10 @@ import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { round } from '../../../shared/utils/functions';
 import { emptyDeletetBillProduct, emptyBill, emptyTable } from '../../../models/empty-models';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { Subscription, Observable, map, switchMap, of, Subject } from 'rxjs';
+import { Subscription, Observable, map, switchMap, of, Subject, subscribeOn } from 'rxjs';
 import User from '../../../auth/user.model';
 import { Router } from '@angular/router';
+import { SubProduct } from 'src/app/models/category.model';
 
 interface billData{
   billProducts: BillProduct[],
@@ -163,7 +164,9 @@ export class BillPage implements OnInit, OnDestroy {
           cantitate: product.qty,
           sgrTax: product.sgrTax,
           description: product.description,
-          printOut: product.printOut
+          printOut: product.printOut,
+          subProductId: product.subProductId,
+          productId: product.productId
         };
         if(newBillIndex){
           for(let i=0; i<qtyChioise; i++){

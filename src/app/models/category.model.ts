@@ -43,6 +43,16 @@ export class Product {
     salts: number,
     protein: number,
   },
+  public saleLog: {
+      day: {
+        date: string,
+        qty: number,
+        hours: {
+          date: string,
+          qty: number
+        }[]
+      }
+  }[],
   public toppings: Topping[],
   public ings: {qty: number, ing:InvIngredient}[],
   public ingredients:{quantity: number, ingredient: Ingredient}[],
@@ -63,6 +73,16 @@ export class SubProduct{
     public available: boolean,
     public printOut: boolean,
     public ings: {qty: number, ing:InvIngredient}[],
+    public saleLog: {
+      day: {
+        date: string,
+        qty: number,
+        hours: {
+          date: string,
+          qty: number
+        }[]
+      }
+  }[],
   ){};
 };
 

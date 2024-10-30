@@ -5,6 +5,7 @@ import { Category, Product } from "./category.model";
 import { InvIngredient, NirIngredient } from './nir.model';
 import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
+import { Inventary, line, productionReport } from "./inventary.model";
 
 export function emptyUser(){
   const user: User = {
@@ -52,6 +53,48 @@ export function emptyUser(){
     return user
 }
 
+
+export function emptyProductionReport(){
+  const emptyRep: productionReport= {
+      intrari: emptyLine(),
+      iesiri: emptyLine(),
+      dif: {
+        marfaBuc: 0,
+        prodBuc: 0,
+        marfaBar: 0,
+        prodBar: 0,
+      },
+      totals: {
+        firstInv: 0,
+        intrari: 0,
+        iesiri: 0,
+        secondInv: 0,
+        dif: 0,
+      }
+  }
+  return emptyRep
+}
+
+
+function emptyLine(){
+  const line: line = {
+    buc: {
+      marfa: 0,
+      prod: 0
+    },
+    bar: {
+      marfa: 0,
+      prod: 0
+    },
+    inv: {
+      marfaBuc: 0,
+      marfaBar: 0,
+      prodBar: 0,
+      prodBuc: 0
+    }
+  }
+  return line
+}
 
 
 export function  emptyBillProduct(){
@@ -106,6 +149,18 @@ export function  emptyBillProduct(){
  export function emptyTable(){
   const emptyTable: Table = {_id: '', bills: [], index: 0, name: ''}
   return emptyTable
+}
+
+
+export function emptyInv(){
+  const inv: Inventary = {
+     date: '',
+     ingredients: [],
+     locatie: '',
+     _id: '',
+     updated: false,
+  }
+  return inv
 }
 
 

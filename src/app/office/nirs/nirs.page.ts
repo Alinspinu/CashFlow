@@ -29,6 +29,7 @@ export class NirsPage implements OnInit {
   suplierColor: string = 'none'
   dateColor: string = 'none'
   indexColor: string = 'primary'
+  totalColor: string = 'none'
 
   nirSearch!: string
 
@@ -68,6 +69,7 @@ index(){
   this.suplierColor = 'none'
   this.dateColor = 'none'
   this.indexColor = 'primary'
+  this.totalColor= 'none'
 }
 
 
@@ -83,6 +85,23 @@ date(){
   })
   this.suplierColor = 'none'
   this.dateColor = 'primary'
+  this.indexColor = 'none'
+  this.totalColor= 'none'
+}
+
+total(){
+  this.nirs.sort((a,b) => b.totalDoc - a.totalDoc)
+  this.suplierColor = 'none'
+  this.dateColor = 'none'
+  this.indexColor = 'none'
+  this.totalColor = 'primary'
+}
+
+suplier(){
+  this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
+ this.totalColor= 'none'
+  this.suplierColor = 'primary'
+  this.dateColor = 'none'
   this.indexColor = 'none'
 }
 
@@ -108,13 +127,7 @@ searchNir(ev: any){
 }
 
 
-suplier(){
-  this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
 
-  this.suplierColor = 'primary'
-  this.dateColor = 'none'
-  this.indexColor = 'none'
-}
 
   export(){
     if(this.startDate && this.endDate){

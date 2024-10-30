@@ -15,6 +15,10 @@ export class Report {
     public constructionsValue: number,
     public rent: number,
     public utilities: number,
+    public supliesProdBuc: number,
+    public supliesMfBuc: number,
+    public supliesProdBar: number,
+    public supliesMfBar: number,
     public diverse: {
       total: number,
       entry: {
@@ -52,6 +56,11 @@ export class Report {
         total: number,
         procent: number,
         name: string,
+        dep: {
+          name: string,
+          total: number,
+          procent: number
+        }[],
         products: {
                 name: string,
                 qty: number,

@@ -146,13 +146,14 @@ export class CashPage implements OnInit {
     this.repSrv.getReport(start, end).subscribe(response => {
       if(response){
         this.report = response
-        const depIndex = this.report.departaments.findIndex(dep => dep.name === 'food')
+        console.log(this.report)
+        // const depIndex = this.report.departaments.findIndex(dep => dep.name === 'food')
 
-        const foodProducts = this.report.departaments[depIndex].products
-        const filtredFoodProducts = foodProducts.filter(prod => {
-          return prod.dep !== 'marfa'
-        })
-        this.report.departaments[depIndex].products = filtredFoodProducts
+        // const foodProducts = this.report.departaments[depIndex].products
+        // const filtredFoodProducts = foodProducts.filter(prod => {
+        //   return prod.dep !== 'marfa'
+        // })
+        // this.report.departaments[depIndex].products = filtredFoodProducts
         this.report.departaments.forEach(dep => {
           dep.products.sort((a,b) => b.qty - a.qty)
           dep.products = dep.products.slice(0, 20)

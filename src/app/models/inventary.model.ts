@@ -62,3 +62,43 @@ class log{
       }
   ){}
 }
+
+
+export interface line {
+  buc: {
+    marfa: number,
+    prod: number
+  },
+  bar: {
+    marfa: number,
+    prod: number,
+  }
+  inv: {
+    marfaBuc: number,
+    prodBuc: number,
+    marfaBar: number,
+    prodBar: number,
+  }
+}
+
+
+
+export class productionReport{
+  constructor(
+    public intrari: line,
+    public iesiri: line,
+    public dif: {
+      marfaBuc: number,
+      prodBuc: number,
+      marfaBar: number,
+      prodBar: number,
+    },
+    public totals: {
+      firstInv: number,
+      intrari: number,
+      iesiri: number,
+      secondInv: number,
+      dif: number,
+    }
+  ){}
+}

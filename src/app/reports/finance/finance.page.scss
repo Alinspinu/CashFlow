@@ -109,7 +109,7 @@ ion-label{
     margin: 8px 0 4px 0;
     padding: 8px;
   }
-  .method{
+  .method, .header{
     cursor: pointer;
     display: flex;
     flex-direction: row;
@@ -141,7 +141,49 @@ ion-label{
       flex: 40%;
       text-align: end;
     }
+    .label{
+      font-family: NoirProReg !important;
+      flex: 30%;
+      font-size: 18px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .intrari{
+      flex: 16%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .iesiri{
+      flex: 16%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .dif{
+      flex: 16%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .inv{
+      flex: 16%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
   }
+}
+
+.font{
+  font-family: NoirProSemi !important;
+  font-size: 22px !important;
+  background-color: var(--ion-color-medium) !important;
+  color: var(--ion-color-light) !important;
 }
 
 

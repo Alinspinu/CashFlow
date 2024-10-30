@@ -14,7 +14,8 @@
     "est": "cash-test-6f218",
     "caf": "cash-flow-8a7f4",
     "waiters": "cash-flow-waiters",
-    "wai": "cash-flow-waiters"
+    "wai": "cash-flow-waiters",
+    "cash": "cash-flow-8a7f4"
   },
   "targets": {},
   "etags": {}

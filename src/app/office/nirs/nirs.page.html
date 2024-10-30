@@ -46,6 +46,10 @@
         Furnizor
         <ion-icon src="assets/icon/arrows-down.svg"  [color]="suplierColor"></ion-icon>
       </span>
+      <span class="total font" (click)="total()">
+        Total
+        <ion-icon src="assets/icon/arrows-down.svg"  [color]="totalColor"></ion-icon>
+      </span>
       <span class="docNumber font">Nr Document</span>
       <ion-buttons solt="end">
         <ion-button>
@@ -75,6 +79,7 @@
         <span class="nr">{{nir.index}}</span>
         <span class="date">{{formatedDate(nir.documentDate)}}</span>
         <span class="suplier">{{nir.suplier.name}}</span>
+        <span class="total">{{nir.totalDoc}} Lei</span>
         <span class="docNumber">{{nir.nrDoc}}</span>
         <ion-buttons solt="end">
           <ion-button (click)="editNir(nir._id)">

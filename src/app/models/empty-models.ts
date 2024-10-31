@@ -6,6 +6,7 @@ import { InvIngredient, NirIngredient } from './nir.model';
 import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
 import { Inventary, line, productionReport } from "./inventary.model";
+import { reportUsers } from "./report.model";
 
 export function emptyUser(){
   const user: User = {
@@ -341,6 +342,18 @@ export function emptyPontaj(){
     days: []
   }
   return emptyPont
+}
+
+
+export function emptyReportUsers(){
+  const users: reportUsers = {
+    totalBonus: 0,
+    totalIncome: 0,
+    totalTax: 0,
+    totalUsers: 0,
+    section: []
+  }
+  return users
 }
 
 

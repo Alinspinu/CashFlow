@@ -62,7 +62,7 @@ periodMark: boolean = false
         const employees = response.filter(user => user.employee.active === true)
         this.users = employees
        const sortedUsers = this.users.sort((a, b):any => {
-          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Bucatar: 6, 'Ajutor bucatar': 7, 'Asistent Manager': 8, Manager: 9, Designer: 10, Asociat: 11, Administrator: 12 };
+          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Bucatar: 6, 'Ajutor bucatar': 7, Aprovizionare: 8, 'Asistent Manager': 9 ,Manager: 10, Asociat: 11, Administrator: 12 };
           return rolesOrder[a.employee.position] - rolesOrder[b.employee.position];
         });
         this.users = sortedUsers.slice(0,-2)

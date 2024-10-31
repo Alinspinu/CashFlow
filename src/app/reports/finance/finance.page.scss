@@ -3,13 +3,15 @@
 
 ion-content{
   --background: var(--ion-color-tertiary) !important;
-  background-color: var(--ion-color-tertiary) !important;
 }
 
-ion-label{
+ion-label, ion-title{
   font-family: NoirProSemi !important;
 }
 
+ion-title{
+  font-size: 20px;
+}
 
 .spinner-content{
   height: 100vh;
@@ -41,57 +43,6 @@ ion-label{
 }
 
 
-.sum-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  margin-top: 5%;
-  margin-bottom: 8px;
-  span{
-    color: var(--ion-color-primary);
-  }
-  .total{
-    font-family: NoirProSemi !important;
-    font-size: 30px;
-    align-self: center !important;
-  }
-  .label{
-    font-family: NoirProReg !important;
-    font-size: 30px;
-    align-self: center;
-    margin-bottom: 8px;
-  }
-  .incasat{
-    color: rgb(94, 80, 20);
-    align-self: center;
-    font-size: 28px;
-  }
-  .vat{
-    color: rgb(175, 141, 110);
-    align-self: center;
-    font-size: 26px;
-  }
-  .tot{
-    color: rgb(57, 49, 15);
-    // align-self: center !important;
-  }
-  .note{
-    font-family: NoirProReg !important;
-    font-size: 10px;
-    align-self: center;
-    margin-bottom: 8px;
-  }
-  .data{
-    font-family: NoirProReg !important;
-    font-size: 22px;
-    align-self: center;
-    margin-top: 8px;
-    margin-bottom: 12px;
-  }
-
-}
-
 .method-container{
   display: flex;
   flex-direction: column;
@@ -118,17 +69,6 @@ ion-label{
     justify-content: space-between;
     align-items: center;
     color: var(--ion-color-medium);
-    .index{
-      font-family: NoirProReg !important;
-      font-size: 22px;
-      margin-right: 4px;
-      align-self: flex-start;
-    }
-    .label{
-      font-family: NoirProReg !important;
-      font-size: 22px;
-      flex: 40%;
-    }
     .proc{
       font-family: NoirProReg !important;
       font-size: 16px;
@@ -143,27 +83,27 @@ ion-label{
     }
     .label{
       font-family: NoirProReg !important;
-      flex: 30%;
+      flex: 20%;
       font-size: 18px;
       margin-right: 4px;
       text-align: start;
     }
     .intrari{
-      flex: 16%;
+      flex: 20%;
       font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
     }
     .iesiri{
-      flex: 16%;
+      flex: 20%;
       font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
     }
     .dif{
-      flex: 16%;
+      flex: 18%;
       font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
@@ -176,12 +116,111 @@ ion-label{
       margin-right: 4px;
       text-align: start;
     }
+    .bonus {
+      cursor: pointer;
+      flex: 15%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .section{
+      cursor: pointer;
+      flex: 18%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .net{
+      cursor: pointer;
+      flex: 20%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .tax{
+      cursor: pointer;
+      flex: 20%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .brut{
+      flex: 20%;
+      font-family: NoirProReg !important;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .pers{
+      flex: 5%;
+      font-family: NoirProReg !important;
+      font-size: 16px;
+      margin-right: 4px;
+      text-align: start;
+    }
+
+
+    .venit{
+      flex: 16.5%;
+      font-family: NoirProReg !important;
+      font-size: 24px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .mfs{
+      flex: 16.5%;
+      font-family: NoirProReg !important;
+      font-size: 24px;
+      margin-right: 4px;
+      text-align: center;
+    }
+    .mfr{
+      flex: 16.5%;
+      font-family: NoirProReg !important;
+      font-size: 24px;
+      margin-right: 4px;
+      text-align: center;
+    }
+    .empl{
+      flex: 16.5%;
+      font-family: NoirProReg !important;
+      font-size: 24px;
+      margin-right: 4px;
+      text-align: center;
+    }
+    .spend{
+      flex: 16.5%;
+      font-family: NoirProReg !important;
+      font-size: 24px;
+      margin-right: 4px;
+      text-align: center;
+    }
+    .prof{
+      flex: 16.5%;
+      font-family: NoirProReg !important;
+      font-size: 24px;
+      margin-right: 4px;
+      text-align: end;
+    }
   }
+}
+
+.header{
+  border-bottom: 0.1px solid var(--ion-color-medium);
+  margin-bottom: 0.7rem;
+}
+
+.light{
+  font-family: NoirProLight !important;
 }
 
 .font{
   font-family: NoirProSemi !important;
-  font-size: 22px !important;
+  font-size: 25px !important;
   background-color: var(--ion-color-medium) !important;
   color: var(--ion-color-light) !important;
 }
@@ -208,4 +247,75 @@ ion-label{
 
   }
 
+}
+
+@media(max-width: 500px){
+  .method-container{
+    .method, .header{
+      .label{
+        font-size: 9px !important;
+      }
+      .proc{
+        font-size: 9px !important;
+      }
+      .sum{
+        font-size: 9px !important;
+      }
+      .intrari{
+        font-size: 9px !important;
+      }
+      .iesiri{
+        font-size: 9px !important;
+      }
+      .dif{
+        font-size: 9px !important;
+      }
+      .inv{
+        font-size: 9px !important;
+      }
+      .bonus {
+        font-size: 9px !important;
+      }
+      .section{
+        font-size: 9px !important;
+      }
+      .net{
+        font-size: 9px !important;
+      }
+      .tax{
+        font-size: 9px !important;
+      }
+      .brut{
+        font-size: 9px !important;
+      }
+      .pers{
+        font-size: 9px !important;
+      }
+      .venit{
+        font-size: 9px !important;
+      }
+      .mfs{
+        font-size: 9px !important;
+      }
+      .mfr{
+        font-size: 9px !important;
+      }
+      .empl{
+        font-size: 9px !important;
+      }
+      .spend{
+        font-size: 9px !important;
+      }
+      .prof{
+        font-size: 9px !important;
+      }
+    }
+  }
+  .font{
+    font-size: 10px !important;
+  }
+
+  ion-title{
+    font-size: 14px !important;
+  }
 }

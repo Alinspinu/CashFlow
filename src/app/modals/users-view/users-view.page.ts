@@ -27,9 +27,9 @@ import { roundOne } from '../../shared/utils/functions';
 })
 export class UsersViewPage implements OnInit {
 
-
+  total: number = 0
   users!: user[]
-  mode!: boolean
+  mode: string = ''
 
   constructor(
     private navPar: NavParams,
@@ -39,8 +39,10 @@ export class UsersViewPage implements OnInit {
 
 
   ngOnInit() {
-   this.users =  this.navPar.get('options')
-   this.mode = this.navPar.get('sub')
+    const data =  this.navPar.get('options')
+   this.users =  data.users
+   this.total = data.total
+   this.mode = data.mode
   }
 
 

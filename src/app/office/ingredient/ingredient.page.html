@@ -81,9 +81,9 @@
 <div>
   <ion-row *ngFor="let ing of ingredients; let i= index;">
     <ion-col *ngIf="ing.name.length > 1">
-      <div class="content-container product input" (click)="showContent(ing)">
+      <div class="content-container product input">
         <span class="nr" *ngIf="screenWidth > 500">{{i+1}}.</span>
-        <span class="name">{{ing.name}}</span>
+        <span class="name" (click)="showContent(ing)">{{ing.name}}</span>
         <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="ing.ings.length  && screenWidth > 500" (click)="showIngs(i)" class="arrow"></ion-icon>
         <ion-icon  *ngIf="!ing.ings.length && screenWidth > 500" class="arrow"></ion-icon>
         <span class="gestiune">{{ing.gestiune}}</span>

@@ -39,18 +39,7 @@ export class Report {
     public workValue: {
         total: number,
         tax: number,
-        users:{
-                name: string,
-                hours: number,
-                position: string,
-                monthHours: number,
-                baseIncome: number,
-                baseTax: number,
-                hourIncome: number,
-                totalIncome: number,
-                taxValue: number,
-                user: string,
-        }[]
+        users: reportUser[]
         },
     public departaments: {
         total: number,
@@ -107,6 +96,37 @@ export class Report {
         procent: number,
         total: number,
         user: string,
+    }[]
+  ){}
+}
+
+
+export interface reportUser{
+    name: string,
+    hours: number,
+    position: string,
+    monthHours: number,
+    baseIncome: number,
+    baseTax: number,
+    hourIncome: number,
+    totalIncome: number,
+    taxValue: number,
+    user: string,
+    bonus: number,
+}
+
+export class reportUsers{
+  constructor(
+    public totalIncome: number,
+    public totalTax: number,
+    public totalBonus: number,
+    public totalUsers: number,
+    public section: {
+      name: string,
+      totalIncome: number,
+      totalTax: number,
+      totalBonus: number,
+      users: reportUser[]
     }[]
   ){}
 }

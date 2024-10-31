@@ -1,14 +1,19 @@
-<ion-content [fullscreen]="true">
+
+<ion-header>
   <ion-toolbar>
-    <ion-button size="large" color="primary" (click)="close()">
+    <ion-button size="medium" color="medium" (click)="close()" slot="start">
      <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
     </ion-button>
+    <ion-title class="ion-text-center">Total {{total}} Lei</ion-title>
    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
 <ion-grid>
   <ion-row>
     <ion-col>
-      <ion-item lines="none" class="header">
-        <span class="nr">Nr</span>
+      <ion-item lines="none" class="header" color="transparent">
+        <span class="nr"></span>
         <span class="data">Nume</span>
         <span class="discount">Ore</span>
         <span class="total">Total</span>
@@ -17,11 +22,14 @@
   </ion-row>
 <ion-row>
   <ion-col *ngIf="users && users.length">
-    <ion-item lines="none" class="input" *ngFor="let user of users; let i = index;" (click)="showUser(user)">
+    <ion-item lines="none" color="medium" class="input" *ngFor="let user of users; let i = index;" (click)="showUser(user)">
       <span class="nr">{{i+1}}.</span>
       <span class="data">{{user.name}}</span>
       <span class="discount"> {{user.hours}}</span>
-      <span class="total">{{mode ? roundInHtml(user.bonus + user.totalIncome) : roundInHtml(user.taxValue)}} Lei</span>
+      <span class="total" *ngIf="mode === 'income'">{{roundInHtml(user.bonus + user.totalIncome)}} Lei</span>
+      <span class="total" *ngIf="mode === 'tax'">{{roundInHtml(user.taxValue)}} Lei</span>
+      <span class="total" *ngIf="mode === 'bonus'">{{roundInHtml(user.bonus)}} Lei</span>
+      <span class="total" *ngIf="mode === 'brut'">{{roundInHtml(user.bonus + user.totalIncome + user.taxValue)}} Lei</span>
     </ion-item>
   </ion-col>
 </ion-row>

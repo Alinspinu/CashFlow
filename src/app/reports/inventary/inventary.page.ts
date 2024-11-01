@@ -60,10 +60,14 @@ export class InventaryPage implements OnInit {
     this.isLoading = true
     this.invService.getInventary('last').subscribe(inv => {
         if(inv){
+          console.log(inv)
           this.editInventary(inv)
         }
     })
   }
+
+
+
 
   exportInv(){
     this.invService.exportInv(this.inventary._id).subscribe(response => {
@@ -127,15 +131,20 @@ export class InventaryPage implements OnInit {
         this.compareTable = response.compareInv
         this.ingsComp = this.compareTable.ingredients
         this.allIngsComp = this.ingsComp
-        this.ingsComp.sort((a, b) => a.name.localeCompare(b.name));
+        this.ingsComp.sort((a, b) => {
+          const valueA = a.saleUnload - (a.first+a.upload.value - a.second)
+          const valueB = b.saleUnload - (b.first+b.upload.value - b.second)
+          return valueA - valueB
+        })
+        // this.ingsComp.sort((a, b) => a.name.localeCompare(b.name));
         this.isLoading = false
         console.log(response)
       })
     }
   }
 
-  async showlog(logs: any[], ingName: string){
-    await this.actService.openPayment(UploadLogPage, {logs, ingName} )
+  async showlog(logs: any[], ingName: string, ingUm: string){
+    await this.actService.openPayment(UploadLogPage, {logs, ingName, ingUm} )
 
   }
 
@@ -213,6 +222,15 @@ export class InventaryPage implements OnInit {
       }
     }
   }
+
+//   sort(value: string){
+//     const ings = this.ingsComp.sort((a, b) => {
+//       const valueA = a.saleUnload - (a.first+a.upload.value - a.second)
+//       const valueB = b.saleUnload - (b.first+b.upload.value - b.second)
+//       return valueA - valueB
+//     })
+//     this.ingsComp = [...ings]
+// }
 
 
 

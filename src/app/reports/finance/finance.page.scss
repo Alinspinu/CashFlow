@@ -41,8 +41,6 @@ ion-title{
 
   }
 }
-
-
 .method-container{
   display: flex;
   flex-direction: column;
@@ -52,14 +50,6 @@ ion-title{
   width: 100%;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 5px rgba(0, 0, 0, 0.15);
   background-color: var(--ion-color-light);
-  .title {
-    text-align: center;
-    color: var(--ion-color-medium);
-    font-family: NoirProReg !important;
-    font-size: 26px;
-    margin: 8px 0 4px 0;
-    padding: 8px;
-  }
   .method, .header{
     cursor: pointer;
     display: flex;
@@ -226,87 +216,10 @@ ion-title{
 }
 
 
-@media (prefers-color-scheme: dark) {
-
-
-  .sum-wrapper {
-    span{
-      color: var(--ion-color-primary);
-    }
-    .incasat{
-      color: rgb(255, 246, 234);
-
-    }
-    .vat{
-      color: rgb(255, 240, 240);
-
-    }
-    .tot{
-      color: rgb(237, 252, 255);
-    }
-
-  }
-
-}
-
 @media(max-width: 500px){
   .method-container{
     .method, .header{
-      .label{
-        font-size: 9px !important;
-      }
-      .proc{
-        font-size: 9px !important;
-      }
-      .sum{
-        font-size: 9px !important;
-      }
-      .intrari{
-        font-size: 9px !important;
-      }
-      .iesiri{
-        font-size: 9px !important;
-      }
-      .dif{
-        font-size: 9px !important;
-      }
-      .inv{
-        font-size: 9px !important;
-      }
-      .bonus {
-        font-size: 9px !important;
-      }
-      .section{
-        font-size: 9px !important;
-      }
-      .net{
-        font-size: 9px !important;
-      }
-      .tax{
-        font-size: 9px !important;
-      }
-      .brut{
-        font-size: 9px !important;
-      }
-      .pers{
-        font-size: 9px !important;
-      }
-      .venit{
-        font-size: 9px !important;
-      }
-      .mfs{
-        font-size: 9px !important;
-      }
-      .mfr{
-        font-size: 9px !important;
-      }
-      .empl{
-        font-size: 9px !important;
-      }
-      .spend{
-        font-size: 9px !important;
-      }
-      .prof{
+      .span{
         font-size: 9px !important;
       }
     }

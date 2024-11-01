@@ -1,24 +1,25 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-button slot="start" color="medium" (click)="close()" size="large">
+      <ion-icon src="../../../../assets//icon/close-outline.svg" size="large"></ion-icon>
+    </ion-button>
+    <div class="title-wrapper">
+      <div class="title">Intrari {{ingName}}</div>
+    </div>
+  </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true">
-  <ion-header class="ion-no-border">
-    <ion-toolbar class="ion-no-border">
-      <ion-button slot="start" color="medium" (click)="close()" size="large">
-        <ion-icon src="../../../../assets//icon/close-outline.svg" size="large"></ion-icon>
-      </ion-button>
-      <div class="title-wrapper">
-        <div class="title">Intrari {{ingName}}</div>
-      </div>
-    </ion-toolbar>
-  </ion-header>
 <ion-grid>
-  <ion-row>
-    <ion-col size-xs="6" size-lg="4" *ngFor="let log of logs"  >
-      <div class="log">
-        <span class="date">{{editDate(log.date)}}</span>
-        <span class="suplier">{{log.operation.details}}</span>
-        <span class="quantity">{{log.qty}}</span>
-       
-      </div>
-    </ion-col>
+  <ion-row *ngFor="let log of logs">
+      <ion-col size="12"*ngIf="log.operation.name === 'intrare'">
+        <div class="log" >
+          <span class="date">{{editDate(log.date)}}</span>
+          <span class="suplier">{{log.operation.details}}</span>
+          <span class="quantity">{{log.qty}} {{um}}</span>
+          <span class="quantity">{{log.uploadPrice}} Lei / {{um}}</span>
+        </div>
+      </ion-col>
   </ion-row>
 </ion-grid>
 </ion-content>

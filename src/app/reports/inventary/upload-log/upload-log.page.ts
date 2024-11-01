@@ -15,6 +15,7 @@ export class UploadLogPage implements OnInit {
 
   ingName: string = ''
   logs: any[] = []
+  um: string = ''
 
   constructor(
     private navParams: NavParams,
@@ -25,6 +26,7 @@ export class UploadLogPage implements OnInit {
     const data = this.navParams.get('options')
     this.ingName = data.ingName
     this.logs = data.logs
+    this.um = data.ingUm
   }
 
   close(){

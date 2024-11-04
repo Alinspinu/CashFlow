@@ -44,14 +44,6 @@ export class PaymentPage implements OnInit {
   ngOnInit() {
     this.order = this.navPar.get('options');
     this.total = this.order.total
-    if(this.order.payment.online > 0 && this.order.total === 0){
-      this.total = this.order.payment.online
-    }
-    if(this.order.payment.online > 0 && this.order.total > 0){
-      this.total = this.order.total + this.order.payment.online
-    }
-
-
     if(this.order.status === "done"){
       this.button = "SCHIMBĂ METODA DE PLATĂ"
     }

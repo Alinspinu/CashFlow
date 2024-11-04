@@ -69,7 +69,13 @@ updateOrder(bill: Bill){
   const table = this.tables.find(obj => obj.index === bill.masa)
   const tableIndex = this.tables.findIndex(obj => obj.index === bill.masa)
   if(table){
-    const billIndex = table.bills.findIndex(obj => obj.soketId === bill.soketId)
+    const billIndex = table.bills.findIndex(obj => {
+      if(obj){
+        return obj.soketId === bill.soketId
+      } else {
+        return -1
+      }
+    })
     console.log('update order--', bill.status, 'bill index--', billIndex, 'masa--', bill.masa)
       if(billIndex !== -1){
           if(bill.status == 'done'){

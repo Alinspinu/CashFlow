@@ -6,6 +6,7 @@ import { AuthService } from '../auth/auth.service';
 import User from '../auth/user.model';
 import { getUserFromLocalStorage } from '../shared/utils/functions';
 import { Subscription } from 'rxjs';
+import { IngredientService } from '../office/ingredient/ingredient.service';
 
 
 @Component({
@@ -25,10 +26,15 @@ export class TabsPage implements OnInit{
   constructor(
     private authSrv: AuthService,
     private router: Router,
-     private navCtrl: NavController
+     private navCtrl: NavController,
+     private ingService: IngredientService
   ) {
   }
 
+
+  getIngredients(){
+    this.ingService.getAllIngredients().subscribe()
+  }
 
 
   ngOnInit(): void {
@@ -38,18 +44,6 @@ export class TabsPage implements OnInit{
   })
 }
 
-
-// getUser(){
-//   this.userSub = this.authSrv.user$.subscribe(response => {
-//     if(response){
-//       this.userSub = response.subscribe(user => {
-//         if(user){
-//           this.user = user;
-//         }
-//       })
-//     }
-//   })
-//   }
 
 @HostListener('document:keydown', ['$event'])
 handleKeyDown(ev: KeyboardEvent){

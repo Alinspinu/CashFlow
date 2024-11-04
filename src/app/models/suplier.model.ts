@@ -20,7 +20,9 @@ export class Record{
     public document: {
       typeOf: string,
       docId: string,
-      amount: number
+      amount: number,
+      asociat: boolean,
+      docRecords: {docNumber: string, docTotal: number}[]
     },
     public descriptipn: string,
     public nir: string,

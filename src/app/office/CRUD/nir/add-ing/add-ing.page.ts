@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, FormGroup, FormControl, Form, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, IonSearchbar, ToastController } from '@ionic/angular';
@@ -6,11 +6,14 @@ import { Subscription } from 'rxjs';
 import { IngredientService } from '../../../ingredient/ingredient.service';
 import { InvIngredient, NirIngredient } from '../../../../models/nir.model';
 import User from '../../../../auth/user.model';
-import { getUserFromLocalStorage, round } from '../../../../shared/utils/functions';
+import { round } from '../../../../shared/utils/functions';
 import { Router } from '@angular/router';
 import { IonInput } from '@ionic/angular/standalone';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { NirService } from '../nir.service';
+import { RandomService } from 'src/app/shared/random.service';
+import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { AddIngredientPage } from '../../add-ingredient/add-ingredient.page';
 
 @Component({
   selector: 'app-add-ing',
@@ -36,6 +39,7 @@ export class AddIngPage implements OnInit, OnDestroy {
   user!: User;
 
   ingSub!: Subscription
+  ingId: string = ''
 
   disableIngredientSearch: boolean = true
   isTva: boolean = true
@@ -52,9 +56,10 @@ export class AddIngPage implements OnInit, OnDestroy {
 
   constructor(
     private ingSrv: IngredientService,
-    private router: Router,
     private toastCtrl: ToastController,
     private nirSrv: NirService,
+    private randomSrv: RandomService,
+    @Inject(ActionSheetService) private actionSrv: ActionSheetService
   ) { }
 
 
@@ -65,6 +70,8 @@ export class AddIngPage implements OnInit, OnDestroy {
   }
 
 
+
+
   ngOnInit() {
     this.getIngredients()
     this.setupIngForm()
@@ -72,26 +79,39 @@ export class AddIngPage implements OnInit, OnDestroy {
   }
 
 
+
+  async addIng(){
+    const ing = await this.actionSrv.openPayment(AddIngredientPage, [])
+    if(ing){
+      this.nirSrv.saveIng(ing).subscribe(response => {
+       this.ingSrv.addIngredinet(response.ing)
+       showToast(this.toastCtrl, response.message, 4000)
+      })
+    }
+   }
+
+
   addToNir(){
     const ingredient: NirIngredient = {
       name: this.ingredientForm.value.name,
       price: this.ingredientForm.value.price,
       um: this.ingredientForm.value.um,
-      qty: this.ingredientForm.value.qty,
+      qty: +this.ingredientForm.value.qty,
       value: round(+this.ingredientForm.value.value),
       tva: +this.ingredientForm.value.tva,
       tvaValue: this.ingredientForm.value.tvaValue,
       total: round(this.ingredientForm.value.total),
       dep: this.ingredientForm.value.dep,
       gestiune: this.ingredientForm.value.gestiune,
-      sellPrice: this.ingredientForm.value.sellPrice ? this.ingredientForm.value.sellPrice : 0
+      sellPrice: this.ingredientForm.value.sellPrice ? this.ingredientForm.value.sellPrice : 0,
+      logId: this.randomSrv.generateRandomHexString(9),
+      ing: this.ingId
     }
     if(this.ingredientForm.valid){
       this.totalDoc += ingredient.total
       this.nirSrv.addNirIngs(ingredient)
       this.ingredientForm.reset()
       this.searchBar.setFocus()
-      // this.clacTotals(this.nirIngredients, -1)
     }
   }
 
@@ -120,6 +140,7 @@ export class AddIngPage implements OnInit, OnDestroy {
       this.ingredientForm.get('price')?.setValue(this.ingredient.price)
       this.ingredientForm.get('tva')?.setValue(this.ingredient.tva.toString())
       this.ingredientForm.get('sellPrice')?.setValue(this.ingredient.sellPrice)
+      this.ingId = ingredient._id
       this.ingredients = []
       this.qtyInput.setFocus()
       this.ingredientSearch = ''

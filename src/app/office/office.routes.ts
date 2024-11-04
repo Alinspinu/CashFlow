@@ -81,10 +81,15 @@ export const routes: Routes = [
   {
     path: 'add-ing',
     loadComponent: () => import('./CRUD/nir/add-ing/add-ing.page').then( m => m.AddIngPage)
-  },  {
+  },
+  {
     path: 'ingredient-content',
     loadComponent: () => import('./ingredient/ingredient-content/ingredient-content.page').then( m => m.IngredientContentPage)
+  },  {
+    path: 'record',
+    loadComponent: () => import('./nirs/record/record.page').then( m => m.RecordPage)
   },
+
 
 
 

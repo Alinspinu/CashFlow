@@ -54,10 +54,12 @@ export class SuplierPage implements OnInit{
 
   async addRecord(){
     const data = await this.actionSheet.openPayment(RecordModalPage, '')
-    this.suplierSrv.addRecord(data, this.suplier._id).subscribe(response => {
-      this.suplier.records.push(data)
-      this.suplier.sold = this.suplier.sold - data.document.amount
-    })
+    if(data){
+      this.suplierSrv.addRecord(data, this.suplier._id).subscribe(response => {
+        this.suplier.records.push(data)
+        this.suplier.sold = this.suplier.sold - data.document.amount
+      })
+    }
   }
 
   calcTotals(){

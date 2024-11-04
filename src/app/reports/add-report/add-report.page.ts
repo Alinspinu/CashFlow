@@ -4,9 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { ReportsService } from '../reports.service';
 import { environment } from 'src/environments/environment';
-import { formatedDateToShow } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, sortByDate } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
+import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 
 
 
@@ -23,6 +24,14 @@ export class AddReportPage implements OnInit {
   newReports: any[] = []
 
   isLoading: boolean = false
+
+
+  filter: any = {
+    inreg: true,
+    unreg: true,
+    goods: true,
+    prod: true
+  }
 
   constructor(
     private modalCtrl: ModalController,
@@ -53,17 +62,11 @@ export class AddReportPage implements OnInit {
 
 
   addReport(){
-    const filter = {
-      inreg: true,
-      unreg: true,
-      goods: true,
-      prod: true
-    }
     const oldDate = new Date(this.reports[this.reports.length - 1].day)
     oldDate.setDate(oldDate.getDate() + 1)
     const date = oldDate.toISOString()
     this.isLoading = true
-    this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, filter, 'report').subscribe(response => {
+    this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, this.filter, 'report').subscribe(response => {
       if(response){
         this.reports.push(response)
         this.newReports.push(response)
@@ -72,6 +75,43 @@ export class AddReportPage implements OnInit {
     })
 
   }
+
+ async deleteReports(){
+    const startDate = await this.actSheet.openPayment(DatePickerPage, 'DATA DE ÎNCEPUT')
+    if(startDate){
+      const endDate = await this.actSheet.openPayment(DatePickerPage, 'DATA DE SFÂRȘIT')
+      if(endDate){
+        const date = new Date(startDate)
+        date.setDate(date.getDate() -1)
+        this.repSrv.deleteReports(date.toISOString(), endDate).subscribe({
+          next: (response) => {
+            showToast(this.toastCtrl, response.message, 2000)
+            this.close()
+          },
+          error: (error) => {
+            showToast(this.toastCtrl, error.message, 2000)
+            console.log(error)
+          }
+        })
+      }
+    }
+  }
+
+ async addReportOnDate(){
+    const date = await this.actSheet.openPayment(DatePickerPage, '')
+    if(date){
+      this.isLoading = true
+      this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, this.filter, 'report').subscribe(response => {
+        if(response){
+          this.reports.push(response)
+          this.reports = sortByDate(this.reports, true)
+          this.newReports.push(response)
+          this.isLoading = false
+        }
+      })
+    }
+  }
+
 
   close(){
     this.modalCtrl.dismiss(null)

@@ -23,6 +23,7 @@ export class IngredientService{
     private dbService: IndexDbService,
 
   ){
+    this.getIngsFromLocal()
     this.ingredientsState = new BehaviorSubject<InvIngredient[]>([emptyIng()]);
     this.ingredientsSend$ =  this.ingredientsState.asObservable();
   }
@@ -34,15 +35,16 @@ export class IngredientService{
 
 
   getIngredient(page: number){
-    if(page === 1){
-      this.dbService.getData('data', 1).subscribe((data: any) => {
-        if(data){
-          this.ingredients = [...JSON.parse(data.ings)]
-          this.ingredientsState.next([...this.ingredients])
-        }
-      })
-    }
     return this.http.get<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {params: { page: page.toString(), loc: environment.LOC }},)
+  }
+
+  getIngsFromLocal(){
+    this.dbService.getData('data', 1).subscribe((data: any) => {
+      if(data){
+        this.ingredients = [...JSON.parse(data.ings)]
+        this.ingredientsState.next([...this.ingredients])
+      }
+    })
   }
 
 
@@ -64,7 +66,11 @@ export class IngredientService{
                 fetchData(); // Fetch the next page
             } else {
               console.log(allItems.length)
-               const sortedIngs = allItems.sort((a, b) => a.name.localeCompare(b.name))
+               const sortedIngs = allItems.sort((a, b) => {
+                if(a.name && b.name){
+                  return a.name.localeCompare(b.name)
+                }
+               }) 
                const stringIngs = JSON.stringify(sortedIngs)
                this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
               this.ingredientsState.next([...sortedIngs]); // Emit all collected items
@@ -82,25 +88,6 @@ export class IngredientService{
 
 
 
-
-
-
-  // getIngredients(loc: string){
-    // this.dbService.getData('data', 1).subscribe((data: any) => {
-    //   if(data){
-    //     this.ingredients = [...JSON.parse(data.ings)]
-    //     this.ingredientsState.next([...this.ingredients])
-    //   }
-    // })
-  //   return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
-  //       .pipe(tap(response => {
-  //         this.ingredients = response
-  //         console.log(this.ingredients.length)
-  //         const stringIngs = JSON.stringify(this.ingredients)
-  //         this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
-  //         this.ingredientsState.next([...this.ingredients])
-  //       }))
-  // }
 
   deleteIngredient(id: string){
     return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)

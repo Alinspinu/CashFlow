@@ -169,7 +169,7 @@ export class AddEntryPage implements OnInit {
   }
 
   getSupliers(){
-    this.nirSrv.getSuplier('', environment.LOC).subscribe(response => {
+    this.nirSrv.getSuplier('').subscribe(response => {
       if(response){
         this.supliers = response.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         response.forEach(suplier => {

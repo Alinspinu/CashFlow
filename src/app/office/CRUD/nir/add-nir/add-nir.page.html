@@ -33,8 +33,12 @@
           <ion-input mode="ios" type="text" label="Alege Data" labelPlacement="floating" fill="outline" formControlName="receptionDate" required></ion-input>
           <span style="cursor: pointer;">{{receptionDate ? formatDate(receptionDate) :'Reception Date'}}</span>
         </div>
-        <ion-button class="discount-button" size="default" color="light" (click)="openDiscount()">
-          Adaugă Reducere
+        <ion-button class="discount-button" size="small" color="light" (click)="openDiscount()">
+        + Add
+          <ion-icon color="medium" src="../../../../assets/icon/discount.svg" style="font-size: 18px; margin-left: 8px;"></ion-icon>
+        </ion-button>
+        <ion-button class="discount-button" size="default" color="light" (click)="removeDiscount()" [disabled]="discountMode">
+       - rem
           <ion-icon color="medium" src="../../../../assets/icon/discount.svg" style="font-size: 18px; margin-left: 8px;"></ion-icon>
         </ion-button>
       </ion-item>
@@ -68,8 +72,8 @@
     <ion-grid *ngIf="!isLoading">
       <ion-row>
       <ion-col>
-            <div *ngFor="let ing of nirIngredients; let i = index;">
-              <div  class="content-container input" *ngIf="ing.total !== 0">
+            <div *ngFor="let ing of nir.ingredients; let i = index;">
+              <div  class="content-container input">
                 <span class="content name">{{ing.name}}</span>
                 <span class="content um">{{ing.um}}</span>
                 <span class="content cant">{{ing.qty}}</span>
@@ -95,14 +99,22 @@
             <span class="footer"></span>
             <span class="footer"></span>
             <span class="footer"></span>
-            <span class="footer">{{val}} Lei</span>
+            <span class="footer">{{nir.val}} Lei</span>
             <span class="footer"></span>
             <span class="footer"></span>
-            <span class="footer">{{valTva}} Lei</span>
-            <span class="footer">{{valTotal}} Lei</span>
+            <span class="footer">{{nir.valTva}} Lei</span>
+            <span class="footer">{{nir.totalDoc}} Lei</span>
             <span class="footer"></span>
             <span class="footer"></span>
-            <span class="footer">{{valVanzare}} lei</span>
+            <span class="footer">{{nir.valVanzare}} lei</span>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="tva-wrapper" *ngFor="let disc of nir.discount">
+            <span class="label">Reducere {{disc.tva}} %</span>
+            <span class="value"> - {{disc.value}} Lei</span>
           </div>
         </ion-col>
       </ion-row>

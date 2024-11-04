@@ -2,11 +2,12 @@
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 import { Category, Product } from "./category.model";
-import { InvIngredient, NirIngredient } from './nir.model';
+import { InvIngredient, Nir, NirIngredient } from './nir.model';
 import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
 import { Inventary, line, productionReport } from "./inventary.model";
 import { reportUsers } from "./report.model";
+import { Suplier } from "./suplier.model";
 
 export function emptyUser(){
   const user: User = {
@@ -317,8 +318,47 @@ export function emptyNirIng(){
    tvaValue: 0,
    sellPrice: 0,
    total: 0,
+   logId: '',
+   ing: '',
   }
   return emptyNirIng
+}
+
+export function emptyNir(){
+  const nir: Nir ={
+    _id: '',
+    index: 0,
+    payd: false,
+    suplier: emptySuplier(),
+    nrDoc: 0,
+    documentDate: '',
+    receptionDate: '',
+    ingredients: [],
+    document: '',
+    totalDoc: 0,
+    val: 0,
+    valTva: 0,
+    valVanzare: 0,
+    discount: [],
+  }
+  return nir
+}
+
+export function emptySuplier(){
+  const sup: Suplier = {
+     _id: '',
+     bussinessName: '',
+     name: '',
+     vatNumber: '',
+     register: '',
+     account: '',
+     bank: '',
+     VAT: true,
+     address: '',
+     sold: 0,
+     records: []
+  }
+  return sup
 }
 
 

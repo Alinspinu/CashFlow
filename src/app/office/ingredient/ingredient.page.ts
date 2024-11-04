@@ -229,7 +229,6 @@ updateProductIng(){
       if(ingToUpdate){
         this.ingSrv.updateIngredientInventary(ingToUpdate).subscribe(async response => {
           this.ind += 1
-          // await this.inventary(this.ind)
           showToast(this.toastCtrl, response.message, 3000)
         })
       }
@@ -248,7 +247,14 @@ updateProductIng(){
   }
 
   searchRecive(searchQuery: string){
-      this.ingredients = this.allIngs.filter((ing: InvIngredient) => ing.name.toLowerCase().includes(searchQuery))
+      this.ingredients = this.allIngs.filter((ing: InvIngredient) => {
+        if(ing.name){
+          return ing.name.toLowerCase().includes(searchQuery)
+        } else {
+          return console.log(ing)
+        }
+
+      })
   }
 
   onIngRecive(ev: any){

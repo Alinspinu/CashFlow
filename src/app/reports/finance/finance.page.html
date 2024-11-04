@@ -217,10 +217,10 @@
           
             <div class="method">
               <span class="venit font">{{productioReport.totals.iesiri}} Lei</span>
-              <span class="mfs" [ngClass]="{'font': sup}" (click)="suplies(sup)">{{productioReport.totals.firstInv + productioReport.totals.intrari - productioReport.totals.secondInv}} Lei</span>  
+              <span class="mfs" [ngClass]="{'font': sup}" (click)="suplies(sup)">{{roundInHtml(productioReport.totals.firstInv + productioReport.totals.intrari - productioReport.totals.secondInv)}} Lei</span>  
               <span class="mfr" [ngClass]="{'font': !sup}" (click)="suplies(sup)">{{report.ingsValue}} Lei</span>  
               <span class="empl font">{{roundInHtml(report.workValue.tax + report.workValue.total)}} Lei</span>  
-              <span class="spend font">{{totalSpendings + totalRentAndStuff}} Lei</span>  
+              <span class="spend font">{{roundInHtml(totalSpendings + totalRentAndStuff)}} Lei</span>  
               <span class="prof font" *ngIf="sup">
                 {{roundInHtml(
                   productioReport.totals.dif - 

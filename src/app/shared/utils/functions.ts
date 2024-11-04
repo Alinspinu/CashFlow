@@ -6,6 +6,9 @@ import { Product } from "src/app/models/category.model";
 export function round(num: number): number {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 }
+export function round4(num: number): number {
+  return Math.round((num + Number.EPSILON) * 10000) / 10000;
+}
 export function roundOne(num: number): number {
   return Math.round((num + Number.EPSILON) * 1) / 1;
 }
@@ -167,15 +170,24 @@ export function findCommonNumber(arr: number[]): number | null {
 
 export function sortByDate(arr: any[], ascending: boolean = true): any[] {
   return arr.sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-
+    let dateA = new Date(a.date).getTime();
+    let dateB = new Date(b.date).getTime();
+    if(a.day){
+       dateA = new Date(a.day).getTime();
+       dateB = new Date(b.day).getTime();
+    }
+    if(a.date){
+      dateA = new Date(a.date).getTime();
+      dateB = new Date(b.date).getTime();
+    }
+    console.log(dateA)
       // Compare dates
       if (ascending) {
-          return dateA.getTime() - dateB.getTime(); // Ascending order
+          return dateA - dateB; // Ascending order
       } else {
-          return dateB.getTime() - dateA.getTime(); // Descending order
+          return dateB - dateB; // Descending order
       }
   });
 }
+
 

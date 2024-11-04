@@ -12,19 +12,27 @@ export class NirIngredient {
     public total: number,
     public dep: number,
     public gestiune: string,
-    public sellPrice: number
+    public sellPrice: number,
+    public logId: string,
+    public ing: string,
   ){}
 }
 
 export class Nir{
   constructor(
-    public suplier: string,
+    public _id: string,
+    public index: number,
+    public payd: boolean,
+    public suplier: Suplier,
     public nrDoc: number,
     public documentDate: string,
     public receptionDate: string,
     public ingredients: NirIngredient[],
     public document: string,
     public totalDoc: number,
+    public val: number,
+    public valTva: number,
+    public valVanzare: number,
     public discount: {tva: number, value: number, procent: number}[]
   ){}
 }

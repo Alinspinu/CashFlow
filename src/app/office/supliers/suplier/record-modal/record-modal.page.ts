@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { formatedDateToShow } from '../../../../shared/utils/functions';
 import { ActionSheetService } from '../../../../shared/action-sheet.service';
 import { DatePickerPage } from '../../../../modals/date-picker/date-picker.page';
@@ -17,6 +17,7 @@ export class RecordModalPage implements OnInit {
 
   form!: FormGroup;
   date!:any
+  total: number = 0
 
   documents: string[] = [
     'bon fiscal',
@@ -43,10 +44,15 @@ export class RecordModalPage implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
+    private navParams: NavParams,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService
   ) { }
 
   ngOnInit() {
+    const data = this.navParams.get('options')
+    if(data){
+      this.total = data.amount
+    }
     this.setForm()
     this.startEntryFlow()
     this.form.get('description')?.setValue('-')
@@ -113,17 +119,23 @@ export class RecordModalPage implements OnInit {
         this.form.get('document')?.setValue(document)
           const docNumber = await this.actionSheet.textAlert('Numar Document', 'Introdu numarul documentului', 'nr', 'Numad document')
           if(docNumber){
+            this.hide.docNr = true
             this.form.get('docNr')?.setValue(docNumber)
-            const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
-              if(sum){
-                this.hide.amount = true
-                this.form.get('price')?.setValue(sum)
-                const description = await this.actionSheet.textAlert('Detalii', 'Adaugă detalii suplimentare', 'nr', 'Detalii plată')
-                if(description){
-                  this.hide.desc = true
-                  this.form.get('description')?.setValue(description)
+            if(this.total > 0){
+              this.hide.amount = true
+              this.form.get('price')?.setValue(this.total)
+            } else {
+              const sum = await this.actionSheet.numberAlert('Sumă', 'Adaugă suma', 'val', 'Sumă')
+                if(sum){
+                  this.hide.amount = true
+                  this.form.get('price')?.setValue(sum)
+                  const description = await this.actionSheet.textAlert('Detalii', 'Adaugă detalii suplimentare', 'nr', 'Detalii plată')
+                  if(description){
+                    this.hide.desc = true
+                    this.form.get('description')?.setValue(description)
+                  }
+  
                 }
-
               }
             }
         }

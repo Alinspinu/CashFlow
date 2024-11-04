@@ -6,10 +6,14 @@ import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { NirsService } from './nirs.service';
 import { Router } from '@angular/router';
-import { formatedDateToShow, getUserFromLocalStorage } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, getUserFromLocalStorage, round, roundOne } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { Record, Suplier } from 'src/app/models/suplier.model';
+import { Nir } from 'src/app/models/nir.model';
+import { SelectDataPage } from 'src/app/modals/select-data/select-data.page';
+import { RecordPage } from './record/record.page';
 
 @Component({
   selector: 'app-nirs',
@@ -20,8 +24,11 @@ import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 })
 export class NirsPage implements OnInit {
 
-  nirs: any[] = []
-  dbNirs: any[] = []
+  nirs: Nir[] = []
+  dbNirs: Nir[] = []
+
+  supliers: Suplier[] = [] 
+  supliersToSend: string[] = []
 
   startDate!: any
   endDate!: any
@@ -30,8 +37,14 @@ export class NirsPage implements OnInit {
   dateColor: string = 'none'
   indexColor: string = 'primary'
   totalColor: string = 'none'
+  dueDaysColor: string = 'none'
+
+  totalDue: number = 0
 
   nirSearch!: string
+
+
+  suplierId!: string
 
 
   constructor(
@@ -43,11 +56,9 @@ export class NirsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-   this.getUser()
-  }
-
-  ionViewDidEnter() {
     this.getNirs()
+    this.getUser()
+    this.getSupliers()
   }
 
 
@@ -55,7 +66,7 @@ getUser(){
   getUserFromLocalStorage().then(user => {
     if(user){
       this.user = user
-      this.getNirs()
+
     } else {
       this.router.navigateByUrl('/auth')
     }
@@ -70,6 +81,7 @@ index(){
   this.dateColor = 'none'
   this.indexColor = 'primary'
   this.totalColor= 'none'
+  this.dueDaysColor = 'none'
 }
 
 
@@ -78,7 +90,7 @@ date(){
     const dateA = new Date(a.documentDate).getTime()
     const dateB = new Date(b.documentDate).getTime()
     if (!isNaN(dateA) && !isNaN(dateB)) {
-      return dateA - dateB;
+      return dateB - dateA;
     } else {
       return 0;
     }
@@ -87,6 +99,7 @@ date(){
   this.dateColor = 'primary'
   this.indexColor = 'none'
   this.totalColor= 'none'
+   this.dueDaysColor = 'none'
 }
 
 total(){
@@ -95,25 +108,119 @@ total(){
   this.dateColor = 'none'
   this.indexColor = 'none'
   this.totalColor = 'primary'
+   this.dueDaysColor = 'none'
 }
 
 suplier(){
   this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
- this.totalColor= 'none'
+  this.totalColor= 'none'
   this.suplierColor = 'primary'
   this.dateColor = 'none'
   this.indexColor = 'none'
+   this.dueDaysColor = 'none'
+}
+
+
+dueDays(){
+  this.nirs.sort((a,b) => {
+    if(a.payd !== b.payd){
+      return a.payd ? 1 : -1
+    } 
+    return this.showDoDate(b.documentDate) - this.showDoDate(a.documentDate)
+  })
+  this.totalColor= 'none'
+  this.suplierColor = 'none'
+  this.dateColor = 'none'
+  this.indexColor = 'none'
+   this.dueDaysColor = 'primary'
+
+}
+
+
+
+async selectSuplier(){
+  const suplierName = await this.actionSheetService.openSelect(SelectDataPage, this.supliersToSend, 'data')
+  if(suplierName){
+    const suplier = this.supliers.find((suplier: any) => suplier.name === suplierName)
+    if(suplier){
+      this.nirSrv.getnirsBySuplier(suplier._id).subscribe({
+        next: (response) => {
+          this.dbNirs = response
+          this.nirs = [...this.dbNirs].reverse()
+          this.suplierId = this.nirs[0].suplier._id
+          this.calcTotalDue()
+        }, 
+        error: (error) => {
+          console.log(error)
+          showToast(this.toastCtrl, error.message, 2000)
+        }
+      })
+    }
+  }
+}
+
+
+updateNirsBySulier(){
+  this.nirSrv.updateNirsBySuplier(this.suplierId).subscribe()
 }
 
 getNirs(){
-  this.nirSrv.getNirs(this.user.locatie).subscribe(response => {
+  this.nirSrv.getNirs().subscribe(response => {
     if(response){
       this.dbNirs = response
       this.nirs = [...this.dbNirs]
+      this.calcTotalDue()
     }
   })
 }
 
+
+
+async payNir(nir: Nir, index: number){
+  if(nir.payd){
+    const response = await this.actionSheetService.deleteAlert(`Ești sigur că vrei să marchezi documentul numărul - ${nir.nrDoc}, cu valoarea de ${nir.totalDoc}, ca neplătit?`, 'Anulează Plata!')
+    if(response){
+      const data = {records: nir.suplier.records, title: `Deselectează intrarea cu valoarea de ${nir.totalDoc} Lei`, nir: nir}
+      await this.updatedocStatuNirPayment(data, false, index, nir)
+    }
+  } else {
+    const response = await this.actionSheetService.deleteAlert(`Vrei să asociezi plata documentului cu o plata deja existentă?`, 'Asociază plata')
+    if(response){
+      const data = {records: nir.suplier.records, title: `Alege intrarea din registru pentru valoarea de ${nir.totalDoc} Lei`, nir: nir}
+      await this.updatedocStatuNirPayment(data, true, index, nir)  
+    } else {
+
+    }
+  }
+}
+
+async updatedocStatuNirPayment( data:{records: Record[], title: string}, payment: boolean, index: number, nir: Nir){
+  const response = await this.actionSheetService.openSelect(RecordPage, data, '')
+  if(response){
+    const records = response.records
+    this.nirSrv.updateDocPaymentStatus(payment, nir._id, response.type).subscribe({
+      next: (response) => {
+        this.nirs[index] = response.nir
+        this.nirSrv.updateSuplierRecords(nir.suplier._id, records).subscribe({
+          next: (response) => {
+            this.nirs[index].suplier.records = records 
+            this.calcTotalDue()
+            showToast(this.toastCtrl, 'Nirul și furnizorul au fost actualizati!', 2000)
+          },
+          error: (error) =>{
+            showToast(this.toastCtrl, error.message, 3000)
+            console.log(error)
+          }
+        })
+      },
+      error: (error) => {
+        showToast(this.toastCtrl, error.message, 3000)
+        console.log(error)
+      }
+    })
+  }
+
+}
 
 searchNir(ev: any){
   const input = ev.detail.value
@@ -127,11 +234,30 @@ searchNir(ev: any){
 }
 
 
+  showDoDate(date: string){
+    const now = new Date().getTime()
+    const invoceDate = new Date(date).getTime()
+    const dueDays =roundOne((now - invoceDate) / (1000 * 60 * 60 * 24))
+    return dueDays
+  }
+
+
+
+  getSupliers(){
+    this.nirSrv.getSuplier('').subscribe(response => {
+      if(response){
+        this.supliers = response.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+        this.supliers.forEach(suplier => {
+          this.supliersToSend.push(suplier.name)
+        })
+      }
+    })
+  }
+
 
 
   export(){
     if(this.startDate && this.endDate){
-      console.log('hit')
       this.nirSrv.exportNirs(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
@@ -145,28 +271,38 @@ searchNir(ev: any){
   }
 
 
-  async openDateModal(mode: string){
-    const response = await this.actionSheetService.openAuth(DatePickerPage)
-    if(response && mode === 'start'){
-      this.startDate = response
-    }
-    if(response && mode === 'end'){
-      this.endDate = response
-      if(this.startDate){
-        console.log(this.startDate, this.endDate)
-        this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
-          if(response){
-            this.dbNirs = response
-            this.nirs = [...this.dbNirs]
-            this.dbNirs.forEach(nir => {
-              if(nir.index === 1449){
-                console.log(nir)
+  async openDateModal(start: boolean){
+    if(start){
+      const response = await this.actionSheetService.openAuth(DatePickerPage)
+        if(response){
+          this.startDate = response
+          const res = await this.actionSheetService.openAuth(DatePickerPage)
+          if(res){
+            this.endDate = res
+              this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
+                if(response){
+                  this.dbNirs = response
+                  this.nirs = [...this.dbNirs]
+                  this.calcTotalDue()
+                }
+              })
+           }
+         }
+      } else {
+        const res = await this.actionSheetService.openAuth(DatePickerPage)
+        if(res && this.startDate){
+          this.endDate = res
+            this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
+              if(response){
+                this.dbNirs = response
+                this.nirs = [...this.dbNirs]
+                this.calcTotalDue()
               }
             })
-          }
-        })
-      }
-    }
+         } else {
+          showToast(this.toastCtrl, 'Trebuie să alegi întâi data de început!', 2000)
+         }
+       } 
   }
 
 
@@ -191,6 +327,15 @@ searchNir(ev: any){
     }
   }
 
+  calcTotalDue(){
+    this.totalDue = 0
+    this.nirs.forEach(nir => {
+      if(!nir.payd){
+        this.totalDue = round(this.totalDue + nir.totalDoc)
+      }
+    })
+  }
+
 
   printNir(id: string) {
     this.nirSrv.printNir(id).subscribe(response => {
@@ -208,4 +353,8 @@ searchNir(ev: any){
     return formatedDateToShow(date).split('ora')[0]
   }
 
+
+  roundInHtml(num: number){
+    return round(num)
+  }
 }

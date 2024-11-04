@@ -5,23 +5,27 @@
       <ion-row>
         <ion-col col="12">
           <div class="header-buttons">
-              <ion-button (click)="openDateModal('start')" color="medium">
+              <!-- <ion-button (click)="openDateModal('start')" color="medium">
                 Start
-                <!-- <ion-icon src="../../../assets/png/date-in.png" class="icon-start" alt="date-in-logo"></ion-icon> -->
-              </ion-button>
-              <div class="display-date">
-                <span>{{startDate ? formatedDate(startDate) : "..."}}</span>
+              </ion-button> -->
+              <div class="display-date" (click)="openDateModal(true)">
+                <span>{{startDate ? formatedDate(startDate) : "Dată de început..."}}</span>
               </div>
-              <ion-button (click)="openDateModal('end')" color="medium">
+              <!-- <ion-button (click)="openDateModal('end')" color="medium">
                 End
-                <!-- <ion-icon src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo"></ion-icon> -->
-              </ion-button>
-              <div class="display-date">
-                <span>{{endDate ? formatedDate(endDate) : "..."}}</span>
+                <ion-icon src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo"></ion-icon>
+              </ion-button> -->
+              <div class="display-date" (click)="openDateModal(false)">
+                <span>{{endDate ? formatedDate(endDate) : "Dată de sfârșit..."}}</span>
               </div>
-              <ion-button  style="margin-left: 90px;" (click)="export()" [disabled]="!startDate || !endDate" color="medium">
-                Export
-                <ion-icon src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo"></ion-icon>
+              <ion-button  style="margin-left: 10px;" (click)="selectSuplier()" color="medium" fill="outline" mode="ios">
+                Alege furnizor
+              </ion-button>
+              <div class="total-wrapper" *ngIf="totalDue > 0">
+                <span class="tot"> - {{totalDue}} Lei</span>
+              </div>
+              <ion-button  style="margin-left: 30px;" (click)="updateNirsBySulier()" color="medium" fill="outline" mode="ios">
+                Update
               </ion-button>
             <ion-searchbar mode="ios" [(ngModel)]="nirSearch"  placeholder="Caută document după furnizor.."  (ionInput)="searchNir($event)" #searchbar>
             </ion-searchbar>
@@ -50,6 +54,15 @@
         Total
         <ion-icon src="assets/icon/arrows-down.svg"  [color]="totalColor"></ion-icon>
       </span>
+      <span class="due-days font" (click)="dueDays()">
+        Zile întarziere
+        <ion-icon src="assets/icon/arrows-down.svg"  [color]="dueDaysColor"></ion-icon>
+      </span>
+      <ion-buttons class="pay-button">
+        <ion-button>
+          <ion-icon ></ion-icon>
+        </ion-button>
+      </ion-buttons>
       <span class="docNumber font">Nr Document</span>
       <ion-buttons solt="end">
         <ion-button>
@@ -79,9 +92,18 @@
         <span class="nr">{{nir.index}}</span>
         <span class="date">{{formatedDate(nir.documentDate)}}</span>
         <span class="suplier">{{nir.suplier.name}}</span>
-        <span class="total">{{nir.totalDoc}} Lei</span>
+        <span class="total">{{roundInHtml(nir.totalDoc)}} Lei</span>
+        <span class="due-days">{{ nir.payd ? 'Platit' : ' - ' + showDoDate(nir.documentDate) + ' Zile'}}</span>
+        <ion-buttons class="pay-button">
+          <ion-button *ngIf="nir.payd" (click)="payNir(nir, i)">
+            <ion-icon src="../../../assets/icon/success.svg"  color="success"></ion-icon>
+          </ion-button>
+          <ion-button *ngIf="!nir.payd" (click)="payNir(nir, i)">
+            <ion-icon src="../../../assets/icon/not.svg"  color="danger"></ion-icon>
+          </ion-button>
+        </ion-buttons>
         <span class="docNumber">{{nir.nrDoc}}</span>
-        <ion-buttons solt="end">
+        <ion-buttons>
           <ion-button (click)="editNir(nir._id)">
             <ion-icon  src="../../assets/icon/create-outline.svg"  size="large"></ion-icon>
           </ion-button>

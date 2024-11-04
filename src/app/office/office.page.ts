@@ -40,7 +40,6 @@ export class OfficePage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getUser()
     this.productSub =  this.productsSrv.getProducts(environment.LOC).subscribe()
-    this.ingSub = this.ingSrv.getAllIngredients().subscribe()
     this.userSrv.getUsers().subscribe()
 
   }

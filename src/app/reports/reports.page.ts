@@ -44,7 +44,7 @@ export class ReportsPage {
     cashRegister: boolean
     finance: boolean
     inventary: boolean
-  } = {sales: false, products: false, cashRegister: false, menu: false, finance: false, inventary: true}
+  } = {sales: false, products: false, cashRegister: false, menu: false, finance: true, inventary: false}
 
   constructor() {
     this.screenWidth = window.innerWidth

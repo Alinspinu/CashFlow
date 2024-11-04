@@ -287,7 +287,7 @@ export class SuplierPage implements OnInit {
 
   searchSuplierInDb(ev: any){
     const input = ev.detail.value
-    this.nirSrv.getSuplier(input, this.user.locatie).subscribe(response => {
+    this.nirSrv.getSuplier(input).subscribe(response => {
       this.supliers = response
       if(input === ''){
         this.supliers = []

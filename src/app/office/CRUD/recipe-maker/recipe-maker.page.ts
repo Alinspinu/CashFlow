@@ -153,7 +153,6 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   }
 
   setDataToEdit(){
-    // this.ingPage ? this.color = "tertiary": this.color = 'transparent'
     if(this.top && this.top.length){
       this.toppings = this.top
       this.toppSend.emit(this.toppings)
@@ -189,7 +188,14 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   searchIngredient(ev: any){
     const searchQuery = ev.detail.value.toLowerCase()
     if(!this.ingPage){
-    this.ingredients = this.dbIngs.filter((obj: InvIngredient) => obj.name.toLowerCase().includes(searchQuery))
+    this.ingredients = this.dbIngs.filter((obj: InvIngredient) =>{
+      if(obj.name){
+        return obj.name.toLowerCase().includes(searchQuery)
+      } else {
+       return console.log(obj)
+      }
+    })
+     
     if(searchQuery === ''){
       this.ingredients = []
     }

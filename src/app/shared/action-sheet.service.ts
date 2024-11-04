@@ -42,6 +42,7 @@ import { CloseDayPage } from '../cash-control/close-day/close-day.page';
 import { MonetarPage } from '../cash-control/monetar/monetar.page';
 import { UploadLogPage } from '../reports/inventary/upload-log/upload-log.page';
 import { IngredientContentPage } from '../office/ingredient/ingredient-content/ingredient-content.page';
+import { RecordPage } from '../office/nirs/record/record.page';
 
 
 
@@ -80,7 +81,8 @@ export class ActionSheetService {
 
 
   async openSelect(
-    component: typeof SelectDataPage,
+    component: typeof SelectDataPage |
+               typeof RecordPage,
     options: any,
     mode: string,
                ) {

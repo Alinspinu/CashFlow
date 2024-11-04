@@ -5,7 +5,10 @@
       <ion-row>
         <ion-col>
           <ion-title class="ion-text-center">Adaugă Ingredient</ion-title>
-          <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută ingredient"  (ionInput)="searchIngredient($event)" (keyup.enter)="setIng($event)" #searchBar [disabled]="disableIngredientSearch"></ion-searchbar>
+          <ion-item lines="none" color="transparent">
+            <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută ingredient"  (ionInput)="searchIngredient($event)" (keyup.enter)="setIng($event)" #searchBar [disabled]="disableIngredientSearch"></ion-searchbar>
+            <ion-icon src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()" color="medium" size="large"></ion-icon>
+          </ion-item>
           <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
             <div *ngIf="ingredients.length >= 1">
               <span class="name">{{ing.name}}</span>

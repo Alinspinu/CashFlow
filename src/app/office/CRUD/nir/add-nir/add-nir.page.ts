@@ -16,6 +16,8 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { DiscountPage } from '../../../../modals/discount/discount.page';
 import { identifierName } from '@angular/compiler';
 import { SpinnerPage } from '../../../../modals/spinner/spinner.page';
+import { emptyNir } from 'src/app/models/empty-models';
+import { RandomService } from 'src/app/shared/random.service';
 
 
 @Component({
@@ -34,7 +36,7 @@ export class AddNirPage implements OnInit {
 
   supliers: any = [];
   suplier!: any
-  nir: Nir = {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], document: '' , totalDoc: 0, receptionDate: ''}
+  nir: Nir = emptyNir()
 
   nirIngredients: NirIngredient[] = []
 
@@ -48,6 +50,8 @@ export class AddNirPage implements OnInit {
 
   user!: User
 
+  discountMode: boolean = true
+
 
   isLoading: boolean = false
 
@@ -55,6 +59,8 @@ export class AddNirPage implements OnInit {
   valTva: number = 0;
   valTotal: number = 0;
   valVanzare: number = 0;
+
+
   nirId!: string
 
   constructor(
@@ -63,6 +69,7 @@ export class AddNirPage implements OnInit {
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
     private router: Router,
+    private randomSrv: RandomService,
   ) { }
 
 
@@ -70,29 +77,11 @@ export class AddNirPage implements OnInit {
   ngOnInit() {
     this.setupNirForm()
     this.getNirToEdit()
-    this.getNirIngs()
+    this.getNir()
   }
 
 
-  getNirIngs(){
-    this.nirSrv.nirIngSend$.subscribe(ings => {
-      if(ings){
-        if(!this.editMode){
-          // const index = ings.findIndex(ing => ing.total === 0)
-          // console.log(index)
-          // if(index !== -1){
-          //   this.nirIngredients = ings.splice(index+1, 1)
-          // } else {
-          // }
-          this.nirIngredients = ings
-          this.clacTotals(this.nirIngredients, -1)
-        } else{
-          this.nirIngredients = ings
-          this.clacTotals(this.nirIngredients, -1)
-        }
-      }
-    })
-  }
+
 
 
 
@@ -121,7 +110,6 @@ setupNirForm(){
     }),
   })
 
-  // this.nirForm.get('date')?.setValue(new Date(Date.now()).toISOString())
   setTimeout(()=> {
     if(this.editMode){
       this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
@@ -141,13 +129,12 @@ getNirToEdit(){
     this.nirSrv.getNir(id).subscribe(response => {
       if(response) {
         this.nir = response.nir
+        // this.updateLogId()
         this.editMode = true
         this.isLoading = false
-        this.nirSrv.setIngredients(this.nir.ingredients)
+        this.nirSrv.setNir(this.nir)
         this.nirId = id
         this.suplier = this.nir.suplier
-        this.valTotal = this.nir.totalDoc
-        this.calcTotalsAftDiscount(this.nirIngredients)
         this.nirForm.get('docDate')?.setValue(this.nir.documentDate)
         this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
         this.nirForm.get('document')?.setValue(this.nir.document)
@@ -159,26 +146,19 @@ getNirToEdit(){
   }
 }
 
-
-
-calcTotalsAftDiscount(nirIngredients: NirIngredient[]){
-  this.val = 0;
-  this.valTva = 0;
-  this.valTotal = 0;
-  this.valVanzare = 0
-  nirIngredients.forEach(el=> {
-    this.val = round(this.val + el.value);
-    this.valTva = round(this.valTva + el.tvaValue);
-    this.valTotal = round(this.valTotal + el.total);
-    this.valVanzare = round(this.valVanzare + (el.sellPrice *  el.qty))
+updateLogId(){
+  this.nir.ingredients.forEach(ing => {
+    ing.logId = this.randomSrv.generateRandomHexString(9)
   })
 }
 
 
 
+
+
   searchSuplier(ev: any){
     const input = ev.detail.value
-    this.nirSrv.getSuplier(input, environment.LOC ).subscribe(response => {
+    this.nirSrv.getSuplier(input).subscribe(response => {
       this.supliers = response
       if(input === ''){
         this.supliers = []
@@ -225,57 +205,30 @@ calcTotalsAftDiscount(nirIngredients: NirIngredient[]){
    }
 
 
+
+
+
   async openDiscount(){
-    const result = await this.actionSht.openPayment(DiscountPage, {nir: true})
-    if(result.tva === 19 || result.tva === 9 || result.tva === 5 || result.tva === 0) {
-      if(result.type === 'val'){
-        let totalOfIngsClassTva = 0
-        this.nirIngredients.forEach(ing => {
-         if(ing.tva === result.tva){
-             totalOfIngsClassTva += ing.price * ing.qty
-           }
-         })
-         let discountProcent = result.val / totalOfIngsClassTva
-         this.nir.discount.push({tva: result.tva, value: result.val, procent: discountProcent})
-         this.nirIngredients.forEach(ing => {
-           if(ing.tva === result.tva) {
-             ing.price = round(ing.price - ing.price * discountProcent);
-             ing.value = round(ing.price * ing.qty);
-             ing.tvaValue = round(ing.value * ing.tva / 100);
-             ing.total = round(ing.value + ing.tvaValue);
-           }
+      const result = await this.actionSht.openPayment(DiscountPage, {nir: true})
+      if(result.tva === 19 || result.tva === 9 || result.tva === 5 || result.tva === 0) {
+        this.nirSrv.calcDiscount(result)
+        this.discountMode = false
+      } else {
+       showToast(this.toastCtrl, "Valoarea TVA trebuie sa fie 19, 9, 5 sau 0", 3000)
+      }
+   }
 
-         })
-       }
-       if(result.type === 'proc') {
-         let discountValue = 0
-         this.nirIngredients.forEach(ing => {
-           if(ing.tva === result.tva) {
-             ing.price = round(ing.price - ing.price * result.val / 100)
-             ing.value = round(ing.price * ing.qty)
-             ing.tvaValue = round(ing.value * ing.tva / 100)
-             ing.total = round(ing.value + ing.tvaValue)
-             discountValue += (ing.price * result.val / 100) * ing.qty
-           }
-         })
-         this.nir.discount.push({tva: result.tva, value: discountValue, procent: result.val})
-       }
-       this.calcTotalsAftDiscount(this.nirIngredients)
-       console.log(this.nir)
-    } else {
-     showToast(this.toastCtrl, "Valoarea TVA trebuie sa fie 19, 9, 5 sau 0", 3000)
-    }
-
+   removeDiscount(){
+    this.nirSrv.removeDiscount()
+    this.discountMode = true
    }
 
 
   deleteEntry(index: number){
-    if(this.nirIngredients.length)
+    if(this.nir.ingredients.length){
     this.nirSrv.redNirIng(index)
-    setTimeout(() => {
-      this.clacTotals(this.nirIngredients, index)
-    }, 200)
   }
+}
 
 
 
@@ -287,18 +240,10 @@ calcTotalsAftDiscount(nirIngredients: NirIngredient[]){
             this.nir.documentDate = this.nirForm.value.docDate;
             this.nir.receptionDate = this.nirForm.value.receptionDate;
             this.nir.nrDoc = this.nirForm.value.nrDoc
-            this.nir.suplier = this.suplier._id
+            this.nir.suplier._id = this.suplier._id
             this.nir.document = this.nirForm.value.document
-            const index = this.nirIngredients.findIndex(ing => ing.total === 0)
-            if(index !== -1){
-              this.nirIngredients.splice(index, 1)
-              this.nir.ingredients = this.nirIngredients
-            } else {
-              this.nir.ingredients = this.nirIngredients
-            }
-            this.nir.totalDoc = this.valTotal
-            this.nirSrv.saveNir(this.nir, environment.LOC).subscribe(response => {
-              this.reserNirData()
+            this.nirSrv.saveNir(this.nir).subscribe(response => {
+              this.nirSrv.setNir(emptyNir())
               showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
               this.router.navigateByUrl('/tabs/office/nirs')
             })
@@ -308,18 +253,10 @@ calcTotalsAftDiscount(nirIngredients: NirIngredient[]){
         this.nir.documentDate = this.nirForm.value.docDate;
         this.nir.receptionDate = this.nirForm.value.receptionDate;
         this.nir.nrDoc = this.nirForm.value.nrDoc
-        this.nir.suplier = this.suplier._id
+        this.nir.suplier._id = this.suplier._id
         this.nir.document = this.nirForm.value.document
-        const index = this.nirIngredients.findIndex(ing => ing.total === 0)
-            if(index !== -1){
-              this.nirIngredients.splice(index, 1)
-              this.nir.ingredients = this.nirIngredients
-            } else {
-              this.nir.ingredients = this.nirIngredients
-            }
-        this.nir.totalDoc = this.valTotal
-        this.nirSrv.saveNir(this.nir, environment.LOC).subscribe(response=> {
-          this.reserNirData()
+        this.nirSrv.saveNir(this.nir).subscribe(response=> {
+          this.nirSrv.setNir(emptyNir())
           this.router.navigateByUrl('/tabs/office/nirs')
           showToast(this.toastCtrl, response.message, 2000)
         })
@@ -328,36 +265,13 @@ calcTotalsAftDiscount(nirIngredients: NirIngredient[]){
   }
 
 
-
-  clacTotals(nirIngs: NirIngredient[], index: number){
-    if(index !== -1 && nirIngs.length){
-      let ing = nirIngs[index]
-      this.val = round(this.val - ing.value)
-      this.valTva = round(this.valTva - ing.tvaValue)
-      this.valTotal = round(this.valTotal -  ing.total)
-      this.valVanzare = round(this.valVanzare - (ing.sellPrice *  ing.qty))
-    } else {
-          if(nirIngs.length){
-            let ing =  nirIngs[nirIngs.length -1]
-            this.val = round(this.val + ing.value)
-            this.valTva = round(this.valTva +  ing.tvaValue)
-            this.valTotal = round(this.valTotal +  ing.total)
-            this.valVanzare = round(this.valVanzare + (ing.sellPrice *  ing.qty))
-          }
-    }
+  getNir(){
+    this.nirSrv.nirSend$.subscribe(nir => { 
+        this.nir = nir
+    })
   }
 
 
-  reserNirData(){
-    this.nir =  {suplier: '', nrDoc: 0, documentDate: '', ingredients: [], discount: [], document: '', totalDoc: 0, receptionDate: ''}
-    this.nirSrv.resetProducts()
-    this.val = 0
-    this.suplier = undefined
-    this.valTotal = 0
-    this.valTva = 0
-    this.valVanzare = 0
-    this.nirForm.reset()
-  }
 
 
 roundFor(num: number){

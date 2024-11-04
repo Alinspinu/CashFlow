@@ -45,7 +45,7 @@
               'bucatar' : getPosition(day.users, user._id) === 'Bucatar',
               'aj-bucatar' : getPosition(day.users, user._id) === 'Ajutor bucatar',
               'liber' : getPosition(day.users, user._id) === 'LiBER',
-              'tes' : user.employee.position === 'Supervizor' || user.employee.position === 'Asistent Manager'}">
+              'tes' : getPosition(day.users, user._id) === 'Supervizor' || getPosition(day.users, user._id) === 'Asistent Manager'}">
               {{findUser(day.users, user._id)}}
             </div>
           </ion-col>

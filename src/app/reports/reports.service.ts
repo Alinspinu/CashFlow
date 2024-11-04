@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 import { Bill } from "../models/table.model";
@@ -44,16 +44,31 @@ export class ReportsService{
  getReport(startDate: string | undefined, endDate: string | undefined){
   return this.http.get<any>(`${environment.BASE_URL}report?startDate=${startDate}&endDate=${endDate}&loc=${environment.LOC}`)
  }
+
  getReports(){
-  return this.http.get<any[]>(`${environment.BASE_URL}report/all?loc=${environment.LOC}`)
+  const params = new HttpParams()
+    .set('loc', environment.LOC)
+  return this.http.get<any[]>(`${environment.BASE_URL}report/all`, {params})
  }
 
  deleteReport(reportId: string){
-  return this.http.delete<{message: string}>(`${environment.BASE_URL}report/delete?id=${reportId}`)
+  const params = new HttpParams()
+    .set('id', reportId)
+  return this.http.delete<{message: string}>(`${environment.BASE_URL}report/delete`, {params})
+ }
+
+ deleteReports(start: string, end: string){
+  const params = new HttpParams()
+    .set('start', start)
+    .set('end', end)
+    .set('loc', environment.LOC)
+  return this.http.delete<{message: string}>(`${environment.BASE_URL}report/all`, {params})
  }
 
  getReportsDate(){
-  return this.http.get<{start: string, end: string}>(`${environment.BASE_URL}report/dates?loc=${environment.LOC}`)
+  const params = new HttpParams()
+  .set('loc', environment.LOC)
+  return this.http.get<{start: string, end: string}>(`${environment.BASE_URL}report/dates`, {params})
  }
 
 

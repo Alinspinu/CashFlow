@@ -1,6 +1,8 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {environment} from '../../../environments/environment'
+import { Nir } from "src/app/models/nir.model";
+import { Record } from "src/app/models/suplier.model";
 
 
 
@@ -20,8 +22,8 @@ export class NirsService{
     return this.http.get(`${environment.BASE_URL}nir/print-nir?id=${id}`, { responseType: 'arraybuffer' })
   }
 
-  getNirs(loc: string){
-    return this.http.post<{nir: any}[]>(`${environment.BASE_URL}nir/get-nirs`, {loc: loc})
+  getNirs(){
+    return this.http.post<Nir[]>(`${environment.BASE_URL}nir/get-nirs`, {loc: environment.LOC})
   }
 
   deleteNir(id: string) {
@@ -33,6 +35,28 @@ export class NirsService{
   }
 
   getNirsByDate(startDate: any, endDate: any, loc: string){
-    return this.http.post<{nir: any}[]>(`${environment.BASE_URL}nir/get-nirs-by-date`, {startDate, endDate, loc})
+    return this.http.post<Nir[]>(`${environment.BASE_URL}nir/get-nirs-by-date`, {startDate, endDate, loc})
+  }
+
+  getSuplier(input: any){
+    return this.http.post<any[]>(`${environment.BASE_URL}suplier/send-supliers`, {search: input, loc: environment.LOC})
+  }
+
+  getnirsBySuplier(id: string){
+    const params = new HttpParams()
+    .set('id', id)
+    return this.http.get<Nir[]>(`${environment.BASE_URL}nir/get-nirs`, {params})
+  }
+
+  updateNirsBySuplier(id: string){
+    return this.http.post<Nir[]>(`${environment.BASE_URL}nir/update`, {id: id})
+  }
+
+  updateDocPaymentStatus(update: boolean, id: string, type: string){
+    return this.http.post<{message: string, nir: Nir}>(`${environment.BASE_URL}nir/pay`, {update, id, type})
+  }
+
+  updateSuplierRecords(id: string, records: Record[]){
+    return this.http.put(`${environment.BASE_URL}suplier/add-record`, {id, records})
   }
 }

@@ -45,7 +45,10 @@
               'bucatar' : getPosition(day.users, user._id) === 'Bucatar',
               'aj-bucatar' : getPosition(day.users, user._id) === 'Ajutor bucatar',
               'liber' : getPosition(day.users, user._id) === 'LiBER',
-              'tes' : getPosition(day.users, user._id) === 'Supervizor' || getPosition(day.users, user._id) === 'Asistent Manager'}">
+              'tes' : getPosition(day.users, user._id) === 'Supervizor' || getPosition(day.users, user._id) === 'Asistent Manager',
+              'con' : getPosition(day.users, user._id) === 'Concediu',
+              'med' : getPosition(day.users, user._id) === 'Medical',
+              }">
               {{findUser(day.users, user._id)}}
             </div>
           </ion-col>

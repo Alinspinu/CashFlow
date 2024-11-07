@@ -267,10 +267,23 @@ calcTesTotal(){
   this.totalTesDay = roundOne(total / this.pontaj.days.length)
 }
 
+  // getPosition(users: any[], userId: string){
+  //   const user = users.find(usr => usr.employee === userId)
+  //   if(user) {
+  //     return user.position
+  //   } else {
+  //     return '0'
+  //   }
+  // }
+
   getPosition(users: any[], userId: string){
     const user = users.find(usr => usr.employee === userId)
-    if(user) {
+    if(user && !user.concediu && !user.medical) {
       return user.position
+    } else if(user && user.concediu) {
+      return 'Concediu'
+    } else if(user && user.medical){
+      return 'Medical'
     } else {
       return '0'
     }

@@ -83,14 +83,15 @@ async addOnShedule(day: any, empl: User){
   const options = [
     'Dimineata 7:30 - 15:30',
     'Seara 15:30 - 22:30',
-    'Seara 15:30 - 23:30',
     'Full 7:30 - 22:30',
     'Custom',
     'LiBER',
-    'Concediu'
+    'Concediu',
+    'Medical'
   ]
   const choise = await this.actSrv.entryAlert(options,'radio','Perioadă', 'Alege perioadă', '', '')
   let con = choise === 'Concediu' ? true : false
+  let med = choise === 'Medical' ? true : false
   if(choise){
     const dayDate = new Date(day.date)
     const monthNumber = dayDate.getMonth()
@@ -103,7 +104,7 @@ async addOnShedule(day: any, empl: User){
       end = dayDate.setHours(15, 30, 0, 0)
       hours = (end-start) / 1000 / 60 / 60
     }
-    if(choise === 'Concediu'){
+    if(choise === 'Concediu' || choise === 'Medical'){
       start = dayDate.setHours(7, 30, 0, 0)
       end = dayDate.setHours(15, 30, 0, 0)
       hours = (end-start) / 1000 / 60 / 60
@@ -111,11 +112,6 @@ async addOnShedule(day: any, empl: User){
     if(choise === 'Seara 15:30 - 22:30'){
       start = dayDate.setHours(15, 30, 0, 0)
       end = dayDate.setHours(22, 30, 0, 0)
-      hours = 1 + (end-start) / 1000 / 60 / 60
-    }
-    if(choise === 'Seara 15:30 - 23:30'){
-      start = dayDate.setHours(15, 30, 0, 0)
-      end = dayDate.setHours(23, 30, 0, 0)
       hours = 1 + (end-start) / 1000 / 60 / 60
     }
     if(choise === 'Full 7:30 - 22:30'){
@@ -161,7 +157,8 @@ async addOnShedule(day: any, empl: User){
             end: end,
             hours: hours,
             position: choise,
-            concediu: con
+            concediu: con,
+            medical: med
           },
           employee: empl._id
         }
@@ -173,7 +170,8 @@ async addOnShedule(day: any, empl: User){
           hours: hours,
           position: choise,
           earnd: workValue,
-          concediu: con
+          concediu: con,
+          medical: med
         }
         this.shedSrv.updateUserWorkLog(empl._id, userWorkLog).subscribe()
         this.shedSrv.addEntry(user, day, `${this.months[monthNumber]} - ${year}`, workValue).subscribe()
@@ -189,8 +187,12 @@ formatDateInHtml(date: any){
 
 getPosition(users: any[], userId: string){
   const user = users.find(usr => usr.employee === userId)
-  if(user) {
+  if(user && !user.workPeriod.concediu && !user.workPeriod.medical) {
     return user.workPeriod.position
+  } else if(user && user.workPeriod.concediu) {
+    return 'Concediu'
+  } else if(user && user.workPeriod.medical){
+    return 'Medical'
   } else {
     return 'LiBER'
   }
@@ -202,7 +204,9 @@ findUser(users: any[], userId: string){
     if(user) {
       if(user.workPeriod.concediu){
         return 'Concediu'
-      } else{
+      } else if(user.workPeriod.medical){
+        return 'Medical'
+      } else {
         return formatPeriod(user.workPeriod.start, user.workPeriod.end)
       }
     } else {

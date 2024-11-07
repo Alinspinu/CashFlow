@@ -88,6 +88,14 @@ font-family: NoirProSemi !important;
   background-color: rgb(212, 104, 27);
   color: white;
 }
+.con{
+  background-color: rgb(19, 82, 116);
+  color: white;
+}
+.med{
+  background-color: rgb(232, 41, 41);
+  color: white;
+}
 
 
 @media (prefers-color-scheme: dark) {
@@ -119,6 +127,14 @@ font-family: NoirProSemi !important;
   }
   .tes {
     background-color: rgb(106, 52, 13); /* Darkened version of rgb(212, 104, 27) */
+    color: white;
+  }
+  .con{
+    background-color: rgb(10, 41, 58);
+    color: white;
+  }
+  .med{
+    background-color: rgb(67, 15, 15);
     color: white;
   }
 

@@ -46,6 +46,12 @@
         <ion-input label="Paper ON" labelPlacement="floating"  type="number" name="position"  formControlName="onPaper">
         </ion-input>
       </ion-item>
+      <ion-item lines="none" class="input" (click)="openDateModal(true)">
+        <span>{{startDate ? 'Dată angajare - ' + formatedDate(startDate) : "Alege data de angajare"}}</span>
+      </ion-item>
+      <ion-item lines="none" class="input" (click)="openDateModal(false)">
+        <span>{{endDate ? 'Dată încetare - ' + formatedDate(endDate) : "Alege data de încetare"}}</span>
+      </ion-item>
       <ion-item lines="none" class="input">
         <ion-select label="Cuantificare" placeholder="Level" formControlName="fix">
           <ion-select-option class="font" [value]="true">Fix</ion-select-option>
@@ -57,6 +63,7 @@
           <ion-select-option class="font" value="1">Level 1</ion-select-option>
           <ion-select-option class="font" value="2">Level 2</ion-select-option>
           <ion-select-option class="font" value="3">Level 3</ion-select-option>
+          <ion-select-option class="font" value="4">Level 4</ion-select-option>
         </ion-select>
         </ion-item>
       <ion-item lines="none" class="input">

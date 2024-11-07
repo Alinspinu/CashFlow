@@ -5,16 +5,9 @@
       <ion-row>
         <ion-col col="12">
           <div class="header-buttons">
-              <!-- <ion-button (click)="openDateModal('start')" color="medium">
-                Start
-              </ion-button> -->
               <div class="display-date" (click)="openDateModal(true)">
                 <span>{{startDate ? formatedDate(startDate) : "Dată de început..."}}</span>
               </div>
-              <!-- <ion-button (click)="openDateModal('end')" color="medium">
-                End
-                <ion-icon src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo"></ion-icon>
-              </ion-button> -->
               <div class="display-date" (click)="openDateModal(false)">
                 <span>{{endDate ? formatedDate(endDate) : "Dată de sfârșit..."}}</span>
               </div>

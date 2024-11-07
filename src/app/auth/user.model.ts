@@ -57,6 +57,8 @@ export default class User {
         hours: number,
         earnd: number,
         position: string,
+        concediu: boolean,
+        medical: boolean,
       }[]
     },
   ){}

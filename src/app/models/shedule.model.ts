@@ -19,7 +19,9 @@ export class Day{
         workPeriod: {
           start: Date,
           end: Date,
-          hours: Number,
+          hours: number,
+          concediu: boolean,
+          medical: boolean 
         },
         employee: User
     }[] ,
@@ -48,6 +50,8 @@ export class PDay{
         hours: number,
         employee: User,
         position: string,
+        medical: boolean,
+        concediu: boolean
     }[]
   ){};
 

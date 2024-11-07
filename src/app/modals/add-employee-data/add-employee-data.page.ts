@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
-import { round } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, round } from 'src/app/shared/utils/functions';
+import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { DatePickerPage } from '../date-picker/date-picker.page';
 
 @Component({
   selector: 'app-add-employee-data',
@@ -16,9 +18,13 @@ export class AddEmployeeDataPage implements OnInit {
   form!: FormGroup
   data!: any
 
+  startDate!: string
+  endDate!: string
+
   constructor(
     private modalCtrl: ModalController,
-    private navPar: NavParams
+    private navPar: NavParams,
+    @Inject(ActionSheetService) private actionSheetService: ActionSheetService
   ) { }
 
   ngOnInit() {
@@ -66,7 +72,6 @@ export class AddEmployeeDataPage implements OnInit {
         updateOn: 'change',
       }),
     });
-    console.log(this.data)
     if(this.data){
       this.form.get('fullName')?.setValue(this.data.fullName);
       this.form.get('cnp')?.setValue(this.data.cnp);
@@ -77,16 +82,22 @@ export class AddEmployeeDataPage implements OnInit {
       if(this.data.access){
         this.form.get('access')?.setValue(this.data.access.toString());
       }
-      this.form.get('salary')?.setValue(this.data.salary.inHeand);
-      this.form.get('onPaper')?.setValue(this.data.salary.onPaper.salary);
+      if(this.data.salary){
+        this.form.get('salary')?.setValue(this.data.salary.inHeand);
+        this.form.get('onPaper')?.setValue(this.data.salary.onPaper.salary);
+        this.form.get('fix')?.setValue(this.data.salary.fix ? this.data.salary.fix : false );
+      }
       this.form.get('status')?.setValue(this.data.active);
-      this.form.get('fix')?.setValue(this.data.salary.fix ? this.data.salary.fix : false );
+      this.startDate = this.data.startDate
+      this.endDate = this.data.endDate
     }
   }
 
   onSubmit(){
-    const dataToSend = {
+    const dataToSend: any = {
       active: this.form.value.status,
+      startDate: this.startDate,
+      endDate: this.endDate,
       fullName: this.form.value.fullName,
       cnp: this.form.value.cnp,
       ciSerial: this.form.value.ciSerial,
@@ -106,10 +117,34 @@ export class AddEmployeeDataPage implements OnInit {
       payments: this.data.payments
 
     }
+    if(!this.startDate){
+     delete dataToSend.startDate
+    }
+    if(!this.endDate){
+      delete dataToSend.endDate
+    }
     this.modalCtrl.dismiss(dataToSend)
   }
 
   close(){
     this.modalCtrl.dismiss(null)
   }
+
+
+
+  async openDateModal(start: boolean){
+      const response = await this.actionSheetService.openAuth(DatePickerPage)
+        if(response){
+          if(start){
+            this.startDate = response
+          } else {
+            this.endDate = response
+          }
+       }
+}
+
+formatedDate(date: string){
+  return formatedDateToShow(date).split('ora')[0]
+}
+
 }

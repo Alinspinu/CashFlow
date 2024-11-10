@@ -61,8 +61,17 @@ periodMark: boolean = false
       if(response) {
         const employees = response.filter(user => user.employee.active === true)
         this.users = employees
-       const sortedUsers = this.users.sort((a, b):any => {
-          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Bucatar: 6, 'Ajutor bucatar': 7, Aprovizionare: 8, 'Asistent Manager': 9 ,Manager: 10, Asociat: 11, Administrator: 12 };
+        const filtredUsers = this.users.filter(user => {
+          const position = user.employee.position
+          const positions = ['Asociat', 'Administrator','Project Manager']
+          if( user.employee.active === true && !positions.includes(position)){
+            return user
+          } else {
+            return
+          }
+        })
+       const sortedUsers = filtredUsers.sort((a, b):any => {
+          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Curatenie: 6, Bucatar: 7, 'Ajutor bucatar': 8, Aprovizionare: 9, 'Asistent Manager': 10 ,Manager: 11 };
           return rolesOrder[a.employee.position] - rolesOrder[b.employee.position];
         });
         this.users = sortedUsers.slice(0,-2)

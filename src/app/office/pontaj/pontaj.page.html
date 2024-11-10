@@ -50,7 +50,7 @@
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
@@ -64,7 +64,7 @@
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
@@ -77,7 +77,7 @@
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
@@ -90,7 +90,7 @@
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
@@ -105,7 +105,7 @@
             (click)="openPayments(user.employee.payments, user.employee.fullName)" style="cursor:pointer;"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
@@ -118,7 +118,7 @@
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
@@ -133,7 +133,7 @@
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
@@ -146,7 +146,7 @@
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
+              'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
               'casier' : user.employee.position === 'Casier',
               'ospatar' : user.employee.position === 'Ospatar',
               'bucatar' : user.employee.position === 'Bucatar',
@@ -160,7 +160,7 @@
             (click)="getIndex(i+1)"
             [ngClass]="{
               'barista' : getPosition(day.users, user._id) === 'Barista',
-              'aj-barista' : getPosition(day.users, user._id) === 'Ajutor barman',
+              'aj-barista' : getPosition(day.users, user._id) === 'Ajutor barman' || getPosition(day.users, user._id) === 'Curatenie',
               'casier' : getPosition(day.users, user._id) === 'Casier',
               'ospatar' : getPosition(day.users, user._id) === 'Ospatar',
               'bucatar' : getPosition(day.users, user._id) === 'Bucatar',

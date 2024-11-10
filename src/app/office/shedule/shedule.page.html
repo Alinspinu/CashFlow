@@ -1,10 +1,10 @@
 
-        <ion-header class="ion-no-border">
+        <ion-header class="ion-no-border" *ngIf="shedule">
           <ion-row>
             <ion-col>
               <ion-item lines="none" class="date-wrapper pointer" color="primary" (click)="selectShedule()">
                 <ion-icon src="assets/icon/create-outline.svg" slot="start"></ion-icon>
-                <span class="date">{{editPeriod(shedule.period)}}</span>
+                <span class="date" >{{editPeriod(shedule.period)}}</span>
               </ion-item>
             </ion-col>
             <ion-col *ngFor="let day of shedule.days">

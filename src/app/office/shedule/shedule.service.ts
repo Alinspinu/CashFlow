@@ -35,6 +35,7 @@ export class SheduleService{
 getLastShedule(){
   return this.http.get<Shedule>(`${environment.BASE_URL}shedule?loc=${environment.LOC}&shedule=last`)
       .pipe(tap(response => {
+        console.log(response)
         this.shedule = response
         this.sheduleState.next(this.shedule)
   }))

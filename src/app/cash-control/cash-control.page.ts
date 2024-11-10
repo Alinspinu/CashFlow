@@ -131,27 +131,6 @@ export class CashControlPage implements OnInit, OnDestroy {
 
 
 
-
- async closeDay(){
-    const data = await this.actionSheet.openPayment(CloseDayPage,
-      {
-        pay: this.payments,
-        payTotal: roundOne(this.paymentsTotal),
-        cashTotal: roundOne(this.userCash),
-        card: roundOne(this.userTotal - this.userCash),
-        name: this.user.employee.fullName
-      })
-      if(data){
-        showToast(this.toastCtrl, data, 1500)
-        this.onReports('z')
-
-      }
-
-  }
-
-
-
-
   async adPayment(){
       const data = await this.actionSheet.openPayment(AddEntryPage, 'user')
       if(data && data.entry){

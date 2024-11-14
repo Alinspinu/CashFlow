@@ -65,6 +65,8 @@ export class AddReportPage implements OnInit {
     const oldDate = new Date(this.reports[this.reports.length - 1].day)
     oldDate.setDate(oldDate.getDate() + 1)
     const date = oldDate.toISOString()
+    // const newDate = new Date('2024-05-01')
+    // const date = newDate.toISOString()
     this.isLoading = true
     this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, this.filter, 'report').subscribe(response => {
       if(response){

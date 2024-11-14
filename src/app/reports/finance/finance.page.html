@@ -42,7 +42,7 @@
               <span class="inv">Out Inv</span>
               <span class="dif">Diferența</span>
             </div>
-  
+
             <div class="method">
               <span class="label">Productie Bucatarie</span>
               <span class="inv">{{roundInHtml(productioReport.intrari.inv.prodBuc)}} Lei</span>
@@ -96,16 +96,16 @@
             <div class="header">
               <span class="section"></span>
               <span class="pers"></span>
-              <span class="bonus light">Bonus/Dublaj</span>  
+              <span class="bonus light">Bonus/Dublaj</span>
               <span class="net light">Venit net</span>
               <span class="tax light">Taxe</span>
               <span class="brut light">Venit brut</span>
             </div>
-  
+
             <div class="method" *ngFor="let section of reportUsers.section">
               <span class="section">{{section.name}}</span>
               <span class="pers">({{section.users.length}})</span>
-              <span class="bonus"(click)="showUsers(section.users, 'bonus', section.totalBonus)">{{section.totalBonus}} Lei</span> 
+              <span class="bonus"(click)="showUsers(section.users, 'bonus', section.totalBonus)">{{section.totalBonus}} Lei</span>
               <span class="net" (click)="showUsers(section.users, 'income', section.totalIncome)">{{section.totalIncome}} Lei</span>
               <span class="tax" (click)="showUsers(section.users, 'tax', section.totalTax)">{{section.totalTax}} Lei</span>
               <span class="brut" (click)="showUsers(section.users, 'brut', roundInHtml(section.totalIncome + section.totalTax + section.totalBonus))">{{roundInHtml(section.totalIncome + section.totalTax)}} Lei</span>
@@ -113,7 +113,7 @@
             <div class="method">
               <span class="section font">Total</span>
               <span class="pers font">{{reportUsers.totalUsers}}</span>
-              <span class="bonus font">{{reportUsers.totalBonus}} Lei</span> 
+              <span class="bonus font">{{reportUsers.totalBonus}} Lei</span>
               <span class="net font">{{reportUsers.totalIncome}} Lei</span>
               <span class="tax font">{{reportUsers.totalTax}} Lei</span>
               <span class="brut font">{{roundInHtml(reportUsers.totalIncome + reportUsers.totalTax + reportUsers.totalBonus)}} lei</span>
@@ -133,7 +133,7 @@
             </ion-toolbar>
             <div class="header">
               <span class="label"></span>
-              <span class="sum light">Valoare</span>  
+              <span class="sum light">Valoare</span>
             </div>
             <div class="method">
               <span class="label">Chirie (facturi)</span>
@@ -153,7 +153,7 @@
             </div>
             <div class="method">
               <span class="label font">Total</span>
-              <span class="sum font">{{totalRentAndStuff}} Lei</span> 
+              <span class="sum font">{{totalRentAndStuff}} Lei</span>
             </div>
           </div>
         </ion-col>
@@ -165,9 +165,9 @@
             </ion-toolbar>
             <div class="header">
               <span class="label"></span>
-              <span class="sum light">Valoare</span>  
+              <span class="sum light">Valoare</span>
             </div>
-          
+
             <div class="method">
               <span class="label">Obiecte de inventar</span>
               <span class="sum">{{report.inventarySpendings}} Lei</span>
@@ -195,7 +195,7 @@
 
             <div class="method">
               <span class="label font">Total</span>
-              <span class="sum font">{{totalSpendings}} Lei</span> 
+              <span class="sum font">{{totalSpendings}} Lei</span>
             </div>
           </div>
         </ion-col>
@@ -208,38 +208,38 @@
             </ion-toolbar>
             <div class="header">
               <span class="venit">Venit</span>
-              <span class="mfs">Materii  (stoc)</span>  
-              <span class="mfr">Materii (retete)</span>  
-              <span class="empl">Angajați</span>  
-              <span class="spend">Cheltuieli</span>  
-              <span class="prof">Profit {{':)'}}</span>  
+              <span class="mfs">Materii  (stoc)</span>
+              <span class="mfr">Materii (retete)</span>
+              <span class="empl">Angajați</span>
+              <span class="spend">Cheltuieli</span>
+              <span class="prof">Profit {{':)'}}</span>
             </div>
-          
+
             <div class="method">
               <span class="venit font">{{productioReport.totals.iesiri}} Lei</span>
-              <span class="mfs" [ngClass]="{'font': sup}" (click)="suplies(sup)">{{roundInHtml(productioReport.totals.firstInv + productioReport.totals.intrari - productioReport.totals.secondInv)}} Lei</span>  
-              <span class="mfr" [ngClass]="{'font': !sup}" (click)="suplies(sup)">{{report.ingsValue}} Lei</span>  
-              <span class="empl font">{{roundInHtml(report.workValue.tax + report.workValue.total)}} Lei</span>  
-              <span class="spend font">{{roundInHtml(totalSpendings + totalRentAndStuff)}} Lei</span>  
+              <span class="mfs" [ngClass]="{'font': sup}" (click)="suplies(sup)">{{roundInHtml(productioReport.totals.firstInv + productioReport.totals.intrari - productioReport.totals.secondInv)}} Lei</span>
+              <span class="mfr" [ngClass]="{'font': !sup}" (click)="suplies(sup)">{{report.ingsValue}} Lei</span>
+              <span class="empl font">{{roundInHtml(report.workValue.tax + report.workValue.total)}} Lei</span>
+              <span class="spend font">{{roundInHtml(totalSpendings + totalRentAndStuff)}} Lei</span>
               <span class="prof font" *ngIf="sup">
                 {{roundInHtml(
-                  productioReport.totals.dif - 
-                  (report.workValue.tax + 
-                  report.workValue.total + 
+                  productioReport.totals.dif -
+                  (report.workValue.tax +
+                  report.workValue.total +
                   totalRentAndStuff +
                   totalSpendings)
                   )}}
-              </span> 
+              </span>
               <span class="prof font" *ngIf="!sup">
                 {{roundInHtml(
                   productioReport.totals.iesiri -
                   (report.ingsValue +
-                  report.workValue.tax + 
-                  report.workValue.total + 
+                  report.workValue.tax +
+                  report.workValue.total +
                   totalRentAndStuff +
                   totalSpendings)
                   )}}
-              </span> 
+              </span>
             </div>
           </div>
         </ion-col>

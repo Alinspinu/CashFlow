@@ -71,7 +71,7 @@
           <ion-label class="nr">{{i+1}}.</ion-label>
           <ion-label class="name">{{product.name}}</ion-label>
           <ion-label class="mainCat" >{{product.mainCat | capitalize}}</ion-label>
-          <ion-label class="cat">{{product.category.name}}</ion-label>
+          <ion-label class="cat" *ngIf="product.category">{{product.category.name}}</ion-label>
           <ion-label class="dep">{{product.dep ? product.dep : "dep" }}</ion-label>
           <ion-label class="tva">{{product.tva ? product.tva : "Tva"}} %</ion-label>
           <ion-label class="price-prod">{{product.subProducts.length ? '~ap ' + calcProductionPrice(product) : calcProductionPrice(product)}} </ion-label>

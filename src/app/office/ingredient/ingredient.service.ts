@@ -23,7 +23,7 @@ export class IngredientService{
     private dbService: IndexDbService,
 
   ){
-    this.getIngsFromLocal()
+    // this.getIngsFromLocal()
     this.ingredientsState = new BehaviorSubject<InvIngredient[]>([emptyIng()]);
     this.ingredientsSend$ =  this.ingredientsState.asObservable();
   }
@@ -70,7 +70,7 @@ export class IngredientService{
                 if(a.name && b.name){
                   return a.name.localeCompare(b.name)
                 }
-               }) 
+               })
                const stringIngs = JSON.stringify(sortedIngs)
                this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
               this.ingredientsState.next([...sortedIngs]); // Emit all collected items

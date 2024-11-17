@@ -14,6 +14,8 @@ import { Record, Suplier } from 'src/app/models/suplier.model';
 import { Nir } from 'src/app/models/nir.model';
 import { SelectDataPage } from 'src/app/modals/select-data/select-data.page';
 import { RecordPage } from './record/record.page';
+import { mergeNirs } from './nirs.engine';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-nirs',
@@ -27,7 +29,7 @@ export class NirsPage implements OnInit {
   nirs: Nir[] = []
   dbNirs: Nir[] = []
 
-  supliers: Suplier[] = [] 
+  supliers: Suplier[] = []
   supliersToSend: string[] = []
 
   startDate!: any
@@ -45,6 +47,9 @@ export class NirsPage implements OnInit {
 
 
   suplierId!: string
+
+  selectedNirs: Nir [] = []
+  selectedNirsId: string[] = []
 
 
   constructor(
@@ -74,9 +79,52 @@ getUser(){
 }
 
 
+selectNir(nir: Nir){
+  if(nir.selected){
+   const index = this.selectedNirs.findIndex(n => n._id === nir._id)
+   const idIndex = this.selectedNirsId.findIndex(n => n === nir._id)
+   this.selectedNirs.splice(index, 1)
+   this.selectedNirsId.splice(idIndex, 1)
+   nir.selected = false
+  } else {
+    if(this.selectedNirs.length){
+      if(this.selectedNirs[0].suplier._id === nir.suplier._id){
+        this.selectedNirs.push(nir)
+        this.selectedNirsId.push(nir._id)
+        nir.selected = true
+      } else {
+        showToast(this.toastCtrl, 'Nu poți selecta decât documente de la același furnizor!', 2000)
+      }
+    } else{
+      this.selectedNirs.push(nir)
+      this.selectedNirsId.push(nir._id)
+      nir.selected = true
+    }
+  }
+}
+
+
+paySelectedNirs(){
+
+}
+
+
+mergeNir(){
+  const nir = mergeNirs(this.selectedNirs)
+  Preferences.remove({key: 'nir'});
+  Preferences.set({key: 'nir', value: JSON.stringify(nir)})
+  Preferences.set({key: 'nirIds', value: JSON.stringify(this.selectedNirsId)})
+  this.router.navigateByUrl(`/tabs/office/nir/${nir._id}`)
+  console.log(nir)
+}
 
 index(){
-  this.nirs.sort((a, b) => a.index - b.index)
+  this.nirs.sort((a, b) =>{
+    if(a.index && b.index){
+      return a.index - b.index
+    }
+    return 0
+  })
   this.suplierColor = 'none'
   this.dateColor = 'none'
   this.indexColor = 'primary'
@@ -125,7 +173,7 @@ dueDays(){
   this.nirs.sort((a,b) => {
     if(a.payd !== b.payd){
       return a.payd ? 1 : -1
-    } 
+    }
     return this.showDoDate(b.documentDate) - this.showDoDate(a.documentDate)
   })
   this.totalColor= 'none'
@@ -149,7 +197,7 @@ async selectSuplier(){
           this.nirs = [...this.dbNirs].reverse()
           this.suplierId = this.nirs[0].suplier._id
           this.calcTotalDue()
-        }, 
+        },
         error: (error) => {
           console.log(error)
           showToast(this.toastCtrl, error.message, 2000)
@@ -187,7 +235,7 @@ async payNir(nir: Nir, index: number){
     const response = await this.actionSheetService.deleteAlert(`Vrei să asociezi plata documentului cu o plata deja existentă?`, 'Asociază plata')
     if(response){
       const data = {records: nir.suplier.records, title: `Alege intrarea din registru pentru valoarea de ${nir.totalDoc} Lei`, nir: nir}
-      await this.updatedocStatuNirPayment(data, true, index, nir)  
+      await this.updatedocStatuNirPayment(data, true, index, nir)
     } else {
 
     }
@@ -203,7 +251,7 @@ async updatedocStatuNirPayment( data:{records: Record[], title: string}, payment
         this.nirs[index] = response.nir
         this.nirSrv.updateSuplierRecords(nir.suplier._id, records).subscribe({
           next: (response) => {
-            this.nirs[index].suplier.records = records 
+            this.nirs[index].suplier.records = records
             this.calcTotalDue()
             showToast(this.toastCtrl, 'Nirul și furnizorul au fost actualizati!', 2000)
           },
@@ -302,7 +350,7 @@ searchNir(ev: any){
          } else {
           showToast(this.toastCtrl, 'Trebuie să alegi întâi data de început!', 2000)
          }
-       } 
+       }
   }
 
 

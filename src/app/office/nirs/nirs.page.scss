@@ -97,6 +97,16 @@ ion-button, .font{
   }
 }
 
+.selected{
+  background-color: var(--ion-color-warning) !important;
+  span{
+    color: var(--ion-color-light);
+  }
+  ion-icon{
+    color: var(--ion-color-light) !important;
+  }
+}
+
 .spinner-container{
   height: 70vh;
   display: flex;

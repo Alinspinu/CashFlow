@@ -21,7 +21,6 @@ export class NirIngredient {
 export class Nir{
   constructor(
     public _id: string,
-    public index: number,
     public payd: boolean,
     public suplier: Suplier,
     public nrDoc: number,
@@ -32,8 +31,10 @@ export class Nir{
     public totalDoc: number,
     public val: number,
     public valTva: number,
+    public selected: boolean,
     public valVanzare: number,
-    public discount: {tva: number, value: number, procent: number}[]
+    public discount: {tva: number, value: number, procent: number}[],
+    public index?: number,
   ){}
 }
 

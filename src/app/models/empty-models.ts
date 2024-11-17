@@ -335,6 +335,7 @@ export function emptyNir(){
     receptionDate: '',
     ingredients: [],
     document: '',
+    selected: false,
     totalDoc: 0,
     val: 0,
     valTva: 0,

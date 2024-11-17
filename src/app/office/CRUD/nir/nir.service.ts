@@ -120,6 +120,10 @@ export class NirService{
   }
 
 
+  deleteNirs(ids: string[]){
+    return this.http.put<{message: string}>(`${environment.BASE_URL}nir/delete-nirs`, {ids: ids})
+  }
+
 
   getSuplier(input: any){
     return this.http.post<any[]>(`${environment.BASE_URL}suplier/send-supliers`, {search: input, loc: environment.LOC})

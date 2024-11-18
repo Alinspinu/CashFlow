@@ -1,0 +1,71 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>e-factura</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4" *ngIf="message">
+        <div class="input" *ngFor="let msg of message.mesaje.reverse()">
+          <span class="data">{{msg.data_creare}}</span>
+          <span class="suplier">{{msg.detalii}}</span>
+          <ion-button fill="outline" color="medium" size="small" (click)="showInvoice(msg.id)">Arată factura</ion-button>
+        </div>
+      </ion-col>
+
+      <ion-col size="6" offset="1" *ngIf="eFactura">
+        <ion-row>
+          <ion-col size="4">
+            <div class="party">
+              <span class="name">Nume: {{eFactura.customer.name}}</span>
+              <span class="cif">CIF: {{eFactura.customer.vatNumber}}</span>
+            </div>
+          </ion-col>
+          <ion-col size="4">
+            <div class="party">
+              <span class="nr">Numar: {{eFactura.invoiceNumber}}</span>
+              <span class="date">Data emitere: {{eFactura.issueDate}}</span>
+              <span class="date">Data de plata: {{eFactura.dueDate}}</span>
+            </div>
+          </ion-col>
+          <ion-col size="4">
+            <div class="party">
+              <span class="name">Nume: {{eFactura.supplier.name}}</span>
+              <span class="cif">CIF: {{eFactura.supplier.vatNumber}}</span>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="input">
+                <span class="nr">NR</span>
+                <span class="name">Denumire produs</span>
+                <span class="vat">Cota Tva</span>
+                <span class="qty">cantitate</span>
+                <span class="price">Pret F TVA</span>
+                <span class="totalNoVat">Valoare</span>
+                <span class="totalWithVat">Total cu TVA</span>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="input" *ngFor="let product of eFactura.products; let i=index">
+                <span class="nr">{{i+1}}.</span>
+                <span class="name">{{product.name}}</span>
+                <span class="vat">{{product.vatPrecent}} %</span>
+                <span class="qty">{{product.quantity}}</span>
+                <span class="price">{{product.price}}</span>
+                <span class="totalNoVat">{{product.totalNoVat}}</span>
+                <span class="totalWithVat">{{roundInHtml(product.totalNoVat *(1+ (product.vatPrecent/100)))}}</span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -25,7 +25,7 @@ export class Record{
       docRecords: {docNumber: string, docTotal: number}[]
     },
     public descriptipn: string,
-    public nir: string,
+    public nir: string[],
     public date: string,
 
   ){}

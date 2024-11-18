@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {environment} from '../../../environments/environment'
 import { Nir } from "src/app/models/nir.model";
-import { Record } from "src/app/models/suplier.model";
+import { Record, Suplier } from "src/app/models/suplier.model";
 
 
 
@@ -52,11 +52,11 @@ export class NirsService{
     return this.http.post<Nir[]>(`${environment.BASE_URL}nir/update`, {id: id})
   }
 
-  updateDocPaymentStatus(update: boolean, id: string, type: string){
-    return this.http.post<{message: string, nir: Nir}>(`${environment.BASE_URL}nir/pay`, {update, id, type})
+  updateDocPaymentStatus(update: boolean, id: string[], type: string){
+    return this.http.post<{message: string, nirs: Nir[]}>(`${environment.BASE_URL}nir/pay`, {update, id, type})
   }
 
   updateSuplierRecords(id: string, records: Record[]){
-    return this.http.put(`${environment.BASE_URL}suplier/add-record`, {id, records})
+    return this.http.put<{message: string, suplier: Suplier}>(`${environment.BASE_URL}suplier/add-record`, {id, records})
   }
 }

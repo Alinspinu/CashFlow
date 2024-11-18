@@ -59,6 +59,10 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'e-factura',
+        loadComponent: () => import('./e-factura/e-factura.page').then( m => m.EFacturaPage)
+      },
+      {
         path: '',
         redirectTo: '/tabs/office/products',
         pathMatch: 'full',
@@ -85,10 +89,12 @@ export const routes: Routes = [
   {
     path: 'ingredient-content',
     loadComponent: () => import('./ingredient/ingredient-content/ingredient-content.page').then( m => m.IngredientContentPage)
-  },  {
+  },
+  {
     path: 'record',
     loadComponent: () => import('./nirs/record/record.page').then( m => m.RecordPage)
-  },
+  }
+
 
 
 

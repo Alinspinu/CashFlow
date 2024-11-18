@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
-import { formatedDateToShow, getUserFromLocalStorage, sortByDate } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, getUserFromLocalStorage, round, sortByDate } from 'src/app/shared/utils/functions';
 import { Record } from 'src/app/models/suplier.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { RecordModalPage } from '../../supliers/suplier/record-modal/record-modal.page';
@@ -11,6 +11,7 @@ import { CashRegisterService } from '../../cash-register/cash-register.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { emptyNir } from 'src/app/models/empty-models';
 import { Nir } from 'src/app/models/nir.model';
+import { calcTotalDocs } from '../nirs.engine';
 
 
 @Component({
@@ -26,12 +27,14 @@ export class RecordPage implements OnInit {
   records: Record[] = []
   allRecords: Record[] = []
 
-  nir: Nir = emptyNir()
+  nir: Nir[] = []
 
   type: string = ''
   title: string = ''
 
   userId: string = ''
+
+  paymentMessage: string = ''
 
   message: string = 'Din păcate nu sunt inregistrări in registrul de casă pentru acest furnizor. Inregistrează documentul de plată!'
 
@@ -61,12 +64,15 @@ getData(){
   const data = this.navParams.get('options')
   this.allRecords = data.records
   this.nir = data.nir
-  this.records = this.allRecords.filter(r => r.typeOf === 'iesire' && r.document.amount < this.nir.totalDoc + 2 && r.document.amount > this.nir.totalDoc -2).reverse()
+  this.paymentMessage = data.message
+  const total = calcTotalDocs(this.nir).total
+  this.records = this.allRecords.filter(r => r.typeOf === 'iesire' && r.document.amount < total + 2 && r.document.amount > total -2).reverse()
   this.title = this.records.length ? data.title : `Nu sunt inregistrări!`
 }
 
+
 onSubmit(){
-  this.modalCtrl.dismiss({records: this.allRecords, type: this.type})
+  this.modalCtrl.dismiss({records: this.allRecords, type: this.type, nir: calcTotalDocs(this.nir).nirsId})
 }
 
 selectRecord(record: Record, ind: number){
@@ -84,23 +90,23 @@ selectRecord(record: Record, ind: number){
 
 
 async online(){
-  const data = {amount: this.nir.totalDoc}
+  const data = {amount: calcTotalDocs(this.nir).total}
   const record = await this.actService.openPayment(RecordModalPage, data)
   if(record){
     record.document.asociat = false
     record.document.docRecords = []
-    record.nir = this.nir._id
+    record.nir = calcTotalDocs(this.nir).nirsId
     this.records.push(record)
     this.allRecords.push(record)
     if(record.document.typeOf !== 'banca'){
       const entry = {
         tip: 'expense',
         date: record.date,
-        description: `Plata furnizor ${this.nir.suplier.name} ${record.document.typeOf} ${record.document.docId}`,
+        description: `Plata furnizor ${this.nir[0].suplier.name} ${record.document.typeOf} ${record.document.docId}`,
         amount: record.document.amount,
         locatie: environment.LOC,
         typeOf: 'Plata furnizor',
-        suplier: this.nir.suplier._id,
+        suplier: this.nir[0].suplier._id,
         user: [this.userId],
         document: {
           tip: record.document.typeOf,

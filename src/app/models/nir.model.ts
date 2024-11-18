@@ -23,7 +23,7 @@ export class Nir{
     public _id: string,
     public payd: boolean,
     public suplier: Suplier,
-    public nrDoc: number,
+    public nrDoc: string,
     public documentDate: string,
     public receptionDate: string,
     public ingredients: NirIngredient[],
@@ -32,6 +32,7 @@ export class Nir{
     public val: number,
     public valTva: number,
     public selected: boolean,
+    public efacturaId: string,
     public valVanzare: number,
     public discount: {tva: number, value: number, procent: number}[],
     public index?: number,
@@ -74,6 +75,47 @@ export class InvIngredient {
         name: string,
         details: string,
       }
+    }[]
+  ){}
+}
+
+
+export class EFactura {
+  constructor(
+    public invoiceNumber: string,
+    public dueDate: string,
+    public issueDate: string,
+    public supplier: {
+      name: string,
+      vatNumber: string
+    },
+    public customer: {
+      name: string,
+      vatNumber: string
+    },
+    public products: {
+      name: string,
+      quantity: number,
+      price: number,
+      totalNoVat: number,
+      vatPrecent: number
+    }[],
+    public vatAmount: number,
+    public taxExcusiveAmount: number,
+    public taxInclusiveAmount: number,
+    public prepaydAmount: number,
+    public payableAmount: number,
+    public id: string
+  ){}
+}
+
+export class messageEFactura{
+  constructor(
+    public mesaje: {
+      data_creare: string,
+      cif: string,
+      detalii: string,
+      id: string
     }[]
   ){}
 }

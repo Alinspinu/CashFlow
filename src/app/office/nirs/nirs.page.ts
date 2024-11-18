@@ -14,7 +14,7 @@ import { Record, Suplier } from 'src/app/models/suplier.model';
 import { Nir } from 'src/app/models/nir.model';
 import { SelectDataPage } from 'src/app/modals/select-data/select-data.page';
 import { RecordPage } from './record/record.page';
-import { mergeNirs } from './nirs.engine';
+import { calcTotalDocs, mergeNirs } from './nirs.engine';
 import { Preferences } from '@capacitor/preferences';
 
 @Component({
@@ -51,6 +51,8 @@ export class NirsPage implements OnInit {
   selectedNirs: Nir [] = []
   selectedNirsId: string[] = []
 
+  selectedDocsNumber: string[] = []
+
 
   constructor(
     public nirSrv: NirsService,
@@ -83,30 +85,37 @@ selectNir(nir: Nir){
   if(nir.selected){
    const index = this.selectedNirs.findIndex(n => n._id === nir._id)
    const idIndex = this.selectedNirsId.findIndex(n => n === nir._id)
+   const docIndex = this.selectedDocsNumber.findIndex(n => n === nir.nrDoc)
    this.selectedNirs.splice(index, 1)
    this.selectedNirsId.splice(idIndex, 1)
+   this.selectedDocsNumber.splice(docIndex, 1)
    nir.selected = false
+   this.totalDue = round(this.totalDue - nir.totalDoc)
+   if(!this.selectedNirs.length){
+    this.calcTotalDue()
+   }
   } else {
     if(this.selectedNirs.length){
       if(this.selectedNirs[0].suplier._id === nir.suplier._id){
         this.selectedNirs.push(nir)
         this.selectedNirsId.push(nir._id)
+        this.selectedDocsNumber.push(nir.nrDoc)
         nir.selected = true
+        this.totalDue = round(this.totalDue + nir.totalDoc)
       } else {
         showToast(this.toastCtrl, 'Nu poți selecta decât documente de la același furnizor!', 2000)
       }
     } else{
+      this.totalDue = nir.totalDoc
       this.selectedNirs.push(nir)
       this.selectedNirsId.push(nir._id)
+      this.selectedDocsNumber.push(nir.nrDoc)
       nir.selected = true
     }
   }
 }
 
 
-paySelectedNirs(){
-
-}
 
 
 mergeNir(){
@@ -115,74 +124,9 @@ mergeNir(){
   Preferences.set({key: 'nir', value: JSON.stringify(nir)})
   Preferences.set({key: 'nirIds', value: JSON.stringify(this.selectedNirsId)})
   this.router.navigateByUrl(`/tabs/office/nir/${nir._id}`)
-  console.log(nir)
-}
-
-index(){
-  this.nirs.sort((a, b) =>{
-    if(a.index && b.index){
-      return a.index - b.index
-    }
-    return 0
-  })
-  this.suplierColor = 'none'
-  this.dateColor = 'none'
-  this.indexColor = 'primary'
-  this.totalColor= 'none'
-  this.dueDaysColor = 'none'
 }
 
 
-date(){
-  this.nirs.sort((a, b) =>{
-    const dateA = new Date(a.documentDate).getTime()
-    const dateB = new Date(b.documentDate).getTime()
-    if (!isNaN(dateA) && !isNaN(dateB)) {
-      return dateB - dateA;
-    } else {
-      return 0;
-    }
-  })
-  this.suplierColor = 'none'
-  this.dateColor = 'primary'
-  this.indexColor = 'none'
-  this.totalColor= 'none'
-   this.dueDaysColor = 'none'
-}
-
-total(){
-  this.nirs.sort((a,b) => b.totalDoc - a.totalDoc)
-  this.suplierColor = 'none'
-  this.dateColor = 'none'
-  this.indexColor = 'none'
-  this.totalColor = 'primary'
-   this.dueDaysColor = 'none'
-}
-
-suplier(){
-  this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
-  this.totalColor= 'none'
-  this.suplierColor = 'primary'
-  this.dateColor = 'none'
-  this.indexColor = 'none'
-   this.dueDaysColor = 'none'
-}
-
-
-dueDays(){
-  this.nirs.sort((a,b) => {
-    if(a.payd !== b.payd){
-      return a.payd ? 1 : -1
-    }
-    return this.showDoDate(b.documentDate) - this.showDoDate(a.documentDate)
-  })
-  this.totalColor= 'none'
-  this.suplierColor = 'none'
-  this.dateColor = 'none'
-  this.indexColor = 'none'
-   this.dueDaysColor = 'primary'
-
-}
 
 
 
@@ -194,7 +138,7 @@ async selectSuplier(){
       this.nirSrv.getnirsBySuplier(suplier._id).subscribe({
         next: (response) => {
           this.dbNirs = response
-          this.nirs = [...this.dbNirs].reverse()
+          this.nirs = [...this.dbNirs]
           this.suplierId = this.nirs[0].suplier._id
           this.calcTotalDue()
         },
@@ -224,34 +168,68 @@ getNirs(){
 
 
 
-async payNir(nir: Nir, index: number){
-  if(nir.payd){
-    const response = await this.actionSheetService.deleteAlert(`Ești sigur că vrei să marchezi documentul numărul - ${nir.nrDoc}, cu valoarea de ${nir.totalDoc}, ca neplătit?`, 'Anulează Plata!')
-    if(response){
-      const data = {records: nir.suplier.records, title: `Deselectează intrarea cu valoarea de ${nir.totalDoc} Lei`, nir: nir}
-      await this.updatedocStatuNirPayment(data, false, index, nir)
-    }
-  } else {
+
+async paySelectedNirs(){
+  const ind = this.selectedNirs.findIndex(i => i.payd)
+  if(ind === -1){
     const response = await this.actionSheetService.deleteAlert(`Vrei să asociezi plata documentului cu o plata deja existentă?`, 'Asociază plata')
     if(response){
-      const data = {records: nir.suplier.records, title: `Alege intrarea din registru pentru valoarea de ${nir.totalDoc} Lei`, nir: nir}
-      await this.updatedocStatuNirPayment(data, true, index, nir)
-    } else {
+      const suplier = this.supliers.find(s => s.name === this.selectedNirs[0].suplier.name)
+      if(suplier){
+        const message = `Plata facturi: ${this.selectedDocsNumber.join(', ')} de la Slayer Cup`
+        const data = {records: suplier.records, title: `Alege intrarea din registru pentru valoarea de ${calcTotalDocs(this.selectedNirs).total} Lei`, nir: [], message}
+        await this.updatedocStatuNirPayment(data, true, this.selectedNirs)
+      }
+    } 
+  } else{
+    showToast(this.toastCtrl, 'Nu poti plăti decât documente neplătite!', 3000)
+  }
 
+}
+
+
+async payNir(nir: Nir, index: number){
+  const suplier = this.supliers.find(s => s.name === nir.suplier.name)
+  if(suplier){
+    if(nir.payd){
+      const response = await this.actionSheetService.deleteAlert(`Ești sigur că vrei să marchezi documentul numărul - ${nir.nrDoc}, cu valoarea de ${nir.totalDoc}, ca neplătit?`, 'Anulează Plata!')
+      if(response){
+        const data = {records: suplier.records, title: `Deselectează intrarea cu valoarea de ${nir.totalDoc} Lei`, nir: [], message: ''}
+        await this.updatedocStatuNirPayment(data, false,  [nir])
+      }
+    } else {
+      const response = await this.actionSheetService.deleteAlert(`Vrei să asociezi plata documentului cu o plata deja existentă?`, 'Asociază plata')
+      if(response){
+        const message =  `Plata factura: ${nir.nrDoc} de la Slayer Cup`
+        const data = {records: suplier.records, title: `Alege intrarea din registru pentru valoarea de ${nir.totalDoc} Lei`, nir: [], message}
+        await this.updatedocStatuNirPayment(data, true,  [nir])
+      } 
     }
   }
 }
 
-async updatedocStatuNirPayment( data:{records: Record[], title: string}, payment: boolean, index: number, nir: Nir){
+async updatedocStatuNirPayment( data:{records: Record[], title: string, nir: Nir[], message: string}, payment: boolean, nir: Nir[]){
+  data.nir = nir
   const response = await this.actionSheetService.openSelect(RecordPage, data, '')
   if(response){
+    console.log(response)
     const records = response.records
-    this.nirSrv.updateDocPaymentStatus(payment, nir._id, response.type).subscribe({
+    this.nirSrv.updateDocPaymentStatus(payment, response.nir, response.type).subscribe({
       next: (response) => {
-        this.nirs[index] = response.nir
-        this.nirSrv.updateSuplierRecords(nir.suplier._id, records).subscribe({
+        this.nirs = this.nirs.map(nir => {
+           const updatedNir = response.nirs.find(n => n._id === nir._id)
+           if(updatedNir){
+            return nir = updatedNir
+           } else {
+            return nir
+           }
+        })
+        this.nirSrv.updateSuplierRecords(nir[0].suplier._id, records).subscribe({
           next: (response) => {
-            this.nirs[index].suplier.records = records
+            const supInd = this.supliers.findIndex(s => s._id === response.suplier._id)
+            if(supInd !== -1){
+              this.supliers[supInd] = response.suplier
+            }
             this.calcTotalDue()
             showToast(this.toastCtrl, 'Nirul și furnizorul au fost actualizati!', 2000)
           },
@@ -405,4 +383,74 @@ searchNir(ev: any){
   roundInHtml(num: number){
     return round(num)
   }
+
+
+  index(){
+    this.nirs.sort((a, b) =>{
+      if(a.index && b.index){
+        return a.index - b.index
+      }
+      return 0
+    })
+    this.suplierColor = 'none'
+    this.dateColor = 'none'
+    this.indexColor = 'primary'
+    this.totalColor= 'none'
+    this.dueDaysColor = 'none'
+  }
+  
+  
+  date(){
+    this.nirs.sort((a, b) =>{
+      const dateA = new Date(a.documentDate).getTime()
+      const dateB = new Date(b.documentDate).getTime()
+      if (!isNaN(dateA) && !isNaN(dateB)) {
+        return dateB - dateA;
+      } else {
+        return 0;
+      }
+    })
+    this.suplierColor = 'none'
+    this.dateColor = 'primary'
+    this.indexColor = 'none'
+    this.totalColor= 'none'
+     this.dueDaysColor = 'none'
+  }
+  
+  total(){
+    this.nirs.sort((a,b) => b.totalDoc - a.totalDoc)
+    this.suplierColor = 'none'
+    this.dateColor = 'none'
+    this.indexColor = 'none'
+    this.totalColor = 'primary'
+     this.dueDaysColor = 'none'
+  }
+  
+  suplier(){
+    this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
+    this.totalColor= 'none'
+    this.suplierColor = 'primary'
+    this.dateColor = 'none'
+    this.indexColor = 'none'
+     this.dueDaysColor = 'none'
+  }
+  
+  
+  dueDays(){
+    this.nirs.sort((a,b) => {
+      if(a.payd !== b.payd){
+        return a.payd ? 1 : -1
+      }
+      return this.showDoDate(b.documentDate) - this.showDoDate(a.documentDate)
+    })
+    this.totalColor= 'none'
+    this.suplierColor = 'none'
+    this.dateColor = 'none'
+    this.indexColor = 'none'
+     this.dueDaysColor = 'primary'
+  
+  }
+
+
+
 }

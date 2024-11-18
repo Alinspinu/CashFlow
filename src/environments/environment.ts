@@ -21,8 +21,8 @@ export const environment = {
   // SAVE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
 
 
-  //  BASE_URL: 'http://localhost:8080/',
-   BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
+   BASE_URL: 'http://localhost:8080/',
+  //  BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
 
 
 
@@ -33,7 +33,7 @@ export const environment = {
   API_PASS: 'afara-ploua',
   LOC: "655e2e7c5a3d53943c6b7c53",
 
-
+  CIF: '44994432',
 
   API_USER: 'uewmdhdA@&*939NSDOO73ns',
   API_PASSWORD: 'JSHFBJDS7323423MBDSF7SHUI!7^4WEW@92MNSDSHDYSY2KS93BWSYQJ3NQBE>/QW3Q312HSDNMASU2UD',

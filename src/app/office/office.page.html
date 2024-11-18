@@ -21,6 +21,11 @@
       <ion-label>NIR</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button tab="e-factura" href="/office/e-factura" *ngIf="user && user.employee.access > 2">
+      <ion-icon aria-hidden="true" src="../../assets/icon/cloud-outline.svg"></ion-icon>
+      <ion-label>E-Factura</ion-label>
+    </ion-tab-button>
+
     <ion-tab-button tab="supliers" href="/office/supliers" *ngIf="user && user.employee.access > 2">
       <ion-icon aria-hidden="true" src="../../assets/icon/document.svg"></ion-icon>
       <ion-label>Furnizori</ion-label>

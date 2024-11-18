@@ -35,3 +35,14 @@ export function mergeNirs(nirs: Nir[]){
   newNir.valVanzare = round(newNir.valVanzare)
   return newNir
 }
+
+
+export function calcTotalDocs(nirs: Nir[]){
+  let total = 0
+  let nirsId = []
+  for(let nir of nirs){
+    total = round(total + nir.totalDoc)
+    nirsId.push(nir._id)
+  }
+  return {total, nirsId}
+}

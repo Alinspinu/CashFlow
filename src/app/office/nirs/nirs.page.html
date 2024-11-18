@@ -15,15 +15,15 @@
                 Alege furnizor
               </ion-button>
               <div class="total-wrapper" *ngIf="totalDue > 0">
-                <span class="tot"> - {{totalDue}} Lei</span>
+                <span class="tot"> {{totalDue}} Lei</span>
               </div>
-              <ion-button  style="margin-left: 30px;" (click)="updateNirsBySulier()" color="medium" fill="outline" mode="ios">
+              <!-- <ion-button  style="margin-left: 30px;" (click)="updateNirsBySulier()" color="medium" fill="outline" mode="ios">
                 Update
-              </ion-button>
-              <ion-button  style="margin-left: 30px;" (click)="paySelectedNirs()" color="medium" fill="outline" mode="ios">
+              </ion-button> -->
+              <ion-button  style="margin-left: 30px;" (click)="paySelectedNirs()" color="medium" fill="outline" mode="ios" [disabled]="selectedNirs.length < 2">
                 Plătește
               </ion-button>
-              <ion-button  style="margin-left: 30px;" (click)="mergeNir()" color="medium" fill="outline" mode="ios">
+              <ion-button  style="margin-left: 30px;" (click)="mergeNir()" color="medium" fill="outline" mode="ios" [disabled]="selectedNirs.length < 2">
                 Unește
               </ion-button>
             <ion-searchbar mode="ios" [(ngModel)]="nirSearch"  placeholder="Caută document după furnizor.."  (ionInput)="searchNir($event)" #searchbar>

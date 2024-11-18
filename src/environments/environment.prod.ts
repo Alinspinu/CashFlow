@@ -19,11 +19,13 @@ export const environment = {
   // SAVE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
 
 
-  BASE_URL: 'http://localhost:8080/',
-  // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
+  // BASE_URL: 'http://localhost:8080/',
+  BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
 
 
   VIVA_POS_IP: 'https://192.168.100.9:9564/pos/v1/sale',
+
+  CIF: '44994432',
 
   API_PASS: 'afara-ploua',
   ADMIN_EMAIL: "alinz.spinu@gmail.com",

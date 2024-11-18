@@ -15,25 +15,53 @@
         </div>
       </ion-col>
 
-      <ion-col size="6" offset="1" *ngIf="eFactura">
+      <ion-col size="8" *ngIf="eFactura">
         <ion-row>
           <ion-col size="4">
             <div class="party">
-              <span class="name">Nume: {{eFactura.customer.name}}</span>
-              <span class="cif">CIF: {{eFactura.customer.vatNumber}}</span>
+              <span class="title">Cumpărător</span>
+              <div class="name">
+                <span class="label">Nume:</span>
+                <span class="value">{{eFactura.customer.name}}</span>
+              </div>
+              <div class="cif">
+                <span class="label">CIF:</span>
+                <span class="value">{{eFactura.customer.vatNumber}}</span>
+              </div>
             </div>
           </ion-col>
           <ion-col size="4">
             <div class="party">
-              <span class="nr">Numar: {{eFactura.invoiceNumber}}</span>
-              <span class="date">Data emitere: {{eFactura.issueDate}}</span>
-              <span class="date">Data de plata: {{eFactura.dueDate}}</span>
+              <span class="title">Detalii</span>
+              <div class="details">
+                <span class="label">Număr:</span>
+                <span class="value">{{eFactura.invoiceNumber}}</span>
+              </div>
+              <div class="details">
+                <span class="label">Dată emitere:</span>
+                <span class="value">{{eFactura.issueDate}}</span>
+              </div>
+              <div class="details">
+                <span class="label">Dată de plata:</span>
+                <span class="value">{{eFactura.dueDate}}</span>
+              </div>
+              <div class="details">
+                <span class="label">Monedă:</span>
+                <span class="value">{{eFactura.currencyId}}</span>
+              </div>
             </div>
           </ion-col>
           <ion-col size="4">
             <div class="party">
-              <span class="name">Nume: {{eFactura.supplier.name}}</span>
-              <span class="cif">CIF: {{eFactura.supplier.vatNumber}}</span>
+              <span class="title">Vânzător</span>
+              <div class="name">
+                <span class="label">Nume:</span>
+                <span class="value">{{eFactura.supplier.name}}</span>
+              </div>
+              <div class="cif">
+                <span class="label">CIF:</span>
+                <span class="value">{{eFactura.supplier.vatNumber}}</span>
+              </div>
             </div>
           </ion-col>
         </ion-row>
@@ -42,10 +70,12 @@
             <div class="input">
                 <span class="nr">NR</span>
                 <span class="name">Denumire produs</span>
+                <span class="um">UM</span>
                 <span class="vat">Cota Tva</span>
                 <span class="qty">cantitate</span>
                 <span class="price">Pret F TVA</span>
                 <span class="totalNoVat">Valoare</span>
+                <span class="vatValue">Valoare Tva</span>
                 <span class="totalWithVat">Total cu TVA</span>
             </div>
           </ion-col>
@@ -55,17 +85,51 @@
             <div class="input" *ngFor="let product of eFactura.products; let i=index">
                 <span class="nr">{{i+1}}.</span>
                 <span class="name">{{product.name}}</span>
+                <span class="um">{{product.unitCode}}</span>
                 <span class="vat">{{product.vatPrecent}} %</span>
                 <span class="qty">{{product.quantity}}</span>
                 <span class="price">{{product.price}}</span>
                 <span class="totalNoVat">{{product.totalNoVat}}</span>
+                <span class="vatValue">{{roundInHtml((product.totalNoVat *(1+ (product.vatPrecent/100))) - product.totalNoVat)}}</span>
                 <span class="totalWithVat">{{roundInHtml(product.totalNoVat *(1+ (product.vatPrecent/100)))}}</span>
             </div>
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <div class="tot">
+              <span>TOTAL</span>
+            </div>
+    
+          </ion-col>
+          <ion-col size="3">
+            <div class="total-wrapper">
+              <div class="total">
+                <span class="label">Total fară tva</span>
+                <span class="value">{{eFactura.taxExclusiveAmount}}</span>
+              </div>
+              <div class="total border">
+                <span class="label">Valoare tva</span>
+                <span class="value">{{eFactura.vatAmount}}</span>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="total-wrapper">
+              <div class="total">
+                <span class="label">Plătit</span>
+                <span class="value">{{eFactura.prePaydAmount}}</span>
+              </div>
+              <div class="total border">
+                <span class="label">Total</span>
+                <span class="value">{{eFactura.taxInclusiveAmount}}</span>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
       </ion-col>
-
     </ion-row>
+
   </ion-grid>
 
 </ion-content>

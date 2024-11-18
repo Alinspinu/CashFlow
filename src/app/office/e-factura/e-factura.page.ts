@@ -6,7 +6,7 @@ import { EService } from './e-factura.service';
 import { Suplier } from 'src/app/models/suplier.model';
 import { EFactura, messageEFactura } from 'src/app/models/nir.model';
 import { SupliersService } from '../supliers/supliers.service';
-import { editMessage } from './e-factura.engine';
+import { editMessage, mergeProducts } from './e-factura.engine';
 import { round } from 'src/app/shared/utils/functions';
 
 @Component({
@@ -61,8 +61,8 @@ export class EFacturaPage implements OnInit {
   showInvoice(id: string){
     this.eService.getInvoice(id).subscribe({
       next: (response) => {
-       this.eFactura = response
-       console.log(response)
+       this.eFactura = mergeProducts(response)
+      //  console.log(response)
       },
       error: (error) => {
         console.log(error)

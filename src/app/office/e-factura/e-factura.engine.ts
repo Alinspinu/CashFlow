@@ -1,5 +1,6 @@
-import { messageEFactura } from "src/app/models/nir.model";
+import { EFactura, messageEFactura } from "src/app/models/nir.model";
 import { Suplier } from "src/app/models/suplier.model";
+import { round } from "src/app/shared/utils/functions";
 
 
 
@@ -28,4 +29,21 @@ export function editMessage(message: messageEFactura, supliers: Suplier[]){
     })
     message.mesaje = msg
     return message
+}
+
+
+export function mergeProducts(invoice: EFactura){
+    let products: any = [] 
+    for(let product of invoice.products){
+        const existingProduct = products.find((p: any) => p.name === product.name)
+        if(existingProduct){
+            existingProduct.quantity = round(existingProduct.quantity + product.quantity)
+            existingProduct.totalnoVat = round(existingProduct.totalNoVat + product.totalNoVat)
+        } else {
+            products.push(product)
+        }
+    }
+    products.sort((a: any, b: any) => a.name.localeCompare(b.name));
+    invoice.products = products
+    return invoice
 }

@@ -97,14 +97,16 @@ export class EFactura {
       name: string,
       quantity: number,
       price: number,
+      unitCode: string,
       totalNoVat: number,
       vatPrecent: number
     }[],
     public vatAmount: number,
-    public taxExcusiveAmount: number,
+    public taxExclusiveAmount: number,
     public taxInclusiveAmount: number,
-    public prepaydAmount: number,
+    public prePaydAmount: number,
     public payableAmount: number,
+    public currencyId: string,
     public id: string
   ){}
 }

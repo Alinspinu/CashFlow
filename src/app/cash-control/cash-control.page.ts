@@ -383,25 +383,25 @@ reports(value: string){
     if(response){
       this.disableButtons = false
       if(value === 'z'){
-        this.isLoading = true
-        this.message = true
-            this.cashSrv.saveInventary().subscribe({
-              next: (response) => {
-                if(response){
-                  this.isLoading = false
-                  this.message = false
-                  Preferences.remove({key: 'payments'})
-                  Preferences.remove({key: 'cashInAndOut'})
-                  showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
-                }
-              },
-              error: (error) => {
-                console.log(error)
-                this.isLoading = false
-                this.message = false
-                showToast(this.toastCtrl, error.message, 2000)
-              }
-            })
+        Preferences.remove({key: 'payments'})
+        Preferences.remove({key: 'cashInAndOut'})
+            // this.cashSrv.saveInventary().subscribe({
+            //   next: (response) => {
+            //     if(response){
+            //       this.isLoading = false
+            //       this.message = false
+            //       Preferences.remove({key: 'payments'})
+            //       Preferences.remove({key: 'cashInAndOut'})
+            //       showToast(this.toastCtrl, "Gata calculele au fost făcute!", 3000)
+            //     }
+            //   },
+            //   error: (error) => {
+            //     console.log(error)
+            //     this.isLoading = false
+            //     this.message = false
+            //     showToast(this.toastCtrl, error.message, 2000)
+            //   }
+            // })
         this.cashIn = 0
         this.cashOut = 0
       }

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EnvironmentInjector, inject, OnInit, OnDestroy } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { ProductsPage } from './products/products.page';
 import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { ProductsService } from './products/products.service';
@@ -17,7 +16,7 @@ import { UsersService } from './users/users.service';
   templateUrl: 'office.page.html',
   styleUrls: ['office.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, ProductsPage]
+  imports: [IonicModule, CommonModule]
 })
 export class OfficePage implements OnInit, OnDestroy {
   public environmentInjector = inject(EnvironmentInjector);
@@ -40,6 +39,7 @@ export class OfficePage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getUser()
     this.productSub =  this.productsSrv.getProducts(environment.LOC).subscribe()
+    this.ingSub = this.ingSrv.getAllIngredients().subscribe()
     this.userSrv.getUsers().subscribe()
 
   }

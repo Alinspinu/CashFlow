@@ -222,7 +222,7 @@ searchIngProduct(ev: any){
 
     getProducts(){
       this.productsSrv.productsSend$.subscribe(response => {
-        this.dbProducts = response
+        this.dbProducts = response.filter(p => p.category)
         this.products = this.dbProducts
         if(this.dbProducts.length > 1){
             this.isLoading = false

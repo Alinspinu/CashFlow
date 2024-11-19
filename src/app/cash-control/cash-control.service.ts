@@ -22,7 +22,7 @@ raport(value: string){
 
 saveInventary(){
   const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.get<{message: string}>(`${environment.BASE_URL}ing/save-inventary?loc=${environment.LOC}`, {headers})
+  return this.http.get<{message: string}>(`${environment.SAVE_URL}ing/save-inventary?loc=${environment.LOC}`, {headers})
 }
 
 cashInAndOut(data: any){

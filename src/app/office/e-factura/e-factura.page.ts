@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { EService } from './e-factura.service';
 import { Suplier } from 'src/app/models/suplier.model';
-import { EFactura, EProduct, InvIngredient, messageEFactura } from 'src/app/models/nir.model';
+import { EFactura, EProduct, InvIngredient, messageEFactura, Nir } from 'src/app/models/nir.model';
 import { SupliersService } from '../supliers/supliers.service';
 import { createNir, editMessage, mergeProducts } from './e-factura.engine';
 import { round } from 'src/app/shared/utils/functions';
@@ -14,6 +14,7 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { IngredientsPage } from './ingredients/ingredients.page';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
+import { SuplierPage } from '../CRUD/suplier/suplier.page';
 
 @Component({
   selector: 'app-e-factura',
@@ -27,6 +28,9 @@ export class EFacturaPage implements OnInit, OnDestroy {
   supliers: Suplier[] = []
   message!: messageEFactura
   eFactura!: EFactura
+  invoiceSearch: string = ''
+
+  messages: any[] = []
 
   ingSub!: Subscription
 
@@ -56,14 +60,14 @@ export class EFacturaPage implements OnInit, OnDestroy {
     this.ingSub = this.ingService.ingredientsSend$.subscribe({
       next: (response) => {
         this.ingrdients = response.filter(i => !i.productIngredient)
-        this.getMessage()
+        this.getMessage(10)
       }
     })
   }
 
 
-  getMessage(){
-    this.eService.getMessages(10).subscribe({
+  getMessage(days: number){
+    this.eService.getMessages(days).subscribe({
       next: (response) => {
         this.message = response
         this.getSupliers()
@@ -78,6 +82,8 @@ export class EFacturaPage implements OnInit, OnDestroy {
     this.suplService.getSupliers().subscribe({
       next: (response) => {
         this.supliers = response
+        this.message.mesaje.reverse()
+        this.messages = this.message.mesaje
         this.message = editMessage(this.message, this.supliers)
  
       },
@@ -91,7 +97,6 @@ export class EFacturaPage implements OnInit, OnDestroy {
     this.eService.getInvoice(id).subscribe({
       next: (response) => {
        this.eFactura = mergeProducts(response, this.ingrdients)
-      //  console.log(response)
       },
       error: (error) => {
         console.log(error)
@@ -106,10 +111,8 @@ export class EFacturaPage implements OnInit, OnDestroy {
         um: product.unitCode,
         suplier: this.eFactura.supplier.name
       }
-      console.log(data)
       const ing = await this.actService.openPayment(IngredientsPage, data)
       if(ing){
-        console.log(ing)
         this.eFactura = mergeProducts(this.eFactura, this.ingrdients)
       }
     } else {
@@ -118,12 +121,46 @@ export class EFacturaPage implements OnInit, OnDestroy {
 
   }
 
-  createNewNir(){
-    const nir = createNir(this.eFactura, this.supliers)
-    if(nir){
-      Preferences.remove({key: 'nir'});
-      Preferences.set({key: 'nir', value: JSON.stringify(nir)})
+   addNewNir(nir: Nir){
+    Preferences.remove({key: 'nir'});
+    Preferences.set({key: 'nir', value: JSON.stringify(nir)})
+    setTimeout(() => {
       this.router.navigateByUrl(`/tabs/office/nir/${nir._id}`)
+    }, 500)
+  }
+
+
+ async createNewNir(){
+    const nir = createNir(this.eFactura, this.supliers)
+    if(nir && nir.nir && !nir.add){
+      this.addNewNir(nir.nir)
+    } else if(nir && !nir.nir && nir.add) {
+      const suplier = await this.actService.openModal(SuplierPage, {cif: this.eFactura.supplier.vatNumber}, false)
+      if(suplier){
+        this.supliers.push(suplier)
+        const nir = createNir(this.eFactura, this.supliers)
+        if(nir && nir.nir && !nir.add){
+          this.addNewNir(nir.nir)
+        }
+      }
+    }
+  }
+
+
+  searchInvooice(ev: any){
+    const input = ev.detail.value
+    let filterData = this.messages.filter((object) =>
+    object.detalii.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+    this.messages = filterData
+    if(!input.length){
+      this.messages = [ ...this.message.mesaje]
+    }
+  }
+
+  async selectDays(){
+    const days = await this.actService.numberAlert('Alege numarul de zile', 'Alege numarul de zile pentru care vrei să faci interogarea!', 'val', 'Zile')
+    if(days){
+      this.getMessage(days)
     }
   }
 

@@ -117,7 +117,7 @@ export function createNir(eFactura: EFactura, supliers: Suplier[]){
         newNir.receptionDate = eFactura.dueDate
         newNir.efacturaId = eFactura.id
         newNir.nrDoc = eFactura.invoiceNumber
-        return newNir
+        return {nir: newNir}
     } 
-    return null
+    return {add: 'add'}
   }

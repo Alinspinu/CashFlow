@@ -1,7 +1,42 @@
 
 
-ion-content, ion-toolbar{
+ion-content, ion-toolbar, ion-header{
     --background: var(--ion-color-tertiary) !important;
+  }
+
+  .content-container{
+    height: 100vh;
+    display: flex;
+    background-color: var(--ion-color-tertiary);
+    .message{
+      height: 85vh;
+    }
+    .invoice{
+      height: 85vh;
+    }
+  }
+
+
+  .searchbar-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 12px;
+    padding-right: 24px;
+    border-radius: 12px;
+    background-color: var(--ion-color-light);
+    box-shadow:
+    0 -2px 4px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+    ion-searchbar{
+      font-family: NoirProReg !important;
+     padding-bottom: 0 !important;
+     height: 60px !important;
+    }
+    .searchbar-icon{
+      cursor: pointer;
+    }
   }
   
   .input{
@@ -59,13 +94,9 @@ ion-content, ion-toolbar{
         flex: 16%;
         text-align: left;
         display: flex;
-        // justify-content: center;
         align-items: center;
         .icon{
             margin-right: 18px;
-        }
-        .name{
-            
         }
       }
       .price{
@@ -76,116 +107,115 @@ ion-content, ion-toolbar{
         flex: 12%;
         text-align: center;
       }
-    //   .vatValue{
-    //     flex: 10%;
-    //     text-align: center;
-    //   }
-    //   .totalWithVat{
-    //     flex: 10%;
-    //     text-align: right;
-    //   }
       .vat{
         flex: 8%;
         text-align: center;
       }
-
   }
 
   .party{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: NoirProReg !important;
     margin: 0.5rem 0 0.1rem 0;
     font-size: 22px;
+    padding: 12px;
     padding-left: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     color: var(--ion-color-medium);
-    border: 0.8px solid var(--ion-color-medium);
+    background-color: var(--ion-color-light);
     border-radius: 12px;
     height: 100%;
-    .title{
-        text-align: center;
-        margin: 12px 0;
-        font-size: 26px;
-    }
+    box-shadow:
+    0 -2px 4px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
     .details{
         width: 100%;
         display: flex;
+        flex-direction: column;
         .label{
             flex: 40%;
-            text-align: left;
+            text-align: center;
+            font-size: 14px !important;
+            margin-bottom: 5px;
         }
         .value{
             flex: 60%;
-            text-align: left;
+            text-align: center;
         }
     }
-    .name, .cif{
+    .name{
         width: 100%;
         display: flex;
+        flex-direction: column;
         .label{
             flex: 20%;
-            text-align: left;
+            text-align: center;
+            font-size: 14px !important;
+            margin-bottom: 5px;
         }
         .value{
             flex: 80%;
-            text-align: left;
+            text-align: center;
         }
     }
   }
 
 
   .total-wrapper{
-    height: 100%;
-    font-family: NoirProReg !important;
-    font-size: 22px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    height: 100%;
+    font-size: 22px;
     margin-top: 12px;
-    color: var(--ion-color-medium);
-    border: 0.8px solid var(--ion-color-medium);
-    border-radius: 12px;
-
+    font-family: NoirProReg !important;
     .total{
-        width: 100%;
-        padding: 24px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 24px 0;
+      color: var(--ion-color-medium);
+      background-color: var(--ion-color-light);
+      border-radius: 12px;
+      box-shadow:
+      0 -2px 4px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.1);
         .label{
             font-size: 18px;
         }
         .value{
-            font-size: 26px;
+            font-family: NoirProSemi !important;
+            font-size: 30px;
         }
     }
   }
 
   .tot{
-    margin-top: 12px;
-    cursor: pointer;
-    color: var(--ion-color-medium);
-    border: 0.8px solid var(--ion-color-medium);
-    border-radius: 12px;
-    height: 100%;
-    width: 100%;
+    font-family: NoirProSemi !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    height: 100%;
+    margin-top: 12px;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 36px;
+    color: var(--ion-color-light-tint);
+    background-color: var(--ion-color-medium-tint);
+    box-shadow:
+    0 -2px 4px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
   }
 
-  .border{
-    border-top: 0.8px solid var(--ion-color-medium);
+  .tot:hover{
+    color: var(--ion-color-medium-tint);
+    background-color: var(--ion-color-light-tint);
   }
 
-
-// .input:hover{
-//     background-color: var(--ion-color-medium-shade);
-//   }
 
   

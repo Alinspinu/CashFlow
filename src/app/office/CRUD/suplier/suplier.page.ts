@@ -62,7 +62,7 @@ export class SuplierPage implements OnInit {
       vatNumber: fb.control('', [Validators.required]),
       register: fb.control('', [Validators.required]),
       address: fb.control('', [Validators.required]),
-      VAT: fb.control('', [Validators.required]),
+      VAT: fb.control('yes', [Validators.required]),
       bank: fb.control('', [Validators.required]),
       account: fb.control('', [Validators.required]),
       sold: fb.control(''),
@@ -166,7 +166,6 @@ export class SuplierPage implements OnInit {
 
   ngOnInit() {
     this.getUser()
-    this.getMode()
     this.validateForm()
     this.getSuplierToEdit()
   }
@@ -182,21 +181,21 @@ export class SuplierPage implements OnInit {
   }
 
   getSuplierToEdit(){
-    const suplier = this.navParams.get('options')
-    if(suplier && suplier.name){
-      this.selectSuplier(suplier)
+    const data = this.navParams.get('options')
+    if(data && data.suplier && data.suplier.name){
+      this.selectSuplier(data.suplier)
       this.editMode = true
-    }
-  }
-
-  getMode(){
-    const mode = this.route.snapshot.paramMap.get('value')
-    if(mode){
-      this.mode = mode
+    } else if(data && data.enroll === 'enrol'){
+       this.mode = data.enroll
       this.size = '6'
+    } else if(data && data.cif) {
+      this.suplierForm.get('vatNumber')?.setValue(data.cif)
+      this.searchSuplier()
     }
 
   }
+
+
   searchSuplier(){
     const vatNumber = this.suplierForm.value.vatNumber
     if(vatNumber){
@@ -206,6 +205,9 @@ export class SuplierPage implements OnInit {
             this.suplierForm.get('bussinessName')?.setValue(response.data.nume);
             this.suplierForm.get('register')?.setValue(response.data.cod_inmatriculare);
             this.suplierForm.get('address')?.setValue(response.data.adresa);
+            this.suplierForm.get('bank')?.setValue('-')
+            this.suplierForm.get('account')?.setValue('-')
+            this.suplierForm.get('sold')?.setValue(0)
           } else if(response.status === 402){
             showToast(this.toastCtrl, response.message, 4000)
           }

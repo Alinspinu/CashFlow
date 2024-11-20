@@ -60,7 +60,7 @@ export class SupliersPage implements OnInit {
   }
 
  async editSuplier(suplier: Suplier, index: number){
-    const newSuplier = await this.actionSht.openModal(SuplierPage, suplier, false)
+    const newSuplier = await this.actionSht.openModal(SuplierPage, {suplier: suplier}, false)
     if(newSuplier){
       this.suplierSrv.editSuplier(suplier._id, newSuplier).subscribe(response => {
         if(response){

@@ -43,6 +43,7 @@ import { MonetarPage } from '../cash-control/monetar/monetar.page';
 import { UploadLogPage } from '../reports/inventary/upload-log/upload-log.page';
 import { IngredientContentPage } from '../office/ingredient/ingredient-content/ingredient-content.page';
 import { RecordPage } from '../office/nirs/record/record.page';
+import { IngredientsPage } from '../office/e-factura/ingredients/ingredients.page';
 
 
 
@@ -148,6 +149,7 @@ export class ActionSheetService {
                typeof CloseDayPage |
                typeof IngredientContentPage |
                typeof UploadLogPage |
+               typeof IngredientsPage |
                typeof DelProdViewPage,
     options: any
   ){

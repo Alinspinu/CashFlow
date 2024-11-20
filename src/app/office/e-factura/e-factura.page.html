@@ -7,7 +7,7 @@
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row>
-      <ion-col size="4" *ngIf="message">
+      <ion-col size="3" *ngIf="message">
         <div class="input" *ngFor="let msg of message.mesaje.reverse()">
           <span class="data">{{msg.data_creare}}</span>
           <span class="suplier">{{msg.detalii}}</span>
@@ -15,7 +15,7 @@
         </div>
       </ion-col>
 
-      <ion-col size="8" *ngIf="eFactura">
+      <ion-col size="9" *ngIf="eFactura">
         <ion-row>
           <ion-col size="4">
             <div class="party">
@@ -69,14 +69,17 @@
           <ion-col>
             <div class="input">
                 <span class="nr">NR</span>
-                <span class="name">Denumire produs</span>
-                <span class="um">UM</span>
-                <span class="vat">Cota Tva</span>
-                <span class="qty">cantitate</span>
+                <span class="name">Denumire Produs</span>
+                <span class="um">UM Factura</span>
+                <span class="qty">Qty Factura</span>
+                <span class="ing-qty">Qty Nir</span>
+                <span class="ing-um">UM Nir</span>
+                <span class="ing-name">Denumire Ingredient</span>
                 <span class="price">Pret F TVA</span>
                 <span class="totalNoVat">Valoare</span>
-                <span class="vatValue">Valoare Tva</span>
-                <span class="totalWithVat">Total cu TVA</span>
+                <!-- <span class="vatValue">Valoare Tva</span> -->
+                <!-- <span class="totalWithVat">Total cu TVA</span> -->
+                <span class="vat">Cota Tva</span>
             </div>
           </ion-col>
         </ion-row>
@@ -86,19 +89,32 @@
                 <span class="nr">{{i+1}}.</span>
                 <span class="name">{{product.name}}</span>
                 <span class="um">{{product.unitCode}}</span>
-                <span class="vat">{{product.vatPrecent}} %</span>
                 <span class="qty">{{product.quantity}}</span>
+                <span class="ing-qty">{{product.ingQty}}</span>
+                <span class="ing-um">{{product.ingUm}}</span>
+                <div class="ing-name">
+                  <ion-icon 
+                  [src]="product.ingUm === '-' ? '../../../assets/icon/add-circle.svg' : '../../../assets/icon/create-outline.svg' "  
+                  color="medium" 
+                  class="icon" 
+                  size="large" 
+                  (click)="selectIng(product)"></ion-icon>
+                  <span class="name">{{product.ingName}}</span>
+                </div>
+                <!-- <ion-button fill="ghost" color="medium" class="add-edit"> -->
+                <!-- </ion-button> -->
                 <span class="price">{{product.price}}</span>
                 <span class="totalNoVat">{{product.totalNoVat}}</span>
-                <span class="vatValue">{{roundInHtml((product.totalNoVat *(1+ (product.vatPrecent/100))) - product.totalNoVat)}}</span>
-                <span class="totalWithVat">{{roundInHtml(product.totalNoVat *(1+ (product.vatPrecent/100)))}}</span>
+                <!-- <span class="vatValue">{{roundInHtml((product.totalNoVat *(1+ (product.vatPrecent/100))) - product.totalNoVat)}}</span> -->
+                <!-- <span class="totalWithVat">{{roundInHtml(product.totalNoVat *(1+ (product.vatPrecent/100)))}}</span> -->
+                <span class="vat">{{product.vatPrecent}} %</span>
             </div>
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="6">
+          <ion-col size="6" (click)="createNewNir()">
             <div class="tot">
-              <span>TOTAL</span>
+              <span>CREAZĂ NIR</span>
             </div>
     
           </ion-col>

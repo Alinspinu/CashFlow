@@ -125,7 +125,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
       }
       this.productIngQty = '1'
       this.recipeTotal = +prodIng.price
-      this.recipeService.saveIng(prodIng, this.user.locatie).subscribe(response => {
+      this.recipeService.saveIng(prodIng).subscribe(response => {
         if(response){
           showToast(this.toastCtrl, response.message, 3000)
           this.displayIngs = [];
@@ -239,7 +239,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   async addIng(){
    const ing = await this.actionSrv.openPayment(AddIngredientPage, [])
    if(ing){
-     this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
+     this.recipeService.saveIng(ing).subscribe(response => {
       this.ingSrv.addIngredinet(response.ing)
       showToast(this.toastCtrl, response.message, 4000)
      })

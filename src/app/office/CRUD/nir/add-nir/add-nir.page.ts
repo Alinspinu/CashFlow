@@ -126,7 +126,7 @@ setupNirForm(){
 
 async getNirToEdit(){
   const id = this.route.snapshot.paramMap.get('id')
-  if(id && id !== "new" && id !== 'merged') {
+  if(id && id !== "new" && id !== 'merged' && id !== 'eFactura') {
     this.isLoading = true
     this.nirSrv.getNir(id).subscribe(response => {
       if(response) {
@@ -161,9 +161,27 @@ async getNirToEdit(){
       this.nirSrv.setNir(this.nir)
       this.nirId = id
       this.suplier = this.nir.suplier
-      this.nirForm.get('document')?.setValue(this.nir.document)
       this.docDate = this.nir.documentDate
       this.receptionDate = this.nir.receptionDate
+      this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
+      this.nirForm.get('document')?.setValue(this.nir.document)
+      this.nirForm.get('document')?.setValue(this.nir.document)
+    }
+  }
+
+  if(id && id === 'eFactura'){
+    const nir = await Preferences.get({key: 'nir'})
+    if(nir && nir.value){
+      const parsedNir = JSON.parse(nir.value) as Nir
+      this.nir = parsedNir
+      this.nirSrv.setNir(this.nir)
+      this.suplier = this.nir.suplier
+      this.docDate = this.nir.documentDate
+      this.receptionDate = this.nir.receptionDate
+      this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
+      this.nirForm.get('docDate')?.setValue(this.nir.documentDate)
+      this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
+      this.nirForm.get('document')?.setValue(this.nir.document)
     }
   }
 }

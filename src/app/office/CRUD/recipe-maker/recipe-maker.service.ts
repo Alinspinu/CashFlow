@@ -14,11 +14,11 @@ export class RecipeMakerService{
   ){}
 
 
-getIngredients(loc: string){
-  return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients?prod=true`, {loc: loc})
+getIngredients(){
+  return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients?prod=true`, {loc: environment.LOC})
 }
-saveIng(ing: any, loc: string){
-  return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: loc})
+saveIng(ing: any){
+  return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: environment.LOC})
 }
 
 editIng(ing: any, id: string){

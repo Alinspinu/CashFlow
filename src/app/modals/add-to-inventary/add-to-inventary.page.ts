@@ -43,7 +43,6 @@ export class AddToInventaryPage implements OnInit {
 getIngToedit(){
   const ing = this.navParams.get('options')
     this.ing = ing.ing
-    console.log(this.ing)
     this.date =  formatedDateToShow(ing.date)
     const invDay = this.ing.inventary.find((inv:any) => {
       return this.setDateToZero(inv.day) === this.setDateToZero(ing.date)

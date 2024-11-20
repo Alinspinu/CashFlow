@@ -186,7 +186,7 @@ export class ProductIngredientPage implements OnInit, OnDestroy {
   async addIng(){
    const ing = await this.actionSrv.openPayment(AddIngredientPage, [])
    if(ing){
-     this.recipeService.saveIng(ing, this.user.locatie).subscribe(response => {
+     this.recipeService.saveIng(ing).subscribe(response => {
       showToast(this.toastCtrl, response.message, 4000)
      })
    }

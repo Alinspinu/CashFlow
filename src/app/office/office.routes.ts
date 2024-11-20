@@ -62,6 +62,10 @@ export const routes: Routes = [
         path: 'e-factura',
         loadComponent: () => import('./e-factura/e-factura.page').then( m => m.EFacturaPage)
       },
+      // {
+      //   path: 'ingredients',
+      //   loadComponent: () => import('./e-factura/ingredients/ingredients.page').then( m => m.IngredientsPage)
+      // },
       {
         path: '',
         redirectTo: '/tabs/office/products',
@@ -93,7 +97,9 @@ export const routes: Routes = [
   {
     path: 'record',
     loadComponent: () => import('./nirs/record/record.page').then( m => m.RecordPage)
-  }
+  },
+ 
+
 
 
 

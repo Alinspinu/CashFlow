@@ -1,22 +1,6 @@
 import { Suplier } from "./suplier.model";
 
-export class NirIngredient {
-  constructor(
-    public name:string,
-    public price: number,
-    public um: string,
-    public qty: number,
-    public value: number,
-    public tva: number,
-    public tvaValue: number,
-    public total: number,
-    public dep: number,
-    public gestiune: string,
-    public sellPrice: number,
-    public logId: string,
-    public ing: string,
-  ){}
-}
+
 
 export class Nir{
   constructor(
@@ -40,44 +24,7 @@ export class Nir{
 }
 
 
-export class InvIngredient {
-  constructor(
-    public _id: string,
-    public name: string,
-    public price: number,
-    public um: string,
-    public qty: number,
-    public tvaPrice: number,
-    public tva: number,
-    public dep: string,
-    public gestiune: string,
-    public locatie: string,
-    public ings: InvIngredient[],
-    public productIngredient: boolean,
-    public inventary: {
-      index: number,
-      day: string,
-      qty: number
-    } [],
-    public uploadLog: {
-      date: string,
-      qty: number,
-      uploadPrice: number,
-      operation: {
-        name: string,
-        details: string,
-      }
-    }[],
-    public unloadLog: {
-      date: string,
-      qty: number,
-      operation: {
-        name: string,
-        details: string,
-      }
-    }[]
-  ){}
-}
+
 
 
 export class EFactura {
@@ -93,14 +40,7 @@ export class EFactura {
       name: string,
       vatNumber: string
     },
-    public products: {
-      name: string,
-      quantity: number,
-      price: number,
-      unitCode: string,
-      totalNoVat: number,
-      vatPrecent: number
-    }[],
+    public products: EProduct[],
     public vatAmount: number,
     public taxExclusiveAmount: number,
     public taxInclusiveAmount: number,
@@ -121,5 +61,87 @@ export class messageEFactura{
     }[]
   ){}
 }
+
+export interface EProduct {
+  name: string,
+  quantity: number,
+  price: number,
+  unitCode: string,
+  totalNoVat: number,
+  vatPrecent: number,
+  ingName: string,
+  ingQty: number,
+  ingUm: string,
+  ingDep: string,
+  ingGestiune: string,
+  ingSellPrice: number,
+  ingLogId: string,
+  ingID: string,
+}
+
+export class NirIngredient {
+  constructor(
+    public name:string,
+    public price: number,
+    public um: string,
+    public qty: number,
+    public value: number,
+    public tva: number,
+    public tvaValue: number,
+    public total: number,
+    public dep: string,
+    public gestiune: string,
+    public sellPrice: number,
+    public logId: string,
+    public ing: string,
+  ){}
+}
+
+
+export class InvIngredient {
+  constructor(
+    public _id: string,
+    public name: string,
+    public price: number,
+    public um: string,
+    public qty: number,
+    public tvaPrice: number,
+    public tva: number,
+    public dep: string,
+    public gestiune: string,
+    public locatie: string,
+    public ings: InvIngredient[],
+    public productIngredient: boolean,
+    public sellPrice: number,
+    public inventary: {
+      index: number,
+      day: string,
+      qty: number
+    } [],
+    public uploadLog: {
+      date: string,
+      qty: number,
+      uploadPrice: number,
+      operation: {
+        name: string,
+        details: string,
+      }
+    }[],
+    public eFactura: {
+      suplier: string,
+      name: string,
+      qtyCorector: number
+    }[],
+    public unloadLog: {
+      date: string,
+      qty: number,
+      operation: {
+        name: string,
+        details: string,
+      }
+    }[]
+  ){}
+}
+
 
 

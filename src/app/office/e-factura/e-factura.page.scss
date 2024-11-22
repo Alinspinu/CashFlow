@@ -17,6 +17,8 @@ ion-content, ion-toolbar, ion-header{
   }
 
 
+
+
   .searchbar-wrapper{
     display: flex;
     align-items: center;
@@ -38,7 +40,7 @@ ion-content, ion-toolbar, ion-header{
       cursor: pointer;
     }
   }
-  
+
   .input{
     cursor: pointer;
     display: flex;
@@ -217,5 +219,9 @@ ion-content, ion-toolbar, ion-header{
     background-color: var(--ion-color-light-tint);
   }
 
+  .done{
+    background-color: var(--ion-color-warning) !important;
+    // color: var(--ion-color-light-tint) !important;
+  }
 
-  
+

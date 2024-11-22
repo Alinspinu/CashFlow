@@ -65,7 +65,6 @@ export class IngredientService{
               currentPage++;
                 fetchData(); // Fetch the next page
             } else {
-              console.log(allItems.length)
                const sortedIngs = allItems.sort((a, b) => {
                 if(a.name && b.name){
                   return a.name.localeCompare(b.name)

@@ -16,7 +16,7 @@ export class Nir{
     public val: number,
     public valTva: number,
     public selected: boolean,
-    public efacturaId: string,
+    public eFacturaId: string,
     public valVanzare: number,
     public discount: {tva: number, value: number, procent: number}[],
     public index?: number,
@@ -57,7 +57,8 @@ export class messageEFactura{
       data_creare: string,
       cif: string,
       detalii: string,
-      id: string
+      id: string,
+      done: boolean
     }[]
   ){}
 }

@@ -26,5 +26,9 @@ getInvoice(id: string){
     return this.http.get<EFactura>(`${environment.BASE_URL}invoice/get-invoice?id=${id}`)
 }
 
+checkInvoiceStatus(ids: string[]){
+  return this.http.post<string[]>(`${environment.BASE_URL}invoice/check`, {ids: ids})
+}
+
 
 }

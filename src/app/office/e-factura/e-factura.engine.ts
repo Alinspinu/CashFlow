@@ -34,7 +34,7 @@ export function editMessage(message: messageEFactura, supliers: Suplier[]){
 
 
 export function mergeProducts(invoice: EFactura, ings: InvIngredient[]){
-    let products: EProduct[] = [] 
+    let products: EProduct[] = []
     for(let product of invoice.products){
         const existingProduct = products.find((p) => p.name === product.name)
         if(existingProduct){
@@ -64,7 +64,7 @@ export function mergeProducts(invoice: EFactura, ings: InvIngredient[]){
                 p.ingID = ing._id
                 p.ingSellPrice = ing.sellPrice
                 foundMatch = true;
-            } 
+            }
             if(!foundMatch) {
                 p.ingName = 'Neidentificat'
                 p.ingUm = '-'
@@ -73,7 +73,7 @@ export function mergeProducts(invoice: EFactura, ings: InvIngredient[]){
         }
         return p
     })
- 
+
     invoice.products = updatedProducts
     return invoice
 }
@@ -115,9 +115,28 @@ export function createNir(eFactura: EFactura, supliers: Suplier[]){
         newNir.valVanzare = sellPrice
         newNir.documentDate = eFactura.issueDate
         newNir.receptionDate = eFactura.dueDate
-        newNir.efacturaId = eFactura.id
+        newNir.eFacturaId = eFactura.id
         newNir.nrDoc = eFactura.invoiceNumber
         return {nir: newNir}
-    } 
+    }
     return {add: 'add'}
+  }
+
+
+  export function getBillIds(message: messageEFactura){
+    const ids = message.mesaje.map(m => m.id)
+    return ids
+  }
+
+  export function ckeckMessageStatus(message: messageEFactura, nirsIds: string[]){
+   const msg = message.mesaje.map(m => {
+      for(let id of nirsIds) {
+        if(m.id === id){
+          m.done = true
+        }
+      }
+      return m
+    })
+    message.mesaje = msg
+    return message
   }

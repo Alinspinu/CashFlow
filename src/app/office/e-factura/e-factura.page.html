@@ -2,7 +2,7 @@
   <ion-toolbar class="ion-no-border">
     <ion-grid>
       <ion-row>
-        <ion-col size="3">
+        <ion-col size="4">
           <div class="searchbar-wrapper">
             <ion-searchbar mode="ios" [(ngModel)]="invoiceSearch"  placeholder="Caută factură..."  (ionInput)="searchInvooice($event)">
             </ion-searchbar>
@@ -10,7 +10,7 @@
           </div>
         </ion-col>
 
-        <ion-col size="9" *ngIf="eFactura">
+        <ion-col size="8" *ngIf="eFactura">
           <ion-row>
             <ion-col size="4">
               <div class="party">
@@ -51,18 +51,18 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col size="3" *ngIf="message">
+      <ion-col size="4" *ngIf="message">
         <ion-content  class="message">
-          <div class="input" *ngFor="let msg of messages">
+          <div class="input" *ngFor="let msg of messages" [ngClass]="{'done': msg.done}">
             <span class="data">{{msg.data_creare}}</span>
             <span class="suplier">{{msg.detalii}}</span>
             <ion-button fill="outline" color="medium" size="small" (click)="showInvoice(msg.id)">Arată factura</ion-button>
           </div>
-        </ion-content> 
+        </ion-content>
       </ion-col>
-  
 
-      <ion-col size="9" *ngIf="eFactura">
+
+      <ion-col size="8" *ngIf="eFactura">
         <ion-content class="invoice">
           <ion-row>
             <ion-col>
@@ -92,11 +92,11 @@
                   <span class="ing-qty">{{product.ingQty}}</span>
                   <span class="ing-um">{{product.ingUm}}</span>
                   <div class="ing-name">
-                    <ion-icon 
-                    [src]="product.ingUm === '-' ? '../../../assets/icon/add-circle.svg' : '../../../assets/icon/create-outline.svg' "  
-                    color="medium" 
-                    class="icon" 
-                    size="large" 
+                    <ion-icon
+                    [src]="product.ingUm === '-' ? '../../../assets/icon/add-circle.svg' : '../../../assets/icon/create-outline.svg' "
+                    color="medium"
+                    class="icon"
+                    size="large"
                     (click)="selectIng(product)"></ion-icon>
                     <span class="name">{{product.ingName}}</span>
                   </div>
@@ -115,7 +115,7 @@
               <div class="tot">
                 <span>CREAZĂ NIR</span>
               </div>
-      
+
             </ion-col>
             <ion-col size="3">
               <div class="total-wrapper">

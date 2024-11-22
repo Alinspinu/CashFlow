@@ -6,7 +6,7 @@ import { EService } from './e-factura.service';
 import { Suplier } from 'src/app/models/suplier.model';
 import { EFactura, EProduct, InvIngredient, messageEFactura, Nir } from 'src/app/models/nir.model';
 import { SupliersService } from '../supliers/supliers.service';
-import { createNir, editMessage, mergeProducts } from './e-factura.engine';
+import { ckeckMessageStatus, createNir, editMessage, getBillIds, mergeProducts } from './e-factura.engine';
 import { round } from 'src/app/shared/utils/functions';
 import { IngredientService } from '../ingredient/ingredient.service';
 import { Subscription } from 'rxjs';
@@ -31,6 +31,8 @@ export class EFacturaPage implements OnInit, OnDestroy {
   invoiceSearch: string = ''
 
   messages: any[] = []
+
+  billsId: string[] = []
 
   ingSub!: Subscription
 
@@ -60,7 +62,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
     this.ingSub = this.ingService.ingredientsSend$.subscribe({
       next: (response) => {
         this.ingrdients = response.filter(i => !i.productIngredient)
-        this.getMessage(10)
+        this.getMessage(1)
       }
     })
   }
@@ -70,9 +72,22 @@ export class EFacturaPage implements OnInit, OnDestroy {
     this.eService.getMessages(days).subscribe({
       next: (response) => {
         this.message = response
-        this.getSupliers()
+        this.checkInvoice()
       },
       error: (error)=> {
+        console.log(error)
+      }
+    })
+  }
+
+  checkInvoice(){
+    this.eService.checkInvoiceStatus(getBillIds(this.message)).subscribe({
+      next: (response) => {
+        const msg = ckeckMessageStatus(this.message, response)
+        this.message = msg
+        this.getSupliers()
+      },
+      error: (error) => {
         console.log(error)
       }
     })
@@ -84,14 +99,17 @@ export class EFacturaPage implements OnInit, OnDestroy {
         this.supliers = response
         this.message.mesaje.reverse()
         this.messages = this.message.mesaje
+
         this.message = editMessage(this.message, this.supliers)
- 
+
       },
       error: (error) => {
         console.log(error)
       }
     })
   }
+
+
 
   showInvoice(id: string){
     this.eService.getInvoice(id).subscribe({

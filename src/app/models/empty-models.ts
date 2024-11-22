@@ -338,7 +338,7 @@ export function emptyNir(){
     ingredients: [],
     document: '',
     selected: false,
-    efacturaId: '',
+    eFacturaId: '',
     totalDoc: 0,
     val: 0,
     valTva: 0,

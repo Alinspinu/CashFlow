@@ -1,22 +1,23 @@
 import { Component, Inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, NavigationEnd, Router, Event } from '@angular/router';
 import { FormsModule, FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, IonSearchbar, ToastController } from '@ionic/angular';
-import { Nir, NirIngredient } from '../../../../models/nir.model';
-import { NirService } from '../nir.service';
-import User from '../../../../auth/user.model';
-import { ActionSheetService } from '../../../../shared/action-sheet.service';
 import { SuplierPage } from '../../suplier/suplier.page';
-import { DatePickerPage } from '../../../../modals/date-picker/date-picker.page';
-import { IonInput } from '@ionic/angular/standalone';
-import { ActivatedRoute, Router } from '@angular/router';
+import { filter } from 'rxjs';
+import { IonicModule, IonSearchbar, ToastController } from '@ionic/angular';
+import { ActionSheetService } from '../../../../shared/action-sheet.service';
+import { RandomService } from 'src/app/shared/random.service';
+import { Preferences } from '@capacitor/preferences';
 import { formatedDateToShow } from '../../../../shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { DiscountPage } from '../../../../modals/discount/discount.page';
 import { SpinnerPage } from '../../../../modals/spinner/spinner.page';
 import { emptyNir } from 'src/app/models/empty-models';
-import { RandomService } from 'src/app/shared/random.service';
-import { Preferences } from '@capacitor/preferences';
+import { DatePickerPage } from '../../../../modals/date-picker/date-picker.page';
+import { Nir, NirIngredient } from '../../../../models/nir.model';
+import { NirService } from '../nir.service';
+import User from '../../../../auth/user.model';
+import { IonInput } from '@ionic/angular/standalone';
 
 
 
@@ -77,6 +78,13 @@ export class AddNirPage implements OnInit {
 
 
   ngOnInit() {
+    this.router.events
+    .pipe(filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd))
+    .subscribe((event: NavigationEnd) => {
+      this.setupNirForm()
+      this.getNirToEdit()
+      this.getNir()
+    });
     this.setupNirForm()
     this.getNirToEdit()
     this.getNir()
@@ -174,6 +182,7 @@ async getNirToEdit(){
     if(nir && nir.value){
       const parsedNir = JSON.parse(nir.value) as Nir
       this.nir = parsedNir
+      console.log(this.nir)
       this.nirSrv.setNir(this.nir)
       this.suplier = this.nir.suplier
       this.docDate = this.nir.documentDate

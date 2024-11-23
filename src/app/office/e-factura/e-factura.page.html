@@ -100,12 +100,8 @@
                     (click)="selectIng(product)"></ion-icon>
                     <span class="name">{{product.ingName}}</span>
                   </div>
-                  <!-- <ion-button fill="ghost" color="medium" class="add-edit"> -->
-                  <!-- </ion-button> -->
                   <span class="price">{{product.price}}</span>
                   <span class="totalNoVat">{{product.totalNoVat}}</span>
-                  <!-- <span class="vatValue">{{roundInHtml((product.totalNoVat *(1+ (product.vatPrecent/100))) - product.totalNoVat)}}</span> -->
-                  <!-- <span class="totalWithVat">{{roundInHtml(product.totalNoVat *(1+ (product.vatPrecent/100)))}}</span> -->
                   <span class="vat">{{product.vatPrecent}} %</span>
               </div>
             </ion-col>

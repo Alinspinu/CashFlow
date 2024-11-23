@@ -8,7 +8,7 @@ import { IonicModule, IonSearchbar, ToastController } from '@ionic/angular';
 import { ActionSheetService } from '../../../../shared/action-sheet.service';
 import { RandomService } from 'src/app/shared/random.service';
 import { Preferences } from '@capacitor/preferences';
-import { formatedDateToShow } from '../../../../shared/utils/functions';
+import { formatedDateToShow, round } from '../../../../shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { DiscountPage } from '../../../../modals/discount/discount.page';
 import { SpinnerPage } from '../../../../modals/spinner/spinner.page';
@@ -181,9 +181,20 @@ async getNirToEdit(){
     const nir = await Preferences.get({key: 'nir'})
     if(nir && nir.value){
       const parsedNir = JSON.parse(nir.value) as Nir
+      const eFacturaNirTotal = parsedNir.totalDoc
       this.nir = parsedNir
-      console.log(this.nir)
       this.nirSrv.setNir(this.nir)
+      this.nirSrv.clacTotals()
+      const diference = round(this.nir.totalDoc - eFacturaNirTotal)
+      if(diference > 1){
+        const tva = this.nir.ingredients[0].tva
+        const discountData ={
+          type: 'val',
+          tva,
+          val: round(diference / (1 + (tva / 100)))
+        }
+        this.nirSrv.calcDiscount(discountData)
+      }
       this.suplier = this.nir.suplier
       this.docDate = this.nir.documentDate
       this.receptionDate = this.nir.receptionDate

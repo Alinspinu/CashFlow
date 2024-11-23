@@ -80,7 +80,13 @@ export class IngredientsPage implements OnInit, OnDestroy {
         name: this.productName,
         qtyCorector: data
       }
-      ing.eFactura.push(update)
+      const existingUpdate = ing.eFactura.find(u => u.name === update.name)
+      if(existingUpdate){
+        existingUpdate.suplier = update.suplier
+        existingUpdate.qtyCorector = update.qtyCorector
+      } else{
+        ing.eFactura.push(update)
+      }
       this.ing = ing
       this.ingSrv.editIngredient(ing._id, ing).subscribe({
         next: (response) => {

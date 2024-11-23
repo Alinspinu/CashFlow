@@ -99,9 +99,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
         this.supliers = response
         this.message.mesaje.reverse()
         this.messages = this.message.mesaje
-
         this.message = editMessage(this.message, this.supliers)
-
       },
       error: (error) => {
         console.log(error)
@@ -123,7 +121,6 @@ export class EFacturaPage implements OnInit, OnDestroy {
   }
 
   async selectIng(product: EProduct){
-    if(product.ingUm === '-'){
       const data = {
         name: product.name,
         um: product.unitCode,
@@ -133,9 +130,6 @@ export class EFacturaPage implements OnInit, OnDestroy {
       if(ing){
         this.eFactura = mergeProducts(this.eFactura, this.ingrdients)
       }
-    } else {
-
-    }
 
   }
 

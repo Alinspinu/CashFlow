@@ -480,7 +480,7 @@ updateProductsQuantity(products: any[]){
 
 
 async payment(){
-      this.sendOrder(false, true).subscribe(async (response) => {
+      this.sendOrder(false, false).subscribe(async (response) => {
         if(response){
           const paymentInfo = await this.actionSheet.openPayment(PaymentPage, this.billData.billToshow)
             if(paymentInfo){

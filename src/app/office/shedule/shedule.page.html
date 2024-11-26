@@ -38,17 +38,24 @@
           <ion-col *ngFor="let day of shedule.days">
             <div class="square pointer" (click)="addOnShedule(day, user)"
             [ngClass]="{
-              'barista' : getPosition(day.users, user._id) === 'Barista',
-              'aj-barista' : getPosition(day.users, user._id) === 'Ajutor barman',
-              'casier' : getPosition(day.users, user._id) === 'Casier',
-              'ospatar' : getPosition(day.users, user._id) === 'Ospatar',
-              'bucatar' : getPosition(day.users, user._id) === 'Bucatar',
-              'aj-bucatar' : getPosition(day.users, user._id) === 'Ajutor bucatar',
-              'liber' : getPosition(day.users, user._id) === 'LiBER',
-              'tes' : getPosition(day.users, user._id) === 'Supervizor' || getPosition(day.users, user._id) === 'Asistent Manager',
-              'con' : getPosition(day.users, user._id) === 'Concediu',
-              'med' : getPosition(day.users, user._id) === 'Medical',
-              }">
+              'barista' : getPosition(day.users, user._id).position === 'Barista' && getPosition(day.users, user._id).checkIn,
+              'on-barista' : getPosition(day.users, user._id).position === 'Barista' && !getPosition(day.users, user._id).checkIn,
+              'aj-barista' : getPosition(day.users, user._id).position === 'Ajutor barman' && getPosition(day.users, user._id).checkIn,
+              'on-aj-barista' : getPosition(day.users, user._id).position === 'Ajutor barman' && !getPosition(day.users, user._id).checkIn,
+              'casier' : getPosition(day.users, user._id).position === 'Casier'&& getPosition(day.users, user._id).checkIn,
+              'on-casier' : getPosition(day.users, user._id).position === 'Casier'&& !getPosition(day.users, user._id).checkIn,
+              'ospatar' : getPosition(day.users, user._id).position === 'Ospatar'&& getPosition(day.users, user._id).checkIn,
+              'on-ospatar' : getPosition(day.users, user._id).position === 'Ospatar'&& !getPosition(day.users, user._id).checkIn,
+              'bucatar' : getPosition(day.users, user._id).position === 'Bucatar'&& getPosition(day.users, user._id).checkIn,
+              'on-bucatar' : getPosition(day.users, user._id).position === 'Bucatar'&& !getPosition(day.users, user._id).checkIn,
+              'aj-bucatar' : getPosition(day.users, user._id).position === 'Ajutor bucatar'&& getPosition(day.users, user._id).checkIn,
+              'on-aj-bucatar' : getPosition(day.users, user._id).position === 'Ajutor bucatar'&& !getPosition(day.users, user._id).checkIn,
+              'liber' : getPosition(day.users, user._id).position === 'LiBER'&& !getPosition(day.users, user._id).checkIn,
+              'tes' :( getPosition(day.users, user._id).position === 'Supervizor' || getPosition(day.users, user._id).position === 'Asistent Manager')&& !getPosition(day.users, user._id).checkIn,
+              'con' : getPosition(day.users, user._id).position === 'Concediu'&& !getPosition(day.users, user._id).checkIn,
+              'med' : getPosition(day.users, user._id).position === 'Medical'&& !getPosition(day.users, user._id).checkIn,
+              }"
+              >
               {{findUser(day.users, user._id)}}
             </div>
           </ion-col>

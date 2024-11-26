@@ -67,16 +67,27 @@ export class AppComponent implements OnInit, OnDestroy {
       })
     }
 
-  ngOnInit(): void {
-   this.getUser()
+    getThemeStatus(){
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      this.toggleTheme(prefersDark.matches);
+      prefersDark.addListener((mediaQuery) => this.toggleTheme(mediaQuery.matches));
+    }
 
-  }
+    toggleTheme(isDarkMode: boolean) {
+      document.body.classList.toggle('dark-theme', isDarkMode);
+      document.body.classList.toggle('light-theme', !isDarkMode);
+    }
 
-  ngOnDestroy(): void {
-      if(this.contentSub){
-        this.contentSub.unsubscribe()
-      }
-  }
+    ngOnInit(): void {
+      this.getThemeStatus()
+      this.getUser()
+    }
+
+    ngOnDestroy(): void {
+        if(this.contentSub){
+          this.contentSub.unsubscribe()
+        }
+    }
 
 
 

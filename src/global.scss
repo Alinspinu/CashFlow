@@ -24,6 +24,85 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+@import 'theme/colors';
+
+
+
+
+
+.light-theme {
+  --green: #{$green-light};
+  --green-shade: #{$green-shade-light};
+  --light-green: #{$light-green};
+  --light-green-shade: #{$light-green-shade};
+
+  --orange: #{$orange-light};
+  --orange-shade: #{$orange-shade-light};
+
+  --yellow: #{$yellow-light};
+  --yellow-shade: #{$yellow-shade-light};
+
+  --blue: #{$blue-light};
+  --blue-shade: #{$blue-shade-light};
+  --light-blue: #{$light-blue-light};
+  --light-blue-shade: #{$light-blue-light-shade};
+  --dark-blue: #{$dark-blue};
+
+  --turqoise: #{$turqoise-light};
+  --turqoise-shade: #{$turqoise-shade-light};
+
+  --red: #{$red-light};
+  --red-shade: #{$red-shade-light};
+
+
+
+  --grey: #{$grey-light};
+
+
+  --text-color: #{$text-color-light};
+  --background-color: #{$background-color-light};
+
+  --white: #{$white};
+  --dark: #{$dark};
+}
+
+// Dark Theme
+.dark-theme {
+  --green: #{$green-dark};
+  --green-shade: #{$green-shade-dark};
+  --light-green: #{$light-green};
+  --light-green-shade: #{$light-green-shade};
+
+  --orange: #{$orange-dark};
+  --orange-shade: #{$orange-shade-dark};
+
+  --yellow: #{$yellow-dark};
+  --yellow-shade: #{$yellow-shade-dark};
+
+  --blue: #{$blue-dark};
+  --blue-shade: #{$blue-shade-dark};
+  --light-blue: #{$light-blue-dark};
+  --light-blue-shade: #{$light-blue-dark-shade};
+  --dark-blue: #{$dark-blue};
+
+  --turqoise: #{$turqoise-dark};
+  --turqoise-shade: #{$turqoise-shade-dark};
+
+  --red: #{$red-dark};
+  --red-shade: #{$red-shade-dark};
+
+  --grey: #{$grey-dark};
+
+
+  --text-color: #{$text-color-dark};
+  --background-color: #{$background-color-dark};
+
+  --white: #{$white};
+  --dark: #{$dark};
+}
+
+
+
 
 
 

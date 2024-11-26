@@ -195,16 +195,15 @@ formatDateInHtml(date: any){
 getPosition(users: any[], userId: string){
   const user = users.find(usr => usr.employee === userId)
   if(user && !user.workPeriod.concediu && !user.workPeriod.medical) {
-    return user.workPeriod.position
+    return {position: user.workPeriod.position, checkIn: user.checkIn}
   } else if(user && user.workPeriod.concediu) {
-    return 'Concediu'
+    return {position: 'Concediu', checkIn: false}
   } else if(user && user.workPeriod.medical){
-    return 'Medical'
+    return {position: 'Medical', checkIn: false}
   } else {
-    return 'LiBER'
+    return {position: 'LiBER', checkIn: false}
   }
 }
-
 
 findUser(users: any[], userId: string){
   const user = users.find(usr => usr.employee === userId)

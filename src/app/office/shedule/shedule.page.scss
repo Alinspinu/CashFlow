@@ -7,7 +7,6 @@ ion-content{
 
 .square{
   font-family: NoirProReg !important;
-  // border: solid 1.2px black;
   border-radius: 4px;
   height: 50px;
   display: flex;
@@ -59,86 +58,117 @@ font-family: NoirProSemi !important;
 
 
 .barista{
-  background-color: rgb(61, 158, 190);
+  background-color: var(--blue);
+  color: var(--white);
 }
 .aj-barista{
-  background-color: rgb(129, 196, 218);
+  background-color: var(--light-blue);
+  color: var(--text-color);
 }
 .casier{
-  background-color: rgb(225, 115, 109);
+  background-color: var(--red);
+  color: var(--text-color);
 }
 .ospatar{
-  background-color: rgb(225, 177, 109);
+  background-color: var(--yellow);
+  color: var(--text-color);
 }
 .bucatar{
-  background-color: rgb(116, 169, 107);
+  background-color: var(--green);
+  color: var(--white)
 }
 .aj-bucatar{
-  background-color: rgb(155, 182, 150);
+  background-color: var(--light-green);
+  color: var(--dark);
 }
-.days{
-  background-color: rgb(19, 82, 116);
-  color: white;
-}
+
 .liber{
-  background-color: rgb(98, 91, 91) !important;
-  color: white !important;
+  background-color: var(--grey) !important;
+  color: var(--text-color)
 }
 .tes{
-  background-color: rgb(212, 104, 27);
-  color: white;
+  background-color: var(--orange);
+  color: var(--text-color)
+}
+.days{
+  background-color: var(--dark-blue);
+  color: var(--white);
 }
 .con{
-  background-color: rgb(19, 82, 116);
-  color: white;
+  background-color:var(--dark-blue);
+  color: var(--white);
 }
 .med{
-  background-color: rgb(232, 41, 41);
-  color: white;
+  background-color: var(--red);
+  color: var(--white);
+}
+
+.on-barista{
+  background-color: var(--blue-shade);
+  color: var(--text-color);
+}
+.on-casier{
+  background-color: var(--red-shade);
+  color: var(--text-color);
+}
+.on-aj-barista{
+  background-color: var(--light-blue-shade);
+  color: var(--text-color);
+}
+.on-ospatar{
+  background-color: var(--yellow-shade);
+  color: var(--text-color);
+}
+
+.on-bucatr{
+  background-color: var(--green-shade);
+  color: var(--white)
+}
+.on-aj-bucatar{
+  background-color: var(--light-green-shade);
+  color: var(--dark);
 }
 
 
-@media (prefers-color-scheme: dark) {
-  .barista {
-    background-color: rgb(30, 79, 95); /* Darkened version of rgb(61, 158, 190) */
-  }
-  .aj-barista {
-    background-color: rgb(64, 98, 109); /* Darkened version of rgb(129, 196, 218) */
-  }
-  .casier {
-    background-color: rgb(112, 57, 54); /* Darkened version of rgb(225, 115, 109) */
-  }
-  .ospatar {
-    background-color: rgb(122, 88, 54); /* Darkened version of rgb(225, 177, 109) */
-  }
-  .bucatar {
-    background-color: rgb(58, 84, 54); /* Darkened version of rgb(116, 169, 107) */
-  }
-  .aj-bucatar {
-    background-color: rgb(77, 91, 75); /* Darkened version of rgb(155, 182, 150) */
-  }
-  .days {
-    background-color: rgb(10, 41, 58); /* Darkened version of rgb(19, 82, 116) */
-    color: white;
-  }
-  .liber {
-    background-color: rgb(49, 46, 46) !important; /* Darkened version of rgb(98, 91, 91) */
-    color: white !important;
-  }
-  .tes {
-    background-color: rgb(106, 52, 13); /* Darkened version of rgb(212, 104, 27) */
-    color: white;
-  }
-  .con{
-    background-color: rgb(10, 41, 58);
-    color: white;
-  }
-  .med{
-    background-color: rgb(67, 15, 15);
-    color: white;
-  }
+// .barista{
+//   background-color: rgb(61, 158, 190);
+// }
+// .aj-barista{
+//   background-color: rgb(129, 196, 218);
+// }
+// .casier{
+//   background-color: rgb(225, 115, 109);
+// }
+// .ospatar{
+//   background-color: rgb(225, 177, 109);
+// }
+// .bucatar{
+//   background-color: rgb(116, 169, 107);
+// }
+// .aj-bucatar{
+//   background-color: rgb(155, 182, 150);
+// }
+// .days{
+//   background-color: rgb(19, 82, 116);
+//   color: white;
+// }
+// .liber{
+//   background-color: rgb(98, 91, 91) !important;
+//   color: white !important;
+// }
+// .tes{
+//   background-color: rgb(212, 104, 27);
+//   color: white;
+// }
+// .con{
+//   background-color: rgb(19, 82, 116);
+//   color: white;
+// }
+// .med{
+//   background-color: rgb(232, 41, 41);
+//   color: white;
+// }
 
 
-}
 
 

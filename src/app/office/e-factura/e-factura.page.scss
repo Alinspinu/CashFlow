@@ -196,14 +196,18 @@ ion-content, ion-toolbar, ion-header{
     }
   }
 
-  .tot{
+.tot-wrapper{
+  display: flex;
+  font-family: NoirProSemi !important;
+  margin-top: 12px;
+  height: 100%;
+  cursor: pointer;
+  div{
     font-family: NoirProSemi !important;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    margin-top: 12px;
-    width: 100%;
     border-radius: 12px;
     font-size: 36px;
     color: var(--ion-color-light-tint);
@@ -211,10 +215,19 @@ ion-content, ion-toolbar, ion-header{
     box-shadow:
     0 -2px 4px rgba(0, 0, 0, 0.1),
     0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
   }
+  .tot{
+    flex: 60%;
+    margin-right: 12px;
+  }
+  .merge{
+    flex: 38%;
+  }
+}
 
-  .tot:hover{
+
+
+  .tot-wrapper div:hover{
     color: var(--ion-color-medium-tint);
     background-color: var(--ion-color-light-tint);
   }

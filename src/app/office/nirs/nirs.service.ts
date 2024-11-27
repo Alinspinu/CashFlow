@@ -56,6 +56,10 @@ export class NirsService{
     return this.http.post<{message: string, nirs: Nir[]}>(`${environment.BASE_URL}nir/pay`, {update, id, type})
   }
 
+  updateNirEFacturaStatus(nirId: string, eFatcturaID: string){
+    return this.http.put<Nir>(`${environment.BASE_URL}nir/update`, {nirId: nirId, id: eFatcturaID})
+  }
+
   updateSuplierRecords(id: string, records: Record[]){
     return this.http.put<{message: string, suplier: Suplier}>(`${environment.BASE_URL}suplier/add-record`, {id, records})
   }

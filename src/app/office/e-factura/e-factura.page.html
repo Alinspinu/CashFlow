@@ -107,9 +107,14 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="6" (click)="createNewNir()">
-              <div class="tot">
-                <span>CREAZĂ NIR</span>
+            <ion-col size="6">
+              <div class="tot-wrapper">
+                <div class="tot" (click)="createNewNir()">
+                  <span>CREAZĂ NIR</span>
+                </div>
+                <div class="merge" (click)="merge()">
+                  <span>ASOCIAZĂ</span>
+                </div>
               </div>
 
             </ion-col>

@@ -98,6 +98,7 @@ export const routes: Routes = [
     path: 'record',
     loadComponent: () => import('./nirs/record/record.page').then( m => m.RecordPage)
   },
+
  
 
 

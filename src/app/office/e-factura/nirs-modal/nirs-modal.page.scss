@@ -1,0 +1,78 @@
+
+ion-content, ion-toolbar{
+    --background: var(--ion-color-tertiary) !important;
+  }
+  
+  span{
+    font-family: NoirProReg !important;
+  }
+
+  .nir-entry{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 24px;
+    .nr{
+      flex: 2%;
+    }
+    .date{
+      text-align: center;
+      flex: 20%;
+    }
+    .suplier{
+      text-align: left;
+      flex: 20%;
+    }
+    .total{
+      text-align: left;
+      flex: 10%;
+    }
+    .due-days{
+      text-align: center;
+      flex: 20%;
+    }
+    .docNumber{
+      text-align: left;
+      flex: 15%;
+    }
+    ion-buttons{
+      margin-left: auto;
+      flex: 7%;
+    }
+    ion-icon{
+      color: var(--ion-color-medium) !important;
+    }
+  }
+
+  .input{
+    height: 45px;
+    box-shadow:
+    0 -2px 4px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: var(--ion-color-light);
+    margin: 0.5rem 0 0.1rem 0.2rem;
+    font-family: NoirProReg !important;
+  }
+
+  .container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    span{
+        background-color: var(--ion-color-light);
+        color: var(--ion-color-medium);
+        padding: 12px;
+    }
+  }
+
+  .selected{
+    background-color: var(--ion-color-warning) !important;
+    span{
+      color: var(--ion-color-light);
+    }
+}
+  
+  

@@ -15,6 +15,7 @@ import { IngredientsPage } from './ingredients/ingredients.page';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { SuplierPage } from '../CRUD/suplier/suplier.page';
+import { NirsModalPage } from './nirs-modal/nirs-modal.page';
 
 @Component({
   selector: 'app-e-factura',
@@ -43,7 +44,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
     private suplService: SupliersService,
     private ingService: IngredientService,
     @Inject(ActionSheetService) private actService: ActionSheetService,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -72,7 +73,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
     this.eService.getMessages(days).subscribe({
       next: (response) => {
         this.message = response
-        this.checkInvoice()
+        this.checkInvoice(true)
       },
       error: (error)=> {
         console.log(error)
@@ -80,12 +81,14 @@ export class EFacturaPage implements OnInit, OnDestroy {
     })
   }
 
-  checkInvoice(){
+  checkInvoice(edit: boolean){
     this.eService.checkInvoiceStatus(getBillIds(this.message)).subscribe({
       next: (response) => {
         const msg = ckeckMessageStatus(this.message, response)
         this.message = msg
-        this.getSupliers()
+        if(edit){
+          this.getSupliers()
+        }
       },
       error: (error) => {
         console.log(error)
@@ -150,11 +153,22 @@ export class EFacturaPage implements OnInit, OnDestroy {
       const suplier = await this.actService.openModal(SuplierPage, {cif: this.eFactura.supplier.vatNumber}, false)
       if(suplier){
         this.supliers.push(suplier)
+     
         const nir = createNir(this.eFactura, this.supliers)
         if(nir && nir.nir && !nir.add){
           this.addNewNir(nir.nir)
         }
       }
+    }
+  }
+
+ async merge(){
+    const nir = createNir(this.eFactura, this.supliers)
+    const suplierId = nir.nir?.suplier._id
+    if(suplierId){
+      const data = {id: suplierId, docNumber: this.eFactura.invoiceNumber, docDate: this.eFactura.issueDate, eFacturaID: this.eFactura.id}
+      const nir = await this.actService.openPayment(NirsModalPage, data)
+      this.checkInvoice(false)
     }
   }
 

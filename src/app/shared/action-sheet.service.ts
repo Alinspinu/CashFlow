@@ -44,6 +44,7 @@ import { UploadLogPage } from '../reports/inventary/upload-log/upload-log.page';
 import { IngredientContentPage } from '../office/ingredient/ingredient-content/ingredient-content.page';
 import { RecordPage } from '../office/nirs/record/record.page';
 import { IngredientsPage } from '../office/e-factura/ingredients/ingredients.page';
+import { NirsModalPage } from '../office/e-factura/nirs-modal/nirs-modal.page';
 
 
 
@@ -150,6 +151,7 @@ export class ActionSheetService {
                typeof IngredientContentPage |
                typeof UploadLogPage |
                typeof IngredientsPage |
+               typeof NirsModalPage |
                typeof DelProdViewPage,
     options: any
   ){

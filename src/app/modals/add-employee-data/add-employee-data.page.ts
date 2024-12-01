@@ -20,6 +20,7 @@ export class AddEmployeeDataPage implements OnInit {
 
   startDate!: string
   endDate!: string
+  birthDate!: string
 
   constructor(
     private modalCtrl: ModalController,
@@ -62,6 +63,9 @@ export class AddEmployeeDataPage implements OnInit {
       salary: new FormControl(null, {
         updateOn: 'change',
       }),
+      zodie: new FormControl(null, {
+        updateOn: 'change',
+      }),
       onPaper: new FormControl(null, {
         updateOn: 'change',
       }),
@@ -79,6 +83,7 @@ export class AddEmployeeDataPage implements OnInit {
       this.form.get('ciNumber')?.setValue(this.data.ciNumber);
       this.form.get('address')?.setValue(this.data.address);
       this.form.get('position')?.setValue(this.data.position);
+      this.form.get('zodie')?.setValue(this.data.zodie ? this.data.zodie : '');
       if(this.data.access){
         this.form.get('access')?.setValue(this.data.access.toString());
       }
@@ -90,6 +95,7 @@ export class AddEmployeeDataPage implements OnInit {
       this.form.get('status')?.setValue(this.data.active);
       this.startDate = this.data.startDate
       this.endDate = this.data.endDate
+      this.birthDate = this.data.birthDate
     }
   }
 
@@ -98,12 +104,14 @@ export class AddEmployeeDataPage implements OnInit {
       active: this.form.value.status,
       startDate: this.startDate,
       endDate: this.endDate,
+      birthDate: this.birthDate,
       fullName: this.form.value.fullName,
       cnp: this.form.value.cnp,
       ciSerial: this.form.value.ciSerial,
       ciNumber: this.form.value.ciNumber,
       address: this.form.value.address,
       position: this.form.value.position,
+      zodie: this.form.value.zodie,
       access: +this.form.value.access,
       salary: {
         inHeand: this.form.value.salary,
@@ -132,15 +140,22 @@ export class AddEmployeeDataPage implements OnInit {
 
 
 
-  async openDateModal(start: boolean){
+  async openDateModal(start: boolean | string){
       const response = await this.actionSheetService.openAuth(DatePickerPage)
         if(response){
-          if(start){
-            this.startDate = response
+          if(start === 'birth'){
+            this.birthDate = response
           } else {
-            this.endDate = response
+            if(start === true){
+              this.startDate = response
+            } else {
+              this.endDate = response
+            }
           }
        }
+       console.log(this.birthDate)
+       console.log(this.startDate)
+       console.log(this.endDate)
 }
 
 formatedDate(date: string){

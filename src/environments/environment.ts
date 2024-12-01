@@ -27,8 +27,6 @@ export const environment = {
 
 
 
-
-
   ADMIN_EMAIL: "alinz.spinu@gmail.com",
   API_PASS: 'afara-ploua',
   LOC: "655e2e7c5a3d53943c6b7c53",

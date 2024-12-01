@@ -37,6 +37,8 @@ export function emptyUser(){
       ciNumber: 0,
       address: '',
       position: '',
+      zodie: '',
+      varsta: '',
       user: '',
       access: 0,
       salary: {

@@ -46,6 +46,13 @@
         <ion-input label="Paper ON" labelPlacement="floating"  type="number" name="position"  formControlName="onPaper">
         </ion-input>
       </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input label="Zodie" labelPlacement="floating"  type="string" name="position"  formControlName="zodie">
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input" (click)="openDateModal('birth')">
+        <span>{{birthDate ? 'Dată nașterii - ' + formatedDate(birthDate) : "Alege data nașterii"}}</span>
+      </ion-item>
       <ion-item lines="none" class="input" (click)="openDateModal(true)">
         <span>{{startDate ? 'Dată angajare - ' + formatedDate(startDate) : "Alege data de angajare"}}</span>
       </ion-item>

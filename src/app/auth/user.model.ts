@@ -36,6 +36,8 @@ export default class User {
       position: string,
       user: string,
       access: number,
+      zodie: string,
+      varsta: string,
       salary: {
         inHeand: number,
         onPaper: {

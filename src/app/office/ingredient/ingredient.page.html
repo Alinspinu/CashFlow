@@ -15,7 +15,7 @@
           [ings]="ingsToEdit"
           </app-recipe-maker>
         </ion-col>
-        <ion-col size="2" *ngIf="screenWidth > 500">
+        <ion-col size="1.75" *ngIf="screenWidth > 500">
           <ion-item lines="none" class="input">
             <ion-select placeholder="Alege Gestiunea" (ionChange)="onSelectGestiune($event)">
               <ion-select-option  class="font" value="">Toate</ion-select-option>
@@ -23,7 +23,7 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="2" *ngIf="screenWidth > 500">
+        <ion-col size="1.75" *ngIf="screenWidth > 500">
           <ion-item lines="none" class="input">
             <ion-select placeholder="Alege tipul de ingrediet" (ionChange)="onSelectType($event)">
               <ion-select-option class="font" value="">Toate</ion-select-option>
@@ -31,13 +31,16 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="2" *ngIf="screenWidth > 500">
+        <ion-col size="1.75" *ngIf="screenWidth > 500">
           <ion-item lines="none" class="input">
             <ion-select placeholder="Alege departamentul" (ionChange)="onSelectDep($event)">
               <ion-select-option class="font" value="">Toate</ion-select-option>
               <ion-select-option  class="font"*ngFor="let type of ingDep" [value]="type">{{type | capitalize}}</ion-select-option>
             </ion-select>
           </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-button (click)="printIngsInv()" color="medium" fill="outline">Print</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

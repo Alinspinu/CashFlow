@@ -18,6 +18,7 @@ import { Subscription, take } from 'rxjs';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 import { AddToInventaryPage } from 'src/app/modals/add-to-inventary/add-to-inventary.page';
 import { IngredientContentPage } from './ingredient-content/ingredient-content.page';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-ingredient',
@@ -275,6 +276,26 @@ updateProductIng(){
 
   roundInHtml(number: number){
     return round(number)
+  }
+
+
+
+
+  printIngsInv(){
+    this.ingSrv.printIngredientsList(this.filter, environment.LOC).subscribe({
+      next: (response) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Lista inventar.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
   }
 
 }

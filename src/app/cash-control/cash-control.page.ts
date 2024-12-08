@@ -252,10 +252,12 @@ export class CashControlPage implements OnInit, OnDestroy {
     this.cashSrv.getAllorders().subscribe(response => {
       if(response) {
         this.data = response
+        // console.log(response)
         this.orders = []
         this.data.forEach(order => {
           if(order.status === 'done'){
               this.orders.push(order)
+              console.log(this.orders)
           }
         })
         this.calcCashIn()

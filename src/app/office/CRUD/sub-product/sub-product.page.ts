@@ -75,6 +75,7 @@ export class SubProductPage implements OnInit {
         description: this.form.value.description,
         ings: this.ingredientsToSend,
         toppings: this.toppings,
+        recipe: this.form.value.recipe,
         product: '',
         _id: '',
       }
@@ -116,6 +117,10 @@ export class SubProductPage implements OnInit {
       printOut: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
+      }),
+      recipe: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
       })
   })
   this.form.get('name')?.setValue(this.sub.name)
@@ -125,6 +130,7 @@ export class SubProductPage implements OnInit {
   this.form.get('tva')?.setValue(this.sub.tva)
   this.form.get('description')?.setValue(this.sub.description)
   this.form.get('printOut')?.setValue(this.sub.printOut)
+  this.form.get('recipe')?.setValue(this.sub.recipe ? this.sub.recipe : '-')
   }
 
 

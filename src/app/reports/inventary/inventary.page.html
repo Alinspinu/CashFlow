@@ -115,6 +115,7 @@
           <span class="second">{{formatDate(compareTable.dateSecond)}}</span>
           <span class="scriptic">Valoare scriptica</span>
           <span class="sales">Valoare din vanzari</span>
+          <span class="depr">Deprecieri</span>
           <span class="dif">Diferenta</span>
         </div>
       </ion-col>
@@ -136,7 +137,8 @@
                   <span class="second">{{roundInHtml(ing.second)}}</span>
                   <span class="scriptic">{{roundInHtml(ing.first+ing.upload.value - ing.second)}}</span>
                   <span class="sales">{{roundInHtml(ing.saleUnload)}}</span>
-                  <span class="dif" >{{roundInHtml(ing.saleUnload - (ing.first+ing.upload.value - ing.second))}}</span>
+                  <span class="depr">{{roundInHtml(ing.depVal)}}</span>
+                  <span class="dif" >{{roundInHtml(ing.saleUnload - ing.depVal - (ing.first+ing.upload.value - ing.second))}}</span>
                 </div>
               </div>
             </ion-col>

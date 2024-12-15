@@ -85,6 +85,9 @@
         <ion-item lines="none" class="input">
           <ion-textarea  mode="ios" type="text" label="Descriere detaliată" labelPlacement="floating" fill="outline" formControlName="longDescription"></ion-textarea>
         </ion-item>
+        <ion-item lines="none" class="input recipe">
+          <ion-textarea  mode="ios" type="text" label="Descriere mod de preparare" labelPlacement="floating" fill="outline" formControlName="recipe"></ion-textarea>
+        </ion-item>
         <div class="input">
         <app-image-picker (imagePick)="onImagePicked($event)"></app-image-picker>
         </div>

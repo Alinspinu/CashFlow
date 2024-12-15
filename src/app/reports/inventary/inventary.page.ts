@@ -33,7 +33,7 @@ export class InventaryPage implements OnInit {
 
   isLoading: boolean = false
   allIngs!: ing[]
-  
+
   ingsComp: any[] = []
   allIngsComp: any[] = []
 
@@ -115,7 +115,7 @@ export class InventaryPage implements OnInit {
 
   async selectInventaries(){
     let start
-    let end 
+    let end
     const startInventary = await this.actService.openPayment(SelectInvPage, '')
     if(startInventary){
       start = startInventary.date
@@ -128,6 +128,7 @@ export class InventaryPage implements OnInit {
       this.isLoading = true
       this.invService.compareInventary(start, end).subscribe(response => {
         this.mode = 'compare'
+        console.log(response)
         this.compareTable = response.compareInv
         this.ingsComp = this.compareTable.ingredients
         this.allIngsComp = this.ingsComp

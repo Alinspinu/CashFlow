@@ -42,6 +42,7 @@ export class ProductIngredientPage implements OnInit, OnDestroy {
   productIngQty: string = '';
   productIngGest: string = 'magazie'
   productIngDep!: string
+  recipe: string = ''
 
   recipeTotal: number = 0;
 
@@ -91,6 +92,7 @@ export class ProductIngredientPage implements OnInit, OnDestroy {
         this.displayIngs = product.ings
         this.productId = product._id
         this.productIngDep = product.dep
+        this.recipe = product.recipe
         this.displayIngs.forEach(el => {
           const ing = {
             qty: el.qty,
@@ -125,6 +127,7 @@ export class ProductIngredientPage implements OnInit, OnDestroy {
         ings: this.ingredientsToSend,
         locatie: this.user.locatie,
         gestiune: this.productIngGest,
+        recipe: this.recipe,
         dep: this.productIngDep,
         price: this.round(this.recipeTotal / +this.productIngQty),
         productIngredient: true,

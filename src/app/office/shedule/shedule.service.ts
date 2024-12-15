@@ -50,6 +50,7 @@ addEntry(user: any, day: any, month: string, dayValue: number){
     .pipe(tap(response => {
       if(response){
         this.shedule = response
+        console.log('add entry', this.shedule)
         this.sheduleState.next(this.shedule)
       }
     }))
@@ -61,6 +62,7 @@ addShedule(){
 
 selectShedule(shedule: Shedule){
   this.shedule = shedule
+  console.log(this.shedule)
   this.sheduleState.next(this.shedule)
 }
 

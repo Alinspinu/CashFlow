@@ -31,7 +31,7 @@
       <ion-label>Furnizori</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="cash-register" href="/office/cash-register">
+    <ion-tab-button tab="cash-register" href="/office/cash-register" *ngIf="user && user.employee.access > 2">
       <ion-icon aria-hidden="true" src="../../assets/icon/business.svg"></ion-icon>
       <ion-label>Registru de casa</ion-label>
     </ion-tab-button>

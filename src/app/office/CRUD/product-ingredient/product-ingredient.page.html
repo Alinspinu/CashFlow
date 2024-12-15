@@ -69,11 +69,13 @@
       </ion-button>
     </ion-buttons>
   </div>
+  <div class="recipe-wrapper">
+    <ion-textarea class="recipe" [(ngModel)]="recipe" placeholder="Descrie modul de preparare" label="Mod de preparare" labelPlacement="floating"></ion-textarea>
+  </div>
   <div *ngIf="displayIngs.length" class="content-container total">
     <span class="total">Total Rețetă</span>
     <span class="total-price">{{round(recipeTotal)}} Lei</span>
   </div>
-
 </ion-content>
 
 

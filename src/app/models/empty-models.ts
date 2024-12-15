@@ -253,6 +253,7 @@ export function emptyProduct(){
     ingredients: [],
     mainCat: '',
     printOut: false,
+    recipe: '',
     nutrition: {
       energy:{kJ: 0, kcal: 0},
       fat: {all: 0, satAcids: 0},

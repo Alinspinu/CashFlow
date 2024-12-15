@@ -33,6 +33,7 @@ export class Product {
   public printer: string,
   public sgrTax: boolean,
   public printOut: boolean,
+  public recipe: string,
   public longDescription: string,
   public allergens: {name: string, _id: string}[],
   public additives: {name: string, _id: string}[],
@@ -71,6 +72,7 @@ export class SubProduct{
     public quantity: number,
     public product: Product,
     public available: boolean,
+    public recipe: string,
     public printOut: boolean,
     public ings: {qty: number, ing:InvIngredient}[],
     public saleLog: {

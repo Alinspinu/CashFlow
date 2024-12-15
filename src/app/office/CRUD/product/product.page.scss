@@ -15,6 +15,12 @@ ion-toolbar, ion-content, ion-footer{
   }
 }
 
+.recipe{
+  ion-textarea{
+    height: 200px !important;
+  }
+}
+
 img{
   height: 25px;
   cursor: pointer

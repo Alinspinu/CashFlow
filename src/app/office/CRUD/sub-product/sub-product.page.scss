@@ -11,6 +11,11 @@ ion-content, ion-toolbar, ion-footer{
 ion-button{
   font-family: NoirProSemi !important;
 }
+.recipe{
+  ion-textarea{
+    height: 200px !important;
+  }
+}
 
 .input{
   box-shadow:

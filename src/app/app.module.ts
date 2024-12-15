@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import {HttpClient, HttpClientModule} from '@angular/common/http'
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http'
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app.routes';
 import { environment } from 'src/environments/environment';
 import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthInterceptorService } from './auth/auth-interceptor.service';
 
 
 const dbConfig: DBConfig  = {
@@ -35,7 +36,15 @@ const dbConfig: DBConfig  = {
      NgxIndexedDBModule.forRoot(dbConfig),
      BrowserAnimationsModule
     ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, HttpClient],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+     HttpClient
+    ],
   bootstrap: [AppComponent],
 
 })

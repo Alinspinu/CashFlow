@@ -69,7 +69,6 @@ async selectShedule(){
 
 getLastShedule(){
   this.sheduleSub = this.shedSrv.sheduleSend$.subscribe(response => {
-    console.log(response)
     this.shedule = response
   })
 }
@@ -193,12 +192,19 @@ formatDateInHtml(date: any){
 }
 
 getPosition(users: any[], userId: string){
-  const user = users.find(usr => usr.employee === userId)
-  if(user && !user.workPeriod.concediu && !user.workPeriod.medical) {
+  const user = users.find(usr => {
+    if(usr.employee){
+      return usr.employee._id === userId
+    } else {
+      return
+    }
+
+  })
+  if(user && user.employee.employee && !user.workPeriod.concediu && !user.workPeriod.medical) {
     return {position: user.workPeriod.position, checkIn: user.checkIn}
-  } else if(user && user.workPeriod.concediu) {
+  } else if(user &&  user.employee.employee && user.workPeriod.concediu) {
     return {position: 'Concediu', checkIn: false}
-  } else if(user && user.workPeriod.medical){
+  } else if(user && user.employee && user.workPeriod.medical){
     return {position: 'Medical', checkIn: false}
   } else {
     return {position: 'LiBER', checkIn: false}
@@ -206,8 +212,15 @@ getPosition(users: any[], userId: string){
 }
 
 findUser(users: any[], userId: string){
-  const user = users.find(usr => usr.employee === userId)
-    if(user) {
+  const user = users.find(usr => {
+    if(usr.employee){
+      return usr.employee._id === userId
+    } else {
+      return
+    }
+
+  })
+    if(user && user.employee.employee) {
       if(user.workPeriod.concediu){
         return 'Concediu'
       } else if(user.workPeriod.medical){

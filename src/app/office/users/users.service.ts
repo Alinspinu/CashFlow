@@ -28,16 +28,15 @@ export class UsersService{
   }
 
 
-  private createBasicAuthHeader(): HttpHeaders {
-    const credentials = btoa(`${environment.API_USER}:${environment.API_PASSWORD}`);
-    return new HttpHeaders({
-      'Authorization': `Basic ${credentials}`
-    });
-  }
+  // private createBasicAuthHeader(): HttpHeaders {
+  //   const credentials = btoa(`${environment.API_USER}:${environment.API_PASSWORD}`);
+  //   return new HttpHeaders({
+  //     'Authorization': `Basic ${credentials}`
+  //   });
+  // }
 
   getUsers(){
-    const headers = this.createBasicAuthHeader()
-    return this.http.post<User[]>(`${environment.BASE_URL}users?loc=${environment.LOC}`, {}, {headers})
+    return this.http.post<User[]>(`${environment.BASE_URL}users?loc=${environment.LOC}`, {})
             .pipe(tap(response => {
               if(response){
                 this.users = response
@@ -49,8 +48,8 @@ export class UsersService{
 
 
   editUser(user: any, id: string){
-    const headers = this.createBasicAuthHeader()
-    return this.http.put<{message: string, user: User}>(`${environment.BASE_URL}users/user?id=${id}`, {update: {employee: user}}, {headers})
+
+    return this.http.put<{message: string, user: User}>(`${environment.BASE_URL}users/user?id=${id}`, {update: {employee: user}})
             .pipe(tap(response => {
               if(response){
                 const userIndex = this.users.findIndex(user => user._id === response.user._id)
@@ -63,8 +62,7 @@ export class UsersService{
   }
 
   deleteUser(id: string){
-    const headers = this.createBasicAuthHeader()
-    return this.http.delete<{message: string}>(`${environment.BASE_URL}users/ed-user?id=${id}`,{headers})
+    return this.http.delete<{message: string}>(`${environment.BASE_URL}users/ed-user?id=${id}`)
           .pipe(tap(response => {
             if(response){
               const userIndex = this.users.findIndex(user => user._id === id)
@@ -77,13 +75,11 @@ export class UsersService{
   }
 
   getUser(userId: string){
-    const headers = this.createBasicAuthHeader()
-    return this.http.post(`${environment.BASE_URL}users/user`, {userId: userId}, {headers})
+    return this.http.post(`${environment.BASE_URL}users/user`, {userId: userId})
   }
 
   setUserDiscount(userId: string, discount: any){
-    const headers = this.createBasicAuthHeader()
-    return this.http.put<{message: string}>(`${environment.BASE_URL}users/user?id=${userId}`, {update: {discount: {general: discount.general, category: discount.category}, cashBackProcent: discount.cashBackProcent}}, {headers})
+    return this.http.put<{message: string}>(`${environment.BASE_URL}users/user?id=${userId}`, {update: {discount: {general: discount.general, category: discount.category}, cashBackProcent: discount.cashBackProcent}})
   }
 
 }

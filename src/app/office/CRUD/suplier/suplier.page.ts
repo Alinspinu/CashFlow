@@ -233,7 +233,7 @@ export class SuplierPage implements OnInit {
         sold: 0,
         records: []
       }
-        this.suplierSrv.saveSuplier(suplier, this.mode, this.user.locatie).subscribe((response: any) => {
+        this.suplierSrv.saveSuplier(suplier, this.mode).subscribe((response: any) => {
           if(response){
             if(this.mode ){
               const user = {

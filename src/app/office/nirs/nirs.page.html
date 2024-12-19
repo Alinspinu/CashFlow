@@ -90,7 +90,7 @@
       <div class="nir-entry input"  *ngFor="let nir of nirs; let i = index" [ngClass]="{'selected': nir.selected}">
         <span class="nr">{{nir.index}}</span>
         <span class="date">{{formatedDate(nir.documentDate)}}</span>
-        <span class="suplier">{{nir.suplier.name}}</span>
+        <span class="suplier">{{nir.suplier.name }}</span>
         <span class="total">{{roundInHtml(nir.totalDoc)}} Lei</span>
         <span class="due-days">{{ nir.payd ? 'Platit' : ' - ' + showDoDate(nir.documentDate) + ' Zile'}}</span>
         <ion-buttons class="pay-button">

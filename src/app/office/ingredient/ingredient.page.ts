@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { InvIngredient } from 'src/app/models/nir.model';
 import { Subscription, take } from 'rxjs';
-import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 import { AddToInventaryPage } from 'src/app/modals/add-to-inventary/add-to-inventary.page';
 import { IngredientContentPage } from './ingredient-content/ingredient-content.page';
 import { environment } from 'src/environments/environment';
@@ -25,7 +24,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './ingredient.page.html',
   styleUrls: ['./ingredient.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage, CapitalizePipe]
 })
 export class IngredientPage implements OnInit, OnDestroy {
 

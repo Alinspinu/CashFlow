@@ -14,7 +14,7 @@
           </ion-searchbar>
         </ion-item>
       </ion-col>
-      <ion-col size-lg="2" size-md="6">
+      <ion-col size-lg="1.5" size-md="6">
         <ion-item lines="none" class="input">
           <ion-select placeholder="Alege Categorie Parinte" (ionChange)="onSelectMainCat($event)" class="reprint-alert' suplier-alert">
             <ion-select-option value="">Toate</ion-select-option>
@@ -22,7 +22,7 @@
           </ion-select>
         </ion-item>
         </ion-col>
-        <ion-col size-lg="2" size-md="6">
+        <ion-col size-lg="1.5" size-md="6">
         <ion-item lines="none" class="input">
           <ion-select placeholder="Alege Categorie Produs" (ionChange)="onCatSelect($event)" class="reprint-alert' suplier-alert">
             <ion-select-option value="">Toate Categoriile</ion-select-option>
@@ -31,6 +31,11 @@
           <ion-icon src="assets/icon/add-circle.svg" id="add-cat" (click)="addCat()" color="medium"></ion-icon>
           <ion-icon src="assets/icon/create-outline.svg" style="margin-left: 12px;" (click)="editCat()" color="medium"></ion-icon>
         </ion-item>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button color="medium" fill="ghost" (click)="printProducts()">
+          <ion-icon src="../../../assets/icon/exports.svg"  alt="export-logo" color="medium" size="large"></ion-icon>
+        </ion-button>
       </ion-col>
     </ion-row>
     <div class="product-container" style="font-family: NoirProSemi !important;">

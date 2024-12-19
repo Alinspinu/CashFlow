@@ -63,7 +63,6 @@ export class ProductsService{
           if(response && response.product){
             const newProduct = response.product
             const productIndex = this.products.findIndex(product => product._id === newProduct._id)
-            console.log(productIndex)
             if(productIndex !== -1){
               this.products[productIndex] = newProduct
               this.productsState.next([...this.products])
@@ -97,5 +96,9 @@ export class ProductsService{
         }))
   }
 
+
+ printEcel(filter : any) {
+  return this.http.post(`${environment.BASE_URL}print/products-recipes`, {filter}, {responseType: 'blob'})
+ }
 
 }

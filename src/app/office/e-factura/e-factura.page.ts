@@ -48,7 +48,9 @@ export class EFacturaPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.ingService.getAllIngredients().subscribe()
     this.getIngredients()
+    this.getMessage(1)
   }
 
 
@@ -62,8 +64,8 @@ export class EFacturaPage implements OnInit, OnDestroy {
   getIngredients(){
     this.ingSub = this.ingService.ingredientsSend$.subscribe({
       next: (response) => {
+        console.log(response.length, 'ingrediente')
         this.ingrdients = response.filter(i => !i.productIngredient)
-        this.getMessage(1)
       }
     })
   }
@@ -153,7 +155,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
       const suplier = await this.actService.openModal(SuplierPage, {cif: this.eFactura.supplier.vatNumber}, false)
       if(suplier){
         this.supliers.push(suplier)
-     
+
         const nir = createNir(this.eFactura, this.supliers)
         if(nir && nir.nir && !nir.add){
           this.addNewNir(nir.nir)

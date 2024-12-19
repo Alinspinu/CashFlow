@@ -19,8 +19,8 @@ export class SuplierService{
    return this.http.get<any>(`${environment.SUPLIER_APY_URL}?key=${environment.SUPLIER_APY_KEY}&cui=${cif}`)
   }
 
-  saveSuplier(suplier: Suplier, mode: any, loc: string){
-    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL}suplier/save-suplier?mode=${mode}`, {suplier: suplier, loc: loc})
+  saveSuplier(suplier: Suplier, mode: any){
+    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL}suplier/save-suplier?mode=${mode}`, {suplier: suplier, loc: environment.LOC})
   }
 
   saveAdmin(user: any, second: any){

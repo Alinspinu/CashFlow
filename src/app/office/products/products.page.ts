@@ -13,6 +13,7 @@ import { findCommonNumber, getUserFromLocalStorage, round } from 'src/app/shared
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-products',
@@ -61,6 +62,30 @@ export class ProductsPage implements OnInit {
     this.getCategories()
     this.getuser()
   }
+
+
+  printProducts(){
+    const filter = {mainCat: this.filter.mainCat, category: this.filter.cat, locatie: environment.LOC, available: true}
+    if(!filter.mainCat.length) delete filter.mainCat
+    if(!filter.category.length) delete filter.category
+    this.productsSrv.printEcel(filter).subscribe({
+      next: (response) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'produse.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      },
+      error: (error) => {
+
+      }
+    })
+  }
+
+
+
 
 getuser(){
   this.isLoading = true
@@ -263,12 +288,12 @@ searchIngProduct(ev: any){
           if(product.name == 'Catena Chardonnay Tupungato'){
           }
           if(productionPrice > 0){
-            subSurplus.push(round(productionPrice)) 
+            subSurplus.push(round(productionPrice))
           } else {
-            subSurplus.push(0) 
+            subSurplus.push(0)
           }
         })
-       
+
         const modeSubSurplus = findCommonNumber(subSurplus)
         return `${modeSubSurplus} Lei`
       } else {
@@ -294,7 +319,7 @@ searchIngProduct(ev: any){
             const productionPrice =  +this.calcProductionPrice(sub).split(' ')[0]
             if(productionPrice> 0){
               const procentSurplus =  (( sub.price - productionPrice ) / productionPrice ) * 100
-              subSurplus.push(round(procentSurplus)) 
+              subSurplus.push(round(procentSurplus))
             } else {
               subSurplus.push(0)
             }
@@ -335,7 +360,7 @@ showProducsAndSubsRecipe(product: Product) {
 }
 
 
-    
+
 filters(option: string){
   switch (option) {
     case 'name':

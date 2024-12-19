@@ -70,9 +70,9 @@ export class IngredientService{
                   return a.name.localeCompare(b.name)
                 }
                })
-               const stringIngs = JSON.stringify(sortedIngs)
-               this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
-              this.ingredientsState.next([...sortedIngs]); // Emit all collected items
+
+              this.ingredients = sortedIngs
+              this.ingredientsState.next([...this.ingredients]); // Emit all collected items
               observer.complete(); // Complete the observable
             }
           },

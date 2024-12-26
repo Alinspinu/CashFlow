@@ -43,7 +43,7 @@ export class AddEntryPage implements OnInit {
   description: string = ''
 
   usersToShow!: any
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   supliersToSend: any[]  = []
   usersNames: any[] = []

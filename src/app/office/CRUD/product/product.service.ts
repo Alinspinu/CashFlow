@@ -11,7 +11,7 @@ import { Preferences } from '@capacitor/preferences';
 
 export class ProductService{
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
   constructor(
     private http: HttpClient
   ){

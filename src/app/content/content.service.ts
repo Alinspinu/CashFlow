@@ -16,7 +16,7 @@ import { emptyCategory } from "../models/empty-models";
 export class ContentService{
 
   user!: User
-  url: string ='https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   private categoryState!: BehaviorSubject<Category[]>;
   public categorySend$!: Observable<Category[]>;

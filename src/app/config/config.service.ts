@@ -13,7 +13,7 @@ import { Preferences } from '@capacitor/preferences';
 
 export class ConfigService{
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
   locatie!: string
 
   constructor(

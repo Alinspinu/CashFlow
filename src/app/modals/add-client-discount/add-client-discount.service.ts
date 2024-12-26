@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from "@angular/core";
+import { environment } from 'src/environments/environment';
 
 
 
@@ -10,7 +11,7 @@ import { Injectable } from "@angular/core";
 
 export class AddClientDiscountService{
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+ url: string = environment.BASE_URL
 
   constructor(
     private http: HttpClient

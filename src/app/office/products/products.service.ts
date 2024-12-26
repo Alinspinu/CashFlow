@@ -22,24 +22,15 @@ export class ProductsService{
   public productsSend$!: Observable<Product[]>;
   products: Product[] = [emptyProduct()];
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   constructor(
     private http: HttpClient,
     @Inject(ProductService) private productService: ProductService,
     private dbService: IndexDbService,
   ){
-    this.getUrl()
     this.productsState = new BehaviorSubject<Product[]>([emptyProduct()]);
     this.productsSend$ =  this.productsState.asObservable();
-  }
-
-  async getUrl(){
-    Preferences.get({key: 'serverUrl'}).then( async (data)  => {
-      if(data.value) {
-        this.url = data.value
-      }
-    })
   }
 
 

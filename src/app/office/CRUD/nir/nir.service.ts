@@ -18,7 +18,7 @@ import { emptyNirIng } from '../../../models/empty-models';
 
 
 export class NirService{
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   private nirIngState!: BehaviorSubject<NirIngredient[]>;
   public nirIngSend$!: Observable<NirIngredient[]>;

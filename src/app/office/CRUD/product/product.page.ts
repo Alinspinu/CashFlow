@@ -101,7 +101,6 @@ export class ProductPage implements OnInit {
             this.form.get('cat')?.setValue(this.product.category._id)
             this.form.get('mainCat')?.setValue(this.product.mainCat)
             this.form.get('description')?.setValue(this.product.description)
-            this.form.get('longDescription')?.setValue(this.product.longDescription)
             this.form.get('qty')?.setValue(this.product.qty)
             this.form.get('sgrTax')?.setValue(this.product.sgrTax)
             this.form.get('order')?.setValue(this.product.order)
@@ -207,10 +206,6 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      longDescription: new FormControl(null, {
-        updateOn: 'change',
-        validators: [Validators.required]
-      }),
         qty: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
@@ -249,7 +244,6 @@ export class ProductPage implements OnInit {
       productData.append('category', this.form.value.cat);
       productData.append('mainCat', this.form.value.mainCat);
       productData.append('description', this.form.value.description);
-      productData.append('longDescription', this.form.value.longDescription);
       productData.append('qty', this.form.value.qty);
       productData.append('order', this.form.value.order);
       productData.append('sgrTax', this.form.value.sgrTax);

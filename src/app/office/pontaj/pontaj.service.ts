@@ -18,7 +18,7 @@ export class PontajService{
   public pontajSend$!: Observable<Pontaj>;
   pontaj: Pontaj = emptyPontaj();
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   constructor(
     private http: HttpClient,

@@ -78,8 +78,9 @@ ion-content, ion-toolbar {
   text-align: end;
   font-family: NoirProSemi !important;
   font-size: 20px;
-  color: var(--ion-color-light-tint)
+  color: var(--ion-color-medium)
 }
+
 
 
 .icon-start{
@@ -98,7 +99,7 @@ ion-content, ion-toolbar {
 
 .input{
   height: 45px;
-  border: 0.5px solid var(--ion-color-light-tint);
+  border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   margin: 0.1rem 0 0.1rem 0.2rem;
 }
@@ -106,7 +107,7 @@ ion-content, ion-toolbar {
 
 .display-date{
   height: 45px;
-  border: 0.5px solid var(--ion-color-light-tint);
+  border: 0.5px solid var(--ion-color-medium);
   border-radius: 8px;
   padding: 10px;
   margin: 0.1rem 0 0.1rem 0.2rem;

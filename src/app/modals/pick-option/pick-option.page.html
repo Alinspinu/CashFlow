@@ -39,7 +39,7 @@
           <ion-list>
             <div class="input wrapper" *ngFor="let option of options; let i=index;">
               <ion-item  lines="none" class="topping-name">
-                  <ion-checkbox [value]="option"  justify="start" labelPlacement="end" (ionChange)="onCheckboxChange(option, i)" [disabled]="option.counter > 1">{{option.name.split('/')[0]}}{{ option.price > 0 ? ' + ' + option.price + ' Lei' : '' }}</ion-checkbox>
+                  <ion-checkbox [value]="option"  justify="start" labelPlacement="end" (ionChange)="onCheckboxChange(option, i)" [disabled]="option.counter > 1">{{option.name.split('/')[0]}}{{ ' | ' + '  ' +  option.price  + ' Lei'  }}</ion-checkbox>
                 </ion-item>
                 <ion-button size="medium" color="secondary"(click)="redTopping(i)" *ngIf="option.counter && option.counter > 1">-</ion-button>
                 <span class="qty" *ngIf="option.counter && option.counter > 1">{{option.counter}}</span>

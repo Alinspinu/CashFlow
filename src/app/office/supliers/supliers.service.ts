@@ -10,7 +10,7 @@ import { Suplier } from "src/app/models/suplier.model";
 
 
 export class SupliersService{
-  url: string ='https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 constructor(
   private http: HttpClient
 ){

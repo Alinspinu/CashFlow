@@ -227,25 +227,31 @@ export class MeniuPage implements OnInit, OnDestroy {
        return triggerEscapeKeyPress()
       }
     }
-    let options: Topping[] = []
-    let optionPrice: number = 0;
-    let pickedToppings: Topping[] = [];
-    let comment: string = ''
-    if(product.category._id === '65d78af381e86f3feded7300' || product._id === "654e909215fb4c734b9689b8"){
-      const itemsToSort = [...product.toppings]
-      options = itemsToSort.sort((a, b) => a.name.localeCompare(b.name))
-      if(options.length){
-          const extra = await this.actionSheet.openModal(PickOptionPage, options, false)
-            if(extra && extra.toppings) {
-               pickedToppings = extra.toppings
-               pickedToppings.forEach(el => {
-                optionPrice += el.price
-               })
-               price += optionPrice
-            }
-            if(extra && extra.comment){
-              comment = extra.comment
-            }
+    const categoryIds = ['65bb594b04258e1abf216a1e', '65bb589304258e1abf216a11', '65bb58dd04258e1abf216a18','65bb5b4904258e1abf216a21']
+    let combo: Topping[] = []
+    if(categoryIds.includes(product.category._id)){
+        const toppings: Topping[] = [
+          {
+            ing: '67163d115eeeefa4ddfdf1fb',
+            ingPrice: 4.62,
+            price: 15 - price,
+            qty: 1,
+            um: 'buc',
+            name: 'Combo Ciocolata Neagra'
+          },
+          {
+            ing: '67163d115eeeefa4ddfdf1fa',
+            ingPrice: 4.62,
+            price: 15 - price,
+            qty: 1,
+            um: 'buc',
+            name: 'Combo Cioclata Alba'
+          }
+        ]
+        const result = await this.actionSheet.openModal(PickOptionPage, toppings, false)
+        if(result){
+          combo = result.toppings
+          price += result.toppings[0].price
         }
     }
 
@@ -258,7 +264,7 @@ export class MeniuPage implements OnInit, OnDestroy {
         imgPath: product.image.path,
         category: product.category._id,
         sub: false,
-        toppings: pickedToppings,
+        toppings: combo,
         mainCat: product.mainCat,
         payToGo: false,
         newEntry: true,
@@ -268,7 +274,7 @@ export class MeniuPage implements OnInit, OnDestroy {
         printer: product.printer,
         sentToPrint: true,
         imgUrl: product.image.path,
-        comment: comment,
+        comment: '',
         tva: product.tva,
         toppingsToSend: product.toppings,
         sentToPrintOnline: true,

@@ -20,7 +20,7 @@ export class UsersService{
   public usersSend$!: Observable<User[]>;
   users: User[] = [emptyUser()];
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   constructor(
     private http: HttpClient

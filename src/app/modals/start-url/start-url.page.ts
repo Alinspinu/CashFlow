@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { Preferences } from '@capacitor/preferences';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-start-url',
@@ -21,7 +22,7 @@ export class StartUrlPage implements OnInit {
 
 
   localUrl: string = 'http://localhost:8080/'
-  onlineUrl: string = 'https://cafetish-server.ew.r.appspot.com/'
+  onlineUrl: string = environment.BASE_URL
 
   ngOnInit() {
   }

@@ -20,7 +20,7 @@ export class TablesService{
   public tableSend$!: Observable<Table[]>;
   tables: Table[] = [emptyTable()];
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   user!: any;
   private orderSub!: Subscription

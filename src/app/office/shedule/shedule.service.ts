@@ -18,7 +18,7 @@ export class SheduleService{
   public sheduleSend$!: Observable<Shedule>;
   shedule: Shedule = emptyShedule();
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   constructor(
     private http: HttpClient,

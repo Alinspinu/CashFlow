@@ -17,7 +17,7 @@ export const environment = {
   LOC: '65ba7dcf1694ff43f52d44ed',
   ADMIN_EMAIL: 'alinz.spinu@gmail.com',
 
-  BASE_URL_CLOUD: 'https://flow-api-394209.lm.r.appspot.com/',
+  BASE_URL_CLOUD: 'https://cafetish.flowmanager.ro/',
 
   BASE_URL_CAFETISH: 'http://localhost:8090/',
 
@@ -25,7 +25,7 @@ export const environment = {
   API_PASS: 'afara-ploua',
 
   // BASE_URL: 'http://localhost:8080/',
-  BASE_URL: 'https://cafetish-server.ew.r.appspot.com/',
+  BASE_URL: 'https://cafetish.flowmanager.ro/',
 
   SAVE_URL: 'http://localhost:8080/',
 

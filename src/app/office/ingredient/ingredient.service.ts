@@ -19,7 +19,7 @@ export class IngredientService{
   public ingredientsSend$!: Observable<InvIngredient[]>;
   ingredients: InvIngredient[] = [emptyIng()];
 
-  url: string = 'https://cafetish-server.ew.r.appspot.com/'
+  url: string = environment.BASE_URL
 
   constructor(
     private http: HttpClient,

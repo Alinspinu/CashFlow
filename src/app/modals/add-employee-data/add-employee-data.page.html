@@ -60,6 +60,10 @@
         <span>{{endDate ? 'Dată încetare - ' + formatedDate(endDate) : "Alege data de încetare"}}</span>
       </ion-item>
       <ion-item lines="none" class="input">
+        <ion-input label="Normă (ore)" labelPlacement="floating"  type="number" name="norm"  formControlName="norm">
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none" class="input">
         <ion-select label="Cuantificare" placeholder="Level" formControlName="fix">
           <ion-select-option class="font" [value]="true">Fix</ion-select-option>
           <ion-select-option class="font" [value]="false">Ore</ion-select-option>

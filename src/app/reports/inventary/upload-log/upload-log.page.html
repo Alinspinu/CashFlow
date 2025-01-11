@@ -18,6 +18,9 @@
           <span class="suplier">{{log.operation.details}}</span>
           <span class="quantity">{{log.qty}} {{um}}</span>
           <span class="quantity">{{log.uploadPrice}} Lei / {{um}}</span>
+          <ion-button fill="outline" color="light" (click)="deleteLog(log._id)">
+            <ion-icon src="../../../../assets/icon/trash-outline.svg"></ion-icon>
+          </ion-button>
         </div>
       </ion-col>
   </ion-row>

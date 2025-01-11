@@ -7,14 +7,38 @@ export class Report {
     public vatValue: number,
     public ingsValue: number,
     public rentValue: number,
-    public supliesValue: number,
-    public serviceValue: number,
-    public marketingValue: number,
-    public inventarySpendings: number,
-    public gasValue: number,
-    public constructionsValue: number,
-    public rent: number,
-    public utilities: number,
+    public supliesValue: {
+      total: number,
+      entries: reportEntry[]
+    },
+    public serviceValue: {
+      total: number,
+      entries: reportEntry[]
+    },
+    public marketingValue: {
+      total: number,
+      entries: reportEntry[]
+    },
+    public inventarySpendings: {
+      total: number,
+      entries: reportEntry[]
+    },
+    public gasValue: {
+      total: number,
+      entries: reportEntry[]
+    },
+    public constructionsValue: {
+      total: number,
+      entries: reportEntry[]
+    },
+    public rent: {
+      total: number,
+      entries: reportEntry[]
+    },
+    public utilities: {
+      total: number,
+      entries: reportEntry[]
+    },
     public supliesProdBuc: number,
     public supliesMfBuc: number,
     public supliesProdBar: number,
@@ -100,6 +124,14 @@ export class Report {
   ){}
 }
 
+
+export interface reportEntry{
+  date: Date,
+  name: String,
+  qty: Number,
+  price: Number,
+  suplier: String,
+}
 
 export interface reportUser{
     name: string,

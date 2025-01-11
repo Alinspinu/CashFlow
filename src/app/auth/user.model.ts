@@ -44,7 +44,8 @@ export default class User {
           salary: number,
           tax: number
         },
-        fix: boolean
+        fix: boolean,
+        norm: number,
       }
       payments: {
         date: string,

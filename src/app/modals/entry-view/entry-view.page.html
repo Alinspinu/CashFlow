@@ -7,7 +7,7 @@
       <div class="title">Total {{total}} Lei</div>
     </div>
    </ion-toolbar>
-<ion-grid>
+<ion-grid *ngIf="!ingMode">
   <ion-row>
     <ion-col>
       <div class="header">
@@ -25,6 +25,20 @@
       <span class="data">{{formateDate(entry.date)}}</span>
       <span class="discount"> {{entry.reason}}</span>
       <span class="total">{{entry.value}} Lei</span>
+    </div>
+  </ion-col>
+</ion-row>
+</ion-grid>
+<ion-grid *ngIf="ingMode">
+
+<ion-row>
+  <ion-col *ngIf="ingEntries && ingEntries.length">
+    <div class="input" *ngFor="let entry of ingEntries;">
+      <span class="name">{{entry.name}}.</span>
+      <span class="data">{{formateDate(entry.date)}}</span>
+      <span class="discount"> {{entry.suplier}}</span>
+      <span class="qty"> {{entry.qty}} buc</span>
+      <span class="total">{{roundH(entry.price)}} Lei</span>
     </div>
   </ion-col>
 </ion-row>

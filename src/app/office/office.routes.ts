@@ -60,7 +60,13 @@ export const routes: Routes = [
       },
       {
         path: 'e-factura',
-        loadComponent: () => import('./e-factura/e-factura.page').then( m => m.EFacturaPage)
+        loadComponent: () => import('./e-factura/e-factura.page').then( m => m.EFacturaPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'imp',
+        loadComponent: () => import('./imp/imp.page').then( m => m.ImpPage),
+        canActivate: [AuthGuard]
       },
       // {
       //   path: 'ingredients',
@@ -98,8 +104,17 @@ export const routes: Routes = [
     path: 'record',
     loadComponent: () => import('./nirs/record/record.page').then( m => m.RecordPage)
   },
+  {
+    path: 'sale-point',
+    loadComponent: () => import('./sale-point/sale-point.page').then( m => m.SalePointPage)
+  },
+  {
+    path: 'add-point-modal',
+    loadComponent: () => import('./sale-point/add-point-modal/add-point-modal.page').then( m => m.AddPointModalPage)
+  },
 
- 
+
+
 
 
 

@@ -145,4 +145,15 @@ export class InvIngredient {
 }
 
 
+export class ImpSheet{
+  constructor(
+    public date: Date,
+    public ings: {qty: number, ing: any}[],
+    public user: any,
+    public locatie: string,
+    public _id?: string,
+  ){}
+}
+
+
 

@@ -18,6 +18,7 @@ import { Nir, NirIngredient } from '../../../../models/nir.model';
 import { NirService } from '../nir.service';
 import User from '../../../../auth/user.model';
 import { IonInput } from '@ionic/angular/standalone';
+import { NirsService } from 'src/app/office/nirs/nirs.service';
 
 
 
@@ -68,6 +69,7 @@ export class AddNirPage implements OnInit {
 
   constructor(
     private nirSrv: NirService,
+    private nirsSrv: NirsService,
     @Inject(ActionSheetService) private actionSht: ActionSheetService,
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
@@ -133,77 +135,82 @@ setupNirForm(){
 
 
 async getNirToEdit(){
-  const id = this.route.snapshot.paramMap.get('id')
-  if(id && id !== "new" && id !== 'merged' && id !== 'eFactura') {
-    this.isLoading = true
-    this.nirSrv.getNir(id).subscribe(response => {
-      if(response) {
-        this.nir = response.nir
-        // this.updateLogId()
-        this.editMode = true
-        this.isLoading = false
-        this.nirSrv.setNir(this.nir)
-        this.nirId = id
-        this.suplier = this.nir.suplier
-        this.nirForm.get('docDate')?.setValue(this.nir.documentDate)
-        this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
-        this.nirForm.get('document')?.setValue(this.nir.document)
-        this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
-        this.docDate = this.nir.documentDate
-        this.receptionDate = this.nir.receptionDate
+  this.route.paramMap.subscribe(async (paramMap) => {
+    const id = paramMap.get('id');
+      if(id && id !== "new" && id !== 'merged' && id !== 'eFactura') {
+        this.isLoading = true
+        this.nirSrv.getNir(id).subscribe(response => {
+          if(response) {
+            this.nir = response.nir
+            // this.updateLogId()
+            this.editMode = true
+            this.isLoading = false
+            this.nirSrv.setNir(this.nir)
+            this.nirId = id
+            this.suplier = this.nir.suplier
+            this.nirForm.get('docDate')?.setValue(this.nir.documentDate)
+            this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
+            this.nirForm.get('document')?.setValue(this.nir.document)
+            this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
+            this.docDate = this.nir.documentDate
+            this.receptionDate = this.nir.receptionDate
+          }
+        })
       }
-    })
-  }
-  if(id && id === 'merged'){
-    const nir = await Preferences.get({key: 'nir'})
-    const nirId = await Preferences.get({key: 'nirIds'})
-    if(nirId && nirId.value){
-      this.nirIds = JSON.parse(nirId.value)
-      this.mergeMode = true
-    }
-    if(nir && nir.value){
-      const parsedNir = JSON.parse(nir.value) as Nir
-      this.nir = parsedNir
-      // this.updateLogId()
-      this.isLoading = false
-      this.nirSrv.setNir(this.nir)
-      this.nirId = id
-      this.suplier = this.nir.suplier
-      this.docDate = this.nir.documentDate
-      this.receptionDate = this.nir.receptionDate
-      this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
-      this.nirForm.get('document')?.setValue(this.nir.document)
-      this.nirForm.get('document')?.setValue(this.nir.document)
-    }
-  }
-
-  if(id && id === 'eFactura'){
-    const nir = await Preferences.get({key: 'nir'})
-    if(nir && nir.value){
-      const parsedNir = JSON.parse(nir.value) as Nir
-      const eFacturaNirTotal = parsedNir.totalDoc
-      this.nir = parsedNir
-      this.nirSrv.setNir(this.nir)
-      this.nirSrv.clacTotals()
-      const diference = round(this.nir.totalDoc - eFacturaNirTotal)
-      if(diference > 1){
-        const tva = this.nir.ingredients[0].tva
-        const discountData ={
-          type: 'val',
-          tva,
-          val: round(diference / (1 + (tva / 100)))
+      if(id && id === 'merged'){
+        const nir = await Preferences.get({key: 'nir'})
+        const nirId = await Preferences.get({key: 'nirIds'})
+        if(nirId && nirId.value){
+          this.nirIds = JSON.parse(nirId.value)
+          this.mergeMode = true
         }
-        this.nirSrv.calcDiscount(discountData)
+        if(nir && nir.value){
+          const parsedNir = JSON.parse(nir.value) as Nir
+          this.nir = parsedNir
+          // this.updateLogId()
+          this.isLoading = false
+          this.nirSrv.setNir(this.nir)
+          this.nirId = id
+          this.suplier = this.nir.suplier
+          this.docDate = this.nir.documentDate
+          this.receptionDate = this.nir.receptionDate
+          this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
+          this.nirForm.get('document')?.setValue(this.nir.document)
+          this.nirForm.get('document')?.setValue(this.nir.document)
+        }
       }
-      this.suplier = this.nir.suplier
-      this.docDate = this.nir.documentDate
-      this.receptionDate = this.nir.receptionDate
-      this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
-      this.nirForm.get('docDate')?.setValue(this.nir.documentDate)
-      this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
-      this.nirForm.get('document')?.setValue(this.nir.document)
-    }
-  }
+
+      if(id && id === 'eFactura'){
+        const nir = await Preferences.get({key: 'nir'})
+        if(nir && nir.value){
+          const parsedNir = JSON.parse(nir.value) as Nir
+          const eFacturaNirTotal = parsedNir.totalDoc
+          this.nir = parsedNir
+          this.nirSrv.setNir(this.nir)
+          this.nirSrv.clacTotals()
+          const diference = round(this.nir.totalDoc - eFacturaNirTotal)
+          if(diference > 1){
+            const tva = this.nir.ingredients[0].tva
+            const discountData ={
+              type: 'val',
+              tva,
+              val: round(diference / (1 + (tva / 100)))
+            }
+            this.nirSrv.calcDiscount(discountData)
+          }
+          this.suplier = this.nir.suplier
+          this.docDate = this.nir.documentDate
+          this.receptionDate = this.nir.receptionDate
+          this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
+          this.nirForm.get('docDate')?.setValue(this.nir.documentDate)
+          this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate)
+          this.nirForm.get('document')?.setValue(this.nir.document)
+        }
+      }
+      if(id === 'new'){
+        this.nirSrv.setNir(emptyNir())
+      }
+  });
 }
 
 updateLogId(){
@@ -295,14 +302,14 @@ updateLogId(){
   saveNir(){
     if(this.nirForm.valid){
       if(this.editMode) {
-        this.nirSrv.deleteNir(this.nirId).subscribe(response => {
+        this.nirsSrv.deleteNir(this.nirId).subscribe(response => {
           if(response && response.message){
             this.nir.documentDate = this.nirForm.value.docDate;
             this.nir.receptionDate = this.nirForm.value.receptionDate;
             this.nir.nrDoc = this.nirForm.value.nrDoc
             this.nir.suplier._id = this.suplier._id
             this.nir.document = this.nirForm.value.document
-            this.nirSrv.saveNir(this.nir).subscribe(response => {
+            this.nirsSrv.saveNir(this.nir).subscribe(response => {
               this.nirSrv.setNir(emptyNir())
               showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
               this.router.navigateByUrl('/tabs/office/nirs')
@@ -311,7 +318,7 @@ updateLogId(){
         })
       } else {
         if(this.mergeMode){
-          this.nirSrv.deleteNirs(this.nirIds).subscribe({
+          this.nirsSrv.deleteNirs(this.nirIds).subscribe({
             next: (response) => {
               showToast(this.toastCtrl, response.message, 3000)
               this.nir.documentDate = this.nirForm.value.docDate;
@@ -319,7 +326,7 @@ updateLogId(){
               this.nir.nrDoc = this.nirForm.value.nrDoc
               this.nir.suplier._id = this.suplier._id
               this.nir.document = this.nirForm.value.document
-              this.nirSrv.saveNir(this.nir).subscribe(response=> {
+              this.nirsSrv.saveNir(this.nir).subscribe(response=> {
                 this.nirSrv.setNir(emptyNir())
                 this.router.navigateByUrl('/tabs/office/nirs')
                 showToast(this.toastCtrl, response.message, 2000)
@@ -336,7 +343,7 @@ updateLogId(){
           this.nir.nrDoc = this.nirForm.value.nrDoc
           this.nir.suplier._id = this.suplier._id
           this.nir.document = this.nirForm.value.document
-          this.nirSrv.saveNir(this.nir).subscribe(response=> {
+          this.nirsSrv.saveNir(this.nir).subscribe(response=> {
             this.nirSrv.setNir(emptyNir())
             this.router.navigateByUrl('/tabs/office/nirs')
             showToast(this.toastCtrl, response.message, 2000)

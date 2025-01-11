@@ -37,9 +37,20 @@ export class CashRegisterService{
     getDaysByDate(startDate: any, endDate: any, loc: string){
       return this.http.post<{message: string, documents: Day[]}>(`${environment.BASE_URL}register/get-days`,{startDate: startDate, endDate: endDate, loc: loc})
     }
-  
+
     addEntry(entry: any){
       return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
     }
 
+    deleteDay(id: string){
+      return this.http.delete<{message: string}>(`${environment.BASE_URL}register/day?id=${id}`)
+    }
+
 }
+
+
+
+
+
+
+

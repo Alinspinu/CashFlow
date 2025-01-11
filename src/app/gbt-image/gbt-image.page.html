@@ -1,0 +1,39 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar >
+    <ion-title class="ion-text-center">Generază Imagine</ion-title>
+    <ion-select placeholder="Alege dimensiunea (px)" (ionChange)="onSizeSelect($event)" class="reprint-alert' suplier-alert" slot="end">
+      <ion-select-option *ngFor="let size of sizes" [value]="size">{{size}}</ion-select-option>
+    </ion-select>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+<div class="image-container" *ngIf="imageUrl">
+  <div class="hero-image">
+    <img [src]="imageUrl">
+  </div>
+</div>
+<div class="message-wrapper" *ngIf="sendetMessage">
+  <span class="message">{{sendetMessage}}</span>
+</div>
+  <div class="chat-container">
+    <ion-textarea
+      [(ngModel)]="message"
+      placeholder="Type your message"
+      rows="1"
+      auto-grow
+      class="chat-textarea"
+    ></ion-textarea>
+    <ion-button
+      fill="clear"
+      color="medium"
+      (click)="sendMessage()"
+      class="send-button"
+      aria-label="Send message"
+      slot="end"
+    >
+      <ion-icon src="../../assets/icon/send-outline.svg" size="large"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>

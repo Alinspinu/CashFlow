@@ -49,8 +49,9 @@ getIngToedit(){
     })
     if(invDay){
       this.invDayIndex = invDay.index
-      this.dateQty = invDay.qty
+      this.dateQty = invDay.qty ? invDay.qty : this.ing.qty
       this.qty = invDay.faptic
+
     }
 
 }
@@ -60,7 +61,8 @@ saveInvIng(){
     const ingTosave = {
       qtyInv: this.qty,
       invIndex: this.invDayIndex,
-      ingId: this.ing._id
+      ingId: this.ing._id,
+      scriptic: this.dateQty
     }
     this.modalCtr.dismiss(ingTosave)
 }

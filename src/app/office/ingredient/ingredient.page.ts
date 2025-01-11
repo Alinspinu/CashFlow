@@ -18,6 +18,7 @@ import { Subscription, take } from 'rxjs';
 import { AddToInventaryPage } from 'src/app/modals/add-to-inventary/add-to-inventary.page';
 import { IngredientContentPage } from './ingredient-content/ingredient-content.page';
 import { environment } from 'src/environments/environment';
+import { UploadLogPage } from 'src/app/reports/inventary/upload-log/upload-log.page';
 
 @Component({
   selector: 'app-ingredient',
@@ -80,6 +81,17 @@ export class IngredientPage implements OnInit, OnDestroy {
     }
   }
 
+  async uploadLog(id: string) {
+      this.ingSrv.getUploadLog(id).subscribe({
+        next: (ing) => {
+          this.actionSh.openPayment(UploadLogPage, {logs: ing.uploadLog, ingName: ing.name, ingUm: ing.um, ingID: id} )
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
+  }
+
   async showContent(ing: InvIngredient){
     await this.actionSh.openPayment(IngredientContentPage, ing)
   }
@@ -122,6 +134,18 @@ export class IngredientPage implements OnInit, OnDestroy {
         })
       }
     }
+  }
+
+  createInv(){
+     this.ingSrv.saveInventary().subscribe({
+      next: (response) => {
+        showToast(this.toastCtrl, response.message, 3000)
+      },
+      error: (error) => {
+        showToast(this.toastCtrl, error.message, 5000)
+        console.log(error)
+      }
+     })
   }
 
   showIngs(index: number){
@@ -229,7 +253,7 @@ updateProductIng(){
       if(ingToUpdate){
         this.ingSrv.updateIngredientInventary(ingToUpdate).subscribe(async response => {
           this.ind += 1
-          // await this.inventary(this.ind)
+          await this.inventary(this.ind)
           showToast(this.toastCtrl, response.message, 3000)
         })
       }

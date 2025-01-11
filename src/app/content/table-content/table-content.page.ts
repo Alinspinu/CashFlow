@@ -14,14 +14,12 @@ import { IonInput } from '@ionic/angular/standalone';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
 import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
 import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
-import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { AuthService } from 'src/app/auth/auth.service';
 import User from 'src/app/auth/user.model';
 import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
 import { round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
 import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
-import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 import { WebRTCService } from '../webRTC.service';
 import { MeniuPage} from './meniu/meniu.page';
 import { BillPage } from './bill/bill.page';
@@ -43,7 +41,7 @@ interface billData{
   templateUrl: './table-content.page.html',
   styleUrls: ['./table-content.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule, CapitalizePipe, SpinnerPage, MeniuPage, BillPage]
+  imports: [IonicModule, CommonModule, FormsModule, RouterModule, MeniuPage, BillPage]
 })
 export class TableContentPage implements OnInit, OnDestroy {
 
@@ -85,7 +83,7 @@ export class TableContentPage implements OnInit, OnDestroy {
   billId!: string;
   billIndex: number = 0;
 
-  client!: any
+  client: any = null
   clientMode: boolean = true
 
   billToshow!: Bill
@@ -160,6 +158,7 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getData();
     this.getBill();
     this.getScreenSize()
+    console.log(this.client)
   }
 
   ngOnDestroy(): void {
@@ -258,6 +257,7 @@ export class TableContentPage implements OnInit, OnDestroy {
         this.clientMode = false
       } else {
         this.billData.billToshow.name = 'COMANDĂ'
+        this.client = null
         this.clientMode = true
       }
 
@@ -340,6 +340,11 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.billData.billToshow = this.billData.table.bills[orderIndex]
     if(this.billData.billToshow){
       this.client = this.billData.billToshow.clientInfo.name.length ? this.billData.billToshow.clientInfo : null
+      if(this.client){
+        this.clientMode = false
+      } else {
+        this.clientMode = true
+      }
       this.billData.billProducts = [...this.billData.billToshow.products]
       this.billData.billToshow.show = true
       this.calcBillDiscount(this.billData.billToshow)
@@ -412,7 +417,6 @@ async addTips(){
 
 
 sendOrder(out: boolean, outside: boolean): Observable<boolean> {
-  console.log('before orders',this.clientMode)
   if (this.billData.billToshow) {
     this.billData.billToshow.out = outside
     this.disableOrderButton = true;
@@ -432,7 +436,6 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
         outside
       ).pipe(
         map((res) => {
-          console.log('after orders',this.clientMode)
           this.disableOrderButton = false;
           if (out && res) {
             this.router.navigateByUrl('/tabs/tables');
@@ -453,7 +456,6 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
             outside
           ).pipe(
             map((res) => {
-              console.log('after orders',this.clientMode)
               this.disableOrderButton = false;
               if (out && res) {
                 this.router.navigateByUrl('/tabs/tables');
@@ -490,12 +492,11 @@ async payment(){
               this.tabSub = this.tableSrv.sendBillToPrint(this.billData.billToshow).subscribe({
                 next: (response => {
                   if(response && response.bill.status === 'done'){
-                    // this.tableSrv.removeBill(this.tableNumber, this.billIndex)
                     this.billData.billToshow = emptyBill()
                     this.client = null
                     this.router.navigateByUrl("/tabs/tables")
                     this.disableOrderButton = false;
-                    this.tableSrv.saveBillToCloud(response.bill)
+                    // this.tableSrv.saveBillToCloud(response.bill)
                     showToast(this.toastCtrl, response.message, 3000)
                   }
                 }),
@@ -731,7 +732,6 @@ async useCashBack(mode: boolean){
         }
 
           data.push({id: this.billData.billToshow.soketId})
-          console.log(data)
           this.tableSrv.removeBill(this.tableNumber, this.billIndex)
           this.tableSub = this.tableSrv.deleteOrders(data).subscribe()
           this.billData.billProducts = []
@@ -752,16 +752,27 @@ async useCashBack(mode: boolean){
   }
 
   async mergeOrders(){
+    this.addCustomer(false)
     const bills = this.table.bills;
     if(bills.length > 1){
       let name: string[] = [];
       let id: any[] = [];
       let billIndex: number[] = [];
+      let client = false
       bills.forEach((el, i) => {
+        if(el.clientInfo.name.length){
+          client = true
+        }
        el.name === "COMANDA" ? name.push(el.name + ` ${i+1}`) : name.push(el.name)
        id.push(el.soketId)
        billIndex.push(i)
       })
+      if(client){
+         name = [];
+         id = [];
+         billIndex = [];
+        return showToast(this.toastCtrl, 'SUNT COMENZI CU REDUCERE! SCOATE CLIENȚII DE PE COMENZE PENTRU A LE PUTEA UNI!', 5000)
+      }
       let options = name.map((val, index) =>({name: val, data: {id: id[index], billIndex: billIndex[index]}}))
       const orders = await this.actionSheet.mergeOreders(options)
       if(orders){
@@ -780,6 +791,7 @@ async useCashBack(mode: boolean){
   }
 
   breakOrder(){
+    this.addCustomer(false)
     this.billData.breakMode = !this.billData.breakMode
     this.billDataSubject.next(this.billData)
 

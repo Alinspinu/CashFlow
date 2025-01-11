@@ -20,6 +20,11 @@
       <ion-label>Rapoarte</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button tab="gbt-image" href="/tabs/gbt-image" *ngIf="screenWidth > 500">
+      <ion-icon aria-hidden="true" src="../../assets/icon/image-outline.svg"></ion-icon>
+      <ion-label>Image</ion-label>
+    </ion-tab-button>
+
     <ion-tab-button tab="config" href="/tabs/config" *ngIf="screenWidth > 500">
       <ion-icon aria-hidden="true" src="../../assets/icon/settings.svg"></ion-icon>
       <ion-label>Config</ion-label>

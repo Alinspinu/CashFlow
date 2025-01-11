@@ -53,6 +53,7 @@ export class FinancePage implements OnInit {
 
   sup: boolean = true
 
+
   tips: number = 0
 
   reportUsers: reportUsers = emptyReportUsers()
@@ -74,6 +75,11 @@ export class FinancePage implements OnInit {
 
   }
 
+
+  toggleImpairments(){
+
+  }
+
   getRepDates(){
     this.repSrv.getReportsDate().subscribe(response => {
       if(response){
@@ -92,6 +98,7 @@ export class FinancePage implements OnInit {
     this.repSrv.getReports().subscribe(response => {
       if(response){
         this.reports = response.reverse()
+        console.log(this.reports)
       }
     })
   }
@@ -110,6 +117,7 @@ getReport(start: string, end: string){
   this.isLoading = true
   this.repSrv.getReport(start, end).subscribe(response => {
     if(response){
+      console.log(response)
       this.report = response
       this.reportUsers = sortUsers(this.report)
       this.productioReport = updateReportValues(this.report, emptyInv(), emptyInv())
@@ -120,18 +128,18 @@ getReport(start: string, end: string){
         this.tips = tipsObj.value
       }
       this.totalSpendings = round(
-        this.report.supliesValue +
+        this.report.supliesValue.total +
         this.report.impairment.total +
-        this.report.constructionsValue +
-        this.report.gasValue +
-        this.report.inventarySpendings +
+        this.report.constructionsValue.total +
+        this.report.gasValue.total +
+        this.report.inventarySpendings.total +
         this.report.diverse.total
       )
       this.totalRentAndStuff = round(
-        this.report.marketingValue +
-        this.report.rent +
-        this.report.utilities +
-        this.report.serviceValue
+        this.report.marketingValue.total +
+        this.report.rent.total +
+        this.report.utilities.total +
+        this.report.serviceValue.total
       )
 
     }
@@ -157,6 +165,10 @@ showDep(products: any){
 
 showEntry(entry: any){
   this.actionSheet.openPayment(EntryViewPage, {total: this.report.diverse.total, entries: entry})
+}
+
+showEntries(entry: any){
+  this.actionSheet.openModal(EntryViewPage, {total: entry.total, entries: entry.entries}, true)
 }
 
 

@@ -18,23 +18,32 @@ ion-botton, ion-title, span, ion-item, ion-input{
   font-family: NoirProLight !important;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   span{
     margin: 10px 5px 10px 5px;
   }
   .nr{
     flex: 5%
   }
+  .name {
+     flex: 20%
+  }
+  .qty{
+    flex: 20%;
+    text-align: center;
+  }
   .data{
-    flex: 30%;
+    flex: 20%;
   }
   .discount{
     flex: 35%;
     text-align: center;
   }
   .total{
-    flex: 30%;
+    flex: 20%;
     font-family: NoirProSemi !important;
-    text-align: end;
+    text-align: start;
   }
 
 }

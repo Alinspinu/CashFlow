@@ -1,12 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {environment} from '../../../../environments/environment'
-import { Suplier } from "../../../models/suplier.model";
 import { Nir, InvIngredient, NirIngredient } from '../../../models/nir.model';
 import { BehaviorSubject, Observable, take, tap } from "rxjs";
-import { emptyIng, emptyNir } from "src/app/models/empty-models";
-import { Preferences } from "@capacitor/preferences";
-import { emptyNirIng } from '../../../models/empty-models';
+import { emptyNir } from "src/app/models/empty-models";
 import { round, round4 } from "src/app/shared/utils/functions";
 
 
@@ -120,18 +117,12 @@ export class NirService{
   }
 
 
-  deleteNirs(ids: string[]){
-    return this.http.put<{message: string}>(`${environment.BASE_URL}nir/delete-nirs`, {ids: ids})
-  }
 
 
   getSuplier(input: any){
     return this.http.post<any[]>(`${environment.BASE_URL}suplier/send-supliers`, {search: input, loc: environment.LOC})
   }
 
-  saveNir(nir: Nir){
-    return this.http.post<{message: string, nir: any}>(`${environment.BASE_URL}nir/save-nir`, {nir: nir, loc: environment.LOC})
-  }
 
   getIngredients(loc: string){
     return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {loc: loc})
@@ -143,10 +134,6 @@ export class NirService{
 
   getNir(id: string){
     return this.http.get<{nir: Nir}>(`${environment.BASE_URL}nir/nir?id=${id}`)
-  }
-
-  deleteNir(id: string) {
-    return this.http.delete<{message: string}>(`${environment.BASE_URL}nir/nir?id=${id}`)
   }
 
   saveIng(ing: any){

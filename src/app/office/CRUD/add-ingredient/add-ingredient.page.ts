@@ -1,8 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
-import { IonInput } from '@ionic/angular/standalone';
+import { SalePoint } from '../../../models/sale-point';
+import { SalePointService } from '../../sale-point/sale-point.service';
+import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { AddPointModalPage } from '../../sale-point/add-point-modal/add-point-modal.page';
 
 @Component({
   selector: 'app-addingredient',
@@ -17,14 +20,37 @@ export class AddIngredientPage implements OnInit {
   title: string = 'Adaugă Ingredient'
   ing!: any
 
+  salePoints: SalePoint[] = []
+
   constructor(
     private modalCtr: ModalController,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private salePointService: SalePointService,
+    @Inject(ActionSheetService) private actSheet: ActionSheetService
   ) { }
 
   ngOnInit() {
+    this.salePointService.getPoints().subscribe()
     this.getIngToedit()
     this.setupIngForm()
+    this.getSalePoints()
+  }
+
+
+  getSalePoints(){
+    this.salePointService.pointsSend$.subscribe({
+      next: (points) => {
+        this.salePoints = points
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
+
+  async addSailPoint(){
+      const point = await this.actSheet.openPayment(AddPointModalPage, '')
+      console.log(point)
   }
 
 
@@ -61,6 +87,9 @@ export class AddIngredientPage implements OnInit {
       invQty: new FormControl(null, {
         updateOn: 'change',
       }),
+      salePoint: new FormControl(null, {
+        updateOn: 'change',
+      }),
     });
     if(this.ing){
 
@@ -74,6 +103,9 @@ export class AddIngredientPage implements OnInit {
       }
       if(this.ing.dep){
         this.ingredientForm.get('dep')?.setValue(this.ing.dep)
+      }
+      if(this.ing.salePoint){
+        this.ingredientForm.get('salePoint')?.setValue(this.ing.salePoint)
       }
       // this.ingredientForm.get('invQty')?.setValue(this.ing.inventary[19].qty - this.ing.qty);
     }
@@ -97,7 +129,8 @@ saveIng(){
       dep: this.ingredientForm.value.dep ? this.ingredientForm.value.dep : this.ing.dep,
       qty: this.ingredientForm.value.qty,
       price: this.ingredientForm.value.price,
-      tvaPrice: this.ingredientForm.value.price / ((this.ingredientForm.value.tva / 100) +1)
+      tvaPrice: this.ingredientForm.value.price / ((this.ingredientForm.value.tva / 100) +1),
+      salePoint: this.ingredientForm.value.SalePoint
     }
     this.modalCtr.dismiss(ingTosave)
   }

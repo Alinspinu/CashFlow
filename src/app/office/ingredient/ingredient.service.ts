@@ -72,6 +72,7 @@ export class IngredientService{
                })
 
               this.ingredients = sortedIngs
+              console.log(this.ingredients[28])
               this.ingredientsState.next([...this.ingredients]); // Emit all collected items
               observer.complete(); // Complete the observable
             }
@@ -148,6 +149,14 @@ export class IngredientService{
 
 getIngsConsumabils(){
   return this.http.get<InvIngredient[]>(`${environment.BASE_URL}ing/get-consumabil?loc=${environment.LOC}`)
+}
+
+saveInventary(){
+  return this.http.get<{message: string}>(`${environment.BASE_URL}ing/save-inventary?loc=${environment.LOC}`)
+}
+
+getUploadLog(id: string){
+  return this.http.get<InvIngredient>(`${environment.BASE_URL}ing/log?id=${id}`)
 }
 
 

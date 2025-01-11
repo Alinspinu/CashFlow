@@ -174,7 +174,7 @@ export class ProductIngredientPage implements OnInit, OnDestroy {
 
 
   async selectIngredient(ing: any){
-    const data = await this.actionSrv.pickQty(PickQtyPage, {um: ing.um, name: ing.name, hideTop: true, hideIng: false });
+    const data = await this.actionSrv.pickQty(PickQtyPage, {um: ing.um, name: ing.name, hideTop: true, hideIng: false, imp: false });
     if(data){
         const ingToSend = {qty: +data.qty, ing: ing._id}
         const ingToShow = {qty: +data.qty, ing: ing}

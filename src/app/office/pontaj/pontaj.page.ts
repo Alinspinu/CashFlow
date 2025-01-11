@@ -85,23 +85,21 @@ periodMark: boolean = false
 
 
 openPayments(payments: any, userName: string){
+  console.log(payments)
   const monthPayments = payments.filter((pay: any) => {
     return pay.workMonth === this.monthIndex
   })
-  console.log(monthPayments)
-  console.log(payments)
   this.actSrv.openModal(PaymentsPage, {name: userName, logs: monthPayments}, false)
 }
 
 hours(workLog: any, name: string, payments: any) {
   const docToFilter = workLog.filter((doc: any) => {
     const docDate = new Date(doc.checkIn);
-    return docDate.getUTCMonth() === this.monthIndex
+    return docDate.getMonth() === this.monthIndex
   })
   const monthPayments = payments.filter((pay: any) => {
     return pay.workMonth === this.monthIndex
   })
-  console.log(monthPayments)
   this.actSrv.openModal(HoursPage, {logs: docToFilter, name: name, payments: monthPayments}, false)
 }
 
@@ -121,10 +119,8 @@ async paySalary(user: any){
   const response = await this.actSrv.deleteAlert(`Plătește salariul lui ${user.employee.fullName} pentru luna ${this.pontaj.month.split('-')[0]}`, `${total} Lei`)
   if(response){
     this.pontSrv.paySalary(entry).subscribe((res: any) => {
-      console.log(res)
     })
   }
-  console.log(entry)
 }
 
 
@@ -169,7 +165,7 @@ async paySalary(user: any){
   }
 
   getIndex(index: number){
-    console.log(index)
+
   }
 
 

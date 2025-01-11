@@ -1,0 +1,79 @@
+
+ion-content, ion-toolbar{
+  --background: var(--background-color);
+}
+
+ion-title, ion-textarea{
+  font-family: NoirProReg;
+}
+
+ion-title{
+  font-size: 24px;
+}
+
+.image-container{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.hero-image {
+  position: relative;
+  max-width: 70%;
+  max-height: 60vh;
+  // overflow: hidden;
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message-wrapper{
+  position: absolute;
+  bottom: 200px;
+  width: 77%;
+  display: flex;
+  justify-content: flex-end;
+  span{
+    background-color: var(--turqoise);
+    border-radius: 18px;
+    padding: 18px;
+    font-size: 18px;
+    color: var(--ion-color-medium)
+  }
+}
+
+.chat-container {
+  width: 100%;
+  display: flex;
+  align-items: center; /* Vertically center the items */
+  justify-content: center;
+  position: absolute;
+  bottom: 80px;
+  left: 10px;
+  right: 10px;
+  padding: 10px;
+  gap: 10px; /* Add some space between textarea and button */
+}
+
+.chat-textarea {
+  width: 60%;
+  min-height: 70px;
+  padding-left: 24px;
+  font-size: 18px;
+  margin-right: 10px;
+  background-color: var(--grey);
+  border-radius: 24px;
+  // border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+
+}
+
+
+
+.send-button {
+  min-width: 90px; /* Set a minimum width for the button */
+}

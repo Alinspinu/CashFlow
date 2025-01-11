@@ -15,7 +15,10 @@
     "caf": "cash-flow-8a7f4",
     "waiters": "cash-flow-waiters",
     "wai": "cash-flow-waiters",
-    "cash": "cash-flow-8a7f4"
+    "cash": "cash-flow-8a7f4",
+    "flow": "cash-flow-8a7f4",
+    "fir": "cash-flow-8a7f4",
+    "firebase deploy": "cash-flow-8a7f4"
   },
   "targets": {},
   "etags": {}

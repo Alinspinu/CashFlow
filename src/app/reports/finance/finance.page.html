@@ -135,21 +135,21 @@
               <span class="label"></span>
               <span class="sum light">Valoare</span>
             </div>
-            <div class="method">
+            <div class="method" style="cursor:pointer;" (click)="showEntries(report.rent)">
               <span class="label">Chirie (facturi)</span>
-              <span class="sum">{{report.rent}} Lei</span>
+              <span class="sum">{{report.rent.total}} Lei</span>
             </div>
-            <div class="method">
+            <div class="method" style="cursor:pointer;" (click)="showEntries(report.utilities)">
               <span class="label">Utilitati (facturi)</span>
-              <span class="sum">{{report.utilities}} Lei</span>
+              <span class="sum">{{report.utilities.total}} Lei</span>
             </div>
-            <div class="method">
+            <div class="method" style="cursor:pointer;" (click)="showEntries(report.serviceValue)">
               <span class="label">Servicii</span>
-              <span class="sum">{{report.serviceValue}} Lei</span>
+              <span class="sum">{{report.serviceValue.total}} Lei</span>
             </div>
-            <div class="method">
+            <div class="method" style="cursor:pointer;" (click)="showEntries(report.marketingValue)">
               <span class="label">Marketing</span>
-              <span class="sum">{{report.marketingValue}} Lei</span>
+              <span class="sum">{{report.marketingValue.total}} Lei</span>
             </div>
             <div class="method">
               <span class="label font">Total</span>
@@ -168,25 +168,25 @@
               <span class="sum light">Valoare</span>
             </div>
 
-            <div class="method">
+            <div class="method" style="cursor:pointer;" (click)="showEntries(report.inventarySpendings)">
               <span class="label">Obiecte de inventar</span>
-              <span class="sum">{{report.inventarySpendings}} Lei</span>
+              <span class="sum">{{report.inventarySpendings.total}} Lei</span>
             </div>
-            <div class="method">
+            <div class="method" style="cursor:pointer;" (click)="showEntries(report.supliesValue)">
               <span class="label">Consumabile</span>
-              <span class="sum">{{report.supliesValue}} Lei</span>
+              <span class="sum">{{report.supliesValue.total}} Lei</span>
             </div>
-            <div class="method">
+            <div class="method" style="cursor:pointer;" (click)="showEntries(report.gasValue)">
               <span class="label">Benzina</span>
-              <span class="sum">{{report.gasValue}} Lei</span>
+              <span class="sum">{{report.gasValue.total}} Lei</span>
             </div>
-            <div class="method">
+            <div class="method" style="cursor:pointer;" (click)="showEntries(report.constructionsValue)">
               <span class="label">Constructii(facturi)</span>
-              <span class="sum">{{report.constructionsValue}} Lei</span>
+              <span class="sum">{{report.constructionsValue.total}} Lei</span>
             </div>
-            <div class="method" (click)="showDep(report.impairment.products)">
+            <div class="method selected" style="cursor:pointer;" (click)="showDep(report.impairment.products)">
               <span class="label">Deprecieri</span>
-              <span class="sum">{{report.impairment.total}} Lei</span>
+              <span class="sum" [ngClass]="{'font': sup}">{{report.impairment.total}} Lei</span>
             </div>
             <div class="method" (click)="showEntry(report.diverse.entry)">
               <span class="label">Diverse</span>
@@ -195,7 +195,8 @@
 
             <div class="method">
               <span class="label font">Total</span>
-              <span class="sum font">{{totalSpendings}} Lei</span>
+              <span class="sum font" *ngIf="!sup">{{totalSpendings}} Lei</span>
+              <span class="sum font" *ngIf="sup">{{totalSpendings - report.impairment.total}} Lei</span>
             </div>
           </div>
         </ion-col>
@@ -220,14 +221,16 @@
               <span class="mfs" [ngClass]="{'font': sup}" (click)="suplies(sup)">{{roundInHtml(productioReport.totals.firstInv + productioReport.totals.intrari - productioReport.totals.secondInv)}} Lei</span>
               <span class="mfr" [ngClass]="{'font': !sup}" (click)="suplies(sup)">{{report.ingsValue}} Lei</span>
               <span class="empl font">{{roundInHtml(report.workValue.tax + report.workValue.total)}} Lei</span>
-              <span class="spend font">{{roundInHtml(totalSpendings + totalRentAndStuff)}} Lei</span>
+              <span class="spend font" *ngIf="!sup">{{roundInHtml(totalSpendings + totalRentAndStuff)}} Lei</span>
+              <span class="spend font" *ngIf="sup">{{roundInHtml(totalSpendings - report.impairment.total + totalRentAndStuff)}} Lei</span>
               <span class="prof font" *ngIf="sup">
                 {{roundInHtml(
                   productioReport.totals.dif -
                   (report.workValue.tax +
                   report.workValue.total +
                   totalRentAndStuff +
-                  totalSpendings)
+                  totalSpendings -
+                  report.impairment.total)
                   )}}
               </span>
               <span class="prof font" *ngIf="!sup">

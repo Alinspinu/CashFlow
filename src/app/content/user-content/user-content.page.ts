@@ -49,6 +49,7 @@ export class UserContentPage implements OnInit {
   getUser(){
     this.userSrv.getUser(this.userId).subscribe(response => {
       this.user = response
+      console.log(this.user)
     })
   }
 

@@ -57,6 +57,25 @@ export class CashRegisterPage implements OnInit {
     })
   }
 
+  deleteDay(day: Day) {
+    if(day.entry.length){
+       showToast(this.toastCtrl, 'Trebuie să ștergi toate intrările din ziua pentru a pute șterge ziua', 3000)
+    } else {
+      this.cashRegService.deleteDay(day._id).subscribe({
+        next: (message) => {
+          const index = this.documents.findIndex(d => d._id === day._id)
+          if(index !== -1) this.documents.splice(index, 1)
+          showToast(this.toastCtrl, message.message, 3000)
+        },
+        error: (error) => {
+          console.log(error)
+          showToast(this.toastCtrl, error.message, 4000)
+        }
+      })
+    }
+  }
+
+
 
   showEntryAmount(entry: any){
       if(this.user.employee.access < 4 && entry.typeOf === 'Salariu') {
@@ -90,7 +109,6 @@ loadDocuments(event?: any) {
     if (event) {
       event.target.complete();
     }
-    console.log(this.documents)
   });
 }
 

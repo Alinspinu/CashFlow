@@ -36,7 +36,7 @@ export function editMessage(message: messageEFactura, supliers: Suplier[]){
 export function mergeProducts(invoice: EFactura, ings: InvIngredient[]){
     let products: EProduct[] = []
     for(let product of invoice.products){
-        const existingProduct = products.find((p) => p.name === product.name)
+        const existingProduct = products.find((p) => p.name === product.name && p.price === product.price)
         if(existingProduct){
             existingProduct.quantity = round(existingProduct.quantity + product.quantity)
             existingProduct.totalNoVat = round(existingProduct.totalNoVat + product.totalNoVat)
@@ -99,7 +99,7 @@ export function createNir(eFactura: EFactura, supliers: Suplier[]){
                 tvaValue: round((eP.totalNoVat *(1+ (eP.vatPrecent/100))) - eP.totalNoVat),
                 total: round(eP.totalNoVat *(1+ (eP.vatPrecent/100))),
                 sellPrice: eP.ingSellPrice,
-                logId: ''
+                logId: generateRandomHexString(9)
             }
             sellPrice = round(sellPrice + product.sellPrice)
             return product
@@ -139,4 +139,18 @@ export function createNir(eFactura: EFactura, supliers: Suplier[]){
     })
     message.mesaje = msg
     return message
+  }
+
+
+
+  function generateRandomBytes(length: number): Uint8Array {
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array); // Fill array with random values
+    return array;
+  }
+
+  // Optional: Convert to hex string if needed
+  function generateRandomHexString(length: number): string {
+    const bytes = generateRandomBytes(length);
+    return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
   }

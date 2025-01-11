@@ -28,6 +28,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   @Input() top: any
   @Input() ings: any
   @Input() ingPage!: boolean
+  @Input() impPage!: boolean
   @Input() hideIng: boolean = false
   @Input() hideTop: boolean = false
 
@@ -74,19 +75,30 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     if (changes['top']) {
       if(changes['top'].currentValue !== undefined){
         this.toppings = changes['top'].currentValue
+        this.toppSend.emit(this.toppings)
       }
     } else if (changes['ings']) {
       if(changes['ings'].currentValue !== undefined) {
         this.displayIngs = changes['ings'].currentValue
+        this.ingredientsToSend = []
+        this.displayIngs.forEach(el => {
+          const ing = {
+            qty: el.qty,
+            ing: el.ing._id
+          }
+          this.ingredientsToSend.push(ing)
+          this.ingsSend.emit(this.ingredientsToSend)
+        })
+        this.calcrRecipeTotal(this.displayIngs)
       }
     }
   }
 
   ngOnInit() {
     this.getUser()
-    setTimeout(()=>{
-      this.setDataToEdit()
-    }, 1100)
+    // setTimeout(()=>{
+    //   this.setDataToEdit()
+    // }, 1100)
   }
 
   getUser(){
@@ -152,24 +164,24 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     this.ingsSend.emit(this.ingredientsToSend)
   }
 
-  setDataToEdit(){
-    if(this.top && this.top.length){
-      this.toppings = this.top
-      this.toppSend.emit(this.toppings)
-    }
-    if(this.ings && this.ings.length){
-      this.displayIngs = this.ings
-      this.displayIngs.forEach(el => {
-        const ing = {
-          qty: el.qty,
-          ing: el.ing._id
-        }
-        this.ingredientsToSend.push(ing)
-        this.ingsSend.emit(this.ingredientsToSend)
-      })
-      this.calcrRecipeTotal(this.displayIngs)
-    }
-  }
+  // setDataToEdit(){
+  //   if(this.top && this.top.length){
+  //     this.toppings = this.top
+  //     this.toppSend.emit(this.toppings)
+  //   }
+  //   if(this.ings && this.ings.length){
+  //     this.displayIngs = this.ings
+  //     this.displayIngs.forEach(el => {
+  //       const ing = {
+  //         qty: el.qty,
+  //         ing: el.ing._id
+  //       }
+  //       this.ingredientsToSend.push(ing)
+  //       this.ingsSend.emit(this.ingredientsToSend)
+  //     })
+  //     this.calcrRecipeTotal(this.displayIngs)
+  //   }
+  // }
 
   setIng(){
     this.selectIngredient(this.ingredients[0])
@@ -195,7 +207,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
        return console.log(obj)
       }
     })
-     
+
     if(searchQuery === ''){
       this.ingredients = []
     }
@@ -207,7 +219,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
 
   async selectIngredient(ing: any){
-    const data = await this.actionSrv.pickQty(PickQtyPage, {um: ing.um, name: ing.name, hideTop: this.hideTop, hideIng: this.hideIng });
+    const data = await this.actionSrv.pickQty(PickQtyPage, {um: ing.um, name: ing.name, hideTop: this.hideTop, hideIng: this.hideIng, imp: this.impPage });
     if(data){
       this.searchbar.setFocus()
       if(data.mode === 'topping'){

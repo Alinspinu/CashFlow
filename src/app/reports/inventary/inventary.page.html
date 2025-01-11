@@ -133,12 +133,12 @@
                 <div class="ing-wrapper input">
                   <span class="name">{{ing.name}} /<span class="um">{{ing.um}}</span></span>
                   <span class="first">{{roundInHtml(ing.first)}}</span>
-                  <span class="upload" (click)="showlog(ing.upload.entries, ing.name, ing.um)">{{roundInHtml(ing.upload.value)}}</span>
+                  <span class="upload" (click)="showlog(ing.upload.entries, ing.name, ing.um, ing._id)">{{roundInHtml(ing.upload.value)}}</span>
                   <span class="second">{{roundInHtml(ing.second)}}</span>
                   <span class="scriptic">{{roundInHtml(ing.first+ing.upload.value - ing.second)}}</span>
                   <span class="sales">{{roundInHtml(ing.saleUnload)}}</span>
                   <span class="depr">{{roundInHtml(ing.depVal)}}</span>
-                  <span class="dif" >{{roundInHtml(ing.saleUnload - ing.depVal - (ing.first+ing.upload.value - ing.second))}}</span>
+                  <span class="dif" >{{roundInHtml(ing.saleUnload + ing.depVal - (ing.first+ing.upload.value - ing.second))}}</span>
                 </div>
               </div>
             </ion-col>

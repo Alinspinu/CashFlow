@@ -45,6 +45,7 @@ import { IngredientContentPage } from '../office/ingredient/ingredient-content/i
 import { RecordPage } from '../office/nirs/record/record.page';
 import { IngredientsPage } from '../office/e-factura/ingredients/ingredients.page';
 import { NirsModalPage } from '../office/e-factura/nirs-modal/nirs-modal.page';
+import { AddPointModalPage } from '../office/sale-point/add-point-modal/add-point-modal.page';
 
 
 
@@ -66,6 +67,7 @@ export class ActionSheetService {
                typeof ProductIngredientPage |
                typeof PaymentsPage |
                typeof TogglePage |
+               typeof EntryViewPage |
                typeof TogglePontPage |
                typeof AddToInventaryPage,
     options: any,
@@ -152,6 +154,7 @@ export class ActionSheetService {
                typeof UploadLogPage |
                typeof IngredientsPage |
                typeof NirsModalPage |
+               typeof AddPointModalPage |
                typeof DelProdViewPage,
     options: any
   ){
@@ -169,7 +172,7 @@ export class ActionSheetService {
 
   async pickQty(
     component: typeof PickQtyPage,
-    ing: {um: string, name: string, hideTop: boolean, hideIng: boolean}
+    ing: {um: string, name: string, hideTop: boolean, hideIng: boolean, imp: boolean}
   ){
     const modal = await this.modalCtrl.create({
       component: component,

@@ -144,8 +144,8 @@ export class InventaryPage implements OnInit {
     }
   }
 
-  async showlog(logs: any[], ingName: string, ingUm: string){
-    await this.actService.openPayment(UploadLogPage, {logs, ingName, ingUm} )
+  async showlog(logs: any[], ingName: string, ingUm: string, ingID: string){
+    await this.actService.openPayment(UploadLogPage, {logs, ingName, ingUm, ingID} )
 
   }
 

@@ -25,12 +25,7 @@ export class SheduleService{
   }
 
 
-  private createBasicAuthHeader(): HttpHeaders {
-    const credentials = btoa(`${environment.API_USER}:${environment.API_PASSWORD}`);
-    return new HttpHeaders({
-      'Authorization': `Basic ${credentials}`
-    });
-  }
+
 
 getLastShedule(){
   return this.http.get<Shedule>(`${environment.BASE_URL}shedule?loc=${environment.LOC}&shedule=last`)
@@ -78,13 +73,11 @@ deleteEntry(userId: any, day: string, month: string, dateStr: string){
 }
 
 updateUserWorkLog(userId: string, workLog: any){
-  const headers = this.createBasicAuthHeader()
-  return this.http.put(`${environment.BASE_URL}users/work-log`,{userId, workLog}, {headers})
+  return this.http.put(`${environment.BASE_URL}users/work-log`,{userId, workLog})
 }
 
 deleteUserWorkEntry(userId: string, day: any){
-  const headers = this.createBasicAuthHeader()
-    return this.http.post(`${environment.BASE_URL}users/work-log`, {userId, day}, {headers})
+    return this.http.post(`${environment.BASE_URL}users/work-log`, {userId, day})
 }
 
 

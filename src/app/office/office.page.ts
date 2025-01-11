@@ -8,6 +8,7 @@ import { IngredientService } from './ingredient/ingredient.service';
 import { AuthService } from '../auth/auth.service';
 import User from '../auth/user.model';
 import { UsersService } from './users/users.service';
+import { NirsService } from './nirs/nirs.service';
 
 
 
@@ -29,6 +30,7 @@ export class OfficePage implements OnInit, OnDestroy {
 
   constructor(
     private productsSrv: ProductsService,
+    private nirsSrv: NirsService,
     private ingSrv: IngredientService,
     private authSrv: AuthService,
     private userSrv: UsersService,
@@ -38,6 +40,7 @@ export class OfficePage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getUser()
+    this.nirsSrv.getNirs().subscribe()
     this.productSub =  this.productsSrv.getProducts(environment.LOC).subscribe()
     this.ingSub = this.ingSrv.getAllIngredients().subscribe()
     this.userSrv.getUsers().subscribe()

@@ -48,6 +48,14 @@
         </ion-select>
     </div>
     <div class="input">
+      <ion-select label="Punct de lucru" placeholder="Alege punctul de lucru" formControlName="salePoint">
+        <ion-select-option *ngFor="let point of salePoints" [value]="point._id">{{point.name}}</ion-select-option>
+      </ion-select>
+      <ion-button  color="medium" (click)="addSailPoint()" style="margin-left: 24px;">
+        <ion-icon src="../../../../assets/icon/add-circle.svg"></ion-icon>
+      </ion-button>
+  </div>
+    <div class="input">
       <ion-input  mode="ios" type="number" label="Preț fară TVA" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
     </div>
     <div class="input">

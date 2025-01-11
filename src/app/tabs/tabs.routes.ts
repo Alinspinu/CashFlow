@@ -61,6 +61,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'gbt-image',
+        loadComponent: () => import('../gbt-image/gbt-image.page').then( m => m.GbtImagePage),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'mobile',
         loadComponent: () => import('../cash-control/mobile/mobile.page').then( m => m.MobilePage)
       },

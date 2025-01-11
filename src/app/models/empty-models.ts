@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { Inventary, line, productionReport } from "./inventary.model";
 import { reportUsers } from "./report.model";
 import { Suplier } from "./suplier.model";
+import { SalePoint } from "./sale-point";
 
 export function emptyUser(){
   const user: User = {
@@ -48,6 +49,7 @@ export function emptyUser(){
           tax: 0
         },
         fix: false,
+        norm: 176,
       },
       workLog: [],
       payments: []
@@ -401,6 +403,15 @@ export function emptyReportUsers(){
     section: []
   }
   return users
+}
+
+export function emptySalePoint(){
+  const point: SalePoint = {
+    name: '',
+    address: '',
+    locatie: environment.LOC
+  }
+  return point
 }
 
 

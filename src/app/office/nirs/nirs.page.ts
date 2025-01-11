@@ -22,7 +22,7 @@ import { Preferences } from '@capacitor/preferences';
   templateUrl: './nirs.page.html',
   styleUrls: ['./nirs.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, DatePickerPage, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
 })
 export class NirsPage implements OnInit {
 
@@ -137,9 +137,6 @@ async selectSuplier(){
     if(suplier){
       this.nirSrv.getnirsBySuplier(suplier._id).subscribe({
         next: (response) => {
-          this.dbNirs = response
-          this.nirs = [...this.dbNirs]
-          this.suplierId = this.nirs[0].suplier._id
           this.calcTotalDue()
         },
         error: (error) => {
@@ -157,7 +154,7 @@ updateNirsBySulier(){
 }
 
 getNirs(){
-  this.nirSrv.getNirs().subscribe(response => {
+  this.nirSrv.nirsSend$.subscribe(response => {
     if(response){
       this.dbNirs = response
       this.nirs = [...this.dbNirs]
@@ -180,11 +177,10 @@ async paySelectedNirs(){
         const data = {records: suplier.records, title: `Alege intrarea din registru pentru valoarea de ${calcTotalDocs(this.selectedNirs).total} Lei`, nir: [], message}
         await this.updatedocStatuNirPayment(data, true, this.selectedNirs)
       }
-    } 
+    }
   } else{
     showToast(this.toastCtrl, 'Nu poti plăti decât documente neplătite!', 3000)
   }
-
 }
 
 
@@ -203,7 +199,7 @@ async payNir(nir: Nir, index: number){
         const message =  `Plata factura: ${nir.nrDoc} de la Slayer Cup`
         const data = {records: suplier.records, title: `Alege intrarea din registru pentru valoarea de ${nir.totalDoc} Lei`, nir: [], message}
         await this.updatedocStatuNirPayment(data, true,  [nir])
-      } 
+      }
     }
   }
 }
@@ -212,18 +208,9 @@ async updatedocStatuNirPayment( data:{records: Record[], title: string, nir: Nir
   data.nir = nir
   const response = await this.actionSheetService.openSelect(RecordPage, data, '')
   if(response){
-    console.log(response)
     const records = response.records
     this.nirSrv.updateDocPaymentStatus(payment, response.nir, response.type).subscribe({
       next: (response) => {
-        this.nirs = this.nirs.map(nir => {
-           const updatedNir = response.nirs.find(n => n._id === nir._id)
-           if(updatedNir){
-            return nir = updatedNir
-           } else {
-            return nir
-           }
-        })
         this.nirSrv.updateSuplierRecords(nir[0].suplier._id, records).subscribe({
           next: (response) => {
             const supInd = this.supliers.findIndex(s => s._id === response.suplier._id)
@@ -305,26 +292,14 @@ searchNir(ev: any){
           const res = await this.actionSheetService.openAuth(DatePickerPage)
           if(res){
             this.endDate = res
-              this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
-                if(response){
-                  this.dbNirs = response
-                  this.nirs = [...this.dbNirs]
-                  this.calcTotalDue()
-                }
-              })
+              this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe()
            }
          }
       } else {
         const res = await this.actionSheetService.openAuth(DatePickerPage)
         if(res && this.startDate){
           this.endDate = res
-            this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
-              if(response){
-                this.dbNirs = response
-                this.nirs = [...this.dbNirs]
-                this.calcTotalDue()
-              }
-            })
+            this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe()
          } else {
           showToast(this.toastCtrl, 'Trebuie să alegi întâi data de început!', 2000)
          }
@@ -346,7 +321,6 @@ searchNir(ev: any){
     if(result){
       this.nirSrv.deleteNir(id).subscribe(response => {
         if(response){
-          this.nirs.splice(index, 1)
           showToast(this.toastCtrl, response.message, 2000)
         }
       })
@@ -398,8 +372,8 @@ searchNir(ev: any){
     this.totalColor= 'none'
     this.dueDaysColor = 'none'
   }
-  
-  
+
+
   date(){
     this.nirs.sort((a, b) =>{
       const dateA = new Date(a.documentDate).getTime()
@@ -416,7 +390,7 @@ searchNir(ev: any){
     this.totalColor= 'none'
      this.dueDaysColor = 'none'
   }
-  
+
   total(){
     this.nirs.sort((a,b) => b.totalDoc - a.totalDoc)
     this.suplierColor = 'none'
@@ -425,7 +399,7 @@ searchNir(ev: any){
     this.totalColor = 'primary'
      this.dueDaysColor = 'none'
   }
-  
+
   suplier(){
     this.nirs.sort((a,b) => a.suplier.name.localeCompare(b.suplier.name))
     this.totalColor= 'none'
@@ -434,8 +408,8 @@ searchNir(ev: any){
     this.indexColor = 'none'
      this.dueDaysColor = 'none'
   }
-  
-  
+
+
   dueDays(){
     this.nirs.sort((a,b) => {
       if(a.payd !== b.payd){
@@ -448,7 +422,7 @@ searchNir(ev: any){
     this.dateColor = 'none'
     this.indexColor = 'none'
      this.dueDaysColor = 'primary'
-  
+
   }
 
 

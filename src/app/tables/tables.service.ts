@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Injectable} from "@angular/core";
-import { BehaviorSubject, Observable, of, switchMap, take, tap, firstValueFrom, throwError, catchError, subscribeOn } from "rxjs";
+import { BehaviorSubject, Observable, of, switchMap, take, tap, firstValueFrom} from "rxjs";
 import { Preferences } from "@capacitor/preferences"
 import { Bill, BillProduct, Table, Topping } from "../models/table.model";
 import { environment } from "src/environments/environment";
@@ -25,7 +25,6 @@ export class TablesService{
 
   user!: any;
 
-  headers: HttpHeaders = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
 
   constructor(
     private http: HttpClient,
@@ -33,8 +32,6 @@ export class TablesService{
   ){
     this.tableState = new BehaviorSubject<Table[]>([emptyTable()]);
     this.tableSend$ =  this.tableState.asObservable();
-    this.screenWidth = window.innerWidth
-    this.screenWidth < 450 ? this.baseUrl = environment.SAVE_URL_MOBILE : this.baseUrl = environment.SAVE_URL
   }
 
 //******************************ORDERS************************* */
@@ -57,6 +54,8 @@ addNewBill(masa: number, name: string, newOrder: boolean){
   }
 }
 
+
+
 addOnlineOrder(bill: Bill){
     const table = this.tables[53]
     table.bills.push(bill)
@@ -65,9 +64,10 @@ addOnlineOrder(bill: Bill){
     this.tableState.next([...this.tables])
 }
 
+
+
 updateOrder(bill: Bill){
   const table = this.tables.find(obj => obj.index === bill.masa)
-  const tableIndex = this.tables.findIndex(obj => obj.index === bill.masa)
   if(table){
     const billIndex = table.bills.findIndex(obj => {
       if(obj){
@@ -82,25 +82,8 @@ updateOrder(bill: Bill){
             this.removeBill(bill.masa, billIndex)
           } else {
           table.bills[billIndex] = bill
-          this.saveOrder(tableIndex +1, bill._id, billIndex, bill.employee, bill.inOrOut, bill.out).subscribe(response => {
-            if(response){
-              this.tableState.next([...this.tables])
-            }
-          })
+          this.tableState.next([...this.tables])
          }
-      } else {
-        const index = table.bills.findIndex(obj => obj.soketId === '')
-        if(index === -1){
-          if(bill._id !== 'new'){
-            table.bills.push(bill)
-            const index = table.bills.findIndex(obj => obj.soketId === bill.soketId)
-            this.saveOrder(tableIndex +1, bill._id, index, bill.employee, bill.inOrOut, bill.out).subscribe(response => {
-              if(response){
-                this.tableState.next([...this.tables])
-              }
-            })
-          }
-        }
       }
     }
 
@@ -153,7 +136,6 @@ async manageSplitBills(tableIndex: number, billIndex: number, employee: any, old
 }
 
 removeBill(masa: number, billIndex: number){
-  console.log('remove function', billIndex)
   let table = this.tables[masa-1];
   if(billIndex  === -1){
     table.bills.pop()
@@ -177,7 +159,6 @@ removeLive(masa: number, soketId: string){
       }
   })
   if(billIndex !== -1){
-    // console.log('remove live function', billIndex)
     table.bills.splice(billIndex, 1)
     this.webRtc.sendProductData(JSON.stringify(emptyBill()))
     const tables = JSON.stringify(this.tables);
@@ -200,7 +181,6 @@ if(table){
     product.quantity = 1
     bill.products.push(product)
     bill.total = bill.total + product.price
-    console.log('add bill', table.bills)
     this.webRtc.sendProductData(JSON.stringify(bill))
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
@@ -214,7 +194,6 @@ if(table){
     bill.products.push(product)
     bill._id = 'new'
     table.bills.push(bill)
-    console.log('add bill', table.bills)
     this.webRtc.sendProductData(JSON.stringify(bill))
     const tables = JSON.stringify(this.tables);
     Preferences.set({key: 'tables', value: tables});
@@ -373,7 +352,7 @@ getTables(locatie: string, id: string){
       this.tableState.next([...this.tables])
     }
   })
-  this.http.get<Table[]>(`${this.baseUrl}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
+  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
       console.log('get table service',this.tables[0])
@@ -385,7 +364,7 @@ getTables(locatie: string, id: string){
 }
 
 addTable(name: string, locatie: string){
-  return this.http.post<{message: string, table: Table}>(`${this.baseUrl}table?loc=${locatie}`, {name: name})
+  return this.http.post<{message: string, table: Table}>(`${environment.BASE_URL}table?loc=${locatie}`, {name: name})
     .pipe(take(1), tap(response => {
     if(response){
       this.tables.push(response.table)
@@ -398,7 +377,7 @@ addTable(name: string, locatie: string){
 
 editTable(tableIndex: number, name: string){
   const table = this.tables[tableIndex-1];
-  return this.http.put<{message: string, table: Table}>(`${this.baseUrl}table`,{name: name, tableId: table._id})
+  return this.http.put<{message: string, table: Table}>(`${environment.BASE_URL}table`,{name: name, tableId: table._id})
   .pipe(take(1), tap(response => {
     if(response){
       const table = this.tables[response.table.index-1]
@@ -412,7 +391,7 @@ editTable(tableIndex: number, name: string){
 
 
 deleteTable(tableId: string, index: number){
-  return this.http.delete<{message: string}>(`${this.baseUrl}table?tableId=${tableId}`)
+  return this.http.delete<{message: string}>(`${environment.BASE_URL}table?tableId=${tableId}`)
   .pipe(take(1), tap(response => {
     if(response){
       const indexToDelete = this.tables.findIndex(obj => obj.index === index)
@@ -449,11 +428,11 @@ deleteTable(tableId: string, index: number){
   bill.onlineOrder = false
   bill.pending = true
   bill.prepStatus = 'open'
+  // this.printOrder(bill)
   const billToSend = JSON.stringify(bill);
-  return this.http.post<{bill: Bill, masa: any}>(`${this.baseUrl}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend})
+  return this.http.post<{bill: Bill, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend, mode: true})
       .pipe(take(1),
         switchMap(res => {
-          console.log(res)
         this.tables[tableIndex-1].bills[billIndex] = res.bill
         this.tableState.next([...this.tables]);
         const tables = JSON.stringify(this.tables);
@@ -464,43 +443,45 @@ deleteTable(tableId: string, index: number){
 };
 
 
+printOrder(billToSend: any){
+  return this.http.post(`${this.baseUrl}orders/bill`,  {bill: billToSend}).subscribe()
+}
+
 saveBillToCloud(bill: Bill){
   this.http.post(`${environment.BASE_URL}pay/save-bill-cloud`, {bill: bill}).subscribe(res => {
   })
 }
 
 
-
 sendBillToPrint(bill: Bill){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string, bill: Bill}>(`${this.baseUrl}pay/print-bill`, {bill: bill}, {headers})
+  // this.sendBillToPrintLocal(bill)
+  return this.http.post<{message: string, bill: Bill}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill, mode: true})
+}
+
+sendBillToPrintLocal(bill: Bill){
+  return this.http.post<{message: string, bill: Bill}>(`${this.baseUrl}pay/print-bill`, {bill: bill}).subscribe()
 }
 
 
 uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation}, {headers})
+  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation})
 }
 
 unloadIngs(ings: any, quantity: number, operation: any, locatie: string){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/unload-ings?loc=${locatie}`, {ings, quantity, operation}, {headers})
+  return this.http.post<{message: string}>(`${environment.BASE_URL}orders/unload-ings?loc=${locatie}`, {ings, quantity, operation})
 }
 
 deleteOrders(data: any[]){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.put<{message: string}>(`${this.baseUrl}orders/bill`, {data: data}, {headers})
+  return this.http.put<{message: string}>(`${environment.BASE_URL}orders/bill`, {data: data})
 }
 
 registerDeletetProduct(product: any){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product}, {headers})
+  return this.http.post(`${environment.BASE_URL}orders/register-del-prod`, {product: product})
 }
 
 
 setOrderTime(orderId: string, time: number){
-  const headers = new HttpHeaders().set('bypass-tunnel-reminder', 'true')
-  return this.http.get(`${environment.BASE_URL}orders/set-order-time?orderId=${orderId}&time=${time}`, {headers})
+  return this.http.get(`${environment.BASE_URL}orders/set-order-time?orderId=${orderId}&time=${time}`)
 }
 
 //********************EMPTY MODELS**************************** */

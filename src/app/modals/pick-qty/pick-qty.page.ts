@@ -17,7 +17,7 @@ export class PickQtyPage implements OnInit {
 
   @ViewChild('ingInputQty') ingQty!: IonInput
 
-  ingredient: {um: string, name: string, hideTop: boolean, hideIng: boolean} = {um: '', name: '', hideTop: false, hideIng: false}
+  ingredient: {um: string, name: string, hideTop: boolean, hideIng: boolean, imp: boolean} = {um: '', name: '', hideTop: false, hideIng: false, imp: false}
   qty!: number
   mode: string = 'ingredient'
   toppingPrice!: number

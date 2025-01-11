@@ -16,11 +16,11 @@ export const environment = {
 
   SAVE_URL_MOBILE: 'https://flow-api-394209.lm.r.appspot.com/',
   SAVE_URL: 'http://localhost:8080/',
-  // SAVE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
 
 
-  BASE_URL: 'http://localhost:8080/',
-  // BASE_URL: 'https://flow-api-394209.lm.r.appspot.com/',
+
+  // BASE_URL: 'http://localhost:8080/',
+  BASE_URL: 'https://flowmanager.ro/',
 
 
   VIVA_POS_IP: 'https://192.168.100.9:9564/pos/v1/sale',

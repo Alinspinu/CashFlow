@@ -21,16 +21,8 @@ const routes: Routes = [
     loadComponent: () => import('./office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
   },
   {
-    path: 'table-content-mobile/:id',
-    loadChildren: () => import('./content/table-content-mobile/table-content-mobile.routes').then( m => m.routes)
-  },
-  {
     path: 'user-display',
     loadComponent: () => import('./content/user-display/user-display.page').then( m => m.UserDisplayPage)
-  },
-  {
-    path: 'order-content/:id',
-    loadComponent: () => import('./content/order-content/order-content.page').then( m => m.OrderContentPage)
   },
   {
     path: 'entry-view',

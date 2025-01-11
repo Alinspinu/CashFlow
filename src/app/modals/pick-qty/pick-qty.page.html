@@ -8,7 +8,7 @@
 
 <ion-content (keyup.enter)="saveData()">
   <ion-list class="list">
-    <ion-item lines="none" class="input">
+    <ion-item lines="none" class="input" *ngIf="!ingredient.imp">
       <ion-select [(ngModel)]="mode" label="Salvează ca..">
         <ion-select-option value="ingredient" >Ingredient în rețetă</ion-select-option>
         <ion-select-option value="topping" >Topping extra</ion-select-option>

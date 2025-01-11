@@ -39,7 +39,11 @@
         <ion-card *ngFor="let day of documents; let z = index" class="day">
           <ion-card-header>
             <span class="cash">Cash in  {{round(day.cashIn)}} Lei</span>
-            <span class="date">DATA  {{formatDate(day.date)}}</span>
+            <span class="date">
+              <ion-icon src="../../../assets/icon/trash-outline.svg" color="dangar" (click)="deleteDay(day)" style="cursor: pointer;"></ion-icon>
+              DATA  {{formatDate(day.date)}}
+            </span>
+
           </ion-card-header>
           <ion-card-content class="ion-no-padding">
             <ion-list>

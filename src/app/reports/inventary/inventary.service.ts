@@ -43,4 +43,8 @@ export class InventaryService{
     compareInventary(start: string, end: string){
       return this.http.post<{compareInv: CompareInv}>(`${environment.BASE_URL}ing/compare-inv`, {start, end, loc: environment.LOC})
     }
+
+    deleteLog(logID: string, ingID: string){
+      return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/log?ingID=${ingID}&logID=${logID}`)
+    }
 }

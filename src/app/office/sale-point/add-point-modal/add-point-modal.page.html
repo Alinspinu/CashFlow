@@ -1,0 +1,34 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <div class="title-wrapper">
+      <div class="title">ADAUGĂ PUNCT DE LUCRU</div>
+    </div>
+      <ion-button (click)="cancel()" slot="end" color="medium" size="large">
+        Închide
+      </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="content-container">
+  <ion-grid>
+    <ion-row class="ion-padding">
+      <ion-col size-lg="4" offset-lg="4">
+        <div class="input">
+          <ion-input  mode="ios" type="text" [(ngModel)]="name"  fill="outline" placeholder="Nume punct de lucru"></ion-input>
+        </div>
+        <div class="input">
+          <ion-textarea  mode="ios" [(ngModel)]="address"  fill="outline" placeholder="Adresa punct de lucru"></ion-textarea>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-button size="large" expand="block" (click)="saveSalePoint()" color="medium">
+    Salvează punct de lucru
+  </ion-button>
+</ion-footer>

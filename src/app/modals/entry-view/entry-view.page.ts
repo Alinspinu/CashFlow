@@ -16,6 +16,10 @@ export class EntryViewPage implements OnInit {
   entries!: any[]
   total: number = 0
 
+ingMode: boolean = false
+
+ingEntries!: any[]
+
   constructor(
     private navPar: NavParams,
     private modalCtrl: ModalController
@@ -24,10 +28,15 @@ export class EntryViewPage implements OnInit {
 
 
   ngOnInit() {
-   const data =  this.navPar.get('options')
-   this.entries = data.entries
-   this.total = data.total
-   console.log(this.entries)
+  const sub = this.navPar.get('sub')
+  const data =  this.navPar.get('options')
+  if(sub){
+    this.ingMode = true
+    this.ingEntries = data.entries
+  } else {
+    this.entries = data.entries
+  }
+  this.total = data.total
   }
 
 
@@ -37,6 +46,10 @@ export class EntryViewPage implements OnInit {
 
 formateDate(date: string){
   return formatedDateToShow(date).split('ora')[0]
+}
+
+roundH(num: number){
+  return round(num)
 }
 
 }

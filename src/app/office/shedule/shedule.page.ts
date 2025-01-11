@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { UsersService } from '../users/users.service';
-import { environment } from '../../../environments/environment.prod';
 import { SheduleService } from './shedule.service';
 import User from '../../auth/user.model';
 import { Shedule } from '../../models/shedule.model';
@@ -74,7 +73,7 @@ getLastShedule(){
 }
 
 editPeriod(period: string){
-  const split = period.split(' 2024')
+  const split = period.split(' 2025')
   return `${split[0]}${split[1]}`
 }
 
@@ -168,7 +167,7 @@ async addOnShedule(day: any, empl: User){
           },
           employee: empl._id
         }
-        const workValue = round((empl.employee.salary.inHeand / 176) * hours)
+        const workValue = round((empl.employee.salary.inHeand / empl.employee.salary.norm) * hours)
         const userWorkLog = {
           day: dayDate.setHours(0,0,0,0),
           checkIn: start,

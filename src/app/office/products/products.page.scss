@@ -71,13 +71,13 @@ ion-content{
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  overflow-y: scroll;
+  flex-wrap: wrap;
   padding: 8px 0;
   margin: 0 24px;
   .cat-button{
     display: flex;
     min-width: fit-content;
-    margin-right: 6px;
+    margin:  4px 6px 0 0 ;
     font-family: RoseReg;
     padding: 8px;
     background-color: var(--light-blue);

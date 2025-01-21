@@ -1,118 +1,179 @@
 ion-toolbar, ion-content, ion-footer{
   --background: var(--ion-color-light) !important;
-  background-color: var(--ion-color-tertiary) !important;;
+  background-color: var(--ion-color-light) !important;;
 }
 
 
-.fur-name{
-  cursor: pointer;
-  --background: var(--ion-color-warning-shade);
-  border-radius: 8px;
-  margin: 4px;
-  // margin-left: 1.1rem;
-  span{
-    color: var(--ion-color-warning-contrast);
-  }
-}
-
-.recipe{
-  height: 100px !important;
-}
-
-img{
-  height: 25px;
-  cursor: pointer
+.title, .section-label, ion-input{
+  font-family: RoseMed;
 }
 
 
-ion-input, ion-select, ion-title,ion-button, ion-searhbar, ion-textarea{
-  font-family: RoseMed !important;
-}
-
-
-
-
-.subtitle{
-  margin: 1.5rem 0;
-  font-size: 18px;
-}
-
-.input{
-  flex: 50%;
-  margin: 0.3rem 0 0.2rem 0.5rem;
-  border-radius: 4px;
-  padding-left: 12px;
-  background-color:rgba(153, 133, 103, 0.444);
+.title{
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  ion-input, ion-textarea{
+  flex-direction: column;
+  padding: 24px 0 24px 36px;
+  .name{
+    font-size: 36px;
+  }
+  .title-label{
     font-size: 14px;
-  }
-  ion-select{
-    font-size: 13px;
-  }
-  .cat-icon{
-    font-size: 22px;
-    cursor: pointer;
-    margin-right: 12px;
+    color: var(--grey)
   }
 }
 
-.wrapper{
-  display: flex;
+section{
+  margin: 0 36px;
+  border-bottom: solid 1px var(--grey);
+  .section-label{
+    display: flex;
+    flex-direction: column;
+    .label-title{
+      font-size: 24px;
+    }
+    .label-sub-title{
+      font-size: 14px;
+      color: var(--grey)
+    }
+  }
+
+  .inputs-wrapper{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    
+      .input{
+        margin: 8px 0 8px 36px;
+      }
+  }
 }
 
-// .image-wrapper{
-//   height: 100px;
-//   width: 100px;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// .fur-name{
+//   cursor: pointer;
+//   --background: var(--ion-color-warning-shade);
+//   border-radius: 8px;
+//   margin: 4px;
+//   // margin-left: 1.1rem;
+//   span{
+//     color: var(--ion-color-warning-contrast);
+//   }
 // }
 
-.input2{
-  border: 0.5px solid var(--ion-color-medium);
-  border-radius: 8px;
-  margin: 1rem 0 0.5rem 0.5rem;
-}
+// .recipe{
+//   height: 100px !important;
+// }
 
-.header{
-  font-size: 17px !important;
-  margin-left: 0.5rem;
-}
-
-.total{
-  font-size: 19px;
-  margin-left: 0.5rem;
-}
-
-.content-container{
-  display: flex;
-  flex-direction: row;
-  font-weight: 400;
-  font-size: 16px;
-  .name{
-    margin-left: 0.2rem;
-    flex: 30%;
-  };
-  .price{
-    text-align: end;
-  };
-  .button{
-    --margin-left: auto;
-  };
-  .sell-price{
-    text-align: end;
-    font-weight: 600;
-  }
-  .index{
-    max-width: 10px;
-  }
-}
+// img{
+//   height: 25px;
+//   cursor: pointer
+// }
 
 
-.sub-product-container{
-  // border: 0.5px solid var(--ion-color-medium);
-  // border-radius: 8px;
-  padding: 0.4rem;
-  margin: 0 0.5rem 0.5rem 0.5rem;
-}
+// ion-input, ion-select, ion-title,ion-button, ion-searhbar, ion-textarea{
+//   font-family: RoseMed !important;
+// }
+
+
+
+
+// .subtitle{
+//   margin: 1.5rem 0;
+//   font-size: 18px;
+// }
+
+// .input{
+//   flex: 50%;
+//   margin: 0.3rem 0 0.2rem 0.5rem;
+//   border-radius: 4px;
+//   padding-left: 12px;
+//   background-color:rgba(153, 133, 103, 0.444);
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   ion-input, ion-textarea{
+//     font-size: 14px;
+//   }
+//   ion-select{
+//     font-size: 13px;
+//   }
+//   .cat-icon{
+//     font-size: 22px;
+//     cursor: pointer;
+//     margin-right: 12px;
+//   }
+// }
+
+// .wrapper{
+//   display: flex;
+// }
+
+// // .image-wrapper{
+// //   height: 100px;
+// //   width: 100px;
+// // }
+
+// .input2{
+//   border: 0.5px solid var(--ion-color-medium);
+//   border-radius: 8px;
+//   margin: 1rem 0 0.5rem 0.5rem;
+// }
+
+// .header{
+//   font-size: 17px !important;
+//   margin-left: 0.5rem;
+// }
+
+// .total{
+//   font-size: 19px;
+//   margin-left: 0.5rem;
+// }
+
+// .content-container{
+//   display: flex;
+//   flex-direction: row;
+//   font-weight: 400;
+//   font-size: 16px;
+//   .name{
+//     margin-left: 0.2rem;
+//     flex: 30%;
+//   };
+//   .price{
+//     text-align: end;
+//   };
+//   .button{
+//     --margin-left: auto;
+//   };
+//   .sell-price{
+//     text-align: end;
+//     font-weight: 600;
+//   }
+//   .index{
+//     max-width: 10px;
+//   }
+// }
+
+
+// .sub-product-container{
+//   // border: 0.5px solid var(--ion-color-medium);
+//   // border-radius: 8px;
+//   padding: 0.4rem;
+//   margin: 0 0.5rem 0.5rem 0.5rem;
+// }
 

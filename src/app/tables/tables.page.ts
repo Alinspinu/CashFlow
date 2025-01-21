@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
@@ -14,6 +14,7 @@ import { SpinnerPage } from '../modals/spinner/spinner.page';
 import { WebRTCService } from '../content/webRTC.service';
 import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { AudioService } from '../shared/audio.service';
+import { MenuController } from '@ionic/angular';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class TablesPage implements OnInit, OnDestroy {
   onlineOrder: boolean = false
   dynamicColorChange = false
   colorToggleInterval: any
+  menuCloseSubscription!: Subscription;
 
   isLoadding: boolean = true
 
@@ -48,6 +50,8 @@ export class TablesPage implements OnInit, OnDestroy {
 
   screenWidth!: number
 
+  menuOpen: boolean = false
+
   volumeSrc: string = 'assets/icon/volume-mute-outline.svg'
 
   constructor(
@@ -58,15 +62,20 @@ export class TablesPage implements OnInit, OnDestroy {
     private authSrv: AuthService,
     private webRTC: WebRTCService,
     private audioSrv: AudioService,
+    @Inject(MenuController) private menuCtrl: MenuController
     ) {
       this.screenWidth = window.innerWidth
+
     }
+
 
 ngOnInit(): void {
   this.getUser()
   this.hideBill()
   this.getIncommingOrders()
+  this.menuChange()
 }
+
 
 
 
@@ -75,7 +84,7 @@ ngOnDestroy(): void {
   if(this.tableSubs){
     this.tableSubs.unsubscribe()
   }
-
+   this.menuChange()
 }
 
 testSound(){
@@ -236,6 +245,19 @@ goToUser(){
   logout(){
     this.authSrv.logout()
     this.router.navigate(['/auth'])
+  }
+
+
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
   }
 
 }

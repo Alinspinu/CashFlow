@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
-import { formatedDateToShow, getPaymentMethod } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, formatOrderDate, getPaymentMethod } from 'src/app/shared/utils/functions';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { PaymentPage } from '../payment/payment.page';
@@ -32,7 +32,7 @@ export class OrderAppViewPage implements OnInit {
   }
 
   formatDate(date:any) {
-    return formatedDateToShow(date)
+    return formatOrderDate(date)
   }
 
   sendTime(time: string){

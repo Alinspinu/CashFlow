@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { NgChartsModule } from 'ng2-charts';
 
 
 const dbConfig: DBConfig  = {
@@ -28,6 +29,7 @@ const dbConfig: DBConfig  = {
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    NgChartsModule,
     IonicModule.forRoot(),
      AppRoutingModule,
      HttpClientModule,

@@ -1,133 +1,61 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-    <!-- <ion-title *ngIf="user">{{user.employee.fullName}}</ion-title> -->
-    <ion-buttons>
-      <ion-button *ngFor="let user of users" (click)="showOrders(user)" [ngClass]="{ 'active-button': user.show }">
-        {{user.name}}
-      </ion-button>
-    </ion-buttons>
-    <ion-title slot="end">{{today()}}</ion-title>
-  </ion-toolbar>
-</ion-header>
+
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
 
 
-<div class="contents-container" *ngIf="!isLoading">
-  <ion-content [fullscreen]="true" class="cash-info">
-    <ion-title class="title" *ngIf="userTotal > 0">
-      Încsări
-    </ion-title>
-    <div class="col">
-      <div class="cash-info-wrappr">
-        <div class="input" *ngIf="userCash > 0">
-          <span class="description"> Cash</span>
-          <span class="amount">{{userCash}} Lei</span>
-        </div>
-        <div class="input" *ngIf="userCard > 0">
-          <span class="description">Card</span>
-          <span class="amount">{{userCard}} Lei</span>
-        </div>
-        <div class="input" *ngIf="userViva > 0">
-          <span class="description">Viva Wallet</span>
-          <span class="amount">{{userViva}} Lei</span>
-        </div>
-        <div class="input" *ngIf="userTips > 0">
-          <span class="description">Bacșiș</span>
-          <span class="amount">{{userTips}} Lei</span>
-        </div>
-        <div class="input" *ngIf="userVoucher > 0">
-          <span class="description">Voucher</span>
-          <span class="amount">{{userVoucher}} Lei</span>
-        </div>
-        <div class="input" *ngIf="userOnline > 0">
-          <span class="description">Plată Online</span>
-          <span class="amount">{{userOnline}} Lei</span>
-        </div>
-        <div class="input" *ngIf="userTotal > 0">
-          <span class="description bold">Total încasari</span>
-          <span class="amount bold">{{userTotal}} Lei</span>
-        </div>
-        <div class="input" *ngIf="cashIn > 0">
-          <span class="description">Bani Adăugați</span>
-          <span class="amount">{{cashIn}} Lei</span>
-        </div>
-        <div class="input" *ngIf="cashOut > 0">
-          <span class="description">Bani Scoși</span>
-          <span class="amount">{{cashOut}} Lei</span>
-        </div>
+
+<ion-split-pane when="sm" contentId="main">
+  <ion-menu contentId="main">
+      <div class="menu-toolbar">
+          <ion-icon src="../../assets/icon/home-outline.svg" style="font-size: 68px;"></ion-icon>
       </div>
-      </div>
-    <ion-title class="title" *ngIf="payments.length">
-      Plăti
-    </ion-title>
-    <div class="col">
-      <div class="cash-info-wrappr" *ngIf="payments.length">
-        <div class="input payment" *ngFor="let payment of payments">
-          <span class="description">{{payment.description}}</span>
-          <span class="amount">{{payment.amount}} Lei</span>
+    <ion-content>
+      <ion-list>
+        <div *ngFor="let page of appPages">
+          <ion-item
+          lines="none"
+          [ngClass]="{'selected': page.show}"
+          (click)="selectPage(page.name)"
+          *ngIf="page.name === 'Încasări' ||
+          access > 2 ||
+          page.name === 'Comenzi'
+          "
+          >
+            <ion-icon slot="start" [src]="page.icon"></ion-icon>
+            <ion-label>{{page.name}}</ion-label>
+          </ion-item>
         </div>
-        <div  class="input">
-          <span class="description bold">Total plăți</span>
-          <span class="amount bold">{{paymentsTotal}} Lei</span>
-        </div>
-      </div>
-      <div class="button-wrapper">
-        <ion-button expand="block" size="large" color="medium" (click)="onReports('x')" [disabled]="disableButtons">
-          <ion-icon src="../../../assets/icon/business.svg"></ion-icon>
-         RAPORT X
-        </ion-button>
-        <!-- <ion-button expand="block" size="large" color="medium" (click)="onReports('z')" [disabled]="disableButtons">
-          <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
-          RAPORT Z
-        </ion-button> -->
-        <ion-button expand="block" size="large" color="medium" (click)="inAndOut('in')" [disabled]="disableButtons">
-          <ion-icon src="../../../assets/icon/add-circle-outline.svg"></ion-icon>
-         ADAUGA BANI IN CASA
-        </ion-button>
-        <ion-button expand="block" size="large" color="medium" (click)="inAndOut('out')" [disabled]="disableButtons">
-          <ion-icon src="../../../assets/icon/remove-circle-outline.svg"></ion-icon>
-        SCOATE BANI DIN CASA
-        </ion-button>
-        <ion-button expand="block" size="large" color="medium" (click)="onReports('z')">
-          <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
-       INCHIDERE ZI
-        </ion-button>
-        <ion-button expand="block" size="large" color="medium" (click)="adPayment()">
-          <ion-icon src="../../../assets/icon/cash-register.svg"></ion-icon>
-       INREGISTREAZĂ O PLATĂ
-        </ion-button>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+<div class="ion-page" id="main">
+
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="ion-no-border content-toolbar">
+        <ion-title slot="start" class="ion-no-padding">{{title}}</ion-title>
+        <ion-title class="date" slot="end">{{date}}</ion-title>
+      </ion-toolbar>
+
+    <div class="buttons-container">
+      <div class="button animated-border" *ngFor="let user of users; let i =index;" [ngClass]="{'animate selected-button': user.show, 'removing': !user.show && activeTabIndex !== i}" (click)="userOrders(user, i)">
+        <span class="value">{{user.name}}</span>
       </div>
     </div>
-  </ion-content>
-  <div class="separator"></div>
-<ion-content [fullscreen]="true" class="orders">
-    <ion-title class="title">
-      Note Încasate
-    </ion-title>
-    <ion-searchbar mode="ios" [(ngModel)]="productSearch"  placeholder="Caută notă după produs"  (ionInput)="searchProduct($event)" #searchbar>
-    </ion-searchbar>
-  <div class="input order" *ngFor="let order of orders; let i = index;" (click)="openBill(order)">
-    <span>Nr.{{order.index}}</span>
-    <span>Ora - {{orderTime(order.updatedAt)}}</span>
-    <span>{{showPaymentMethod(order.payment)}}</span>
-    <span>Masa: {{order.masa}}</span>
-    <span *ngIf="order.employee">Casier: {{order.employee.fullName}}</span>
-  </div>
-</ion-content>
-</div>
+    </ion-header>
 
-<div class="spinner-container" *ngIf="isLoading">
-  <ion-content [fullscreen]="true">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6" offset="3">
-            <app-spinner></app-spinner>
-            <div class="label-wrapper">
-              <ion-label class="label" *ngIf="message" color="primary">Se lucrează intens....</ion-label>
-            </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-content>
-</div>
+    <ion-content [fullscreen]="true" *ngIf="appPages[0].show">
+      <app-sales [orders]="data.orders" [access]="access" (date)="changeDate($event)"></app-sales>
+    </ion-content>
+    <ion-content [fullscreen]="true" *ngIf="appPages[1].show">
+      <app-orders [data]="data" [access]="access" (date)="changeDate($event)"></app-orders>
+    </ion-content>
+    <ion-content [fullscreen]="true" *ngIf="appPages[2].show && access > 2">
+      <app-products [data]="data.orders" (date)="changeDate($event)"></app-products>
+    </ion-content>
+  </div>
+</ion-split-pane>
+
 
 

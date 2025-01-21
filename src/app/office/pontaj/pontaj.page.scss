@@ -4,14 +4,18 @@ ion-content{
   --background: var(--ion-color-tertiary) !important;
 }
 
-
-
-
-.date{
-  font-family: NoirProSemi !important;
-  font-size: 17px;
-  margin-left: 8px;
+ion-title{
+  font-family: RoseMed !important;
 }
+
+
+
+
+// .date{
+//   font-family: NoirProSemi !important;
+//   font-size: 17px;
+//   margin-left: 8px;
+// }
 
 .barista{
   background-color: rgb(61, 158, 190);
@@ -65,51 +69,42 @@ ion-content{
 
 
 .square{
-  font-family: NoirProReg !important;
+  font-family: RoseMed !important;
   border-radius: 4px;
-  height: 40px;
+  height: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 12px;
   text-align: center;
   .name{
-    font-size: 18px;
+    font-size: 12px;
     text-align: center;
-  }
-  .position{
-    font-size: 14px;
-  }
-  .day{
-    font-size: 20px;
-  }
-  .date{
-    font-size: 14px;
-  }
-  .label{
-    font-size: 18px;
   }
 }
 
 .size{
-  font-size: 20px !important;
+  font-size: 13px !important;
+}
+.padding{
+  padding: 2px;
 }
 
 .total{
-  font-family: NoirProReg !important;
+  font-family: RoseMed !important;
   border-radius: 4px;
-  height: 50px;
+  height: 40px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
-  font-size: 22px;
+  font-size: 16px;
   text-align: center;
   background-color: rgb(9, 46, 66);
   color: white;
   .day{
-    font-size: 14px!important;
+    font-size: 8px!important;
   }
 }
 

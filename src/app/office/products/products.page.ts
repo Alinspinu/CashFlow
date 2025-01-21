@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -9,26 +9,28 @@ import { Router } from '@angular/router';
 import { Product } from 'src/app/models/category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { CategoryPage } from '../CRUD/category/category.page';
-import { findCommonNumber, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
+import { findCommonNumber, getUserFromLocalStorage, modifyImageURL, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 import { environment } from 'src/environments/environment';
+import { cat, getMaincat, mainCat } from './products.engine';
+import { ProductPage } from '../CRUD/product/product.page';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.page.html',
   styleUrls: ['./products.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, ReactiveFormsModule, CapitalizePipe, FormsModule, SpinnerPage]
+  imports: [IonicModule, CommonModule, ReactiveFormsModule, FormsModule, CapitalizePipe]
 })
-export class ProductsPage implements OnInit {
+export class ProductsPage implements OnInit, OnChanges {
 
   productSearch: any
   productIngSearch: any
   recipeIcon: string = ''
   categories: {name: string, _id: string, order: number, mainCat: string}[] = []
-  mainCats: any = []
+  mainCats: mainCat[] = []
   categoriesToShow: any = []
   filter: any = {
     mainCat: '',
@@ -41,6 +43,8 @@ export class ProductsPage implements OnInit {
   dbProducts: Product[] = []
 
   isLoading: boolean = true
+
+ @Input() isDarkMode: boolean = false
 
 
 
@@ -59,30 +63,17 @@ export class ProductsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getCategories()
+    // this.getCategories()
     this.getuser()
   }
 
 
-  printProducts(){
-    const filter = {mainCat: this.filter.mainCat, category: this.filter.cat, locatie: environment.LOC, available: true}
-    if(!filter.mainCat.length) delete filter.mainCat
-    if(!filter.category.length) delete filter.category
-    this.productsSrv.printEcel(filter).subscribe({
-      next: (response) => {
-        const url = window.URL.createObjectURL(response);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'produse.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      },
-      error: (error) => {
-
-      }
-    })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isDarkMode']) {
+      this.mainCats = getMaincat(this.products, this.isDarkMode)
+    }
   }
+
 
 
 
@@ -114,7 +105,6 @@ searchIngProduct(ev: any){
       if(child.ing.name){
         return child.ing.name.toLowerCase().includes(input.toLowerCase())
       } else {
-        console.log(parentItem)
         return false
       }
     }) ||
@@ -180,11 +170,12 @@ searchIngProduct(ev: any){
 
 
   addProduct(){
-    this.router.navigate([`tabs/add-product/1`])
+    this.actionSrv.openAdd(ProductPage, '1' ,'add-modal')
+    // this.router.navigate([`office/add-product/1`])
   }
 
-  productEdit(id: string){
-      this.router.navigate([`tabs/add-product/${id}`])
+  productEdit(product: Product){
+    this.actionSrv.openAdd(ProductPage, product ,'add-modal')
   }
 
 
@@ -211,44 +202,37 @@ searchIngProduct(ev: any){
       product.showSub = !product.showSub
   }
 
-  onSelectMainCat(ev: CustomEvent){
-    this.filter.cat = ''
-    this.filter.mainCat = ev.detail.value;
-    this.categoriesToShow =  this.categories.filter((cat: any) => cat.mainCat === this.filter.mainCat);
-    this.filterProducts()
+  filterByMain(cat: mainCat){
+    this.restetCats()
+    this.products = this.dbProducts.filter(product => product.mainCat === cat.name)
+    if(cat.name === 'Toate') {
+      this.products = this.dbProducts
+    }
+    cat.active = true
   }
 
-  onCatSelect(ev: CustomEvent){
-    this.filter.cat = ev.detail.value;
-    this.filterProducts()
+  filterByCat(cat: cat, mainCat: mainCat){
+    this.restetCats()
+    this.products = this.dbProducts.filter(product => product.category.name === cat.name)
+    cat.active = true
+    mainCat.active = true
+}
+
+restetCats(){
+  for(let main of this.mainCats){
+    main.active = false
+    for(let cat of main.cat){
+      cat.active = false
+    }
   }
+}
 
-  filterProducts(){
-    this.products = this.dbProducts
-    if(this.filter.cat !== ''){
-      this.products = this.products.filter(product => product.category._id === this.filter.cat)
-    }
-    if(this.filter.mainCat !== ''){
-      this.products = this.products.filter(product => product.mainCat === this.filter.mainCat)
-    }
-  }
-
-  getCategories(){
-    this.categories = this.contentSrv.categoriesNameId$;
-    this.categoriesToShow = this.categories;
-    this.isLoading = false
-    this.setMainCats(this.categories);
-    }
-
-    setMainCats(cats: any[]){
-     const uniqueKeys = [...new Set(cats.map(obj => obj.mainCat))];
-     this.mainCats = uniqueKeys.map(name => ({ name }));
-    }
 
     getProducts(){
       this.productsSrv.productsSend$.subscribe(response => {
         this.dbProducts = response.filter(p => p.category)
         this.products = this.dbProducts
+        this.mainCats = getMaincat(this.products, this.isDarkMode)
         if(this.dbProducts.length > 1){
             this.isLoading = false
         }
@@ -258,7 +242,7 @@ searchIngProduct(ev: any){
    async addCat(){
      const response = await this.actionSrv.openPayment(CategoryPage, null)
      if(response){
-       this.productsSrv.saveCat(response, this.user.locatie).subscribe(response => {
+       this.productsSrv.saveCategory(response).subscribe(response => {
         console.log(response)
        })
      }
@@ -334,7 +318,7 @@ searchIngProduct(ev: any){
         const productionPrice = +this.calcProductionPrice(product).split(' ')[0]
         if(productionPrice> 0){
           const procentSurplus =  (( product.price - productionPrice ) / productionPrice ) * 100
-          return  round(procentSurplus) + "%"
+          return  round(procentSurplus) + " %"
         } else {
           return 'Infint %'
         }
@@ -361,45 +345,35 @@ showProducsAndSubsRecipe(product: Product) {
 
 
 
-filters(option: string){
-  switch (option) {
-    case 'name':
-      this.resetAllColors()
-      this.products.sort((a,b) => a.name.localeCompare(b.name))
-      this.nameColor = true;
-      return;
-    case 'out-price':
-      this.resetAllColors()
-      this.products.sort((a,b) => b.price - a.price)
-      this.outPriceColor = true;
-      return
-    case 'in-price':
-      this.resetAllColors()
-      this.products.sort((a,b) => (+this.calcProductionPrice(b).split(' ')[0]) - (+this.calcProductionPrice(a).split(' ')[0]))
-      this.inPriceColor = true;
-      return;
-    case 'recipe':
-      this.resetAllColors()
-      this.products.sort((a,b) => +this.showProducsAndSubsRecipe(a) - +this.showProducsAndSubsRecipe(b))
-      this.recipeColor = true;
-      return;
-    case 'surplus':
-      this.resetAllColors()
-      this.products.sort((a,b) => ((b.price - +this.calcProductionPrice(b).split(' ')[0]) / +this.calcProductionPrice(b).split(' ')[0] * 100) - ((a.price -+this.calcProductionPrice(a).split(' ')[0] ) / +this.calcProductionPrice(a).split(' ')[0]* 100))
-      this.surplusColor = true;
-      return;
-    default:
-      return;
-}
+
+
+
+
+
+
+printProducts(){
+  const filter = {mainCat: this.filter.mainCat, category: this.filter.cat, locatie: environment.LOC, available: true}
+  if(!filter.mainCat.length) delete filter.mainCat
+  if(!filter.category.length) delete filter.category
+  this.productsSrv.printEcel(filter).subscribe({
+    next: (response) => {
+      const url = window.URL.createObjectURL(response);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'produse.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    },
+    error: (error) => {
+
+    }
+  })
 }
 
 
-resetAllColors(){
-  this.recipeColor = false
-  this.inPriceColor = false
-  this.outPriceColor = false
-  this.surplusColor = false
-  this.nameColor = false
+modifyImage(url: string){
+  return modifyImageURL(url)
 }
 
 }

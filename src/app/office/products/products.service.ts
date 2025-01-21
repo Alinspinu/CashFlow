@@ -5,7 +5,6 @@ import { Product, SubProduct } from "src/app/models/category.model";
 import { emptyProduct } from "src/app/models/empty-models";
 import { IndexDbService } from "src/app/shared/indexDb.service";
 import {environment} from '../../../environments/environment'
-import { ProductService } from "../CRUD/product/product.service";
 
 
 
@@ -23,7 +22,6 @@ export class ProductsService{
 
   constructor(
     private http: HttpClient,
-    @Inject(ProductService) private productService: ProductService,
     private dbService: IndexDbService,
   ){
     this.productsState = new BehaviorSubject<Product[]>([emptyProduct()]);
@@ -31,14 +29,14 @@ export class ProductsService{
   }
 
 
-  getProducts(loc: string){
+  getProducts(){
     this.dbService.getData('data', 2).subscribe((response: any) => {
       if(response){
         this.products = [...JSON.parse(response.products)]
         this.productsState.next(this.products)
       }
     })
-    return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products`, {loc: loc})
+    return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products`, {loc: environment.LOC})
           .pipe(tap(response => {
             if(response){
               this.products = response
@@ -48,9 +46,7 @@ export class ProductsService{
             }
           }))
         }
-  saveCat(cat: any, loc: string){
-    return this.productService.saveCategory(cat, loc)
-  }
+
 
   changeProductStatus(stat: string, id: string){
     return this.http.post<Product | SubProduct>(`${environment.BASE_URL}product/change-status`, {stat: stat, id: id})
@@ -71,8 +67,8 @@ export class ProductsService{
         }))
   }
 
-  saveProduct(product: any, loc: string){
-    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?loc=${loc}`, product)
+  saveProduct(product: any){
+    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?loc=${environment.LOC}`, product)
     .pipe(tap(response => {
       if(response && response.product){
         const newProduct = response.product
@@ -94,6 +90,19 @@ export class ProductsService{
             }
           }
         }))
+  }
+
+
+  deleteSubProduct(id: string){
+    return this.http.delete(`${environment.BASE_URL}sub/sub-product?id=${id}`)
+  }
+
+  saveSubProduct(sub: SubProduct){
+    return this.http.post<{message: string, subProduct: any}>(`${environment.BASE_URL}sub/sub-prod-add?loc=${environment.LOC}`, sub)
+  }
+
+  saveCategory(category: any) {
+    return this.http.post(`${environment.BASE_URL}cat/cat-add?loc=${environment.LOC}`, category)
   }
 
 

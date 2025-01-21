@@ -7,9 +7,48 @@ const routes: Routes = [
     path: 'auth',
     loadComponent: () => import('./auth/auth.page').then((m) => m.AuthPage),
   },
+
   {
-    path: '',
-    loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
+    path: 'tables',
+    loadComponent: () =>
+      import('./tables/tables.page').then((m) => m.TablesPage),
+      canActivate: [AuthGuard]
+  },
+  {
+    path: 'cash-control',
+    loadComponent: () => import('./cash-control/cash-control.page').then( m => m.CashControlPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'office',
+    loadChildren: () =>
+      import('./office/office.routes').then((m) => m.routes),
+  },
+  {
+    path: 'reports',
+    loadChildren: () =>
+      import('./reports/reports.routes').then((m) => m.routes),
+  },
+  {
+    path: 'config',
+    loadComponent: () =>
+      import('./config/config.page').then((m) => m.ConfigPage),
+      canActivate: [AuthGuard]
+  },
+  {
+    path: 'shedule',
+    loadComponent: () => import('./office/shedule/shedule.page').then( m => m.ShedulePage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'user-content/:id',
+    loadComponent: () => import('./content/user-content/user-content.page').then( m => m.UserContentPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pontaj',
+    loadComponent: () => import('./office/pontaj/pontaj.page').then( m => m.PontajPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'table-content/:id',
@@ -25,16 +64,22 @@ const routes: Routes = [
     loadComponent: () => import('./content/user-display/user-display.page').then( m => m.UserDisplayPage)
   },
   {
-    path: 'entry-view',
-    loadComponent: () => import('./modals/entry-view/entry-view.page').then( m => m.EntryViewPage)
+    path: 'sales',
+    loadComponent: () => import('./cash-control/sales/sales.page').then( m => m.SalesPage)
   },
   {
-    path: 'close-day',
-    loadComponent: () => import('./cash-control/close-day/close-day.page').then( m => m.CloseDayPage)
+    path: 'products',
+    loadComponent: () => import('./cash-control/products/products.page').then( m => m.ProductsPage)
   },
   {
-    path: 'monetar',
-    loadComponent: () => import('./cash-control/monetar/monetar.page').then( m => m.MonetarPage)
+    path: 'add-product',
+    loadComponent: () => import('./office/CRUD/product/product.page').then( m => m.ProductPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '',
+    redirectTo: '/tables',
+    pathMatch: 'full',
   },
 
 ];

@@ -1,12 +1,46 @@
-<ion-content [fullscreen]="true">
+
+<ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
-    <ion-button size="large" color="medium" (click)="close()">
+    <ion-button size="large" color="medium" (click)="close()" slot="start">
      <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
     </ion-button>
+    <ion-title class="ion-text-center">Produse Șterse</ion-title>
+    <ion-label slot="end">Total {{total}} Lei</ion-label>
    </ion-toolbar>
-<ion-grid>
-<ion-row>
-  <ion-col *ngIf="products && products.length">
+   <ion-toolbar class="ion-no-border">
+    <div class="header">
+      <span class="id">Nr</span>
+      <span class="img"></span>
+      <span class="title">Nume Produs</span>
+      <span class="casier">Casier</span>
+      <span class="reason">Motiv</span>
+      <span class="qty">Qty</span>
+      <span class="total">Total</span>
+    </div>
+   </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+
+  <div class="order-container" *ngFor="let product of products; let i = index">
+    <div class="id">
+      <span class="main">#{{i+1}}</span>
+      <span class="second">{{formatDate(product.createdAt)}}</span>
+    </div>
+    <div class="name">
+      <div class="img">
+        <img [src]="modifyImage(product.billProduct.imgUrl)" alt="Product Img">
+      </div>
+      <span class="name">{{product.billProduct.name}}</span>
+    </div>
+    <span class="casier">{{product.employee.name}}</span>
+    <span class="reason">{{product.reason}}</span>
+    <span class="qty">{{product.billProduct.quantity}} buc</span>
+    <span class="total">{{product.billProduct.total}} Lei</span>
+  </div>
+
+  <!-- <ion-col *ngIf="products && products.length">
     <ion-card *ngFor="let product of products; let i = index;">
       <ion-card-header>
         <ion-card-title>{{product.reason}}</ion-card-title>
@@ -20,8 +54,7 @@
         <ion-card-subtitle>{{product.billProduct.total}} Lei</ion-card-subtitle>
       </ion-card-content>
     </ion-card>
-  </ion-col>
-</ion-row>
-</ion-grid>
+  </ion-col> -->
+
 </ion-content>
 

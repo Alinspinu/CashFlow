@@ -45,8 +45,6 @@ export class PontajService{
     return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
   }
 
-
-
   addPont(month: number, year: number){
     return this.http.post<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}`, {month, year, loc: environment.LOC})
   }
@@ -58,6 +56,10 @@ export class PontajService{
   selectPontaj(pontaj: Pontaj){
     this.pontaj = pontaj
     this.pontajState.next(this.pontaj)
+  }
+
+  deletePayLog(payID: string, userID: string){
+    return this.http.delete<{message: string}>(`${environment.BASE_URL}users/work-log?userID=${userID}&payID=${payID}`)
   }
 
 

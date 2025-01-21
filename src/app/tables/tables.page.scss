@@ -11,6 +11,15 @@ ion-title{
   font-family: NoirProReg !important;
 }
 
+ion-menu-button{
+  --border-radius: 0;
+  width: fit-content;
+  ion-label{
+    font-size: 14px;
+    margin-left: 6px;
+  }
+}
+
 
 .mode{
   margin-left: 40px;
@@ -47,29 +56,29 @@ ion-title{
 
 
 .table-wrapper{
-  margin-top: 20px;
+  margin-top: 10px;
   .table{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
     background-color: var(--ion-color-light);
     border-radius: 8px;
-    font-size: 30px;
+
     position: relative;
     overflow: hidden;
     cursor: pointer;
     .index{
-
+      font-size: 26px;
     }
     .table:active {
       color: green !important;
     }
     .name {
-      font-size: 18px;
+      font-size: 14px;
       align-self: center;
       justify-self: center;
       text-align: center;
@@ -87,8 +96,8 @@ ion-title{
   flex-direction: row;
   width: 100px;
     position: relative;
-    right: 4%;
-    top: 7%;
+    right: 10%;
+    top: 9%;
     bottom: 0;
     z-index: 99;
 }

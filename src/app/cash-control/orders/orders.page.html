@@ -1,0 +1,142 @@
+
+<ion-header class="ion-no-border fixed-toolbar">
+  <ion-toolbar class="ion-no-border card-toolbar " >
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+            <div class="date-wrapper">
+              <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Caută comandă după produs..."  (ionInput)="searchProduct($event)" #searchbar>
+              </ion-searchbar>
+              <div class="buttons-wrapper" *ngIf="access > 2">
+                <ion-button fill="outline" slot="end" color="medium" (click)="selectDate(true)">
+                  <ion-icon slot="start" src="../../assets/icon/time.svg"></ion-icon>
+                  <ion-label slot="end">zi</ion-label>
+                </ion-button>
+                <ion-button  fill="outline" slot="end" color="medium" (click)="selectDate(false)">
+                  <ion-icon slot="start" src="../../assets/icon/shedule.svg"></ion-icon>
+                  <ion-label slot="end">perioadă</ion-label>
+                </ion-button>
+              </div>
+            </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-card id="all-card" (click)="selectOrders(orders)">
+            <ion-card-header>
+              <ion-card-subtitle>Comenzi</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-card-title>{{orders.length}}</ion-card-title>
+              <ion-icon src="../../assets/icon/cash-back.svg"></ion-icon>
+              <ion-note>Total </ion-note>
+              <p> +{{calcOrdersTotal(orders)}} Lei</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card id="in-card" (click)="selectOrders(ordersDone)">
+            <ion-card-header>
+              <ion-card-subtitle>Comenzi Încasate</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-card-title>{{ordersDone.length}}</ion-card-title>
+              <ion-icon src="../../assets/icon/cash-back.svg"></ion-icon>
+              <ion-note>Colectat </ion-note>
+              <p> +{{calcOrdersTotal(ordersDone)}} Lei</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card id="open-card" (click)="selectOrders(ordersOpen)">
+            <ion-card-header>
+              <ion-card-subtitle>Comenzi Deschise</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-card-title>{{ordersOpen.length}}</ion-card-title>
+              <ion-icon src="../../assets/icon/cash-back.svg" class="card-icon"></ion-icon>
+              <ion-note>Potential </ion-note>
+              <p> +{{calcOrdersTotal(ordersOpen)}} Lei</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card id="disc-card" (click)="selectOrders(discountOrders)">
+            <ion-card-header>
+              <ion-card-subtitle>Comenzi Discount</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-card-title>{{discountOrders.length}}</ion-card-title>
+              <ion-icon src="../../assets/icon/cash-back.svg" class="card-icon"></ion-icon>
+              <ion-note>Discount </ion-note>
+              <p> -{{calcOrdersDiscount(discountOrders)}} Lei</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card id="online-card" (click)="selectOrders(onlineOrders)">
+            <ion-card-header>
+              <ion-card-subtitle>Comenzi Online</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-card-title>{{onlineOrders.length}}</ion-card-title>
+              <ion-icon src="../../assets/icon/cash-back.svg" class="card-icon"></ion-icon>
+              <ion-note>Colectat </ion-note>
+              <p> +{{calcOrdersTotal(onlineOrders)}} Lei</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card id="del-card" (click)="openDelProducts(delProducts)">
+            <ion-card-header>
+              <ion-card-subtitle>Produse Șterse</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-card-title>{{delProducts.length}}</ion-card-title>
+              <ion-icon src="../../assets/icon/cash-back.svg" class="card-icon"></ion-icon>
+              <ion-note>Pierdere </ion-note>
+              <p> -{{calcDelProdTotal(delProducts)}} Lei</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="header">
+            <span class="id">Număr</span>
+            <span class="customer">Casier</span>
+            <span class="table">Masă</span>
+            <span class="items">Produse</span>
+            <span class="total">Total</span>
+            <span class="status">Status</span>
+            <span class="action">Actiune</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+
+  <div class="order-container" *ngFor="let order of orders">
+    <div class="id">
+      <span class="main">#{{order.index}}</span>
+      <span class="second">{{formatDate(order.createdAt)}}</span>
+    </div>
+    <div class="customer">
+      <span class="main">{{order.employee ? order.employee.fullName: 'No Name'}}</span>
+      <span class="second">{{order.employee ? order.employee.position : 'No position'}}</span>
+    </div>
+    <span class="table">{{ order.masaRest && order.masaRest.name ? order.masa + ' ' + order.masaRest.name : order.masa}}</span>
+    <span class="items">{{order.products.length}}</span>
+    <span class="total">{{order.total}} Lei</span>
+    <div class="status">
+      <span class="main">{{order.status === 'done' ? 'Plătită' : 'Dechisă'}}</span>
+      <span class="second" *ngIf="order.status === 'done'">{{order.paymentMethod}}</span>
+    </div>
+   <div class="action">
+    <ion-button fill="ghost" (click)="openBill(order)">
+      <ion-icon src="../../assets/icon/eye-outline.svg"></ion-icon>
+    </ion-button>
+   </div>
+  </div>

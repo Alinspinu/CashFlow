@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border main-toolbar">
     <ion-buttons slot="start" class="navigation-buttons">
-      <ion-button routerLink="/tabs/tables" class="back-button">
+      <ion-button routerLink="/tables" class="back-button">
         <ion-icon src="../../../assets/icon/close-outline.svg" (click)="home()"  class="icon"></ion-icon>
       </ion-button>
       <ion-button (click)="home()" *ngIf="data.showProd" class="back-button">
@@ -77,7 +77,7 @@
             </ion-button>
           </ion-col>
           <ion-col [size]="smallCol">
-            <ion-button expand="block" size="small" color="light" (click)="mergeOrders()" [disabled]="disableMerge"  class="smalll">
+            <ion-button expand="block" size="small" color="light" (click)="mergeOrders()" [disabled]="disableMerge"  class="small">
               <ion-icon src="../../../assets/icon/hug.svg" style="font-size:18px; padding: 5px;"></ion-icon>
               UNEȘTE COMENZI
             </ion-button>
@@ -91,8 +91,8 @@
             </ion-button>
           </ion-col>
           <ion-col [size]="smallCol">
-            <ion-button class="client-button" (click)="addCustomer(clientMode)" color="light" expand="block" size="small" [disabled]="billData.billToshow && !billData.billToshow.products.length">
-              <ion-icon [src]=" clientMode ? '../../../assets/icon/adauga_client.svg': '../../../assets/icon/scoate_client.svg'"></ion-icon>
+            <ion-button (click)="addCustomer(clientMode)" color="light" expand="block" class="small" [disabled]="billData.billToshow && !billData.billToshow.products.length">
+              <ion-icon [src]=" clientMode ? '../../../assets/icon/adauga_client.svg': '../../../assets/icon/scoate_client.svg'" size="medium"></ion-icon>
               {{clientMode ? 'ADAUGĂ CLIENT' : "SCOATE  CLIENT"}}
             </ion-button>
             <ion-button size="small" expand="block" color="light" (click)="useCashBack(cashBackMode)" *ngIf="client" class="small">
@@ -115,7 +115,7 @@
               TERASĂ
             </ion-button> -->
             <ion-button size="large" expand="block" color="medium" (click)="sendOrder(true, false).subscribe()" [disabled]="disableOrderButton || !billData.billToshow.products.length" class="big">
-              <ion-icon src="../../../assets/icon/trimite_comanda.svg" size="large" color="light"></ion-icon>
+              <ion-icon src="../../../assets/icon/send-outline.svg" color="light"></ion-icon>
              TRIMITE
             </ion-button>
           </ion-col>

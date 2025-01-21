@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, MenuController } from '@ionic/angular';
 import { UsersService } from '../users/users.service';
 import { SheduleService } from './shedule.service';
 import User from '../../auth/user.model';
@@ -20,6 +20,7 @@ import { TogglePage } from './toggle/toggle.page';
 })
 export class ShedulePage implements OnInit, OnDestroy {
 
+  menuOpen: boolean = false
   users: any[]  = []
   shedule!: Shedule
   sheduleSub!: Subscription
@@ -29,6 +30,7 @@ export class ShedulePage implements OnInit, OnDestroy {
   constructor(
     private usersSrv: UsersService,
     private shedSrv: SheduleService,
+    private menuCtrl: MenuController,
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
   ) { }
 
@@ -39,6 +41,7 @@ export class ShedulePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.menuChange()
     this.getUsers()
     this.shedSrv.getLastShedule().subscribe()
     this.getLastShedule()
@@ -69,6 +72,7 @@ async selectShedule(){
 getLastShedule(){
   this.sheduleSub = this.shedSrv.sheduleSend$.subscribe(response => {
     this.shedule = response
+    console.log(this.shedule)
   })
 }
 
@@ -230,6 +234,19 @@ findUser(users: any[], userId: string){
     } else {
       return 'LiBER'
     }
+}
+
+
+private async menuChange(){
+  const menu = await this.menuCtrl.get('start');
+  if (menu) {
+    menu.addEventListener('ionDidClose', () => {
+      this.menuOpen = false
+    });
+    menu.addEventListener('ionDidOpen', () => {
+         this.menuOpen = true
+    });
+  }
 }
 
 }

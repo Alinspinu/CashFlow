@@ -43,7 +43,7 @@ export class UserContentPage implements OnInit {
   }
 
   goBack(){
-    this.router.navigateByUrl('/tabs/office/users')
+    this.router.navigateByUrl('/office/users')
   }
 
   getUser(){
@@ -96,7 +96,7 @@ deleteUser(){
   this.userSrv.deleteUser(this.userId).subscribe(response => {
     if(response){
       showToast(this.toastCtrl, response.message, 3000)
-      this.router.navigateByUrl('/tabs/office/users')
+      this.router.navigateByUrl('/office/users')
     }
   })
 }

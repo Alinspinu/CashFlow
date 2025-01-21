@@ -84,6 +84,9 @@ updateOrder(bill: Bill){
           table.bills[billIndex] = bill
           this.tableState.next([...this.tables])
          }
+      } else{
+        table.bills.push(bill)
+        this.tableState.next([...this.tables])
       }
     }
 

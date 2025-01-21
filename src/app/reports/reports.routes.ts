@@ -29,28 +29,15 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/reports/cash',
+        redirectTo: '/reports/cash',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/reports/cash',
+    redirectTo: '/reports/cash',
     pathMatch: 'full',
   },
-
-  {
-    path: 'select-inv',
-    loadComponent: () => import('./inventary/select-inv/select-inv.page').then( m => m.SelectInvPage)
-  },
-  {
-    path: 'add-report',
-    loadComponent: () => import('./add-report/add-report.page').then( m => m.AddReportPage)
-  },  {
-    path: 'upload-log',
-    loadComponent: () => import('./inventary/upload-log/upload-log.page').then( m => m.UploadLogPage)
-  },
-
 
 ];

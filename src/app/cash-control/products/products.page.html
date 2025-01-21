@@ -1,0 +1,87 @@
+
+
+<ion-header class="ion-no-border fixed-toolbar">
+  <ion-toolbar class="ion-no-border card-toolbar">
+
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let section of sections" (click)="selectProducts(section.name)">
+          <ion-card [id]="section.class">
+            <ion-card-header>
+              <ion-card-subtitle>{{
+                section.name === 'buc' ? 'Bucătarie' :
+                section.name === 'tea' ? 'Ceai' :
+                section.name === 'coffee' ? 'Cafea' :
+                section.name === 'shop' ? 'Magazin' :
+                section.name === 'bar' ? 'Bar' :
+                section.name === 'vitrina' ? 'Vitrină' :
+                section.name
+              }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-card-title>{{section.total}} Lei</ion-card-title>
+              <ion-icon src="../../assets/icon/cash-back.svg" class="card-icon"></ion-icon>
+              <p>{{section.productsCount}}</p>
+              <ion-note>Buc</ion-note>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+            <div class="date-wrapper">
+              <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Caută produs..."  (ionInput)="searchProduct($event)" #searchbar>
+              </ion-searchbar>
+              <div class="buttons-wrapper">
+                <ion-button fill="outline" slot="end" color="medium" (click)="selectDate(true)">
+                  <ion-icon slot="start" src="../../assets/icon/time.svg"></ion-icon>
+                  <ion-label slot="end">zi</ion-label>
+                </ion-button>
+                <ion-button  fill="outline" slot="end" color="medium" (click)="selectDate(false)">
+                  <ion-icon slot="start" src="../../assets/icon/shedule.svg"></ion-icon>
+                  <ion-label slot="end">perioadă</ion-label>
+                </ion-button>
+              </div>
+            </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="header">
+            <span class="id">Nr</span>
+            <span class="product">Produse</span>
+            <span class="qty">Cantitate</span>
+            <span class="disc">Discount</span>
+            <span class="total">{{headeLabel}}</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<div class="order-container" *ngFor="let product of products; let i = index">
+  <span class="id">#{{i+1}}</span>
+  <div class="product">
+    <ion-thumbnail>
+        <ion-img [src]="modifyImage(product.imgUrl)"></ion-img>
+      </ion-thumbnail>
+    <div class="details">
+      <span class="name">{{product.name}}</span>
+        <span class="cat">{{
+          product.section === 'buc' ? 'Bucătarie' :
+          product.section === 'tea' ? 'Ceai' :
+          product.section === 'coffee' ? 'Cafea' :
+          product.section === 'shop' ? 'Magazin' :
+          product.section === 'bar' ? 'Bar' :
+          product.section === 'vitrina' ? 'Vitrină' :
+          product.section
+        }}</span>
+    </div>
+  </div>
+  <span class="qty">{{product.quantity}} Buc</span>
+  <span class="disc">{{ product.discount > 0 ? product.discount + ' Lei' : ''}}</span>
+  <span class="total">{{product.total - product.discount}} Lei</span>
+</div>

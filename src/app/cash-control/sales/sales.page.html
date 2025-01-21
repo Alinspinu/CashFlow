@@ -1,0 +1,92 @@
+
+
+
+  <div class="row-wrapper">
+    <div class="chart-wrapper">
+      <div class="chart">
+        <canvas id="sale-canvas"></canvas>
+        <app-chart
+        [chartData]="chartData"
+        [chartOptions]="chartOptions"
+        [chartType]="chartType">
+      </app-chart>
+      </div>
+      <div class="legend">
+        <div class="cash" *ngFor="let method of showPaymentMethod(totals)">
+          <div [class]="method.css"></div>
+          <span class="label">{{method.label}}</span>
+          <span class="value">{{method.value}} Lei</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-wrapper">
+      <div class="buttons-wrapper">
+        <ion-button fill="outline" color="medium" (click)="onReports('x')">
+          <ion-icon slot="start" src="../../../assets/icon/stats-chart-outline.svg"></ion-icon>
+          <ion-label>Raport X</ion-label>
+        </ion-button>
+        <ion-button fill="outline" color="medium" (click)="onReports('z')">
+          <ion-icon slot="start" src="../../../assets/icon/power-cycle.svg"></ion-icon>
+          <ion-label slot="end">Inchidere Zi</ion-label>
+        </ion-button>
+        <ion-button fill="outline" color="medium" (click)="inAndOut('in')" [disabled]="serviceSum > 0">
+          <ion-icon slot="start" src="../../../assets/icon/add-circle-outline.svg"></ion-icon>
+          <ion-label slot="end">Adauga Bani</ion-label>
+        </ion-button>
+        <ion-button fill="outline" color="medium" (click)="inAndOut('out')" [disabled]="serviceSum === 0">
+          <ion-icon slot="start" src="../../../assets/icon/remove-circle-outline.svg"></ion-icon>
+          <ion-label>Scoate Bani</ion-label>
+        </ion-button>
+      </div>
+      <div class="header">
+        <span class="id">Nr</span>
+        <span class="method">Metodă de plată</span>
+        <span class="order">Comenzi</span>
+        <span class="total">Încasat</span>
+      </div>
+      <div class="method-wrapper"  *ngFor="let method of showPaymentMethod(totals); let i=index;">
+        <span class="id">{{i+1}}</span>
+        <span class="method">{{method.label}}</span>
+        <span class="order">{{method.orders}} Comenzi</span>
+        <span class="total">{{method.value}} Lei</span>
+      </div>
+      <div class="method-wrapper" *ngIf="serviceSum > 0">
+        <span class="id">4</span>
+        <span class="method">Sumă de serviciu</span>
+        <span class="order"></span>
+        <span class="total">{{serviceSum}} Lei</span>
+      </div>
+      <div class="footer-wrapper">
+        <span class="id">Total</span>
+        <span class="method"></span>
+        <span class="order">{{orders.length}} Comenzi</span>
+        <span class="total">{{totals.total}} Lei </span>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- <div class="chart-hour-wrapper">
+      <div class="chart">
+        <canvas id="hour-canvas"></canvas>
+      </div>
+  </div> -->
+
+
+  <!-- <div class="date-wrapper">
+    <ion-label>Încasări</ion-label>
+    <div class="buttons-wrapper">
+      <ion-button fill="outline" slot="end" color="medium"  (click)="selectDate(true)">
+        <ion-icon slot="start" src="../../assets/icon/time.svg"></ion-icon>
+        <ion-label slot="end">zi</ion-label>
+      </ion-button>
+      <ion-button fill="outline" slot="end" color="medium" (click)="selectDate(false)">
+        <ion-icon slot="start" src="../../assets/icon/shedule.svg"></ion-icon>
+        <ion-label slot="end">perioadă</ion-label>
+      </ion-button>
+    </div>
+  </div> -->
+
+
+

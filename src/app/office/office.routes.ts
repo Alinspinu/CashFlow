@@ -44,18 +44,8 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'shedule',
-        loadComponent: () => import('./shedule/shedule.page').then( m => m.ShedulePage),
-        canActivate: [AuthGuard]
-      },
-      {
         path: 'nir/:id',
         loadComponent: () => import('./CRUD//nir/nir.page').then( m => m.NirPage),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'pontaj',
-        loadComponent: () => import('./pontaj/pontaj.page').then( m => m.PontajPage),
         canActivate: [AuthGuard]
       },
       {
@@ -68,20 +58,40 @@ export const routes: Routes = [
         loadComponent: () => import('./imp/imp.page').then( m => m.ImpPage),
         canActivate: [AuthGuard]
       },
+      {
+        path: 'add-product',
+        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'add-suplier/:value',
+        loadComponent: () => import('../office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'add-product/:id',
+        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'user-content/:id',
+        loadComponent: () => import('../content/user-content/user-content.page').then( m => m.UserContentPage),
+        canActivate: [AuthGuard]
+      },
       // {
       //   path: 'ingredients',
       //   loadComponent: () => import('./e-factura/ingredients/ingredients.page').then( m => m.IngredientsPage)
       // },
       {
         path: '',
-        redirectTo: '/tabs/office/products',
+        redirectTo: '/office/products',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/office/products',
+    redirectTo: '/office/products',
     pathMatch: 'full',
   },
   {

@@ -1,4 +1,116 @@
+
+
+
 <ion-header class="ion-no-border">
+  <!-- <div class="ion-no-border content-toolbar ion-no-padding"> -->
+    <!-- <ion-title class="ion-no-padding">Produse</ion-title>
+    <ion-label slot="end">
+      <ion-icon [src]="isDarkMode? 'assets/icon/coffee-w.svg' : 'assets/icon/coffee.svg'"></ion-icon>
+    </ion-label> -->
+  <!-- </div> -->
+  <ion-toolbar class="ion-no-border">
+        <div class="main-button-container">
+
+          <div class="main-button" *ngFor="let mainCat of mainCats" (click)="filterByMain(mainCat)" [ngClass]="{'main-selected': mainCat.active}">
+            <div class="label">
+              <span class="name">{{mainCat.name ?  mainCat.name : 'Nedefinit'}}</span>
+              <span class="nr">Produse {{mainCat.products}}</span>
+            </div>
+            <ion-icon [src]="mainCat.icon"></ion-icon>
+          </div>
+          <div class="add-button" (click)="addProduct()">
+            <div class="label">Add</div>
+            <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
+          </div>
+        </div>
+          <div *ngFor="let mainCat of mainCats">
+            <div class="cat-button-container" *ngIf="mainCat.active">
+              <div class="cat-button" *ngFor="let cat of mainCat.cat" (click)="filterByCat(cat, mainCat)" [ngClass]="{'cat-selected': cat.active}">
+                <span class="name">{{cat.name}}</span>
+              </div>
+            </div>
+          </div>
+        <div class="searchbar-wrapper">
+          <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Caută produs după nume..."  (ionInput)="searchProduct($event)" #searchbar>
+          </ion-searchbar>
+          <ion-searchbar mode="md" [(ngModel)]="productIngSearch"  placeholder="Caută Produs după ingredient..."  (ionInput)="searchIngProduct($event)">
+          </ion-searchbar>
+        </div>
+        <div class="header">
+          <span class="id">Nr</span>
+          <span class="product">Denumire Produs</span>
+          <span class="price">Preț</span>
+          <span class="adaos">Adaos %</span>
+          <span class="status">Status</span>
+          <span class="recipe">Retetă</span>
+          <span class="action">Action</span>
+        </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+
+  <div class="order-container" *ngFor="let product of products; let i = index">
+    <span class="id">#{{i+1}}</span>
+    <div class="product">
+      <ion-thumbnail>
+          <ion-img [src]="modifyImage(product.image.path)"></ion-img>
+        </ion-thumbnail>
+      <div class="details">
+        <span class="name">{{product.name}}</span>
+          <span class="cat">{{product.mainCat | capitalize}} and {{product.category.name}}</span>
+      </div>
+    </div>
+    <span class="price">{{product.price}} Lei</span>
+    <span class="adaos">{{calcComercialSurplus(product)}}</span>
+    <div class="status">
+      <ion-toggle color="medium" [enableOnOffLabels]="true"  (ionChange)="productStatus($event, product._id, i)" [checked]="product.available"></ion-toggle>
+    </div>
+    <ion-label class="recipe">
+      <ion-icon src="../../../assets/icon/success.svg" *ngIf="product.ings.length" class="green"></ion-icon>
+      <ion-icon src="../../../assets/icon/not.svg" *ngIf="!product.ings.length" class="red"></ion-icon>
+    </ion-label>
+    <ion-button class="action" fill="ghost" color="medium" (click)="productEdit(product)">
+      <ion-icon src="../../../assets/icon/eye-outline.svg"></ion-icon>
+    </ion-button>
+  </div>
+
+</ion-content>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
     <ion-row style="margin-bottom:8px;">
       <ion-col size-lg="4">
@@ -100,7 +212,6 @@
             <ion-label class="mainCat"></ion-label>
             <ion-label class="cat">Sub Produs</ion-label>
             <ion-label class="dep"></ion-label>
-            <!-- <ion-label class="tva"></ion-label> -->
             <ion-label class="price-prod">{{calcProductionPrice(subProduct)}}</ion-label>
             <ion-label class="sale-price">{{subProduct.price + ' Lei'}}</ion-label>
             <ion-label class="price">{{calcComercialSurplus(subProduct)}}</ion-label>
@@ -120,6 +231,6 @@
 </ion-content>
 
 
- <!-- <app-spinner class="spinner-container"></app-spinner> -->
 
 
+ -->

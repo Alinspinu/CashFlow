@@ -1,3 +1,33 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu contentId="main-content" type="reveal"  menuId="start" *ngIf="user">
+    <ion-content>
+      <ion-button fill="ghost" (click)="closeMenu()">
+        <ion-icon src="../assets/icon//chevron-double-left.svg" size="large"></ion-icon>
+      </ion-button>
+      <ion-list id="inbox-list">
+        <ion-list-header>True Fine Coffee</ion-list-header>
+        <ion-note>{{user.email}}</ion-note>
+
+          <ion-menu-toggle auto-hide="true" *ngFor="let p of appPages; let i = index">
+           <ion-item routerDirection="root"
+           [routerLink]="[p.url]"
+           lines="none"
+           detail="false"
+           routerLinkActive="selected"
+           *ngIf="p.title === 'Vanzare' ||
+           user.employee.access === 4 ||
+           p.title === 'Log Out' ||
+           p.title === 'Casă'
+           "
+           >
+            <ion-icon aria-hidden="true" slot="start" [src]="p.icon"></ion-icon>
+            <ion-label>{{ p.title }}</ion-label>
+            <!-- <ion-badge slot="end" color="danger" *ngIf="p.title === 'Notificări' && notificationNumber > 0">{{notificationNumber}}</ion-badge>
+            <ion-badge slot="end" color="danger" *ngIf="p.title === 'Rezervări' && reservationNumber > 0">{{reservationNumber}}</ion-badge> -->
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>

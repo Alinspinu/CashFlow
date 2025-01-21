@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component} from '@angular/core';
+import { Component, Inject, OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { CashPage } from './cash/cash.page';
-import { IngredientsPage } from './ingredients/ingredients.page';
 import { ProductsPage } from './products/products.page';
 import { FinancePage } from './finance/finance.page';
-import { CashRegisterPage } from '../office/cash-register/cash-register.page';
 import { InventaryPage } from './inventary/inventary.page';
+import { MenuController } from '@ionic/angular';
 
 
 
@@ -20,11 +18,8 @@ import { InventaryPage } from './inventary/inventary.page';
     IonicModule,
     FormsModule,
     CommonModule,
-    CashPage,
-    IngredientsPage,
     ProductsPage,
     FinancePage,
-    CashRegisterPage,
     InventaryPage
   ],
 })
@@ -32,68 +27,47 @@ import { InventaryPage } from './inventary/inventary.page';
 
 
 
-export class ReportsPage {
+export class ReportsPage implements OnInit {
+
+  menuOpen: boolean = false
 
   screenWidth!: number
 
-  show:
-  {
-    menu: boolean
-    sales: boolean
-    products: boolean
-    cashRegister: boolean
-    finance: boolean
-    inventary: boolean
-  } = {sales: false, products: false, cashRegister: false, menu: false, finance: true, inventary: false}
 
-  constructor() {
+
+
+  appPages: any = [
+    {name: 'Inventar', icon: '../../assets/icon/cash-register.svg', show: false},
+    {name: 'Situație financiară', icon: '../../assets/icon/document.svg', show: true},
+    {name: 'Produse', icon: '../../assets/icon/foood.svg', show: false},
+  ]
+
+  constructor(
+      @Inject(MenuController) private menuCtrl: MenuController
+  ) {
     this.screenWidth = window.innerWidth
   }
 
-  sales(){
-    this.show.sales = true
-    this.show.products = false
-    this.show.cashRegister = false
-    this.show.finance = false
-    this.show.inventary = false
+
+  ngOnInit(): void {
+      this.menuChange()
   }
 
-  products(){
-    this.show.products = true
-    this.show.sales = false
-    this.show.cashRegister = false
-    this.show.finance = false
-    this.show.inventary = false
-  }
+  selectPage(page: string){
+    const index = this.appPages.findIndex((p:any) => p.name == page)
+    this.appPages = this.appPages.map((p:any) => ({...p, show: false}))
+    this.appPages[index].show = true
+}
 
-  register(){
-    this.show.cashRegister = true
-    this.show.products = false
-    this.show.sales = false
-    this.show.finance = false
-    this.show.inventary = false
+private async menuChange(){
+  const menu = await this.menuCtrl.get('start');
+  if (menu) {
+    menu.addEventListener('ionDidClose', () => {
+      this.menuOpen = false
+    });
+    menu.addEventListener('ionDidOpen', () => {
+         this.menuOpen = true
+    });
   }
-
-  finance(){
-    this.show.cashRegister = false
-    this.show.products = false
-    this.show.sales = false
-    this.show.finance = true
-    this.show.inventary = false
-  }
-  inventary(){
-    this.show.cashRegister = false
-    this.show.products = false
-    this.show.sales = false
-    this.show.finance = false
-    this.show.inventary = true
-  }
-
-  hideMenu(){
-    this.show.menu = false
-  }
-
-  showMenu(){
-    this.show.menu = true
-  }
+}
 }

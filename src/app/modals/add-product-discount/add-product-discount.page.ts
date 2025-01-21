@@ -61,7 +61,7 @@ proDbSub!: Subscription
   }
 
   getProductsFromDb(){
-   this.prodSub = this.productService.getProducts(environment.LOC).subscribe()
+   this.prodSub = this.productService.getProducts().subscribe()
   }
 
 

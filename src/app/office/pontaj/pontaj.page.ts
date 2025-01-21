@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, MenuController } from '@ionic/angular';
 import { PontajService } from './pontaj.service';
 import { Pontaj } from '../../models/shedule.model';
 
@@ -29,6 +29,8 @@ users: User[] = []
 monhs: string[] = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie']
 monthIndex!: number
 
+menuOpen: boolean = false
+
 totalSalary: number = 0
 totalPayd: number = 0
 totalBonus: number = 0
@@ -42,11 +44,15 @@ periodMark: boolean = false
   constructor(
     private pontSrv: PontajService,
     private usersSrv: UsersService,
+    private menuCtrl: MenuController,
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
   ) { }
 
   ngOnInit() {
-    this.pontSrv.getLastPontaj().subscribe()
+    this.menuChange()
+    this.pontSrv.getLastPontaj().subscribe(res => {
+      this.pontaj = res
+    })
     this.getUsers()
   }
 
@@ -84,12 +90,12 @@ periodMark: boolean = false
 
 
 
-openPayments(payments: any, userName: string){
+openPayments(payments: any, userName: string, userID: string){
   console.log(payments)
   const monthPayments = payments.filter((pay: any) => {
     return pay.workMonth === this.monthIndex
   })
-  this.actSrv.openModal(PaymentsPage, {name: userName, logs: monthPayments}, false)
+  this.actSrv.openModal(PaymentsPage, {name: userName, logs: monthPayments, userID}, false)
 }
 
 hours(workLog: any, name: string, payments: any) {
@@ -307,6 +313,19 @@ calcTesTotal(){
   }
 
 
+
+
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
+  }
 
 
 }

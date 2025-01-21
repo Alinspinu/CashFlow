@@ -1,26 +1,23 @@
-<!-- <ion-header [translucent]="true">
-
-</ion-header> -->
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-button color="medium" (click)="close()" slot="start">
+      <ion-icon src="../../../assets/icon/close-outline.svg"></ion-icon>
+    </ion-button>
+    <ion-label slot="start" class="ion-padding">Masa {{order.masa}}</ion-label>
+    <ion-title class="ion-text-center">{{formatDate(order.createdAt)}}</ion-title>
+    <ion-label slot="end" class="ion-padding">#{{order.index}}</ion-label>
+   </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-toolbar class="ion-no-border">
-    <ion-button size="large" color="medium" (click)="close()">
-     <ion-icon src="../../../assets/icon/close-outline.svg"></ion-icon>
-    </ion-button>
-   </ion-toolbar>
-<ion-grid>
-  <ion-row>
-    <ion-col>
       <ion-card *ngIf="order">
         <ion-card-header>
           <ion-card-title class="ion-text-center" style="color: red;" *ngIf="order.pending">COMANDĂ ONLINE</ion-card-title>
-          <ion-card-title>{{formatDate(order.createdAt)}}</ion-card-title>
-          <ion-card-subtitle>Masa {{order.masa}} </ion-card-subtitle>
-          <ion-card-subtitle>Nr. {{order.index}} </ion-card-subtitle>
+          <!-- <ion-card-subtitle>Masa {{order.masa}} </ion-card-subtitle> -->
         </ion-card-header>
         <ion-card-content>
           <ion-list>
-            <ion-item lines="none" class="input" *ngFor="let product of order.products">
+            <ion-item lines="none" class="input" color="light" *ngFor="let product of order.products">
               <ion-thumbnail slot="start">
                 <img alt="Product Image" [src]="product.imgUrl" />
               </ion-thumbnail>
@@ -107,9 +104,6 @@
 
         </ion-card-content>
       </ion-card>
-    </ion-col>
-  </ion-row>
-</ion-grid>
 </ion-content>
 
 <ion-footer *ngIf="order && order.pending">
@@ -150,8 +144,16 @@
     </ion-row>
   </ion-grid>
 </ion-footer>
-<ion-footer *ngIf="order.status === 'done'">
-  <ion-button color="medium" size="large" expand="block"(click)="reprint()">RRTIPĂREȘTE NOTA FISCALA</ion-button>
-  <ion-button color="medium" size="large" expand="block"(click)="changePaymentMethod()">SHIMBĂ METODA DE PLATĂ</ion-button>
-  <ion-button color="medium" size="large" expand="block"(click)="createBill()">TIPARESTE FACTURA</ion-button>
+<ion-footer *ngIf="order.status === 'done'" class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button color="medium"  expand="block"(click)="reprint()">RRTIPĂREȘTE NOTA FISCALA</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="medium"  expand="block"(click)="changePaymentMethod()">SHIMBĂ METODA DE PLATĂ</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <ion-button color="medium" size="large" expand="block"(click)="createBill()">TIPARESTE FACTURA</ion-button> -->
 </ion-footer>

@@ -8,12 +8,11 @@ import { ActionSheetService } from '../../../shared/action-sheet.service';
 import { BillProduct, Topping, Bill, deletetBillProduct, Table } from '../../../models/table.model';
 import { PickOptionPage } from 'src/app/modals/pick-option/pick-option.page';
 import { round } from '../../../shared/utils/functions';
-import { emptyDeletetBillProduct, emptyBill, emptyTable } from '../../../models/empty-models';
+import { emptyDeletetBillProduct} from '../../../models/empty-models';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { Subscription, Observable, map, switchMap, of, Subject, subscribeOn } from 'rxjs';
+import { Subscription, Observable, map, switchMap, of } from 'rxjs';
 import User from '../../../auth/user.model';
 import { Router } from '@angular/router';
-import { SubProduct } from 'src/app/models/category.model';
 
 interface billData{
   billProducts: BillProduct[],

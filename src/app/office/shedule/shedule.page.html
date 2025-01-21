@@ -1,26 +1,40 @@
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
 
-        <ion-header class="ion-no-border" *ngIf="shedule">
-          <ion-row>
-            <ion-col>
-              <ion-item lines="none" class="date-wrapper pointer" color="primary" (click)="selectShedule()">
-                <ion-icon src="assets/icon/create-outline.svg" slot="start"></ion-icon>
-                <span class="date" >{{editPeriod(shedule.period)}}</span>
-              </ion-item>
-            </ion-col>
-            <ion-col *ngFor="let day of shedule.days">
-              <div class="square days">
-                <span class="day">{{day.day}}</span>
-                <span class="date">{{formatDateInHtml(day.date).split('ora')[0]}}</span>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-header>
+<ion-header class="ion-no-border" >
+
+</ion-header>
+  <ion-header class="ion-no-border" *ngIf="shedule">
+    <ion-toolbar class="ion-no-border">
+      <ion-title class="ion-text-center">{{editPeriod(shedule.period)}}</ion-title>
+      <ion-button fill="ghost" color="medium" slot="end" (click)="selectShedule()">
+        <ion-icon src="../../../assets/icon/shedule.svg"></ion-icon>
+      </ion-button>
+    </ion-toolbar>
+    <ion-toolbar class="ion-no-border header">
+      <ion-row>
+        <ion-col size="2"  class="ion-no-padding padding">
+          <div class="square days">
+            <span class="name">Nume Angajat</span>
+          </div>
+        </ion-col>
+        <ion-col *ngFor="let day of shedule.days"  class="ion-no-padding padding">
+          <div class="square days">
+            <span class="day">{{day.day}}</span>
+            <span class="date">{{formatDateInHtml(day.date).split('ora')[0]}}</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-toolbar>
+  </ion-header>
+
 <ion-content [fullscreen]="true">
-  <ion-grid>
+  <ion-grid class="ion-no-padding">
     <ion-row>
-      <ion-col *ngIf="shedule && users">
+      <ion-col *ngIf="shedule && users" class="padding">
         <ion-row *ngFor="let user of users">
-          <ion-col>
+          <ion-col size="2" class="padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -35,7 +49,7 @@
               <span class="position">({{user.employee.position}})</span>
             </div>
           </ion-col>
-          <ion-col *ngFor="let day of shedule.days">
+          <ion-col *ngFor="let day of shedule.days" class="padding">
             <div class="square pointer" (click)="addOnShedule(day, user)"
             [ngClass]="{
               'barista' : getPosition(day.users, user._id).position === 'Barista' && getPosition(day.users, user._id).checkIn,

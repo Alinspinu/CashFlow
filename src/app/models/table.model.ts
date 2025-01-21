@@ -32,13 +32,7 @@ export class Bill{
     public inOrOut: string,
     public prepStatus: string,
     public out: boolean,
-    public payment: {
-        cash: number,
-        card: number,
-        viva: number,
-        voucher: number,
-        online: number,
-    },
+    public payment: OrderPayments,
     public employee: {
       access: number,
       fullName: string,
@@ -74,6 +68,14 @@ export class Bill{
     public locatie: string,
     public pending: boolean
   ){}
+}
+
+export interface OrderPayments{
+  cash: number,
+  card: number,
+  viva: number,
+  voucher: number,
+  online: number,
 }
 
 
@@ -138,11 +140,14 @@ export class deletetBillProduct{
     fullName: string,
     position: string,
     user: string,
+    name?: string
    },
    public reason: string,
    public admin: string,
    public locatie: string,
    public inv: string,
+   public _id?: string,
+   public createdAt?: string
   ){}
 }
 

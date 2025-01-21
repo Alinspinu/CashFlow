@@ -42,6 +42,40 @@ export function formatedDateToShow(date: any){
   }
   }
 
+  export function formatOrderDate(date: any) {
+    const inputDate = new Date(date);
+    const months = [
+      "Ian", "Feb", "Mar", "Aprl", "Mai", "Iun",
+      "Iul", "Aug", "Sept", "Oct", "Nov", "Dec"
+    ];
+
+    // Extract parts of the date
+    const day = inputDate.getDate(); // Day of the month
+    const month = months[inputDate.getMonth()]; // Month name in Romanian
+    const year = inputDate.getFullYear(); // Full year
+    const hours = inputDate.getHours(); // Hours
+    const minutes = inputDate.getMinutes().toString().padStart(2, '0'); // Minutes with leading zero if needed
+
+    // Format the date as "Sept 23, 2025, 12:43"
+    return `${month} ${day}, ${year}, ${hours}:${minutes}`;
+  }
+
+  export function formatOrderDateOne(date: any) {
+    const inputDate = new Date(date);
+    const months = [
+     "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie",
+      "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"
+    ];
+
+    // Extract parts of the date
+    const day = inputDate.getDate(); // Day of the month
+    const month = months[inputDate.getMonth()]; // Month name in Romanian
+    const year = inputDate.getFullYear(); // Full year
+
+    // Format the date as "Sept 23, 2025, 12:43"
+    return `${day} ${month}, ${year}`;
+  }
+
 
   export function getPaymentMethod(paymentObject: any){
       let paymentMethod: {method: string, value: number}[] = []

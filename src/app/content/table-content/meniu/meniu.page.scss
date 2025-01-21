@@ -1,6 +1,5 @@
 ion-content{
   --background: var(--ion-color-tertiary) !important;
-  // font-family: NoirProSemi !important;
 }
 
 .grid-meniu{
@@ -18,10 +17,9 @@ ion-content{
     justify-content: center;
     align-items: center;
     .main-img{
-      // color: var(--ion-color-light) !important;
-      font-size: 90px;
-      height: 200px;
-      padding: 36px;
+      font-size: 74px;
+      height: 160px;
+      padding: 28px;
     }
   }
   ion-title{
@@ -30,7 +28,7 @@ ion-content{
     text-transform: uppercase;
     text-align: center;
     color: white;
-    font-size: 32px;
+    font-size: 28px;
     padding: 10px;
   }
 
@@ -42,8 +40,8 @@ ion-content{
     font-family: NoirProSemi !important;
     text-transform: uppercase;
     text-align: center;
-    font-size: 20px;
-    padding: 10px;
+    font-size: 14px;
+    padding: 8px;
     color: white;
   }
 
@@ -55,8 +53,8 @@ ion-content{
   font-family: NoirProSemi !important;
     text-transform: uppercase;
     text-align: center;
-    font-size: 18px;
-    padding: 10px;
+    font-size: 14px;
+    padding: 8px;
     color: var(--ion-color-dark);
     color: white;
   }
@@ -102,9 +100,9 @@ ion-content{
       ion-title{
         font-size: 28px !important;
       }
-    
+
     }
-    
+
     .cat-card{
      width: 100% !important;
       .small-title{
@@ -112,9 +110,9 @@ ion-content{
         padding: 10px !important;
         padding-right: 8px !important;
       }
-    
+
     }
-    
+
     .prod-card{
       width: 100% !important;
        .product-title{
@@ -123,5 +121,5 @@ ion-content{
         padding-right: 8px !important;
       }
     }
-  
+
   }

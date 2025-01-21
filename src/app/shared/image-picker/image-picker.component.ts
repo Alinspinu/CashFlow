@@ -21,16 +21,13 @@ export class ImagePickerComponent implements OnInit {
 @Input() showPreview = false
 
 usePicker = false
-@Input() selectedImage: string = 'https://cdn11.bigcommerce.com/s-4f830/stencil/21634b10-fa2b-013a-00f1-62a1dd733893/e/4a0532a0-6207-013b-8ab2-261f9b1f5b00/icons/icon-no-image.svg'
+// @Input() selectedImage: string = 'https://cdn11.bigcommerce.com/s-4f830/stencil/21634b10-fa2b-013a-00f1-62a1dd733893/e/4a0532a0-6207-013b-8ab2-261f9b1f5b00/icons/icon-no-image.svg'
+@Input() selectedImage: string = '../../../assets/images/image-picker-w.png'
 
   constructor(private platform: Platform) { }
 
   ngOnInit() {
-    // console.log('mobile', this.platform.is('mobile'));
-    // console.log('hybrid', this.platform.is('hybrid'));
-    // console.log('ios', this.platform.is('ios'));
-    // console.log('android', this.platform.is('android'));
-    // console.log('desktop', this.platform.is('desktop'));
+    this.getThemeStatus()
     if((this.platform.is('mobile') && !this.platform.is('hybrid')) || this.platform.is('desktop')){
       this.usePicker = true;
     };
@@ -74,6 +71,17 @@ onFileChosen(event: Event){
     this.imagePick.emit(pickedFile);
   };
 };
+
+
+getThemeStatus(){
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  this.toggleTheme(prefersDark.matches);
+  prefersDark.addListener((mediaQuery) => this.toggleTheme(mediaQuery.matches));
+}
+
+toggleTheme(isDarkMode: boolean) {
+  this.selectedImage = isDarkMode ?  '../../../assets/images/image-picker-w.png' : '../../../assets/images/image-picker.png'
+}
 
 };
 

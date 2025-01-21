@@ -1,13 +1,11 @@
 
 
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
+
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar class="ion-no-border">
-    <ion-buttons slot="start">
-      <ion-button (click)="logout()" class="back-button">
-        <ion-icon src="../../assets/icon/log-out-outline.svg"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
     <ion-buttons slot="end">
       <ion-button (click)="testSound()" color="medium">
         <ion-icon [src]="volumeSrc" ></ion-icon>

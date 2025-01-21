@@ -2,7 +2,6 @@ import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, Simp
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { IonicModule, NavParams, ToastController } from '@ionic/angular';
-import { ProductService } from '../product/product.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { PickQtyPage } from 'src/app/modals/pick-qty/pick-qty.page';
 import { AddIngredientPage } from '../add-ingredient/add-ingredient.page';
@@ -64,7 +63,6 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
   constructor(
     private navParams: NavParams,
-    @Inject(ProductService) private prodSrv: ProductService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private recipeService: RecipeMakerService,
     private ingSrv: IngredientService,
@@ -77,7 +75,8 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         this.toppings = changes['top'].currentValue
         this.toppSend.emit(this.toppings)
       }
-    } else if (changes['ings']) {
+    }
+    if (changes['ings']) {
       if(changes['ings'].currentValue !== undefined) {
         this.displayIngs = changes['ings'].currentValue
         this.ingredientsToSend = []

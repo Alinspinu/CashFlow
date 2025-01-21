@@ -21,10 +21,10 @@ ion-title{
   background-color: var(--ion-color-light);
   color: var(--ion-color-medium);
   border-radius: 4px;
-  height: 80px;
+  height: 50px;
   display: flex;
   align-items: center;
-  font-size: 22px;
+  font-size: 16px;
   cursor: pointer;
   user-select: none;
   .date{
@@ -62,7 +62,7 @@ ion-title{
     padding: 18px;
     background-color: var(--ion-color-light);
     color: var(--ion-color-medium);
-    font-size: 24px;
+    font-size: 18px;
     margin-top: 8px;
   }
 }

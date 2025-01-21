@@ -102,7 +102,7 @@ getUser(){
   }
 
   goUserPage(userId: string){
-    this.router.navigateByUrl(`/tabs/user-content/${userId}`)
+    this.router.navigateByUrl(`/user-content/${userId}`)
   }
 
 }

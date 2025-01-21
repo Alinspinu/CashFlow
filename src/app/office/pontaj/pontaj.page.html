@@ -1,55 +1,65 @@
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
+
 <ion-header class="ion-no-border">
-  <ion-grid>
+  <ion-toolbar class="ion-no-border ion-no-padding" style="height: 50px !important;">
+    <ion-title class="ion-text-center">{{pontaj.month}}</ion-title>
+         <ion-button fill="ghost" color="medium" (click)="selectPontaj()" slot="end">
+          <ion-icon src="assets/icon/time.svg"></ion-icon>
+        </ion-button>
+  </ion-toolbar>
+  <ion-grid class="ion-no-padding">
     <ion-row *ngIf="pontaj && users">
-      <ion-col size="1">
-        <ion-item lines="none" class="date-wrapper pointer" color="primary" (click)="selectPontaj()">
-          <ion-icon src="assets/icon/create-outline.svg"></ion-icon>
+      <ion-col size="1" class="ion-no-padding padding">
+        <div class="square days">Nume Angajat</div>
+
+        <!-- <ion-item lines="none" class="date-wrapper pointer" color="primary" (click)="selectPontaj()">
           <span class="date">{{pontaj.month}}</span>
-        </ion-item>
+        </ion-item> -->
       </ion-col>
-      <ion-col size="0.4">
+      <ion-col size="0.4" class="ion-no-padding padding">
         <div class="square days">Baza</div>
       </ion-col>
-      <ion-col size="0.4">
+      <ion-col size="0.4" class="ion-no-padding padding">
         <div class="square days">Norm</div>
       </ion-col>
-      <ion-col size="0.3">
+      <ion-col size="0.3" class="ion-no-padding padding">
         <div class="square days">Bonus</div>
       </ion-col>
-      <ion-col size="0.4">
+      <ion-col size="0.4" class="ion-no-padding padding">
         <div class="square days">Total</div>
       </ion-col>
-      <ion-col size="0.4">
+      <ion-col size="0.4" class="ion-no-padding padding">
         <div class="square days">Plătit</div>
       </ion-col>
-      <ion-col size="0.5">
+      <ion-col size="0.5" class="ion-no-padding padding">
         <div class="square days pointer" (click)="selectPeriod()">
           <span>De Plată</span>
           <span>{{period}}</span>
         </div>
       </ion-col>
-      <ion-col size="0.3">
+      <ion-col size="0.3" class="ion-no-padding padding">
         <div class="square days">lei/h</div>
       </ion-col>
-      <ion-col size="0.3">
+      <ion-col size="0.3" class="ion-no-padding padding">
         <div class="square days">Ora</div>
       </ion-col>
-      <ion-col *ngFor="let day of pontaj.days">
+      <ion-col *ngFor="let day of pontaj.days" class="ion-no-padding padding">
         <div class="square days">
-          <span class="day">{{day.number}}</span>
+          <span class="day size">{{day.number}}</span>
         </div>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-grid>
+  <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col *ngIf="pontaj && users">
 
         <ion-row *ngFor="let user of users">
-          <ion-col size="1">
+          <ion-col size="1" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -63,7 +73,7 @@
               <span class="name">{{user.employee.fullName}}</span>
             </div>
           </ion-col>
-          <ion-col size="0.4">
+          <ion-col size="0.4" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -76,7 +86,7 @@
             }">
             {{user.employee.salary.inHeand}}</div>
           </ion-col>
-          <ion-col size="0.4">
+          <ion-col size="0.4" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -89,7 +99,7 @@
             }">
             {{user.employee.salary.norm}} h</div>
           </ion-col>
-          <ion-col size="0.3">
+          <ion-col size="0.3" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -102,7 +112,7 @@
             }">
               {{calcBonus(user.employee.payments)}}</div>
           </ion-col>
-          <ion-col size="0.4">
+          <ion-col size="0.4" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -116,9 +126,9 @@
             {{calcBonus(user.employee.payments) +
               calcIncome(user.employee)}} </div>
           </ion-col>
-          <ion-col size="0.4">
+          <ion-col size="0.4" class="ion-no-padding padding">
             <div class="square"
-            (click)="openPayments(user.employee.payments, user.employee.fullName)" style="cursor:pointer;"
+            (click)="openPayments(user.employee.payments, user.employee.fullName, user._id)" style="cursor:pointer;"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
               'aj-barista' : user.employee.position === 'Ajutor barman' || user.employee.position === 'Curatenie',
@@ -130,7 +140,7 @@
             }">
             {{calcPayments(user.employee.payments)}}</div>
           </ion-col>
-          <ion-col size="0.5" (click)="paySalary(user)" style="cursor: pointer;">
+          <ion-col size="0.5" (click)="paySalary(user)" style="cursor: pointer;" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -145,7 +155,7 @@
               calcIncome(user.employee) -
               calcPayments(user.employee.payments))}}</div>
           </ion-col>
-          <ion-col size="0.3">
+          <ion-col size="0.3" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -158,7 +168,7 @@
             }">
             {{roundInHtml(user.employee.salary.inHeand / user.employee.salary.norm)}}</div>
           </ion-col>
-          <ion-col size="0.3" (click)="hours(user.employee.workLog, user.employee.fullName, user.employee.payments)" style="cursor: pointer;">
+          <ion-col size="0.3" (click)="hours(user.employee.workLog, user.employee.fullName, user.employee.payments)" style="cursor: pointer;" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',
@@ -171,7 +181,7 @@
             }">
             {{calcTotalsHours(user.employee.workLog)}}</div>
           </ion-col>
-          <ion-col *ngFor="let day of pontaj.days; let i = index">
+          <ion-col *ngFor="let day of pontaj.days; let i = index" class="ion-no-padding padding">
             <div class="square pointer size"
             (click)="getIndex(i+1)"
             [ngClass]="{
@@ -191,25 +201,25 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="1.2">
+          <ion-col size="1.3" class="ion-no-padding padding">
             <div class="total">
               <span>Total:</span>
               <span>{{roundInHtml(totalSalary + totalBonus)}}</span>
             </div>
           </ion-col>
-          <ion-col size="1.2">
+          <ion-col size="1.3" class="ion-no-padding padding">
             <div class="total">
               <span>Plătit:</span>
               <span>{{roundInHtml(totalPayd)}}</span>
             </div>
           </ion-col>
-          <ion-col size="1.2">
+          <ion-col size="1.4" class="ion-no-padding padding">
             <div class="total">
               <span>Rest:</span>
               <span>{{roundInHtml(totalSalary + totalBonus - totalPayd)}}</span>
             </div>
           </ion-col>
-          <ion-col *ngFor="let day of pontaj.days">
+          <ion-col *ngFor="let day of pontaj.days" class="ion-no-padding padding">
             <div class="total">
               <span class="day">{{roundInHtml(calcWorkDayValue(day, pontaj.days.length) + totalTesDay)}}</span>
             </div>

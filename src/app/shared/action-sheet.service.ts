@@ -46,6 +46,7 @@ import { RecordPage } from '../office/nirs/record/record.page';
 import { IngredientsPage } from '../office/e-factura/ingredients/ingredients.page';
 import { NirsModalPage } from '../office/e-factura/nirs-modal/nirs-modal.page';
 import { AddPointModalPage } from '../office/sale-point/add-point-modal/add-point-modal.page';
+import { ProductPage } from '../office/CRUD/product/product.page';
 
 
 
@@ -150,6 +151,7 @@ export class ActionSheetService {
                typeof EntryViewPage |
                typeof MonetarPage |
                typeof CloseDayPage |
+               typeof DelProdViewPage |
                typeof IngredientContentPage |
                typeof UploadLogPage |
                typeof IngredientsPage |
@@ -201,6 +203,22 @@ export class ActionSheetService {
     const { data } = await modal.onDidDismiss();
     return data
   };
+
+  async openAdd(
+    component: typeof ProductPage,
+    options: any,
+    clas: string
+  ) {
+    const modal = await this.modalCtrl.create({
+      component: component,
+      componentProps: {options: options},
+      cssClass: clas
+    });
+
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    return data
+  }
 
 
 

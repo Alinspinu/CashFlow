@@ -123,7 +123,7 @@ mergeNir(){
   Preferences.remove({key: 'nir'});
   Preferences.set({key: 'nir', value: JSON.stringify(nir)})
   Preferences.set({key: 'nirIds', value: JSON.stringify(this.selectedNirsId)})
-  this.router.navigateByUrl(`/tabs/office/nir/${nir._id}`)
+  this.router.navigateByUrl(`/office/nir/${nir._id}`)
 }
 
 
@@ -313,7 +313,7 @@ searchNir(ev: any){
   }
 
   editNir(id: string){
-    this.router.navigateByUrl(`/tabs/office/nir/${id}`)
+    this.router.navigateByUrl(`/office/nir/${id}`)
   }
 
   async deleteNir(id: string, index: number){
@@ -346,7 +346,7 @@ searchNir(ev: any){
   }
 
   addNir(){
-    this.router.navigateByUrl('/tabs/office/nir/new')
+    this.router.navigateByUrl('/office/nir/new')
   }
 
   formatedDate(date: string){

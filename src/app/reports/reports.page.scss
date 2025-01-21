@@ -1,89 +1,48 @@
-// ion-label{
-//   font-family: NoirProReg !important;
-// }
 
-
-
-
-// .contents-container{
-//   display: flex;
-//   flex-direction: row;
-//   height: 100vh;
-//     .menu{
-//       .option{
-//         cursor: pointer;
-//         ion-icon{
-//           margin-left: 2rem;
-//         }
-//       }
-//       .option:hover{
-//        --background: var(--ion-color-medium);
-//       }
-//     }
-
-//     .menu-button{
-//       position: absolute;
-//       z-index: 9999;
-//       font-size: 20px;
-//       top: 3px;
-//       ion-icon{
-//       }
-//     }
-
-//   .separator{
-//     border-right: 1px solid rgb(194, 194, 194);
-//     height: 100vh;
-//   }
-
-//   .view{
-//     flex: 70%;
-//   }
-// }
-
-// .selected{
-//   --background: var(--ion-color-medium);
-//   --color: white;
-// ion-icon{
-//   color: white
-// }
-// }
-
-
-// ion-input, ion-label, ion-title, ion-button{
-//   font-family: NoirProReg !important;
-// }
-
-ion-label{
-  font-family: NoirProReg !important;
+ion-toolbar, ion-content, ion-list, ion-header, ion-item{
+  --background: var(--ion-color-light) !important;
+  background-color: var(--ion-color-light) !important;
 }
 
-
-.selected{
-  --background: var(--ion-color-medium);
-  background-color: var(--ion-color-medium);
-  --color:var(--ion-color-light);
-ion-icon{
-  color:var(--ion-color-light);
-}
-}
-
-.header{
-  padding-top: 16px;
-  height: 50px;
-  text-align: center;
-  ion-title{
-    font-size: 20px;
+ ion-item{
+  cursor: pointer;
+  font-family: RoseReg !important;
+  ion-icon{
+    color: var(--ion-color-medium)
   }
 }
 
-
-.menu{
-  position: absolute;
-  top: 5px;
-  z-index: 999;
+ion-item:hover{
+  --background: var(--light-grey) !important;
+  --color: var(--dark) !important;
+  ion-icon{
+    color:var(--dark) !important;
+  }
 }
 
-ion-input, ion-label, ion-title, ion-button{
-  font-family: NoirProReg !important;
+.selected{
+  --background: var(--light-grey) !important;
+  --color: var(--dark) !important;
+  ion-icon{
+    color:var(--dark) !important;
+  }
 }
 
+ion-button, ion-label{
+  font-family: RoseMed!important;
+}
+
+ion-title{
+  font-family: RoseReg !important;
+  // font-size: 42px;
+}
+
+ion-title.date{
+  font-family: RoseReg !important;
+  font-size: 28px;
+}
+
+ion-split-pane{
+  --side-width: 250px !important;
+  --side-min-width: 0 !important
+}

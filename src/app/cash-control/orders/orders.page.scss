@@ -1,0 +1,244 @@
+
+ion-toolbar, ion-content, ion-list, ion-header{
+  --background: var(--ion-color-light) !important;
+  background-color: var(--ion-color-light) !important;
+}
+
+ion-title{
+  font-family: RoseReg !important;
+  font-size: 42px;
+}
+
+
+.fixed-toolbar {
+  position: sticky; /* Keeps it fixed inside ion-content */
+  top: 0; /* Sticks to the top */
+  z-index: 10; /* Ensures it is above other content */
+}
+
+
+
+
+.content-toolbar{
+  padding: 24px 0;
+  margin-left: 48px;
+  width: 92%;
+  border-bottom: 0.6px solid var(--grey);
+}
+
+
+.menu-toolbar{
+  padding: 64px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-toolbar{
+  width: 95%;
+  margin-left: 28px;
+}
+
+.header{
+  font-family: RoseReg !important;
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  margin: 0 8px;
+  font-size: 18px;
+  justify-content: space-between;
+  border-top: 0.6px solid var(--grey);
+  border-bottom: 1.5px solid var(--grey);
+}
+
+.date-wrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 12px;
+  ion-searchbar{
+    flex: 65%;
+    font-family: RoseReg !important;
+    --box-shadow: none !important;
+    --background: var(--light-grey);
+    color: var(--dark);
+  }
+  .buttons-wrapper{
+    flex: 35%;
+    display: flex;
+    justify-content: end;
+    ion-button{
+      margin-right: 6px;
+      font-family: "RoseMed" !important;
+      --border-width: 1.2px !important;
+      --padding-start: 28px !important;
+      --padding-end: 28px !important;
+      ion-label{
+        font-size: 16px;
+      }
+      ion-icon{
+        font-size: 14px;
+      }
+    }
+  }
+
+}
+
+
+.header, .order-container{
+    .id{
+      flex: 10%;
+    }
+    .customer{
+      text-align: center;
+      flex: 20%;
+    }
+    .table{
+      text-align: center;
+      flex: 10%
+    }
+    .items{
+      text-align: center;
+      flex: 10%;
+    }
+    .total{
+      text-align: center;
+      flex: 15%;
+    }
+    .status{
+      text-align: center;
+      flex: 15%
+    }
+    .action{
+      text-align: center;
+      flex: 10%;
+    }
+}
+
+.order-container{
+  font-family: RoseReg !important;
+  width: 92%;
+  margin-left: 44px;
+  padding: 12px 18px;
+  border-bottom: 0.5px solid var(--grey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  div{
+    display: flex;
+    flex-direction: column;
+    .main{
+      font-size: 16px;
+    }
+    .second{
+      font-size: 12px;
+      color: var(--grey);
+    }
+  }
+}
+
+
+ion-card{
+  cursor: pointer;
+  width: 100%;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  ion-card-title, ion-card-subtitle, p{
+    color: var(--ion-color-medium);
+  }
+
+  ion-card-subtitle{
+    font-family: RoseReg !important;
+    font-size: 16px;
+  }
+  ion-card-title{
+    font-family: RoseMed !important;
+    font-size: 24px;
+  }
+  ion-card-content{
+    ion-icon{
+      padding: 6px;
+      border-radius: 50%;
+      font-size: 16px;
+      color: var(--white) !important;
+      position: absolute;
+      top: 0;
+      right: 16px;
+    }
+    ion-note{
+      font-size: 12px;
+      color: var(--grey)
+    }
+    p{
+      font-family: NoirProReg;
+      display: inline;
+      font-size: 12px;
+      color: var(--green-contrast)
+    }
+  }
+}
+
+#in-card{
+  --background: var(--light-turqoise);
+  ion-card-content{
+    ion-icon{
+      background-color: var(--turqoise);
+    }
+  }
+}
+
+#all-card{
+  --background: var(--light-green);
+  ion-card-content{
+    ion-icon{
+      background-color: var(--green);
+    }
+  }
+}
+#open-card{
+  --background: var(--light-sand);
+  ion-card-content{
+    ion-icon{
+      background-color: var(--sand);
+    }
+  }
+}
+#disc-card{
+  --background: var(--light-blue);
+  ion-card-content{
+    ion-icon{
+      background-color: var(--blue);
+    }
+    p{
+      color: var(--red) !important;
+    }
+  }
+}
+#online-card{
+  --background: var(--light-orange);
+  ion-card-content{
+    ion-icon{
+      background-color: var(--orange);
+    }
+  }
+}
+#del-card{
+  --background: var(--light-red);
+  ion-card-content{
+    ion-icon{
+      background-color: var(--red);
+    }
+    p{
+      color: var(--red) !important;
+    }
+  }
+}
+
+@media(max-width: 1400px){
+  ion-card-header{
+    min-height: 80px;
+  }
+}

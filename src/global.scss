@@ -29,14 +29,22 @@
 
 
 
-
 .light-theme {
   --green: #{$green-light};
   --green-shade: #{$green-shade-light};
-  --light-green: #{$light-green};
+  --green-contrast: #{$green-contrast-light};
+  --light-green: #{$light-green-light};
+  --light-green-contrast: #{$light-green-contrast-light};
   --light-green-shade: #{$light-green-shade};
 
+
+  --sand: #{$sand-light};
+  --light-sand: #{$light-sand-light};
+  --sand-contrast: #{$sand-contrast-light};
+
   --orange: #{$orange-light};
+  --light-orange: #{$light-orange-light};
+  --orange-contrast: #{$orange-contrast-light};
   --orange-shade: #{$orange-shade-light};
 
   --yellow: #{$yellow-light};
@@ -49,14 +57,20 @@
   --dark-blue: #{$dark-blue};
 
   --turqoise: #{$turqoise-light};
+  --light-turqoise: #{$light-turqoise-light};
+  --turqoise-contrast: #{$turqoise-contrast-light};
   --turqoise-shade: #{$turqoise-shade-light};
 
   --red: #{$red-light};
+  --light-red: #{$light-red-light};
+  --red-contrast: #{$red-contrast-light};
   --red-shade: #{$red-shade-light};
 
 
 
   --grey: #{$grey-light};
+  --light-grey: #{$light-grey-light};
+  --greyy: #{$greyy-light};
 
 
   --text-color: #{$text-color-light};
@@ -70,10 +84,19 @@
 .dark-theme {
   --green: #{$green-dark};
   --green-shade: #{$green-shade-dark};
-  --light-green: #{$light-green};
+  --green-contrast: #{$green-contrast-dark};
+  --light-green: #{$light-green-dark};
+  --light-green-contrast: #{$light-green-contrast-dark};
   --light-green-shade: #{$light-green-shade};
 
+
+  --sand: #{$sand-dark};
+  --light-sand: #{$light-sand-dark};
+  --sand-contrast: #{$sand-contrast-dark};
+
   --orange: #{$orange-dark};
+  --light-orange: #{$light-orange-dark};
+  --orange-contrast: #{$orange-contrast-dark};
   --orange-shade: #{$orange-shade-dark};
 
   --yellow: #{$yellow-dark};
@@ -86,12 +109,18 @@
   --dark-blue: #{$dark-blue};
 
   --turqoise: #{$turqoise-dark};
+  --light-turqoise: #{$light-turqoise-dark};
+  --turqoise-contrast: #{$turqoise-contrast-dark};
   --turqoise-shade: #{$turqoise-shade-dark};
 
   --red: #{$red-dark};
+  --light-red: #{$light-red-dark};
+  --red-contrast: #{$red-contrast-dark};
   --red-shade: #{$red-shade-dark};
 
   --grey: #{$grey-dark};
+  --light-grey: #{$light-grey-dark};
+  --greyy: #{$greyy-dark};
 
 
   --text-color: #{$text-color-dark};
@@ -100,6 +129,10 @@
   --white: #{$white};
   --dark: #{$dark};
 }
+
+
+
+
 
 
 
@@ -121,6 +154,23 @@
 @font-face {
   font-family: 'NoirProMed';    //This is what we are going to call
   src: url('./assets/fonts/NoirPro-Medium.woff2');
+}
+
+@font-face {
+  font-family: 'RoseSemi';    //This is what we are going to call
+  src: url('./assets/fonts/RedRose-SemiBold.ttf');
+}
+@font-face {
+  font-family: 'RoseReg';    //This is what we are going to call
+  src: url('./assets/fonts/RedRose-Regular.ttf');
+}
+@font-face {
+  font-family: 'RoseLight';    //This is what we are going to call
+  src: url('./assets/fonts/RedRose-Light.ttf');
+}
+@font-face {
+  font-family: 'RoseMed';    //This is what we are going to call
+  src: url('./assets/fonts/RedRose-Medium.ttf');
 }
 
 body ion-alert.extraAlert{
@@ -251,6 +301,14 @@ body ion-alert.deleteAlert{
   --min-width: none;
   }
 
+.add-modal{
+  --width: 98%;
+  --height: 98vh;
+  --min-heigth: none;
+  --max-width: none;
+  --min-width: none;
+}
+
   .billModal{
     --height: 95%;
     --min-width: none !important;
@@ -339,6 +397,18 @@ body ion-alert.deleteAlert{
     --min-width: none !important;
     --width: 100% !important;
   }
+  }
+
+
+
+  ion-menu-button{
+    position: absolute;
+    top: 0px;
+    left: 8px;
+    z-index: 99;
+    --border-radius: 0;
+    width: fit-content;
+
   }
 
 

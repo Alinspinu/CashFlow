@@ -1,34 +1,34 @@
 
 
 
-ion-content{
+ion-content, .header{
   --background: var(--ion-color-tertiary) !important;
 }
 
+ion-title{
+  font-family: RoseMed !important;
+}
+.padding{
+  padding: 2.5px !important;
+}
 .square{
-  font-family: NoirProReg !important;
-  border-radius: 4px;
-  height: 50px;
+  font-family: RoseMed !important;
+  border-radius: 2px;
+  height: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-
+  font-size: 14px;
   .name{
-    font-size: 18px;
+    font-size: 14px;
+    text-align: center;
   }
   .position{
-    font-size: 14px;
-  }
-  .day{
-    font-size: 20px;
+    font-size: 12px;
   }
   .date{
-    font-size: 14px;
-  }
-  .label{
-    font-size: 18px;
+    font-size: 12px;
   }
 }
 
@@ -36,12 +36,6 @@ ion-content{
   cursor: pointer;
 }
 
-.date-wrapper{
-font-family: NoirProSemi !important;
-  .date{
-    font-size: 22px;
-  }
-}
 
 
 .section-wrapper{

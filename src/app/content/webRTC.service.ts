@@ -14,6 +14,7 @@ export class WebRTCService {
   private getOutsideOrder = new Subject<any>();
   private getUpdatadOrder = new Subject<any>();
   private getTableBillId = new Subject<any>();
+  private delProduct = new Subject<any>();
 
   constructor() {
     // this.socket = io('https://live669-0bac3349fa62.herokuapp.com');
@@ -39,6 +40,9 @@ export class WebRTCService {
     })
     this.socket.on('outsideOrder', (data: any) => {
       this.getOutsideOrder.next(data)
+    })
+    this.socket.on('delProduct', (data: any) => {
+      this.delProduct.next(data)
     })
   }
 
@@ -73,6 +77,11 @@ export class WebRTCService {
     this.socket.emit('outsideOrder', data)
   }
 
+
+
+  getDelProduct(){
+    return this.delProduct.asObservable()
+  }
 
 
   getOrderToPrint(){

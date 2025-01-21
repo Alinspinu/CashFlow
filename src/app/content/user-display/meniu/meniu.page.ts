@@ -2,13 +2,13 @@ import { Component, OnInit, QueryList, ViewChild, ViewChildren, ElementRef } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { ContentService } from '../../content.service';
 import { take, tap } from 'rxjs';
 import { BillPage } from '../bill/bill.page';
 import { WebRTCService } from '../../webRTC.service';
 import { Bill } from 'src/app/models/table.model';
 import { emptyBillProduct } from '../../../models/empty-models';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { emptyBillProduct } from '../../../models/empty-models';
   templateUrl: './meniu.page.html',
   styleUrls: ['./meniu.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, BillPage]
+  imports: [IonicModule, CommonModule, FormsModule,  BillPage]
 })
 export class MeniuPage implements OnInit {
 
@@ -77,8 +77,8 @@ export class MeniuPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.contentService.getData(environment.LOC).subscribe()
     this.getCategories()
-    this.selectMainCat('food', 0)
     this.getBill()
   }
 
@@ -209,9 +209,7 @@ export class MeniuPage implements OnInit {
 
   getCategories(){
     this.contentService.categorySend$
-    .pipe(
-      take(1),
-      tap(response => {
+    .pipe(tap(response => {
         if(response.length > 1){
           this.categories = [...response]
           const index = this.categories.findIndex(cat => cat.name === 'Produse de Paște')
@@ -233,6 +231,7 @@ export class MeniuPage implements OnInit {
             }
           });
           this.mainCats = sortedData
+          this.selectMainCat('food', 0)
         }
       })
     ).subscribe()

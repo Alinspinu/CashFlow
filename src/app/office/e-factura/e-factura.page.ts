@@ -142,7 +142,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
     Preferences.remove({key: 'nir'});
     Preferences.set({key: 'nir', value: JSON.stringify(nir)})
     setTimeout(() => {
-      this.router.navigateByUrl(`/tabs/office/nir/${nir._id}`)
+      this.router.navigateByUrl(`/office/nir/${nir._id}`)
     }, 500)
   }
 

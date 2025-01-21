@@ -78,6 +78,7 @@ export class AuthPage implements OnInit {
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tabs/tables';
+    this.authService.logout()
     this.getCurrentTab();
     this.form = new FormGroup({
       email: new FormControl(null, {

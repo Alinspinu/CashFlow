@@ -7,6 +7,9 @@ import { WebRTCService } from './content/webRTC.service';
 import { ActionSheetService } from './shared/action-sheet.service';
 import { TablesService } from './tables/tables.service';
 import { Subscription } from 'rxjs';
+import { MenuController } from '@ionic/angular'
+import { CashControlService } from './cash-control/cash-control.service';
+import { UsersService } from './office/users/users.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +22,23 @@ export class AppComponent implements OnInit, OnDestroy {
   user!: User
 
 
+  public appPages = [
+    { title: 'Vanzare', url: '/tables', icon: '../assets/icon/cash-register.svg' },
+    { title: 'Casă', url: '/cash-control', icon: '../assets/icon/home-outline.svg' },
+    { title: 'Office', url: '/office', icon: '../assets/icon/office-worker.svg' },
+    { title: 'Rapoarte', url: '/reports', icon: '../assets/icon/line.svg' },
+    { title: 'Program', url: '/shedule', icon: '../assets/icon/shedule.svg' },
+    { title: 'Pontaj', url: '/pontaj', icon: '../assets/icon/time.svg' },
+    { title: 'Setări', url: '/config', icon: '../assets/icon/settings.svg' },
+    // { title: 'Rezervări', url: '/reservations', icon: '../assets/icon/send-outline.svg' },
+    // { title: 'Necesar', url: '/folder/archived', icon: '../assets/icon/list-outline.svg' },
+    // { title: 'Rețetar', url: '/recipes', icon: '../assets/icon/checkmark-outline.svg' },
+    // { title: 'Check In', url: '/check-in', icon: '../assets/icon/location-outline.svg' },
+    // { title: 'Notificări', url: '/notifications', icon: '../assets/icon/notifications-outline.svg' },
+    { title: 'Log Out', url: '/auth', icon: '../assets/icon/log-out-outline.svg' }
+  ];
+
+
   private contentSub!: Subscription;
 
 
@@ -26,9 +46,16 @@ export class AppComponent implements OnInit, OnDestroy {
     private contService: ContentService,
     private tablesService: TablesService,
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
-    private webRTC: WebRTCService
+    private webRTC: WebRTCService,
+    private userSrv: UsersService,
+    private cashCtrlSrv: CashControlService,
+    @Inject(MenuController) private menuCtrl: MenuController
     ) {}
 
+
+    closeMenu(){
+      this.menuCtrl.close('start');
+    }
 
     getUser(){
       Preferences.get({key: 'authData'}).then(data  => {
@@ -36,10 +63,10 @@ export class AppComponent implements OnInit, OnDestroy {
          this.user = JSON.parse(data.value)
         this.contentSub = this.contService.getData(this.user.locatie).subscribe()
         this.tablesService.getTables(this.user.locatie, this.user._id)
-        //  this.getIncommingOrders()
+        this.userSrv.getUsers().subscribe()
          this.getUpdatedOrder()
          this.removeLive()
-        //  this.tablesService.getOrderMessage(this.user.locatie, this.user._id)
+         this.getDelProduct()
         }
       })
     }
@@ -51,11 +78,26 @@ export class AppComponent implements OnInit, OnDestroy {
       this.webRTC.getUpdatedOrderObservable().subscribe(order => {
         if(order){
           const parsedOrder = JSON.parse(order)
-          this.tablesService.updateOrder(parsedOrder)
+          setTimeout(() => {
+            this.tablesService.updateOrder(parsedOrder)
+            this.cashCtrlSrv.addUpdateOrders(parsedOrder)
+          }, 800)
         }
       })
     }
 
+    getDelProduct(){
+      this.webRTC.getDelProduct().subscribe({
+        next: (product) => {
+          const parsedProduct = JSON.parse(product)
+          this.cashCtrlSrv.addDelProduct(parsedProduct)
+          console.log(parsedProduct)
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
+    }
 
 
     removeLive(){

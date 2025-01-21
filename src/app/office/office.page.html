@@ -1,6 +1,70 @@
 
-<ion-tabs>
-  <ion-tab-bar slot="top" *ngIf="screenWidth > 500">
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
+
+
+
+
+
+<ion-split-pane when="sm" contentId="main">
+  <ion-menu contentId="main">
+      <div class="menu-toolbar">
+          <ion-icon src="../../assets/icon/office-worker.svg" style="font-size: 68px;"></ion-icon>
+      </div>
+    <ion-content>
+      <ion-list>
+        <div *ngFor="let page of appPages">
+          <ion-item
+          lines="none"
+          [ngClass]="{'selected': page.show}"
+          (click)="selectPage(page.name)"
+          >
+            <ion-icon [src]="page.icon"></ion-icon>
+            <ion-label>{{page.name}}</ion-label>
+          </ion-item>
+        </div>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+<div class="ion-page" id="main">
+
+
+  <app-products *ngIf="appPages[0].show"  [isDarkMode]="isDarkMode"></app-products>
+  <app-ingredient *ngIf="appPages[1].show"></app-ingredient>
+  <app-imp *ngIf="appPages[2].show"></app-imp>
+  <app-nirs *ngIf="appPages[3].show"></app-nirs>
+  <app-e-factura *ngIf="appPages[4].show"></app-e-factura>
+  <app-cash-register *ngIf="appPages[5].show"></app-cash-register>
+  <app-users *ngIf="appPages[6].show"></app-users>
+
+
+</div>
+</ion-split-pane>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <ion-tabs>
+  <ion-tab-bar slot="bottom" *ngIf="screenWidth > 500">
     <ion-tab-button tab="products" href="/office/products">
       <ion-icon aria-hidden="true" src="../../assets/icon/foood.svg"></ion-icon>
       <ion-label>Produse</ion-label>
@@ -49,7 +113,7 @@
       <ion-label>Pontaj</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
-</ion-tabs>
+</ion-tabs> -->
 
 
 

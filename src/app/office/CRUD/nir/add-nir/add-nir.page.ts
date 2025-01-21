@@ -312,7 +312,7 @@ updateLogId(){
             this.nirsSrv.saveNir(this.nir).subscribe(response => {
               this.nirSrv.setNir(emptyNir())
               showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
-              this.router.navigateByUrl('/tabs/office/nirs')
+              this.router.navigateByUrl('/office/nirs')
             })
           }
         })
@@ -328,7 +328,7 @@ updateLogId(){
               this.nir.document = this.nirForm.value.document
               this.nirsSrv.saveNir(this.nir).subscribe(response=> {
                 this.nirSrv.setNir(emptyNir())
-                this.router.navigateByUrl('/tabs/office/nirs')
+                this.router.navigateByUrl('/office/nirs')
                 showToast(this.toastCtrl, response.message, 2000)
               })
             },
@@ -345,7 +345,7 @@ updateLogId(){
           this.nir.document = this.nirForm.value.document
           this.nirsSrv.saveNir(this.nir).subscribe(response=> {
             this.nirSrv.setNir(emptyNir())
-            this.router.navigateByUrl('/tabs/office/nirs')
+            this.router.navigateByUrl('/office/nirs')
             showToast(this.toastCtrl, response.message, 2000)
           })
         }

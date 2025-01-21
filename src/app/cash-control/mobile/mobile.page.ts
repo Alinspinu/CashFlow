@@ -110,13 +110,13 @@ export class MobilePage implements OnInit {
   }
 
   getOrders(){
-    this.cashSrv.getUserOrders(this.user._id).subscribe(response => {
-      if(response) {
-        this.data = response
-        this.orders = [...this.data]
-        this.calcCashIn()
-      }
-    })
+    // this.cashSrv.getUserOrders(this.user._id).subscribe(response => {
+    //   if(response) {
+    //     this.data = response
+    //     this.orders = [...this.data]
+    //     this.calcCashIn()
+    //   }
+    // })
   }
 
   calcCashIn(){

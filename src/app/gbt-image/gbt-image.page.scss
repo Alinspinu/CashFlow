@@ -48,14 +48,14 @@ ion-title{
 .chat-container {
   width: 100%;
   display: flex;
-  align-items: center; /* Vertically center the items */
+  align-items: center;
   justify-content: center;
   position: absolute;
   bottom: 80px;
   left: 10px;
   right: 10px;
   padding: 10px;
-  gap: 10px; /* Add some space between textarea and button */
+  gap: 10px;
 }
 
 .chat-textarea {
@@ -66,7 +66,6 @@ ion-title{
   margin-right: 10px;
   background-color: var(--grey);
   border-radius: 24px;
-  // border: 1px solid #ccc;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
 

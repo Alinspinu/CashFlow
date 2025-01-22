@@ -33,20 +33,48 @@
             <div  class="input">
               <ion-input  type="text" label="Denumire Produs" labelPlacement="floating" placeholder="Ex. Caffe Latte" fill="outline" formControlName="name"></ion-input>
             </div>
+            <div  class="input">
+              <ion-input  type="text" label="Cantitate" labelPlacement="floating" placeholder="Ex. 300 ml" fill="outline" formControlName="qty"></ion-input>
+            </div>
             <div class="input">
               <ion-input   type="number" label="Preț / Lei" labelPlacement="floating" placeholder="Ex. 24" fill="outline" formControlName="price"></ion-input>
             </div>
           </div>
 
-           <div class="inputs-wrapper">
-             <div  class="input">
-               <ion-input  type="text" label="Cantitate" labelPlacement="floating" placeholder="Ex. 300 ml" fill="outline" formControlName="qty"></ion-input>
-             </div>
+          <div class="inputs-wrapper">
+            <div  class="input">
+              <ion-select label="TVA" placeholder="TVA" fill="outline" formControlName="tva">
+                <ion-select-option value="19">19%</ion-select-option>
+                <ion-select-option value="9">9%</ion-select-option>
+                <ion-select-option value="5">5%</ion-select-option>
+                <ion-select-option value="0">0%</ion-select-option>
+              </ion-select>
+            </div>
              <div  class="input">
                <ion-input  type="number" label="Poziție" labelPlacement="floating" placeholder="Ex. 1 Pentru prima pozitie" fill="outline" formControlName="order"></ion-input>
              </div>
-           </div> 
-
+              <div  class="input">
+                <ion-select label="Departament" fill="outline" placeholder="Departament"  labelPlacement="floating" formControlName="dep">
+                  <ion-select-option value="marfa">Marfă</ion-select-option>
+                  <ion-select-option value="productie">Productie</ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+            <div class="inputs-wrapper">
+              <div  class="input">
+                <ion-select label="Imprimantă" placeholder="Alege imprimanta" fill="outline" labelPlacement="floating" formControlName="printer">
+                  <ion-select-option value="kitchen">Bucătarie</ion-select-option>
+                  <ion-select-option value="barista">Barista</ion-select-option>
+                  <ion-select-option value="main">Principală</ion-select-option>
+                </ion-select>
+            </div>
+              <div class="toggle-input">
+                <ion-toggle  [enableOnOffLabels]="true" justify="space-between" [checked]="product && product.printOut">Printează pe terasă</ion-toggle>
+              </div>
+              <div class="toggle-input">
+                <ion-toggle  [enableOnOffLabels]="true" justify="space-between"  [checked]="product && product.sgrTax">Aplică taxa SGR</ion-toggle>
+              </div>
+            </div>
         </ion-col>
       </ion-row>
     </section>

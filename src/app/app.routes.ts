@@ -80,7 +80,11 @@ const routes: Routes = [
     path: '',
     redirectTo: '/tables',
     pathMatch: 'full',
+  },  {
+    path: 'cloudinary-picker',
+    loadComponent: () => import('./shared/cloudinary-picker/cloudinary-picker.page').then( m => m.CloudinaryPickerPage)
   },
+
 
 ];
 

@@ -37,6 +37,7 @@
     "canvas-confetti": "^1.9.2",
     "chart.js": "^3.4.0",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "cloudinary": "^2.5.1",
     "ionicons": "^7.2.1",
     "jwt-decode": "^4.0.0",
     "ng2-charts": "^4.0.0",

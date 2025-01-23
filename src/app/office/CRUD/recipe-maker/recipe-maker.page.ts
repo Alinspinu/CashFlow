@@ -12,6 +12,7 @@ import User from 'src/app/auth/user.model';
 import { Preferences } from '@capacitor/preferences';
 import { InvIngredient } from 'src/app/models/nir.model';
 import { IngredientService } from '../../ingredient/ingredient.service';
+import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 
 
 @Component({
@@ -20,7 +21,7 @@ import { IngredientService } from '../../ingredient/ingredient.service';
   styleUrls: ['./recipe-maker.page.scss'],
   standalone: true,
   providers: [NavParams],
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe]
 })
 export class RecipeMakerPage implements OnInit, OnChanges {
 

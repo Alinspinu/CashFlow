@@ -1,7 +1,7 @@
 
 //Light theme
 
-$blue-light: rgb(35, 190, 241);
+$blue-light: rgb(0, 143, 191);
 $blue-shade-light: rgb(91, 146, 164);
 
 $light-blue-light: rgb(185, 237, 255);
@@ -10,8 +10,8 @@ $light-blue-light-shade: rgb(161, 213, 230);
 // $light-blue-light: rgb(121, 216, 247);
 // $light-blue-light-shade: rgb(161, 213, 230);
 
-$sand-light: rgba(250, 217, 127, 0.956);
-$light-sand-light:rgba(255, 243, 208, 0.747);
+$sand-light: rgba(251, 214, 114, 0.956);
+$light-sand-light:rgba(255, 238, 186, 0.747);
 $sand-contrast-light: rgba(170, 129, 18, 0.956);
 
 $orange-light:rgb(245, 168, 73);
@@ -42,7 +42,7 @@ $red-shade-light: rgb(211, 183, 181);
 
 
 // Neutral Colors
-$background-color-light: #fff8f6;
+$background-color-light: #fff8e3;
 $text-color-light: #171717;
 
 $grey-light:  #9e9e9e;
@@ -54,19 +54,19 @@ $greyy-light:#d6d6d6;
 
 //Dark Theme
 
-$blue-dark: rgb(0, 97, 130);
+$blue-dark: rgb(2, 132, 175);
 $blue-shade-dark: rgb(72, 106, 121);
 
-$light-blue-dark: rgb(90, 151, 171);
+$light-blue-dark: rgba(110, 189, 216, 0.327);
 $light-blue-dark-shade: rgb(88, 145, 165);
 // $light-blue-dark: rgb(0, 129, 172);
 // $light-blue-dark-shade: rgb(88, 145, 165);
 
 $sand-dark: rgba(221, 174, 44, 0.956);
-$light-sand-dark:rgba(243, 201, 84, 0.479);
+$light-sand-dark:rgba(243, 201, 84, 0.3);
 $sand-contrast-dark: rgba(250, 217, 127, 0.956);
 
-$orange-dark:rgb(145, 86, 22);
+$orange-dark:rgb(150, 118, 83);
 $light-orange-dark: rgb(155, 117, 75);
 $orange-contrast-dark: rgb(245, 168, 73);
 $orange-shade-dark:rgb(136, 114, 84);
@@ -93,7 +93,7 @@ $light-red-dark: rgba(201, 162, 159, 0.843);
 $red-contrast-dark: rgb(252, 146, 138);
 $red-shade-dark: rgb(134, 115, 114);
 // Neutral Colors
-$background-color-dark: #4d3d33;
+$background-color-dark: #272727;
 $text-color-dark: #ffffff;
 
 $grey-dark:  #656565;

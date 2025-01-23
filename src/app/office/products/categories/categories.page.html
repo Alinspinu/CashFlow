@@ -1,0 +1,30 @@
+
+
+<div class="main-button-container">
+  <div class="main-button ion-activatable ripple-parent" *ngFor="let mainCat of mainCats" (click)="selectMain(mainCat)" [ngClass]="{'main-selected': mainCat.active}">
+    <div class="label">
+      <span class="name">{{mainCat.name}}</span>
+      <span class="nr" *ngIf="!addPage">Produse {{mainCat.products}}</span>
+    </div>
+    <ion-icon [src]="mainCat.icon"></ion-icon>
+    <ion-ripple-effect></ion-ripple-effect>
+  </div>
+  <div class="add-button ion-activatable ripple-parent"  *ngIf="addPage" (click)="addMainCat()">
+    <div class="label">Add</div>
+    <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
+    <ion-ripple-effect></ion-ripple-effect>
+  </div>
+</div>
+  <div *ngFor="let mainCat of mainCats">
+    <div class="cat-button-container" *ngIf="mainCat.active">
+      <div class="cat-button ion-activatable ripple-parent" *ngFor="let cat of mainCat.cat" (click)="selectCat(cat, mainCat)" [ngClass]="{'cat-selected': cat.active}">
+        <span class="name">{{cat.name}}</span>
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
+      <div class="add-cat-button ion-activatable ripple-parent" *ngIf="addPage" (click)="addCat()">
+        <div class="label">Add</div>
+        <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
+    </div>
+  </div>

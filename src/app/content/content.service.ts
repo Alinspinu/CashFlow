@@ -119,5 +119,13 @@ export class ContentService{
       }))
   }
 
+  saveCategory(category: any) {
+    return this.http.post<{message: string, cat: Category }>(`${environment.BASE_URL}cat/cat-add?loc=${environment.LOC}`, category)
+          .pipe(tap(response => {
+            this.category.push(response.cat)
+            this.categoryState.next([...this.category])
+          }))
+  }
+
 
 }

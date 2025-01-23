@@ -101,9 +101,7 @@ export class ProductsService{
     return this.http.post<{message: string, subProduct: any}>(`${environment.BASE_URL}sub/sub-prod-add?loc=${environment.LOC}`, sub)
   }
 
-  saveCategory(category: any) {
-    return this.http.post(`${environment.BASE_URL}cat/cat-add?loc=${environment.LOC}`, category)
-  }
+
 
 
  printEcel(filter : any) {

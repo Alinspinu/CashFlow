@@ -1,0 +1,16 @@
+
+
+
+
+<div class="image-wrapper">
+  <div class="image" *ngFor="let image of images; let i =index">
+    <ion-button fill="clear" (click)="deleteImage(i)">
+      <ion-icon src="../../../assets/icon/trash-outline.svg" size="large"></ion-icon>
+    </ion-button>
+    <ion-img [src]="image.path"></ion-img>
+  </div>
+  <div class="picker ion-activatable" (click)="openUploadWidget()">
+    <ion-icon src="../../../assets/icon/add-image.svg"></ion-icon>
+    <ion-ripple-effect></ion-ripple-effect>
+  </div>
+</div>

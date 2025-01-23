@@ -121,7 +121,11 @@ export const routes: Routes = [
   {
     path: 'add-point-modal',
     loadComponent: () => import('./sale-point/add-point-modal/add-point-modal.page').then( m => m.AddPointModalPage)
+  },  {
+    path: 'categories',
+    loadComponent: () => import('./products/categories/categories.page').then( m => m.CategoriesPage)
   },
+
 
 
 

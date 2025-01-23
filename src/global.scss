@@ -411,4 +411,13 @@ body ion-alert.deleteAlert{
 
   }
 
+  ion-toggle.toggle-checked::part(track) {
+    background: #ddd;
+  }
+  
+  
+  ion-toggle.toggle-checked::part(handle) {
+    background: var(--orange)
+  }
+
 

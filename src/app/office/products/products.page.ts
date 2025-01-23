@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
-import { ContentService } from 'src/app/content/content.service';
 import { ProductsService } from './products.service';
 import { Router } from '@angular/router';
 import { Product } from 'src/app/models/category.model';
@@ -12,17 +11,17 @@ import { CategoryPage } from '../CRUD/category/category.page';
 import { findCommonNumber, getUserFromLocalStorage, modifyImageURL, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
-import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
-import { environment } from 'src/environments/environment';
-import { cat, getMaincat, mainCat } from './products.engine';
+
+import { getMaincat, mainCat } from './products.engine';
 import { ProductPage } from '../CRUD/product/product.page';
+import { CategoriesPage } from './categories/categories.page';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.page.html',
   styleUrls: ['./products.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, ReactiveFormsModule, FormsModule, CapitalizePipe]
+  imports: [IonicModule, CommonModule, ReactiveFormsModule, FormsModule, CapitalizePipe, CategoriesPage]
 })
 export class ProductsPage implements OnInit, OnChanges {
 
@@ -31,11 +30,7 @@ export class ProductsPage implements OnInit, OnChanges {
   recipeIcon: string = ''
   categories: {name: string, _id: string, order: number, mainCat: string}[] = []
   mainCats: mainCat[] = []
-  categoriesToShow: any = []
-  filter: any = {
-    mainCat: '',
-    cat: ''
-  }
+
   user!: User
 
   showSubProducts: boolean = false
@@ -56,14 +51,12 @@ export class ProductsPage implements OnInit, OnChanges {
 
   constructor(
     @Inject(ProductsService) private productsSrv: ProductsService,
-    @Inject(ContentService) private contentSrv: ContentService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private router: Router,
     private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
-    // this.getCategories()
     this.getuser()
   }
 
@@ -170,12 +163,11 @@ searchIngProduct(ev: any){
 
 
   addProduct(){
-    this.actionSrv.openAdd(ProductPage, '1' ,'add-modal')
-    // this.router.navigate([`office/add-product/1`])
+    this.actionSrv.openAdd(ProductPage, {mainCats: this.mainCats} ,'add-modal')
   }
 
   productEdit(product: Product){
-    this.actionSrv.openAdd(ProductPage, product ,'add-modal')
+    this.actionSrv.openAdd(ProductPage, {product: product, mainCats: this.mainCats} ,'add-modal')
   }
 
 
@@ -202,31 +194,13 @@ searchIngProduct(ev: any){
       product.showSub = !product.showSub
   }
 
-  filterByMain(cat: mainCat){
-    this.restetCats()
-    this.products = this.dbProducts.filter(product => product.mainCat === cat.name)
-    if(cat.name === 'Toate') {
-      this.products = this.dbProducts
-    }
-    cat.active = true
+  filterByMain(mainCat: mainCat){
+    this.products = this.dbProducts.filter(product => product.mainCat === mainCat.name)
+    const activeCat = mainCat.cat.find(c => c.active === true)
+    if(activeCat) this.products = this.dbProducts.filter(product => product.category.name === activeCat.name)
+    if(mainCat.name === 'Toate' && !activeCat) this.products = this.dbProducts
+
   }
-
-  filterByCat(cat: cat, mainCat: mainCat){
-    this.restetCats()
-    this.products = this.dbProducts.filter(product => product.category.name === cat.name)
-    cat.active = true
-    mainCat.active = true
-}
-
-restetCats(){
-  for(let main of this.mainCats){
-    main.active = false
-    for(let cat of main.cat){
-      cat.active = false
-    }
-  }
-}
-
 
     getProducts(){
       this.productsSrv.productsSend$.subscribe(response => {
@@ -239,30 +213,7 @@ restetCats(){
       });
     }
 
-   async addCat(){
-     const response = await this.actionSrv.openPayment(CategoryPage, null)
-     if(response){
-       this.productsSrv.saveCategory(response).subscribe(response => {
-        console.log(response)
-       })
-     }
 
-    }
-
-    async editCat(){
-      const sortedCategories = this.categories.sort((a,b) => a.name.localeCompare(b.name))
-      const categoryId = await this.actionSrv.chooseCategory(sortedCategories)
-      if(categoryId) {
-        const response = await this.actionSrv.openPayment(CategoryPage, categoryId)
-        if(response){
-          this.contentSrv.editCategory(response).subscribe(response => {
-            if(response){
-             showToast(this.toastCtrl, response.message, 2000)
-            }
-          })
-        }
-      }
-    }
 
     calcProductionPrice(product: any){
       if(product.subProducts && product.subProducts.length){
@@ -351,25 +302,25 @@ showProducsAndSubsRecipe(product: Product) {
 
 
 
-printProducts(){
-  const filter = {mainCat: this.filter.mainCat, category: this.filter.cat, locatie: environment.LOC, available: true}
-  if(!filter.mainCat.length) delete filter.mainCat
-  if(!filter.category.length) delete filter.category
-  this.productsSrv.printEcel(filter).subscribe({
-    next: (response) => {
-      const url = window.URL.createObjectURL(response);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'produse.xlsx';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    },
-    error: (error) => {
+// printProducts(){
+//   const filter = {mainCat: this.filter.mainCat, category: this.filter.cat, locatie: environment.LOC, available: true}
+//   if(!filter.mainCat.length) delete filter.mainCat
+//   if(!filter.category.length) delete filter.category
+//   this.productsSrv.printEcel(filter).subscribe({
+//     next: (response) => {
+//       const url = window.URL.createObjectURL(response);
+//       const a = document.createElement('a');
+//       a.href = url;
+//       a.download = 'produse.xlsx';
+//       document.body.appendChild(a);
+//       a.click();
+//       document.body.removeChild(a);
+//     },
+//     error: (error) => {
 
-    }
-  })
-}
+//     }
+//   })
+// }
 
 
 modifyImage(url: string){

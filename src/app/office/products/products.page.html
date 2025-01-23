@@ -9,9 +9,12 @@
     </ion-label> -->
   <!-- </div> -->
   <ion-toolbar class="ion-no-border">
-        <div class="main-button-container">
 
-          <div class="main-button" *ngFor="let mainCat of mainCats" (click)="filterByMain(mainCat)" [ngClass]="{'main-selected': mainCat.active}">
+    <app-categories [mainCats]="mainCats" (mainCat)="filterByMain($event)"></app-categories>
+
+        <!-- <div class="main-button-container"> -->
+          
+          <!-- <div class="main-button" *ngFor="let mainCat of mainCats" (click)="filterByMain(mainCat)" [ngClass]="{'main-selected': mainCat.active}">
             <div class="label">
               <span class="name">{{mainCat.name ?  mainCat.name : 'Nedefinit'}}</span>
               <span class="nr">Produse {{mainCat.products}}</span>
@@ -29,7 +32,7 @@
                 <span class="name">{{cat.name}}</span>
               </div>
             </div>
-          </div>
+          </div> -->
         <div class="searchbar-wrapper">
           <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Caută produs după nume..."  (ionInput)="searchProduct($event)" #searchbar>
           </ion-searchbar>

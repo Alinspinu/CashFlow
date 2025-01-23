@@ -1,21 +1,19 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, NavParams, ToastController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { base64toBlob } from 'src/app/shared/utils/base64toBlob';
-import { ImagePickerComponent } from 'src/app/shared/image-picker/image-picker.component';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { ContentService } from 'src/app/content/content.service';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { RecipeMakerPage } from '../recipe-maker/recipe-maker.page';
 import { SubProductPage } from '../sub-product/sub-product.page';
-import { ActivatedRoute, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { Product } from 'src/app/models/category.model';
-import { CategoryPage } from '../category/category.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
-import User from 'src/app/auth/user.model';
 import { ProductsService } from '../../products/products.service';
+import { mainCat } from '../../products/products.engine';
+import { CategoriesPage } from '../../products/categories/categories.page';
+import { CloudinaryPickerPage } from 'src/app/shared/cloudinary-picker/cloudinary-picker.page';
 
 
 @Component({
@@ -23,49 +21,80 @@ import { ProductsService } from '../../products/products.service';
   templateUrl: './product.page.html',
   styleUrls: ['./product.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ImagePickerComponent, ReactiveFormsModule, CapitalizePipe, RecipeMakerPage]
+  imports: [IonicModule, CommonModule, FormsModule, CloudinaryPickerPage, ReactiveFormsModule, CapitalizePipe, RecipeMakerPage, CategoriesPage]
 })
 export class ProductPage implements OnInit {
 
   form!: FormGroup;
   searchCategoryInput: string = '';
   toppings: any = [];
-  mainCats: any = [];
-  categoriesToshow: any = [];
+  mainCats: mainCat[] = [];
+
   subProducts: any = [];
   editMode: boolean = false;
+
+
+  progress: number = 0.3
+  productMainCat!: string
+  productCategory!: string | undefined
 
   tempSubArray: any = [];
 
   categories: any = [];
   product!: Product;
-
   productIngredients: any = [];
-
   topToEdit!: any;
   ingsToEdit!: any;
-
   hideIng: boolean = false
-
   isTva: boolean = true
 
+
+  general: boolean = true
+  recipe: boolean = false
+  sub: boolean = false
+  segment: string = 'general'
+
+  kill: boolean | undefined = false 
+
   constructor(
-    @Inject(ContentService) private contentSrv: ContentService,
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
     @Inject(ProductsService) private prodsSrv: ProductsService,
     private navParam: NavParams,
-    private route: ActivatedRoute,
+    private modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private router: Router,
   ) { }
 
   ngOnInit() {
     this.setupForm()
-
     this.setTvaValidators()
   }
 
 
+
+
+
+    selectSegment(event: any){
+        if(this.segment === 'general'){
+          this.general = true;
+          this.recipe = false;
+          this.sub = false;
+        }
+        if(this.segment === 'recipe'){
+          this.general = false;
+          this.recipe = true;
+          this.sub = false;
+        }
+        if(this.segment === 'sub'){
+          this.general = false;
+          this.recipe = false;
+          this.sub = true;
+        }
+    }
+
+    getProductImages(images: any){
+
+    }
 
 
   setupForm() {
@@ -75,14 +104,6 @@ export class ProductPage implements OnInit {
         validators: [Validators.required]
       }),
       price: new FormControl(null, {
-        updateOn: 'change',
-        validators: [Validators.required]
-      }),
-      cat: new FormControl(null, {
-        updateOn: 'change',
-        validators: [Validators.required]
-      }),
-      mainCat: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
@@ -127,18 +148,22 @@ export class ProductPage implements OnInit {
         validators: [Validators.required]
       }),
 
-      image: new FormControl(null),
     });
-    this.form.get('mainCat')?.valueChanges.subscribe(this.updateValue);
-    this.getCategories()
+    this.getProductToEdit()
   };
 
 
 
   getProductToEdit(){
-    const product = this.navParam.get('options')
-    if(product !== '1'){
-      this.product = product
+    const data = this.navParam.get('options') as {product: Product, mainCats: mainCat[]}
+    this.kill = data.mainCats.find(c => c.name === 'Toate')?.active
+    this.mainCats = data.mainCats.filter(m => m.name !== 'Toate')
+    console.log(this.mainCats)
+    if(data.product){
+      this.product = data.product
+      this.productCategory = this.product.category._id
+      this.productMainCat = this.product.mainCat
+      this.selectProductCats(this.product)
       this.product.subProducts.length ? this.hideIng = true : this.hideIng = false
       this.editMode = true
       this.topToEdit = this.product.toppings;
@@ -158,7 +183,6 @@ export class ProductPage implements OnInit {
       this.form.get('printer')?.setValue(this.product.printer)
       this.form.get('printOut')?.setValue(this.product.printOut)
       this.form.get('recipe')?.setValue(this.product.recipe ? this.product.recipe : '-' )
-      this.updateValue()
       this.form.get('cat')?.setValue(this.product.category._id)
     }
   }
@@ -168,35 +192,6 @@ export class ProductPage implements OnInit {
     this.isTva ? tvaControl?.setValidators([Validators.required]) : tvaControl?.clearValidators()
   }
 
-  async addCat(){
-    const response = await this.actSheet.openPayment(CategoryPage, null)
-    if(response){
-      this.prodsSrv.saveCategory(response).subscribe(response => {
-
-      })
-    }
-   }
-
-
-  getCategories(){
-    this.categories = this.contentSrv.categoriesNameId$
-    this.setMainCats(this.categories)
-    this.getProductToEdit()
-  }
-
-  setMainCats(cats: any[]){
-   const uniqueKeys = [...new Set(cats.map(obj => obj.mainCat))];
-   this.mainCats = uniqueKeys.map(name => ({ name }));
-  }
-
-  private updateValue = () => {
-    if(this.form){
-      const mainCatInput = this.form.get('mainCat')
-      if(mainCatInput?.value){
-       this.categoriesToshow =  this.categories.filter((cat: any) => cat.mainCat === mainCatInput.value)
-      }
-    }
-  }
 
 
   onTopRecive(ev: any){
@@ -237,17 +232,18 @@ export class ProductPage implements OnInit {
 
 
 
+
+
  async saveProduct(){
-    if(this.form.valid){
+    if(this.form.valid && this.productCategory && this.productMainCat){
       const productData = new FormData()
       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
       const sub = JSON.stringify(this.subProducts);
-      const tempSubs = JSON.stringify(this.tempSubArray);
       productData.append('name', this.form.value.name);
       productData.append('price', this.form.value.price);
-      productData.append('category', this.form.value.cat);
-      productData.append('mainCat', this.form.value.mainCat);
+      productData.append('category', this.productCategory);
+      productData.append('mainCat', this.productMainCat);
       productData.append('description', this.form.value.description);
       productData.append('longDescription', this.form.value.longDescription);
       productData.append('qty', this.form.value.qty);
@@ -311,4 +307,42 @@ export class ProductPage implements OnInit {
     };
     this.form.patchValue({image: imageFile});
   }
+
+
+  reciveMainCat(maincat: mainCat){
+    this.productMainCat = maincat.name
+    const cat = maincat.cat.find(c => c.active === true)
+     if(cat){
+      this.productCategory = cat._id
+     } else {
+      this.productCategory = undefined
+     }
+  }
+
+  selectProductCats(product: Product){
+    this.restetCats()
+    const mainCat = this.mainCats.find(m => m.name === product.mainCat)
+    if(mainCat){
+      mainCat.active = true
+      const cat = mainCat.cat.find(c => c._id === product.category._id)
+      if(cat){
+        cat.active = true
+      }
+    }
+  }
+  restetCats(){
+    for(let main of this.mainCats){
+      main.active = false
+      for(let cat of main.cat){
+        cat.active = false
+      }
+    }
+  }
+
+
+  close(){
+    this.modalCtrl.dismiss(null)
+  }
+
+
 }

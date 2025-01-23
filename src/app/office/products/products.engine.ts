@@ -14,6 +14,7 @@ export interface mainCat{
 export interface cat{
   name: string,
   active: boolean
+  _id: string
 }
 
 
@@ -27,7 +28,7 @@ export function getMaincat(products: Product[], darkMode: boolean){
       existingMainCat.products ++
       const existingCat = existingMainCat.cat.find(c => c.name === product.category.name)
       if(!existingCat){
-        existingMainCat.cat.push({name: product.category.name, active: false})
+        existingMainCat.cat.push({name: product.category.name, active: false, _id: product.category._id})
       }
     } else {
       mainCats.push({
@@ -35,7 +36,7 @@ export function getMaincat(products: Product[], darkMode: boolean){
         products: 1,
         active: false,
         icon: product.mainCat === 'food' ? icons.food : product.mainCat === 'bar' ? icons.bar : product.mainCat === 'coffee' ? icons.coffee : product.mainCat === 'shop' ? icons.shop : 'assets/icon/plant.svg',
-        cat: [{name: product.category.name, active: false}]
+        cat: [{name: product.category.name, active: false, _id: product.category._id}]
       })
     }
   }

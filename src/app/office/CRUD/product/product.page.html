@@ -6,78 +6,181 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
     <div class="title">
-      <span class="name">Produs Nou</span>
-      <span class="title-label">Completează formularul pentru a salva noile date!</span>
+      <!-- <span class="name">Produs Nou</span> -->
+      <!-- <span class="title-label">Completează formularul pentru a salva noile date!</span> -->
     </div>
-    <ion-button slot="end" fill="ghost" style="margin-right: 36px;">
+    <ion-button slot="end" fill="ghost" style="margin-right: 36px;" (click)="close()">
       <ion-icon src="../../../../assets/icon/close-outline.svg" color="medium" size="large"></ion-icon>
     </ion-button>
+    <ion-segment [(ngModel)]="segment" (ionChange)="selectSegment($event)">
+      <ion-segment-button value="general">
+        <ion-label>Informații generale</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="recipe">
+        <ion-label>Rețetă</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="sub">
+        <ion-label>Sub Produse</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <!-- <ion-progress-bar [value]="progress"></ion-progress-bar> -->
   </ion-toolbar>
 </ion-header>
 
 
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" #content>
   <ion-grid>
     <form [formGroup]="form">
-    <section>
-      <ion-row>
-        <ion-col size="4">
-          <div class="section-label">
-            <span class="label-title">Informații Generale</span>
-            <span class="label-sub-title">Completează informațiile generale ale produsului.</span>
-          </div>
-        </ion-col>
-        <ion-col size="8">
-          <div class="inputs-wrapper">
-            <div  class="input">
-              <ion-input  type="text" label="Denumire Produs" labelPlacement="floating" placeholder="Ex. Caffe Latte" fill="outline" formControlName="name"></ion-input>
+    <section *ngIf="general">
+      <section>
+        <ion-row>
+          <ion-col size="4">
+            <div class="section-label">
+              <span class="label-title">Informații Generale</span>
+              <span class="label-sub-title">Completează informațiile generale ale produsului.</span>
             </div>
-            <div  class="input">
-              <ion-input  type="text" label="Cantitate" labelPlacement="floating" placeholder="Ex. 300 ml" fill="outline" formControlName="qty"></ion-input>
-            </div>
-            <div class="input">
-              <ion-input   type="number" label="Preț / Lei" labelPlacement="floating" placeholder="Ex. 24" fill="outline" formControlName="price"></ion-input>
-            </div>
-          </div>
-
-          <div class="inputs-wrapper">
-            <div  class="input">
-              <ion-select label="TVA" placeholder="TVA" fill="outline" formControlName="tva">
-                <ion-select-option value="19">19%</ion-select-option>
-                <ion-select-option value="9">9%</ion-select-option>
-                <ion-select-option value="5">5%</ion-select-option>
-                <ion-select-option value="0">0%</ion-select-option>
-              </ion-select>
-            </div>
-             <div  class="input">
-               <ion-input  type="number" label="Poziție" labelPlacement="floating" placeholder="Ex. 1 Pentru prima pozitie" fill="outline" formControlName="order"></ion-input>
-             </div>
+          </ion-col>
+          <ion-col size="8">
+            <div class="inputs-wrapper">
               <div  class="input">
-                <ion-select label="Departament" fill="outline" placeholder="Departament"  labelPlacement="floating" formControlName="dep">
-                  <ion-select-option value="marfa">Marfă</ion-select-option>
-                  <ion-select-option value="productie">Productie</ion-select-option>
-                </ion-select>
+                <ion-input  type="text" label="Denumire Produs" labelPlacement="floating" placeholder="Ex. Caffe Latte" fill="outline" formControlName="name"></ion-input>
+              </div>
+              <div  class="input">
+                <ion-input  type="text" label="Cantitate" labelPlacement="floating" placeholder="Ex. 300 ml" fill="outline" formControlName="qty"></ion-input>
+              </div>
+              <div class="input">
+                <ion-input   type="number" label="Preț / Lei" labelPlacement="floating" placeholder="Ex. 24" fill="outline" formControlName="price"></ion-input>
               </div>
             </div>
             <div class="inputs-wrapper">
               <div  class="input">
-                <ion-select label="Imprimantă" placeholder="Alege imprimanta" fill="outline" labelPlacement="floating" formControlName="printer">
-                  <ion-select-option value="kitchen">Bucătarie</ion-select-option>
-                  <ion-select-option value="barista">Barista</ion-select-option>
-                  <ion-select-option value="main">Principală</ion-select-option>
+                <ion-select label="TVA" placeholder="TVA" fill="outline" formControlName="tva">
+                  <ion-select-option value="19">19%</ion-select-option>
+                  <ion-select-option value="9">9%</ion-select-option>
+                  <ion-select-option value="5">5%</ion-select-option>
+                  <ion-select-option value="0">0%</ion-select-option>
                 </ion-select>
-            </div>
-              <div class="toggle-input">
-                <ion-toggle  [enableOnOffLabels]="true" justify="space-between" [checked]="product && product.printOut">Printează pe terasă</ion-toggle>
               </div>
-              <div class="toggle-input">
-                <ion-toggle  [enableOnOffLabels]="true" justify="space-between"  [checked]="product && product.sgrTax">Aplică taxa SGR</ion-toggle>
+               <div  class="input">
+                 <ion-input  type="number" label="Poziție" labelPlacement="floating" placeholder="Ex. 1 Pentru prima pozitie" fill="outline" formControlName="order"></ion-input>
+               </div>
+                <div  class="input">
+                  <ion-select label="Departament" fill="outline" placeholder="Departament"  labelPlacement="floating" formControlName="dep">
+                    <ion-select-option value="marfa">Marfă</ion-select-option>
+                    <ion-select-option value="productie">Productie</ion-select-option>
+                  </ion-select>
+                </div>
               </div>
+              <div class="inputs-wrapper">
+                <div  class="input">
+                  <ion-select label="Imprimantă" placeholder="Alege imprimanta" fill="outline" labelPlacement="floating" formControlName="printer">
+                    <ion-select-option value="kitchen">Bucătarie</ion-select-option>
+                    <ion-select-option value="barista">Barista</ion-select-option>
+                    <ion-select-option value="main">Principală</ion-select-option>
+                  </ion-select>
+              </div>
+                <div class="toggle-input">
+                  <ion-toggle  [enableOnOffLabels]="true" justify="space-between" [checked]="product && product.printOut">Printează pe terasă</ion-toggle>
+                </div>
+                <div class="toggle-input">
+                  <ion-toggle  [enableOnOffLabels]="true" justify="space-between"  [checked]="product && product.sgrTax">Aplică taxa SGR</ion-toggle>
+                </div>
+              </div>
+          </ion-col>
+        </ion-row>
+      </section>
+      <section>
+        <ion-row>
+          <ion-col size="4">
+            <div class="section-label">
+              <span class="label-title">Categorii</span>
+              <span class="label-sub-title">Alege categoria principală și subcategoria produsului.</span>
             </div>
+          </ion-col>
+          <ion-col size="8">
+            <app-categories [mainCats]="mainCats" [kill]="kill" [addPage]="true" (mainCat)="reciveMainCat($event)"></app-categories>
+          </ion-col>
+        </ion-row>
+      </section>
+      <section>
+        <ion-row>
+          <ion-col size="4">
+            <div class="section-label">
+              <span class="label-title">Descriere</span>
+              <span class="label-sub-title">Descrie produsul pentru meniu si modul de preparare pentru rețetar.</span>
+            </div>
+          </ion-col>
+          <ion-col size="8">
+            <div  class="description-wrapper">
+              <ion-textarea  type="text"  label="Descriere pentru meniu" labelPlacement="floating" fill="outline" formControlName="description"></ion-textarea>
+              <ion-textarea class="recipe"  type="text" label="Mod de preparare" labelPlacement="floating" fill="outline" formControlName="recipe"></ion-textarea>
+            </div>
+          </ion-col>
+        </ion-row>
+      </section>
+  
+      <section>
+        <ion-row>
+          <ion-col size="4">
+            <div class="section-label">
+              <span class="label-title">Imagine</span>
+              <span class="label-sub-title">Adaugă o imagine produsului.</span>
+            </div>
+          </ion-col>
+          <ion-col size="8">
+            <app-cloudinary-picker [images]="[product.image]"></app-cloudinary-picker>
+          </ion-col>
+        </ion-row>
+      </section>
+    </section>
+
+    
+    <section *ngIf="recipe" style="margin-top: 48px;">
+      <ion-row>
+        <ion-col size="4">
+          <div class="section-label">
+            <span class="label-title">Rețetă</span>
+            <span class="label-sub-title">Adaugă ingredientele produsului și topingurile după caz.</span>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <app-recipe-maker
+          (ingsSend)="onIngRecive($event)"
+          (toppSend)="onTopRecive($event)"
+          [ingPage]="false"
+          [top]="topToEdit"
+          [ings]="ingsToEdit"
+          [hideIng]="hideIng"
+          ></app-recipe-maker>
         </ion-col>
       </ion-row>
     </section>
+
+    <section *ngIf="sub" style="margin-top: 88px;">
+      <ion-row>
+        <ion-col size="4">
+          <div class="section-label">
+            <span class="label-title">Sub Produse</span>
+            <span class="label-sub-title">Adaugă sub produse la acest produs.</span>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <div class="sub-wrapper">
+            <div class="subProduct ion-activatable ripple-parent rounded-rectangle" *ngFor="let sub of subProducts">
+              <ion-label  class="name">{{sub.name}}</ion-label>
+              <ion-ripple-effect></ion-ripple-effect>
+            </div>
+            <div  class="add-sub-button ion-activatable ripple-parent rounded-rectangle">
+              <ion-label  class="name">Sub Produs Nou</ion-label>
+              <ion-icon src="../../../../assets/icon/add-outline.svg"></ion-icon>
+              <ion-ripple-effect></ion-ripple-effect>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </section>
+
   </form>
   </ion-grid>
 </ion-content>

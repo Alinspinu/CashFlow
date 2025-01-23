@@ -2,20 +2,22 @@
 
     <ion-item lines="none" [color]="color">
       <ion-icon src="assets/icon/art.svg" alt="" class="searchbar-icon" (click)="switchMode()" color="medium" size="large" *ngIf="!impPage"></ion-icon>
-      <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)" #searchbar (keyup.enter)="setIng()"[disabled]="isLoading">
+      <ion-searchbar mode="md" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)" #searchbar (keyup.enter)="setIng()"[disabled]="isLoading">
       </ion-searchbar>
       <ion-icon src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()" color="medium" size="large" *ngIf="!impPage"></ion-icon>
     </ion-item>
-    <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
-      <div>
+    <div  class="ing-container">
+      <div class="ing" *ngFor="let ing of ingredients; let i = index" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
         <span class="name">{{ing.name}}</span>
         <div class="ing-info-wrapper">
-          <span class="ing-info">Gestiune:</span>
-          <span class="ing-info-gest">{{ing.gestiune}}</span>
-          <span class="ing-info-stoc">{{"Stoc: " + ing.qty + ' ' + ing.um}}</span>
+          <span class="gest">Gestiune:</span>
+          <span class="gest-value">{{ing.gestiune | capitalize}}</span>
+          <span class="stoc">Stoc:</span>
+          <span class="stoc-value">{{ing.qty}}</span>
+          <span class="stoc-um">{{ing.um}}</span>
         </div>
       </div>
-    </ion-item>
+    </div>
     <div  *ngIf="productIngredientMode" class="prouct-ing-wrapper">
       <ion-input class="input1" type="text" label="Nume" labelPlacement="floating" [(ngModel)]="productIngName"></ion-input>
       <ion-input class="input1" type="text" label="UM" labelPlacement="floating" [(ngModel)]="productIngUm"></ion-input>
@@ -27,10 +29,11 @@
       </ion-select>
     </div>
     <h3 class="ion-text-center subtitle"  *ngIf="displayIngs.length">{{impPage ? 'Deprecieri' : 'Rețetă produs'}}</h3>
+
     <div class="content-container header" *ngIf="displayIngs.length && !impPage">
       <span class="name">Nume</span>
       <span class="gestiune">Gestiune</span>
-      <span class="cant" style="margin-right: 15px;">Cantitate / Preț cu TVA</span>
+      <span class="cant" style="margin-right: 15px;">Cantitate</span>
       <span class="price">Valoare</span>
       <div class="sep"></div>
     </div>
@@ -38,11 +41,11 @@
       <span class="index">{{i+1}}.</span>
       <span class="name">{{ing.ing.name}}</span>
       <span class="gestiune">{{ing.ing.gestiune}}</span>
-      <span class="cant">{{ing.qty + ' '+ ing.ing.um + ' ' + 'X' + ' ' + round(ing.ing.price + (ing.ing.price * ing.ing.tva / 100))}} Lei</span>
+      <span class="cant">{{ing.qty + ' '+ ing.ing.um}} Lei</span>
       <span class="price">{{round((ing.ing.price + (ing.ing.price * ing.ing.tva / 100)) * ing.qty)}} Lei</span>
       <ion-buttons slot="end">
         <ion-button color="medium" fill="clear" class="trash" (click)="deleteIng(i)">
-          <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/><path d="M192 112V72h0a23.93 23.93 0 0124-24h80a23.93 23.93 0 0124 24h0v40M256 176v224M184 176l8 224M328 176l-8 224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
+          <ion-icon src="../../../../assets/icon/trash-outline.svg"></ion-icon>
         </ion-button>
       </ion-buttons>
     </div>
@@ -52,6 +55,7 @@
     </div>
     <ion-button color="medium" size="large" expland="block" style="width: 100%;" (click)="saveProdIng()" *ngIf="productIngredientMode" [disabled]="!productIngName.length || !productIngUm.length || !productIngQty.length || !displayIngs.length">SALVEAZĂ INGREDIENTUL COMPUS</ion-button>
     <h3 class="ion-text-center subtitle"  *ngIf="toppings.length">Toppings</h3>
+
     <div class="content-container header"  *ngIf="toppings.length">
       <span class="name">Nume</span>
       <span class="gestiune">Gestiune</span>
@@ -69,7 +73,7 @@
       <span class="price">{{top.price}} Lei</span>
       <ion-buttons slot="end">
         <ion-button color="medium" fill="clear" class="trash" (click)="deleteTop(i)">
-          <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/><path d="M192 112V72h0a23.93 23.93 0 0124-24h80a23.93 23.93 0 0124 24h0v40M256 176v224M184 176l8 224M328 176l-8 224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
+          <ion-icon src="../../../../assets/icon/trash-outline.svg"></ion-icon>
         </ion-button>
       </ion-buttons>
     </div>

@@ -8,6 +8,10 @@ ion-toolbar, ion-content, ion-footer{
   font-family: RoseMed;
 }
 
+ion-content{
+  height: 50vh;
+}
+
 ion-toggle{
   font-family: RoseMed;
   font-size: 15px;

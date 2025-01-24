@@ -58,7 +58,7 @@
                             <ion-card-content class="ion-no-padding">
                               <ion-row>
                                 <ion-col size="1.65">
-                                  <img [src]="modifyImageURL(product.image.path)"alt="Image" class="product-image">
+                                  <img [src]=" product.image.length ?  modifyImageURL(product.image[0].path) : 'https://res.cloudinary.com/dhetxk68c/image/upload/v1692369756/True/no_image_patrat_pt8iod.png'"alt="Image" class="product-image">
                                 </ion-col>
                                 <ion-col size="9.05">
                                   <ion-card-header class="ion-no-padding">

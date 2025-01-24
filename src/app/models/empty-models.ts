@@ -245,7 +245,7 @@ export function emptyProduct(){
     order: 0,
     description: '',
     quantity: 0,
-    image: {path: '', filename: ''},
+    image: [],
     subProducts: [],
     category: {_id: '', mainCat: '', name: '', product: [], image: {path: '', filename:''}, order: 0},
     available: false,

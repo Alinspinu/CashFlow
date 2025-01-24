@@ -54,7 +54,7 @@ export class ProductPage implements OnInit {
   sub: boolean = false
   segment: string = 'general'
 
-  kill: boolean | undefined = false 
+  kill: boolean | undefined = false
 
   constructor(
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
@@ -158,7 +158,6 @@ export class ProductPage implements OnInit {
     const data = this.navParam.get('options') as {product: Product, mainCats: mainCat[]}
     this.kill = data.mainCats.find(c => c.name === 'Toate')?.active
     this.mainCats = data.mainCats.filter(m => m.name !== 'Toate')
-    console.log(this.mainCats)
     if(data.product){
       this.product = data.product
       this.productCategory = this.product.category._id
@@ -240,6 +239,8 @@ export class ProductPage implements OnInit {
       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
       const sub = JSON.stringify(this.subProducts);
+
+      // const stringImages = JSON.stringify(images)
       productData.append('name', this.form.value.name);
       productData.append('price', this.form.value.price);
       productData.append('category', this.productCategory);
@@ -251,10 +252,11 @@ export class ProductPage implements OnInit {
       productData.append('sgrTax', this.form.value.sgrTax);
       productData.append('dep', this.form.value.dep);
       productData.append('tva', this.form.value.tva);
-      productData.append('image', this.form.value.image);
+      // productData.append('images', stringImages);
       productData.append('printer', this.form.value.printer);
       productData.append('printOut', this.form.value.printOut)
       productData.append('recipe', this.form.value.recipe)
+
       if(toppings !== 'skip'){
         productData.append('toppings', toppings);
       }
@@ -265,7 +267,7 @@ export class ProductPage implements OnInit {
       if(this.editMode){
         this.prodsSrv.editProduct(productData, this.product._id).subscribe(response => {
           showToast(this.toastCtrl, response.message, 3000);
-          this.router.navigateByUrl('/office/products')
+          this.modalCtrl.dismiss(null)
         })
       } else {
         this.prodsSrv.saveProduct(productData).subscribe(response => {
@@ -278,11 +280,11 @@ export class ProductPage implements OnInit {
             for(let sub of this.tempSubArray){
                this.prodsSrv.saveSubProduct(sub).subscribe()
             }
-            this.router.navigateByUrl('/office/products')
             this.form.reset()
             this.toppings = []
             this.productIngredients = []
             this.subProducts = []
+            this.modalCtrl.dismiss(null)
           }
         })
       }

@@ -24,7 +24,7 @@ export class Product {
   public dep: string,
   public quantity: number,
   public total: number,
-  public image: {path: string, filename: string},
+  public image: {path: string, filename: string}[],
   public subProducts: SubProduct[],
   public category: Category,
   public available: boolean,

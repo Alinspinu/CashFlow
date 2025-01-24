@@ -21,7 +21,7 @@
       <ion-row *ngIf="data.showProd">
         <ion-col [size]="catCol" *ngFor="let product of productsToShow" class="ion-no-padding">
           <ion-card (click)="addToBill(product)" class="prod-card">
-              <img alt="image" class="prod-img" [src]="modifyImageURL(product.image.path)" />
+              <img alt="image" class="prod-img" [src]="product.image.length ? modifyImageURL(product.image[0].path) : 'https://res.cloudinary.com/dhetxk68c/image/upload/v1692369756/True/no_image_patrat_pt8iod.png'" />
             <ion-card-subtitle class="product-title">{{product.name}}</ion-card-subtitle>
             <div class="badge-wrapper" *ngIf="product.dep === 'marfa' && product.ings.length === 1 ">
               <span class="badge">{{product.ings[0].ing.qty}}</span>

@@ -13,7 +13,7 @@
     <app-categories [mainCats]="mainCats" (mainCat)="filterByMain($event)"></app-categories>
 
         <!-- <div class="main-button-container"> -->
-          
+
           <!-- <div class="main-button" *ngFor="let mainCat of mainCats" (click)="filterByMain(mainCat)" [ngClass]="{'main-selected': mainCat.active}">
             <div class="label">
               <span class="name">{{mainCat.name ?  mainCat.name : 'Nedefinit'}}</span>
@@ -57,7 +57,7 @@
     <span class="id">#{{i+1}}</span>
     <div class="product">
       <ion-thumbnail>
-          <ion-img [src]="modifyImage(product.image.path)"></ion-img>
+          <ion-img [src]="product.image.length ? product.image[0].path :  'https://res.cloudinary.com/dhetxk68c/image/upload/v1692369756/True/no_image_patrat_pt8iod.png'"></ion-img>
         </ion-thumbnail>
       <div class="details">
         <span class="name">{{product.name}}</span>

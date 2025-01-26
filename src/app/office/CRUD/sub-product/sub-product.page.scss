@@ -1,45 +1,81 @@
 
 ion-content, ion-toolbar, ion-footer{
-  --background: var(--ion-color-tertiary) !important;
+  --background: var(--background-color) !important;
 }
 
 
- ion-title, span, ion-item, ion-input, ion-select,  ion-searchbar{
-  font-family: NoirProReg !important;
+  span, ion-input, ion-select, ion-searchbar{
+  font-family: RoseMed !important;
 }
 
-ion-button{
-  font-family: NoirProSemi !important;
+ion-textarea{
+  font-family: RoseLight !important;
+  // font-size: 14px;
 }
-.recipe{
-  ion-textarea{
-    height: 200px !important;
+
+.header-buttons{
+  --border-width: 1px !important;
+  margin: 0 24px !important;
+}
+
+
+.section{
+  margin: 0 36px;
+  padding: 12px 0 24px 0;
+  border-bottom: solid 1px var(--grey);
+  .section-label{
+    padding-top: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .label-title{
+      font-size: 24px;
+    }
+    .label-sub-title{
+      font-size: 14px;
+      color: var(--grey)
+    }
+  }
+
+  .inputs-wrapper{
+      padding: 12px 0 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+
+      .input, .toggle-input{
+        margin: 4px 0 4px 12px;
+        min-width: 230px;
+        max-width: 230px;
+        ion-input, ion-select{
+          --border-width: 1.5px;
+          // --border-color: var(--dark)
+        }
+      }
+      .toggle-input{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 17px;
+        border: 1.5px solid var(--grey);
+        border-radius: 6px;
+      }
+      .toggle-input:hover{
+        border-color: var(--ion-color-medium) ;
+      }
   }
 }
 
-.input{
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: var(--ion-color-light);
-  padding-left: 24px;
-  border-radius: 8px;
-  margin: 1rem 0 0.5rem 0.5rem;
-}
-
-.title-wrapper{
-  width: 100%;
+.description-wrapper{
+  padding: 12px 0 0 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  .title{
-    font-family: NoirProSemi !important;
-    text-align: center;
-    background-color: var(--ion-color-medium);
-    padding: 18px;
-    color: var(--ion-color-light);
-    font-size: 24px;
-    margin-top: 8px;
+  justify-content: space-between;
+  ion-textarea{
+    margin-right: 12px;
+    height: 180px;
   }
 }
+
+

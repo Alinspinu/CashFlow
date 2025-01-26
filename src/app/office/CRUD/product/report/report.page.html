@@ -1,0 +1,36 @@
+
+
+<div class="report-wrapper">
+
+  <!-- <div class="chart-hour-wrapper">
+    <div class="chart">
+      <canvas id="hour-canvas"></canvas>
+    </div>
+  </div> -->
+  
+  <ion-segment [(ngModel)]="bar" (ionChange)="selectSegment($event)">
+    <ion-segment-button value="today">
+      <ion-label>Astăzi</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="thisWeek">
+      <ion-label>Săptamana in curs</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="lastWeek">
+      <ion-label>Săptamana trecută</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="thisMonth">
+      <ion-label>Luna în curs</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="lastMonth">
+      <ion-label>Luna trecută</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="custom">
+      <ion-label>Custom</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+</div>
+
+
+
+

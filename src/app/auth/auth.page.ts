@@ -77,7 +77,7 @@ export class AuthPage implements OnInit {
 
 
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tabs/tables';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tables';
     this.authService.logout()
     this.getCurrentTab();
     this.form = new FormGroup({
@@ -92,6 +92,8 @@ export class AuthPage implements OnInit {
     });
   };
 
+
+  
 
   onSubmit(){
     this.isLoading = true
@@ -113,7 +115,7 @@ export class AuthPage implements OnInit {
         });
         Preferences.set({key: 'tempUserData', value: data });
         this.disableLogIn = false
-        this.router.navigateByUrl('/tabs/tables');
+        this.router.navigateByUrl('/tables');
       } else {
         const id: any = jwtDecode(res.token);
         this.tableSrv.getTables(res.locatie, id.userId)

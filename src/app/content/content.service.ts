@@ -66,7 +66,7 @@ export class ContentService{
     }
 
     get categoriesNameId$(){
-      return  this.category.map(({_id, name, mainCat, order}) => ({_id, name, mainCat, order}))
+      return  this.category.map(({_id, name, mainCat, order, image, product, locatie}) => ({_id, name, mainCat, order, image, product, locatie}))
       }
 
       setDiscount(data: any[]){
@@ -120,8 +120,10 @@ export class ContentService{
   }
 
   saveCategory(category: any) {
-    return this.http.post<{message: string, cat: Category }>(`${environment.BASE_URL}cat/cat-add?loc=${environment.LOC}`, category)
+    console.log(category) 
+    return this.http.post<{message: string, cat: Category }>(`${environment.BASE_URL}cat/cat-add?loc=${environment.LOC}`, {category: category})
           .pipe(tap(response => {
+            console.log(response)
             this.category.push(response.cat)
             this.categoryState.next([...this.category])
           }))

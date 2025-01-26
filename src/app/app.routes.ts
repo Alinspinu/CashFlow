@@ -56,6 +56,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'nir/:id',
+    loadComponent: () => import('./office/CRUD//nir/nir.page').then( m => m.NirPage),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'register-locatie/:value',
     loadComponent: () => import('./office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
   },
@@ -80,7 +85,8 @@ const routes: Routes = [
     path: '',
     redirectTo: '/tables',
     pathMatch: 'full',
-  },  {
+  },
+  {
     path: 'cloudinary-picker',
     loadComponent: () => import('./shared/cloudinary-picker/cloudinary-picker.page').then( m => m.CloudinaryPickerPage)
   },

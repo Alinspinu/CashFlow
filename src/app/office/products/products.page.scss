@@ -6,7 +6,8 @@ ion-toolbar, ion-content, ion-list, ion-header, ion-item{
 }
 
 ion-content{
-  height: 60vh;
+  // height: 100vh;
+  // overflow: hidden;
 }
 
 
@@ -183,9 +184,16 @@ ion-content{
   align-items: center;
   justify-content: space-between;
   width: 97.5%;
-  margin-left: 16px;
+  margin-left: 18px;
+  ion-button{
+    font-family: RoseReg !important;
+    --background: var(--turqoise) !important;
+    --border-width: 1.5px;
+    --box-shadow: none !important;
+    height: 43px;
+  }
   ion-searchbar{
-    flex: 50%;
+    flex: 40%;
     font-family: RoseReg !important;
     --box-shadow: none !important;
     --background: var(--light-grey);

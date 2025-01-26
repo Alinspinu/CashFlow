@@ -142,13 +142,15 @@ export class EFacturaPage implements OnInit, OnDestroy {
     Preferences.remove({key: 'nir'});
     Preferences.set({key: 'nir', value: JSON.stringify(nir)})
     setTimeout(() => {
-      this.router.navigateByUrl(`/office/nir/${nir._id}`)
+      console.log('hit navigation process')
+      this.router.navigateByUrl(`/nir/${nir._id}`)
     }, 500)
   }
 
 
  async createNewNir(){
     const nir = createNir(this.eFactura, this.supliers)
+    console.log(nir)
     if(nir && nir.nir && !nir.add){
       this.addNewNir(nir.nir)
     } else if(nir && !nir.nir && nir.add) {

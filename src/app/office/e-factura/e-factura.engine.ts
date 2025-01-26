@@ -80,9 +80,11 @@ export function mergeProducts(invoice: EFactura, ings: InvIngredient[]){
 
 
 export function createNir(eFactura: EFactura, supliers: Suplier[]){
+    console.log(eFactura)
     let newNir: Nir = emptyNir()
     const eVat = eFactura.supplier.vatNumber.replace(/\D/g, '')
     const suplier = supliers.find(s => s.vatNumber.replace(/\D/g, '') === eVat)
+    console.log(suplier)
     if(suplier){
         let sellPrice = 0
         const nirProducts = eFactura.products.map(eP => {

@@ -1,5 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
+    <ion-button slot="start" fill="outline" color="medium" (click)="dismissModal()">
+      <ion-icon src="../../../assets/icon/close-outline.svg"></ion-icon>
+    </ion-button>
     <div class="title-wrapper">
       <div class="title">{{ingredient.name}}</div>
     </div>
@@ -8,31 +11,27 @@
 
 <ion-content (keyup.enter)="saveData()">
   <ion-list class="list">
-    <ion-item lines="none" class="input" *ngIf="!ingredient.imp">
-      <ion-select [(ngModel)]="mode" label="Salvează ca..">
+    <div class="input" *ngIf="!ingredient.imp">
+      <ion-select [(ngModel)]="mode" mode="md" fill="outline" label="Salvează ca..">
         <ion-select-option value="ingredient" >Ingredient în rețetă</ion-select-option>
         <ion-select-option value="topping" >Topping extra</ion-select-option>
       </ion-select>
-    </ion-item>
+    </div>
     <div  class="input">
-      <ion-input [label]="'Alege cantitatea' + ' ' + '/' + ' ' + (ingredient.um | capitalize)" labelPlacement="floating" type="number" [(ngModel)]="qty" #ingInputQty></ion-input>
+      <ion-input mode="md" fill="outline" [label]="'Alege cantitatea' + ' ' + '/' + ' ' + (ingredient.um | capitalize)" labelPlacement="floating" type="number" [(ngModel)]="qty" #ingInputQty></ion-input>
     </div>
     <div *ngIf="mode === 'topping'"  class="input">
-      <ion-input label="Alege preț vanzare topping" labelPlacement="floating" type="number" [(ngModel)]="toppingPrice" ></ion-input>
+      <ion-input label="Alege preț vanzare topping" labelPlacement="floating" mode="md" fill="outline" type="number" [(ngModel)]="toppingPrice" ></ion-input>
     </div>
   </ion-list>
 </ion-content>
 
 <ion-footer class="ion-no-border">
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6">
-        <ion-button (click)="dismissModal()" size="large" expand="block" color="light" >RENUNȚĂ</ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button id="submit" size="large" expand="block" (click)="saveData()" color="medium">ADAUGĂ</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-toolbar>
+    <ion-button id="submit" size="large"fill='outline' mode="md" slot="end" (click)="saveData()" color="medium" style="margin-right: 36px;">
+      <ion-label slot="start">Adaugă</ion-label>
+      <ion-icon slot="end" src="../../../assets/icon/checkmark-outline.svg"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
 </ion-footer>
 

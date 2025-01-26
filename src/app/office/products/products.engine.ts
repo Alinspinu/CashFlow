@@ -14,7 +14,7 @@ export interface mainCat{
 export interface cat{
   name: string,
   active: boolean
-  _id: string
+  _id: string | undefined
 }
 
 
@@ -50,7 +50,7 @@ export function getMaincat(products: Product[], darkMode: boolean){
   sortedMain.unshift({
     name: 'Toate',
     products: products.length,
-    active: true,
+    active: false,
     icon: 'assets/icon/planet-outline.svg',
     cat: cats
   })

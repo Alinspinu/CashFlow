@@ -5,16 +5,26 @@
 
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
-    <div class="title">
-      <!-- <span class="name">Produs Nou</span> -->
-      <!-- <span class="title-label">Completează formularul pentru a salva noile date!</span> -->
-    </div>
-    <ion-button slot="end" fill="ghost" style="margin-right: 36px;" (click)="close()">
-      <ion-icon src="../../../../assets/icon/close-outline.svg" color="medium" size="large"></ion-icon>
+    <ion-button class="header-buttons" slot="start" fill="outline" (click)="close()" color="medium">
+      <ion-label slot="start" size="large">Închide</ion-label>
+      <ion-icon slot="end" src="../../../../assets/icon/close-outline.svg" color="medium"></ion-icon>
     </ion-button>
+ 
+    <ion-button class="header-buttons" slot="end" fill="outline" color="medium" [disabled]="product._id.length < 1" (click)="deleteProduct()">
+      <ion-label slot="start" size="large">Șterge</ion-label>
+      <ion-icon slot="end" src="../../../../assets/icon/trash-outline.svg" color="medium"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+    <ion-toolbar>  
     <ion-segment [(ngModel)]="segment" (ionChange)="selectSegment($event)">
+      <ion-segment-button value="report">
+        <ion-label>Raport</ion-label>
+      </ion-segment-button>
       <ion-segment-button value="general">
-        <ion-label>Informații generale</ion-label>
+        <ion-label>General</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="image">
+        <ion-label>Imagine</ion-label>
       </ion-segment-button>
       <ion-segment-button value="recipe">
         <ion-label>Rețetă</ion-label>
@@ -23,17 +33,20 @@
         <ion-label>Sub Produse</ion-label>
       </ion-segment-button>
     </ion-segment>
-    <!-- <ion-progress-bar [value]="progress"></ion-progress-bar> -->
   </ion-toolbar>
 </ion-header>
 
 
 
-<ion-content #content>
+
+<ion-content #content [fullscreen]="true">
   <ion-grid>
+    <section *ngIf="report">
+      <app-report [product]="product" ></app-report>
+    </section>
     <form [formGroup]="form">
     <section *ngIf="general">
-      <section>
+      <section class="section">
         <ion-row>
           <ion-col size="4">
             <div class="section-label">
@@ -44,13 +57,13 @@
           <ion-col size="8">
             <div class="inputs-wrapper">
               <div  class="input">
-                <ion-input  type="text" label="Denumire Produs" labelPlacement="floating" placeholder="Ex. Caffe Latte" fill="outline" formControlName="name"></ion-input>
+                <ion-input  type="text" label="Denumire Produs" labelPlacement="floating" placeholder="Ex. Caffe Latte" fill="outline" formControlName="name" [required]="true"></ion-input>
               </div>
               <div  class="input">
-                <ion-input  type="text" label="Cantitate" labelPlacement="floating" placeholder="Ex. 300 ml" fill="outline" formControlName="qty"></ion-input>
+                <ion-input  type="text" label="Cantitate" labelPlacement="floating" placeholder="Ex. 300 ml" fill="outline" formControlName="qty" [required]="true"></ion-input>
               </div>
               <div class="input">
-                <ion-input   type="number" label="Preț / Lei" labelPlacement="floating" placeholder="Ex. 24" fill="outline" formControlName="price"></ion-input>
+                <ion-input   type="number" label="Preț / Lei" labelPlacement="floating" placeholder="Ex. 24" fill="outline" formControlName="price" [required]="true"></ion-input>
               </div>
             </div>
             <div class="inputs-wrapper">
@@ -63,10 +76,10 @@
                 </ion-select>
               </div>
                <div  class="input">
-                 <ion-input  type="number" label="Poziție" labelPlacement="floating" placeholder="Ex. 1 Pentru prima pozitie" fill="outline" formControlName="order"></ion-input>
+                 <ion-input  type="number" label="Poziție" labelPlacement="floating" placeholder="Ex. 1 Pentru prima pozitie" fill="outline" formControlName="order" [required]="true"></ion-input>
                </div>
                 <div  class="input">
-                  <ion-select label="Departament" fill="outline" placeholder="Departament"  labelPlacement="floating" formControlName="dep">
+                  <ion-select label="Departament" fill="outline" placeholder="Departament"  labelPlacement="floating" formControlName="dep" [required]="true">
                     <ion-select-option value="marfa">Marfă</ion-select-option>
                     <ion-select-option value="productie">Productie</ion-select-option>
                   </ion-select>
@@ -74,23 +87,23 @@
               </div>
               <div class="inputs-wrapper">
                 <div  class="input">
-                  <ion-select label="Imprimantă" placeholder="Alege imprimanta" fill="outline" labelPlacement="floating" formControlName="printer">
+                  <ion-select label="Imprimantă" placeholder="Alege imprimanta" fill="outline" labelPlacement="floating" formControlName="printer" [required]="true">
                     <ion-select-option value="kitchen">Bucătarie</ion-select-option>
                     <ion-select-option value="barista">Barista</ion-select-option>
                     <ion-select-option value="main">Principală</ion-select-option>
                   </ion-select>
               </div>
                 <div class="toggle-input">
-                  <ion-toggle  [enableOnOffLabels]="true" justify="space-between" [checked]="product && product.printOut">Printează pe terasă</ion-toggle>
+                  <ion-toggle  [enableOnOffLabels]="true" justify="space-between"  formControlName="printOut">Printează pe terasă</ion-toggle>
                 </div>
                 <div class="toggle-input">
-                  <ion-toggle  [enableOnOffLabels]="true" justify="space-between"  [checked]="product && product.sgrTax">Aplică taxa SGR</ion-toggle>
+                  <ion-toggle  [enableOnOffLabels]="true" justify="space-between"   formControlName="sgrTax">Aplică taxa SGR</ion-toggle>
                 </div>
               </div>
           </ion-col>
         </ion-row>
       </section>
-      <section>
+      <section class="section">
         <ion-row>
           <ion-col size="4">
             <div class="section-label">
@@ -103,40 +116,45 @@
           </ion-col>
         </ion-row>
       </section>
-      <section>
-        <ion-row>
-          <ion-col size="4">
-            <div class="section-label">
-              <span class="label-title">Descriere</span>
-              <span class="label-sub-title">Descrie produsul pentru meniu si modul de preparare pentru rețetar.</span>
-            </div>
-          </ion-col>
-          <ion-col size="8">
-            <div  class="description-wrapper">
-              <ion-textarea  type="text"  label="Descriere pentru meniu" labelPlacement="floating" fill="outline" formControlName="description"></ion-textarea>
-              <ion-textarea class="recipe"  type="text" label="Mod de preparare" labelPlacement="floating" fill="outline" formControlName="recipe"></ion-textarea>
-            </div>
-          </ion-col>
-        </ion-row>
-      </section>
-
-      <section>
-        <ion-row>
-          <ion-col size="4">
-            <div class="section-label">
-              <span class="label-title">Imagine</span>
-              <span class="label-sub-title">Adaugă o imagine produsului.</span>
-            </div>
-          </ion-col>
-          <ion-col size="8">
-            <app-cloudinary-picker [images]="product.image"></app-cloudinary-picker>
-          </ion-col>
-        </ion-row>
-      </section>
     </section>
 
+      <section *ngIf="image">
+        <section  class="section">
+          <ion-row>
+            <ion-col size="4">
+              <div class="section-label">
+                <span class="label-title">Descriere</span>
+                <span class="label-sub-title">Descrie produsul pentru meniu si modul de preparare pentru rețetar.</span>
+              </div>
+            </ion-col>
+            <ion-col size="8">
+              <div  class="description-wrapper">
+                <ion-textarea  type="text"  label="Descriere pentru meniu" labelPlacement="floating" fill="outline" formControlName="description" [required]="true"></ion-textarea>
+                <ion-textarea class="recipe"  type="text" label="Mod de preparare" labelPlacement="floating" fill="outline" formControlName="recipe" [required]="true"></ion-textarea>
+              </div>
+            </ion-col>
+          </ion-row>
+        </section>
+  
+        <section class="section">
+          <ion-row>
+            <ion-col size="4">
+              <div class="section-label">
+                <span class="label-title">Imagine</span>
+                <span class="label-sub-title">Adaugă o imagine produsului.</span>
+              </div>
+            </ion-col>
+            <ion-col size="8">
+              <app-cloudinary-picker [images]="product.image" (imagesToSend)="getImages($event)"></app-cloudinary-picker>
+            </ion-col>
+          </ion-row>
+        </section>
+      </section>
+  
+    <!-- <ion-button size="large" expand="block"(click)="saveProduct()" color="medium" [disabled]="!form.valid">{{editMode ? "Editează" : "Salvează"}} Produsl</ion-button> -->
 
-    <section *ngIf="recipe" style="margin-top: 48px;">
+
+    <section *ngIf="recipe" style="margin-top: 48px;" class="section">
       <ion-row>
         <ion-col size="4">
           <div class="section-label">
@@ -149,15 +167,15 @@
           (ingsSend)="onIngRecive($event)"
           (toppSend)="onTopRecive($event)"
           [ingPage]="false"
-          [top]="topToEdit"
-          [ings]="ingsToEdit"
+          [top]="product.toppings"
+          [ings]="product.ings"
           [hideIng]="hideIng"
           ></app-recipe-maker>
         </ion-col>
       </ion-row>
     </section>
 
-    <section *ngIf="sub" style="margin-top: 88px;">
+    <section *ngIf="sub" style="margin-top: 88px;" class="section">
       <ion-row>
         <ion-col size="4">
           <div class="section-label">
@@ -167,11 +185,15 @@
         </ion-col>
         <ion-col size="8">
           <div class="sub-wrapper">
-            <div class="subProduct ion-activatable ripple-parent rounded-rectangle" *ngFor="let sub of subProducts">
+            <div class="subProduct ion-activatable ripple-parent rounded-rectangle" *ngFor="let sub of product.subProducts; let i = index" (click)="onSubEdit(i)">
               <ion-label  class="name">{{sub.name}}</ion-label>
               <ion-ripple-effect></ion-ripple-effect>
             </div>
-            <div  class="add-sub-button ion-activatable ripple-parent rounded-rectangle">
+            <div class="subProduct ion-activatable ripple-parent rounded-rectangle" *ngFor="let sub of tempSubArray; let i = index" (click)="onTempEdit(i)">
+              <ion-label  class="name">{{sub.name}}</ion-label>
+              <ion-ripple-effect></ion-ripple-effect>
+            </div>
+            <div  class="add-sub-button ion-activatable ripple-parent rounded-rectangle" (click)="addSubProduct()">
               <ion-label  class="name">Sub Produs Nou</ion-label>
               <ion-icon src="../../../../assets/icon/add-outline.svg"></ion-icon>
               <ion-ripple-effect></ion-ripple-effect>
@@ -187,10 +209,14 @@
 
 
 
-<ion-footer class="ion-no-border">
-  <ion-button size="large" expand="block"(click)="saveProduct()" color="medium" [disabled]="!form.valid">{{editMode ? "Editează" : "Salvează"}} Produsl</ion-button>
+<ion-footer mode="ios" [translucent]="true" class="ion-no-border" *ngIf="!report">
+  <ion-toolbar>
+    <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large" [disabled]="!form.valid || !productCategory || !productMainCat" (click)="saveProduct()" >
+       <ion-label slot="start" size="large" >{{editMode ? "Editează" : "Salvează"}}</ion-label>
+       <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+     </ion-button>
+  </ion-toolbar>
 </ion-footer>
-
 
 
 

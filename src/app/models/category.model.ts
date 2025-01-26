@@ -3,12 +3,13 @@ import { Ing, Topping } from "./table.model";
 
 export class Category{
   constructor(
-    public _id: string,
     public name: string,
     public order: number,
     public mainCat: string,
+    public locatie: string,
     public product: Product[],
     public image: {path: string, filename: string},
+    public _id?: string,
   ){};
 
 };
@@ -45,14 +46,15 @@ export class Product {
     protein: number,
   },
   public saleLog: {
-      day: {
         date: string,
         qty: number,
+        total: number,
+        discount: number,
         hours: {
           date: string,
+          label: string,
           qty: number
         }[]
-      }
   }[],
   public toppings: Topping[],
   public ings: {qty: number, ing:InvIngredient}[],
@@ -65,26 +67,33 @@ export class Product {
 
 export class SubProduct{
   constructor(
-    public _id: string,
+   
     public name: string,
     public price: number,
     public order: number,
     public quantity: number,
-    public product: Product,
+    public qty: string,
+    public product: string,
     public available: boolean,
     public recipe: string,
+    public description: string,
+    public tva: number,
+    public locatie: string,
+    public toppings: Topping[],
     public printOut: boolean,
     public ings: {qty: number, ing:InvIngredient}[],
     public saleLog: {
-      day: {
         date: string,
         qty: number,
+        total: number,
+        discount: number,
         hours: {
           date: string,
+          label: string,
           qty: number
         }[]
-      }
   }[],
+  public _id?: string,
   ){};
 };
 

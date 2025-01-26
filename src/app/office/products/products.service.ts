@@ -53,8 +53,8 @@ export class ProductsService{
   }
 
 
-  editProduct(product: any, id: string) {
-    return this.http.put<{message: string, product: any}>(`${environment.BASE_URL}product/product?id=${id}`, product)
+  editProduct(product: any) {
+    return this.http.put<{message: string, product: any}>(`${environment.BASE_URL}product/product`, {product: product})
         .pipe(tap(response => {
           if(response && response.product){
             const newProduct = response.product
@@ -68,8 +68,9 @@ export class ProductsService{
   }
 
   saveProduct(product: any){
-    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?loc=${environment.LOC}`, product)
+    return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?loc=${environment.LOC}`, {data: product})
     .pipe(tap(response => {
+      console.log(response)
       if(response && response.product){
         const newProduct = response.product
         this.products.push(newProduct)
@@ -98,10 +99,12 @@ export class ProductsService{
   }
 
   saveSubProduct(sub: SubProduct){
-    return this.http.post<{message: string, subProduct: any}>(`${environment.BASE_URL}sub/sub-prod-add?loc=${environment.LOC}`, sub)
+    return this.http.post<{message: string, subProduct: any}>(`${environment.BASE_URL}sub/sub-product?loc=${environment.LOC}`, sub)
   }
 
-
+  editSubProduct(subProduct: any){
+    return this.http.put<{message: string, subProduct: any}>(`${environment.BASE_URL}sub/sub-product`, {sub: subProduct})
+  }
 
 
  printEcel(filter : any) {

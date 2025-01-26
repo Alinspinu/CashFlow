@@ -87,7 +87,7 @@ export class BillProduct{
    public quantity: number,
    public total: number,
    public imgPath: string,
-   public category: string,
+   public category: string | undefined,
    public mainCat: string,
    public newEntry: boolean,
    public discount: number,

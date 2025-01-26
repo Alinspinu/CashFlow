@@ -84,7 +84,6 @@ getAllorders(day: string |undefined, start: string | undefined, end: string | un
 }
 
 addUpdateOrders(order: Bill){
-  console.log(order)
   const index = this.orders.findIndex(o => o._id === order._id)
   if(index !== -1){
     this.orders[index] = order

@@ -10,30 +10,13 @@
   <!-- </div> -->
   <ion-toolbar class="ion-no-border">
 
-    <app-categories [mainCats]="mainCats" (mainCat)="filterByMain($event)"></app-categories>
+    <app-categories [mainCats]="mainCats" [kill]="true" [addPage]="false" (mainCat)="filterByMain($event)"></app-categories>
 
-        <!-- <div class="main-button-container"> -->
-
-          <!-- <div class="main-button" *ngFor="let mainCat of mainCats" (click)="filterByMain(mainCat)" [ngClass]="{'main-selected': mainCat.active}">
-            <div class="label">
-              <span class="name">{{mainCat.name ?  mainCat.name : 'Nedefinit'}}</span>
-              <span class="nr">Produse {{mainCat.products}}</span>
-            </div>
-            <ion-icon [src]="mainCat.icon"></ion-icon>
-          </div>
-          <div class="add-button" (click)="addProduct()">
-            <div class="label">Add</div>
-            <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
-          </div>
-        </div>
-          <div *ngFor="let mainCat of mainCats">
-            <div class="cat-button-container" *ngIf="mainCat.active">
-              <div class="cat-button" *ngFor="let cat of mainCat.cat" (click)="filterByCat(cat, mainCat)" [ngClass]="{'cat-selected': cat.active}">
-                <span class="name">{{cat.name}}</span>
-              </div>
-            </div>
-          </div> -->
         <div class="searchbar-wrapper">
+          <ion-button (click)="addProduct()">
+          <ion-label slot="start" color="medium"> Produs Nou</ion-label> 
+          <ion-icon slo="end" src="../../../assets/icon/add-outline.svg" color="medium"></ion-icon> 
+          </ion-button>
           <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Caută produs după nume..."  (ionInput)="searchProduct($event)" #searchbar>
           </ion-searchbar>
           <ion-searchbar mode="md" [(ngModel)]="productIngSearch"  placeholder="Caută Produs după ingredient..."  (ionInput)="searchIngProduct($event)">
@@ -51,7 +34,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content >
+<ion-content [fullscreen]="true">
 
   <div class="order-container" *ngFor="let product of products; let i = index">
     <span class="id">#{{i+1}}</span>

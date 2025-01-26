@@ -313,7 +313,7 @@ searchNir(ev: any){
   }
 
   editNir(id: string){
-    this.router.navigateByUrl(`/office/nir/${id}`)
+    this.router.navigateByUrl(`/nir/${id}`)
   }
 
   async deleteNir(id: string, index: number){
@@ -346,7 +346,7 @@ searchNir(ev: any){
   }
 
   addNir(){
-    this.router.navigateByUrl('/office/nir/new')
+    this.router.navigateByUrl('/nir/new')
   }
 
   formatedDate(date: string){

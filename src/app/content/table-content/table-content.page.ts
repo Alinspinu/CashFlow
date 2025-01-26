@@ -489,6 +489,7 @@ async payment(){
               this.disableOrderButton = true;
               this.billData.billToshow.payment = paymentInfo
               this.billData.billToshow.cif = paymentInfo.cif;
+              // console.log(this.billData.billToshow)
               this.tabSub = this.tableSrv.sendBillToPrint(this.billData.billToshow).subscribe({
                 next: (response => {
                   if(response && response.bill.status === 'done'){

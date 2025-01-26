@@ -14,6 +14,10 @@ import { ProductsService } from '../../products/products.service';
 import { mainCat } from '../../products/products.engine';
 import { CategoriesPage } from '../../products/categories/categories.page';
 import { CloudinaryPickerPage } from 'src/app/shared/cloudinary-picker/cloudinary-picker.page';
+import { ContentService } from 'src/app/content/content.service';
+import { environment } from 'src/environments/environment';
+import { emptyProduct } from 'src/app/models/empty-models';
+import { ReportPage } from './report/report.page';
 
 
 @Component({
@@ -21,40 +25,42 @@ import { CloudinaryPickerPage } from 'src/app/shared/cloudinary-picker/cloudinar
   templateUrl: './product.page.html',
   styleUrls: ['./product.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CloudinaryPickerPage, ReactiveFormsModule, CapitalizePipe, RecipeMakerPage, CategoriesPage]
+  imports: [IonicModule, CommonModule, FormsModule, CloudinaryPickerPage, ReactiveFormsModule, ReportPage, RecipeMakerPage, CategoriesPage]
 })
 export class ProductPage implements OnInit {
 
   form!: FormGroup;
   searchCategoryInput: string = '';
-  toppings: any = [];
-  mainCats: mainCat[] = [];
 
-  subProducts: any = [];
+
+  tempSubArray: any = [];
+  ingredientsToSend: any = []
+
   editMode: boolean = false;
 
-
-  progress: number = 0.3
   productMainCat!: string
   productCategory!: string | undefined
 
-  tempSubArray: any = [];
-
+  product: Product = emptyProduct()
   categories: any = [];
-  product!: Product;
-  productIngredients: any = [];
-  topToEdit!: any;
-  ingsToEdit!: any;
+  mainCats: mainCat[] = [];
+  privateCats: mainCat[] = []
+
+
   hideIng: boolean = false
   isTva: boolean = true
 
 
-  general: boolean = true
+  general: boolean = false
   recipe: boolean = false
   sub: boolean = false
-  segment: string = 'general'
+  image: boolean = false
+  report: boolean = true
+  segment: string = 'report'
 
-  kill: boolean | undefined = false
+  kill: boolean = true
+
+
 
   constructor(
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
@@ -62,6 +68,7 @@ export class ProductPage implements OnInit {
     private navParam: NavParams,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
+    private contentService: ContentService,
     private router: Router,
   ) { }
 
@@ -79,22 +86,40 @@ export class ProductPage implements OnInit {
           this.general = true;
           this.recipe = false;
           this.sub = false;
+          this.image = false
+          this.report = false
+          this.mainCats = JSON.parse(JSON.stringify(this.privateCats))
+        }
+        if(this.segment === 'report'){
+          this.general = false;
+          this.recipe = false;
+          this.sub = false;
+          this.image = false
+          this.report = true
         }
         if(this.segment === 'recipe'){
           this.general = false;
           this.recipe = true;
           this.sub = false;
+          this.image = false
+          this.report = false
         }
         if(this.segment === 'sub'){
           this.general = false;
           this.recipe = false;
           this.sub = true;
+          this.image = false
+          this.report = false
         }
+        if(this.segment === 'image'){
+          this.general = false;
+          this.recipe = false;
+          this.sub = false;
+          this.image = true
+          this.report = false
+        } 
     }
 
-    getProductImages(images: any){
-
-    }
 
 
   setupForm() {
@@ -115,17 +140,15 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      // longDescription: new FormControl(null, {
-      //   updateOn: 'change',
-      //   validators: [Validators.required]
-      // }),
         qty: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-        sgrTax: new FormControl(null, {
+      sgrTax: new FormControl(null, {
         updateOn: 'change',
-        validators: [Validators.required]
+      }),
+      printOut: new FormControl(null, {
+        updateOn: 'change',
       }),
       order: new FormControl(null, {
         updateOn: 'change',
@@ -136,10 +159,6 @@ export class ProductPage implements OnInit {
         validators: [Validators.required]
       }),
       tva: new FormControl(null, {
-        updateOn: 'change',
-        validators: [Validators.required]
-      }),
-      printOut: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
@@ -156,31 +175,29 @@ export class ProductPage implements OnInit {
 
   getProductToEdit(){
     const data = this.navParam.get('options') as {product: Product, mainCats: mainCat[]}
-    this.kill = data.mainCats.find(c => c.name === 'Toate')?.active
+    const mainC = data.mainCats.find(c => c.name === 'Toate')
+    if(mainC) this.kill = mainC.active
     this.mainCats = data.mainCats.filter(m => m.name !== 'Toate')
+    this.privateCats = JSON.parse(JSON.stringify(this.mainCats))
     if(data.product){
       this.product = data.product
+      console.log(this.product)
       this.productCategory = this.product.category._id
       this.productMainCat = this.product.mainCat
       this.selectProductCats(this.product)
       this.product.subProducts.length ? this.hideIng = true : this.hideIng = false
       this.editMode = true
-      this.topToEdit = this.product.toppings;
-      this.ingsToEdit = this.product.ings;
-      this.subProducts = this.product.subProducts;
-      this.toppings = this.product.toppings;
       this.form.get('name')?.setValue(this.product.name)
       this.form.get('price')?.setValue(this.product.price)
       this.form.get('mainCat')?.setValue(this.product.mainCat)
       this.form.get('description')?.setValue(this.product.description)
-      // this.form.get('longDescription')?.setValue(this.product.longDescription)
       this.form.get('qty')?.setValue(this.product.qty)
       this.form.get('sgrTax')?.setValue(this.product.sgrTax)
+      this.form.get('printOut')?.setValue(this.product.printOut)
       this.form.get('order')?.setValue(this.product.order)
       this.form.get('dep')?.setValue(this.product.dep)
       this.form.get('tva')?.setValue(this.product.tva ? this.product.tva.toString() : '')
       this.form.get('printer')?.setValue(this.product.printer)
-      this.form.get('printOut')?.setValue(this.product.printOut)
       this.form.get('recipe')?.setValue(this.product.recipe ? this.product.recipe : '-' )
       this.form.get('cat')?.setValue(this.product.category._id)
     }
@@ -194,120 +211,140 @@ export class ProductPage implements OnInit {
 
 
   onTopRecive(ev: any){
-    this.toppings = ev
+    this.product.toppings = ev
   }
 
   onIngRecive(ev: any){
-    this.productIngredients = ev
+    this.product.ings = ev
+    this.ingredientsToSend = []
+    this.product.ings.forEach((el:any) => {
+      const ing = {
+        qty: el.qty,
+        ing: el.ing._id
+      }
+      this.ingredientsToSend.push(ing)
+    })
+
   }
 
-  deleteSub(index: number, id: string){
-    if(id){
-      this.prodsSrv.deleteSubProduct(id).subscribe()
-    }
-    this.subProducts.splice(index, 1)
+  getImages(ev: any){
+    this.product.image = ev
   }
+
 
  async addSubProduct(){
-    const subProduct = await this.actSheet.openModal(SubProductPage,[],false)
-    if(subProduct && this.editMode){
+    const data = await this.actSheet.openAdd(SubProductPage, null , 'add-modal')
+    if(data && data.sub && this.editMode){
+      const subProduct = data.sub
       subProduct.product = this.product._id
       this.prodsSrv.saveSubProduct(subProduct).subscribe(response => {
-        this.subProducts.push(response.subProduct)
+        this.product.subProducts.push(response.subProduct)
+        showToast(this.toastCtrl, response.message, 3000)
       })
-    } else if(subProduct && !this.editMode){
+      }
+    if(data && data.sub &&  !this.editMode){
+      const subProduct = data.sub
       this.tempSubArray.push(subProduct)
     }
   }
 
-
-  async onSubEdit(index: number){
-    const subToEdit = this.subProducts[index]
-    const editedSub = await this.actSheet.openModal(SubProductPage, subToEdit, false)
-    if(editedSub){
-      this.subProducts[index] = editedSub
-    }
+  async onTempEdit(index: number){
+    const subToEdit = this.tempSubArray[index]
+    const data = await this.actSheet.openAdd(SubProductPage, subToEdit, 'add-modal')
+    if(data && data.sub) this.tempSubArray[index] = data.sub
+    if(data && data.delete) this.tempSubArray.splice(index, 1)
   }
 
+  async onSubEdit(index: number){
+    const subToEdit = this.product.subProducts[index]
+    const data = await this.actSheet.openAdd(SubProductPage, subToEdit, 'add-modal')
+    if(data && data.sub){
+      const subProduct = data.sub
+        this.prodsSrv.editSubProduct(subProduct).subscribe({
+          next: (response) => {
+            const index = this.product.subProducts.findIndex((s:any) => {
+              if(s._id){
+                return s._id === response.subProduct._id
+              } else {
+                return -1
+              }
+            })
+            if(index !== -1){
+              this.product.subProducts[index] = response.subProduct
+              showToast(this.toastCtrl, response.message, 3000)
+            }
+          },
+          error: (error) => {
+            showToast(this.toastCtrl, error.message, 4000)
+          }
+        })
+    }
+    if(data && data.delete) this.product.subProducts.splice(index, 1)
+  }
+
+  async deleteProduct(){
+    const message = `Ești sigur ca vrei să ștergi produsul ${this.product.name}?`
+    const title = 'Șterge produsul'
+    const result = await this.actSheet.deleteAlert(message, title)
+    if(result){
+      this.prodsSrv.deleteProduct(this.product._id).subscribe(response => {
+        if(response){
+          showToast(this.toastCtrl, response.message, 3000)
+          this.modalCtrl.dismiss(null)
+        }
+      }, (err) => {
+        if(err){
+          showToast(this.toastCtrl, err.error.message, 3000)
+        }
+      })
+    }
+}
 
 
 
 
- async saveProduct(){
+  async saveProduct(){
     if(this.form.valid && this.productCategory && this.productMainCat){
-      const productData = new FormData()
-      const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
-      const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
-      const sub = JSON.stringify(this.subProducts);
-
-      // const stringImages = JSON.stringify(images)
-      productData.append('name', this.form.value.name);
-      productData.append('price', this.form.value.price);
-      productData.append('category', this.productCategory);
-      productData.append('mainCat', this.productMainCat);
-      productData.append('description', this.form.value.description);
-      productData.append('longDescription', this.form.value.longDescription);
-      productData.append('qty', this.form.value.qty);
-      productData.append('order', this.form.value.order);
-      productData.append('sgrTax', this.form.value.sgrTax);
-      productData.append('dep', this.form.value.dep);
-      productData.append('tva', this.form.value.tva);
-      // productData.append('images', stringImages);
-      productData.append('printer', this.form.value.printer);
-      productData.append('printOut', this.form.value.printOut)
-      productData.append('recipe', this.form.value.recipe)
-
-      if(toppings !== 'skip'){
-        productData.append('toppings', toppings);
+      const newProduct: any = {
+        name: this.form.value.name,
+        price: +this.form.value.price,
+        category: this.productCategory,
+        mainCat: this.productMainCat,
+        description: this.form.value.description,
+        qty: this.form.value.qty,
+        order: +this.form.value.order,
+        printOut: this.form.value.printOut,
+        sgrTax: this.form.value.sgrTax,
+        dep: this.form.value.dep,
+        printer: this.form.value.printer,
+        recipe: this.form.value.recipe,
+        locatie: environment.LOC,
+        tva: +this.form.value.tva,
+        toppings: this.product.toppings,
+        ings: this.ingredientsToSend,
+        subProducts: this.tempSubArray,
+        image: this.product.image
       }
-      if(ings !== 'skip'){
-        productData.append('ings', ings);
+      if(this.editMode) {
+        newProduct._id = this.product._id
+        delete newProduct.subProducts
       }
-      productData.append('sub', sub);
+      const product = JSON.stringify(newProduct)
       if(this.editMode){
-        this.prodsSrv.editProduct(productData, this.product._id).subscribe(response => {
+        this.prodsSrv.editProduct(product).subscribe(response => {
           showToast(this.toastCtrl, response.message, 3000);
           this.modalCtrl.dismiss(null)
         })
       } else {
-        this.prodsSrv.saveProduct(productData).subscribe(response => {
-          const product = response.product
-          if(product){
-            this.tempSubArray.map((obj:any) => {
-              obj.product = product._id;
-              return obj;
-            })
-            for(let sub of this.tempSubArray){
-               this.prodsSrv.saveSubProduct(sub).subscribe()
-            }
-            this.form.reset()
-            this.toppings = []
-            this.productIngredients = []
-            this.subProducts = []
-            this.modalCtrl.dismiss(null)
-          }
+        this.prodsSrv.saveProduct(product).subscribe(response => {
+          this.form.reset()
+          this.product = emptyProduct()
+          this.modalCtrl.dismiss(null)
+          showToast(this.toastCtrl, response.message, 3000);
         })
       }
     }
-  }
 
-
-
-  onImagePicked(imageData: string | File){
-    let imageFile;
-    if(typeof imageData === 'string'){
-      try{
-        imageFile = base64toBlob(
-          imageData.replace(/^data:image\/(png|jpe?g|gif|webp);base64,/, ''),
-          'image/jpeg'
-          );
-      } catch (error) {
-        console.log(error);
-      };
-    } else {
-      imageFile = imageData;
-    };
-    this.form.patchValue({image: imageFile});
   }
 
 
@@ -315,6 +352,7 @@ export class ProductPage implements OnInit {
     this.productMainCat = maincat.name
     const cat = maincat.cat.find(c => c.active === true)
      if(cat){
+      this.privateCats = JSON.parse(JSON.stringify(this.mainCats))
       this.productCategory = cat._id
      } else {
       this.productCategory = undefined
@@ -331,6 +369,7 @@ export class ProductPage implements OnInit {
         cat.active = true
       }
     }
+    this.privateCats = JSON.parse(JSON.stringify(this.mainCats))
   }
   restetCats(){
     for(let main of this.mainCats){
@@ -348,3 +387,81 @@ export class ProductPage implements OnInit {
 
 
 }
+
+
+
+
+
+//  async saveProduct(){
+//     if(this.form.valid && this.productCategory && this.productMainCat){
+//       const productData = new FormData()
+//       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
+//       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
+//       const sub = JSON.stringify(this.subProducts);
+//       const newProduct: any = {
+//         name: this.form.value.name,
+//         price: this.form.value.price,
+//         category: this.productCategory,
+//         mainCat: this.productMainCat,
+//         description: this.form.value.description,
+//         qty: this.form.value.qty,
+//         order: this.form.value.order,
+//         printOut: this.form.value.printOut,
+//         sgrTax: this.form.value.sgrTax,
+//         dep: this.form.value.dep,
+//         printer: this.form.value.printer,
+//         recipe: this.form.value.recipe,
+//         toppings: this.toppings,
+//         ings: this.productIngredients,
+//         subProducts: this.subProducts
+//       }
+
+
+//       productData.append('name', this.form.value.name);
+//       productData.append('price', this.form.value.price);
+//       productData.append('category', this.productCategory);
+//       productData.append('mainCat', this.productMainCat);
+//       productData.append('description', this.form.value.description);
+//       productData.append('longDescription', this.form.value.longDescription);
+//       productData.append('qty', this.form.value.qty);
+//       productData.append('order', this.form.value.order);
+//       productData.append('sgrTax', this.form.value.sgrTax);
+//       productData.append('dep', this.form.value.dep);
+//       productData.append('tva', this.form.value.tva);
+//       productData.append('printer', this.form.value.printer);
+//       productData.append('printOut', this.form.value.printOut)
+//       productData.append('recipe', this.form.value.recipe)
+
+//       if(toppings !== 'skip'){
+//         productData.append('toppings', toppings);
+//       }
+//       if(ings !== 'skip'){
+//         productData.append('ings', ings);
+//       }
+//       productData.append('sub', sub);
+//       if(this.editMode){
+//         this.prodsSrv.editProduct(productData, this.product._id).subscribe(response => {
+//           showToast(this.toastCtrl, response.message, 3000);
+//           this.modalCtrl.dismiss(null)
+//         })
+//       } else {
+//         this.prodsSrv.saveProduct(productData).subscribe(response => {
+//           const product = response.product
+//           if(product){
+//             this.tempSubArray.map((obj:any) => {
+//               obj.product = product._id;
+//               return obj;
+//             })
+//             for(let sub of this.tempSubArray){
+//                this.prodsSrv.saveSubProduct(sub).subscribe()
+//             }
+//             this.form.reset()
+//             this.toppings = []
+//             this.productIngredients = []
+//             this.subProducts = []
+//             this.modalCtrl.dismiss(null)
+//           }
+//         })
+//       }
+//     }
+//   }

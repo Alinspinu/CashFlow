@@ -1,15 +1,16 @@
 ion-content, ion-toolbar, ion-footer, ion-list{
-  --background: var(--ion-color-tertiary) !important;
-  background-color: var(--ion-color-tertiary) !important;
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
 }
 
 
-ion-title, span, ion-item, ion-input{
-  font-family: NoirProReg !important;
+ion-title, span, ion-item, ion-input, ion-select{
+  font-family: RoseMed !important;
 }
 
 ion-button{
-  font-family: NoirProSemi !important;
+  font-family: RoseMed !important;
+  --border-width: 1px;
 }
 
 
@@ -27,22 +28,21 @@ ion-button{
   align-items: center;
   justify-content: center;
   .title{
-    font-family: NoirProSemi !important;
+    font-family: RoseMed !important;
     text-align: center;
-    background-color: var(--ion-color-medium);
+    background-color: var(--background-color);
     padding: 18px;
-    color: var(--ion-color-light);
+    color: var(--ion-color-medium);
     font-size: 24px;
     margin-top: 8px;
   }
 }
 
 .input{
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: var(--ion-color-light);
+  border-radius: 6px;
   margin: 1rem 0 0.5rem 0.5rem;
   padding-left: 12px;
+  ion-input, ion-select{
+    --border-width: 1.5px;
+  }
 }

@@ -44,11 +44,6 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'nir/:id',
-        loadComponent: () => import('./CRUD//nir/nir.page').then( m => m.NirPage),
-        canActivate: [AuthGuard]
-      },
-      {
         path: 'e-factura',
         loadComponent: () => import('./e-factura/e-factura.page').then( m => m.EFacturaPage),
         canActivate: [AuthGuard]
@@ -121,10 +116,15 @@ export const routes: Routes = [
   {
     path: 'add-point-modal',
     loadComponent: () => import('./sale-point/add-point-modal/add-point-modal.page').then( m => m.AddPointModalPage)
-  },  {
+  },
+  {
     path: 'categories',
     loadComponent: () => import('./products/categories/categories.page').then( m => m.CategoriesPage)
+  },  {
+    path: 'report',
+    loadComponent: () => import('./CRUD/product/report/report.page').then( m => m.ReportPage)
   },
+
 
 
 

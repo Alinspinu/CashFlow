@@ -1,0 +1,24 @@
+ion-toolbar, ion-content, ion-footer{
+    --background: var(--background-color) !important;
+    background-color: var(--background-color) !important;
+  }
+
+
+
+  ion-label{
+    font-family: RoseMed !important;
+  }
+
+  .report-wrapper{
+    height: 82vh;
+    display: flex;
+    flex-direction: column;
+    ion-segment{
+        margin-top: auto;
+    }
+  }
+
+  .chart-hour-wrapper{
+     
+        width: 800px;
+  }

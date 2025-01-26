@@ -28,7 +28,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   @Input() top: any
   @Input() ings: any
   @Input() ingPage!: boolean
-  @Input() impPage!: boolean
+  @Input() impPage: boolean = false
   @Input() hideIng: boolean = false
   @Input() hideTop: boolean = false
 
@@ -80,15 +80,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     if (changes['ings']) {
       if(changes['ings'].currentValue !== undefined) {
         this.displayIngs = changes['ings'].currentValue
-        this.ingredientsToSend = []
-        this.displayIngs.forEach(el => {
-          const ing = {
-            qty: el.qty,
-            ing: el.ing._id
-          }
-          this.ingredientsToSend.push(ing)
-          this.ingsSend.emit(this.ingredientsToSend)
-        })
+        this.ingsSend.emit(this.displayIngs)
         this.calcrRecipeTotal(this.displayIngs)
       }
     }
@@ -119,11 +111,14 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
   saveProdIng(){
     if(this.productIngredientMode){
+      this.ingredientsToSend = []
       this.displayIngs.forEach(el => {
         el.qty = this.round(el.qty / +this.productIngQty)
-      })
-      this.ingredientsToSend.forEach(el => {
-        el.qty = this.round(el.qty / +this.productIngQty)
+        const ing = {
+          qty: el.qty,
+          ing: el.ing._id
+        }
+        this.ingredientsToSend.push(ing)
       })
       const prodIng: any = {
         name: this.productIngName,
@@ -159,29 +154,10 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
   deleteIng(index: number){
     this.displayIngs.splice(index, 1)
-    this.ingredientsToSend.splice(index, 1)
     this.calcrRecipeTotal(this.displayIngs)
-    this.ingsSend.emit(this.ingredientsToSend)
+    this.ingsSend.emit(this.displayIngs)
   }
 
-  // setDataToEdit(){
-  //   if(this.top && this.top.length){
-  //     this.toppings = this.top
-  //     this.toppSend.emit(this.toppings)
-  //   }
-  //   if(this.ings && this.ings.length){
-  //     this.displayIngs = this.ings
-  //     this.displayIngs.forEach(el => {
-  //       const ing = {
-  //         qty: el.qty,
-  //         ing: el.ing._id
-  //       }
-  //       this.ingredientsToSend.push(ing)
-  //       this.ingsSend.emit(this.ingredientsToSend)
-  //     })
-  //     this.calcrRecipeTotal(this.displayIngs)
-  //   }
-  // }
 
   setIng(){
     this.selectIngredient(this.ingredients[0])
@@ -236,11 +212,9 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         this.ingredients = [];
         this.ingredientSearch = '';
       } else if(data.mode === 'ingredient'){
-        const ingToSend = {qty: +data.qty, ing: ing._id}
         const ingToShow = {qty: +data.qty, ing: ing}
         this.displayIngs.push(ingToShow);
-        this.ingredientsToSend.push(ingToSend)
-        this.ingsSend.emit(this.ingredientsToSend)
+        this.ingsSend.emit(this.displayIngs)
         this.calcrRecipeTotal(this.displayIngs);
         this.ingredients = [];
         this.ingredientSearch = '';

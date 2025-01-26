@@ -47,6 +47,7 @@ import { IngredientsPage } from '../office/e-factura/ingredients/ingredients.pag
 import { NirsModalPage } from '../office/e-factura/nirs-modal/nirs-modal.page';
 import { AddPointModalPage } from '../office/sale-point/add-point-modal/add-point-modal.page';
 import { ProductPage } from '../office/CRUD/product/product.page';
+import { NirPage } from '../office/CRUD/nir/nir.page';
 
 
 
@@ -204,8 +205,12 @@ export class ActionSheetService {
     return data
   };
 
+
+
   async openAdd(
-    component: typeof ProductPage,
+    component: typeof ProductPage | 
+               typeof SubProductPage | 
+               typeof NirPage,
     options: any,
     clas: string
   ) {
@@ -268,7 +273,7 @@ export class ActionSheetService {
       header: 'Alege Nume',
       buttons: [
         {
-          text: 'Nu Muțumesc!',
+          text: 'Renuță',
           role: 'cancel',
           cssClass: 'cancel'
         },
@@ -281,7 +286,8 @@ export class ActionSheetService {
         {
           label: 'Alege Nume',
           type: 'text',
-          cssClass: 'input'
+          cssClass: 'input',
+          placeholder: 'Ex. Piese auto'
         }
     ],
     });
@@ -312,7 +318,7 @@ export class ActionSheetService {
           cssClass: 'confirm'
         },
       ],
-      cssClass: "reprint-alert"
+      cssClass: "deleteAlert"
     });
     await alert.present();
     const result = await alert.onDidDismiss();

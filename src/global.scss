@@ -268,7 +268,9 @@ body ion-alert.time-alert{
 
 body ion-alert.deleteAlert{
   --max-width: none!important;
-  --width: 500px!important;
+  --width: 400px!important;
+  font-family: RoseMed !important;
+  font-size: 16px !important;
   .alert-button-group-vertical{
     flex-direction: row !important;
     justify-content: center;
@@ -284,13 +286,11 @@ body ion-alert.deleteAlert{
 }
 .cancel{
   color: var(--ion-color-medium) !important;
-  background-color: var(--ion-color-light) !important;;
+  background-color: var(--background-color) !important;
 }
 .confirm{
   color: var(--ion-color-light) !important;
-  --color: var(--ion-color-light) !important;
-  --background:  var(--ion-color-medium) !important ;
-  background-color:  var(--ion-color-medium) !important ;
+  background-color: var(--ion-color-medium) !important;
 }
 
 .crud-modal{
@@ -345,16 +345,31 @@ body ion-alert.deleteAlert{
 
 
   body ion-alert{
-    --background:  var(--ion-color-tertiary) !important;
+    --background:  var(--background-color) !important;
     --max-width: none!important;
     --width: 500px;
-    font-family: NoirProReg !important;
+    font-family: RoseMed !important;
     .alert-title{
-      background-color: var(--ion-color-medium) !important;
-      color: var(--ion-color-light) !important;
       padding: 12px !important;
       font-size: 26px !important;
       text-align: center;
+    }
+    .alert-radio-group{
+      .alert-radio-button[aria-checked=true]{
+        .alert-radio-icon {
+          border-color: var(--ion-color-medium);
+          .alert-radio-inner{
+            background-color: var(--ion-color-medium) !important;
+          }
+        }
+      }
+    }
+    .alert-input{
+      padding-left: 18px !important;
+      font-family: RoseMed !important;
+      font-size: 16px;
+      border: 1px solid var(--ion-color-medium) !important;
+      border-radius: 6px;
     }
     .alert-button-group{
       display: flex;
@@ -362,18 +377,16 @@ body ion-alert.deleteAlert{
       justify-content: space-between !important;
       button:nth-child(1){
         color: var(--ion-color-medium) !important;
-        background-color: var(--ion-color-light) !important;
+        background-color: var(--background-color) !important;
       }
       button:nth-child(2){
         color: var(--ion-color-light) !important;
-        --color: var(--ion-color-light) !important;
-        --background:  var(--ion-color-medium) !important ;
-        background-color:  var(--ion-color-medium) !important ;
+        background-color: var(--ion-color-medium) !important;
         padding: 0 24px;
       }
     }
     .alert-radio-label{
-      font-size: 22px !important;
+      font-size: 18px !important;
     }
   }
 

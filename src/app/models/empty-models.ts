@@ -1,7 +1,7 @@
 
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
-import { Category, Product } from "./category.model";
+import { Category, Product, SubProduct } from "./category.model";
 import { InvIngredient, Nir, NirIngredient } from './nir.model';
 import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
@@ -247,7 +247,7 @@ export function emptyProduct(){
     quantity: 0,
     image: [],
     subProducts: [],
-    category: {_id: '', mainCat: '', name: '', product: [], image: {path: '', filename:''}, order: 0},
+    category: emptyCategory(),
     available: false,
     total: 0,
     sgrTax: false,
@@ -276,13 +276,35 @@ export function emptyProduct(){
   return emptyProduct
 }
 
+export function emptySubProduct(){
+  const sub: SubProduct = {
+       name: '',
+       price: 0,
+       order: 0,
+       quantity: 0,
+       qty: '',
+       product: '',
+       available: true,
+       recipe: '',
+       description: '',
+       tva: 19,
+       locatie: environment.LOC,
+       toppings: [],
+       printOut: false,
+       ings:[],
+       saleLog: [],
+  }
+  return sub
+}
+
 export function emptyCategory(){
   const emptyCategory: Category = {
-    _id: '',
     mainCat: '',
     name: '',
     product: [],
-    image: {path: '', filename:''}, order: 0
+    locatie: environment.LOC,
+    image: {path: '', filename:''}, 
+    order: 0
   }
   return emptyCategory
 }
@@ -413,6 +435,8 @@ export function emptySalePoint(){
   }
   return point
 }
+
+
 
 
 

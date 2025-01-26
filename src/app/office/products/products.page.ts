@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -15,6 +15,7 @@ import User from 'src/app/auth/user.model';
 import { getMaincat, mainCat } from './products.engine';
 import { ProductPage } from '../CRUD/product/product.page';
 import { CategoriesPage } from './categories/categories.page';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -25,8 +26,8 @@ import { CategoriesPage } from './categories/categories.page';
 })
 export class ProductsPage implements OnInit, OnChanges {
 
-  productSearch: any
-  productIngSearch: any
+  productSearch: string = ''
+  productIngSearch: string = ''
   recipeIcon: string = ''
   categories: {name: string, _id: string, order: number, mainCat: string}[] = []
   mainCats: mainCat[] = []
@@ -84,15 +85,15 @@ getuser(){
 }
 
 searchProduct(ev: any){
-  const input = ev.detail.value
-  this.products = this.products.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+  const input = this.productSearch
+  this.products = this.dbProducts.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
   if(input === ''){
    this.products = [...this.dbProducts]
   }
  }
 
 searchIngProduct(ev: any){
-  const input = ev.detail.value
+  const input = this.productIngSearch
   this.products = this.dbProducts.filter(parentItem =>
     parentItem.ings.some(child => {
       if(child.ing.name){
@@ -203,14 +204,36 @@ searchIngProduct(ev: any){
   }
 
     getProducts(){
-      this.productsSrv.productsSend$.subscribe(response => {
-        this.dbProducts = response.filter(p => p.category)
-        this.products = this.dbProducts
-        this.mainCats = getMaincat(this.products, this.isDarkMode)
-        if(this.dbProducts.length > 1){
-            this.isLoading = false
-        }
-      });
+      this.productsSrv.productsSend$.pipe(
+        map((value, index) => ({ value, index })),
+        tap(({value, index}) => {
+          if(index === 1){
+            this.dbProducts = value.filter(p => p.category)
+            this.products = this.dbProducts
+            this.mainCats = getMaincat(this.products, this.isDarkMode)
+            this.activateMainCat()
+          }
+          if(index > 1) {
+            this.dbProducts = value.filter(p => p.category)
+            this.products = this.dbProducts
+            this.updateProductsBySelectedCategory()
+            if(this.productIngSearch.length) this.searchIngProduct('')
+            if(this.productSearch.length)this.searchProduct('')
+          }
+        })
+      ).subscribe();
+    }
+
+    activateMainCat(){
+      setTimeout(() => {
+        const index = this.mainCats.findIndex(c => c.name === 'Toate')
+        if(index !== -1) this.mainCats[index].active = true
+      }, 2000)
+    }
+
+    updateProductsBySelectedCategory(){
+      const maniCat = this.mainCats.find(c => c.active)
+      if(maniCat) this.filterByMain(maniCat)
     }
 
 

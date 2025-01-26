@@ -100,20 +100,20 @@ export interface gamaTreshold {
 export function lightGama () {
     const gama: gamaTreshold[] = [
     { value: 0, color: 'rgb(89, 147, 219)' },
-    { value: 500, color: 'rgb(89, 208, 219)'  },
-    { value: 600, color: 'rgb(89, 219, 182)' },
-    { value: 700, color: 'rgb(89, 219, 143)' },
-    { value: 800, color: 'rgb(117, 219, 89)'},
-    { value: 900, color: 'rgb(152, 219, 89)' },
-    { value: 1100, color: 'rgb(189, 219, 89)' },
-    { value: 1400, color: 'rgb(219, 219, 89)' },
-    { value: 1700, color: 'rgb(219, 200, 89)' },
-    { value: 2100, color: 'rgb(219, 182, 89)' },
-    { value: 2400, color: 'rgb(219, 160, 89)' },
-    { value: 2700, color: 'rgb(219, 147, 89)' },
-    { value: 3000, color: 'rgb(219, 121, 89)' },
-    { value: 3300, color: 'rgb(219, 102, 89)' },
-    { value: 3500, color: 'rgb(219, 89, 89)' }
+    { value: 5, color: 'rgb(89, 208, 219)'  },
+    { value: 10, color: 'rgb(89, 219, 182)' },
+    { value: 20, color: 'rgb(89, 219, 143)' },
+    { value: 30, color: 'rgb(117, 219, 89)'},
+    { value: 40, color: 'rgb(152, 219, 89)' },
+    { value: 50, color: 'rgb(189, 219, 89)' },
+    { value: 70, color: 'rgb(219, 219, 89)' },
+    { value: 100, color: 'rgb(219, 200, 89)' },
+    { value: 120, color: 'rgb(219, 182, 89)' },
+    { value: 160, color: 'rgb(219, 160, 89)' },
+    { value: 200, color: 'rgb(219, 147, 89)' },
+    { value: 300, color: 'rgb(219, 121, 89)' },
+    { value: 400, color: 'rgb(219, 102, 89)' },
+    { value: 600, color: 'rgb(219, 89, 89)' }
   ]
   return gama
 }
@@ -121,20 +121,20 @@ export function lightGama () {
 export function darkGama(){
   const gama: gamaTreshold[] = [
     { value: 0, color: 'rgb(74, 123, 183)' },
-    { value: 500, color: 'rgb(82, 185, 194)'  },
-    { value: 600, color: 'rgb(79, 197, 164)' },
-    { value: 700, color: 'rgb(76, 188, 123)' },
-    { value: 800, color: 'rgb(99, 183, 76)'},
-    { value: 900, color: 'rgb(133, 191, 78)' },
-    { value: 1100, color: 'rgb(149, 171, 74)' },
-    { value: 1400, color: 'rgb(193, 193, 76)' },
-    { value: 1700, color: 'rgb(189, 172, 77)' },
-    { value: 2100, color: 'rgb(196, 163, 80)' },
-    { value: 2400, color: 'rgb(192, 141, 78)' },
-    { value: 2700, color: 'rgb(183, 125, 77)' },
-    { value: 3000, color: 'rgb(198, 110, 81)' },
-    { value: 3300, color: 'rgb(196, 91, 79)' },
-    { value: 3500, color: 'rgb(192, 80, 80)' }
+    { value: 5, color: 'rgb(82, 185, 194)'  },
+    { value: 10, color: 'rgb(79, 197, 164)' },
+    { value: 20, color: 'rgb(76, 188, 123)' },
+    { value: 30, color: 'rgb(99, 183, 76)'},
+    { value: 40, color: 'rgb(133, 191, 78)' },
+    { value: 50, color: 'rgb(149, 171, 74)' },
+    { value: 70, color: 'rgb(193, 193, 76)' },
+    { value: 100, color: 'rgb(189, 172, 77)' },
+    { value: 120, color: 'rgb(196, 163, 80)' },
+    { value: 160, color: 'rgb(192, 141, 78)' },
+    { value: 200, color: 'rgb(183, 125, 77)' },
+    { value: 300, color: 'rgb(198, 110, 81)' },
+    { value: 400, color: 'rgb(196, 91, 79)' },
+    { value: 600, color: 'rgb(192, 80, 80)' }
   ]
   return gama
 }

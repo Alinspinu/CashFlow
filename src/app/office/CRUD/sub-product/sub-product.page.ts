@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, ModalController, NavParams} from '@ionic/angular';
+import { ActionSheetController, IonicModule, ModalController, NavParams} from '@ionic/angular';
 import { RecipeMakerPage } from '../recipe-maker/recipe-maker.page';
+import { SubProduct } from 'src/app/models/category.model';
+import { emptySubProduct } from 'src/app/models/empty-models';
+import { ProductsService } from '../../products/products.service';
+import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 
 @Component({
   selector: 'app-sub-product',
@@ -13,79 +17,31 @@ import { RecipeMakerPage } from '../recipe-maker/recipe-maker.page';
 })
 export class SubProductPage implements OnInit {
 
+  general: boolean = true
+  recipe: boolean = false
+  segment: string = 'general'
+
 
   form!: FormGroup;
   editMode: boolean = false;
-  sub: any = {
-    name: "",
-    price: 0,
-    qty: "",
-    description: '',
-    order: 0,
-    tva:""
-  }
+  sub: SubProduct = emptySubProduct()
 
   toppings: any = [];
-  productIngredientss: any = [];
-  ingredientsToSend: any = []
+  ingredients: any = [];
 
   isTva: boolean = true;
 
   constructor(
+    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private modalCtrl: ModalController,
-    private navParmas: NavParams
+    private navParmas: NavParams,
+    private prodsSrv: ProductsService,
   ) { }
 
   ngOnInit() {
-    this.getSubToEdit()
     this.setupForm()
-    this.setTvaValidators()
   }
 
-  setTvaValidators(){
-    const tvaControl = this.form.get('tva')
-    this.isTva ? tvaControl?.setValidators([Validators.required]) : tvaControl?.clearValidators()
-  }
-
-  getSubToEdit(){
-   this.sub =  this.navParmas.get('options')
-   if(this.sub.name){
-     if(this.sub.name.length){
-      this.editMode = true
-     }
-   }
-   this.toppings = this.sub.toppings
-   this.productIngredientss = this.sub.ings;
-   console.log(this.productIngredientss)
-  }
-
-  onClose(){
-    this.modalCtrl.dismiss(null)
-  }
-
-  addToProduct(){
-    if(this.form.valid){
-      const subProduct = {
-        name: this.form.value.name,
-        price: this.form.value.price,
-        qty: this.form.value.qty,
-        order: this.form.value.order,
-        tva: this.form.value.tva,
-        printOut: this.form.value.printOut,
-        description: this.form.value.description,
-        ings: this.ingredientsToSend,
-        toppings: this.toppings,
-        recipe: this.form.value.recipe,
-        product: '',
-        _id: '',
-      }
-      if(this.editMode){
-       subProduct.product = this.sub.product
-       subProduct._id = this.sub._id
-      }
-      this.modalCtrl.dismiss(subProduct)
-    }
-  }
 
 
   setupForm() {
@@ -114,24 +70,86 @@ export class SubProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      printOut: new FormControl(null, {
-        updateOn: 'change',
-        validators: [Validators.required]
-      }),
       recipe: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
+      }),
+      printOut: new FormControl(null, {
+        updateOn: 'change',
       })
   })
-  this.form.get('name')?.setValue(this.sub.name)
-  this.form.get('price')?.setValue(this.sub.price)
-  this.form.get('qty')?.setValue(this.sub.qty)
-  this.form.get('order')?.setValue(this.sub.order)
-  this.form.get('tva')?.setValue(this.sub.tva)
-  this.form.get('description')?.setValue(this.sub.description)
-  this.form.get('printOut')?.setValue(this.sub.printOut)
-  this.form.get('recipe')?.setValue(this.sub.recipe ? this.sub.recipe : '-')
+  this.getSubToEdit()
   }
+
+
+
+  selectSegment(event: any){
+    if(this.segment === 'general'){
+      this.general = true;
+      this.recipe = false;
+
+    }
+    if(this.segment === 'recipe'){
+      this.general = false;
+      this.recipe = true;
+    }
+}
+
+  getSubToEdit(){
+   const data =  this.navParmas.get('options')
+   if(data){
+    this.sub = data     
+    console.log(this.sub)
+    this.editMode = true
+    this.toppings = this.sub.toppings
+    this.ingredients = this.sub.ings;
+    this.form.get('name')?.setValue(this.sub.name)
+    this.form.get('price')?.setValue(this.sub.price)
+    this.form.get('qty')?.setValue(this.sub.qty)
+    this.form.get('printOut')?.setValue(this.sub.printOut)
+    this.form.get('order')?.setValue(this.sub.order)
+    this.form.get('tva')?.setValue(this.sub.tva.toString())
+    this.form.get('description')?.setValue(this.sub.description)
+    this.form.get('recipe')?.setValue(this.sub.recipe ? this.sub.recipe : '-')
+   }
+  }
+
+
+  close(){
+    this.modalCtrl.dismiss(null)
+  }
+
+  addToProduct(){
+    if(this.form.valid){
+      this.sub.name = this.form.value.name
+      this.sub.price = this.form.value.price
+      this.sub.qty = this.form.value.qty
+      this.sub.order = this.form.value.order
+      this.sub.tva = +this.form.value.tva
+      this.sub.printOut = this.form.value.printOut
+      this.sub.description = this.form.value.description
+      this.sub.ings =  this.ingredients
+      this.sub.toppings = this.toppings
+      this.sub.recipe = this.form.value.recipe
+      this.modalCtrl.dismiss({sub: this.sub})
+    }
+  }
+
+  async deleteSub(){
+    const response = await this.actionSheet.deleteAlert(`Ești sigur că vrei să ștergi sub produsul ${this.sub.name}?`, 'Șterge Sub Produsul')
+    if(response) {
+      if(this.sub._id){
+        this.prodsSrv.deleteSubProduct(this.sub._id).subscribe({
+          next: (response) => {
+            this.modalCtrl.dismiss({delete: true})
+          }
+        })
+      }
+    } 
+  }
+
+
+
 
 
 
@@ -140,7 +158,7 @@ export class SubProductPage implements OnInit {
   }
 
   onIngRecive(ev: any){
-    this.ingredientsToSend = ev;
+    this.ingredients = ev
   }
 
 }

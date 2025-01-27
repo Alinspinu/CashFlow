@@ -51,6 +51,15 @@
       font-size: 28px;
     }
   }
+
+  #all-card{
+    --background: var(--light-green);
+    ion-card-content{
+      ion-icon{
+        background-color: var(--green);
+      }
+    }
+  }
   
   
   

@@ -5,20 +5,99 @@ ion-toolbar, ion-content, ion-footer{
 
 
 
-  ion-label{
+  ion-label, span{
     font-family: RoseMed !important;
   }
 
-  .report-wrapper{
-    height: 82vh;
-    display: flex;
-    flex-direction: column;
-    ion-segment{
-        margin-top: auto;
-    }
-  }
+//   .report-wrapper{
+//     height: 82vh;
+//     display: flex;
+//     flex-direction: column;
+//     ion-segment{
+//         margin-top: auto;
+//     }
+//   }
 
   .chart-hour-wrapper{
      
         width: 800px;
+  }
+
+  ion-card{
+    cursor: pointer;
+    width: 100%;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    ion-card-title, ion-card-subtitle, p{
+      color: var(--ion-color-medium);
+    }
+  
+    ion-card-subtitle{
+      font-family: RoseReg !important;
+      font-size: 16px;
+    }
+    ion-card-title{
+      font-family: RoseMed !important;
+      font-size: 24px;
+    }
+    ion-card-content{
+      ion-icon{
+        padding: 6px;
+        border-radius: 50%;
+        font-size: 16px;
+        color: var(--white) !important;
+        position: absolute;
+        top: 0;
+        right: 16px;
+      }
+      ion-note{
+        font-size: 12px;
+        color: var(--grey)
+      }
+      p{
+        font-family: NoirProReg;
+        display: inline;
+        font-size: 12px;
+        color: var(--green-contrast)
+      }
+    }
+  }
+  
+
+
+  #all-card{
+    --background: var(--light-green);
+    ion-card-content{
+      ion-icon{
+        background-color: var(--green);
+      }
+    }
+  }
+
+  .total-wrapper{
+    display: flex;
+    flex-direction: column;
+    .product, .header, .sub{
+        display: flex;
+        align-items: center;
+        .name{
+            flex: 30%;
+        }
+        .qty{
+            flex: 17%;
+        }
+        .total{
+            flex: 17%;
+        }
+        .prod{
+            flex: 17%;
+        }
+        .profit{
+            flex: 17%;
+        }
+    }
+    .sub{
+        margin-left: 12px;
+        font-size: 14px;
+    }
   }

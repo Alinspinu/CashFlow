@@ -1,3 +1,4 @@
+import { SalePoint } from "./sale-point";
 import { Suplier } from "./suplier.model";
 
 
@@ -114,6 +115,7 @@ export class InvIngredient {
     public ings: InvIngredient[],
     public productIngredient: boolean,
     public sellPrice: number,
+    public salePoint: SalePoint,
     public inventary: {
       index: number,
       day: string,

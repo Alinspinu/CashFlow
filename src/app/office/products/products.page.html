@@ -2,20 +2,14 @@
 
 
 <ion-header class="ion-no-border">
-  <!-- <div class="ion-no-border content-toolbar ion-no-padding"> -->
-    <!-- <ion-title class="ion-no-padding">Produse</ion-title>
-    <ion-label slot="end">
-      <ion-icon [src]="isDarkMode? 'assets/icon/coffee-w.svg' : 'assets/icon/coffee.svg'"></ion-icon>
-    </ion-label> -->
-  <!-- </div> -->
   <ion-toolbar class="ion-no-border">
 
     <app-categories [mainCats]="mainCats" [kill]="true" [addPage]="false" (mainCat)="filterByMain($event)"></app-categories>
 
         <div class="searchbar-wrapper">
           <ion-button (click)="addProduct()">
-          <ion-label slot="start" color="medium"> Produs Nou</ion-label> 
-          <ion-icon slo="end" src="../../../assets/icon/add-outline.svg" color="medium"></ion-icon> 
+          <ion-label slot="start" color="medium"> Produs Nou</ion-label>
+          <ion-icon slo="end" src="../../../assets/icon/add-outline.svg" color="medium"></ion-icon>
           </ion-button>
           <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Caută produs după nume..."  (ionInput)="searchProduct($event)" #searchbar>
           </ion-searchbar>

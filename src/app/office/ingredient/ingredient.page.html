@@ -1,6 +1,108 @@
 
 
 <ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+      <ion-title slot="start">Ingrediente</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="printIngsInv()">
+          <ion-icon size="large" src="../../../assets/icon/print-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="createInv()">
+          <ion-icon size="large" src="../../../assets/icon/document.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="5.5" style="padding-left: 22px;">
+          <app-recipe-maker
+          (ingsSend)="onIngRecive($event)"
+          (toppSend)="onTopRecive($event)"
+          (search)="searchRecive($event)"
+          [ingPage]="true"
+          [hideIng]="false">
+          [top]="topToEdit"
+          [ings]="ingsToEdit"
+          </app-recipe-maker>
+        </ion-col>
+        <ion-col size="2">
+          <ion-select placeholder="Alege Gestiunea" mode="md" fill="outline" (ionChange)="onSelectGestiune($event)">
+            <ion-select-option  class="font" value="">Toate</ion-select-option>
+            <ion-select-option  class="font"*ngFor="let gest of gestiuni" [value]="gest">{{gest | capitalize}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="2">
+          <ion-select mode="md" placeholder="Alege tipul de ingrediet" fill="outline"  (ionChange)="onSelectType($event)">
+            <ion-select-option class="font" value="">Toate</ion-select-option>
+            <ion-select-option  class="font"*ngFor="let type of ingTypes" [value]="type">{{type | capitalize}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="2">
+          <ion-select mode="md" placeholder="Alege departamentul" fill="outline"  (ionChange)="onSelectDep($event)">
+            <ion-select-option class="font" value="">Toate</ion-select-option>
+            <ion-select-option  class="font"*ngFor="let type of ingDep" [value]="type">{{type | capitalize}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+  <ion-toolbar>
+    <div class="header">
+      <span class="id">Nr</span>
+      <span class="ing">Denumire Ingredient</span>
+      <span class="um">UM</span>
+      <span class="price">Pret</span>
+      <span class="qty">Cantitate</span>
+      <span class="inv">Inventar</span>
+      <span class="in">Intrări</span>
+      <span class="action">Action</span>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+
+<ion-content [fullscreen]="true">
+
+  <div class="ing-container" *ngFor="let ing of ingredients; let i = index">
+    <span class="id">#{{i+1}}</span>
+    <div class="ing">
+      <div class="details">
+        <span class="name">{{ing.name}}</span>
+          <span class="cat">{{ing.salePoint ? ing.salePoint.name : ''}} / {{ing.dep | capitalize}} / {{ing.gestiune | capitalize}}</span>
+      </div>
+    </div>
+    <span class="um">{{ing.um}}</span>
+    <span class="price">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
+    <span class="qty">{{roundInHtml(ing.qty)}}</span>
+    <span class="comp"></span>
+    <ion-button fill="ghost" color="medium" class="inv" (click)="inventary(i)">
+      <ion-icon  src="../../assets/icon/tools.svg"></ion-icon>
+    </ion-button>
+    <ion-button fill="clear" color="medium" class="in" (click)="uploadLog(ing._id)">
+      <ion-icon src="../../../assets/icon/plant.svg"></ion-icon>
+    </ion-button>
+    <ion-button class="action" fill="ghost" color="medium" (click)="ingEdit(ing)">
+      <ion-icon src="../../../assets/icon/eye-outline.svg"></ion-icon>
+    </ion-button>
+  </div>
+
+</ion-content>
+
+
+
+
+
+
+
+
+
+<!--
+
+<ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
     <ion-grid>
       <ion-row>
@@ -102,4 +204,4 @@
 </div>
   </ion-grid>
 </ion-content>
-
+ -->

@@ -167,16 +167,18 @@ resetOrders(){
     let total: number = 0
     for(let product of products){
       const clonedProduct = JSON.parse(JSON.stringify(product));
-      const prd = prod.find(p => p.billProduct.name === product.billProduct.name)
-      if(prd){
-        prd.billProduct.quantity += clonedProduct.billProduct.quantity
-        prd.billProduct.total = round(+prd.billProduct.total + +clonedProduct.billProduct.total)
-      } else {
-        prod.push(clonedProduct)
-      }
+      // const prd = prod.find(p => p.billProduct.name === product.billProduct.name)
+      // if(prd){
+      //   prd.billProduct.quantity += clonedProduct.billProduct.quantity
+      //   prd.billProduct.total = round(+prd.billProduct.total + +clonedProduct.billProduct.total)
+      // } else {
+      //   prod.push(clonedProduct)
+      // }
+      prod.push(clonedProduct)
       total = round(total + +product.billProduct.total)
     }
-    prod.sort((a,b) => b.billProduct.quantity - a.billProduct.quantity)
+    // prod.sort((a,b) => b.billProduct.quantity - a.billProduct.quantity)
+    prod.sort((a,b) => a.billProduct.name.localeCompare(b.billProduct.name))
    this.actionSheet.openPayment(DelProdViewPage, {products: prod, total: total})
  }
 

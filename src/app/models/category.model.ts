@@ -45,17 +45,7 @@ export class Product {
     salts: number,
     protein: number,
   },
-  public saleLog: {
-        date: string,
-        qty: number,
-        total: number,
-        discount: number,
-        hours: {
-          date: string,
-          label: string,
-          qty: number
-        }[]
-  }[],
+  public saleLog: saleLog[],
   public toppings: Topping[],
   public ings: {qty: number, ing:InvIngredient}[],
   public ingredients:{quantity: number, ingredient: Ingredient}[],
@@ -65,9 +55,21 @@ export class Product {
   ){};
 };
 
+export interface saleLog {
+  date: string,
+  qty: number,
+  total: number,
+  discount: number,
+  hours: {
+    date: string,
+    label: string,
+    qty: number
+  }[]
+}
+
 export class SubProduct{
   constructor(
-   
+
     public name: string,
     public price: number,
     public order: number,
@@ -82,17 +84,7 @@ export class SubProduct{
     public toppings: Topping[],
     public printOut: boolean,
     public ings: {qty: number, ing:InvIngredient}[],
-    public saleLog: {
-        date: string,
-        qty: number,
-        total: number,
-        discount: number,
-        hours: {
-          date: string,
-          label: string,
-          qty: number
-        }[]
-  }[],
+    public saleLog: saleLog[],
   public _id?: string,
   ){};
 };

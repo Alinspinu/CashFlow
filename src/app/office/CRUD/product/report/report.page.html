@@ -2,86 +2,79 @@
 
 <div class="report-wrapper">
 
-  <!-- <div class="chart-hour-wrapper">
-    <div class="chart">
-      <canvas id="hour-canvas"></canvas>
-    </div>
-  </div> -->
 
-  <!-- <ion-grid>
+
+  <div class="name-wrapper">
+    <span>{{product.name}}</span>
+    <span>{{saleLog?.date}}</span>
+    <div class="buttons-wrapper">
+      <ion-button fill="outline" slot="end" color="medium" (click)="selectDate(true)">
+        <ion-icon slot="start" src="../../assets/icon/time.svg"></ion-icon>
+        <ion-label slot="end">zi</ion-label>
+      </ion-button>
+      <ion-button  fill="outline" slot="end" color="medium" (click)="selectMonth()">
+        <ion-icon slot="start" src="../../assets/icon/shedule.svg"></ion-icon>
+        <ion-label slot="end">Luna in curs</ion-label>
+      </ion-button>
+      <ion-button  fill="outline" slot="end" color="medium" (click)="selectDate(false)">
+        <ion-icon slot="start" src="../../assets/icon/shedule.svg"></ion-icon>
+        <ion-label slot="end">perioadă</ion-label>
+      </ion-button>
+    </div>
+  </div>
+  <ion-grid>
     <ion-row>
-      <ion-col size="4">
+      <ion-col size="12" offset="0" *ngIf="saleLog">
         <div class="total-wrapper">
           <div class="header">
-           <span class="name"></span>
-            <span class="qty"></span>
+            <span class="name"></span>
+            <span class="qty">Cantitate</span>
+            <span class="disc">Discount</span>
             <span class="total">Încasat</span>
             <span class="prod">Producție</span>
             <span class="profit">Profit</span>
           </div>
+          <div  *ngFor="let log of saleLog.subLog">
+            <div class="sub" *ngIf="log && log.qty > 0">
+             <span class="name">{{log.name}}</span>
+             <span class="qty">{{log.qty}} buc</span>
+             <span class="disc">{{log.discount}} Lei</span>
+             <span class="total">{{log.total}} Lei</span>
+             <span class="prod">{{log.production}} Lei</span>
+             <span class="profit">{{roundInHtml(log.total - log.production)}} Lei</span>
+           </div>
+          </div>
+          <div class="tot">
+            <span class="name">Total</span>
+            <span class="qty">{{saleLog.qty}} buc</span>
+            <span class="disc">{{saleLog.discount}} Lei</span>
+            <span class="total">{{saleLog.total}} Lei</span>
+            <span class="prod">{{saleLog.production}} Lei</span>
+            <span class="profit">{{roundInHtml(saleLog.total - saleLog.production)}} Lei</span>
+          </div>
 
-          <div class="product">
-            <span class="name">Cappuccino da ciocolata cu migdale</span>
-            <span class="qty">50 buc</span>
-            <span class="total">1231 Lei</span>
-            <span class="prod">436 Lei</span>
-            <span class="profit">825 Lei</span>
-          </div>
-          <div class="sub">
-            <span class="name">True Blend</span>
-            <span class="qty">48 buc</span>
-            <span class="total">1123 Lei</span>
-            <span class="prod">436 Lei</span>
-            <span class="profit">825 Lei</span>
-          </div>
-          
-          <div class="sub">
-            <span class="name">True Blend</span>
-            <span class="qty">48 buc</span>
-            <span class="total">1123 Lei</span>
-            <span class="prod">436 Lei</span>
-            <span class="profit">825 Lei</span>
-          </div>
-          
-          <div class="sub">
-            <span class="name">True Blend</span>
-            <span class="qty">48 buc</span>
-            <span class="total">1123 Lei</span>
-            <span class="prod">436 Lei</span>
-            <span class="profit">825 Lei</span>
-          </div>
-          
-          <div class="sub">
-            <span class="name">True Blend</span>
-            <span class="qty">48 buc</span>
-            <span class="total">1123 Lei</span>
-            <span class="prod">436 Lei</span>
-            <span class="profit">825 Lei</span>
+        </div>
+      </ion-col>
+
+    </ion-row>
+
+
+    <ion-row>
+      <ion-col size="12" offset="0">
+        <div class="chart-hour-wrapper">
+          <ion-button fill="clear" color="medium" (click)="changeChard()" *ngIf="viewButton">{{dayy ? 'Ore' : 'Zile'}}</ion-button>
+          <div class="chart">
+            <canvas id="hour-canvas"></canvas>
           </div>
         </div>
       </ion-col>
-      <ion-col size="8">
-
-      </ion-col>
     </ion-row>
-  </ion-grid> -->
-
-  <ion-card id="all-card" >
-    <ion-card-header>
-      <ion-card-subtitle>Cappuccino</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-card-title>50 buc</ion-card-title>
-      <ion-icon src="../../assets/icon/cash-back.svg"></ion-icon>
-      <ion-note>Total </ion-note>
-      <p> +34344 Lei</p>
-    </ion-card-content>
-  </ion-card>
+  </ion-grid>
 
 
 
-  
-  <ion-segment [(ngModel)]="bar" (ionChange)="selectSegment($event)">
+
+  <!-- <ion-segment [(ngModel)]="bar" (ionChange)="selectSegment($event)">
     <ion-segment-button value="today">
       <ion-label>Astăzi</ion-label>
     </ion-segment-button>
@@ -100,7 +93,8 @@
     <ion-segment-button value="custom">
       <ion-label>Custom</ion-label>
     </ion-segment-button>
-  </ion-segment>
+  </ion-segment> -->
+
 
 </div>
 

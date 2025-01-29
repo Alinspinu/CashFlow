@@ -68,8 +68,6 @@ export class ProductPage implements OnInit {
     private navParam: NavParams,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
-    private contentService: ContentService,
-    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -117,7 +115,7 @@ export class ProductPage implements OnInit {
           this.sub = false;
           this.image = true
           this.report = false
-        } 
+        }
     }
 
 
@@ -348,6 +346,31 @@ export class ProductPage implements OnInit {
   }
 
 
+  subStatus(ev: any, id: string | undefined, index: number){
+    let status
+    const isCheked = ev.detail.checked
+      if(isCheked) {
+        status = "activate"
+      } else {
+        status = "deactivated"
+      }
+      if(id){
+        this.prodsSrv.changeProductStatus(status, id).subscribe(response => {
+          if(response) {
+            const subProduct = this.product.subProducts[index]
+            if(subProduct){
+              subProduct.available = response.available
+              showToast(this.toastCtrl, `Produsul a fost ${isCheked? 'Activat' : 'Dezactivat'}`, 2000)
+            } else {
+              showToast(this.toastCtrl, `Produst nu a fost gasit! REFRESH!`,2000)
+            }
+          }
+        })
+      }
+  }
+
+
+
   reciveMainCat(maincat: mainCat){
     this.productMainCat = maincat.name
     const cat = maincat.cat.find(c => c.active === true)
@@ -382,86 +405,10 @@ export class ProductPage implements OnInit {
 
 
   close(){
+    if(this.kill) this.restetCats()
     this.modalCtrl.dismiss(null)
   }
 
 
 }
 
-
-
-
-
-//  async saveProduct(){
-//     if(this.form.valid && this.productCategory && this.productMainCat){
-//       const productData = new FormData()
-//       const toppings = this.toppings.length ? JSON.stringify(this.toppings): 'skip';
-//       const ings = this.productIngredients.length ? JSON.stringify(this.productIngredients) : 'skip';
-//       const sub = JSON.stringify(this.subProducts);
-//       const newProduct: any = {
-//         name: this.form.value.name,
-//         price: this.form.value.price,
-//         category: this.productCategory,
-//         mainCat: this.productMainCat,
-//         description: this.form.value.description,
-//         qty: this.form.value.qty,
-//         order: this.form.value.order,
-//         printOut: this.form.value.printOut,
-//         sgrTax: this.form.value.sgrTax,
-//         dep: this.form.value.dep,
-//         printer: this.form.value.printer,
-//         recipe: this.form.value.recipe,
-//         toppings: this.toppings,
-//         ings: this.productIngredients,
-//         subProducts: this.subProducts
-//       }
-
-
-//       productData.append('name', this.form.value.name);
-//       productData.append('price', this.form.value.price);
-//       productData.append('category', this.productCategory);
-//       productData.append('mainCat', this.productMainCat);
-//       productData.append('description', this.form.value.description);
-//       productData.append('longDescription', this.form.value.longDescription);
-//       productData.append('qty', this.form.value.qty);
-//       productData.append('order', this.form.value.order);
-//       productData.append('sgrTax', this.form.value.sgrTax);
-//       productData.append('dep', this.form.value.dep);
-//       productData.append('tva', this.form.value.tva);
-//       productData.append('printer', this.form.value.printer);
-//       productData.append('printOut', this.form.value.printOut)
-//       productData.append('recipe', this.form.value.recipe)
-
-//       if(toppings !== 'skip'){
-//         productData.append('toppings', toppings);
-//       }
-//       if(ings !== 'skip'){
-//         productData.append('ings', ings);
-//       }
-//       productData.append('sub', sub);
-//       if(this.editMode){
-//         this.prodsSrv.editProduct(productData, this.product._id).subscribe(response => {
-//           showToast(this.toastCtrl, response.message, 3000);
-//           this.modalCtrl.dismiss(null)
-//         })
-//       } else {
-//         this.prodsSrv.saveProduct(productData).subscribe(response => {
-//           const product = response.product
-//           if(product){
-//             this.tempSubArray.map((obj:any) => {
-//               obj.product = product._id;
-//               return obj;
-//             })
-//             for(let sub of this.tempSubArray){
-//                this.prodsSrv.saveSubProduct(sub).subscribe()
-//             }
-//             this.form.reset()
-//             this.toppings = []
-//             this.productIngredients = []
-//             this.subProducts = []
-//             this.modalCtrl.dismiss(null)
-//           }
-//         })
-//       }
-//     }
-//   }

@@ -303,7 +303,7 @@ export function emptyCategory(){
     name: '',
     product: [],
     locatie: environment.LOC,
-    image: {path: '', filename:''}, 
+    image: {path: '', filename:''},
     order: 0
   }
   return emptyCategory
@@ -325,6 +325,7 @@ export function emptyIng(){
    gestiune: '',
    locatie: '',
    ings: [],
+   salePoint: emptySalePoint(),
    productIngredient: false,
    inventary: [],
    uploadLog: [],

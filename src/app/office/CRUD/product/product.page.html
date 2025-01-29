@@ -9,13 +9,13 @@
       <ion-label slot="start" size="large">Închide</ion-label>
       <ion-icon slot="end" src="../../../../assets/icon/close-outline.svg" color="medium"></ion-icon>
     </ion-button>
- 
+
     <ion-button class="header-buttons" slot="end" fill="outline" color="medium" [disabled]="product._id.length < 1" (click)="deleteProduct()">
       <ion-label slot="start" size="large">Șterge</ion-label>
       <ion-icon slot="end" src="../../../../assets/icon/trash-outline.svg" color="medium"></ion-icon>
     </ion-button>
   </ion-toolbar>
-    <ion-toolbar>  
+    <ion-toolbar>
     <ion-segment [(ngModel)]="segment" (ionChange)="selectSegment($event)">
       <ion-segment-button value="report">
         <ion-label>Raport</ion-label>
@@ -135,7 +135,7 @@
             </ion-col>
           </ion-row>
         </section>
-  
+
         <section class="section">
           <ion-row>
             <ion-col size="4">
@@ -150,7 +150,7 @@
           </ion-row>
         </section>
       </section>
-  
+
     <!-- <ion-button size="large" expand="block"(click)="saveProduct()" color="medium" [disabled]="!form.valid">{{editMode ? "Editează" : "Salvează"}} Produsl</ion-button> -->
 
 
@@ -185,8 +185,11 @@
         </ion-col>
         <ion-col size="8">
           <div class="sub-wrapper">
-            <div class="subProduct ion-activatable ripple-parent rounded-rectangle" *ngFor="let sub of product.subProducts; let i = index" (click)="onSubEdit(i)">
-              <ion-label  class="name">{{sub.name}}</ion-label>
+            <div class="subProduct ion-activatable ripple-parent rounded-rectangle" *ngFor="let sub of product.subProducts; let i = index">
+              <ion-label  class="name" (click)="onSubEdit(i)">{{sub.name}}</ion-label>
+              <div class="status">
+                <ion-toggle color="medium" [enableOnOffLabels]="true"  (ionChange)="subStatus($event, sub._id, i)" [checked]="sub.available"></ion-toggle>
+              </div>
               <ion-ripple-effect></ion-ripple-effect>
             </div>
             <div class="subProduct ion-activatable ripple-parent rounded-rectangle" *ngFor="let sub of tempSubArray; let i = index" (click)="onTempEdit(i)">

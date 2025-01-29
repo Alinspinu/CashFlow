@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, EnvironmentInjector, inject, OnInit, OnDestroy, Inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { environment } from '../../environments/environment.prod';
 import { ProductsService } from './products/products.service';
 import { IngredientService } from './ingredient/ingredient.service';
 import { AuthService } from '../auth/auth.service';
@@ -40,8 +39,8 @@ export class OfficePage implements OnInit, OnDestroy {
 
 
   public appPages = [
-    {name: 'Produse', icon: '../../assets/icon/fast-food-outline.svg', show: true},
-    {name: 'Materii Prime', icon: '../../assets/icon/plant.svg', show: false},
+    {name: 'Produse', icon: '../../assets/icon/fast-food-outline.svg', show: false},
+    {name: 'Materii Prime', icon: '../../assets/icon/plant.svg', show: true},
     {name: 'Deprecieri', icon: '../../assets/icon/tools.svg', show: false},
     {name: 'Nir', icon: '../../assets/icon/document.svg', show: false},
     {name: 'E-Factura', icon: '../../assets/icon/cloud-outline.svg', show: false},

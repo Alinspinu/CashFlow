@@ -5,7 +5,7 @@ ion-toolbar, ion-content, ion-footer{
 
 
 
-  ion-label, span{
+  ion-label{
     font-family: RoseMed !important;
   }
 
@@ -18,73 +18,49 @@ ion-toolbar, ion-content, ion-footer{
 //     }
 //   }
 
-  .chart-hour-wrapper{
-     
-        width: 800px;
+.chart-hour-wrapper{
+  padding-top: 24px;
+  margin-top: 24px;
+}
+
+  #hour-canvas{
+      max-height: 300px !important;
+        // width: 800px;
   }
 
-  ion-card{
-    cursor: pointer;
-    width: 100%;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    ion-card-title, ion-card-subtitle, p{
-      color: var(--ion-color-medium);
-    }
-  
-    ion-card-subtitle{
-      font-family: RoseReg !important;
-      font-size: 16px;
-    }
-    ion-card-title{
-      font-family: RoseMed !important;
-      font-size: 24px;
-    }
-    ion-card-content{
-      ion-icon{
-        padding: 6px;
-        border-radius: 50%;
-        font-size: 16px;
-        color: var(--white) !important;
-        position: absolute;
-        top: 0;
-        right: 16px;
-      }
-      ion-note{
-        font-size: 12px;
-        color: var(--grey)
-      }
-      p{
-        font-family: NoirProReg;
-        display: inline;
-        font-size: 12px;
-        color: var(--green-contrast)
-      }
-    }
-  }
-  
 
-
-  #all-card{
-    --background: var(--light-green);
-    ion-card-content{
-      ion-icon{
-        background-color: var(--green);
-      }
+  .name-wrapper{
+    display: flex;
+    justify-content: space-between;
+    font-family: RoseMed !important;
+    border-bottom: 1.5px solid var(--grey);
+    padding: 12px;
+    margin: 24px 24px 12px 24px;
+    span{
+      text-transform: uppercase;
+      font-size: 28px;
     }
   }
 
   .total-wrapper{
+    height: 100%;
     display: flex;
     flex-direction: column;
-    .product, .header, .sub{
+    justify-content: center;
+    margin-left: 12px;
+    .tot, .header, .sub{
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         .name{
-            flex: 30%;
+            // text-align: end;
+            flex: 20%;
         }
         .qty{
             flex: 17%;
+            // text-align: center;
+        }
+        .disc{
+          flex: 17%;
         }
         .total{
             flex: 17%;
@@ -96,8 +72,26 @@ ion-toolbar, ion-content, ion-footer{
             flex: 17%;
         }
     }
+
+    .header{
+      font-family: RoseMed !important;
+      padding: 4px;
+      font-size: 22px;
+      margin-bottom: 12px;
+      // border-bottom: 1px solid var(--grey);
+      // .name{
+      //   flex: 40% !important;
+      // }
+    }
+    .tot{
+      font-family: RoseMed !important;
+      padding: 4px;
+      font-size: 28px;
+    }
     .sub{
-        margin-left: 12px;
-        font-size: 14px;
+      font-family: RoseLight !important;
+        // margin-left: 12px;
+        padding: 4px;
+        font-size: 18px;
     }
   }

@@ -60,6 +60,42 @@ export function formatedDateToShow(date: any){
     return `${month} ${day}, ${year}, ${hours}:${minutes}`;
   }
 
+  export function formatTitleDate(date: any) {
+    const inputDate = new Date(date);
+    const months = [
+      "Ian", "Feb", "Mar", "Aprl", "Mai", "Iun",
+      "Iul", "Aug", "Sept", "Oct", "Nov", "Dec"
+    ];
+
+    // Extract parts of the date
+    const day = inputDate.getDate(); // Day of the month
+    const month = months[inputDate.getMonth()]; // Month name in Romanian
+    const year = inputDate.getFullYear(); // Full year
+
+    // Format the date as "Sept 23, 2025, 12:43"
+    return `${month} ${day} - ${year}`;
+  }
+
+
+  export function formatDayDate(date: any) {
+    const inputDate = new Date(date);
+
+    const days = [
+      "Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"
+    ];
+    const months = [
+      "Ian", "Feb", "Mar", "Aprl", "Mai", "Iun",
+      "Iul", "Aug", "Sept", "Oct", "Nov", "Dec"
+    ];
+
+    const day = inputDate.getDate(); // Day of the month
+    const zi = days[inputDate.getDay()];
+    const month = months[inputDate.getMonth()];
+
+
+    return ` ${month} ${day} ${zi} `;
+  }
+
   export function formatOrderDateOne(date: any) {
     const inputDate = new Date(date);
     const months = [

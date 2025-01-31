@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, tap } from "rxjs";
 import { emptyIng } from "src/app/models/empty-models";
-import { InvIngredient } from "src/app/models/nir.model";
+import { Dep, Gestiune, InvIngredient } from "src/app/models/nir.model";
 import { IndexDbService } from "src/app/shared/indexDb.service";
 import {environment} from '../../../environments/environment'
 import { Ingredient } from '../../models/category.model';
@@ -23,15 +23,22 @@ export class IngredientService{
     private dbService: IndexDbService,
 
   ){
-    // this.getIngsFromLocal()
+
     this.ingredientsState = new BehaviorSubject<InvIngredient[]>([emptyIng()]);
     this.ingredientsSend$ =  this.ingredientsState.asObservable();
   }
 
   addIngredinet(ing: InvIngredient){
-    this.ingredients.push(ing)
-    this.ingredientsState.next([...this.ingredients])
-  }
+    return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: environment.LOC})
+            .pipe(tap(response => {
+              if(response){
+                this.ingredients.push(response.ing)
+                const stringIngs = JSON.stringify(this.ingredients)
+                this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
+                this.ingredientsState.next([...this.ingredients])
+                }
+            }))
+     }
 
 
   getIngredient(page: number){
@@ -49,6 +56,7 @@ export class IngredientService{
 
 
   getAllIngredients(): Observable<any[]> {
+    this.getIngsFromLocal()
     const allItems: any[] = [];
     let currentPage = 1;
 
@@ -72,17 +80,18 @@ export class IngredientService{
                })
 
               this.ingredients = sortedIngs
-              console.log(this.ingredients[28])
-              this.ingredientsState.next([...this.ingredients]); // Emit all collected items
-              observer.complete(); // Complete the observable
+              const stringIngs = JSON.stringify(sortedIngs)
+              this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs }).subscribe()
+              this.ingredientsState.next([...this.ingredients]); 
+              observer.complete(); 
             }
           },
           (error) => {
-            observer.error(error); // Handle any errors
+            observer.error(error);
           }
         );
       };
-      fetchData(); // Start fetching data
+      fetchData(); 
     });
   }
 
@@ -141,6 +150,8 @@ export class IngredientService{
           const ingIndex = this.ingredients.findIndex(ing => ing._id === response.ing._id)
           if(ingIndex !== -1){
             this.ingredients[ingIndex] = response.ing
+            const stringIngs = JSON.stringify(this.ingredients)
+            this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
             this.ingredientsState.next([...this.ingredients])
           }
         }
@@ -157,6 +168,44 @@ saveInventary(){
 
 getUploadLog(id: string){
   return this.http.get<InvIngredient>(`${environment.BASE_URL}ing/log?id=${id}`)
+}
+
+
+
+
+addGestiune(gest: any){
+  return this.http.post<{message: string, gest: Gestiune}>(`${environment.BASE_URL}ing/gest`, {gest: gest})
+}
+
+getGestiune(){
+  return this.http.get<Gestiune[]>(`${environment.BASE_URL}ing/gest?loc=${environment.LOC}&salePoint=${environment.POINT}`)
+}
+
+editGestiune(gest: any){
+  return this.http.put<{message: string, gest: Gestiune}>(`${environment.BASE_URL}ing/gest`, {gest: gest})
+}
+
+deleteGestiune(id: string){
+  return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/gest?id=${id}`)
+}
+
+
+
+
+addDep(dep: any){
+  return this.http.post<{message: string, dep: Dep}>(`${environment.BASE_URL}ing/dep`, {dep: dep})
+}
+
+getDep(){
+  return this.http.get<Dep[]>(`${environment.BASE_URL}ing/dep?loc=${environment.LOC}&salePoint=${environment.POINT}`) 
+}
+
+editDep(dep: any){
+  return this.http.put<{message: string, dep: Dep}>(`${environment.BASE_URL}ing/dep`, {dep: dep})
+}
+
+deleteDep(id: string){
+  return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/dep?id=${id}`)
 }
 
 

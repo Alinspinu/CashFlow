@@ -1,15 +1,16 @@
 
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-      <ion-button (click)="close()" slot="start" color="medium">
-        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" color="light" style="font-size: 32px;"></ion-icon>
+  <!-- <ion-toolbar class="ion-no-border">
+
+
+      <ion-button (click)="close()" slot="start" color="medium" fill="outline">
+        <ion-icon src="../../../assets/icon/close-outline.svg" color="medium" style="font-size: 28px;"></ion-icon>
       </ion-button>
-      <!-- <div class="title-wrapper">
-        <div class="title">{{title}}</div>
-      </div> -->
-      <ion-searchbar mode="ios"  [placeholder]="searchPlaceholder"  (ionInput)="searchData($event)" #searchbar style="margin-top:18px;">
+    </ion-toolbar> -->
+    <ion-toolbar class="ion-no-border">
+      <ion-searchbar mode="md"  [placeholder]="searchPlaceholder"  (ionInput)="searchData($event)" #searchbar>
       </ion-searchbar>
-  </ion-toolbar>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="auth-wrapper">
@@ -28,6 +29,20 @@
   </ion-content>
 
 
-  <ion-footer class="ion-no-border">
+  <!-- <ion-footer class="ion-no-border">
     <ion-button color="medium" (click)="onSubmit()" size="large" expand="block" style="font-family: NoirProSemi !important;">Alege</ion-button>
-  </ion-footer>
+  </ion-footer> -->
+
+  
+<ion-footer mode="ios" [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-button mode='md' class="footer-buttons" size="large" slot="start" fill="outline" (click)="close()" color="medium">
+      <ion-label slot="start" size="large">Închide</ion-label>
+      <ion-icon slot="end" src="../../../../assets/icon/close-outline.svg" color="medium"></ion-icon>
+    </ion-button>
+    <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large" (click)="onSubmit()">
+       <ion-label slot="start" size="large" >Adaugă</ion-label>
+       <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+     </ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -34,6 +34,7 @@ export class ProductsService{
       if(response){
         this.products = [...JSON.parse(response.products)]
         this.productsState.next(this.products)
+        this.productsState.next([...this.products])
       }
     })
     return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products`, {loc: environment.LOC})

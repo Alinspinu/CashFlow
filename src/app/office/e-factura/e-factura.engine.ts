@@ -59,8 +59,8 @@ export function mergeProducts(invoice: EFactura, ings: InvIngredient[]){
                 p.ingName = ing.name
                 p.ingUm = ing.um
                 p.ingQty = round(p.quantity * eI.qtyCorector)
-                p.ingDep = ing.dep
-                p.ingGestiune = ing.gestiune
+                p.ingDep = ing.dept.name
+                p.ingGestiune = ing.gest.name
                 p.ingID = ing._id
                 p.ingSellPrice = ing.sellPrice
                 foundMatch = true;

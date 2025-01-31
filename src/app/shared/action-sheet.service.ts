@@ -210,6 +210,8 @@ export class ActionSheetService {
   async openAdd(
     component: typeof ProductPage | 
                typeof SubProductPage | 
+               typeof AddIngredientPage | 
+               typeof ProductIngredientPage | 
                typeof NirPage,
     options: any,
     clas: string

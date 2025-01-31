@@ -1,34 +1,34 @@
 ion-content, ion-toolbar, ion-footer, ion-radio-group{
-  --background: var(--ion-color-tertiary) !important;
+  --background: var(--background-color) !important;
 }
 
 
-ion-title, span, ion-item, ion-input, ion-searchbar{
-  font-family: NoirProReg !important;
+ion-title, span, ion-item, ion-input, ion-searchbar, ion-chekbox, ion-radio, ion-button{
+  font-family: RoseMed !important;
 }
 
 
-.input{
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: var(--ion-color-light);
-  color: var(--ion-color-medium);
-  border-radius: 8px;
-  margin: 1rem 0 0.5rem 0.5rem;
+ion-searchbar{
+  --background: var(--grey);
+  --box-shadow: none !important;
 }
+
+.footer-button{
+  margin: 12px 0 !important;
+  margin-left: 36px !important;
+  margin-right: 24px !important;
+}
+
 
 
 ion-checkbox {
-  font-family: NoirProReg !important;
-  font-size: 28px;
-  --size: 32px;
+  font-size: 18px;
+  --size: 24px;
 }
 
 ion-radio {
-  font-family: NoirProReg !important;
-  font-size: 28px;
-  --size: 32px;
+  font-size: 18px;
+  --size: 24px;
 }
 
 // ion-checkbox::part(label) {

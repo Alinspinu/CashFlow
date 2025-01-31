@@ -29,7 +29,7 @@
         <ion-col size="2">
           <ion-select placeholder="Alege Gestiunea" mode="md" fill="outline" (ionChange)="onSelectGestiune($event)">
             <ion-select-option  class="font" value="">Toate</ion-select-option>
-            <ion-select-option  class="font"*ngFor="let gest of gestiuni" [value]="gest">{{gest | capitalize}}</ion-select-option>
+            <ion-select-option  class="font"*ngFor="let ges of gest" [value]="ges._id">{{ges.name}}</ion-select-option>
           </ion-select>
         </ion-col>
         <ion-col size="2">
@@ -41,7 +41,7 @@
         <ion-col size="2">
           <ion-select mode="md" placeholder="Alege departamentul" fill="outline"  (ionChange)="onSelectDep($event)">
             <ion-select-option class="font" value="">Toate</ion-select-option>
-            <ion-select-option  class="font"*ngFor="let type of ingDep" [value]="type">{{type | capitalize}}</ion-select-option>
+            <ion-select-option  class="font"*ngFor="let type of deps" [value]="type._id">{{type.name}}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -72,7 +72,7 @@
     <div class="ing">
       <div class="details">
         <span class="name">{{ing.name}}</span>
-          <span class="cat">{{ing.salePoint ? ing.salePoint.name : ''}} / {{ing.dep | capitalize}} / {{ing.gestiune | capitalize}}</span>
+          <span class="cat">{{ing.salePoint ? ing.salePoint.name : '-'}} / {{ing.dept ? ing.dept.name: '-'}} / {{ing.gest ? ing.gest.name : '-'}}</span>
       </div>
     </div>
     <span class="um">{{ing.um}}</span>

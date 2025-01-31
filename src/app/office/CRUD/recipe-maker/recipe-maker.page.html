@@ -19,13 +19,14 @@
       </div>
     </div>
     <div  *ngIf="productIngredientMode" class="prouct-ing-wrapper">
-      <ion-input class="input1" type="text" label="Nume" labelPlacement="floating" [(ngModel)]="productIngName"></ion-input>
-      <ion-input class="input1" type="text" label="UM" labelPlacement="floating" [(ngModel)]="productIngUm"></ion-input>
-      <ion-input class="input1" type="text" label="Cantitate" labelPlacement="floating" [(ngModel)]="productIngQty"></ion-input>
-      <ion-select label="Gestiune" labelPlacement="floating" placeholder="Gestiune" class="input1" [(ngModel)]="productIngGest">
-        <ion-select-option value="magazie">Magazie</ion-select-option>
-        <ion-select-option value="bucatarie">Bucătărie</ion-select-option>
-        <ion-select-option value="bar">Bar</ion-select-option>
+      <ion-input mode="md" fill="outline" type="text" label="Nume" labelPlacement="floating" [(ngModel)]="product.name" id="name"></ion-input>
+      <ion-input mode="md" fill="outline" type="text" label="UM" labelPlacement="floating" [(ngModel)]="product.um"></ion-input>
+      <ion-input mode="md" fill="outline" type="number" label="Cantitate" labelPlacement="floating" [(ngModel)]="product.qty"></ion-input>
+      <ion-select label="Gestiune" labelPlacement="floating" placeholder="Gestiune" mode="md" fill="outline" [(ngModel)]="product.gest._id">
+        <ion-select-option *ngFor="let ges of gest" [value]="ges._id">{{ges.name}}</ion-select-option>
+      </ion-select>
+      <ion-select label="Departament" labelPlacement="floating" placeholder="Gestiune"mode="md" fill="outline" [(ngModel)]="departament">
+        <ion-select-option *ngFor="let dep of deps" [value]="dep._id">{{dep.name}}</ion-select-option>
       </ion-select>
     </div>
     <h3 class="ion-text-center subtitle"  *ngIf="displayIngs.length">{{impPage ? 'Deprecieri' : 'Rețetă produs'}}</h3>
@@ -53,7 +54,12 @@
       <span class="total">{{impPage ? 'Total fișă' : 'Total rețetă'}}</span>
       <span class="total-price">{{round(recipeTotal)}} Lei</span>
     </div>
-    <ion-button color="medium" size="large" expland="block" style="width: 100%;" (click)="saveProdIng()" *ngIf="productIngredientMode" [disabled]="!productIngName.length || !productIngUm.length || !productIngQty.length || !displayIngs.length">SALVEAZĂ INGREDIENTUL COMPUS</ion-button>
+    <ion-toolbar class="footer-toolbar" *ngIf="productIngredientMode">
+      <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large" [disabled]="!product.name.length || !product.um.length || product.qty === 0 || !displayIngs.length" (click)="saveProdIng()" >
+        <ion-label slot="start" size="large" >{{editMode ? "Editează" : "Salvează"}}</ion-label>
+        <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+      </ion-button>
+    </ion-toolbar>
     <h3 class="ion-text-center subtitle"  *ngIf="toppings.length">Toppings</h3>
 
     <div class="content-container header"  *ngIf="toppings.length">

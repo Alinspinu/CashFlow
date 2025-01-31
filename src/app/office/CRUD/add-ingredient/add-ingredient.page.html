@@ -1,4 +1,104 @@
+
+
+
 <ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="deleteIng()">
+        <ion-icon src="../../../../assets/icon/trash-outline.svg" color="medium" size="large"></ion-icon>
+      </ion-button>
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon src="../../../../assets/icon/close-outline.svg" color="medium" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+
+
+    <ion-content [fullscreen]="true">
+      <ion-grid style="margin-top: 46px;">
+        <form [formGroup]="ingredientForm">
+        <ion-row>
+          <ion-col size="4">
+            <div class="section-label">
+              <span class="label-title">Salvează Datele</span>
+              <span class="label-sub-title">Completează / editează informațiile ingredientului.</span>
+            </div>
+          </ion-col>
+            <ion-col size="3.5">
+              <div class="input-wrapper">
+                <ion-input  mode="md" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
+                <ion-input  mode="md" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
+                <ion-input  mode="md" type="number" label="Preț fară TVA" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
+                <ion-input  mode="md" type="number" label="Cantitate Actuală" labelPlacement="floating" fill="outline" formControlName="qty" (keyup.enter)="saveIng()"></ion-input>
+                <ion-input  mode="md" type="number" label="Cantitate Inventar" labelPlacement="floating" fill="outline" formControlName="invQty"></ion-input>
+              </div>
+            </ion-col>
+
+              <ion-col size="4">
+                  <div class="input-wrapper">
+                    <div class="add-input">
+                      <ion-select label="Cotă TVA %" placeholder="%" formControlName="tva">
+                        <ion-select-option value="19">19%</ion-select-option>
+                        <ion-select-option value="9">9%</ion-select-option>
+                        <ion-select-option value="5">5%</ion-select-option>
+                        <ion-select-option value="0">0%</ion-select-option>
+                      </ion-select>
+                    </div>
+                   <div class="add-input">
+                     <ion-select mode="md" label="Gestiune" placeholder="Gestiune" formControlName="gest">
+                       <ion-select-option *ngFor="let ges of gest" [value]="ges._id">{{ges.name}}</ion-select-option>
+                 
+                     </ion-select>
+                     <ion-button  color="medium" fill="outline" (click)="addGestiune()" style="margin-left: 24px;">
+                      <ion-icon src="../../../../assets/icon/add-outline.svg"></ion-icon>
+                    </ion-button>
+                   </div>   
+
+                  <div class="add-input">
+                    <ion-select mode="md" label="Departament" placeholder="Departament" formControlName="dept" >
+                      <ion-select-option  *ngFor="let dep of deps" [value]="dep._id">{{dep.name}}</ion-select-option>
+                    </ion-select>
+                    <ion-button  color="medium" fill="outline" (click)="addDep()" style="margin-left: 24px;">
+                      <ion-icon src="../../../../assets/icon/add-outline.svg"></ion-icon>
+                    </ion-button>
+                  </div>
+
+                <div class="add-input">
+                  <ion-select mode="md" label="Punct de lucru" placeholder="Alege punctul de lucru" formControlName="salePoint">
+                    <ion-select-option *ngFor="let point of salePoints" [value]="point._id">{{point.name}}</ion-select-option>
+                  </ion-select>
+                  <ion-button  color="medium" fill="outline" (click)="addSailPoint()" style="margin-left: 24px;">
+                    <ion-icon src="../../../../assets/icon/add-outline.svg"></ion-icon>
+                  </ion-button>
+                </div>
+            </div>
+          
+          
+          </ion-col>
+        </ion-row>
+        </form>
+      </ion-grid>
+    </ion-content>
+
+
+
+    <ion-footer mode="ios" [translucent]="true" class="ion-no-border">
+      <ion-toolbar class="footer-toolbar">
+        <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large" [disabled]="!ingredientForm.valid" (click)="saveIng()" >
+          <ion-label slot="start" size="large" >{{editMode ? "Editează" : "Salvează"}}</ion-label>
+          <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+        </ion-button>
+      </ion-toolbar>
+    </ion-footer>
+
+
+
+<!-- <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
 
     <div class="title-wrapper">
@@ -86,4 +186,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-footer>
+</ion-footer> -->

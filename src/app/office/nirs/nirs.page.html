@@ -1,4 +1,114 @@
 
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+      <ion-title slot="start">Facturi</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="addNir()">
+          <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="openDateModal(true)">
+          <ion-icon size="large" src="../../../assets/icon/shedule.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  <ion-toolbar>
+    <div class="searchbar-wrapper">
+      <ion-searchbar  mode="md" [(ngModel)]="nirSearch"  placeholder="Caută document după furnizor..."  (ionInput)="searchNir($event)" #searchbar>
+      </ion-searchbar>
+      
+      <ion-button  (click)="selectSuplier()"  fill="outline" mode="md">
+        Alege furnizor
+      </ion-button>
+  
+      <ion-button (click)="paySelectedNirs()"  fill="outline" mode="md" [disabled]="selectedNirs.length < 2">
+        Plătește
+      </ion-button>
+  
+      <ion-button  (click)="mergeNir()" fill="outline" mode="md" [disabled]="selectedNirs.length < 2">
+        Unește
+      </ion-button>
+
+      <div class="total-wrapper" *ngIf="totalDue > 0">
+        <span class="tot"> {{totalDue}} Lei</span>
+      </div>
+    </div>
+
+  </ion-toolbar>
+  <ion-toolbar>
+    <div class="header">
+      <span class="id">
+        Nr
+      </span>
+      <span class="suplier" (click)="suplier()">
+        Furnizor
+        <ion-icon src="assets/icon/arrows-down.svg"  [color]="suplierColor"></ion-icon>
+      </span>
+      <span class="date" (click)="date()">
+        Dată
+        <ion-icon src="assets/icon/arrows-down.svg"  [color]="dateColor"></ion-icon>
+      </span>
+      <span class="total" (click)="total()">
+        Total
+        <ion-icon src="assets/icon/arrows-down.svg"  [color]="totalColor"></ion-icon>
+      </span>
+      <span class="doc">Nr. Document</span>
+      <span class="days" (click)="dueDays()">
+        Zile Întârziere
+        <ion-icon src="assets/icon/arrows-down.svg"  [color]="dueDaysColor"></ion-icon>
+      </span>
+      <span class="merge">Sel</span>
+      <span class="action">Action</span>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <div class="nir-container input"  *ngFor="let nir of nirs; let i = index" [ngClass]="{'selected': nir.selected}">
+    <span class="id">#{{i+1}}</span>
+    <span class="suplier">{{nir.suplier.name}}</span>
+    <span class="date">{{formatedDate(nir.documentDate)}}</span>
+    <span class="total">{{roundInHtml(nir.totalDoc)}} Lei</span>
+    <span class="doc">{{nir.nrDoc}}</span>
+    <div class="days">
+      <span class="label" [ngClass]="{'green': nir.payd, 'red': !nir.payd }" >{{ nir.payd ? 'Platit' : ' - ' + showDoDate(nir.documentDate) + ' Zile'}}</span>
+      <ion-button *ngIf="nir.payd" (click)="payNir(nir, i)" fill="clear" color="medium">
+        <ion-icon src="../../../assets/icon/success.svg"  color="success"></ion-icon>
+      </ion-button>
+      <ion-button class="payd" *ngIf="!nir.payd" (click)="payNir(nir, i)" fill="clear" color="medium">
+        <ion-icon src="../../../assets/icon/not.svg"  color="danger"></ion-icon>
+      </ion-button>
+    </div>
+    <ion-button class="merge" fill="clear" (click)="selectNir(nir)" color="medium">
+      <ion-icon  src="../../../assets/icon/hug.svg" ></ion-icon>
+    </ion-button>
+    <ion-button class="action" (click)="editNir(nir._id)" fill="clear"color="medium">
+      <ion-icon  src="../../assets/icon/eye-outline.svg"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
     <ion-grid>
@@ -17,9 +127,6 @@
               <div class="total-wrapper" *ngIf="totalDue > 0">
                 <span class="tot"> {{totalDue}} Lei</span>
               </div>
-              <!-- <ion-button  style="margin-left: 30px;" (click)="updateNirsBySulier()" color="medium" fill="outline" mode="ios">
-                Update
-              </ion-button> -->
               <ion-button  style="margin-left: 30px;" (click)="paySelectedNirs()" color="medium" fill="outline" mode="ios" [disabled]="selectedNirs.length < 2">
                 Plătește
               </ion-button>
@@ -120,4 +227,4 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-</ion-content>
+</ion-content> -->

@@ -1,43 +1,93 @@
 
 ion-content, ion-toolbar, ion-footer{
-  --background: var(--ion-color-tertiary) !important;
+  --background: var(--background-color) !important;
 }
 
 
  ion-title, span, ion-item, ion-input, ion-select{
-  font-family: NoirProReg !important;
+  font-family: RoseMed !important;
 }
 
-ion-button{
-  font-family: NoirProSemi !important;
-}
 
-.title-wrapper{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .title{
-    font-family: NoirProSemi !important;
-    text-align: center;
-    background-color: var(--ion-color-medium);
-    padding: 18px;
-    color: var(--ion-color-light);
-    font-size: 24px;
-    margin-top: 8px;
+// .footer-toolbar{
+//   padding: 24px 0 24px 0;
+//   margin-left: 48px;
+//   width: 92%;
+//   border-top: 1.2px solid var(--grey);
+// }
+
+
+.header-toolbar{
+  padding: 24px 0 12px 0;
+  margin-left: 48px;
+  width: 92%;
+  border-bottom: 1.2px solid var(--grey);
+  ion-title{
+    font-size: 36px;
+  }
+  ion-buttons{
+    ion-button{
+      --padding-bottom: 14px;
+      --padding-end: 14px;
+      --padding-top: 14px;
+      --padding-start: 14px;
+      --border-radius: 50%;
+      --border-width: 1px;
+      margin-right: 12px;
+    }
   }
 }
 
-.input{
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: var(--ion-color-light);
-  padding-left: 24px;
-  margin: 1rem 0 0.5rem 0.5rem;
-  font-family: NoirProReg !important;
-  display: flex;
+
+.header-buttons{
+  --border-width: 1px !important;
+  margin: 0 24px !important;
 }
+
+.footer-button{
+  margin: 12px 24px !important;
+}
+
+.section-label{
+  padding: 24px 0 0 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .label-title{
+    font-size: 24px;
+  }
+  .label-sub-title{
+    font-size: 14px;
+    color: var(--grey)
+  }
+}
+
+.input-wrapper{
+  ion-input{
+    margin-top: 12.5px;
+    height: 70px;
+    --border-width: 1.5px;
+  }
+}
+
+.add-input{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid var(--grey);
+  border-radius: 4px;
+  margin-top: 12px;
+  padding: 12px;
+  ion-button{
+    --border-width: 1px;
+  }
+}
+
+.add-input:hover{
+  border-color: var(--ion-color-medium) !important;
+}
+
+
 
 

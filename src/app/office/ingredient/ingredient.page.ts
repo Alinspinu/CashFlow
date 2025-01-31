@@ -11,9 +11,8 @@ import { ProductIngredientPage } from '../CRUD/product-ingredient/product-ingred
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
-import { Router } from '@angular/router';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
-import { InvIngredient } from 'src/app/models/nir.model';
+import { Dep, Gestiune, InvIngredient } from 'src/app/models/nir.model';
 import { Subscription, take } from 'rxjs';
 import { AddToInventaryPage } from 'src/app/modals/add-to-inventary/add-to-inventary.page';
 import { IngredientContentPage } from './ingredient-content/ingredient-content.page';
@@ -35,6 +34,9 @@ export class IngredientPage implements OnInit, OnDestroy {
   inventaryDate!: string
   ingPage: boolean = true
 
+  deps: Dep[] = []
+  gest: Gestiune[] = []
+
   topToEdit!: any;
   ingsToEdit!: any;
   user!: User
@@ -49,9 +51,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   dep: string = ""
   toppings!: any;
   productIngredients!: any;
-  gestiuni: string[] = ["bar", "bucatarie", "magazie"]
   ingTypes: string[] = ["simplu", "compus"]
-  ingDep: string[] = ["materie", "marfa", "consumabil", "servicii", "ob-inventar", "amenajari", "combustibil", "utilitati", "chirie", 'marketing']
   isLoading: boolean = true
 
   filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
@@ -60,7 +60,6 @@ export class IngredientPage implements OnInit, OnDestroy {
   constructor(
     private toastCtrl: ToastController,
     private ingSrv: IngredientService,
-    private router: Router,
     @Inject(ActionSheetService) private actionSh: ActionSheetService
   ) {
     this.screenWidth = window.innerWidth
@@ -73,6 +72,8 @@ export class IngredientPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getUser()
+    this.getDeps()
+    this.getGest()
   }
 
   ngOnDestroy(): void {
@@ -179,12 +180,18 @@ export class IngredientPage implements OnInit, OnDestroy {
 
   filterIngredients(){
     if(this.filter.dep !== ''){
-      const ings = this.ingredients.filter((ing: any) => ing.dep === this.filter.dep)
+      const ings = this.ingredients.filter((ing: any) => {
+        if(ing.dept){
+         return ing.dept._id === this.filter.dep
+        } else{
+          console.log('NO DEP INGREDIENT******', ing.name)
+          return ing
+        }
+      })
       this.ingredients = [...ings]
-      console.log(this.ingredients)
     }
     if(this.filter.gestiune !== ''){
-      const ings = this.ingredients.filter((ing: any) => ing.gestiune === this.filter.gestiune)
+      const ings = this.ingredients.filter((ing: any) => ing.gest._id === this.filter.gestiune)
       this.ingredients = [...ings]
     }
     if(this.filter.type === 'compus'){
@@ -221,12 +228,12 @@ updateProductIng(){
 
  async ingEdit(ing: any){
   if(ing.ings.length){
-    const message = await this.actionSh.openModal(ProductIngredientPage, ing, false)
+    const message = await this.actionSh.openAdd(ProductIngredientPage, ing, 'add-modal')
     if(message === 'done'){
       // this.getIngredients()
     }
   } else {
-    const ingToEdit = await this.actionSh.openPayment(AddIngredientPage, ing)
+    const ingToEdit = await this.actionSh.openAdd(AddIngredientPage, ing, 'add-modal')
     if(ingToEdit){
       this.ingSrv.editIngredient(ing._id, ingToEdit).subscribe(response => {
         if(response){
@@ -295,6 +302,32 @@ updateProductIng(){
       total += ingCoppy.qty * (ingCoppy.ing.price + (ingCoppy.ing.price * ingCoppy.ing.tva / 100))
     })
     return round(total)
+  }
+
+
+
+  getDeps(){
+    this.ingSrv.getDep().subscribe({
+      next: (response) => {
+        this.deps = response
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  
+  }
+  
+  
+  getGest(){
+    this.ingSrv.getGestiune().subscribe({
+      next: (response) => {
+        this.gest = response
+      }, 
+      error: (error) => {
+        console.log(error)
+      }
+    })
   }
 
 

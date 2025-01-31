@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -15,7 +15,7 @@ import User from 'src/app/auth/user.model';
 import { getMaincat, mainCat } from './products.engine';
 import { ProductPage } from '../CRUD/product/product.page';
 import { CategoriesPage } from './categories/categories.page';
-import { map, tap } from 'rxjs';
+import { map, Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -24,7 +24,7 @@ import { map, tap } from 'rxjs';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule, FormsModule, CapitalizePipe, CategoriesPage]
 })
-export class ProductsPage implements OnInit, OnChanges {
+export class ProductsPage implements OnInit, OnChanges, OnDestroy {
 
   productSearch: string = ''
   productIngSearch: string = ''
@@ -39,6 +39,8 @@ export class ProductsPage implements OnInit, OnChanges {
   dbProducts: Product[] = []
 
   isLoading: boolean = true
+
+  productSub!: Subscription
 
  @Input() isDarkMode: boolean = false
 
@@ -68,6 +70,11 @@ export class ProductsPage implements OnInit, OnChanges {
     }
   }
 
+  ngOnDestroy(): void {
+    if(this.productSub){
+      this.productSub.unsubscribe()
+    }
+  }
 
 
 
@@ -204,16 +211,17 @@ searchIngProduct(ev: any){
   }
 
     getProducts(){
-      this.productsSrv.productsSend$.pipe(
+      this.productSub = this.productsSrv.productsSend$.pipe(
         map((value, index) => ({ value, index })),
         tap(({value, index}) => {
-          if(index === 1){
+          if(index === 0){
             this.dbProducts = value.filter(p => p.category)
             this.products = this.dbProducts
             this.mainCats = getMaincat(this.products, this.isDarkMode)
             this.activateMainCat()
           }
-          if(index > 1) {
+          if(index > 0) {
+           
             this.dbProducts = value.filter(p => p.category)
             this.products = this.dbProducts
             this.updateProductsBySelectedCategory()

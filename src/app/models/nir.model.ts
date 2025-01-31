@@ -102,7 +102,7 @@ export class NirIngredient {
 
 export class InvIngredient {
   constructor(
-    public _id: string,
+   
     public name: string,
     public price: number,
     public um: string,
@@ -110,12 +110,14 @@ export class InvIngredient {
     public tvaPrice: number,
     public tva: number,
     public dep: string,
+    public dept: Dep,
+    public gest: Gestiune,
     public gestiune: string,
     public locatie: string,
-    public ings: InvIngredient[],
+    public ings: {qty: number, ing: InvIngredient}[],
     public productIngredient: boolean,
     public sellPrice: number,
-    public salePoint: SalePoint,
+    public salePoint:string,
     public inventary: {
       index: number,
       day: string,
@@ -142,7 +144,8 @@ export class InvIngredient {
         name: string,
         details: string,
       }
-    }[]
+    }[],
+    public _id: string,
   ){}
 }
 
@@ -158,4 +161,23 @@ export class ImpSheet{
 }
 
 
+
+export class Gestiune{
+  constructor(
+    public locatie: string,
+    public salePoint: string | undefined,
+    public name: string,
+    public _id?: string,
+  ){}
+}
+
+
+export class Dep{
+  constructor(
+    public locatie: string,
+    public salePoint: string | undefined,
+    public name: string,
+    public _id?: string,
+  ){}
+}
 

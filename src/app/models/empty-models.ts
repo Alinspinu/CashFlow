@@ -2,7 +2,7 @@
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 import { Category, Product, SubProduct } from "./category.model";
-import { InvIngredient, Nir, NirIngredient } from './nir.model';
+import { Dep, Gestiune, InvIngredient, Nir, NirIngredient } from './nir.model';
 import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
 import { Inventary, line, productionReport } from "./inventary.model";
@@ -310,29 +310,6 @@ export function emptyCategory(){
 }
 
 
-export function emptyIng(){
-  const emptyIng: InvIngredient = {
-   _id: '',
-   name: '',
-   price: 0,
-   um: '',
-   qty: 0,
-   tvaPrice: 0,
-   eFactura: [],
-   sellPrice: 0,
-   tva: 0,
-   dep: '',
-   gestiune: '',
-   locatie: '',
-   ings: [],
-   salePoint: emptySalePoint(),
-   productIngredient: false,
-   inventary: [],
-   uploadLog: [],
-   unloadLog: []
-  }
-  return emptyIng
-}
 
 
 export function emptyNirIng(){
@@ -428,6 +405,33 @@ export function emptyReportUsers(){
   return users
 }
 
+export function emptyIng(){
+  const emptyIng: InvIngredient = {
+   _id: '',
+   name: '',
+   price: 0,
+   um: '',
+   qty: 0,
+   tvaPrice: 0,
+   eFactura: [],
+   sellPrice: 0,
+   tva: 0,
+   dep: '',
+   dept: emptyDep(),
+   gest: emptyGest(),
+   gestiune: '',
+   locatie: environment.LOC,
+   ings: [],
+   salePoint: environment.POINT,
+   productIngredient: false,
+   inventary: [],
+   uploadLog: [],
+   unloadLog: []
+  }
+  return emptyIng
+}
+
+
 export function emptySalePoint(){
   const point: SalePoint = {
     name: '',
@@ -435,6 +439,24 @@ export function emptySalePoint(){
     locatie: environment.LOC
   }
   return point
+}
+
+
+export function emptyGest(){
+  const gest: Gestiune = {
+    name: '',
+    locatie: environment.LOC,
+    salePoint: '',
+  }
+  return  gest
+}
+export function emptyDep(){
+  const dep: Dep = {
+    name: '',
+    locatie: environment.LOC,
+    salePoint: '',
+  }
+  return dep
 }
 
 

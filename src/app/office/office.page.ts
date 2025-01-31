@@ -40,9 +40,9 @@ export class OfficePage implements OnInit, OnDestroy {
 
   public appPages = [
     {name: 'Produse', icon: '../../assets/icon/fast-food-outline.svg', show: false},
-    {name: 'Materii Prime', icon: '../../assets/icon/plant.svg', show: true},
+    {name: 'Materii Prime', icon: '../../assets/icon/plant.svg', show: false},
     {name: 'Deprecieri', icon: '../../assets/icon/tools.svg', show: false},
-    {name: 'Nir', icon: '../../assets/icon/document.svg', show: false},
+    {name: 'Nir', icon: '../../assets/icon/document.svg', show: true},
     {name: 'E-Factura', icon: '../../assets/icon/cloud-outline.svg', show: false},
     {name: 'Registru de Casă', icon: '../../assets/icon/business.svg', show: false},
     {name: 'Utilizatori', icon: '../../assets/icon/man.svg', show: false},
@@ -63,8 +63,8 @@ export class OfficePage implements OnInit, OnDestroy {
     this.getThemeStatus()
     this.menuChange()
     this.getUser()
+    this.productsSrv.getProducts().subscribe()
     this.nirsSrv.getNirs().subscribe()
-    this.productSub =  this.productsSrv.getProducts().subscribe()
     this.ingSub = this.ingSrv.getAllIngredients().subscribe()
     this.userSrv.getUsers().subscribe()
 

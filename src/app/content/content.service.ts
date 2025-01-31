@@ -7,6 +7,7 @@ import { AuthService } from "../auth/auth.service";
 import User from "../auth/user.model";
 import {Category} from "../models/category.model"
 import { emptyCategory } from "../models/empty-models";
+import { IndexDbService } from "../shared/indexDb.service";
 
 
 @Injectable({providedIn: 'root'})
@@ -22,7 +23,7 @@ export class ContentService{
   category: Category[] = [emptyCategory()];
 
 
-  constructor(private http: HttpClient, private authSrv: AuthService){
+  constructor(private http: HttpClient, private dbService: IndexDbService){
     this.categoryState = new BehaviorSubject<Category[]>([emptyCategory()]);
     this.categorySend$ =  this.categoryState.asObservable();
   }
@@ -30,17 +31,18 @@ export class ContentService{
 
 
     getData(locatie: string){
-      Preferences.get({key: 'categories'}).then(data => {
-        if(data.value){
-          const cats = JSON.parse(data.value)
-          this.category = cats
+      this.dbService.getData('data', 3).subscribe((data: any) => {
+        if(data){
+          this.category = [...JSON.parse(data.ings)]
           this.categoryState.next([...this.category])
         }
       })
       return this.http.get<Category[]>(`${environment.BASE_URL}cat/get-cats?loc=${locatie}`).pipe(take(1), tap(res => {
         this.category = this.sortData(res)
         this.categoryState.next([...this.category]);
-        Preferences.set({key: 'categories', value: JSON.stringify(this.category)})
+        const stringCats = JSON.stringify(this.category)
+        this.dbService.addOrUpdateIngredient({id: 3, ings: stringCats}).subscribe()
+        // Preferences.set({key: 'categories', value: JSON.stringify(this.category)})
       }));
     }
 
@@ -51,6 +53,8 @@ export class ContentService{
           category.product.forEach(el => el.discount = cat.precent)
         }
       })
+      const stringCats = JSON.stringify(this.category)
+      this.dbService.addOrUpdateIngredient({id: 3, ings: stringCats}).subscribe()
       this.categoryState.next([...this.category])
     }
 
@@ -62,6 +66,8 @@ export class ContentService{
             prod.discount = product.precent
         })
       })
+      const stringCats = JSON.stringify(this.category)
+      this.dbService.addOrUpdateIngredient({id: 3, ings: stringCats}).subscribe()
       this.categoryState.next([...this.category])
     }
 
@@ -104,6 +110,8 @@ export class ContentService{
           prod.ings[0].ing.qty -= qty
           this.categoryState.next([...this.category])
         }
+        const stringCats = JSON.stringify(this.category)
+        this.dbService.addOrUpdateIngredient({id: 3, ings: stringCats}).subscribe()
       }
     }
 
@@ -114,17 +122,20 @@ export class ContentService{
         if(response){
           const catIndex = this.category.findIndex(cat => cat._id === response.category._id)
           this.category[catIndex] = response.category
+          const stringCats = JSON.stringify(this.category)
+          this.dbService.addOrUpdateIngredient({id: 3, ings: stringCats}).subscribe()
           this.categoryState.next([...this.category])
         }
       }))
   }
 
   saveCategory(category: any) {
-    console.log(category) 
     return this.http.post<{message: string, cat: Category }>(`${environment.BASE_URL}cat/cat-add?loc=${environment.LOC}`, {category: category})
           .pipe(tap(response => {
             console.log(response)
             this.category.push(response.cat)
+            const stringCats = JSON.stringify(this.category)
+            this.dbService.addOrUpdateIngredient({id: 3, ings: stringCats}).subscribe()
             this.categoryState.next([...this.category])
           }))
   }

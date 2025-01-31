@@ -16,6 +16,7 @@ import { SelectDataPage } from 'src/app/modals/select-data/select-data.page';
 import { RecordPage } from './record/record.page';
 import { calcTotalDocs, mergeNirs } from './nirs.engine';
 import { Preferences } from '@capacitor/preferences';
+import { NirPage } from '../CRUD/nir/nir.page';
 
 @Component({
   selector: 'app-nirs',
@@ -313,8 +314,13 @@ searchNir(ev: any){
   }
 
   editNir(id: string){
-    this.router.navigateByUrl(`/nir/${id}`)
+    this.actionSheetService.openAdd(NirPage, id, 'add-modal')
   }
+
+  addNir(){
+    this.actionSheetService.openAdd(NirPage, 'new', 'add-modal')
+  }
+
 
   async deleteNir(id: string, index: number){
     const result = await this.actionSheetService.deleteAlert('Esti sigur că vrei să ștergi documentul?', "ȘTERGE NIR")
@@ -337,17 +343,8 @@ searchNir(ev: any){
   }
 
 
-  printNir(id: string) {
-    this.nirSrv.printNir(id).subscribe(response => {
-      const blob = new Blob([response], { type: 'application/pdf' });
-      const pdfUrl = URL.createObjectURL(blob);
-      window.open(pdfUrl, '_blank');
-    })
-  }
 
-  addNir(){
-    this.router.navigateByUrl('/nir/new')
-  }
+
 
   formatedDate(date: string){
     return formatedDateToShow(date).split('ora')[0]

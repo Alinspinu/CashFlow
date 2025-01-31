@@ -1,16 +1,19 @@
-import { Component, Inject, OnInit} from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { AddIngPage } from './add-ing/add-ing.page';
-import { AddNirPage } from './add-nir/add-nir.page';
+import { Component, Inject, OnInit, ViewChild} from '@angular/core';
+import { IonContent, IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Nir } from 'src/app/models/nir.model';
 import { Suplier } from 'src/app/models/suplier.model';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { formatedDateToShow } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, round } from 'src/app/shared/utils/functions';
 import { NirsService } from '../../nirs/nirs.service';
 import { SelectDataPage } from 'src/app/modals/select-data/select-data.page';
+import { NirService } from './nir.service';
+import { Preferences } from '@capacitor/preferences';
+import { emptyNir } from 'src/app/models/empty-models';
+import { showToast } from 'src/app/shared/utils/toast-controller';
+import { AddIngPage } from './add-ing/add-ing.page';
 
 
 @Component({
@@ -18,29 +21,58 @@ import { SelectDataPage } from 'src/app/modals/select-data/select-data.page';
   templateUrl: './nir.page.html',
   styleUrls: ['./nir.page.scss'],
   standalone: true,
-  imports: [IonicModule, AddIngPage, AddNirPage, CommonModule, ReactiveFormsModule,]
+  imports: [IonicModule, CommonModule, ReactiveFormsModule]
 })
 export class NirPage implements OnInit {
+  @ViewChild(IonContent, { static: false }) content: IonContent | undefined;
+  isHidden = false;
+  lastScrollTop = 0;
 
   nirForm!: FormGroup
-  nir!: Nir
+  nir: Nir = emptyNir()
   suplier!: Suplier
+
+
+  nirId!: string
+  nirIds: string[] = []
 
   supliers: Suplier[] = []
   supliersToSend: string[] = []
 
   editMode: boolean = false
+  mergeMode: boolean = false
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
-    private nirService: NirsService,
+    private nirsService: NirsService,
+    private nirService: NirService,
+     private navParams: NavParams,
+     private modalCtrl: ModalController,
+     private toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
     this.setupNirForm()
     this.getSupliers()
+    this.getNirToEdit()
   }
 
+
+
+
+  onScroll(event: any) {
+    let scrollTop = event.detail.scrollTop;
+    if (scrollTop === 0) {
+      this.isHidden = false;
+    } else {
+      this.isHidden = true;
+    }
+  }
+
+
+  async addIng(){
+    const ing = await this.actionSheet.openAdd(AddIngPage, '', 'add-modal')
+  }
 
 
 
@@ -134,7 +166,7 @@ setupNirForm(){
 
    
   getSupliers(){
-    this.nirService.getSuplier('').subscribe(response => {
+    this.nirsService.getSuplier('').subscribe(response => {
       if(response){
         this.supliers = response.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         this.supliers.forEach(suplier => {
@@ -143,6 +175,157 @@ setupNirForm(){
       }
     })
   }
+
+  deleteEntry(index: number){
+    if(this.nir.ingredients.length){
+    this.nirService.redNirIng(index)
+  }
+}
+
+
+async getNirToEdit(){
+    const id = this.navParams.get('options')
+    console.log(id)
+      if(id && id !== "new" && id !== 'merged' && id !== 'eFactura') {
+        // this.isLoading = true
+        this.nirService.getNir(id).subscribe(response => {
+          if(response) {
+            this.nir = response.nir
+            // this.updateLogId()
+            this.editMode = true
+            // this.isLoading = false
+            this.nirService.setNir(this.nir)
+            this.nirId = id
+            this.suplier = this.nir.suplier
+            this.nirForm.get('document')?.setValue(this.nir.document)
+            this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
+            this.nirForm.get('docDate')?.setValue(this.nir.documentDate.split('T')[0])
+            this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate.split('T')[0])
+            this.nirForm.get('suplier')?.setValue(this.nir.suplier.name)
+            this.nirForm.get('cif')?.setValue(this.nir.suplier.vatNumber)
+          }
+        })
+      }
+      if(id && id === 'merged'){
+        const nir = await Preferences.get({key: 'nir'})
+        const nirId = await Preferences.get({key: 'nirIds'})
+        if(nirId && nirId.value){
+          this.nirIds = JSON.parse(nirId.value)
+          this.mergeMode = true
+        }
+        if(nir && nir.value){
+          const parsedNir = JSON.parse(nir.value) as Nir
+          this.nir = parsedNir
+          // this.updateLogId()
+          // this.isLoading = false
+          this.nirService.setNir(this.nir)
+          this.nirId = id
+          this.suplier = this.nir.suplier
+          this.nirForm.get('docDate')?.setValue(this.nir.documentDate.split('T')[0])
+          this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate.split('T')[0])
+          this.nirForm.get('document')?.setValue(this.nir.document)
+          this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
+          this.nirForm.get('suplier')?.setValue(this.nir.suplier.name)
+          this.nirForm.get('cif')?.setValue(this.nir.suplier.vatNumber)
+        }
+      }
+
+      if(id && id === 'eFactura'){
+        const nir = await Preferences.get({key: 'nir'})
+        if(nir && nir.value){
+          const parsedNir = JSON.parse(nir.value) as Nir
+          const eFacturaNirTotal = parsedNir.totalDoc
+          this.nir = parsedNir
+          this.nirService.setNir(this.nir)
+          this.nirService.clacTotals()
+          const diference = round(this.nir.totalDoc - eFacturaNirTotal)
+          if(diference > 1){
+            const tva = this.nir.ingredients[0].tva
+            const discountData ={
+              type: 'val',
+              tva,
+              val: round(diference / (1 + (tva / 100)))
+            }
+            this.nirService.calcDiscount(discountData)
+          }
+          this.suplier = this.nir.suplier
+          this.nirForm.get('docDate')?.setValue(this.nir.documentDate.split('T')[0])
+          this.nirForm.get('receptionDate')?.setValue(this.nir.receptionDate.split('T')[0])
+          this.nirForm.get('nrDoc')?.setValue(this.nir.nrDoc)
+          this.nirForm.get('document')?.setValue(this.nir.document)
+          this.nirForm.get('suplier')?.setValue(this.nir.suplier.name)
+          this.nirForm.get('cif')?.setValue(this.nir.suplier.vatNumber)
+        }
+      }
+      if(id === 'new'){
+        this.nirService.setNir(emptyNir())
+      }
+   }
+
+     saveNir(){
+       if(this.nirForm.valid){
+         if(this.editMode) {
+           this.nirsService.deleteNir(this.nirId).subscribe(response => {
+             if(response && response.message){
+               this.nir.documentDate = this.nirForm.value.docDate;
+               this.nir.receptionDate = this.nirForm.value.receptionDate;
+               this.nir.nrDoc = this.nirForm.value.nrDoc
+               this.nir.suplier._id = this.suplier._id
+               this.nir.document = this.nirForm.value.document
+               this.nirsService.saveNir(this.nir).subscribe(response => {
+                 this.nirService.setNir(emptyNir())
+                 showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
+                this.close()
+               })
+             }
+           })
+         } else {
+           if(this.mergeMode){
+             this.nirsService.deleteNirs(this.nirIds).subscribe({
+               next: (response) => {
+                 this.nir.documentDate = this.nirForm.value.docDate;
+                 this.nir.receptionDate = this.nirForm.value.receptionDate;
+                 this.nir.nrDoc = this.nirForm.value.nrDoc
+                 this.nir.suplier._id = this.suplier._id
+                 this.nir.document = this.nirForm.value.document
+                 this.nirsService.saveNir(this.nir).subscribe(response=> {
+                   this.nirService.setNir(emptyNir())
+                   showToast(this.toastCtrl, response.message, 2000)
+                   this.close()
+                 })
+               },
+               error: (error) => {
+                 console.log(error)
+                 showToast(this.toastCtrl, error.message, 4000)
+               }
+             })
+           } else {
+             this.nir.documentDate = this.nirForm.value.docDate;
+             this.nir.receptionDate = this.nirForm.value.receptionDate;
+             this.nir.nrDoc = this.nirForm.value.nrDoc
+             this.nir.suplier._id = this.suplier._id
+             this.nir.document = this.nirForm.value.document
+             this.nirsService.saveNir(this.nir).subscribe(response=> {
+               this.nirService.setNir(emptyNir())
+               showToast(this.toastCtrl, response.message, 2000)
+               this.close()
+             })
+           }
+         }
+       }
+     }
+
+    close(){
+    this.modalCtrl.dismiss(null)
+    }
+
+    printNir() {
+      this.nirsService.printNir(this.nir._id).subscribe(response => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const pdfUrl = URL.createObjectURL(blob);
+        window.open(pdfUrl, '_blank');
+      })
+    }
 
 
 }

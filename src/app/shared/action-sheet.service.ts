@@ -48,6 +48,7 @@ import { NirsModalPage } from '../office/e-factura/nirs-modal/nirs-modal.page';
 import { AddPointModalPage } from '../office/sale-point/add-point-modal/add-point-modal.page';
 import { ProductPage } from '../office/CRUD/product/product.page';
 import { NirPage } from '../office/CRUD/nir/nir.page';
+import { AddIngPage } from '../office/CRUD/nir/add-ing/add-ing.page';
 
 
 
@@ -210,6 +211,7 @@ export class ActionSheetService {
   async openAdd(
     component: typeof ProductPage | 
                typeof SubProductPage | 
+               typeof AddIngPage | 
                typeof AddIngredientPage | 
                typeof ProductIngredientPage | 
                typeof NirPage,

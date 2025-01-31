@@ -302,11 +302,11 @@ body ion-alert.deleteAlert{
   }
 
 .add-modal{
-  --width: 98%;
-  --height: 98vh;
   --min-heigth: none;
   --max-width: none;
   --min-width: none;
+  --width: 98%;
+  --height: 98% !important;
 }
 
   .billModal{

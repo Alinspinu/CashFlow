@@ -3,19 +3,19 @@
 
 
 <ion-header class="ion-no-border">
-    <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-toolbar class="ion-no-border header-toolbar" [ngClass]="{ 'hidden-header': isHidden }">
         <ion-title slot="start">{{suplier ? suplier.name : 'Adaugă Document'}}</ion-title>
         <ion-buttons slot="end">
-          <ion-button fill="outline" >
+          <ion-button fill="outline"  class="round" (click)="printNir()" [disabled]="nir._id.length < 12">
             <ion-icon size="large" src="../../../assets/icon/print-outline.svg"></ion-icon>
           </ion-button>
-          <ion-button fill="outline">
-            <ion-icon size="large" src="../../../assets/icon/document.svg"></ion-icon>
+          <ion-button fill="outline" (click)="close()" class="round">
+            <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
-      <ion-toolbar>
-        <section class="section">
+      <ion-toolbar [ngClass]="{ 'hidden-header': isHidden }">
+        <section class="section" >
             <ion-row>
               <ion-col size="4">
                 <div class="section-label">
@@ -61,30 +61,32 @@
             </ion-row>
           </section>
       </ion-toolbar>
-      <ion-toolbar class="ion-no-border second-toolbar">
+      <ion-toolbar class="ion-no-border second-toolbar" >
         <div class="section-label">
             <span class="label-title">Produse</span>
             <span class="label-sub-title">Adaugă produsele / serviciile documentului.</span>
           </div>
         <ion-buttons slot="end">
-          <ion-button fill="outline" >
-            <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>
+          <ion-button fill="outline" class="round" (click)="addIng()">
+            <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
           </ion-button>
+       
         </ion-buttons>
       </ion-toolbar>
       <ion-toolbar class="ion-no-border ion-no-padding three-toolbar">
         <div class="content-container head">
-            <span class="header name-h">Nume</span>
+            <span class="header id">Nr.</span>
+            <span class="header name">Nume</span>
             <span class="header um">UM</span>
             <span class="header cant">Cant</span>
             <span class="header p-um">Preț/Um</span>
             <span class="header val">Valoare</span>
-            <span class="header tva">Cota TVA</span>
+            <span class="header tva">TVA</span>
             <span class="header val-tva">Valoare TVA</span>
             <span class="header tot">Total</span>
             <span class="header dep">Departament</span>
             <span class="header gst">Gestiune</span>
-            <span class="header p-v">Preț Vanzare</span>
+            <span class="header p-v">Vanzare</span>
             <ion-icon color="danger" size="lage"></ion-icon>
           </div>
       </ion-toolbar>
@@ -92,9 +94,46 @@
 
 
 
-<ion-content [fullscreen]="true">
-    
+<ion-content   (ionScroll)="onScroll($event)" [scrollEvents]="true" [ngClass]="{ 'expanded': isHidden }">
+    <div *ngFor="let ing of nir.ingredients; let i = index;">
+        <div  class="content-container input">
+          <span class="content id">#{{i+1}}</span>
+          <span class="content name">{{ing.name}}</span>
+          <span class="content um">{{ing.um}}</span>
+          <span class="content cant">{{ing.qty}}</span>
+          <span class="content p-um">{{ing.price}} Lei</span>
+          <span class="content val">{{ing.value}} Lei</span>
+          <span class="content tva">{{ing.tva}}%</span>
+          <span class="content val-tva">{{ing.tvaValue}} Lei</span>
+          <span class="content tot">{{ing.total}} Lei</span>
+          <span class="content dep">{{ing.dep}}</span>
+          <span class="content gst">{{ing.gestiune}}</span>
+          <span class="content p-v">{{ing.sellPrice}} Lei</span>
+          <ion-icon color="medium" size="lage" src="../../../assets/icon/trash-outline.svg" (click)="deleteEntry(i)" style="cursor:pointer;"></ion-icon>
+        </div>
+      </div>
 </ion-content>
+
+<ion-footer>
+      <div class="footer-container">
+        <div>
+            <span class="label">Fără TVA</span>
+            <span class="value">{{nir.val}} Lei</span>
+        </div>
+        <div>
+            <span class="label">TVA</span>
+            <span class="value">{{nir.valTva}} Lei</span>
+        </div>
+        <div>
+            <span class="label">TOTAL</span>
+            <span class="value">{{nir.totalDoc}} Lei</span>
+        </div>
+        <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium"  [disabled]="!nirForm.valid" (click)="saveNir()" >
+            <ion-label slot="start" size="large" >{{editMode ? "Editează" : "Salvează"}}</ion-label>
+            <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+          </ion-button>
+      </div>
+</ion-footer>
 
 
 

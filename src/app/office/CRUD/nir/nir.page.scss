@@ -1,16 +1,17 @@
 
 
-ion-content, ion-toolbar, ion-header{
+ion-content, ion-toolbar, ion-header, ion-footer{
   --background: var(--background-color) !important;
   background-color:  var(--background-color) !important;
 }
-ion-select, span, ion-title, ion-button, ion-input{
+ion-select, head, .section-label, ion-title, ion-button, ion-input{
   font-family: RoseMed !important;
 }
 
 ion-select{
   --border-width: 1.5px;
 }
+
 
 
 
@@ -23,7 +24,7 @@ ion-select{
     font-size: 36px;
   }
   ion-buttons{
-    ion-button{
+    .round{
       --padding-bottom: 14px;
       --padding-end: 14px;
       --padding-top: 14px;
@@ -34,6 +35,9 @@ ion-select{
     }
   }
 }
+
+
+
 .second-toolbar, .three-toolbar{
   margin-left: 36px !important;
   width: 94% !important;
@@ -98,30 +102,95 @@ ion-select{
 }
 
 
+.hidden-header {
+  display: none !important;
+}
+
+
 .header{
-  text-align: left;
   font-size: 15px;
 }
-.name-h{
-  padding-left: 18px;
-  flex: 14% !important;
+
+
+.input{
+  margin-left: 36px !important;
+  width: 95% !important;
+  border-bottom: 1.2px solid var(--grey);
+  font-family: RoseLight !important;
 }
-
-
 
 .content-container{
   display: flex;
   align-items: center;
-  border-radius: 8px;
-    span{
-      flex: 5%;
+  padding: 8px 0;
+    .id{
+      flex: 3%;
     }
     .name{
-      flex: 14% !important;
+      padding-left: 18px;
+      flex: 20%;
     }
+    .um{
+      flex: 6%;
+    }
+    .cant{
+      flex: 6%;
+    }
+    .p-um{
+      flex: 7%;
+    }
+    .val{
+      flex: 8%;
+    }
+    .tva{
+      flex: 5%
+    }
+    .val-tva{
+      flex: 8%
+    }
+    .tot{
+      flex: 8%;
+    }
+    .dep{
+        flex: 10%;
+    }
+    .gst{
+      flex: 9%;
+    }
+    .p-v{
+      flex: 5%
+    }
+    ion-icon{
+      flex: 5%;
+    }
+
+}
+
+.footer-container{
+  display: flex;
+  align-items: baseline;
+  justify-content: end;
+  font-family: RoseReg !important;
+  padding: 12px 0;
+  div{
+   display: flex;
+   align-items: baseline;
+   width: 250px;
+   .label{
+    margin-right: 8px;
+    font-size: 16px;
+   }
+   .value{
+    font-size: 22px;
+   }
+  }
+  .footer-button{
+    margin: 12px 24px !important;
+  }
 }
 
 .head{
+  font-family: RoseReg !important;
   margin: 24px 0 12px 0;
 }
 

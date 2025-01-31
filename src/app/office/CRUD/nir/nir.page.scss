@@ -1,15 +1,127 @@
 
-.wrapper{
-  display: flex;
-  .add-wrapper{
-    flex: 30%;
-    height: 83.6vh;
+
+ion-content, ion-toolbar, ion-header{
+  --background: var(--background-color) !important;
+  background-color:  var(--background-color) !important;
+}
+ion-select, span, ion-title, ion-button, ion-input{
+  font-family: RoseMed !important;
+}
+
+ion-select{
+  --border-width: 1.5px;
+}
+
+
+
+.header-toolbar, .second-toolbar{
+  padding: 24px 0 12px 0;
+  margin-left: 48px;
+  width: 92%;
+  border-bottom: 1.2px solid var(--grey);
+  ion-title{
+    font-size: 36px;
   }
-  .nir-wrapper{
-    flex: 70%;
-    height: 51.5vh;
-    // height: 100%;
+  ion-buttons{
+    ion-button{
+      --padding-bottom: 14px;
+      --padding-end: 14px;
+      --padding-top: 14px;
+      --padding-start: 14px;
+      --border-radius: 50%;
+      --border-width: 1px;
+      margin-right: 12px;
+    }
+  }
+}
+.second-toolbar, .three-toolbar{
+  margin-left: 36px !important;
+  width: 94% !important;
+  border-bottom: 1.2px solid var(--grey);
+}
+
+.section-label{
+  padding-top: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .label-title{
+    font-size: 24px;
+  }
+  .label-sub-title{
+    font-size: 14px;
+    color: var(--grey)
   }
 }
 
+.section{
+  margin: 0 56px 0 36px;
+  padding: 12px 0 24px 0;
+  border-bottom: solid 1px var(--grey);
+
+  .all-wrapper{
+    display: flex;
+    ion-button{
+      --border-width: 2px;
+      --border-style: dashed;
+      ion-icon{
+        font-size: 36px;
+      }
+    }
+    .wrapper{
+      padding: 4px 0;
+      display: flex;
+      flex-direction: column;
+      margin-left: 8px;
+      .suplier-wrapper, .date-wrapper{
+        display: flex;
+        align-items: center;
+        ion-input{
+          margin-right: 8px;
+          --border-width: 1.5px;
+        }
+      }
+      .date-wrapper{
+        width: 100%;
+        margin-bottom: 8px;
+        div{
+          margin-right: 8px;
+          flex: 33%;
+        } 
+        ion-input{
+          flex: 33%;
+        }
+      }
+    }
+    }
+}
+
+
+.header{
+  text-align: left;
+  font-size: 15px;
+}
+.name-h{
+  padding-left: 18px;
+  flex: 14% !important;
+}
+
+
+
+.content-container{
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+    span{
+      flex: 5%;
+    }
+    .name{
+      flex: 14% !important;
+    }
+}
+
+.head{
+  margin: 24px 0 12px 0;
+}
 

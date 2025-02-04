@@ -7,7 +7,7 @@
       <ion-icon src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()" color="medium" size="large" *ngIf="!impPage"></ion-icon>
     </ion-item>
     <div  class="ing-container">
-      <div class="ing" *ngFor="let ing of ingredients; let i = index" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
+      <div class="ing" *ngFor="let ing of ingredients; let i = index" (click)="addIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
         <span class="name">{{ing.name}}</span>
         <div class="ing-info-wrapper">
           <span class="gest">Gestiune:</span>

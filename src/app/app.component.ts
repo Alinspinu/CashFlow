@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
 import { MenuController } from '@ionic/angular'
 import { CashControlService } from './cash-control/cash-control.service';
 import { UsersService } from './office/users/users.service';
+import { SupliersService } from './office/supliers/supliers.service';
+import { EService } from './office/e-factura/e-factura.service';
 
 @Component({
   selector: 'app-root',
@@ -30,11 +32,6 @@ export class AppComponent implements OnInit, OnDestroy {
     { title: 'Program', url: '/shedule', icon: '../assets/icon/shedule.svg' },
     { title: 'Pontaj', url: '/pontaj', icon: '../assets/icon/time.svg' },
     { title: 'Setări', url: '/config', icon: '../assets/icon/settings.svg' },
-    // { title: 'Rezervări', url: '/reservations', icon: '../assets/icon/send-outline.svg' },
-    // { title: 'Necesar', url: '/folder/archived', icon: '../assets/icon/list-outline.svg' },
-    // { title: 'Rețetar', url: '/recipes', icon: '../assets/icon/checkmark-outline.svg' },
-    // { title: 'Check In', url: '/check-in', icon: '../assets/icon/location-outline.svg' },
-    // { title: 'Notificări', url: '/notifications', icon: '../assets/icon/notifications-outline.svg' },
     { title: 'Log Out', url: '/auth', icon: '../assets/icon/log-out-outline.svg' }
   ];
 
@@ -45,7 +42,9 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private contService: ContentService,
     private tablesService: TablesService,
+    private eSerice: EService,
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
+    private supliersService: SupliersService,
     private webRTC: WebRTCService,
     private userSrv: UsersService,
     private cashCtrlSrv: CashControlService,
@@ -61,9 +60,11 @@ export class AppComponent implements OnInit, OnDestroy {
       Preferences.get({key: 'authData'}).then(data  => {
         if(data.value) {
          this.user = JSON.parse(data.value)
+         this.supliersService.getSupliers().subscribe()
         this.contentSub = this.contService.getData(this.user.locatie).subscribe()
         this.tablesService.getTables(this.user.locatie, this.user._id)
         this.userSrv.getUsers().subscribe()
+        this.eSerice.getMessages(5).subscribe()
          this.getUpdatedOrder()
          this.removeLive()
          this.getDelProduct()

@@ -1,240 +1,101 @@
 
 
 ion-content, ion-toolbar, ion-header{
-    --background: var(--ion-color-tertiary) !important;
+    --background: var(--background-color) !important;
+    background-color: var(--background-color) !important;
   }
 
-  .content-container{
-    height: 100vh;
-    display: flex;
-    background-color: var(--ion-color-tertiary);
-    .message{
-      height: 85vh;
-    }
-    .invoice{
-      height: 85vh;
-    }
+    ion-title, ion-button, ion-searchbar{
+    font-family: RoseMed !important;
   }
 
 
 
+  .header-toolbar{
+    padding: 24px 0 12px 0;
+    margin-left: 48px;
+    width: 92%;
+    border-bottom: 1.2px solid var(--grey);
+    font-family: RoseMed !important;
+    ion-title{
+      font-size: 36px;
+    }
+    ion-buttons{
+      ion-button{
+        --padding-bottom: 14px;
+        --padding-end: 14px;
+        --padding-top: 14px;
+        --padding-start: 14px;
+        --border-radius: 50%;
+        --border-width: 1px;
+        margin-right: 12px;
+      }
+    }
+  }
 
-  .searchbar-wrapper{
+  ion-searchbar{
+    --box-shadow: none !important;
+    --background: var(--grey);
+    width: 93%;
+    margin: 12px 36px;
+  }
+
+  .header{
+    width: 96%;
+    font-family: RoseReg !important;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-    padding: 12px;
-    padding-right: 24px;
-    border-radius: 12px;
-    background-color: var(--ion-color-light);
-    box-shadow:
-    0 -2px 4px rgba(0, 0, 0, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.1);
-    ion-searchbar{
-      font-family: NoirProReg !important;
-     padding-bottom: 0 !important;
-     height: 60px !important;
-    }
-    .searchbar-icon{
-      cursor: pointer;
-    }
+    padding: 14px 18px;
+    margin: 0 24px;
+    font-size: 18px;
+    border-bottom: 1.5px solid var(--grey);
+    font-family: RoseMed !important;
   }
 
   .input{
     cursor: pointer;
+    width: 96%;
+    font-family: RoseReg !important;
     display: flex;
+    padding: 8px 18px;
+    margin: 0 24px;
     align-items: center;
-    padding-left: 24px;
-    padding-right: 24px;
-    height: 45px;
-    box-shadow:
-    0 -2px 4px rgba(0, 0, 0, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: var(--ion-color-light);
-    margin: 0.5rem 0 0.1rem 0.2rem;
-    font-family: NoirProReg !important;
-    .data{
-        text-align: start;
+    font-size: 16px;
+    border-bottom: 1.5px solid var(--grey);
+    font-family: RoseLight !important;
+  }
+
+
+  .header, .input{
+      .nr{
+        flex: 5%;
+      }
+      .id{
         flex: 20%;
+      }
+      .date{
+        flex: 30%;
       }
       .suplier{
-        text-align: left;
-        flex: 50%;
+        flex: 35%
       }
-      ion-buttons{
-        margin-left: auto;
-        flex: 20%;
-      }
-      .nr{
-        flex: 2%;
-        text-align: left;
-      }
-      .name{
-        flex: 16%;
-        text-align: left;
-      }
-      .qty{
-        flex: 8%;
+      .recorded{
         text-align: center;
-      }
-      .um{
-        flex: 8%;
-        text-align: center;
-      }
-      .ing-qty{
-          flex: 5%;
-          text-align: center;
-      }
-      .ing-um{
-        flex: 10%;
-        text-align: center;
-      }
-      .ing-name{
-        margin-left: 4px;
-        flex: 16%;
-        text-align: left;
-        display: flex;
-        align-items: center;
-        .icon{
-            margin-right: 18px;
-        }
-      }
-      .price{
-        flex: 12%;
-        text-align: center;
-      }
-      .totalNoVat{
-        flex: 12%;
-        text-align: center;
-      }
-      .vat{
-        flex: 8%;
-        text-align: center;
+        flex: 10%
       }
   }
 
-  .party{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: NoirProReg !important;
-    margin: 0.5rem 0 0.1rem 0;
-    font-size: 22px;
-    padding: 12px;
-    padding-left: 24px;
-    color: var(--ion-color-medium);
-    background-color: var(--ion-color-light);
-    border-radius: 12px;
-    height: 100%;
-    box-shadow:
-    0 -2px 4px rgba(0, 0, 0, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.1);
-    .details{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        .label{
-            flex: 40%;
-            text-align: center;
-            font-size: 14px !important;
-            margin-bottom: 5px;
-        }
-        .value{
-            flex: 60%;
-            text-align: center;
-        }
+  .input:hover{
+    background-color: var(--grey);
+    span{
+      font-family: RoseMed !important;
+      color: var(--ion-color-medium) !important;
+      font-size: 17px !important;
     }
-    .name{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        .label{
-            flex: 20%;
-            text-align: center;
-            font-size: 14px !important;
-            margin-bottom: 5px;
-        }
-        .value{
-            flex: 80%;
-            text-align: center;
-        }
+    ion-icon{
+      font-size: 22px !important;
     }
   }
 
-
-  .total-wrapper{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    font-size: 22px;
-    margin-top: 12px;
-    font-family: NoirProReg !important;
-    .total{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 24px 0;
-      color: var(--ion-color-medium);
-      background-color: var(--ion-color-light);
-      border-radius: 12px;
-      box-shadow:
-      0 -2px 4px rgba(0, 0, 0, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.1);
-        .label{
-            font-size: 18px;
-        }
-        .value{
-            font-family: NoirProSemi !important;
-            font-size: 30px;
-        }
-    }
-  }
-
-.tot-wrapper{
-  display: flex;
-  font-family: NoirProSemi !important;
-  margin-top: 12px;
-  height: 100%;
-  cursor: pointer;
-  div{
-    font-family: NoirProSemi !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    border-radius: 12px;
-    font-size: 36px;
-    color: var(--ion-color-light-tint);
-    background-color: var(--ion-color-medium-tint);
-    box-shadow:
-    0 -2px 4px rgba(0, 0, 0, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  .tot{
-    flex: 60%;
-    margin-right: 12px;
-  }
-  .merge{
-    flex: 38%;
-  }
-}
-
-
-
-  .tot-wrapper div:hover{
-    color: var(--ion-color-medium-tint);
-    background-color: var(--ion-color-light-tint);
-  }
-
-  .done{
-    background-color: var(--ion-color-warning) !important;
-    // color: var(--ion-color-light-tint) !important;
-  }
 
 

@@ -32,6 +32,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   @Input() hideIng: boolean = false
   @Input() hideTop: boolean = false
   @Input() product: InvIngredient = emptyIng()
+  @Input() nir: boolean = false
 
   @Output() ingsSend = new EventEmitter();
   @Output() toppSend = new EventEmitter();
@@ -176,7 +177,11 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
 
   setIng(){
-    this.selectIngredient(this.ingredients[0])
+    if(this.nir){
+      this.selctNirIngredient(this.ingredients[0])
+    } else {
+      this.selectIngredient(this.ingredients[0])
+    }
   }
 
 
@@ -208,6 +213,20 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     }
   }
 
+
+  async addIngredient(ing: any){
+    if(this.nir){
+      this.selctNirIngredient(ing)
+    } else {
+      this.selectIngredient(ing)
+    }
+  }
+
+  selctNirIngredient(ing: any){
+    this.ingsSend.emit(ing)
+    this.ingredientSearch = '';
+    this.ingredients = [];
+  }
 
 
   async selectIngredient(ing: any){
@@ -246,7 +265,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         showToast(this.toastCtrl, response.message, 4000)
       }
     })
-    
+
    }
   }
 
@@ -284,7 +303,7 @@ getGest(){
   this.ingSrv.getGestiune().subscribe({
     next: (response) => {
       this.gest = response
-    }, 
+    },
     error: (error) => {
       console.log(error)
     }

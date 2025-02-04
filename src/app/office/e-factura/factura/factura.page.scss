@@ -1,0 +1,190 @@
+
+ion-content, ion-toolbar, ion-header, ion-footer{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+ ion-title, ion-button, ion-searchbar{
+  font-family: RoseReg !important;
+}
+
+
+  .input{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    border-bottom: 1.2px solid var(--grey);
+    margin: 0.5rem 2rem 0.1rem 2rem;
+    font-size: 14px;
+    font-family: RoseLight !important;
+    .data{
+        text-align: start;
+        flex: 20%;
+      }
+      .suplier{
+        text-align: left;
+        flex: 50%;
+      }
+      ion-buttons{
+        margin-left: auto;
+        flex: 24%;
+      }
+      .nr{
+        flex: 5%;
+        text-align: left;
+      }
+      .name{
+        flex: 25%;
+        text-align: left;
+      }
+      .qty{
+        flex: 10%;
+        text-align: center;
+      }
+      .um{
+        flex: 10%;
+        text-align: center;
+      }
+      .ing-qty{
+          flex: 10%;
+          text-align: center;
+      }
+      .ing-um{
+        flex: 8%;
+        text-align: center;
+      }
+      .ing-name{
+        padding-left: 12px;
+        flex: 20%;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        .icon{
+            margin-right: 18px;
+        }
+      }
+      .price{
+        flex: 8%;
+        text-align: center;
+      }
+      .totalNoVat{
+        flex: 8%;
+        text-align: center;
+      }
+      .vat{
+        flex: 8%;
+        text-align: center;
+      }
+  }
+
+  .header{
+    font-family: RoseMed !important;
+    font-size: 16px !important;
+    margin-top: 12px;
+    padding-bottom: 1rem !important;
+  }
+
+  .party{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5rem 0 0.1rem 0;
+    font-size: 22px;
+    padding: 12px 12px 12px 24px;
+    border: 1.5px solid var(--grey);
+    border-radius: 6px;
+    height: 100%;
+    font-family: RoseMed !important;
+    .details{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        .label{
+            flex: 40%;
+            text-align: center;
+            font-size: 14px !important;
+            margin-bottom: 5px;
+        }
+        .value{
+            flex: 60%;
+            text-align: center;
+        }
+    }
+    .name{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        .label{
+            flex: 20%;
+            text-align: center;
+            font-size: 14px !important;
+            margin-bottom: 5px;
+        }
+        .value{
+            flex: 80%;
+            text-align: center;
+        }
+    }
+  }
+
+
+  .total-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    margin-bottom: 2px;
+    font-family: RoseMed !important;
+    .total{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 8px 0;
+      border-radius: 8px;
+      border: 1.5px solid var(--grey);
+        .label{
+            font-size: 16px;
+        }
+        .value{
+            font-size: 22px;
+        }
+    }
+  }
+
+.tot-wrapper{
+  display: flex;
+  height: 100%;
+  cursor: pointer;
+  font-family: RoseMed !important;
+  div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 8px;
+    font-size: 22px;
+    border: 1.5px solid var(--grey);
+  }
+  .close{
+    flex: 20%;
+  }
+  .tot{
+    flex: 40%;
+    margin-right: 12px;
+  }
+  .merge{
+    flex: 38%;
+    margin: 0 4px;
+  }
+}
+
+
+
+  .tot-wrapper div:hover{
+    color: var(--ion-color-medium-tint);
+    background-color: var(--ion-color-light-tint);
+  }

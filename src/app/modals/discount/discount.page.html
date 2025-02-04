@@ -1,41 +1,44 @@
+
+
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-    <!-- <ion-title class="sum ion-text-center">{{title}}</ion-title> -->
-    <div class="title-wrapper">
-      <div class="title">{{title}}</div>
-    </div>
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Adaugă Discount</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()" class="round">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
-</ion-header>
 
 <ion-content [fullscreen]="true">
-<ion-grid>
-  <form [formGroup]="discountForm">
-  <ion-row class="input-row">
-    <ion-col>
-      <div class="input">
-        <ion-input type="number" [label]="valLabel" labelPlacement="floating" placeholder="00" (ionInput)="onValChange($event)" formControlName="val"></ion-input>
-      </div>
-      <div class="input">
-        <ion-input type="number" label="Reducere procentuală %" labelPlacement="floating" placeholder="%" (ionInput)="onProcentChange($event)"  formControlName="procent"></ion-input>
-      </div>
-      <div class="input" *ngIf="tva">
-        <ion-input type="number" label="Alege cota TVA" labelPlacement="floating" placeholder="19% 9% 5% 0%"  formControlName="tva"></ion-input>
-      </div>
-    </ion-col>
-  </ion-row>
-</form>
-</ion-grid>
+  <ion-grid style="margin-top: 48px;">
+    <ion-row>
+      <ion-col size="4">
+        <div class="section-label">
+          <span class="label-title">Reducere</span>
+          <span class="label-sub-title">Adaugă reducere valorică sau procentuală, pentru o cota de TVA.</span>
+        </div>
+      </ion-col>
+      <ion-col size="8">
+        <form [formGroup]="discountForm">
+        <div class="input-wrapper">
+          <ion-input mode="md" fill="outline" type="number" [label]="valLabel" labelPlacement="floating" placeholder="00" (ionInput)="onValChange($event)" formControlName="val"></ion-input>
+          <ion-input mode="md" fill="outline" type="number" label="Reducere procentuală %" labelPlacement="floating" placeholder="%" (ionInput)="onProcentChange($event)"  formControlName="procent"></ion-input>
+          <ion-input mode="md" fill="outline" type="number" label="Alege cota TVA" labelPlacement="floating" placeholder="19% 9% 5% 0%"  formControlName="tva"></ion-input>
+
+        </div>
+      </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <ion-footer class="ion-no-border">
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-      <ion-button size="large" expand="block" color="light" (click)="close()">RENUNȚĂ</ion-button>
-    </ion-col>
-      <ion-col>
-        <ion-button size="large" expand="block" color="medium"(click)="addDiscount()">ADAUGĂ</ion-button>
-        </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-toolbar class="ion-no-border">
+    <ion-button size="large" fill="outline" slot="end" color="medium"(click)="addDiscount()" style="margin-right: 32px;">
+      <ion-label slot="start">Adaugă</ion-label>
+      <ion-icon slot="end" src="../../../assets/icon/checkmark-outline.svg"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
 </ion-footer>
+

@@ -1,50 +1,50 @@
 import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, FormGroup, FormControl, Form, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, IonSearchbar, ToastController } from '@ionic/angular';
+import { FormsModule, FormGroup, FormControl, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { IonicModule, ToastController, ModalController, NavParams } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { IngredientService } from '../../../ingredient/ingredient.service';
-import { InvIngredient, NirIngredient } from '../../../../models/nir.model';
-import User from '../../../../auth/user.model';
+import { Dep, Gestiune, NirIngredient } from '../../../../models/nir.model';
 import { round } from '../../../../shared/utils/functions';
-import { Router } from '@angular/router';
 import { IonInput } from '@ionic/angular/standalone';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { NirService } from '../nir.service';
 import { RandomService } from 'src/app/shared/random.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { AddIngredientPage } from '../../add-ingredient/add-ingredient.page';
+import { RecipeMakerPage } from '../../recipe-maker/recipe-maker.page';
+import { emptyDep, emptyGest } from 'src/app/models/empty-models';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
+import { SalePoint } from 'src/app/models/sale-point';
 
 @Component({
   selector: 'app-add-ing',
   templateUrl: './add-ing.page.html',
   styleUrls: ['./add-ing.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, RecipeMakerPage]
 })
 export class AddIngPage implements OnInit, OnDestroy {
 
 
   @ViewChild('qtyInput', { static: false }) qtyInput!: IonInput;
-  @ViewChild('searchBar', {static: false}) searchBar!: IonSearchbar
 
 
-  ingredientSearch: string = '';
   ingredientForm!: FormGroup
 
-  allIngs: InvIngredient[] = []
-  ingredients: InvIngredient [] = [];
-  ingredient!: NirIngredient
+  ingredient!: any
 
-  user!: User;
+  showAdd: boolean = false
+
 
   ingSub!: Subscription
   ingId: string = ''
 
-  disableIngredientSearch: boolean = true
-  isTva: boolean = true
+  deps: Dep[] = []
+  gest: Gestiune[] = []
+  salePoints: SalePoint[] = []
 
-  totalDoc: number = 0
+  loop: boolean = false
 
   qtyCalcColor!: string
   valCalcColor!: string
@@ -59,6 +59,9 @@ export class AddIngPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController,
     private nirSrv: NirService,
     private randomSrv: RandomService,
+    private modalCtrl: ModalController,
+    private navParams: NavParams,
+    private salePointService: SalePointService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService
   ) { }
 
@@ -73,21 +76,43 @@ export class AddIngPage implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.getIngredients()
+    this.getDeps()
+    this.getGest()
+    this.getSalePoints()
     this.setupIngForm()
-    this.setTvaValidators()
+    this.getMode()
   }
 
 
+  close(){
+    this.modalCtrl.dismiss(null)
+  }
+
 
   async addIng(){
-    const ing = await this.actionSrv.openPayment(AddIngredientPage, [])
+    this.showAdd = false
+    const ing = await this.actionSrv.openAdd(AddIngredientPage, [], 'add-modal')
     if(ing){
       this.nirSrv.saveIng(ing).subscribe(response => {
        this.ingSrv.addIngredinet(response.ing)
+       this.modalCtrl.dismiss(null)
        showToast(this.toastCtrl, response.message, 4000)
       })
     }
+   }
+
+
+   getMode(){
+    this.loop = this.navParams.get('options')
+    this.ingredientForm.get('loop')?.setValue(this.loop)
+   }
+
+   onIngRecive(ev: any){
+    this.selectIngredient(ev)
+   }
+
+   loopChange(ev: any){
+     this.loop = ev.detail.checked;
    }
 
 
@@ -107,25 +132,18 @@ export class AddIngPage implements OnInit, OnDestroy {
       logId: this.randomSrv.generateRandomHexString(9),
       ing: this.ingId
     }
-    if(this.ingredientForm.valid){
-      this.totalDoc += ingredient.total
+    if(this.ingredientForm.valid && this.ingId.length > 6){
       this.nirSrv.addNirIngs(ingredient)
       this.ingredientForm.reset()
-      this.searchBar.setFocus()
+      this.modalCtrl.dismiss(this.loop)
+    } else {
+      this.showAdd = true
+      showToast(this.toastCtrl, 'Trebuie să salvezi ingredientul în baza de date înainte de a-l adăuga în nir!', 3000)
     }
   }
 
 
 
-
-  getIngredients(){
-    this.ingSub = this.ingSrv.ingredientsSend$.subscribe(response => {
-      this.allIngs = response
-      if(response.length > 1){
-        this.disableIngredientSearch = false
-      }
-    })
-  }
 
 
 
@@ -135,32 +153,103 @@ export class AddIngPage implements OnInit, OnDestroy {
     if(this.ingredient){
       this.ingredientForm.get('name')?.setValue(this.ingredient.name)
       this.ingredientForm.get('um')?.setValue(this.ingredient.um)
-      this.ingredientForm.get('dep')?.setValue(this.ingredient.dep)
-      this.ingredientForm.get('gestiune')?.setValue(this.ingredient.gestiune)
+      this.ingredientForm.get('dept')?.setValue(this.ingredient.dept.name)
+      this.ingredientForm.get('gest')?.setValue(this.ingredient.gest.name)
       this.ingredientForm.get('price')?.setValue(this.ingredient.price)
       this.ingredientForm.get('tva')?.setValue(this.ingredient.tva.toString())
       this.ingredientForm.get('sellPrice')?.setValue(this.ingredient.sellPrice)
       this.ingId = ingredient._id
-      this.ingredients = []
       this.qtyInput.setFocus()
-      this.ingredientSearch = ''
+    }
+  }
+
+  getSalePoints(){
+    this.salePointService.pointsSend$.subscribe({
+      next: (points) => {
+        this.salePoints = points
+        this.setupIngForm()
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
+
+
+  getDeps(){
+    this.ingSrv.getDep().subscribe({
+      next: (response) => {
+        this.deps = response
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+
+  }
+
+
+  getGest(){
+    this.ingSrv.getGestiune().subscribe({
+      next: (response) => {
+        this.gest = response
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
+
+  async addGestiune(){
+    let newGest: Gestiune = emptyGest ()
+    const gestName = await this.actionSrv.textAlert('Nume', 'Alege un nume pentru gestiune','nr','Nume')
+    if(gestName) {
+      newGest.name = gestName
+      if(this.salePoints.length > 1){
+        const salePoints = this.salePoints.map(s => s.name)
+        const salePoint = await this.actionSrv.entryAlert(salePoints, 'radio', 'Punct de lucru', 'Alege un punct de lucru', '', '')
+        if(salePoint){
+          const saleP = this.salePoints.find(s => s.name === salePoint)
+          newGest.salePoint = saleP?._id
+          }
+      } else {
+        newGest.salePoint = this.salePoints[0]._id
+      }
+      this.ingSrv.addGestiune(newGest).subscribe({
+        next: (response) => {
+          this.gest.push(response.gest)
+          showToast(this.toastCtrl, response.message, 3000)
+        }
+      })
     }
   }
 
 
 
-  searchIngredient(ev: any){
-    const input = ev.detail.value;
-    this.ingredients = this.allIngs.filter(obj => obj.name.toLowerCase().includes(input))
-    if(input === '') {
-      this.ingredients = []
+  async addDep(){
+    let newDep: Dep = emptyDep ()
+    const name = await this.actionSrv.textAlert('Nume', 'Alege un nume pentru gestiune','nr','Nume')
+    if(name) {
+      newDep.name = name
+      if(this.salePoints.length > 1){
+        const salePoints = this.salePoints.map(s => s.name)
+        const salePoint = await this.actionSrv.entryAlert(salePoints, 'radio', 'Punct de lucru', 'Alege un punct de lucru', '', '')
+        if(salePoint){
+          const saleP = this.salePoints.find(s => s.name === salePoint)
+          newDep.salePoint = saleP?._id
+          }
+      } else {
+        newDep.salePoint = this.salePoints[0]._id
+      }
+      this.ingSrv.addDep(newDep).subscribe({
+        next: (response) => {
+          this.deps.push(newDep)
+          showToast(this.toastCtrl, response.message, 3000)
+        }
+      })
     }
   }
 
-  setIng(ev: any){
-    this.ingredientSearch = ''
-    this.selectIngredient(this.ingredients[0])
-  }
 
 
 
@@ -199,33 +288,24 @@ export class AddIngPage implements OnInit, OnDestroy {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      dep: new FormControl(null, {
+      dept: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
-      gestiune: new FormControl(null, {
+      gest: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
       }),
       sellPrice: new FormControl(null, {
         updateOn: 'change',
       }),
+      loop: new FormControl(null, {
+        updateOn: 'change',
+      }),
 
 
     });
   };
-
-
-  setTvaValidators(){
-    const tvaControl = this.ingredientForm.get('tva')
-    const tvaValueControl = this.ingredientForm.get('tvaValue')
-    const ValueControl = this.ingredientForm.get('value')
-    this.isTva ? tvaControl?.setValidators([Validators.required]) : tvaControl?.clearValidators()
-    this.isTva ? tvaValueControl?.setValidators([Validators.required]) : tvaValueControl?.clearValidators()
-    this.isTva ? ValueControl?.setValidators([Validators.required]) : ValueControl?.clearValidators()
-  }
-
-
 
 
   switchCalcMode(id: string){
@@ -253,7 +333,6 @@ export class AddIngPage implements OnInit, OnDestroy {
         this.totalInputType = 'text'
       }
     }
-
 
   }
   evalValue(){

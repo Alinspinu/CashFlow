@@ -52,12 +52,12 @@
                    <div class="add-input">
                      <ion-select mode="md" label="Gestiune" placeholder="Gestiune" formControlName="gest">
                        <ion-select-option *ngFor="let ges of gest" [value]="ges._id">{{ges.name}}</ion-select-option>
-                 
+
                      </ion-select>
                      <ion-button  color="medium" fill="outline" (click)="addGestiune()" style="margin-left: 24px;">
                       <ion-icon src="../../../../assets/icon/add-outline.svg"></ion-icon>
                     </ion-button>
-                   </div>   
+                   </div>
 
                   <div class="add-input">
                     <ion-select mode="md" label="Departament" placeholder="Departament" formControlName="dept" >
@@ -77,8 +77,8 @@
                   </ion-button>
                 </div>
             </div>
-          
-          
+
+
           </ion-col>
         </ion-row>
         </form>

@@ -2,7 +2,7 @@
 import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 import { Category, Product, SubProduct } from "./category.model";
-import { Dep, Gestiune, InvIngredient, Nir, NirIngredient } from './nir.model';
+import { Dep, Gestiune, InvIngredient, messageEFactura, Nir, NirIngredient } from './nir.model';
 import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
 import { Inventary, line, productionReport } from "./inventary.model";
@@ -309,6 +309,12 @@ export function emptyCategory(){
   return emptyCategory
 }
 
+export function emptyeFacturaMessage(){
+  const message: messageEFactura = {
+         mesaje: []
+  }
+  return message
+}
 
 
 

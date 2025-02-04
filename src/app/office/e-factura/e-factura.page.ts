@@ -1,13 +1,12 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { EService } from './e-factura.service';
 import { Suplier } from 'src/app/models/suplier.model';
 import { EFactura, EProduct, InvIngredient, messageEFactura, Nir } from 'src/app/models/nir.model';
-import { SupliersService } from '../supliers/supliers.service';
-import { ckeckMessageStatus, createNir, editMessage, getBillIds, mergeProducts } from './e-factura.engine';
-import { round } from 'src/app/shared/utils/functions';
+import {  createNir, getBillIds, mergeProducts } from './e-factura.engine';
+import { formatedDateToShow,  round } from 'src/app/shared/utils/functions';
 import { IngredientService } from '../ingredient/ingredient.service';
 import { Subscription } from 'rxjs';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
@@ -16,6 +15,7 @@ import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { SuplierPage } from '../CRUD/suplier/suplier.page';
 import { NirsModalPage } from './nirs-modal/nirs-modal.page';
+import { FacturaPage } from './factura/factura.page';
 
 @Component({
   selector: 'app-e-factura',
@@ -32,6 +32,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
   invoiceSearch: string = ''
 
   messages: any[] = []
+  messageToShow!: any
 
   billsId: string[] = []
 
@@ -41,8 +42,8 @@ export class EFacturaPage implements OnInit, OnDestroy {
 
   constructor(
     private eService: EService,
-    private suplService: SupliersService,
     private ingService: IngredientService,
+    private modalCtrl: ModalController,
     @Inject(ActionSheetService) private actService: ActionSheetService,
     private router: Router,
   ) { }
@@ -50,7 +51,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.ingService.getAllIngredients().subscribe()
     this.getIngredients()
-    this.getMessage(1)
+    this.getMessage(5)
   }
 
 
@@ -61,10 +62,18 @@ export class EFacturaPage implements OnInit, OnDestroy {
   }
 
 
+  selectPeriod(){
+
+  }
+
+  close(){
+    this.modalCtrl.dismiss(null)
+  }
+
+
   getIngredients(){
     this.ingSub = this.ingService.ingredientsSend$.subscribe({
       next: (response) => {
-        console.log(response.length, 'ingrediente')
         this.ingrdients = response.filter(i => !i.productIngredient)
       }
     })
@@ -72,10 +81,10 @@ export class EFacturaPage implements OnInit, OnDestroy {
 
 
   getMessage(days: number){
-    this.eService.getMessages(days).subscribe({
+    this.eService.eFacturaMessageSend$.subscribe({
       next: (response) => {
         this.message = response
-        this.checkInvoice(true)
+        this.messages = this.message.mesaje
       },
       error: (error)=> {
         console.log(error)
@@ -83,41 +92,15 @@ export class EFacturaPage implements OnInit, OnDestroy {
     })
   }
 
-  checkInvoice(edit: boolean){
-    this.eService.checkInvoiceStatus(getBillIds(this.message)).subscribe({
-      next: (response) => {
-        const msg = ckeckMessageStatus(this.message, response)
-        this.message = msg
-        if(edit){
-          this.getSupliers()
-        }
-      },
-      error: (error) => {
-        console.log(error)
-      }
-    })
-  }
 
-  getSupliers(){
-    this.suplService.getSupliers().subscribe({
-      next: (response) => {
-        this.supliers = response
-        this.message.mesaje.reverse()
-        this.messages = this.message.mesaje
-        this.message = editMessage(this.message, this.supliers)
-      },
-      error: (error) => {
-        console.log(error)
-      }
-    })
-  }
-
-
-
-  showInvoice(id: string){
+  async showInvoice(id: string){
     this.eService.getInvoice(id).subscribe({
-      next: (response) => {
+      next: async (response) => {
        this.eFactura = mergeProducts(response, this.ingrdients)
+        const nulls = await this.actService.openAdd(FacturaPage, this.eFactura, 'add-modal')
+        if(!nulls){
+          this.eService.checkInvoiceStatus(getBillIds(this.message)).subscribe()
+        }
       },
       error: (error) => {
         console.log(error)
@@ -150,7 +133,6 @@ export class EFacturaPage implements OnInit, OnDestroy {
 
  async createNewNir(){
     const nir = createNir(this.eFactura, this.supliers)
-    console.log(nir)
     if(nir && nir.nir && !nir.add){
       this.addNewNir(nir.nir)
     } else if(nir && !nir.nir && nir.add) {
@@ -172,7 +154,7 @@ export class EFacturaPage implements OnInit, OnDestroy {
     if(suplierId){
       const data = {id: suplierId, docNumber: this.eFactura.invoiceNumber, docDate: this.eFactura.issueDate, eFacturaID: this.eFactura.id}
       const nir = await this.actService.openPayment(NirsModalPage, data)
-      this.checkInvoice(false)
+      this.eService.checkInvoiceStatus(getBillIds(this.message)).subscribe()
     }
   }
 
@@ -190,11 +172,13 @@ export class EFacturaPage implements OnInit, OnDestroy {
   async selectDays(){
     const days = await this.actService.numberAlert('Alege numarul de zile', 'Alege numarul de zile pentru care vrei să faci interogarea!', 'val', 'Zile')
     if(days){
-      this.getMessage(days)
+      this.eService.getMessages(days).subscribe()
     }
   }
 
-
+formateDate(date: any){
+  return formatedDateToShow(date)
+}
 
   roundInHtml(num: number){
     return round(num)

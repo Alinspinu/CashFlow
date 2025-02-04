@@ -236,6 +236,11 @@ body ion-alert.reprint-alert{
   }
 }
 
+body .toast{
+  font-family: RoseReg !important;
+  font-size: 18px !important;
+}
+
 body ion-alert.suplier-alert{
   --max-height: none !important;
   --height: 900px !important;
@@ -315,6 +320,16 @@ body ion-alert.deleteAlert{
     --width: 60% !important;
   }
 
+  .small{
+    --min-width: none !important;
+    --width: 60% !important;
+  }
+
+  .medium{
+    --height: 95%;
+    --min-width: none !important;
+    --width: 75% !important;
+  }
   body ion-alert.discountAlert {
     --max-width: none!important;
     --width: 400px!important;
@@ -427,8 +442,8 @@ body ion-alert.deleteAlert{
   ion-toggle.toggle-checked::part(track) {
     background: #ddd;
   }
-  
-  
+
+
   ion-toggle.toggle-checked::part(handle) {
     background: var(--orange)
   }

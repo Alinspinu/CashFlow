@@ -1,90 +1,106 @@
 
 
-  <ion-content [fullscreen]="true">
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-title class="ion-text-center">Adaugă Ingredient</ion-title>
-          <ion-item lines="none" color="transparent">
-            <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută ingredient"  (ionInput)="searchIngredient($event)" (keyup.enter)="setIng($event)" #searchBar [disabled]="disableIngredientSearch"></ion-searchbar>
-            <ion-icon src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()" color="medium" size="large"></ion-icon>
-          </ion-item>
-          <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
-            <div *ngIf="ingredients.length >= 1">
-              <span class="name">{{ing.name}}</span>
-              <div class="ing-info-wrapper">
-                <span class="ing-info">Gestiune:</span>
-                <span class="ing-info-gest">{{ing.gestiune}}</span>
-                <span class="ing-info-stoc">{{"Stoc: " + ing.qty + ' ' + ing.um}}</span>
-              </div>
+
+
+
+
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Adaugă Ingredient</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline"  class="round" (click)="addIng()" [ngClass]="{'show-add': showAdd}">
+        <ion-icon size="large" src="../../../../../assets/icon/add-outline.svg"></ion-icon>
+      </ion-button>
+      <ion-button fill="outline" (click)="close()" class="round">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="8" offset="2">
+        <app-recipe-maker
+        (ingsSend)="onIngRecive($event)"
+        [nir]="true"
+        [impPage]="true"
+        >
+        </app-recipe-maker>
+        <form [formGroup]="ingredientForm">
+          <div class="row" style="margin-top: 36px;">
+            <ion-input mode="md" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
+            <ion-input  mode="md" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
+
+
+            <div class="add-input">
+              <ion-input mode="md" [type]="qtyInputType" label="Cantitate" labelPlacement="floating" formControlName="qty" #qtyInput (keydown)="onQtyTab($event)" (keyup.enter)="qtyInputType === 'text' ? evalQty() : null" ></ion-input>
+              <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="qtyCalcColor" (click)="switchCalcMode('qty')"></ion-icon>
             </div>
-          </ion-item>
-          <form [formGroup]="ingredientForm">
-          <div class="input">
-            <ion-input mode="ios" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
+
           </div>
-          <div class="input">
-            <ion-input  mode="ios" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
-          </div>
-          <div class="input">
-            <ion-input mode="ios" [type]="qtyInputType" label="Cantitate" labelPlacement="floating" fill="outline" formControlName="qty" #qtyInput (keydown)="onQtyTab($event)" (keyup.enter)="qtyInputType === 'text' ? evalQty() : null" ></ion-input>
-            <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="qtyCalcColor" (click)="switchCalcMode('qty')"></ion-icon>
-          </div>
-          <div class="input">
-            <ion-input  mode="ios" type="number" [label]="isTva ? 'Pret/UM/Fara TVA': 'Pret'" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
-          </div>
-          <div class="input" *ngIf="isTva">
-              <ion-select label="Cotă TVA %" placeholder="%" formControlName="tva">
-                <ion-select-option value="19">19%</ion-select-option>
-                <ion-select-option value="9">9%</ion-select-option>
-                <ion-select-option value="5">5%</ion-select-option>
-                <ion-select-option value="0">0%</ion-select-option>
-              </ion-select>
-          </div>
-          <div class="input" *ngIf="isTva">
-            <ion-input  mode="ios" [type]="valInputType" label="Valoare" labelPlacement="floating" fill="outline" formControlName="value" (keydown)="onValTab($event)" (keyup.enter)="valInputType === 'text' ? evalValue() : null"></ion-input>
-            <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="valCalcColor" (click)="switchCalcMode('value')"></ion-icon>
-          </div>
-          <div class="input" *ngIf="isTva">
-            <ion-input  mode="ios" type="number" label="Valoare TVA" labelPlacement="floating" fill="outline" formControlName="tvaValue" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
-          </div>
-          <div class="input">
-            <ion-input  mode="ios" [type]="totalInputType" label="Total" labelPlacement="floating" fill="outline" formControlName="total" (keyup.enter)="totalInputType === 'text' ? evalTotal() : null" (keydown)="calc($event)"></ion-input>
-            <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="totalCalcColor" (click)="switchCalcMode('total')"></ion-icon>
-          </div>
-          <div class="input" (keyup.enter)="ingredientForm.valid ? addToNir(): null">
-            <ion-select label="Departament" placeholder="Materie Prima" formControlName="dep">
-              <ion-select-option value="materie">Materie Primă</ion-select-option>
-              <ion-select-option value="marfa">Marfă</ion-select-option>
-              <ion-select-option value="consumabil">Consumabile</ion-select-option>
-              <ion-select-option value="servicii">Servicii</ion-select-option>
-              <ion-select-option value="marketing">Marketing</ion-select-option>
-              <ion-select-option value="ob-inventar">Obiecte inventar</ion-select-option>
-              <ion-select-option value="amenajari">Amenajări</ion-select-option>
-              <ion-select-option value="combustibil">Combustibil</ion-select-option>
-              <ion-select-option value="utilitati">Utilități</ion-select-option>
-              <ion-select-option value="chirie">Chirie</ion-select-option>
+
+          <div class="row">
+            <ion-input  mode="md" type="number" label="Pret/UM/Fara TVA" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
+
+            <ion-select mode="md" fill="outline" label="Cotă TVA %" placeholder="%" formControlName="tva">
+              <ion-select-option value="19">19%</ion-select-option>
+              <ion-select-option value="9">9%</ion-select-option>
+              <ion-select-option value="5">5%</ion-select-option>
+              <ion-select-option value="0">0%</ion-select-option>
             </ion-select>
-        </div>
-        <div class="input">
-          <ion-select label="Gestiune" placeholder="Gestiune" formControlName="gestiune" (keyup.enter)="ingredientForm.valid ? addToNir(): null">
-            <ion-select-option value="magazie">Magazie</ion-select-option>
-            <ion-select-option value="bucatarie">Bucătărie</ion-select-option>
-            <ion-select-option value="bar">Bar</ion-select-option>
-          </ion-select>
-      </div>
-      <div class="input">
-        <ion-input  mode="ios" type="number" label="Preț de vânzare" labelPlacement="floating" fill="outline" formControlName="sellPrice" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
-      </div>
+
+            <div class="add-input">
+              <ion-input  mode="md" [type]="valInputType" label="Valoare" labelPlacement="floating"  formControlName="value" (keydown)="onValTab($event)" (keyup.enter)="valInputType === 'text' ? evalValue() : null"></ion-input>
+              <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="valCalcColor" (click)="switchCalcMode('value')"></ion-icon>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="add-input">
+              <ion-select mode="md" label="Gestiune" placeholder="Gestiune" formControlName="gest">
+                <ion-select-option *ngFor="let ges of gest" [value]="ges.name">{{ges.name}}</ion-select-option>
+
+              </ion-select>
+              <ion-button  color="medium" fill="outline" (click)="addGestiune()" style="margin-left: 24px;">
+              <ion-icon src="../../../../assets/icon/add-outline.svg"></ion-icon>
+            </ion-button>
+            </div>
+
+          <div class="add-input">
+            <ion-select mode="md" label="Departament" placeholder="Departament" formControlName="dept" >
+              <ion-select-option  *ngFor="let dep of deps" [value]="dep.name">{{dep.name}}</ion-select-option>
+            </ion-select>
+            <ion-button  color="medium" fill="outline" (click)="addDep()" style="margin-left: 24px;">
+              <ion-icon src="../../../../assets/icon/add-outline.svg"></ion-icon>
+            </ion-button>
+          </div>
+
+          </div>
+
+          <div class="row">
+            <ion-input id="input" mode="md" [type]="totalInputType" label="Total" labelPlacement="floating" fill="outline" formControlName="total" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
+            <ion-input  id="input" mode="md" type="number" label="Preț de vânzare" labelPlacement="floating" fill="outline" formControlName="sellPrice" (keyup.enter)="ingredientForm.valid ? addToNir(): null"></ion-input>
+            <ion-toggle  [enableOnOffLabels]="true" justify="space-between" (ionChange)="loopChange($event)" formControlName="loop" >Adaugă din nou</ion-toggle>
+          </div>
     </form>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <ion-button size="large" expand="block" (click)="addToNir()" [disabled]="!ingredientForm.valid" color="medium" class="button">
-      ADAUGĂ
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large" [disabled]="!ingredientForm.valid" (click)="addToNir()" >
+      <ion-label slot="start" size="large" >Adaugă</ion-label>
+      <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
     </ion-button>
-  </ion-content>
+  </ion-toolbar>
+</ion-footer>
 
-  <!-- <ion-footer class="ion-no-border">
-
-  </ion-footer> -->

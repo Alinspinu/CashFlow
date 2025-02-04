@@ -1,29 +1,30 @@
-import { Component, HostListener, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController, ToastButton, ToastController } from '@ionic/angular';
+import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { NirsService } from './nirs.service';
 import { Router } from '@angular/router';
-import { formatedDateToShow, getUserFromLocalStorage, round, roundOne } from 'src/app/shared/utils/functions';
+import { formatedDateToShow, round, roundOne } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
-import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 import { Record, Suplier } from 'src/app/models/suplier.model';
-import { Nir } from 'src/app/models/nir.model';
+import { messageEFactura, Nir } from 'src/app/models/nir.model';
 import { SelectDataPage } from 'src/app/modals/select-data/select-data.page';
 import { RecordPage } from './record/record.page';
 import { calcTotalDocs, mergeNirs } from './nirs.engine';
 import { Preferences } from '@capacitor/preferences';
 import { NirPage } from '../CRUD/nir/nir.page';
+import { EFacturaPage } from '../e-factura/e-factura.page';
+import { EService } from '../e-factura/e-factura.service';
 
 @Component({
   selector: 'app-nirs',
   templateUrl: './nirs.page.html',
   styleUrls: ['./nirs.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class NirsPage implements OnInit {
 
@@ -46,6 +47,9 @@ export class NirsPage implements OnInit {
 
   nirSearch!: string
 
+  newBills: number = 0
+
+  message: any
 
   suplierId!: string
 
@@ -61,25 +65,30 @@ export class NirsPage implements OnInit {
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     public router: Router,
+    private eService: EService,
   ) { }
 
   ngOnInit() {
     this.getNirs()
-    this.getUser()
     this.getSupliers()
+    this.getInvoicesStatus()
   }
 
+  getInvoicesStatus(){
+    this.eService.eFacturaMessageSend$.subscribe({
+      next: (message) => {
+        this.message = message
+        console.log(this.message)
+        this.message.mesaje.forEach((m: any) => {
+          if(!m.done){
+            this.newBills ++
+          }
+        })
+        console.log(this.newBills)
+      }
+    })
+  }
 
-getUser(){
-  getUserFromLocalStorage().then(user => {
-    if(user){
-      this.user = user
-
-    } else {
-      this.router.navigateByUrl('/auth')
-    }
-  })
-}
 
 
 selectNir(nir: Nir){
@@ -127,7 +136,9 @@ mergeNir(){
   this.router.navigateByUrl(`/office/nir/${nir._id}`)
 }
 
-
+async eFactura(){
+  await this.actionSheetService.openAdd(EFacturaPage, '', 'medium')
+}
 
 
 

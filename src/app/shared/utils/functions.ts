@@ -111,6 +111,22 @@ export function formatedDateToShow(date: any){
     // Format the date as "Sept 23, 2025, 12:43"
     return `${day} ${month}, ${year}`;
   }
+  export function formatEFacturaDate(eDate: any) {
+    const date = eDate.split('-')
+    const inputDate = new Date(date[0], date[1], date[2]);
+    const months = [
+     "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie",
+      "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"
+    ];
+
+    // Extract parts of the date
+    const day = inputDate.getDate(); // Day of the month
+    const month = months[inputDate.getMonth()]; // Month name in Romanian
+    const year = inputDate.getFullYear(); // Full year
+
+    // Format the date as "Sept 23, 2025, 12:43"
+    return `${year} ${month} ${day}, ${date[3]} `;
+  }
 
 
   export function getPaymentMethod(paymentObject: any){

@@ -49,6 +49,8 @@ import { AddPointModalPage } from '../office/sale-point/add-point-modal/add-poin
 import { ProductPage } from '../office/CRUD/product/product.page';
 import { NirPage } from '../office/CRUD/nir/nir.page';
 import { AddIngPage } from '../office/CRUD/nir/add-ing/add-ing.page';
+import { EFacturaPage } from '../office/e-factura/e-factura.page';
+import { FacturaPage } from '../office/e-factura/factura/factura.page';
 
 
 
@@ -209,11 +211,14 @@ export class ActionSheetService {
 
 
   async openAdd(
-    component: typeof ProductPage | 
-               typeof SubProductPage | 
-               typeof AddIngPage | 
-               typeof AddIngredientPage | 
-               typeof ProductIngredientPage | 
+    component: typeof ProductPage |
+               typeof SubProductPage |
+               typeof AddIngPage |
+               typeof AddIngredientPage |
+               typeof DiscountPage |
+               typeof EFacturaPage |
+               typeof FacturaPage |
+               typeof ProductIngredientPage |
                typeof NirPage,
     options: any,
     clas: string

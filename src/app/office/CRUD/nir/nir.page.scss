@@ -92,7 +92,7 @@ ion-select{
         div{
           margin-right: 8px;
           flex: 33%;
-        } 
+        }
         ion-input{
           flex: 33%;
         }
@@ -169,7 +169,7 @@ ion-select{
 .footer-container{
   display: flex;
   align-items: baseline;
-  justify-content: end;
+  justify-content: space-between;
   font-family: RoseReg !important;
   padding: 12px 0;
   div{
@@ -186,6 +186,18 @@ ion-select{
   }
   .footer-button{
     margin: 12px 24px !important;
+  }
+  ion-buttons{
+    flex: 30%;
+    ion-button{
+      margin-left: 12px;
+      --padding-end: 14px;
+      --padding-top: 8px;
+      --padding-start: 14px;
+      --padding-bottom: 8px;
+      --border-width: 1px;
+      --border-radius: 0 !important;
+    }
   }
 }
 

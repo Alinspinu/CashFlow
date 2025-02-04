@@ -37,8 +37,8 @@ export class ReportsPage implements OnInit {
 
 
   appPages: any = [
-    {name: 'Inventar', icon: '../../assets/icon/cash-register.svg', show: false},
-    {name: 'Situație financiară', icon: '../../assets/icon/document.svg', show: true},
+    {name: 'Inventar', icon: '../../assets/icon/cash-register.svg', show: true},
+    {name: 'Situație financiară', icon: '../../assets/icon/document.svg', show: false},
     {name: 'Produse', icon: '../../assets/icon/foood.svg', show: false},
   ]
 

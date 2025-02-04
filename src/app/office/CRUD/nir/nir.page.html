@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         </div>
-               
+
                       <!-- <ion-button class="discount-button" size="small" color="light" (click)="openDiscount()">
                       + Add
                         <ion-icon color="medium" src="../../../../assets/icon/discount.svg" style="font-size: 18px; margin-left: 8px;"></ion-icon>
@@ -55,7 +55,7 @@
                      - rem
                         <ion-icon color="medium" src="../../../../assets/icon/discount.svg" style="font-size: 18px; margin-left: 8px;"></ion-icon>
                       </ion-button> -->
-                 
+
                   </form>
               </ion-col>
             </ion-row>
@@ -70,7 +70,7 @@
           <ion-button fill="outline" class="round" (click)="addIng()">
             <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
           </ion-button>
-       
+
         </ion-buttons>
       </ion-toolbar>
       <ion-toolbar class="ion-no-border ion-no-padding three-toolbar">
@@ -116,7 +116,17 @@
 
 <ion-footer>
       <div class="footer-container">
-        <div>
+        <ion-buttons>
+          <ion-button color="medium" fill="outline" mode="md" (click)="openDiscount()">
+            <ion-label slot="start">Adaugă Discount</ion-label>
+            <ion-icon slot="end" src="../../../../../assets/icon/discount.svg"></ion-icon>
+          </ion-button>
+          <ion-button color="medium" fill="outline" mode="md" [disabled]="discountMode" (click)="removeDiscount()">
+            <ion-label slot="start">Scoate</ion-label>
+            <ion-icon slot="end" src="../../../../../assets/icon/discount.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <div style="margin-left: 12px;">
             <span class="label">Fără TVA</span>
             <span class="value">{{nir.val}} Lei</span>
         </div>

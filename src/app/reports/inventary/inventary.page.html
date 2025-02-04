@@ -27,7 +27,7 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size-lg="4.4" offset-lg="3">
+      <ion-col size-lg="6.4" offset-lg="2">
         <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event, false)" #searchbar [disabled]="isLoading" class="searchbar">
         </ion-searchbar>
       </ion-col>
@@ -45,7 +45,7 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size-lg="6" offset-lg="3">
+      <ion-col size-lg="8" offset-lg="2">
         <div  class="ing-wrapper header">
           <span class="name">Nume ingredient</span>
           <span class="gest">Gestiune</span>
@@ -63,7 +63,7 @@
 <ion-content [fullscreen]="true" *ngIf="!isLoading && mode ===  'inventary'">
   <ion-grid>
     <ion-row>
-      <ion-col size-lg="6" offset-lg="3" *ngIf="inventary">
+      <ion-col size-lg="8" offset-lg="2" *ngIf="inventary">
           <ion-row>
             <ion-col>
               <div *ngFor="let ing of ingredients; let i = index" >
@@ -89,7 +89,7 @@
     <ion-row style="margin-top: 1rem">
     </ion-row>
     <ion-row>
-      <ion-col size-lg="4.4" offset-lg="3">
+      <ion-col size-lg="6.4" offset-lg="2">
         <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event, true)" #searchbar [disabled]="isLoading" class="searchbar">
         </ion-searchbar>
       </ion-col>
@@ -107,7 +107,7 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size-lg="8" offset-lg="2">
+      <ion-col size-lg="10" offset-lg="1">
         <div  class="ing-wrapper header">
           <span class="name">Nume ingredient</span>
           <span class="first">{{formatDate(compareTable.dateFirst)}}</span>
@@ -126,7 +126,7 @@
 <ion-content [fullscreen]="true" *ngIf="!isLoading && mode === 'compare'">
   <ion-grid>
     <ion-row>
-      <ion-col size-lg="8" offset-lg="2" *ngIf="inventary && compareTable">
+      <ion-col size-lg="10" offset-lg="1" *ngIf="inventary && compareTable">
           <ion-row>
             <ion-col>
               <div *ngFor="let ing of ingsComp; let i = index" >

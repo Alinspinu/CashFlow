@@ -1,0 +1,123 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar style="margin-top: 24px;">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="party">
+            <div class="name">
+              <span class="label">Cumpărator:</span>
+              <span class="value">{{eFactura.customer.name}}</span>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="party">
+            <div class="details">
+              <span class="label">Număr document:</span>
+              <span class="value">{{eFactura.invoiceNumber}}</span>
+            </div>
+            <div class="details">
+              <span class="label">Dată emitere:</span>
+              <span class="value">{{eFactura.issueDate}}</span>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="party">
+            <div class="name">
+              <span class="label">Vanzător:</span>
+              <span class="value">{{eFactura.supplier.name}}</span>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+
+  </ion-toolbar>
+  <ion-toolbar>
+    <div class="input header">
+      <span class="nr">NR</span>
+      <span class="name">Denumire Produs</span>
+      <span class="um">UM Factura</span>
+      <span class="qty">Qty Factura</span>
+      <span class="ing-qty">Qty Nir</span>
+      <span class="ing-um">UM Nir</span>
+      <span class="ing-name">Denumire Ingredient</span>
+      <span class="price">Pret F TVA</span>
+      <span class="totalNoVat">Valoare</span>
+      <span class="vat">Cota Tva</span>
+  </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="input" *ngFor="let product of eFactura.products; let i=index">
+    <span class="nr">{{i+1}}.</span>
+    <span class="name">{{product.name}}</span>
+    <span class="um">{{product.unitCode}}</span>
+    <span class="qty">{{product.quantity}}</span>
+    <span class="ing-qty">{{product.ingQty}}</span>
+    <span class="ing-um">{{product.ingUm}}</span>
+    <div class="ing-name">
+      <ion-icon
+      [src]="product.ingUm === '-' ? '../../../assets/icon/add-circle.svg' : '../../../assets/icon/create-outline.svg' "
+      color="medium"
+      class="icon"
+      size="large"
+      (click)="selectIng(product)"></ion-icon>
+      <span class="name">{{product.ingName}}</span>
+    </div>
+    <span class="price">{{product.price}}</span>
+    <span class="totalNoVat">{{product.totalNoVat}}</span>
+    <span class="vat">{{product.vatPrecent}} %</span>
+</div>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+
+      <ion-col size="3">
+        <div class="total-wrapper">
+          <div class="total">
+            <span class="label">Total fară tva</span>
+            <span class="value">{{eFactura.taxExclusiveAmount}}</span>
+          </div>
+          <div class="total">
+            <span class="label">Valoare tva</span>
+            <span class="value">{{eFactura.vatAmount}}</span>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="total-wrapper">
+          <div class="total">
+            <span class="label">Plătit</span>
+            <span class="value">{{eFactura.prePaydAmount}}</span>
+          </div>
+          <div class="total">
+            <span class="label">Total</span>
+            <span class="value">{{eFactura.taxInclusiveAmount}}</span>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="tot-wrapper">
+          <div class="close" (click)="close()">
+            <span>Renunță</span>
+          </div>
+          <div class="merge" (click)="merge()">
+            <span>Asociază</span>
+          </div>
+          <div class="tot" (click)="createNewNir()">
+            <span>Crează NIR</span>
+          </div>
+
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

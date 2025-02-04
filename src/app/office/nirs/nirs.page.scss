@@ -9,6 +9,7 @@ ion-title, span, ion-searchbar, ion-button{
 }
 
 
+
 .searchbar-wrapper{
     display: flex;
     align-items: center;
@@ -62,10 +63,10 @@ ion-title, span, ion-searchbar, ion-button{
   }
   ion-buttons{
     ion-button{
-      --padding-bottom: 14px;
-      --padding-end: 14px;
-      --padding-top: 14px;
-      --padding-start: 14px;
+      --padding-bottom: 16px;
+      --padding-end: 16px;
+      --padding-top: 16px;
+      --padding-start: 16px;
       --border-radius: 50%;
       --border-width: 2px;
       margin-right: 12px;
@@ -74,8 +75,22 @@ ion-title, span, ion-searchbar, ion-button{
         color: var(--blue);
       }
     }
+    ion-badge{
+      font-family: RoseLight !important;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 99 !important;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      font-size: 18px;
+      box-shadow: none !important;
+    }
   }
 }
+
+
 
 
 .header{
@@ -112,7 +127,7 @@ ion-title, span, ion-searchbar, ion-button{
     flex: 25%
   }
     .date{
-      color: var(--blue); 
+      color: var(--blue);
       text-align: start;
       flex: 15%;
     }
@@ -157,7 +172,7 @@ ion-title, span, ion-searchbar, ion-button{
     color: var(--sand-contrast);
   }
   .date{
-    color: var(--blue);  
+    color: var(--blue);
   }
   .total{
     color: var(--turqoise-contrast);

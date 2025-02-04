@@ -89,42 +89,6 @@ export const routes: Routes = [
     redirectTo: '/office/products',
     pathMatch: 'full',
   },
-  {
-    path: 'record-modal',
-    loadComponent: () => import('./supliers/suplier/record-modal/record-modal.page').then( m => m.RecordModalPage)
-  },
-  {
-    path: 'add-nir',
-    loadComponent: () => import('./CRUD/nir/add-nir/add-nir.page').then( m => m.AddNirPage)
-  },
-  {
-    path: 'add-ing',
-    loadComponent: () => import('./CRUD/nir/add-ing/add-ing.page').then( m => m.AddIngPage)
-  },
-  {
-    path: 'ingredient-content',
-    loadComponent: () => import('./ingredient/ingredient-content/ingredient-content.page').then( m => m.IngredientContentPage)
-  },
-  {
-    path: 'record',
-    loadComponent: () => import('./nirs/record/record.page').then( m => m.RecordPage)
-  },
-  {
-    path: 'sale-point',
-    loadComponent: () => import('./sale-point/sale-point.page').then( m => m.SalePointPage)
-  },
-  {
-    path: 'add-point-modal',
-    loadComponent: () => import('./sale-point/add-point-modal/add-point-modal.page').then( m => m.AddPointModalPage)
-  },
-  {
-    path: 'categories',
-    loadComponent: () => import('./products/categories/categories.page').then( m => m.CategoriesPage)
-  },  {
-    path: 'report',
-    loadComponent: () => import('./CRUD/product/report/report.page').then( m => m.ReportPage)
-  },
-
 
 
 

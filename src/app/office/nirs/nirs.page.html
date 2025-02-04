@@ -10,21 +10,25 @@
         <ion-button fill="outline" (click)="openDateModal(true)">
           <ion-icon size="large" src="../../../assets/icon/shedule.svg"></ion-icon>
         </ion-button>
+        <ion-button fill="outline" (click)="eFactura()">
+          <ion-icon size="large" src="../../../assets/icon/cloud-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-badge>{{newBills}}</ion-badge>
       </ion-buttons>
     </ion-toolbar>
   <ion-toolbar>
     <div class="searchbar-wrapper">
       <ion-searchbar  mode="md" [(ngModel)]="nirSearch"  placeholder="Caută document după furnizor..."  (ionInput)="searchNir($event)" #searchbar>
       </ion-searchbar>
-      
+
       <ion-button  (click)="selectSuplier()"  fill="outline" mode="md">
         Alege furnizor
       </ion-button>
-  
+
       <ion-button (click)="paySelectedNirs()"  fill="outline" mode="md" [disabled]="selectedNirs.length < 2">
         Plătește
       </ion-button>
-  
+
       <ion-button  (click)="mergeNir()" fill="outline" mode="md" [disabled]="selectedNirs.length < 2">
         Unește
       </ion-button>
@@ -108,7 +112,7 @@
 
 
 
-<!-- 
+<!--
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
     <ion-grid>

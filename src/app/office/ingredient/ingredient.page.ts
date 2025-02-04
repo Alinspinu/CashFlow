@@ -315,15 +315,15 @@ updateProductIng(){
         console.log(error)
       }
     })
-  
+
   }
-  
-  
+
+
   getGest(){
     this.ingSrv.getGestiune().subscribe({
       next: (response) => {
         this.gest = response
-      }, 
+      },
       error: (error) => {
         console.log(error)
       }

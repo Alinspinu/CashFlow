@@ -16,6 +16,7 @@ import { IngredientPage } from './ingredient/ingredient.page';
 import { NirsPage } from './nirs/nirs.page';
 import { ProductsPage } from './products/products.page';
 import { UsersPage } from './users/users.page';
+import { SuplierService } from '../../../../../timeout/src/app/office/CRUD/suplier/suplier.service';
 
 
 

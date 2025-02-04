@@ -6,13 +6,14 @@ import { round } from "src/app/shared/utils/functions";
 
 
 export function editMessage(message: messageEFactura, supliers: Suplier[]){
+  console.log(message)
    const msg = message.mesaje.map(m => {
         const year = m.data_creare.substring(0, 4);
         const month = m.data_creare.substring(4, 6);
         const day = m.data_creare.substring(6, 8);
         const hour = m.data_creare.substring(8, 10);
         const minute = m.data_creare.substring(10, 12);
-        m.data_creare = `${year}-${month}-${day}-${hour}:${minute}`
+        m.data_creare = new Date(+year, +month, +day, +hour, +minute).toISOString()
         const match = m.detalii.match(/cif_emitent=(\d+)/)
         if(match){
             const suplier = supliers.find(s => s.vatNumber.replace(/\D/g, '') === match[1])
@@ -28,7 +29,12 @@ export function editMessage(message: messageEFactura, supliers: Suplier[]){
         }
 
     })
-    message.mesaje = msg
+    const sortedMessage = msg.sort((a: any,b: any) => {
+      const aDate = new Date(a.data_creare).getTime()
+      const bDate = new Date(b.data_creare).getTime()
+      return bDate - aDate
+    })
+    message.mesaje = sortedMessage
     return message
 }
 

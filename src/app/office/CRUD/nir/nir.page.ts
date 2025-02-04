@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { IonContent, IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,6 +14,8 @@ import { Preferences } from '@capacitor/preferences';
 import { emptyNir } from 'src/app/models/empty-models';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { AddIngPage } from './add-ing/add-ing.page';
+import { Subscription } from 'rxjs';
+import { DiscountPage } from 'src/app/modals/discount/discount.page';
 
 
 @Component({
@@ -23,7 +25,7 @@ import { AddIngPage } from './add-ing/add-ing.page';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule]
 })
-export class NirPage implements OnInit {
+export class NirPage implements OnInit, OnDestroy {
   @ViewChild(IonContent, { static: false }) content: IonContent | undefined;
   isHidden = false;
   lastScrollTop = 0;
@@ -32,9 +34,12 @@ export class NirPage implements OnInit {
   nir: Nir = emptyNir()
   suplier!: Suplier
 
+  nirSub!: Subscription;
 
   nirId!: string
   nirIds: string[] = []
+
+  discountMode: boolean = true
 
   supliers: Suplier[] = []
   supliersToSend: string[] = []
@@ -55,24 +60,58 @@ export class NirPage implements OnInit {
     this.setupNirForm()
     this.getSupliers()
     this.getNirToEdit()
+    this.getNir()
+  }
+
+  ngOnDestroy(): void {
+      if(this.nirSub) {
+        this.nirSub.unsubscribe()
+      }
+  }
+
+
+  getNir(){
+    this.nirService.nirSend$.subscribe({
+      next: (nir) => {
+        this.nir = nir
+      }
+    })
   }
 
 
 
 
   onScroll(event: any) {
-    let scrollTop = event.detail.scrollTop;
-    if (scrollTop === 0) {
-      this.isHidden = false;
-    } else {
-      this.isHidden = true;
+    // let scrollTop = event.detail.scrollTop;
+    // if (scrollTop < 150) {
+    //   this.isHidden = false;
+    // } else {
+    //   this.isHidden = true;
+    // }
+  }
+
+
+  async addIng(mode: boolean = false){
+    const ing = await this.actionSheet.openAdd(AddIngPage, mode, 'add-modal')
+    if(ing) {
+      this.addIng(true)
     }
   }
 
+    async openDiscount(){
+        const result = await this.actionSheet.openAdd(DiscountPage, {nir: true}, 'small')
+        if(result.tva === 19 || result.tva === 9 || result.tva === 5 || result.tva === 0) {
+          this.nirService.calcDiscount(result)
+          this.discountMode = false
+        } else {
+         showToast(this.toastCtrl, "Valoarea TVA trebuie sa fie 19, 9, 5 sau 0", 3000)
+        }
+     }
 
-  async addIng(){
-    const ing = await this.actionSheet.openAdd(AddIngPage, '', 'add-modal')
-  }
+     removeDiscount(){
+      this.nirService.removeDiscount()
+      this.discountMode = true
+     }
 
 
 
@@ -164,7 +203,7 @@ setupNirForm(){
       }
     }
 
-   
+
   getSupliers(){
     this.nirsService.getSuplier('').subscribe(response => {
       if(response){
@@ -185,7 +224,6 @@ setupNirForm(){
 
 async getNirToEdit(){
     const id = this.navParams.get('options')
-    console.log(id)
       if(id && id !== "new" && id !== 'merged' && id !== 'eFactura') {
         // this.isLoading = true
         this.nirService.getNir(id).subscribe(response => {

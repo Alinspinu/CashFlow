@@ -1,4 +1,49 @@
+
 <ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+      <ion-title slot="start">Facturi Primite</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="selectDays()">
+          <ion-icon size="large" src="../../../assets/icon/calendar.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="selectPeriod()">
+          <ion-icon size="large" src="../../../assets/icon/time.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-toolbar>
+        <ion-searchbar mode="md" [(ngModel)]="invoiceSearch"  placeholder="Caută factură..."  (ionInput)="searchInvooice($event)">
+        </ion-searchbar>
+        <div class="header">
+          <span class="nr">Nr</span>
+          <span class="id">ID eFactura</span>
+          <span class="suplier">Furnizor</span>
+          <span class="date">Data Document</span>
+          <span class="recorded">Inregistrat</span>
+        </div>
+      </ion-toolbar>
+    </ion-toolbar>
+  </ion-header>
+
+
+<ion-content [fullscreen]="true">
+    <div class="input" *ngFor="let msg of messages; let i = index" (click)="showInvoice(msg.id)">
+      <span class="nr">#{{i+1}}</span>
+      <span class="id">#{{msg.id}}</span>
+      <span class="suplier">{{msg.detalii}}</span>
+      <span class="date">{{formateDate(msg.data_creare)}}</span>
+      <ion-icon class="recorded" [src]="msg.done ? '../../../assets/icon/success.svg': '../../../assets/icon/not.svg'" [color]=" msg.done ? 'success' :'danger'"></ion-icon>
+    </div>
+
+</ion-content>
+
+
+
+<!-- <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
     <ion-grid>
       <ion-row>
@@ -76,8 +121,6 @@
                   <span class="ing-name">Denumire Ingredient</span>
                   <span class="price">Pret F TVA</span>
                   <span class="totalNoVat">Valoare</span>
-                  <!-- <span class="vatValue">Valoare Tva</span> -->
-                  <!-- <span class="totalWithVat">Total cu TVA</span> -->
                   <span class="vat">Cota Tva</span>
               </div>
             </ion-col>
@@ -149,4 +192,4 @@
   </ion-grid>
 
 </div>
-
+ -->

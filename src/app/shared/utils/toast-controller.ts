@@ -4,7 +4,8 @@ import { ToastController } from "@ionic/angular";
 export async function  showToast(toastCtrl: ToastController, message: string, duration: number) {
   const toast = await toastCtrl.create({
     message: message,
-    duration: duration
+    duration: duration,
+    cssClass: 'toast'
   });
   toast.present();
 }

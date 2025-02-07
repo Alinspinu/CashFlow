@@ -18,6 +18,7 @@ import { AddToInventaryPage } from 'src/app/modals/add-to-inventary/add-to-inven
 import { IngredientContentPage } from './ingredient-content/ingredient-content.page';
 import { environment } from 'src/environments/environment';
 import { UploadLogPage } from 'src/app/reports/inventary/upload-log/upload-log.page';
+import { ImpPage } from '../imp/imp.page';
 
 @Component({
   selector: 'app-ingredient',
@@ -85,6 +86,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   async uploadLog(id: string) {
       this.ingSrv.getUploadLog(id).subscribe({
         next: (ing) => {
+          console.log(ing.uploadLog)
           this.actionSh.openPayment(UploadLogPage, {logs: ing.uploadLog, ingName: ing.name, ingUm: ing.um, ingID: id} )
         },
         error: (error) => {
@@ -135,6 +137,10 @@ export class IngredientPage implements OnInit, OnDestroy {
         })
       }
     }
+  }
+
+  async openImp(){
+    await this.actionSh.openAdd(ImpPage, [], 'small')
   }
 
   createInv(){

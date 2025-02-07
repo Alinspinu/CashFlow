@@ -1,0 +1,60 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+      <ion-title slot="start">{{editMode ? 'Editează fișa' : 'Fișă nouă'}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="deleteSheet(this.sheet._id)" [disabled]="!this.sheet._id">
+          <ion-icon size="large" src="../../../../assets/icon/trash-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="openDateModal()">
+          <ion-icon size="large" src="../../../../assets/icon/time.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar class="ion-no-border">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="party">
+              <div class="name">
+                <span class="label">Responsabil:</span>
+                <span class="value">{{userName}}</span>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="party">
+              <div class="name">
+                <span class="label">Data:</span>
+                <span class="value">{{formatedDate(sheet.date)}}</span>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <ion-content [fullscreen]="true" >
+    <div class="recipe">
+      <app-recipe-maker
+      (ingsSend)="onIngRecive($event)"
+      [impPage]="true"
+      [ings]="sheet.ings"
+      ></app-recipe-maker>
+    </div>
+  </ion-content>
+
+
+  <ion-footer  class="ion-no-border">
+    <ion-toolbar>
+      <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large"  (click)="saveSheet()" >
+         <ion-label slot="start" size="large" >{{editMode ? 'Editează' : 'Salvează'}}</ion-label>
+         <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+       </ion-button>
+    </ion-toolbar>
+  </ion-footer>

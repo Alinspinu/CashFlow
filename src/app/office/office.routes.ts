@@ -88,7 +88,11 @@ export const routes: Routes = [
     path: '',
     redirectTo: '/office/products',
     pathMatch: 'full',
+  },  {
+    path: 'add-imp',
+    loadComponent: () => import('./imp/add-imp/add-imp.page').then( m => m.AddImpPage)
   },
+
 
 
 

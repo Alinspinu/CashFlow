@@ -24,6 +24,7 @@ export class DepViewPage implements OnInit {
 
   ngOnInit() {
    this.products =  this.navPar.get('options')
+   console.log(this.products)
   }
 
 

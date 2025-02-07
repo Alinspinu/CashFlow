@@ -45,6 +45,8 @@ export class SalesPage implements OnInit, OnChanges, OnDestroy {
 
   catSubs!: Subscription
 
+  openOrders: Bill[] = []
+
   serviceSum: number = 0
 
   private chart!: Chart;
@@ -99,6 +101,7 @@ export class SalesPage implements OnInit, OnChanges, OnDestroy {
 getOrders(){
   this.cashService.ordersSend$.subscribe({
     next: (orders) => {
+      this.openOrders = orders.filter(o => o.status === 'open' && o.masa !== 90)
       this.orders = orders.filter(o => o.status === 'done')
       this.totals = calcCashIn(this.orders)
       this.hours = calcHours(this.orders, this.totals.total)
@@ -188,9 +191,14 @@ async inAndOut(value: string){
 
 async onReports(value: string){
   if(value === 'z'){
-    const response = await this.actSrv.deleteAlert('PRINTEAZĂ RAPORTUL Z', 'RAPORT Z')
-    if(response){
-      this.reports(value)
+    if(this.openOrders.length > 0){
+        const message = this.openOrders.map(o => o.masa + ' ')
+        await this.actSrv.deleteAlert(`Sunt comenzi deschise deschise la mesele ${message}`, 'Scoate comenzile!')
+    } else {
+      const response = await this.actSrv.deleteAlert('PRINTEAZĂ RAPORTUL Z', 'RAPORT Z')
+      if(response){
+        this.reports(value)
+      }
     }
   } else {
     this.reports(value)

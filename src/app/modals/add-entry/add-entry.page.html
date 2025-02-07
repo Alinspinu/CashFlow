@@ -1,6 +1,11 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-      <ion-button (click)="cancel()" slot="start" color="medium" size="large">Cancel</ion-button>
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Adaugă intrare</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="cancel()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -59,6 +64,6 @@
 </ion-content>
 
 <ion-footer class="ion-no-border">
-  <ion-button (click)="confirm()" type="submit" color="medium" [disabled]="!form.valid || !date" [strong]="true" expand="block" size="large">ADAUGĂ INTRARE
+  <ion-button (click)="confirm()" type="submit" fill="outline" color="medium" [disabled]="!form.valid || !date" [strong]="true" expand="block" size="large">ADAUGĂ INTRARE
   </ion-button>
 </ion-footer>

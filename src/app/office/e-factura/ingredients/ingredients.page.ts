@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { InvIngredient } from 'src/app/models/nir.model';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { IngredientService } from '../../ingredient/ingredient.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { AddIngredientPage } from '../../CRUD/add-ingredient/add-ingredient.page';
@@ -26,6 +26,8 @@ export class IngredientsPage implements OnInit, OnDestroy {
   ingredientSearch!:any ;
   isLoading: boolean = true
   ingSub!: Subscription
+  ingID!: string
+  ingName!: string
 
   productName: string = '';
   suplierName: string = '';
@@ -43,12 +45,15 @@ export class IngredientsPage implements OnInit, OnDestroy {
     private navParams: NavParams,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     const data = this.navParams.get('options')
     if(data) {
       this.productName = data.name;
       this.suplierName = data.suplier;
       this.productUm = data.um;
+      this.ingID = data.ingID
+      this.ingName = data.ingName
+      await this.removeEFacturaUpdate()
       this.getIngredients()
     }
   }
@@ -70,10 +75,38 @@ export class IngredientsPage implements OnInit, OnDestroy {
   }
 
 
+  async removeEFacturaUpdate(): Promise<boolean> {
+    if (!this.ingID) return false;
+
+    const accept = await this.actionSrv.deleteAlert(
+      `Dacă alegi un ingredient nou pentru ${this.productName}, vei dezasocia ingredientul ${this.ingName}`,
+      'Dezasociere',
+    );
+
+    if (!accept) return false;
+
+    const ing = this.ingSrv.getIng(this.ingID);
+    if (!ing) return false;
+
+    const index = ing.eFactura.findIndex(u => u.name === this.productName);
+    if (index === -1) return false;
+
+    ing.eFactura.splice(index, 1);
+
+    try {
+      await firstValueFrom(this.ingSrv.editIngredient(ing._id, ing))
+      showToast(this.toastCtrl, `Ingredientul ${this.ingName} a fost dezasociat`, 3000);
+      return true;
+    } catch (error: any) {
+      console.log(error)
+      showToast(this.toastCtrl, error.message, 4000);
+      return false;
+    }
+  }
 
 
   async selectIngredient(ing: InvIngredient){
-    const data = await this.actionSrv.numberAlert('Corecție de cantitate', `Adaugă corecție de cantitate (pune 1 dacă unitatea de masura de pe factura -${this.productUm}-  coincide cu unitatea de măsură a ingredientului)`, 'val', 'Corecție cantitate');
+    const data = await this.actionSrv.numberAlert('Corecție de cantitate', `Adaugă corecție de cantitate (pune 1 dacă unitatea de masura de pe factura -${this.productUm}-  coincide cu unitatea de măsură a ingredientului)`, 'val', 'Corecție cantitate', '');
     if (data){
       const update = {
         suplier: this.suplierName,
@@ -92,7 +125,7 @@ export class IngredientsPage implements OnInit, OnDestroy {
         next: (response) => {
           this.modalCtrl.dismiss(this.ing)
           showToast(this.toastCtrl, response.message, 2000)
-        }, 
+        },
         error: (error) => {
           showToast(this.toastCtrl, error.message, 4000)
           console.log(error)
@@ -110,12 +143,13 @@ export class IngredientsPage implements OnInit, OnDestroy {
 
 
   async addIng(){
-    const ing = await this.actionSrv.openPayment(AddIngredientPage, [])
+    const ing = await this.actionSrv.openAdd(AddIngredientPage, [], 'add-modal')
     if(ing){
-      this.recipeService.saveIng(ing).subscribe(response => {
-       this.ingSrv.addIngredinet(response.ing)
-       showToast(this.toastCtrl, response.message, 4000)
-      })
+       this.ingSrv.addIngredinet(ing).subscribe({
+        next: (response) =>{
+          showToast(this.toastCtrl, response.message, 4000)
+        }
+       })
     }
    }
 
@@ -132,7 +166,7 @@ export class IngredientsPage implements OnInit, OnDestroy {
     if(searchQuery === ''){
       this.ingredients = []
     }
- 
+
   }
 
   close(){

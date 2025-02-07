@@ -10,13 +10,11 @@ import { UsersService } from './users/users.service';
 import { NirsService } from './nirs/nirs.service';
 import { MenuController } from '@ionic/angular';
 import { CashRegisterPage } from './cash-register/cash-register.page';
-import { EFacturaPage } from './e-factura/e-factura.page';
 import { ImpPage } from './imp/imp.page';
 import { IngredientPage } from './ingredient/ingredient.page';
 import { NirsPage } from './nirs/nirs.page';
 import { ProductsPage } from './products/products.page';
 import { UsersPage } from './users/users.page';
-import { SuplierService } from '../../../../../timeout/src/app/office/CRUD/suplier/suplier.service';
 
 
 
@@ -25,7 +23,7 @@ import { SuplierService } from '../../../../../timeout/src/app/office/CRUD/supli
   templateUrl: 'office.page.html',
   styleUrls: ['office.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, CashRegisterPage, EFacturaPage, ImpPage, IngredientPage, NirsPage, ProductsPage, UsersPage]
+  imports: [IonicModule, CommonModule, CashRegisterPage, ImpPage, IngredientPage, NirsPage, ProductsPage, UsersPage]
 })
 export class OfficePage implements OnInit, OnDestroy {
   public environmentInjector = inject(EnvironmentInjector);
@@ -42,10 +40,8 @@ export class OfficePage implements OnInit, OnDestroy {
   public appPages = [
     {name: 'Produse', icon: '../../assets/icon/fast-food-outline.svg', show: false},
     {name: 'Materii Prime', icon: '../../assets/icon/plant.svg', show: false},
-    {name: 'Deprecieri', icon: '../../assets/icon/tools.svg', show: false},
-    {name: 'Nir', icon: '../../assets/icon/document.svg', show: true},
-    {name: 'E-Factura', icon: '../../assets/icon/cloud-outline.svg', show: false},
-    {name: 'Registru de Casă', icon: '../../assets/icon/business.svg', show: false},
+    {name: 'Documente', icon: '../../assets/icon/document.svg', show: false},
+    {name: 'Registru de Casă', icon: '../../assets/icon/business.svg', show: true},
     {name: 'Utilizatori', icon: '../../assets/icon/man.svg', show: false},
   ];
 

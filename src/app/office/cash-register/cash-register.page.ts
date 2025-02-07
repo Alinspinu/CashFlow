@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonContent, IonicModule, ToastController } from '@ionic/angular';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { Day } from './cash-register.model';
 import { showToast } from 'src/app/shared/utils/toast-controller';
@@ -10,7 +10,6 @@ import { CashRegisterService } from './cash-register.service';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { AddEntryPage } from 'src/app/modals/add-entry/add-entry.page';
 import User from 'src/app/auth/user.model';
-import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import { Router } from '@angular/router';
 
 
@@ -23,6 +22,8 @@ import { Router } from '@angular/router';
 })
 export class CashRegisterPage implements OnInit {
 
+  @ViewChild(IonContent, { static: false }) content!: IonContent;
+
   documents: any[] = [];
   page = 1;
 
@@ -32,7 +33,6 @@ export class CashRegisterPage implements OnInit {
   startDate!: any;
   endDate!: any;
   user!: User
-  screenWidth!: number
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
@@ -42,19 +42,30 @@ export class CashRegisterPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.screenWidth = window.innerWidth
-    this.getUser()
+    this.loadDocuments()
   }
 
-  getUser(){
-    getUserFromLocalStorage().then( (user: User | null) => {
-      if(user){
-        this.user = user
-        this.loadDocuments()
-      } else {
-        this.router.navigateByUrl('/auth')
+
+
+  calcDayPayments(day: Day){
+    let total = 0
+    for(let entry of day.entry){
+      if(entry.tip === 'expense'){
+        total -= entry.amount
       }
-    })
+    }
+    return this.round(total)
+  }
+
+  calcDayIncome(day: Day){
+    let total = 0
+    for(let entry of day.entry){
+      if(entry.tip === 'income'){
+        console.log(entry.amount)
+        total += entry.amount
+      }
+    }
+    return this.round(total + day.cashIn)
   }
 
   deleteDay(day: Day) {
@@ -77,14 +88,6 @@ export class CashRegisterPage implements OnInit {
 
 
 
-  showEntryAmount(entry: any){
-      if(this.user.employee.access < 4 && entry.typeOf === 'Salariu') {
-        return 'xxx'
-      } else {
-        return entry.amount
-      }
-  }
-
 
 
   reciveEntry(ev: any){
@@ -93,8 +96,7 @@ export class CashRegisterPage implements OnInit {
   }
 
   async addEntry(){
-    const data = await this.actionSheet.openPayment(AddEntryPage, 'register')
-    console.log(data)
+    const data = await this.actionSheet.openAdd(AddEntryPage, 'register', 'small')
     if(data && data.day){
       const dayIndex = this.documents.findIndex(el => el.date === data.day.date)
       this.documents[dayIndex] = data.day
@@ -102,20 +104,15 @@ export class CashRegisterPage implements OnInit {
   }
 
 
-loadDocuments(event?: any) {
-  this.cashRegService.getDocuments(this.page, this.user.locatie).subscribe((response) => {
-    // Append new documents to the existing list
+loadDocuments() {
+  this.cashRegService.getDocuments(this.page).subscribe((response) => {
     this.documents = [...this.documents, ...response.documents];
-    if (event) {
-      event.target.complete();
-    }
+    setTimeout(() => {
+      this.scrollTo90Percent()
+    }, 300);
   });
 }
 
-loadMore() {
-  this.page++;
-  this.loadDocuments();
-}
 
 
 export(){
@@ -153,20 +150,31 @@ formatDate(inputDate: string): string {
   return `${day}.${month}.${year}`;
 }
 
-deleteEntry(id: string, index: number, dayIndex: number){
-  const dateToCompare = new Date().setUTCHours(0,0,0,0)
-  const day = this.documents[dayIndex];
-  const dayDate = new Date(day.date).setUTCHours(0,0,0,0)
-    this.cashRegService.deleteEntry(id).subscribe(response => {
-      showToast(this.toastCtrl, response.message, 3000);
-      const entry = day.entry[index];
-      day.cashOut = day.cashOut - entry.amount
-      day.entry.splice(index, 1);
-    })
+async deleteEntry(id: string, index: number, dayIndex: number){
+  const response = await this.actionSheet.deleteAlert('Ești sigur că vrei să ștergi intrarea?', "Șterge intrarea")
+  if(response){
+    const dateToCompare = new Date().setUTCHours(0,0,0,0)
+    const day = this.documents[dayIndex];
+    const dayDate = new Date(day.date).setUTCHours(0,0,0,0)
+      this.cashRegService.deleteEntry(id).subscribe(response => {
+        showToast(this.toastCtrl, response.message, 3000);
+        const entry = day.entry[index];
+        day.cashOut = day.cashOut - entry.amount
+        day.entry.splice(index, 1);
+      })
+  }
 }
 
 round(num: number){
   return Math.round(num * 100) / 100;
+}
+
+
+async scrollTo90Percent() {
+  const scrollElement = await this.content.getScrollElement();
+  const totalHeight = scrollElement.scrollHeight;
+  const targetY = totalHeight * 0.95;
+  this.content.scrollToPoint(0, targetY, 500);
 }
 
 }

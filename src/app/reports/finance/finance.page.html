@@ -196,7 +196,7 @@
             <div class="method">
               <span class="label font">Total</span>
               <span class="sum font" *ngIf="!sup">{{totalSpendings}} Lei</span>
-              <span class="sum font" *ngIf="sup">{{totalSpendings - report.impairment.total}} Lei</span>
+              <span class="sum font" *ngIf="sup">{{roundInHtml(totalSpendings - report.impairment.total)}} Lei</span>
             </div>
           </div>
         </ion-col>

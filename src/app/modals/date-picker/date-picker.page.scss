@@ -1,20 +1,24 @@
 ion-content, ion-datetime{
-  --background: var(--ion-color-tertiary)!important;
+  --background: var(--background-color)!important;
 }
 
 
 ion-datetime{
+  font-family: RoseMed !important;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  span{
+    font-family: RoseReg !important;
+  }
+  ion-buttons{
+    ion-button{
+      font-family: RoseMed !important;
+    }
+  }
 }
 
-ion-title{
-  font-family: NoirProReg;
-  font-size: 28px;
-  text-align: center;
-}
 
 
 .title-wrapper{
@@ -23,12 +27,12 @@ ion-title{
   align-items: center;
   justify-content: center;
   .title{
-    font-family: NoirProSemi !important;
+    font-family: RoseMed !important;
     text-align: center;
     background-color: var(--ion-color-medium);
-    padding: 18px;
+    padding: 8px;
     color: var(--ion-color-light);
-    font-size: 24px;
+    font-size: 14px;
     margin-bottom: 24px;
   }
 }

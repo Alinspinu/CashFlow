@@ -189,7 +189,7 @@ body .title-wrapper{
   align-items: center;
   justify-content: center;
   .title{
-    font-family: NoirProSemi !important;
+    font-family: RoseMed !important;
     text-align: center;
     background-color: black;
     padding: 18px;
@@ -201,14 +201,12 @@ body .title-wrapper{
 }
 
 body ion-alert.reprint-alert{
-  font-family: NoirProReg !important;
-  --background: var(--ion-color-tertiary);
+  font-family: RoseMed !important;
+  --background: var(--background-color);
   --max-width: none !important;
   --width: 700px !important;
   .alert-title{
-    background-color: var(--ion-color-light);
-    color: var(--ion-color-medium);
-    padding: 12px;
+    padding: 4px;
     text-align: center;
     font-size: 32px;
     margin-bottom: 24px;
@@ -220,12 +218,7 @@ body ion-alert.reprint-alert{
     font-size: 30px;
     padding-left: 12px;
     height: 100px;
-    background-color: var(--ion-color-light);
-    color: var(--ion-color-medium);
-    box-shadow:
-    0 -2px 4px rgba(0, 0, 0, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+    border: 1.5px solid var(--grey);
   .alert-button-group{
     flex-direction: row !important;
     justify-content: space-between;
@@ -234,6 +227,7 @@ body ion-alert.reprint-alert{
       font-size: 25px;
     }
   }
+}
 }
 
 body .toast{
@@ -321,8 +315,17 @@ body ion-alert.deleteAlert{
   }
 
   .small{
+    --height: 80%;
     --min-width: none !important;
-    --width: 60% !important;
+    --width: 40% !important;
+    .alert-radio-group{
+      max-height: none !important;
+      height: 100% !important;
+    }
+    .alert-checkbox-group{
+      max-height: none !important;
+      height: 100% !important;
+    }
   }
 
   .medium{
@@ -361,13 +364,19 @@ body ion-alert.deleteAlert{
 
   body ion-alert{
     --background:  var(--background-color) !important;
-    --max-width: none!important;
-    --width: 500px;
+    --min-width: none!important;
+    --max-width: 600px !important;
+    --width: 500px !important;
     font-family: RoseMed !important;
     .alert-title{
-      padding: 12px !important;
+      padding: 4px !important;
       font-size: 26px !important;
       text-align: center;
+    }
+    .alert-message{
+      text-align: center;
+      font-family: RoseLight !important;
+      font-size: 24px !important;
     }
     .alert-radio-group{
       .alert-radio-button[aria-checked=true]{
@@ -406,13 +415,20 @@ body ion-alert.deleteAlert{
   }
 
   ion-date-time{
+    ion-buttons{
+      ion-button{
+        font-family: RoseReg !important;
+      }
+    }
     .datetime-button-cancel{
+
       color: var(--ion-color-light) !important;
       --color: var(--ion-color-light) !important;
       --background:  var(--ion-color-medium) !important ;
       background-color:  var(--ion-color-medium) !important ;
     }
     .datetime-button-confirm {
+      font-family: RoseReg !important;
       color: var(--ion-color-medium) !important;
       background-color: var(--ion-color-light) !important;
     }

@@ -1,6 +1,5 @@
 
 <ion-content [fullscreen]="true">
-  <!-- <ion-title class="ion-text-center">ALEGE ZIUA {{mode ? mode : ''}}</ion-title> -->
   <div class="title-wrapper">
     <div class="title">ALEGE ZIUA {{mode ? mode : ''}}</div>
   </div>
@@ -13,10 +12,11 @@
   [max]="maxDate"
   (ionCancel)="onCancel()"
   (ionChange)="onDateChange($event)"
-  #datetime>
+  #datetime
+  >
   <ion-buttons slot="buttons">
-    <ion-button color="medium"  (click)="datetime.cancel()">CANCEL</ion-button>
-    <ion-button color="medium"  (click)="datetime.confirm()">CONFIRM</ion-button>
+    <ion-button slot="start" color="medium"  (click)="datetime.cancel()">CANCEL</ion-button>
+    <ion-button slot="end" color="medium"  (click)="datetime.confirm()">CONFIRM</ion-button>
   </ion-buttons>
   </ion-datetime>
 

@@ -1,0 +1,68 @@
+
+ion-content, ion-toolbar, ion-header{
+  --background: var(--background-color) !important;
+  background-color:  var(--background-color) !important;
+}
+ion-title, ion-button{
+  font-family: RoseMed !important;
+}
+
+
+ion-grid{
+  padding: 12px 48px;
+}
+
+.header-toolbar{
+  padding: 24px 0 12px 0;
+  margin-left: 48px;
+  width: 92%;
+  border-bottom: 1.2px solid var(--grey);
+  ion-title{
+    font-size: 36px;
+  }
+  ion-buttons{
+    ion-button{
+      --padding-bottom: 14px;
+      --padding-end: 14px;
+      --padding-top: 14px;
+      --padding-start: 14px;
+      --border-radius: 50%;
+      --border-width: 1px;
+      margin-right: 12px;
+    }
+  }
+}
+
+.party{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem 0 0.1rem 0;
+  font-size: 22px;
+  padding: 12px 12px 12px 24px;
+  border: 1.5px solid var(--grey);
+  border-radius: 6px;
+  height: 100%;
+  font-family: RoseMed !important;
+  .name{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      .label{
+          flex: 20%;
+          text-align: center;
+          font-size: 14px !important;
+          margin-bottom: 5px;
+      }
+      .value{
+          flex: 80%;
+          text-align: center;
+      }
+  }
+}
+
+.recipe{
+  padding: 24px 48px !important;
+  margin: 0px 48px !important;
+  width: 92% !important;
+}

@@ -84,7 +84,9 @@ export class FacturaPage implements OnInit, OnDestroy {
         const data = {
           name: product.name,
           um: product.unitCode,
-          suplier: this.eFactura.supplier.name
+          suplier: this.eFactura.supplier.name,
+          ingName: product.ingName,
+          ingID: product.ingID
         }
         const ing = await this.actionSheetService.openPayment(IngredientsPage, data)
         if(ing){

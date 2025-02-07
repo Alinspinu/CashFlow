@@ -51,6 +51,8 @@ import { NirPage } from '../office/CRUD/nir/nir.page';
 import { AddIngPage } from '../office/CRUD/nir/add-ing/add-ing.page';
 import { EFacturaPage } from '../office/e-factura/e-factura.page';
 import { FacturaPage } from '../office/e-factura/factura/factura.page';
+import { ImpPage } from '../office/imp/imp.page';
+import { AddImpPage } from '../office/imp/add-imp/add-imp.page';
 
 
 
@@ -218,6 +220,9 @@ export class ActionSheetService {
                typeof DiscountPage |
                typeof EFacturaPage |
                typeof FacturaPage |
+               typeof ImpPage |
+               typeof AddImpPage |
+               typeof AddEntryPage |
                typeof ProductIngredientPage |
                typeof NirPage,
     options: any,
@@ -916,11 +921,15 @@ async detailsAlert(){
     }
   }
 
-  async numberAlert(title: string, message: string, name: string, label: string){
+  async numberAlert(title: string, message: string, name: string, label: string, cssClass: string = '' ){
     const alert = await this.alertController.create({
       header: title,
       message: message,
       buttons: [
+        {
+          text: 'Renunță',
+          role: 'cancel',
+        },
         {
           text: 'ADAUGĂ',
           role: 'confirm',
@@ -936,7 +945,7 @@ async detailsAlert(){
       ],
       backdropDismiss: false,
       keyboardClose: false,
-      cssClass: 'reprint-alert'
+      cssClass: cssClass
     })
     await alert.present();
     const result = await alert.onDidDismiss();

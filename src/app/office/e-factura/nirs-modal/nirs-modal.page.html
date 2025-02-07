@@ -1,41 +1,63 @@
-<ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-    <div class="container">
-      <span class="date"> Data: {{formateDate(docDate)}}</span>
-      <span class="docNumber">Nr Doc: {{docNumber}}</span>
-      <ion-buttons></ion-buttons>
-    </div>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <ion-row class="spinner-container" *ngIf="!suplierNirs.length">
-      <ion-col size="6" offset="3">
-        <app-spinner></app-spinner>
-      </ion-col>
-    </ion-row>
-    <ion-row style="margin-top: 6px;">
-      <ion-col size="12">
-        <div class="nir-entry input"  *ngFor="let nir of suplierNirs; let i = index" [ngClass]="{'selected': nir.selected}" (click)="selectNir(nir)">
-          <span class="date">{{formateDate(nir.documentDate)}}</span>
-          <span class="suplier">{{nir.suplier.name}}</span>
-          <span class="total">{{roundInHtml(nir.totalDoc)}} Lei</span>
-          <span class="docNumber">{{nir.nrDoc}}</span>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  </ion-content>
-  <ion-footer>
-    <ion-grid>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Asociază cu un document existent</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-grid style="padding: 12px 36px;">
       <ion-row>
-        <ion-col size="6">
-          <ion-button expand="block" color="light" (click)="close()" size="large">Închide</ion-button>
+        <ion-col>
+          <div class="party">
+            <div class="name">
+              <span class="label">Data:</span>
+              <span class="value">{{formateDate(docDate)}}</span>
+            </div>
+          </div>
         </ion-col>
-        <ion-col size="6">
-          <ion-button expand="block" color="medium" (click)="merge()" size="large" >Asociază</ion-button>
+        <ion-col>
+          <div class="party">
+            <div class="name">
+              <span class="label">Număr Document:</span>
+              <span class="value">{{docNumber}}</span>
+            </div>
+          </div>
         </ion-col>
       </ion-row>
     </ion-grid>
+  </ion-toolbar>
+  <ion-toolbar>
+    <div class="header">
+      <span class="id">Nr</span>
+      <span class="date">Dată</span>
+      <span class="suplier">Furnizor</span>
+      <span class="total">Total</span>
+      <span class="doc">Nr. Document</span>
+    </div>
+  </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+    <div class="nir-container input"  *ngFor="let nir of suplierNirs; let i = index" [ngClass]="{'selected': nir.selected}" (click)="selectNir(nir)">
+      <span class="id">#{{i+1}}</span>
+      <span class="date">{{formateDate(nir.documentDate)}}</span>
+      <span class="suplier">{{nir.suplier.name}}</span>
+      <span class="total">{{roundInHtml(nir.totalDoc)}} Lei</span>
+      <span class="doc">{{nir.nrDoc}}</span>
+    </div>
+  </ion-content>
+
+  <ion-footer  class="ion-no-border">
+    <ion-toolbar>
+      <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large"  (click)="merge()" [disabled]="disableButton">
+         <ion-label slot="start" size="large" >Asociază</ion-label>
+         <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+       </ion-button>
+    </ion-toolbar>
   </ion-footer>
+
+

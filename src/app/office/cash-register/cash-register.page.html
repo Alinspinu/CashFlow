@@ -1,70 +1,63 @@
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <ion-row>
-      <ion-col size-lg="12">
-        <ion-item lines="none" color="transparent">
-          <ion-buttons slot="start" *ngIf="screenWidth > 500">
-            <ion-button class="input" (click)="openDateModal('start')">
-              DE LA
-              <ion-icon src="../../../assets/png/date-in.png" class="icon-start" alt="date-in-logo" color="medium" size="large"></ion-icon>
-            </ion-button>
-            <span class="display-date">{{startDate ? formatDate(startDate) : "..."}}</span>
-            <ion-button class="input" (click)="openDateModal('end')">
-              PÂNĂ LA
-              <ion-icon src="../../../assets/png/date-out.png" class="icon-end" alt="date-out-logo" color="medium" size="large"></ion-icon>
-            </ion-button>
-            <span class="display-date">{{endDate ? formatDate(endDate) : "..."}}</span>
-            <ion-button class="input" style="margin-left: 90px;" (click)="export()" [disabled]="!startDate || !endDate">
-              Export Xcel
-              <ion-icon src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo" color="medium" size="large"></ion-icon>
-            </ion-button>
-            <!-- <ion-button class="input" style="margin-left: 90px;" (click)="loadMore()">
-              Load
-              <img src="../../../assets/icon/exports.svg" class="icon-end" alt="export-logo">
-            </ion-button> -->
-          </ion-buttons>
-          <ion-buttons slot="end">
-            <ion-button class="input" (click)="addEntry()">
-              ADAUGĂ INTRARE
-              <ion-icon src="assets/icon/add-circle.svg" class="add" color="medium" size="large"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-grid>
-    <ion-row>
-      <ion-col size-lg="8" offset-lg="2">
-        <ion-card *ngFor="let day of documents; let z = index" class="day">
-          <ion-card-header>
-            <span class="cash">Cash in  {{round(day.cashIn)}} Lei</span>
-            <span class="date">
-              <ion-icon src="../../../assets/icon/trash-outline.svg" color="dangar" (click)="deleteDay(day)" style="cursor: pointer;"></ion-icon>
-              DATA  {{formatDate(day.date)}}
-            </span>
 
-          </ion-card-header>
-          <ion-card-content class="ion-no-padding">
-            <ion-list>
-              <ion-item *ngFor="let entry of day.entry; let i = index" class="entry" class="ion-no-margin ion-no-padding">
-                <span class="description">{{entry.description | capitalize}}</span>
-                <span class="tip" [class.red]="entry.tip === 'expense'">{{entry.tip === 'expense' ? 'out' : 'in'}}</span>
-                <span class="amount" [class.red]="entry.tip === 'expense'">{{showEntryAmount(entry)}}</span>
-                <ion-buttons slot="end">
-                  <ion-button (click)="deleteEntry(entry._id, i, z)">
-                    <ion-icon src="../../assets/icon/trash-outline.svg" class="trash"></ion-icon>
-                  </ion-button>
-                </ion-buttons>
-              </ion-item>
-            </ion-list>
-          </ion-card-content>
-          <ion-card-header>
-            <span class="cash">Cash left  {{round(day.cashOut)}} Lei</span>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+      <ion-title slot="start">Registru de casă</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="addEntry()">
+          <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="openDateModal('end')">
+          <ion-icon size="large" src="../../../assets/icon/shedule.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="export()">
+          <ion-icon size="large" src="../../../assets/icon/exports.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+      <div class="header">
+        <span class="id">Nr</span>
+        <span class="date">Data</span>
+        <span class="entry">Denumire Intrare</span>
+        <span class="type">Tip Intrare</span>
+        <span class="total">Valoare</span>
+        <span class="action">Actiune</span>
+      </div>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" #content>
+  <div class="day-container" *ngFor="let day of documents; let z = index">
+      <div class="entry-wrapper" *ngFor="let entry of day.entry; let i = index">
+        <span class="id">#{{i+1}}</span>
+        <span class="date">{{formatDate(day.date)}}</span>
+        <span class="entry">{{entry.description | capitalize}}</span>
+        <span class="type" [class.red]="entry.tip === 'expense'">{{entry.tip === 'expense' ? 'Plată' : 'Încasare'}}</span>
+        <span class="total" [class.red]="entry.tip === 'expense'">{{entry.amount}} Lei</span>
+        <ion-button class="action" fill="ghost" color="medium" (click)="deleteEntry(entry._id, i, z)">
+          <ion-icon src="../../../assets/icon/trash-outline.svg"></ion-icon>
+        </ion-button>
+      </div>
+      <div class="raport-wrapper">
+        <span class="id"></span>
+        <span class="date"></span>
+        <span class="r-label">TOTAL INTRĂRI</span>
+        <span class="r-value">{{calcDayIncome(day)}} Lei</span>
+      <span class="action"></span>
+      </div>
+      <div class="raport-wrapper">
+        <span class="id"></span>
+        <span class="date"></span>
+        <span class="r-label">TOTAL IEȘIRI</span>
+        <span class="r-value">- {{calcDayPayments(day)}} Lei</span>
+      <span class="action"></span>
+      </div>
+      <div class="total-wrapper">
+        <span class="id"></span>
+        <span class="date">{{formatDate(day.date)}}</span>
+        <span class="label">NUMERAR LA SFÂRȘIT DE ZI</span>
+        <span class="value">{{round(day.cashOut)}} Lei</span>
+      <span class="action"></span>
+      </div>
+  </div>
 </ion-content>
-

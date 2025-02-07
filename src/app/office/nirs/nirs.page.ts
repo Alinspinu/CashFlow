@@ -78,7 +78,7 @@ export class NirsPage implements OnInit {
     this.eService.eFacturaMessageSend$.subscribe({
       next: (message) => {
         this.message = message
-        console.log(this.message)
+        this.newBills = 0
         this.message.mesaje.forEach((m: any) => {
           if(!m.done){
             this.newBills ++

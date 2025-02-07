@@ -6,14 +6,16 @@ import { round } from "src/app/shared/utils/functions";
 
 
 export function editMessage(message: messageEFactura, supliers: Suplier[]){
-  console.log(message)
    const msg = message.mesaje.map(m => {
         const year = m.data_creare.substring(0, 4);
         const month = m.data_creare.substring(4, 6);
         const day = m.data_creare.substring(6, 8);
         const hour = m.data_creare.substring(8, 10);
         const minute = m.data_creare.substring(10, 12);
-        m.data_creare = new Date(+year, +month, +day, +hour, +minute).toISOString()
+        const date = new Date(m.data_creare)
+        if (isNaN(date.getTime())) {
+          m.data_creare = new Date(+year, +month-1, +day, +hour, +minute).toISOString()
+        }
         const match = m.detalii.match(/cif_emitent=(\d+)/)
         if(match){
             const suplier = supliers.find(s => s.vatNumber.replace(/\D/g, '') === match[1])
@@ -62,20 +64,22 @@ export function mergeProducts(invoice: EFactura, ings: InvIngredient[]){
                 return normalizedPName === normalizedEIName;
             })
             if(eI){
-                p.ingName = ing.name
-                p.ingUm = ing.um
-                p.ingQty = round(p.quantity * eI.qtyCorector)
-                p.ingDep = ing.dept.name
-                p.ingGestiune = ing.gest.name
-                p.ingID = ing._id
-                p.ingSellPrice = ing.sellPrice
-                foundMatch = true;
-            }
-            if(!foundMatch) {
-                p.ingName = 'Neidentificat'
-                p.ingUm = '-'
-                p.ingQty = 0
-            }
+              p.ingName = ing.name
+              p.ingUm = ing.um
+              p.ingQty = round(p.quantity * eI.qtyCorector)
+              p.ingDep = ing.dept.name
+              p.ingGestiune = ing.gest.name
+              p.ingID = ing._id
+              p.ingSellPrice = ing.sellPrice
+              foundMatch = true;
+          }
+          if(!foundMatch) {
+              p.ingName = 'Neidentificat'
+              p.ingUm = '-'
+              p.ingQty = 0
+          }
+
+
         }
         return p
     })
@@ -86,7 +90,6 @@ export function mergeProducts(invoice: EFactura, ings: InvIngredient[]){
 
 
 export function createNir(eFactura: EFactura, supliers: Suplier[]){
-    console.log(eFactura)
     let newNir: Nir = emptyNir()
     const eVat = eFactura.supplier.vatNumber.replace(/\D/g, '')
     const suplier = supliers.find(s => s.vatNumber.replace(/\D/g, '') === eVat)

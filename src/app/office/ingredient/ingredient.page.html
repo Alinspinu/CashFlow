@@ -10,6 +10,9 @@
         <ion-button fill="outline" (click)="createInv()">
           <ion-icon size="large" src="../../../assets/icon/document.svg"></ion-icon>
         </ion-button>
+        <ion-button fill="outline" (click)="openImp()">
+          <ion-icon size="large" src="../../../assets/icon/tools.svg"></ion-icon>
+        </ion-button>
       </ion-buttons>
     </ion-toolbar>
   <ion-toolbar>
@@ -93,115 +96,3 @@
 </ion-content>
 
 
-
-
-
-
-
-
-
-<!--
-
-<ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-    <ion-grid>
-      <ion-row>
-        <ion-col [size]="screenWidth > 500 ? 6 : 12">
-          <app-recipe-maker
-          (ingsSend)="onIngRecive($event)"
-          (toppSend)="onTopRecive($event)"
-          (search)="searchRecive($event)"
-          [ingPage]="true"
-          [hideIng]="false">
-          [top]="topToEdit"
-          [ings]="ingsToEdit"
-          </app-recipe-maker>
-        </ion-col>
-        <ion-col size="1.75" *ngIf="screenWidth > 500">
-          <ion-item lines="none" class="input">
-            <ion-select placeholder="Alege Gestiunea" (ionChange)="onSelectGestiune($event)">
-              <ion-select-option  class="font" value="">Toate</ion-select-option>
-              <ion-select-option  class="font"*ngFor="let gest of gestiuni" [value]="gest">{{gest | capitalize}}</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-        <ion-col size="1.75" *ngIf="screenWidth > 500">
-          <ion-item lines="none" class="input">
-            <ion-select placeholder="Alege tipul de ingrediet" (ionChange)="onSelectType($event)">
-              <ion-select-option class="font" value="">Toate</ion-select-option>
-              <ion-select-option  class="font"*ngFor="let type of ingTypes" [value]="type">{{type | capitalize}}</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-        <ion-col size="1.75" *ngIf="screenWidth > 500">
-          <ion-item lines="none" class="input">
-            <ion-select placeholder="Alege departamentul" (ionChange)="onSelectDep($event)">
-              <ion-select-option class="font" value="">Toate</ion-select-option>
-              <ion-select-option  class="font"*ngFor="let type of ingDep" [value]="type">{{type | capitalize}}</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-button (click)="printIngsInv()" color="medium" fill="outline">Print</ion-button>
-          <ion-button (click)="createInv()" color="medium" fill="outline">Inv</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <div class="content-container" style="padding-left: 24px; font-family: NoirProSemi !important;"  *ngIf="screenWidth > 500">
-      <span class="nr">Nr</span>
-      <span class="name">Nume</span>
-      <span class="compus">Compus</span>
-      <span class="gestiune">Gestiune</span>
-      <span class="dep">Dep</span>
-      <span class="um">UM</span>
-      <span class="price">Pret de intare cu TVA</span>
-      <span class="qty">Cantitate Inv</span>
-      <ion-icon  class="button"></ion-icon>
-      <ion-icon  class="button"></ion-icon>
-      <ion-icon  class="button"></ion-icon>
-    </div>
-  </ion-toolbar>
-</ion-header>
-
-
-<ion-content [fullscreen]="true">
-  <ion-grid>
-
-<div>
-  <ion-row *ngFor="let ing of ingredients; let i= index;">
-    <ion-col *ngIf=" ing.name && ing.name.length > 1">
-      <div class="content-container product input">
-        <span class="nr" *ngIf="screenWidth > 500">{{i+1}}.</span>
-        <span class="name" (click)="showContent(ing)">{{ing.name}}</span>
-        <ion-icon src="../../../assets/icon/arrows-down.svg" *ngIf="ing.ings.length  && screenWidth > 500" (click)="showIngs(i)" class="arrow"></ion-icon>
-        <ion-icon  *ngIf="!ing.ings.length && screenWidth > 500" class="arrow"></ion-icon>
-        <span class="gestiune">{{ing.gestiune}}</span>
-        <span class="dep" *ngIf="screenWidth > 500">{{ing.dep}}</span>
-        <span class="um" *ngIf="screenWidth > 500">{{ing.um}}</span>
-        <span class="price" *ngIf="screenWidth > 500">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
-        <span class="qty" *ngIf="screenWidth > 500">{{ing.ings.length ? 1 : ing.qty}}</span>
-        <ion-icon  src="../../assets/icon/plant.svg" class="button" (click)="uploadLog(ing._id)"></ion-icon>
-        <ion-icon  src="../../assets/icon/tools.svg" class="button" (click)="inventary(i)"></ion-icon>
-        <ion-icon  src="../../assets/icon/create-outline.svg"  (click)="ingEdit(ing)" *ngIf="screenWidth > 500" class="button"></ion-icon>
-        <ion-icon  src="../../assets/icon/trash-outline.svg" (click)="deleteIng(ing._id, ing.name)" *ngIf="screenWidth > 500" class="button"></ion-icon>
-      </div>
-      <div *ngIf="ing.ings.length && ing.showIngs && screenWidth > 500" class="sub-container">
-        <div *ngFor="let ingr of ing.ings" lines="none" class="content-container" (click)="ingEdit(ing._id)" color="transparent">
-          <span class="name">{{ingr.ing.name}}</span>
-          <span class="gestiune">{{ingr.ing.gestiune}}</span>
-          <span class="dep">{{ingr.ing.dep}}</span>
-          <span class="um">{{ingr.ing.um}}</span>
-          <span class="price">{{ingr.ing.ings.length ? calcProductIngredientPrice(ingr.ing.ings) : roundInHtml(ingr.ing.price + (ingr.ing.price * ingr.ing.tva / 100))}} Lei</span>
-          <span class="qty">{{ingr.qty}}</span>
-          <ion-icon   class="button"></ion-icon>
-          <ion-icon  class="button"></ion-icon>
-          <ion-icon  class="button"></ion-icon>
-        </div>
-      </div>
-    </ion-col>
-  </ion-row>
-</div>
-  </ion-grid>
-</ion-content>
- -->

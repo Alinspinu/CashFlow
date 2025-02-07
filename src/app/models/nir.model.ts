@@ -102,7 +102,7 @@ export class NirIngredient {
 
 export class InvIngredient {
   constructor(
-   
+
     public name: string,
     public price: number,
     public um: string,
@@ -152,7 +152,7 @@ export class InvIngredient {
 
 export class ImpSheet{
   constructor(
-    public date: Date,
+    public date: Date | string,
     public ings: {qty: number, ing: any}[],
     public user: any,
     public locatie: string,

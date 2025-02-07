@@ -12,7 +12,7 @@ import { formatedDateToShow, round } from 'src/app/shared/utils/functions';
   templateUrl: './nirs-modal.page.html',
   styleUrls: ['./nirs-modal.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class NirsModalPage implements OnInit {
 
@@ -20,6 +20,7 @@ export class NirsModalPage implements OnInit {
   docNumber!: string;
   docDate!: string;
   eFacturaID!: string
+  disableButton: boolean = true
 
   nir!: Nir| undefined
 
@@ -60,12 +61,20 @@ export class NirsModalPage implements OnInit {
     if(nir.selected){
       this.nir = undefined
       nir.selected = false
+      this.disableButton = true
     } else{
       this.nir = nir
+      this.disableButton = false
+      this.resetNirs()
       nir.selected = true
-      console.log(this.nir)
-    }
 
+    }
+  }
+
+  resetNirs(){
+    for(let nir of this.suplierNirs){
+      nir.selected = false
+    }
   }
 
 
@@ -87,8 +96,8 @@ export class NirsModalPage implements OnInit {
   }
 
   roundInHtml(num: number) {
-    return round(num) 
-  } 
+    return round(num)
+  }
 
   formateDate(date: string){
     return formatedDateToShow(date).split('ora')[0]

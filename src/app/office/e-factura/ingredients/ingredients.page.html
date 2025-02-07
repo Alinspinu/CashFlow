@@ -1,40 +1,54 @@
 
 <ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+      <ion-title slot="start">Asociază</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
   <ion-toolbar class="ion-no-border">
-    <div class="title-wrapper">
-      <div class="title">Asociază un ingredient pentru produsul  {{productName}}</div>
-      <div class="sub-title">Unitate de măsură (factură) - {{productUm}}</div>
-    </div>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6" offset="3">
-        <ion-item lines="none">
-          <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)" #searchbar (keyup.enter)="setIng()"[disabled]="isLoading">
-          </ion-searchbar>
-          <ion-icon src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()"  size="large"></ion-icon>
-        </ion-item>
-        <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)">
-          <div>
-            <span class="name">{{ing.name}}</span>
-            <div class="ing-info-wrapper">
-              <span class="ing-info">Gestiune:</span>
-              <span class="ing-info-gest">{{ing.gestiune}}</span>
-              <span class="ing-info-stoc">{{"Stoc: " + ing.qty + ' ' + ing.um}}</span>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="8">
+          <div class="party">
+            <div class="name">
+              <span class="label">Denumire Produs:</span>
+              <span class="value">{{productName}}</span>
             </div>
           </div>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+        </ion-col>
+        <ion-col size="4">
+          <div class="party">
+            <div class="name">
+              <span class="label">Unitate de măsură:</span>
+              <span class="value">{{productUm}}</span>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+
+<ion-content [fullscreen]="true">
+  <ion-item lines="none" color="transparent">
+    <ion-searchbar mode="md" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event)" #searchbar (keyup.enter)="setIng()"[disabled]="isLoading">
+    </ion-searchbar>
+    <ion-icon src="assets/icon/add-circle.svg" class="searchbar-icon" (click)="addIng()" color="medium" size="large"></ion-icon>
+  </ion-item>
+  <div  class="ing-container">
+    <div class="ing" *ngFor="let ing of ingredients; let i = index" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
+      <span class="name">{{ing.name}}</span>
+      <div class="ing-info-wrapper">
+        <span class="gest">Gestiune:</span>
+        <span class="gest-value">{{ing.gestiune}}</span>
+        <span class="stoc">Stoc:</span>
+        <span class="stoc-value">{{ing.qty}}</span>
+        <span class="stoc-um">{{ing.um}}</span>
+      </div>
+    </div>
+  </div>
 
 </ion-content>
-
-
-<ion-footer class="ion-no-border">
-  <ion-button expand="block" color="medium" (click)="close()" size="large">Închide</ion-button>
-
-</ion-footer>

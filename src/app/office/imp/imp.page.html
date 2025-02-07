@@ -1,6 +1,47 @@
 
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+      <ion-title slot="start">Fișe Deprecieri</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="newSheet()">
+          <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
 
-<ion-content [fullscreen]="true">
+  <ion-toolbar>
+    <div class="header">
+      <span class="id">Nr</span>
+      <span class="user">Responsabil</span>
+      <span class="date">Dată</span>
+      <span class="ing">Ingredinete</span>
+
+    </div>
+  </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+
+    <div class="ing-container" *ngFor="let sheet of sheets; let i = index" (click)="showSheet(sheet)">
+      <span class="id">#{{i+1}}</span>
+      <span class="user">{{sheet.user.employee.fullName}}</span>
+      <span class="date">{{formatedDate(sheet.date)}}</span>
+      <span class="ing">{{sheet.ings.length}}</span>
+    </div>
+
+  </ion-content>
+
+
+
+
+
+
+
+
+<!-- <ion-content [fullscreen]="true">
 <ion-grid>
   <ion-row>
     <ion-col size="9" offset="1">
@@ -40,4 +81,4 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-</ion-content>
+</ion-content> -->

@@ -28,6 +28,16 @@ export class IngredientService{
     this.ingredientsSend$ =  this.ingredientsState.asObservable();
   }
 
+
+  getIng(id: string): InvIngredient | null{
+      const index =  this.ingredients.findIndex(i => i._id === id)
+      if(index !== -1) {
+        return this.ingredients[index]
+      } else{
+        return null
+      }
+  }
+
   addIngredinet(ing: InvIngredient){
     return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: environment.LOC})
             .pipe(tap(response => {
@@ -82,8 +92,8 @@ export class IngredientService{
               this.ingredients = sortedIngs
               const stringIngs = JSON.stringify(sortedIngs)
               this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs }).subscribe()
-              this.ingredientsState.next([...this.ingredients]); 
-              observer.complete(); 
+              this.ingredientsState.next([...this.ingredients]);
+              observer.complete();
             }
           },
           (error) => {
@@ -91,7 +101,7 @@ export class IngredientService{
           }
         );
       };
-      fetchData(); 
+      fetchData();
     });
   }
 
@@ -197,7 +207,7 @@ addDep(dep: any){
 }
 
 getDep(){
-  return this.http.get<Dep[]>(`${environment.BASE_URL}ing/dep?loc=${environment.LOC}&salePoint=${environment.POINT}`) 
+  return this.http.get<Dep[]>(`${environment.BASE_URL}ing/dep?loc=${environment.LOC}&salePoint=${environment.POINT}`)
 }
 
 editDep(dep: any){

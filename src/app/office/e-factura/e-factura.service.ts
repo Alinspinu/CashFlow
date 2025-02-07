@@ -36,6 +36,7 @@ export class EService{
   getMessages(days: number){
     return this.http.get<messageEFactura>(`${environment.BASE_URL}invoice/get-msg?days=${days}&cif=${environment.CIF}`)
             .pipe(tap(message => {
+              console.log(message)
                   this.eFacturaMessage = message
                   this.getSupliers()
                 }))
@@ -48,6 +49,15 @@ export class EService{
         this.checkInvoiceStatus(getBillIds(this.eFacturaMessage)).subscribe()
       }
     })
+  }
+
+  getDateMessages(startTime: number, endTime: number){
+    return this.http.post<messageEFactura>(`${environment.BASE_URL}invoice/get-date-msg`, {startDate: startTime, endDate: endTime, cif: environment.CIF})
+    .pipe(tap(message => {
+      console.log(message)
+          this.eFacturaMessage = message
+          this.getSupliers()
+        }))
   }
 
 getInvoice(id: string){

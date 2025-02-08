@@ -59,6 +59,15 @@ export class UsersPage implements OnInit, OnDestroy {
     }
 
 
+    filter(){
+
+    }
+
+    addUser(){
+
+    }
+
+
 getUser(){
   Preferences.get({key: 'authData'}).then(data  => {
     if(data.value) {

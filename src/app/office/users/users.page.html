@@ -1,5 +1,54 @@
 
+
 <ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+      <ion-title slot="start">Utilizatori</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="addUser()">
+          <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="filter()">
+          <ion-icon size="large" src="../../../assets/icon/filter-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+      <div class="header">
+        <span class="id">Nr</span>
+        <span class="name">Nume</span>
+        <span class="email">E-mail</span>
+        <span class="tel">Telefon</span>
+        <!-- <span class="comenzi">Comenzi</span>
+        <span class="spent">Cheltuit</span>
+        <span class="disc">Discount</span>
+        <span class="cash-back">Cash Back</span> -->
+        <span class="status">Status</span>
+        <span class="action">Actiune</span>
+      </div>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  `<div class="user-container"  *ngFor="let user of localUsers; let i = index;">
+      <span class="id">#{{i+1}}</span>
+      <span class="name">{{user.name}}</span>
+      <span class="email">{{user.email}}</span>
+      <span class="tel">{{user.telephone}}</span>
+      <!-- <span class="comenzi">{{user.orders.length}}</span>
+      <span class="spent">538 Lei</span>
+      <span class="disc">32 lei</span>
+      <span class="cash-back">{{user.cashBack}}</span> -->
+      <span class="status">{{user.status}}</span>
+      <ion-button class="action" fill="ghost" color="medium" (click)="goUserPage(user._id)">
+        <ion-icon src="../../../assets/icon/eye-outline.svg"></ion-icon>
+      </ion-button>
+  </div>
+</ion-content>
+
+
+
+<!-- <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
     <div class="search-wrapper">
       <ion-searchbar mode="ios" [(ngModel)]="userSearch"  placeholder="Caută Utilizatori"  (ionInput)="searchUsers($event)">
@@ -44,4 +93,4 @@
     </ion-row>
 
   </ion-grid>
-</ion-content>
+</ion-content> -->

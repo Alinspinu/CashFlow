@@ -41,8 +41,8 @@ export class OfficePage implements OnInit, OnDestroy {
     {name: 'Produse', icon: '../../assets/icon/fast-food-outline.svg', show: false},
     {name: 'Materii Prime', icon: '../../assets/icon/plant.svg', show: false},
     {name: 'Documente', icon: '../../assets/icon/document.svg', show: false},
-    {name: 'Registru de Casă', icon: '../../assets/icon/business.svg', show: true},
-    {name: 'Utilizatori', icon: '../../assets/icon/man.svg', show: false},
+    {name: 'Registru de Casă', icon: '../../assets/icon/business.svg', show: false},
+    {name: 'Utilizatori', icon: '../../assets/icon/man.svg', show: true},
   ];
 
   constructor(

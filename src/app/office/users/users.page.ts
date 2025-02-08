@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -8,6 +8,8 @@ import { filter, Subject, takeUntil, firstValueFrom } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
 import User from 'src/app/auth/user.model';
 import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
+import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { UserContentPage } from './user-content/user-content.page';
 
 
 @Component({
@@ -15,52 +17,42 @@ import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class UsersPage implements OnInit, OnDestroy {
 
   userSearch: string = ''
   users: User[] = []
-  user!: User
   localUsers: User[] = []
 
   select: string = ''
 
 
-  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private usersSrv: UsersService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
-      ) {
-        this.router.events
-        .pipe(
-          filter(event => event instanceof NavigationEnd),
-          takeUntil(this.unsubscribe$)
-        )
-        .subscribe(() => {
-          if (this.activatedRoute.snapshot.routeConfig?.path === 'users') {
-            if(this.select === 'employees'){
-              this.localUsers = this.users.filter(users => users.employee.active === true)
-            } else if(this.select === 'users'){
-              this.localUsers = this.users.filter(users => users.employee.active === false)
-            } else {
-              this.localUsers = this.users
-            }
-          }
-        });
+    @Inject(ActionSheetService) private actionSheetService: ActionSheetService
 
-      }
+      ) {}
 
     ngOnDestroy() {
-      this.unsubscribe$.next();
-      this.unsubscribe$.complete();
+  
+    }
+
+    async showUser(user: User){
+      const usr = await this.actionSheetService.openAdd(UserContentPage, user, 'add-modal')
     }
 
 
-    filter(){
-
+    async filter(){
+      const type = await this.actionSheetService.entryAlert(['Toți', 'Clienți', 'Angajați'], 'radio', 'Filtrează', 'Alege o opțiune', '', '')
+      if(type === 'Angajați'){
+        this.localUsers = this.users.filter(users => users.employee.active === true)
+      } else if(type === 'Clienți'){
+        this.localUsers = this.users.filter(users => users.employee.active === false)
+      } else {
+        this.localUsers = this.users
+      }
     }
 
     addUser(){
@@ -68,38 +60,23 @@ export class UsersPage implements OnInit, OnDestroy {
     }
 
 
-getUser(){
-  Preferences.get({key: 'authData'}).then(data  => {
-    if(data.value) {
-     this.user = JSON.parse(data.value)
-    } else{
-      this.router.navigateByUrl('/auth')
-    }
-  })
-}
 
 
   ngOnInit() {
-   this.getUser()
    this.getUsers()
   }
 
-  onSelectUsers(ev: CustomEvent){
-    const select = ev.detail.value
-    this.select = select
-    if(select === 'employees'){
-      this.localUsers = this.users.filter(users => users.employee.active === true)
-    } else if(select === 'users'){
-      this.localUsers = this.users.filter(users => users.employee.active === false)
-    } else {
-      this.localUsers = this.users
-    }
-  }
 
-  searchUsers(ev: CustomEvent){
+  searchUsersName(ev: CustomEvent){
     const searchInput = ev.detail.value
     this.localUsers = this.users.filter(users => users.name.toLowerCase().includes(searchInput.toLowerCase()))
   }
+
+  searchUsersEmail(ev: CustomEvent){
+    const searchInput = ev.detail.value
+    this.localUsers = this.users.filter(users => users.email.toLowerCase().includes(searchInput.toLowerCase()))
+  }
+
 
   getUsers(){
     this.usersSrv.usersSend$.subscribe(response => {
@@ -110,8 +87,6 @@ getUser(){
     })
   }
 
-  goUserPage(userId: string){
-    this.router.navigateByUrl(`/user-content/${userId}`)
-  }
+
 
 }

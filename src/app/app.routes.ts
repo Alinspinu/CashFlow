@@ -41,11 +41,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'user-content/:id',
-    loadComponent: () => import('./content/user-content/user-content.page').then( m => m.UserContentPage),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'pontaj',
     loadComponent: () => import('./office/pontaj/pontaj.page').then( m => m.PontajPage),
     canActivate: [AuthGuard]

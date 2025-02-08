@@ -53,6 +53,7 @@ import { EFacturaPage } from '../office/e-factura/e-factura.page';
 import { FacturaPage } from '../office/e-factura/factura/factura.page';
 import { ImpPage } from '../office/imp/imp.page';
 import { AddImpPage } from '../office/imp/add-imp/add-imp.page';
+import { UserContentPage } from '../office/users/user-content/user-content.page';
 
 
 
@@ -223,6 +224,7 @@ export class ActionSheetService {
                typeof ImpPage |
                typeof AddImpPage |
                typeof AddEntryPage |
+               typeof UserContentPage |
                typeof ProductIngredientPage |
                typeof NirPage,
     options: any,

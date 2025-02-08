@@ -1,4 +1,40 @@
-<ion-header class="ion-no-border" *ngIf="user">
+
+
+
+<ion-header class="ion-no-border">
+  <div class="header-toolbar">
+    <ion-toolbar class="ion-no-border">
+        <ion-title slot="start">{{user.name | capitalize}} ({{user.email}})</ion-title>
+        <ion-buttons slot="end">
+          <ion-button fill="outline" (click)="editUser()">
+            <ion-icon size="large" src="../../../assets/icon/create-outline.svg"></ion-icon>
+          </ion-button>
+          <ion-button fill="outline" (click)="addDiscount()">
+            <ion-icon size="large" src="../../../assets/icon/percent-outline.svg"></ion-icon>
+          </ion-button>
+          <ion-button fill="outline" (click)="deleteUser()">
+            <ion-icon size="large" src="../../../assets/icon/trash-outline.svg"></ion-icon>
+          </ion-button>
+          <ion-button fill="outline" (click)="goBack()">
+            <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+  </div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+</ion-content>
+
+
+
+
+
+
+
+
+<!-- <ion-header class="ion-no-border" *ngIf="user">
   <ion-toolbar class="ion-no-border">
       <ion-button (click)="goBack()" class="back-button" slot="start">
         <ion-icon src="../../../assets/icon/arrow-back-outline.svg"  class="icon"></ion-icon>
@@ -55,18 +91,6 @@
         <div class="input" *ngIf="user.employee.salary">
           <ion-label>Salariu NET: {{user.employee.salary.inHeand}}</ion-label>
         </div>
-        <!-- <div class="input">
-          <ion-label>Adresa: {{user.employee.address}}</ion-label>
-        </div> -->
-        <!-- <div class="input">
-          <ion-label>CNP: {{user.employee.cnp}}</ion-label>
-        </div> -->
-        <!-- <div class="input">
-          <ion-label>Serie: {{user.employee.ciSerial}}</ion-label>
-        </div> -->
-        <!-- <div class="input">
-          <ion-label>Număr: {{user.employee.ciNumber}}</ion-label>
-        </div> -->
         <div class="input">
           <ion-label>Access: Level {{user.employee.access}}</ion-label>
         </div>
@@ -100,4 +124,4 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-</ion-content>
+</ion-content> -->

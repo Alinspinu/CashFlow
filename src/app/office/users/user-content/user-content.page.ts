@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from 'src/app/office/users/users.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
@@ -10,13 +10,14 @@ import { AddEmployeeDataPage } from 'src/app/modals/add-employee-data/add-employ
 import { formatedDateToShow } from 'src/app/shared/utils/functions';
 import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.page';
 import { AddClientDiscountPage } from 'src/app/modals/add-client-discount/add-client-discount.page';
+import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 
 @Component({
   selector: 'app-user-content',
   templateUrl: './user-content.page.html',
   styleUrls: ['./user-content.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe]
 })
 export class UserContentPage implements OnInit {
 
@@ -26,13 +27,13 @@ export class UserContentPage implements OnInit {
   constructor(
     private router: Router,
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
-    private route: ActivatedRoute,
+    private modalCtrl: ModalController,
+    private navParams: NavParams,
     private userSrv: UsersService,
     private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
-    this.getUserId()
     this.getUser()
 
   }
@@ -43,15 +44,14 @@ export class UserContentPage implements OnInit {
   }
 
   goBack(){
-    this.router.navigateByUrl('/office/users')
+    this.modalCtrl.dismiss(null)
   }
 
   getUser(){
-    this.userSrv.getUser(this.userId).subscribe(response => {
-      this.user = response
-      console.log(this.user)
-    })
+    const user = this.navParams.get('options')
+    if(user) this.user = user
   }
+
 
   showOrder(order: any){
     this.actSrv.openPayment(OrderAppViewPage, order)
@@ -68,14 +68,6 @@ export class UserContentPage implements OnInit {
       }
 }
 
-  getUserId(){
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if(id){
-        this.userId = id;
-      }
-    })
-  }
 
 async editUser(){
   if(this.user){

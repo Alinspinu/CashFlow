@@ -68,11 +68,6 @@ export const routes: Routes = [
         loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage),
         canActivate: [AuthGuard]
       },
-      {
-        path: 'user-content/:id',
-        loadComponent: () => import('../content/user-content/user-content.page').then( m => m.UserContentPage),
-        canActivate: [AuthGuard]
-      },
       // {
       //   path: 'ingredients',
       //   loadComponent: () => import('./e-factura/ingredients/ingredients.page').then( m => m.IngredientsPage)
@@ -88,7 +83,8 @@ export const routes: Routes = [
     path: '',
     redirectTo: '/office/products',
     pathMatch: 'full',
-  },  {
+  },
+  {
     path: 'add-imp',
     loadComponent: () => import('./imp/add-imp/add-imp.page').then( m => m.AddImpPage)
   },

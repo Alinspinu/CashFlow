@@ -1,0 +1,144 @@
+
+<ion-header class="ion-no-border">
+  <div class="header-toolbar">
+    <ion-toolbar class="ion-no-border">
+        <ion-title slot="start">Adaugă reduceri</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="adBasDsicounts()" color="medium">
+            <ion-icon src="../../../assets/icon/add-circle.svg"></ion-icon>
+          </ion-button>
+          <ion-button fill="outline" (click)="close()" color="medium">
+            <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+      </div>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form">
+  <section>
+    <section class="section">
+      <ion-row>
+        <ion-col size="4">
+          <div class="section-label">
+            <span class="label-title">General</span>
+            <span class="label-sub-title">Adaugă discountul general și procentul de cash back.</span>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <div class="inputs-wrapper">
+            <div  class="input">
+              <ion-input type="number" mode="md" fill="outline" label="Discount General %" labelPlacement="floating" placeholder="Ex 10%" formControlName="generalDiscount"></ion-input>
+            </div>
+            <div class="input">
+              <ion-input type="number" mode="md" fill="outline" label="Cash Back %" labelPlacement="floating" placeholder="Ex 10%" formControlName="cashBackProcent"></ion-input>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </section>
+  </section>
+  <section>
+    <section class="section">
+      <ion-row>
+        <ion-col size="4">
+          <div class="section-label">
+            <span class="label-title">Categorii</span>
+            <span class="label-sub-title">Adaugă categorii de produs și procentul de discount pe categorii.</span>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <ion-searchbar mode="md" [(ngModel)]="categoriesSearch"  placeholder="Caută Categorie"  (ionInput)="searchCategory($event)" #searchbar (keyup.enter)="setCat()">
+          </ion-searchbar>
+          <ion-item *ngFor="let cat of categories; let i = index" class="ing-name" (click)="selectCat(cat)">
+            <div>
+              <span class="name">{{cat.name}}</span>
+              <div class="ing-info-wrapper">
+                <span class="main-cat">{{cat.mainCat}}</span>
+              </div>
+            </div>
+          </ion-item>
+          <div class="inputs-wrapper">
+            <div *ngFor="let discount of discountsCats; let i = index" lines="none" class="cat-input">
+              <span class="name">{{discount.name}}</span>
+              <span class="disc">{{discount.precent}} %</span>
+                <ion-button (click)="deleteDiscount(i)" fill="clear" color="medium">
+                  <ion-icon src="'../../../../../assets/icon/trash-outline.svg"></ion-icon>
+                </ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </section>
+  </section>
+</form>
+</ion-content>
+
+<ion-footer mode="ios" [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large" [disabled]="!form.valid" (click)="onSubmit()" >
+       <ion-label slot="start" size="large">Adaugă</ion-label>
+       <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+     </ion-button>
+  </ion-toolbar>
+</ion-footer>
+
+<!-- <ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+      <ion-button (click)="close()" slot="start" color="medium">
+        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" style="font-size: 35px;"color="light"></ion-icon>
+      </ion-button>
+      <div class="title-wrapper">
+        <div class="title">REDUCERE</div>
+      </div>
+      <ion-button (click)="adBasDsicounts()" slot="end" color="light">
+        <ion-icon src="../../../assets/icon/add-circle.svg" style="font-size: 35px;"color="medium"></ion-icon>
+      </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="auth-wrapper">
+  <ion-grid>
+    <ion-searchbar mode="ios" [(ngModel)]="categoriesSearch"  placeholder="Caută Categorie"  (ionInput)="searchCategory($event)" #searchbar (keyup.enter)="setCat()">
+    </ion-searchbar>
+    <ion-item *ngFor="let cat of categories; let i = index" class="ing-name" (click)="selectCat(cat)">
+      <div>
+        <span class="name">{{cat.name}}</span>
+        <div class="ing-info-wrapper">
+          <span class="main-cat">{{cat.mainCat}}</span>
+        </div>
+      </div>
+    </ion-item>
+
+    <form [formGroup]="form">
+  <ion-row *ngIf="!setDiscountForAll">
+    <ion-col>
+      <ion-title class="ion-text-center">Discount general</ion-title>
+      <ion-item lines="none" class="input">
+        <ion-input type="number" label="Discount General %" labelPlacement="floating" placeholder="Ex 10%" formControlName="generalDiscount"></ion-input>
+    </ion-item>
+      <ion-item lines="none" class="input">
+        <ion-input type="number" label="Cash Back %" labelPlacement="floating" placeholder="Ex 10%" formControlName="cashBackProcent"></ion-input>
+    </ion-item>
+      </ion-col>
+  </ion-row>
+  </form>
+  <ion-title *ngIf="discountsCats.length" class="ion-text-center">Discount pe categorii de produse</ion-title>
+  <ion-item *ngFor="let discount of discountsCats; let i = index" lines="none" class="input">
+    <ion-label slot="start">{{discount.name}}</ion-label>
+    <ion-buttons slot="end">
+        <ion-button (click)="deleteDiscount(i)">
+          <ion-icon src="'../../../../../assets/icon/trash-outline.svg" color="danger"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+    <ion-label slot="end">{{discount.precent}} %</ion-label>
+  </ion-item>
+    </ion-grid>
+  </ion-content>
+
+
+  <ion-footer class="ion-no-border">
+    <ion-button color="medium" (click)="onSubmit()" class="ion-padding submit" size="large" expand="block">ADAUGĂ</ion-button>
+  </ion-footer> -->

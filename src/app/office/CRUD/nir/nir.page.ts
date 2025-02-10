@@ -16,6 +16,7 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { AddIngPage } from './add-ing/add-ing.page';
 import { Subscription } from 'rxjs';
 import { DiscountPage } from 'src/app/modals/discount/discount.page';
+import { SupliersService } from '../../supliers/supliers.service';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class NirPage implements OnInit, OnDestroy {
   suplier!: Suplier
 
   nirSub!: Subscription;
+  supliersSub!: Subscription;
 
   nirId!: string
   nirIds: string[] = []
@@ -51,6 +53,7 @@ export class NirPage implements OnInit, OnDestroy {
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private nirsService: NirsService,
     private nirService: NirService,
+    private supliersService: SupliersService,
      private navParams: NavParams,
      private modalCtrl: ModalController,
      private toastCtrl: ToastController,
@@ -174,7 +177,8 @@ setupNirForm(){
     }
 
     async selectSuplier(){
-      const suplierName = await this.actionSheet.openSelect(SelectDataPage, this.supliersToSend, 'data')
+      const suplierName = await this.actionSheet.openSelect(SelectDataPage, this.supliersToSend, 'supliers')
+      console.log(suplierName)
       if(suplierName){
         const suplier = this.supliers.find((suplier: any) => suplier.name === suplierName)
         if(suplier){
@@ -205,7 +209,7 @@ setupNirForm(){
 
 
   getSupliers(){
-    this.nirsService.getSuplier('').subscribe(response => {
+   this.supliersSub = this.supliersService.supliersSend$.subscribe(response => {
       if(response){
         this.supliers = response.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         this.supliers.forEach(suplier => {

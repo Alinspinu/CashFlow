@@ -79,6 +79,24 @@ editSuplier(suplierId: string, update: any){
 
 }
 
+saveSuplier(suplier: Suplier, mode: any){
+  return this.http.post<{message: string, id: string, suplier: Suplier}>(`${environment.BASE_URL}suplier/save-suplier?mode=${mode}`, {suplier: suplier, loc: environment.LOC})
+          .pipe(tap(response => {
+            this.supliers.push(response.suplier)
+            const stringSupliers = JSON.stringify(this.supliers)
+            this.dbService.addOrUpdateIngredient({id: 4, ings: stringSupliers}).subscribe()
+            this.supliersState.next([...this.supliers])
+          }))
+}
+
+searchSuplier(input: string){
+  const duplicatedSupliers = JSON.parse(JSON.stringify(this.supliers)) as Suplier[]
+  let result = duplicatedSupliers.filter((object) =>
+    object.name.toLocaleLowerCase().includes(input.toLocaleLowerCase())
+    );
+    return result
+}
+
 getSuplier(id: string){
   return this.http.get<Suplier>(`${environment.BASE_URL}suplier/get-suplier?suplierId=${id}`)
 }

@@ -36,11 +36,11 @@ export class UsersPage implements OnInit, OnDestroy {
       ) {}
 
     ngOnDestroy() {
-  
+
     }
 
-    async showUser(user: User){
-      const usr = await this.actionSheetService.openAdd(UserContentPage, user, 'add-modal')
+    async showUser(userId: string){
+      const usr = await this.actionSheetService.openAdd(UserContentPage, userId, 'add-modal')
     }
 
 

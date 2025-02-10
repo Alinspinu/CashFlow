@@ -75,7 +75,7 @@ export class UsersService{
   }
 
   getUser(userId: string){
-    return this.http.post(`${environment.BASE_URL}users/user`, {userId: userId})
+    return this.http.post<User>(`${environment.BASE_URL}users/user`, {userId: userId})
   }
 
   setUserDiscount(userId: string, discount: any){

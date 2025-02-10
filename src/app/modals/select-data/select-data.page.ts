@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavParams, ModalController } from '@ionic/angular';
+import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { SuplierPage } from 'src/app/office/CRUD/suplier/suplier.page';
+import { Suplier } from 'src/app/models/suplier.model';
 
 @Component({
   selector: 'app-select-data',
@@ -16,6 +19,7 @@ export class SelectDataPage implements OnInit {
   searchPlaceholder: string = 'Caută'
   choise: string[] = []
   mode!: string;
+  showAdd: boolean = false
 
   selectedValue!: string
 
@@ -27,10 +31,20 @@ export class SelectDataPage implements OnInit {
   constructor(
     private navParams: NavParams,
     private modalCtrl: ModalController,
+    @Inject(ActionSheetService) private actionSht: ActionSheetService
   ) { }
 
   ngOnInit() {
     this.getData()
+  }
+
+
+   async addSuplier(){
+    const suplier = await this.actionSht.openModal(SuplierPage, true, false) as Suplier
+    console.log(suplier)
+   if(suplier){
+    this.modalCtrl.dismiss(suplier.name)
+   }
   }
 
   getData(){
@@ -45,12 +59,14 @@ export class SelectDataPage implements OnInit {
       this.users.push(user)
     })
     this.userss = this.users
-    // this.users = this.userss
-
    } else {
     this.dataa = this.navParams.get('options')
     this.data = this.dataa
    }
+   if(this.mode === 'supliers'){
+      this.showAdd = true
+   }
+
   }
 
   searchData(ev: any){

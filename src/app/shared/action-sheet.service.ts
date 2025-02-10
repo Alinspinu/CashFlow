@@ -12,13 +12,11 @@ import { PaymentPage } from '../modals/payment/payment.page';
 import { CustomerCheckPage } from '../modals/customer-check/customer-check.page';
 import { CashbackPage } from '../modals/cashback/cashback.page';
 import { DiscountPage } from '../modals/discount/discount.page';
-import { AddEmployeeDataPage } from '../modals/add-employee-data/add-employee-data.page';
 import { OrderViewPage } from '../reports/cash/order-view/order-view.page';
 import { ProductIngredientPage } from '../office/CRUD/product-ingredient/product-ingredient.page';
 import { CashInOutPage } from '../modals/cash-in-out/cash-in-out.page';
 import { DatePickerPage } from '../modals/date-picker/date-picker.page';
 import { AddEntryPage } from '../modals/add-entry/add-entry.page';
-import { AddClientDiscountPage } from '../modals/add-client-discount/add-client-discount.page';
 import { OrdersViewPage } from '../reports/cash/orders-view/orders-view.page';
 import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { TipsPage } from '../modals/tips/tips.page';
@@ -54,6 +52,8 @@ import { FacturaPage } from '../office/e-factura/factura/factura.page';
 import { ImpPage } from '../office/imp/imp.page';
 import { AddImpPage } from '../office/imp/add-imp/add-imp.page';
 import { UserContentPage } from '../office/users/user-content/user-content.page';
+import { AddEmployeeDataPage } from '../office/users/user-content/add-employee-data/add-employee-data.page';
+import { AddClientDiscountPage } from '../office/users/user-content/add-client-discount/add-client-discount.page';
 
 
 
@@ -139,7 +139,6 @@ export class ActionSheetService {
                typeof AddEmployeeDataPage |
                typeof OrderViewPage |
                typeof CashInOutPage |
-               typeof AddClientDiscountPage |
                typeof AddProductDiscountPage |
                typeof OrdersViewPage |
                typeof OrderAppViewPage |
@@ -225,6 +224,8 @@ export class ActionSheetService {
                typeof AddImpPage |
                typeof AddEntryPage |
                typeof UserContentPage |
+               typeof AddClientDiscountPage |
+               typeof AddEmployeeDataPage |
                typeof ProductIngredientPage |
                typeof NirPage,
     options: any,

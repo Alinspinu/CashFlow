@@ -1,15 +1,11 @@
 
 <ion-header class="ion-no-border">
-  <!-- <ion-toolbar class="ion-no-border">
-
-
-      <ion-button (click)="close()" slot="start" color="medium" fill="outline">
-        <ion-icon src="../../../assets/icon/close-outline.svg" color="medium" style="font-size: 28px;"></ion-icon>
-      </ion-button>
-    </ion-toolbar> -->
     <ion-toolbar class="ion-no-border">
       <ion-searchbar mode="md"  [placeholder]="searchPlaceholder"  (ionInput)="searchData($event)" #searchbar>
       </ion-searchbar>
+      <ion-button slot="end" color="medium" fill="clear" (click)="addSuplier()" *ngIf="showAdd">
+          <ion-icon src="../../../assets/icon/add-circle-outline.svg" size="large"></ion-icon>
+      </ion-button>
     </ion-toolbar>
 </ion-header>
 
@@ -20,7 +16,7 @@
         <ion-checkbox (ionChange)="onChange($event, user)" slot="start" [checked]="user.checked" labelPlacement="end">{{user.name}}</ion-checkbox>
       </ion-item>
     </div>
-    <ion-radio-group [(ngModel)]="selectedValue"  *ngIf="mode === 'data'">
+    <ion-radio-group [(ngModel)]="selectedValue"  *ngIf="mode === 'supliers' || 'data'">
       <ion-item *ngFor="let choice of data; let i = index" class="ing-name" lines="none" color="transparent">
         <ion-radio slot="start" [value]="choice" labelPlacement="end">{{choice}}</ion-radio>
       </ion-item>
@@ -33,7 +29,7 @@
     <ion-button color="medium" (click)="onSubmit()" size="large" expand="block" style="font-family: NoirProSemi !important;">Alege</ion-button>
   </ion-footer> -->
 
-  
+
 <ion-footer mode="ios" [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-button mode='md' class="footer-buttons" size="large" slot="start" fill="outline" (click)="close()" color="medium">

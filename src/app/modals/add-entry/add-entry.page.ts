@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
@@ -11,6 +11,8 @@ import { formatedDateToShow } from 'src/app/shared/utils/functions';
 import { NirService } from '../../office/CRUD/nir/nir.service';
 import { UsersService } from '../../office/users/users.service';
 import { SelectDataPage } from '../select-data/select-data.page';
+import { Subscription } from 'rxjs';
+import { SupliersService } from 'src/app/office/supliers/supliers.service';
 
 
 @Component({
@@ -20,7 +22,7 @@ import { SelectDataPage } from '../select-data/select-data.page';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule]
 })
-export class AddEntryPage implements OnInit {
+export class AddEntryPage implements OnInit, OnDestroy {
   form!: FormGroup;
   coffee: boolean = false
   date!:any
@@ -33,6 +35,8 @@ export class AddEntryPage implements OnInit {
   users!: any
   admin: any[] = []
   description: string = ''
+
+  suplierSub!: Subscription
 
   usersToShow!: any
 
@@ -102,6 +106,7 @@ export class AddEntryPage implements OnInit {
     private navPar: NavParams,
     private toastCtrl: ToastController,
     private nirSrv: NirService,
+    private supliersService: SupliersService,
     private usersSrv: UsersService,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
   ) { }
@@ -117,6 +122,11 @@ export class AddEntryPage implements OnInit {
    } else {
     this.startEntryFlowUser()
    }
+  }
+  ngOnDestroy(): void {
+      if(this.suplierSub){
+        this.suplierSub.unsubscribe()
+      }
   }
 
 
@@ -162,7 +172,7 @@ export class AddEntryPage implements OnInit {
   }
 
   getSupliers(){
-    this.nirSrv.getSuplier('').subscribe(response => {
+   this.suplierSub = this.supliersService.supliersSend$.subscribe(response => {
       if(response){
         this.supliers = response.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         response.forEach(suplier => {

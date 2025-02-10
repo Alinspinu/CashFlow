@@ -51,12 +51,12 @@ export class ProductPage implements OnInit {
   isTva: boolean = true
 
 
-  general: boolean = false
+  general: boolean = true
   recipe: boolean = false
   sub: boolean = false
   image: boolean = false
-  report: boolean = true
-  segment: string = 'report'
+  report: boolean = false
+  segment: string = 'general'
 
   kill: boolean = true
 

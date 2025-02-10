@@ -4,7 +4,7 @@
 <ion-header class="ion-no-border">
   <div class="header-toolbar">
     <ion-toolbar class="ion-no-border">
-        <ion-title slot="start">{{user.name | capitalize}} ({{user.email}})</ion-title>
+        <ion-title slot="start" *ngIf="user">{{user.name | capitalize}}</ion-title>
         <ion-buttons slot="end">
           <ion-button fill="outline" (click)="editUser()">
             <ion-icon size="large" src="../../../assets/icon/create-outline.svg"></ion-icon>
@@ -20,13 +20,90 @@
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
-  </div>
+      </div>
+      <div class="second-toolbar" *ngIf="user">
+      <ion-toolbar>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4">
+              <div class="party">
+                <div class="name">
+                  <span class="label">E-mail:</span>
+                  <span class="value">{{user.email}}</span>
+                </div>
+              </div>
+            </ion-col>
+
+            <ion-col size="2">
+              <div class="party">
+                <div class="name">
+                  <span class="label">Telefon</span>
+                  <span class="value">{{user.telephone}}</span>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="party">
+                <div class="name" *ngIf="user.orders">
+                  <span class="label">Comenzi</span>
+                  <span class="value">{{user.orders.length}}</span>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="party">
+                <div class="name">
+                  <span class="label">Cheltuit (Lei)</span>
+                  <span class="value">{{total}}</span>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="party">
+                <div class="name">
+                  <span class="label">Discount (Lei)</span>
+                  <span class="value">{{discount + cashBack}}</span>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="party">
+                <div class="name">
+                  <span class="label">CashBack (Lei)</span>
+                  <span class="value">{{user.cashBack}}</span>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-toolbar>
+    </div>
+    <ion-toolbar>
+      <div class="header">
+        <span class="id">Nr</span>
+        <span class="date">Dată</span>
+        <span class="items">Produse</span>
+        <span class="order-total">Valoare Comandă</span>
+        <span class="cash-back">CashBack</span>
+        <span class="discount">Discount Client</span>
+        <span class="total">Încasat</span>
+        <span class="pay-method">Metodă de plată</span>
+      </div>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-
+<ion-content [fullscreen]="true" *ngIf="user">
+  <div class="order-container" *ngFor="let order of user.orders; let i = index" (click)="showOrder(order)">
+    <span class="id">#{{i+1}}</span>
+    <span class="date">{{formatDate(order.createdAt)}}</span>
+    <span class="items">{{order.productCount}}</span>
+    <span class="order-total">{{order.total + order.cashBack + order.discount}} Lei</span>
+    <span class="cash-back">{{order.cashBack}} Lei </span>
+    <span class="discount">{{order.discount}} Lei</span>
+    <span class="total">{{order.total}} Lei</span>
+    <span class="pay-method">{{order.paymentMethod}}</span>
+  </div>
 </ion-content>
-
 
 
 

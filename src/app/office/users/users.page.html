@@ -36,13 +36,13 @@
 
 
 <ion-content [fullscreen]="true">
-  `<div class="user-container"  *ngFor="let user of localUsers; let i = index;" (click)="showUser(user)">
+  `<div class="user-container"  *ngFor="let user of localUsers; let i = index;" (click)="showUser(user._id)">
       <span class="id">#{{i+1}}</span>
       <span class="name">{{user.name}}</span>
       <span class="email">{{user.email}}</span>
       <span class="tel">{{user.telephone}}</span>
       <span class="status">{{user.status}}</span>
-      <span class="orders">{{user.orders.length}}</span>
+      <span class="orders" *ngIf="user.orders">{{user.orders.length}}</span>
   </div>
 </ion-content>
 

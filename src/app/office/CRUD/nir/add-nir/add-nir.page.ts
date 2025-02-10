@@ -19,6 +19,7 @@ import { NirService } from '../nir.service';
 import User from '../../../../auth/user.model';
 import { IonInput } from '@ionic/angular/standalone';
 import { NirsService } from 'src/app/office/nirs/nirs.service';
+import { SupliersService } from '../../../supliers/supliers.service';
 
 
 
@@ -73,6 +74,7 @@ export class AddNirPage implements OnInit {
     @Inject(ActionSheetService) private actionSht: ActionSheetService,
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
+    private supliersService: SupliersService,
     private router: Router,
     private randomSrv: RandomService,
   ) { }
@@ -222,16 +224,13 @@ updateLogId(){
 
 
 
-
-  searchSuplier(ev: any){
-    const input = ev.detail.value
-    this.nirSrv.getSuplier(input).subscribe(response => {
-      this.supliers = response
-      if(input === ''){
-        this.supliers = []
-      }
-    })
+searchSuplierInDb(ev: any){
+  const input = ev.detail.value
+  this.supliers = this.supliersService.searchSuplier(input)
+  if(input === ''){
+    this.supliers = []
   }
+}
 
   async selectSuplier(suplier: any){
     this.suplier = suplier;

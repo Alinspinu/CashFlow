@@ -119,9 +119,6 @@ export class NirService{
 
 
 
-  getSuplier(input: any){
-    return this.http.post<any[]>(`${environment.BASE_URL}suplier/send-supliers`, {search: input, loc: environment.LOC})
-  }
 
 
   getIngredients(loc: string){

@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { formatedDateToShow, round } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { DatePickerPage } from '../date-picker/date-picker.page';
+import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 
 @Component({
   selector: 'app-add-employee-data',
@@ -22,6 +22,7 @@ export class AddEmployeeDataPage implements OnInit {
   endDate!: string
   birthDate!: string
 
+
   constructor(
     private modalCtrl: ModalController,
     private navPar: NavParams,
@@ -32,6 +33,8 @@ export class AddEmployeeDataPage implements OnInit {
     this.getData()
     this.setUpForm()
   }
+
+
 
   getData(){
     this.data = this.navPar.get('options');

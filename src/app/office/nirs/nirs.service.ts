@@ -69,9 +69,6 @@ export class NirsService{
             }))
   }
 
-  getSuplier(input: any){
-    return this.http.post<any[]>(`${environment.BASE_URL}suplier/send-supliers`, {search: input, loc: environment.LOC})
-  }
 
   getnirsBySuplier(id: string){
     return this.http.get<Nir[]>(`${environment.BASE_URL}nir/get-nirs?id=${id}`)

@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {environment} from '../../../../environments/environment'
-import { Suplier } from "../../../models/suplier.model";
 
 
 
@@ -12,16 +11,18 @@ import { Suplier } from "../../../models/suplier.model";
 
 export class SuplierService{
 
-  constructor(private http: HttpClient){}
+
+
+  constructor(
+    private http: HttpClient
+  ){}
 
 
   getSuplierInfo(cif: string){
    return this.http.get<any>(`${environment.SUPLIER_APY_URL}?key=${environment.SUPLIER_APY_KEY}&cui=${cif}`)
   }
 
-  saveSuplier(suplier: Suplier, mode: any){
-    return this.http.post<{message: string, id: string}>(`${environment.BASE_URL}suplier/save-suplier?mode=${mode}`, {suplier: suplier, loc: environment.LOC})
-  }
+
 
   saveAdmin(user: any, second: any){
     return this.http.post<{message: string}>(`${environment.BASE_URL}auth/register-employee`, {user: user, second: second})

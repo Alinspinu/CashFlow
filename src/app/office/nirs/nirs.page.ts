@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, ToastController } from '@ionic/angular';
@@ -18,6 +18,8 @@ import { Preferences } from '@capacitor/preferences';
 import { NirPage } from '../CRUD/nir/nir.page';
 import { EFacturaPage } from '../e-factura/e-factura.page';
 import { EService } from '../e-factura/e-factura.service';
+import { Subscription } from 'rxjs';
+import { SupliersService } from '../supliers/supliers.service';
 
 @Component({
   selector: 'app-nirs',
@@ -26,13 +28,17 @@ import { EService } from '../e-factura/e-factura.service';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class NirsPage implements OnInit {
+export class NirsPage implements OnInit, OnDestroy {
 
   nirs: Nir[] = []
   dbNirs: Nir[] = []
 
   supliers: Suplier[] = []
   supliersToSend: string[] = []
+
+  supliersSub!: Subscription;
+  eFacturaSub!: Subscription;
+  nirsSub!: Subscription;
 
   startDate!: any
   endDate!: any
@@ -64,6 +70,7 @@ export class NirsPage implements OnInit {
     @Inject(ActionSheetService) public actionSheetService: ActionSheetService,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
+    private supliersService: SupliersService,
     public router: Router,
     private eService: EService,
   ) { }
@@ -72,6 +79,13 @@ export class NirsPage implements OnInit {
     this.getNirs()
     this.getSupliers()
     this.getInvoicesStatus()
+  }
+
+
+  ngOnDestroy(): void {
+    if(this.eFacturaSub) this.eFacturaSub.unsubscribe()
+    if(this.supliersSub) this.supliersSub.unsubscribe()
+    if(this.nirsSub) this.nirsSub.unsubscribe()
   }
 
   getInvoicesStatus(){
@@ -84,7 +98,6 @@ export class NirsPage implements OnInit {
             this.newBills ++
           }
         })
-        console.log(this.newBills)
       }
     })
   }
@@ -166,7 +179,7 @@ updateNirsBySulier(){
 }
 
 getNirs(){
-  this.nirSrv.nirsSend$.subscribe(response => {
+  this.nirsSub = this.nirSrv.nirsSend$.subscribe(response => {
     if(response){
       this.dbNirs = response
       this.nirs = [...this.dbNirs]
@@ -269,7 +282,7 @@ searchNir(ev: any){
 
 
   getSupliers(){
-    this.nirSrv.getSuplier('').subscribe(response => {
+   this.supliersSub =  this.supliersService.supliersSend$.subscribe(response => {
       if(response){
         this.supliers = response.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         this.supliers.forEach(suplier => {

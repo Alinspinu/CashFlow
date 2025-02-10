@@ -1,0 +1,127 @@
+ion-content, ion-toolbar, ion-header, ion-footer{
+  --background: var(--background-color)!important;
+  background-color: var(--background-color)!important;
+}
+
+ion-input, ion-searchbar, span{
+  font-family: RoseMed !important;
+}
+
+
+
+.header-toolbar{
+  padding: 24px 0 12px 0;
+  margin: 0 66px 0 46px;
+  border-bottom: 1.2px solid var(--grey);
+  ion-toolbar{
+    ion-title{
+      font-family: RoseMed !important;
+      font-size: 36px;
+    }
+    ion-buttons{
+      ion-button{
+        --padding-bottom: 16px;
+        --padding-end: 16px;
+        --padding-top: 16px;
+        --padding-start: 16px;
+        --border-radius: 50%;
+        --border-width: 2px;
+        margin-right: 12px;
+      }
+    }
+  }
+}
+
+ion-searchbar{
+  margin: 0 22px;
+  width: 90%;
+  box-shadow: none;
+  --background: var(--light-grey);
+  color: var(--dark);
+}
+
+
+
+.section{
+  margin: 0 36px;
+  padding: 12px 0 24px 0;
+  border-bottom: solid 1px var(--grey);
+  .section-label{
+    padding-top: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .label-title{
+      font-size: 24px;
+    }
+    .label-sub-title{
+      font-size: 14px;
+      color: var(--grey)
+    }
+  }
+
+  .inputs-wrapper{
+      padding: 12px 0 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      flex-wrap: wrap;
+      .input, .cat-input{
+        margin: 4px 0 4px 12px;
+        min-width: 45%;
+        max-width: 45%;
+        ion-input, ion-select{
+          --border-width: 1.5px;
+          // --border-color: var(--dark)
+        }
+      }
+      .cat-input{
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        border: 1.5px solid var(--grey);
+        border-radius: 6px;
+        .name{
+          flex: 80%;
+        }
+        .disc{
+          flex: 10%;
+        }
+        ion-button{
+          flex: 10%;
+        }
+      }
+      .cat-input:hover{
+        border-color: var(--ion-color-medium) ;
+      }
+  }
+}
+
+
+
+
+.ing-info-wrapper {
+  margin-left: 20px;
+  .main-cat{
+    font-weight: 400;
+    font-size: 13px;
+    color: rgb(255, 196, 181);
+  }
+}
+
+
+.ing-name{
+  cursor: pointer;
+  --background: var(--ion-color-light);
+  border-radius: 8px;
+  margin: 4px;
+  span{
+    color: var(--ion-color-medium);
+  }
+}
+
+.custon-input{
+  padding: 10px;
+}

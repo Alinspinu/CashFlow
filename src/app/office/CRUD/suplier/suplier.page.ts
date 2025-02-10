@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { NirService } from '../nir/nir.service';
+import { SupliersService } from '../../supliers/supliers.service';
 
 @Component({
   selector: 'app-suplier',
@@ -43,12 +44,11 @@ export class SuplierPage implements OnInit {
 
   constructor(
    private suplierSrv: SuplierService,
+   private supliersService: SupliersService,
    private toastCtrl: ToastController,
    private modalCtrl: ModalController,
    private fb: FormBuilder,
    private router: Router,
-   private route: ActivatedRoute,
-   private nirSrv: NirService,
    private navParams: NavParams,
   ) {
     this.suplierForm = fb.group({
@@ -233,7 +233,7 @@ export class SuplierPage implements OnInit {
         sold: 0,
         records: []
       }
-        this.suplierSrv.saveSuplier(suplier, this.mode).subscribe((response: any) => {
+        this.supliersService.saveSuplier(suplier, this.mode).subscribe((response: any) => {
           if(response){
             if(this.mode ){
               const user = {
@@ -279,6 +279,7 @@ export class SuplierPage implements OnInit {
         bank: this.suplierForm.value.bank ? this.suplierForm.value.bank : '',
         account: this.suplierForm.value.account ? this.suplierForm.value.account : '',
         sold: this.suplierForm.value.sold,
+        VAT: this.suplierForm.value.VAT === 'yes'? true : false,
         _id: this.suplierId
       }
       this.modalCtrl.dismiss(suplier)
@@ -289,12 +290,10 @@ export class SuplierPage implements OnInit {
 
   searchSuplierInDb(ev: any){
     const input = ev.detail.value
-    this.nirSrv.getSuplier(input).subscribe(response => {
-      this.supliers = response
-      if(input === ''){
-        this.supliers = []
-      }
-    })
+    this.supliers = this.supliersService.searchSuplier(input)
+    if(input === ''){
+      this.supliers = []
+    }
   }
 
 

@@ -84,7 +84,7 @@ ion-content, ion-toolbar, ion-header{
   cursor: pointer;
   font-family: RoseLight !important;
   // width: 94.5%;
-  margin: 0 46px 0 46px;
+  margin: 0 66px 0 46px;
   padding: 10px 8px;
   border-bottom: 0.5px solid var(--grey);
   display: flex;
@@ -100,91 +100,3 @@ ion-content, ion-toolbar, ion-header{
     font-family: RoseReg !important;
   }
 }
-
-// .input{
-//   height: 45px;
-//   box-shadow:
-//   0 -2px 4px rgba(0, 0, 0, 0.1),
-//   0 2px 4px rgba(0, 0, 0, 0.1);
-//   border-radius: 8px;
-//   background-color: var(--ion-color-light);
-//   color: var(--ion-color-medium);
-//   margin: 0.5rem 0 0.5rem 0;
-//   font-family: NoirProReg !important;
-// }
-
-// ion-label{
-//   font-family: NoirProReg !important;
-// }
-
-
-
-
-
-
-// }
-
-// .font{
-//   font-family: NoirProSemi !important;
-//   font-size: 17px;
-//   margin-bottom: 12px;
-// }
-
-
-
-// .spinner-container{
-//   height: 70vh;
-//   display: flex;
-//   flex-direction: row;
-//   align-items: center;
-// }
-
-// .content-container{
-//   display: flex;
-//   flex-direction: row;
-//   align-items: center;
-//   padding-left: 18px;
-//   .index{
-//     flex: 2%;
-//     text-align: start !important;
-//   }
-//   .index-h{
-//     flex: 2%;
-//     text-align: start !important;
-//   }
-//   .name{
-//     flex: 22%;
-//     text-align: start !important;
-//   }
-//   .email{
-//     text-align: start !important;
-//     flex: 25%;
-//   }
-//   .tel{
-//     text-align: start !important;
-//     flex: 18%;
-//   }
-//   .cashBack{
-//     text-align: start !important;
-//     flex: 12%;
-//   }
-//   .orders{
-//     text-align: start !important;
-//     flex: 11%;
-//   }
-//   .status{
-//     text-align: start !important;
-//     flex: 10%
-//   }
-// }
-
-// .user{
-//   cursor: pointer;
-// }
-
-// .user:hover{
-//   background-color: var(--ion-color-medium-shade);
-//   ion-label, span{
-//     color: var(--ion-color-light)
-//   }
-// }

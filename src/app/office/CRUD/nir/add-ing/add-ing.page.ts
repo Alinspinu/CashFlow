@@ -126,8 +126,8 @@ export class AddIngPage implements OnInit, OnDestroy {
       tva: +this.ingredientForm.value.tva,
       tvaValue: this.ingredientForm.value.tvaValue,
       total: round(this.ingredientForm.value.total),
-      dep: this.ingredientForm.value.dep,
-      gestiune: this.ingredientForm.value.gestiune,
+      dep: this.ingredientForm.value.dept,
+      gestiune: this.ingredientForm.value.gest,
       sellPrice: this.ingredientForm.value.sellPrice ? this.ingredientForm.value.sellPrice : 0,
       logId: this.randomSrv.generateRandomHexString(9),
       ing: this.ingId

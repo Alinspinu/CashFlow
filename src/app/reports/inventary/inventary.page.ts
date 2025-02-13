@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, MenuController, ToastController } from '@ionic/angular';
 import { CompareInv, ing, Inventary } from '../../models/inventary.model';
 import { InventaryService } from './inventary.service';
-import { formatedDateToShow, round } from '../../shared/utils/functions';
+import { formatedDateToShow, formatTitleDate, round } from '../../shared/utils/functions';
 import { ActionSheetService } from '../../shared/action-sheet.service';
 import { SelectInvPage } from './select-inv/select-inv.page';
 import { SpinnerPage } from '../../modals/spinner/spinner.page';
@@ -34,6 +34,8 @@ export class InventaryPage implements OnInit {
   isLoading: boolean = false
   allIngs!: ing[]
 
+  comp: boolean = false;
+
   ingsComp: any[] = []
   allIngsComp: any[] = []
 
@@ -44,15 +46,19 @@ export class InventaryPage implements OnInit {
 
   filter: {gestiune: string, dep: string} = {gestiune: '', dep: ''}
 
+  menuOpen: boolean = false
+
   constructor(
     private invService: InventaryService,
     @Inject(ActionSheetService) private actService: ActionSheetService,
+      @Inject(MenuController) private menuCtrl: MenuController,
     private toastCtrl: ToastController
   ) {
     this.screenWidth = window.innerWidth
   }
 
   ngOnInit() {
+    this.menuChange()
     this.getLastInventary()
   }
 
@@ -67,7 +73,17 @@ export class InventaryPage implements OnInit {
   }
 
 
-
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
+  }
 
   exportInv(){
     this.invService.exportInv(this.inventary._id).subscribe(response => {
@@ -130,6 +146,7 @@ export class InventaryPage implements OnInit {
         this.mode = 'compare'
         console.log(response)
         this.compareTable = response.compareInv
+        this.comp = true
         this.ingsComp = this.compareTable.ingredients
         this.allIngsComp = this.ingsComp
         this.ingsComp.sort((a, b) => {
@@ -145,7 +162,7 @@ export class InventaryPage implements OnInit {
   }
 
   async showlog(logs: any[], ingName: string, ingUm: string, ingID: string){
-    await this.actService.openPayment(UploadLogPage, {logs, ingName, ingUm, ingID} )
+    await this.actService.openAdd(UploadLogPage, {logs, ingName, ingUm, ingID}, 'medium' )
 
   }
 
@@ -162,8 +179,8 @@ export class InventaryPage implements OnInit {
     })
   }
 
-  searchIngredient(ev: any, comp: boolean){
-    if(comp){
+  searchIngredient(ev: any){
+    if(this.comp){
       const searchQuery = ev.detail.value.toLowerCase()
       this.ingsComp = this.allIngsComp.filter((obj: ing) => obj.name.toLowerCase().includes(searchQuery))
     } else {
@@ -174,36 +191,36 @@ export class InventaryPage implements OnInit {
 
 
 
-  onSelectGestiune(event: any, comp: boolean){
-    if(comp){
+  onSelectGestiune(event: any){
+    if(this.comp){
       this.filter.gestiune = event.detail.value
       this.ingsComp = [...this.allIngsComp]
-      this.filterIngredients(true)
+      this.filterIngredients()
 
     } else {
       this.filter.gestiune = event.detail.value
       this.ingredients = [...this.allIngs]
-      this.filterIngredients(false)
+      this.filterIngredients()
     }
   }
 
-  onSelectDep(event: any, comp: boolean){
-    if(comp){
+  onSelectDep(event: any){
+    if(this.comp){
       this.filter.dep = event.detail.value
       this.ingsComp = [...this.allIngsComp]
-      this.filterIngredients(true)
+      this.filterIngredients()
 
     } else{
       this.filter.dep = event.detail.value
       this.ingredients = [...this.allIngs]
-      this.filterIngredients(false)
+      this.filterIngredients()
     }
   }
 
 
 
-  filterIngredients(comp: boolean){
-    if(comp) {
+  filterIngredients(){
+    if(this.comp) {
       if(this.filter.dep !== ''){
         const ings = this.ingsComp.filter((ing: any) => ing.dep === this.filter.dep)
         this.ingsComp = [...ings]
@@ -241,7 +258,7 @@ export class InventaryPage implements OnInit {
   }
 
   formatDate(date: string){
-   return formatedDateToShow(date).split('ora')[0]
+   return formatTitleDate(date)
   }
 
 

@@ -1,7 +1,7 @@
 
 ion-toolbar, ion-content, ion-list, ion-header{
-  --background: var(--ion-color-light) !important;
-  background-color: var(--ion-color-light) !important;
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
 }
 
 ion-title{
@@ -36,8 +36,8 @@ ion-title{
 }
 
 .card-toolbar{
-  width: 95%;
-  margin-left: 28px;
+  margin: 0 28px;
+  width: 96%;
 }
 
 .header{
@@ -48,41 +48,16 @@ ion-title{
   margin: 0 8px;
   font-size: 18px;
   justify-content: space-between;
-  border-top: 0.6px solid var(--grey);
   border-bottom: 1.5px solid var(--grey);
 }
 
 .date-wrapper{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding-left: 12px;
+  margin-top: 6px;
   ion-searchbar{
-    flex: 65%;
     font-family: RoseReg !important;
+    padding: 0 !important;
     --box-shadow: none !important;
-    --background: var(--light-grey);
-    color: var(--dark);
-  }
-  .buttons-wrapper{
-    flex: 35%;
-    display: flex;
-    justify-content: end;
-    ion-button{
-      margin-right: 6px;
-      font-family: "RoseMed" !important;
-      --border-width: 1.2px !important;
-      --padding-start: 28px !important;
-      --padding-end: 28px !important;
-      ion-label{
-        font-size: 16px;
-      }
-      ion-icon{
-        font-size: 14px;
-      }
-    }
+    --background: rgba(var(--ion-color-medium-rgb), 0.1) !important;
   }
 
 }
@@ -120,8 +95,8 @@ ion-title{
 
 .order-container{
   font-family: RoseReg !important;
-  width: 92%;
-  margin-left: 44px;
+  margin: 0 28px;
+  width: 96%;
   padding: 12px 18px;
   border-bottom: 0.5px solid var(--grey);
   display: flex;
@@ -140,10 +115,15 @@ ion-title{
   }
 }
 
+.order-container:hover{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05) !important;;
+}
+
 
 ion-card{
   cursor: pointer;
-  width: 100%;
+  width: 98%;
+  margin: 8px 0 !important;
   box-shadow: none !important;
   border-radius: 0 !important;
   ion-card-title, ion-card-subtitle, p{

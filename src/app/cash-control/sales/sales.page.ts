@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -19,6 +19,7 @@ import { CashInOutPage } from 'src/app/modals/cash-in-out/cash-in-out.page';
 import { Subscription } from 'rxjs';
 import { ContentService } from 'src/app/content/content.service';
 import { Category } from 'src/app/models/category.model';
+import { HeaderPage } from '../header/header.page';
 
 
 
@@ -31,11 +32,10 @@ Chart.register(ChartDataLabels);
   templateUrl: './sales.page.html',
   styleUrls: ['./sales.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ChartPage]
+  imports: [IonicModule, CommonModule, FormsModule, ChartPage, HeaderPage]
 })
-export class SalesPage implements OnInit, OnChanges, OnDestroy {
+export class SalesPage implements OnInit, OnDestroy {
 
-  users: any[] = []
   totals: PaymentDetail = emptyToatals()
 
   hours: hour[] = []
@@ -52,12 +52,8 @@ export class SalesPage implements OnInit, OnChanges, OnDestroy {
   private chart!: Chart;
 
   @Input() access: number = 1
-  @Input() orders!: Bill[]
-  @Output() date: EventEmitter<string> = new EventEmitter();
+  orders!: Bill[]
 
-
-
-  activeTabIndex: number = 0
 
   private colors: colors = lightColors()
 
@@ -65,16 +61,16 @@ export class SalesPage implements OnInit, OnChanges, OnDestroy {
   public chartOptions!: ChartOptions
   public chartType: ChartType = 'pie';
 
+
   constructor(
     private cdr: ChangeDetectorRef,
     private cashService: CashControlService,
     private toastCtrl: ToastController,
     private contSrv: ContentService,
-    @Inject(ActionSheetService) private actSrv: ActionSheetService
+    @Inject(ActionSheetService) private actSrv: ActionSheetService,
   ) { }
 
   ngOnInit() {
-    this.getOrders()
     this.getData()
     this.getServiceSum()
   }
@@ -88,31 +84,20 @@ export class SalesPage implements OnInit, OnChanges, OnDestroy {
       }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['orders'] && !changes['orders'].firstChange) {
-      const orders = this.orders.filter(o => o.status === 'done')
-      this.totals = calcCashIn(orders)
-      this.hours = calcHours(orders, this.totals.total)
-      this.getColors()
-      this.updateHourstData()
-    }
+
+
+
+
+  reciveData(ev: any){
+    this.orders = ev.orders.filter((o: any) => o.status === 'done')
+    this.openOrders = ev.orders.filter((o: any) => o.status === 'open' && o.masa !== 90)
+    this.totals = calcCashIn(this.orders)
+    this.hours = calcHours(this.orders, this.totals.total)
+    this.updateHourstData()
+    this.getColors()
   }
 
-getOrders(){
-  this.cashService.ordersSend$.subscribe({
-    next: (orders) => {
-      this.openOrders = orders.filter(o => o.status === 'open' && o.masa !== 90)
-      this.orders = orders.filter(o => o.status === 'done')
-      this.totals = calcCashIn(this.orders)
-      this.hours = calcHours(this.orders, this.totals.total)
-      this.updateHourstData()
-      this.getColors()
-    },
-    error: (error) => {
-      console.log(error)
-    }
-  })
-}
+
 
 
 getData(){
@@ -123,22 +108,6 @@ getData(){
     })
   }
 
-
-
-async selectDate(day: boolean){
-  if(day) {
-    const day = await this.actSrv.openAuth(DatePickerPage)
-    this.cashService.getAllorders(day, undefined, undefined).subscribe()
-    this.date.emit(`${formatOrderDateOne(day)}`)
-  } else {
-    const stDate = await this.actSrv.openPayment(DatePickerPage, 'ALEGE ZIUA DE ÎNCEPUT')
-    if(stDate){
-      const enDate = await this.actSrv.openPayment(DatePickerPage, 'ALEGE ZIUA DE SFÂRȘIT')
-      this.cashService.getAllorders(undefined, stDate, enDate).subscribe()
-       this.date.emit(`${formatOrderDateOne(stDate)} - ${formatOrderDateOne(enDate)}`)
-    }
-  }
-}
 
 
 
@@ -227,9 +196,6 @@ reports(value: string){
     }
   })
 }
-
-
-
 
 
 

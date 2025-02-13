@@ -1,24 +1,11 @@
 
-ion-content, ion-toolbar{
-  --background: var(--ion-color-tertiary) !important;
-  font-family: NoirProSemi;
+ion-content, ion-toolbar, ion-header{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;;
+  font-family: RoseMed !important;
 }
 
-ion-button{
-  font-family: NoirProReg !important;
-}
-ion-title{
-  font-family: NoirProReg !important;
-}
 
-ion-menu-button{
-  --border-radius: 0;
-  width: fit-content;
-  ion-label{
-    font-size: 14px;
-    margin-left: 6px;
-  }
-}
 
 
 .mode{
@@ -48,6 +35,7 @@ ion-menu-button{
 }
 
 .header-buttons{
+  font-family: RoseMed !important;
   --background: var(--ion-color-medium);
   color: var(--ion-color-light);
   height: 50px;
@@ -65,7 +53,7 @@ ion-menu-button{
     width: 80px;
     height: 80px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-    background-color: var(--ion-color-light);
+    background-color: rgba(var(--ion-color-medium-rgb), 0.1);
     border-radius: 8px;
 
     position: relative;
@@ -148,7 +136,7 @@ ion-menu-button{
 
 
 .bussy{
-  background-color: var(--ion-color-medium) !important;
+  background-color: rgba(var(--ion-color-medium-rgb), 0.9) !important;
   color: var(--ion-color-light);
 }
 .waiter{

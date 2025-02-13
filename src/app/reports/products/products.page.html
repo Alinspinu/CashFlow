@@ -1,4 +1,7 @@
 
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
 
 <ion-content [fullscreen]="true" *ngIf="!showProducts && !isLoading">
   <ion-title class="ion-text-center">Alege Perioada</ion-title>

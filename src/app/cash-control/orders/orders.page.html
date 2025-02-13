@@ -1,28 +1,12 @@
 
+
 <ion-header class="ion-no-border fixed-toolbar">
+  <app-header [title]="'Comenzi'" (data)="reciveData($event)"></app-header>
   <ion-toolbar class="ion-no-border card-toolbar " >
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-            <div class="date-wrapper">
-              <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Caută comandă după produs..."  (ionInput)="searchProduct($event)" #searchbar>
-              </ion-searchbar>
-              <div class="buttons-wrapper" *ngIf="access > 2">
-                <ion-button fill="outline" slot="end" color="medium" (click)="selectDate(true)">
-                  <ion-icon slot="start" src="../../assets/icon/time.svg"></ion-icon>
-                  <ion-label slot="end">zi</ion-label>
-                </ion-button>
-                <ion-button  fill="outline" slot="end" color="medium" (click)="selectDate(false)">
-                  <ion-icon slot="start" src="../../assets/icon/shedule.svg"></ion-icon>
-                  <ion-label slot="end">perioadă</ion-label>
-                </ion-button>
-              </div>
-            </div>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-card id="all-card" (click)="selectOrders(orders)">
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-no-padding">
+        <ion-col class="ion-no-padding">
+          <ion-card id="all-card" (click)="selectOrders(orders)" style="margin-left: 0 !important;">
             <ion-card-header>
               <ion-card-subtitle>Comenzi</ion-card-subtitle>
             </ion-card-header>
@@ -100,6 +84,10 @@
           </ion-card>
         </ion-col>
       </ion-row>
+      <div class="date-wrapper">
+        <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Caută comandă după produs..."  (ionInput)="searchProduct($event)" #searchbar>
+        </ion-searchbar>
+      </div>
       <ion-row>
         <ion-col>
           <div class="header">
@@ -117,7 +105,7 @@
   </ion-toolbar>
 </ion-header>
 
-
+<ion-content [fullscreen]="true">
   <div class="order-container" *ngFor="let order of orders">
     <div class="id">
       <span class="main">#{{order.index}}</span>
@@ -135,8 +123,9 @@
       <span class="second" *ngIf="order.status === 'done'">{{order.paymentMethod}}</span>
     </div>
    <div class="action">
-    <ion-button fill="ghost" (click)="openBill(order)">
+    <ion-button fill="clear" (click)="openBill(order)">
       <ion-icon src="../../assets/icon/eye-outline.svg"></ion-icon>
     </ion-button>
    </div>
   </div>
+</ion-content>

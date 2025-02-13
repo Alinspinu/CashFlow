@@ -1,8 +1,9 @@
-
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
+</ion-menu-button>
 
 <ion-header class="ion-no-border">
-  <div class="header-toolbar">
-    <ion-toolbar class="ion-no-border">
+    <ion-toolbar class="ion-no-border header-toolbar">
         <ion-title slot="start">Utilizatori</ion-title>
         <ion-buttons slot="end">
           <ion-button fill="outline" (click)="addUser()">
@@ -13,7 +14,6 @@
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
-  </div>
     <ion-toolbar>
       <div class="search-wrapper">
         <ion-searchbar mode="md"   placeholder="Caută după nume..."  (ionInput)="searchUsersName($event)">

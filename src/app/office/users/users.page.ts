@@ -1,13 +1,9 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, MenuController } from '@ionic/angular';
 import { UsersService } from './users.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, Subject, takeUntil, firstValueFrom } from 'rxjs';
-import { Preferences } from '@capacitor/preferences';
 import User from 'src/app/auth/user.model';
-import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { UserContentPage } from './user-content/user-content.page';
 
@@ -27,12 +23,14 @@ export class UsersPage implements OnInit, OnDestroy {
 
   select: string = ''
 
+  menuOpen: boolean = false
+
 
 
   constructor(
     private usersSrv: UsersService,
-    @Inject(ActionSheetService) private actionSheetService: ActionSheetService
-
+    @Inject(ActionSheetService) private actionSheetService: ActionSheetService,
+    @Inject(MenuController) private menuCtrl: MenuController
       ) {}
 
     ngOnDestroy() {
@@ -64,6 +62,19 @@ export class UsersPage implements OnInit, OnDestroy {
 
   ngOnInit() {
    this.getUsers()
+   this.menuChange()
+  }
+
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
   }
 
 

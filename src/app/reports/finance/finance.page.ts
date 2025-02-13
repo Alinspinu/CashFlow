@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule} from '@ionic/angular';
+import { IonicModule, MenuController} from '@ionic/angular';
 import { formatedDateToShow, getUserFromLocalStorage, round } from '../../shared/utils/functions';
 import { ActionSheetService } from '../../shared/action-sheet.service';
 import { DatePickerPage } from '../../modals/date-picker/date-picker.page';
@@ -53,7 +53,7 @@ export class FinancePage implements OnInit {
 
   sup: boolean = true
 
-
+  menuOpen: boolean = false
   tips: number = 0
 
   reportUsers: reportUsers = emptyReportUsers()
@@ -63,17 +63,29 @@ export class FinancePage implements OnInit {
 
   constructor(
    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
-   private router: Router,
+   @Inject(MenuController) private menuCtrl: MenuController,
    private repSrv: ReportsService,
-
   ) { }
 
   ngOnInit() {
+    this.menuChange()
     this.getRepDates()
     this.getAllReports()
     this.getuser()
 
   }
+
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
+}
 
 
   toggleImpairments(){

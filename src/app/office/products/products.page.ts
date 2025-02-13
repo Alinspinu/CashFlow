@@ -1,13 +1,12 @@
-import { AfterViewInit, Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, MenuController, ToastController } from '@ionic/angular';
 import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { ProductsService } from './products.service';
 import { Router } from '@angular/router';
 import { Product } from 'src/app/models/category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { CategoryPage } from '../CRUD/category/category.page';
 import { findCommonNumber, getUserFromLocalStorage, modifyImageURL, round } from 'src/app/shared/utils/functions';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
@@ -24,7 +23,7 @@ import { map, Subscription, tap } from 'rxjs';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule, FormsModule, CapitalizePipe, CategoriesPage]
 })
-export class ProductsPage implements OnInit, OnChanges, OnDestroy {
+export class ProductsPage implements OnInit,  OnDestroy {
 
   productSearch: string = ''
   productIngSearch: string = ''
@@ -39,10 +38,14 @@ export class ProductsPage implements OnInit, OnChanges, OnDestroy {
   dbProducts: Product[] = []
 
   isLoading: boolean = true
+  menuOpen: boolean = false
 
   productSub!: Subscription
 
- @Input() isDarkMode: boolean = false
+  isDarkMode: boolean = false
+
+  isHidden: boolean = false
+  lastY: number = 0;
 
 
 
@@ -55,20 +58,18 @@ export class ProductsPage implements OnInit, OnChanges, OnDestroy {
   constructor(
     @Inject(ProductsService) private productsSrv: ProductsService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
+    @Inject(MenuController) private menuCtrl: MenuController,
     private router: Router,
     private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
+    this.getThemeStatus()
     this.getuser()
+    this.menuChange()
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isDarkMode']) {
-      this.mainCats = getMaincat(this.products, this.isDarkMode)
-    }
-  }
 
   ngOnDestroy(): void {
     if(this.productSub){
@@ -76,7 +77,32 @@ export class ProductsPage implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  onScroll(event: any) {
+    const currentY = event.detail.scrollTop;
 
+    if (currentY > this.lastY && currentY > 150) {
+      // Scrolling down, hide content
+      this.isHidden = true;
+    } else if(currentY === 0){
+      // Scrolling up, show content
+      this.isHidden = false;
+    }
+
+    this.lastY = currentY;
+  }
+
+
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
+  }
 
 
 getuser(){
@@ -221,7 +247,7 @@ searchIngProduct(ev: any){
             this.activateMainCat()
           }
           if(index > 0) {
-           
+
             this.dbProducts = value.filter(p => p.category)
             this.products = this.dbProducts
             this.updateProductsBySelectedCategory()
@@ -326,7 +352,14 @@ showProducsAndSubsRecipe(product: Product) {
 }
 
 
-
+getThemeStatus(){
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  this.isDarkMode = prefersDark.matches
+  prefersDark.addListener((mediaQuery) => this.toggleTheme(mediaQuery.matches))
+}
+toggleTheme(isDarkMode: boolean) {
+    this.isDarkMode = isDarkMode
+}
 
 
 

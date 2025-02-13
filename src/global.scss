@@ -331,7 +331,7 @@ body ion-alert.deleteAlert{
   .medium{
     --height: 95%;
     --min-width: none !important;
-    --width: 75% !important;
+    --width: 88% !important;
   }
   body ion-alert.discountAlert {
     --max-width: none!important;
@@ -444,15 +444,86 @@ body ion-alert.deleteAlert{
   }
 
 
+ body ion-toolbar.header-toolbar{
+    padding: 24px 0 12px 0;
+    margin: 0 28px;
+    width: 96%;
+    border-bottom: 1.2px solid var(--grey);
+    ion-title{
+      margin-left: 60px !important;
+      font-family: RoseMed !important;
+      margin-left: 60px;
+      font-size: 36px;
+    }
+    ion-buttons{
+      ion-button{
+        --padding-bottom: 12px !important;
+        --padding-end: 12px !important;
+        --padding-top: 12px !important;
+        --padding-start: 12px !important;
+        --border-radius: 50% !important;
+        --border-width: 2px !important;
+        margin-right: 12px !important;
+        --border-color: var(--ion-color-medium);
+        ion-icon{
+          color: var(--ion-color-medium);
+        }
+      }
+      ion-badge{
+        font-family: RoseLight !important;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        z-index: 99 !important;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        font-size: 18px;
+        box-shadow: none !important;
+      }
+    }
+  }
+
+  body ion-toolbar.cash{
+    border: none !important;
+  }
+
+  body ion-toolbar.small{
+    padding: 0 !important;
+    ion-buttons{
+      ion-button{
+        --padding-bottom: 10px !important;
+        --padding-end: 10px !important;
+        --padding-top: 10px !important;
+        --padding-start: 10px !important;
+        --border-radius: 50% !important;
+        --border-width: 2px !important;
+        margin-right: 12px !important;
+        --border-color: var(--ion-color-medium);
+        ion-icon{
+          color: var(--ion-color-medium);
+        }
+      }
+    }
+  }
 
   ion-menu-button{
     position: absolute;
-    top: 0px;
-    left: 8px;
+    top: 25px;
+    left: 40px;
     z-index: 99;
-    --border-radius: 0;
     width: fit-content;
+    border: 2px solid var(--ion-color-medium);
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+  }
 
+  ion-menu-button.tool{
+    top: 8px;
+    left: 12px;
+    width: 45px !important;
+    height: 45px !important;
   }
 
   ion-toggle.toggle-checked::part(track) {

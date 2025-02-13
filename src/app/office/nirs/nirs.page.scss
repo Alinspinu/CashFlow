@@ -4,7 +4,7 @@ ion-content, ion-toolbar, ion-header{
   background-color: var(--background-color) !important;
 }
 
-ion-title, span, ion-searchbar, ion-button{
+ion-title, ion-searchbar, ion-button, .tot{
   font-family: RoseMed !important;
 }
 
@@ -14,12 +14,12 @@ ion-title, span, ion-searchbar, ion-button{
     display: flex;
     align-items: center;
     padding: 24px 0 12px 0;
-    margin-left: 48px;
-    width: 92%;
+    margin: 0 28px;
+    width: 96%;
     ion-searchbar{
       flex: 40%;
-      --background: var(--light-sand);
-      --color: var(-ion-color-medium);
+      --background: rgba(var(--ion-color-medium-rgb), 0.1) !important;
+      --color: var(--dark);
       --box-shadow: none;
     }
     ion-button{
@@ -28,8 +28,6 @@ ion-title, span, ion-searchbar, ion-button{
       --padding-top: 14px;
       --padding-start: 14px;
       --border-width: 1.5px;
-      --border-color: var(--sand-contrast);
-      --color: var(--sand-contrast);
       margin-left: 8px;
       flex: 15%;
     }
@@ -52,62 +50,23 @@ ion-title, span, ion-searchbar, ion-button{
 
 
 
-.header-toolbar{
-  padding: 24px 0 12px 0;
-  margin-left: 48px;
-  width: 92%;
-  border-bottom: 1.2px solid var(--grey);
-  ion-title{
-    font-size: 36px;
-    color: var(--blue);
-  }
-  ion-buttons{
-    ion-button{
-      --padding-bottom: 16px;
-      --padding-end: 16px;
-      --padding-top: 16px;
-      --padding-start: 16px;
-      --border-radius: 50%;
-      --border-width: 2px;
-      margin-right: 12px;
-      --border-color: var(--blue);
-      ion-icon{
-        color: var(--blue);
-      }
-    }
-    ion-badge{
-      font-family: RoseLight !important;
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      z-index: 99 !important;
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      font-size: 18px;
-      box-shadow: none !important;
 
-    }
-  }
-}
 
 
 
 
 .header{
+  margin: 0 28px;
   width: 96%;
   display: flex;
   align-items: center;
   padding: 14px 18px;
-  margin: 0 36px 0 24px;
   font-size: 18px;
   justify-content: space-between;
   border-bottom: 1.5px solid var(--grey);
+  font-family: RoseMed !important;
   ion-icon{
     font-size: 12px;
-  }
-  .days{
-    color: var(--ion-color-success);
   }
   .suplier, .total, .days, .date{
     cursor: pointer;
@@ -117,29 +76,24 @@ ion-title, span, ion-searchbar, ion-button{
 
 .header, .nir-container{
   .id{
-    color: var(--grey);
     text-align: start;
     flex: 5%
   }
   .suplier{
-    color: var(--sand-contrast);
     text-align: start;
     flex: 25%
   }
     .date{
-      color: var(--blue);
       text-align: start;
       flex: 15%;
     }
 
     .total{
-      color: var(--turqoise-contrast);
       text-align: start;
       flex: 12%;
     }
 
     .doc{
-      color: var(--orange-contrast);
       text-align: start;
       flex: 18%;
     }
@@ -161,23 +115,14 @@ ion-title, span, ion-searchbar, ion-button{
 
 .nir-container{
   font-family: RoseReg !important;
+  margin: 0 28px;
   width: 96%;
-  margin-left:24px;
   padding: 0 0 0 18px;
   border-bottom: 0.5px solid var(--grey);
   display: flex;
   align-items: center;
   font-size: 14px;
-  .suplier{
-    color: var(--sand-contrast);
-  }
-  .date{
-    color: var(--blue);
-  }
-  .total{
-    color: var(--turqoise-contrast);
-  }
-
+  font-family: RoseLight !important;
   .days{
     width: 100%;
     display: flex;
@@ -210,10 +155,11 @@ ion-title, span, ion-searchbar, ion-button{
 
 
 .nir-container:hover{
-  background-color: var(--grey);
+  cursor: pointer;
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05) !important;
   span{
-    color: var(--ion-color-medium) !important;
     font-size: 16px !important;
+    font-family: RoseMed !important;
   }
   ion-icon{
     font-size: 22px !important;

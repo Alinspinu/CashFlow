@@ -2,15 +2,17 @@
 
 ion-toolbar, ion-content, ion-list, ion-header, ion-item{
   --background: var(--background-color) !important;
-  background-color: var(--background-colort) !important;
-}
-
-ion-content{
-  // height: 100vh;
-  // overflow: hidden;
+  background-color: var(--background-color) !important;
 }
 
 
+
+
+
+
+.hidden {
+ display: none;
+}
 
 
 .main-button-container{
@@ -178,6 +180,10 @@ ion-content{
 }
 
 
+.order-container:hover{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05) !important;
+}
+
 .searchbar-wrapper{
   display: flex;
   flex-direction: row;
@@ -196,7 +202,7 @@ ion-content{
     flex: 40%;
     font-family: RoseReg !important;
     --box-shadow: none !important;
-    --background: var(--light-grey);
+    --background: rgba(var(--ion-color-medium-rgb), 0.1) !important;
     color: var(--dark);
   }
 

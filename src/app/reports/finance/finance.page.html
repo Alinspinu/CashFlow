@@ -1,3 +1,7 @@
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
+
 <div *ngIf="isLoading" class="spinner-content">
   <app-spinner class="spinner"></app-spinner>
 </div>

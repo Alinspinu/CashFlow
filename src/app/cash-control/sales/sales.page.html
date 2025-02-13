@@ -1,6 +1,33 @@
+<!--
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
 
 
 
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border content-toolbar">
+    <ion-title slot="start" class="ion-no-padding">Încasări</ion-title>
+    <span class="date" slot="end">{{date}}</span>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="openDate()">
+        <ion-icon size="large" src="../../../assets/icon/shedule.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+<div class="buttons-container">
+  <div class="button animated-border" *ngFor="let user of users; let i =index;" [ngClass]="{'animate selected-button': user.show, 'removing': !user.show && activeTabIndex !== i}" (click)="userOrders(user, i)">
+    <span class="value">{{user.name}}</span>
+  </div>
+</div>
+</ion-header> -->
+
+<app-header [title]="'Încasări'" (data)="reciveData($event)"></app-header>
+
+
+
+<ion-content [fullscreen]="true">
   <div class="row-wrapper">
     <div class="chart-wrapper">
       <div class="chart">
@@ -65,6 +92,9 @@
       </div>
     </div>
   </div>
+</ion-content>
+
+
 
 
     <!-- <div class="chart-hour-wrapper">

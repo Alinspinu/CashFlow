@@ -10,7 +10,7 @@ import { CashRegisterService } from './cash-register.service';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { AddEntryPage } from 'src/app/modals/add-entry/add-entry.page';
 import User from 'src/app/auth/user.model';
-import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 
 
 @Component({
@@ -33,18 +33,32 @@ export class CashRegisterPage implements OnInit {
   startDate!: any;
   endDate!: any;
   user!: User
+  menuOpen: boolean = false
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
+     @Inject(MenuController) private menuCtrl: MenuController,
     private cashRegService: CashRegisterService,
     private toastCtrl: ToastController,
-    private router: Router,
   ) { }
 
   ngOnInit() {
+    this.menuChange()
     this.loadDocuments()
   }
 
+
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
+  }
 
 
   calcDayPayments(day: Day){
@@ -108,7 +122,7 @@ loadDocuments() {
   this.cashRegService.getDocuments(this.page).subscribe((response) => {
     this.documents = [...this.documents, ...response.documents];
     setTimeout(() => {
-      this.scrollTo90Percent()
+     this.content.scrollToBottom(600)
     }, 300);
   });
 }
@@ -170,11 +184,5 @@ round(num: number){
 }
 
 
-async scrollTo90Percent() {
-  const scrollElement = await this.content.getScrollElement();
-  const totalHeight = scrollElement.scrollHeight;
-  const targetY = totalHeight * 0.95;
-  this.content.scrollToPoint(0, targetY, 500);
-}
 
 }

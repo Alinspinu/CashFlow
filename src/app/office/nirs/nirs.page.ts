@@ -20,6 +20,7 @@ import { EFacturaPage } from '../e-factura/e-factura.page';
 import { EService } from '../e-factura/e-factura.service';
 import { Subscription } from 'rxjs';
 import { SupliersService } from '../supliers/supliers.service';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-nirs',
@@ -64,10 +65,13 @@ export class NirsPage implements OnInit, OnDestroy {
 
   selectedDocsNumber: string[] = []
 
+  menuOpen: boolean = false
+
 
   constructor(
     public nirSrv: NirsService,
     @Inject(ActionSheetService) public actionSheetService: ActionSheetService,
+    @Inject(MenuController) private menuCtrl: MenuController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     private supliersService: SupliersService,
@@ -76,6 +80,7 @@ export class NirsPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.menuChange()
     this.getNirs()
     this.getSupliers()
     this.getInvoicesStatus()
@@ -100,6 +105,20 @@ export class NirsPage implements OnInit, OnDestroy {
         })
       }
     })
+  }
+
+
+
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
   }
 
 
@@ -157,7 +176,10 @@ async eFactura(){
 
 async selectSuplier(){
   const suplierName = await this.actionSheetService.openSelect(SelectDataPage, this.supliersToSend, 'data')
-  if(suplierName){
+  if(suplierName === 'TOȚI FURNIZORII'){
+     this.nirSrv.getNirs().subscribe()
+   }
+  if(suplierName && suplierName !== 'TOȚI FURNIZORII'){
     const suplier = this.supliers.find((suplier: any) => suplier.name === suplierName)
     if(suplier){
       this.nirSrv.getnirsBySuplier(suplier._id).subscribe({
@@ -288,6 +310,10 @@ searchNir(ev: any){
         this.supliers.forEach(suplier => {
           this.supliersToSend.push(suplier.name)
         })
+        const index = this.supliersToSend.findIndex(s => s === 'TOȚI FURNIZORII')
+        if(index === -1){
+          this.supliersToSend.unshift('TOȚI FURNIZORII')
+        }
       }
     })
   }

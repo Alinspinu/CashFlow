@@ -1,28 +1,34 @@
 
-<ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-    <ion-button slot="start" color="medium" (click)="close()" size="large">
-      <ion-icon src="../../../../assets//icon/close-outline.svg" size="large"></ion-icon>
-    </ion-button>
-    <div class="title-wrapper">
-      <div class="title">Intrari {{ingName}}</div>
-    </div>
-  </ion-toolbar>
+<ion-header class="ion-no-border ion-no-padding">
+  <ion-toolbar class="ion-no-border header-toolbar cash">
+      <span class="title" slot="start">Intrări {{ingName}}</span>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+      <div class="header">
+        <span class="id">Nr</span>
+        <span class="date">Dată</span>
+        <span class="suplier">Furnizor</span>
+        <span class="quantity">Cantitae</span>
+        <span class="price">Preț / Um</span>
+        <div class="button">Șterge</div>
+      </div>
 </ion-header>
+
 <ion-content [fullscreen]="true">
-<ion-grid>
-  <ion-row *ngFor="let log of logs">
-      <ion-col size="12"*ngIf="log.operation.name === 'intrare'">
-        <div class="log" >
-          <span class="date">{{editDate(log.date)}}</span>
+    <div class="log-wrapper" *ngFor="let log of logs; let i=index">
+      <div class="log" *ngIf="log.operation.name === 'intrare'" [ngClass]="{'odd' : i % 2 !== 0}">
+        <span class="id">#{{i+1}}</span>
+        <span class="date">{{editDate(log.date)}}</span>
           <span class="suplier">{{log.operation.details}}</span>
           <span class="quantity">{{log.qty}} {{um}}</span>
-          <span class="quantity">{{log.uploadPrice}} Lei / {{um}}</span>
-          <ion-button fill="outline" color="light" (click)="deleteLog(log._id)">
+          <span class="price">{{log.uploadPrice}} Lei / {{um}}</span>
+          <ion-button class="button" fill="clear" color="medium" (click)="deleteLog(log._id)">
             <ion-icon src="../../../../assets/icon/trash-outline.svg"></ion-icon>
           </ion-button>
-        </div>
-      </ion-col>
-  </ion-row>
-</ion-grid>
+      </div>
+    </div>
 </ion-content>

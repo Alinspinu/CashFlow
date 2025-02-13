@@ -11,40 +11,13 @@ ion-title, ion-searchbar, ion-button{
 
 
 
-
-
-
-.header-toolbar{
-  padding: 24px 0 12px 0;
-  margin-left: 48px;
-  width: 92%;
-  border-bottom: 1.2px solid var(--grey);
-  font-family: RoseMed !important;
-  ion-title{
-    font-size: 36px;
-  }
-  ion-buttons{
-    ion-button{
-      --padding-bottom: 16px;
-      --padding-end: 16px;
-      --padding-top: 16px;
-      --padding-start: 16px;
-      --border-radius: 50%;
-      --border-width: 2px;
-      margin-right: 12px;
-    }
-  }
-}
-
-
-
 .header, .total-wrapper{
-  width: 93%;
+  margin: 0 28px;
+  width: 96%;
   font-family: RoseReg !important;
   display: flex;
   align-items: center;
   padding: 14px 8px;
-  margin: 0 46px;
   font-size: 18px;
   justify-content: space-between;
   border-bottom: 1.5px solid var(--grey);
@@ -92,8 +65,8 @@ ion-title, ion-searchbar, ion-button{
 }
 .entry-wrapper, .raport-wrapper{
   font-family: RoseLight !important;
-  width: 93%;
-  margin: 0 46px;
+  margin: 0 28px;
+  width: 96%;
   padding: 0 8px;
   border-bottom: 0.5px solid var(--grey);
   display: flex;

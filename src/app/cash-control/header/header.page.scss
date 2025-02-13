@@ -1,0 +1,82 @@
+ion-toolbar, ion-content, ion-list, ion-header{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+
+.date{
+  font-family: RoseMed !important;
+  margin-right: 12px;
+  font-size: 22px;
+}
+
+.buttons-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0 28px;
+  width: 96%;
+  overflow-y: scroll;
+  .button{
+    cursor: pointer;
+    font-family: RoseSemi;
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid var(--greyy);
+    border-bottom: 1px solid var(--greyy);
+    padding: 20px;
+    span{
+      white-space: nowrap;
+      text-transform: uppercase;
+      color: var(--grey)
+    }
+  }
+}
+
+.selected-button{
+  span{
+    color: var(--ion-color-medium) !important;
+  }
+}
+
+
+
+.animated-border {
+  padding: 10px 20px;
+  position: relative;
+  font-weight: bold;
+  color: var(--greyy);
+  // overflow: hidden;
+}
+
+.animated-border::before,
+.animated-border::after {
+  content: '';
+  position: absolute;
+  height: 1px; /* Border height */
+  background-color: var(--ion-color-medium); /* Border color */
+  width: 0; /* Start width at 0 */
+  left: 0;
+  transition: width 0.8s ease, left 0.8s ease; /* Animation for both width and left */
+}
+
+.animated-border::before {
+  top: 0; /* Border-top */
+}
+
+.animated-border::after {
+  bottom: 0; /* Border-bottom */
+}
+
+.animated-border.animate::before,
+.animated-border.animate::after {
+  width: 100%; /* Expand width to full */
+}
+
+.animated-border.removing::before,
+.animated-border.removing::after {
+  transition: none;
+  width: 0;
+}

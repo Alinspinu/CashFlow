@@ -19,6 +19,7 @@ import { IngredientContentPage } from './ingredient-content/ingredient-content.p
 import { environment } from 'src/environments/environment';
 import { UploadLogPage } from 'src/app/reports/inventary/upload-log/upload-log.page';
 import { ImpPage } from '../imp/imp.page';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-ingredient',
@@ -54,6 +55,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   productIngredients!: any;
   ingTypes: string[] = ["simplu", "compus"]
   isLoading: boolean = true
+  menuOpen: boolean = false
 
   filter: {gestiune: string, type: string, dep: string} = {gestiune: '', type: '', dep: ''}
 
@@ -61,7 +63,8 @@ export class IngredientPage implements OnInit, OnDestroy {
   constructor(
     private toastCtrl: ToastController,
     private ingSrv: IngredientService,
-    @Inject(ActionSheetService) private actionSh: ActionSheetService
+    @Inject(ActionSheetService) private actionSh: ActionSheetService,
+    @Inject(MenuController) private menuCtrl: MenuController,
   ) {
     this.screenWidth = window.innerWidth
   }
@@ -72,6 +75,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.menuChange()
     this.getUser()
     this.getDeps()
     this.getGest()
@@ -80,6 +84,19 @@ export class IngredientPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if(this.ingSub){
       this.ingSub.unsubscribe()
+    }
+  }
+
+
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
     }
   }
 
@@ -116,7 +133,9 @@ export class IngredientPage implements OnInit, OnDestroy {
     getUserFromLocalStorage().then(user => {
       if(user) {
         this.user = user
-        this.getIngredients()
+        setTimeout(() => {
+          this.getIngredients()
+        }, 500)
       }
     })
   }

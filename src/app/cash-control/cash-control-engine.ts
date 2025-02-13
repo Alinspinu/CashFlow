@@ -3,7 +3,33 @@ import { Bill, BillProduct } from "../models/table.model"
 import { round } from "../shared/utils/functions"
 
 
-
+export function getSection(product: BillProduct){
+  let section = ''
+  if(product.mainCat === 'food'){
+      if(product.category === "64be6a3e3ef7bd6552c84608" || product.category=== "64be690d3ef7bd6552c84602") {
+        section = 'vitrina'
+      } else {
+        section = 'buc'
+      }
+  }
+  if(product.mainCat === 'bar'){
+    section = 'bar'
+  }
+  if(product.mainCat === "shop"){
+    section = 'shop'
+  }
+  if(product.mainCat === 'coffee'){
+      if(product.category === "64c8e6c548b61f91a0d45e66" || product.category === "64c8e69548b61f91a0d45e64"){
+        section = "tea"
+      } else {
+        section ='coffee'
+      }
+  }
+  if(product.mainCat === ''){
+    section = 'shop'
+  }
+  return section
+}
 
 
 export function getProducts(orders: Bill[]){
@@ -45,7 +71,18 @@ export function getProducts(orders: Bill[]){
     }
   }
 
+
+
+
+
   for(let product of products){
+    if(!product.section){
+      product.section = getSection(product)
+    }
+    if(!product.section){
+     console.log(product)
+    }
+
     const clonedProduct = JSON.parse(JSON.stringify(product)) as BillProduct;
     const existingSection = section.find(s => s.name === clonedProduct.section)
     if(existingSection){

@@ -27,6 +27,9 @@ export class ShedulePage implements OnInit, OnDestroy {
   period: string = ''
   months: string[] = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
 
+  isHidden: boolean = false
+  lastY: number = 0;
+
   constructor(
     private usersSrv: UsersService,
     private shedSrv: SheduleService,
@@ -40,11 +43,29 @@ export class ShedulePage implements OnInit, OnDestroy {
       }
   }
 
+  open(){
+    console.log('open')
+  }
+
   ngOnInit() {
     this.menuChange()
     this.getUsers()
     this.shedSrv.getLastShedule().subscribe()
     this.getLastShedule()
+  }
+
+  onScroll(event: any) {
+    const currentY = event.detail.scrollTop;
+
+    if (currentY > this.lastY && currentY > 20) {
+      // Scrolling down, hide content
+      this.isHidden = true;
+    } else if(currentY === 0){
+      // Scrolling up, show content
+      this.isHidden = false;
+    }
+
+    this.lastY = currentY;
   }
 
   getUsers(){

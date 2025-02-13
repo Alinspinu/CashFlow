@@ -79,7 +79,16 @@ export class UsersService{
   }
 
   setUserDiscount(userId: string, discount: any){
-    return this.http.put<{message: string}>(`${environment.BASE_URL}users/user?id=${userId}`, {update: {discount: {general: discount.general, category: discount.category}, cashBackProcent: discount.cashBackProcent}})
+    return this.http.put<{message: string, user: User}>(`${environment.BASE_URL}users/user?id=${userId}`, {update: {discount: {general: discount.general, category: discount.category}, cashBackProcent: discount.cashBackProcent}})
+          .pipe(tap(response => {
+            if(response){
+              const userIndex = this.users.findIndex(user => user._id === response.user._id)
+              if(userIndex !== -1){
+                this.users[userIndex] = response.user
+                this.usersState.next(this.users)
+              }
+            }
+          }))
   }
 
 }

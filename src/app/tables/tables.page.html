@@ -1,22 +1,19 @@
 
-
-<ion-menu-button *ngIf="!menuOpen">
-  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+<ion-menu-button class="tool">
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
 </ion-menu-button>
 
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar cash small">
     <ion-buttons slot="end">
-      <ion-button (click)="testSound()" color="medium">
-        <ion-icon [src]="volumeSrc" ></ion-icon>
+      <ion-button (click)="testSound()" color="medium" fill="outline">
+        <ion-icon  [src]="volumeSrc" ></ion-icon>
       </ion-button>
-      <ion-button (click)="addTable()" class="header-buttons">
-        <ion-icon src="../../assets/icon/add-outline.svg"></ion-icon>
-        ADAUGĂ MASĂ
+      <ion-button (click)="addTable()" color="medium" fill="outline">
+        <ion-icon  src="../../assets/icon/add-outline.svg"></ion-icon>
       </ion-button>
-      <ion-button (click)="activateEditMode()" class="header-buttons">
+      <ion-button (click)="activateEditMode()" fill="outline" color="medium">
         <ion-icon [src]="this.editMode ? '../../assets/icon/checkmark-outline.svg' : '../../assets/icon/create-outline.svg'"></ion-icon>
-      {{this.editMode ? 'TERMINAT': 'MODIFICĂ'}}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -57,8 +54,3 @@
 </div>
 
 
-
- <!-- <ion-item (click)="openTable(table.index)" lines="none" [ngClass]="{ 'bussy': table.bills.length > 0}" class="table">
-  <ion-badge *ngIf="table.bills.length" color="danger">{{table.bills.length}}</ion-badge>
-  <ion-label slot="start">{{table.index}}</ion-label>
-</ion-item> -->

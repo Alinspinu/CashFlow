@@ -1,4 +1,7 @@
 
+<ion-menu-button *ngIf="!menuOpen">
+  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+</ion-menu-button>
 
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border header-toolbar">
@@ -21,15 +24,15 @@
       <ion-searchbar  mode="md" [(ngModel)]="nirSearch"  placeholder="Caută document după furnizor..."  (ionInput)="searchNir($event)" #searchbar>
       </ion-searchbar>
 
-      <ion-button  (click)="selectSuplier()"  fill="outline" mode="md">
+      <ion-button  (click)="selectSuplier()"  fill="outline" mode="md" color="medium">
         Alege furnizor
       </ion-button>
 
-      <ion-button (click)="paySelectedNirs()"  fill="outline" mode="md" [disabled]="selectedNirs.length < 2">
+      <ion-button (click)="paySelectedNirs()"  fill="outline" mode="md" [disabled]="selectedNirs.length < 2" color="medium">
         Plătește
       </ion-button>
 
-      <ion-button  (click)="mergeNir()" fill="outline" mode="md" [disabled]="selectedNirs.length < 2">
+      <ion-button  (click)="mergeNir()" fill="outline" mode="md" [disabled]="selectedNirs.length < 2" color="medium">
         Unește
       </ion-button>
 
@@ -76,7 +79,7 @@
     <span class="total">{{roundInHtml(nir.totalDoc)}} Lei</span>
     <span class="doc">{{nir.nrDoc}}</span>
     <div class="days">
-      <span class="label" [ngClass]="{'green': nir.payd, 'red': !nir.payd }" >{{ nir.payd ? 'Platit' : ' - ' + showDoDate(nir.documentDate) + ' Zile'}}</span>
+      <span  class="label" [ngClass]="{'green': nir.payd, 'red': !nir.payd }" >{{ nir.payd ? 'Platit' : ' - ' + showDoDate(nir.documentDate) + ' Zile'}}</span>
       <ion-button *ngIf="nir.payd" (click)="payNir(nir, i)" fill="clear" color="medium">
         <ion-icon src="../../../assets/icon/success.svg"  color="success"></ion-icon>
       </ion-button>

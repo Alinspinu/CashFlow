@@ -6,7 +6,7 @@
 
 
 .header{
-  font-family: NoirProSemi !important;
+  font-family: RoseMed !important;
   font-size: 17px !important;
   padding-left: 24px;
   margin: 24px 0;
@@ -164,7 +164,7 @@ span{
 }
 
 ion-searchbar{
-  --background: var(--light-grey);
+  --background: rgba(var(--ion-color-medium-rgb), 0.1) !important;
   color: var(--dark);
   padding: 6px !important;
   font-size: 12px;

@@ -1,41 +1,63 @@
+ion-content, ion-toolbar, ion-header{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;;
+}
+
+
+.title{
+  font-family: RoseMed !important;
+  font-size: 28px;
+  margin-left: 12px;
+}
+
 .log{
-  font-family: NoirProReg !important;
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: var(--ion-color-medium);
-  color: var(--ion-color-light);
-  border-radius: 4px;
-  height: fit-content;
+  font-family: RoseLight !important;
+  font-size: 16px;
+  padding: 2px 8px;
+}
+
+
+.log, .header{
   display: flex;
+  width: 96%;
+  margin: 0 28px;
   align-items: center;
-  justify-content: center;
-  padding: 22px;
-  font-size: 18px;
+  cursor: default;
+  .id{
+    flex: 5%;
+  }
   .date{
-      flex: 30%;
+    flex: 20%;
   };
   .suplier{
-      flex: 50%;
+    flex: 45%;
   };
   .quantity{
-      flex: 20%;
+    text-align: center;
+    flex: 10%;
+  }
+  .price{
+    text-align: center;
+    flex: 15%;
+  }
+  .button{
+    flex: 5%;
   }
 }
 
-.title-wrapper{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  .title{
-    font-family: NoirProSemi !important;
-    text-align: center;
-    padding: 16px;
-    background-color: var(--ion-color-medium);
-    color: var(--ion-color-light);
-    font-size: 24px;
-    margin: 8px 0 24px 0;
-  }
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05);
 }
+
+.header{
+  border-bottom: 1px solid var(--grey);
+  padding: 8px 8px;
+  font-family: RoseReg !important;
+  font-size: 20px;
+}
+
+.log:hover{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.09);
+  font-family: RoseReg !important;
+}
+

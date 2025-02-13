@@ -5,10 +5,9 @@ import { IonicModule, ModalController, NavParams, ToastController } from '@ionic
 import { Suplier } from '../../../models/suplier.model';
 import { SuplierService } from './suplier.service';
 import { showToast, triggerEscapeKeyPress } from 'src/app/shared/utils/toast-controller';
-import { ActivatedRoute, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
-import { NirService } from '../nir/nir.service';
 import { SupliersService } from '../../supliers/supliers.service';
 
 @Component({

@@ -165,6 +165,7 @@ export function formatedDateToShow(date: any){
 
 
   export function getSection(product: Product){
+
     let section = ''
     if(product.mainCat === 'food'){
         if(product.category._id === "64be6a3e3ef7bd6552c84608" || product.category._id === "64be690d3ef7bd6552c84602") {

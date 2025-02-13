@@ -4,8 +4,8 @@
     <ion-toolbar class="ion-no-border">
         <ion-title slot="start">Adaugă reduceri</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="adBasDsicounts()" color="medium">
-            <ion-icon src="../../../assets/icon/add-circle.svg"></ion-icon>
+          <ion-button (click)="adBasDsicounts()" fill="outline" color="medium">
+            <ion-icon  size="large"  src="../../../assets/icon/add-outline.svg"></ion-icon>
           </ion-button>
           <ion-button fill="outline" (click)="close()" color="medium">
             <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
@@ -40,6 +40,7 @@
       </ion-row>
     </section>
   </section>
+</form>
   <section>
     <section class="section">
       <ion-row>
@@ -52,14 +53,12 @@
         <ion-col size="8">
           <ion-searchbar mode="md" [(ngModel)]="categoriesSearch"  placeholder="Caută Categorie"  (ionInput)="searchCategory($event)" #searchbar (keyup.enter)="setCat()">
           </ion-searchbar>
-          <ion-item *ngFor="let cat of categories; let i = index" class="ing-name" (click)="selectCat(cat)">
-            <div>
+          <div *ngFor="let cat of categories; let i = index" class="ing-name" (click)="selectCat(cat)">
               <span class="name">{{cat.name}}</span>
               <div class="ing-info-wrapper">
                 <span class="main-cat">{{cat.mainCat}}</span>
               </div>
-            </div>
-          </ion-item>
+          </div>
           <div class="inputs-wrapper">
             <div *ngFor="let discount of discountsCats; let i = index" lines="none" class="cat-input">
               <span class="name">{{discount.name}}</span>
@@ -73,7 +72,7 @@
       </ion-row>
     </section>
   </section>
-</form>
+
 </ion-content>
 
 <ion-footer mode="ios" [translucent]="true" class="ion-no-border">

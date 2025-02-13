@@ -41,7 +41,6 @@ export class SelectDataPage implements OnInit {
 
    async addSuplier(){
     const suplier = await this.actionSht.openModal(SuplierPage, true, false) as Suplier
-    console.log(suplier)
    if(suplier){
     this.modalCtrl.dismiss(suplier.name)
    }

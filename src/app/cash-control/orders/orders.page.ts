@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component,  Inject, OnDestroy, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, MenuController, ToastController } from '@ionic/angular';
 import { Bill, deletetBillProduct } from 'src/app/models/table.model';
 import { CashControlService } from '../cash-control.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -12,21 +12,19 @@ import { OrderAppViewPage } from 'src/app/modals/order-app-view/order-app-view.p
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { DelProdViewPage } from 'src/app/reports/cash/del-prod-view/del-prod-view.page';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
-import { emptyBill, emptyDeletetBillProduct } from 'src/app/models/empty-models';
+import { HeaderPage } from '../header/header.page';
 
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
   styleUrls: ['./orders.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, HeaderPage]
 })
-export class OrdersPage implements OnInit, OnDestroy, OnChanges {
+export class OrdersPage implements OnInit, OnDestroy {
 
   productSearch!: string
-   @Input() access: number = 1
-   @Input() data: {orders: Bill[], delProd: deletetBillProduct[]} = {orders: [emptyBill()], delProd: [emptyDeletetBillProduct()]}
-   @Output() date: EventEmitter<string> = new EventEmitter();
+
 
     orders: Bill[] = []
     allOrders: Bill[] = []
@@ -44,12 +42,14 @@ export class OrdersPage implements OnInit, OnDestroy, OnChanges {
     users: {name: string, id: string, show: boolean}[] = []
 
     userSub!: Subscription
+    menuOpen: boolean = false
 
   constructor(
         private cashSrv: CashControlService,
         private toastCtrl: ToastController,
         private authSrv: AuthService,
         @Inject(ActionSheetService) private actionSheet: ActionSheetService,
+        @Inject(MenuController) private menuCtrl: MenuController,
   ) { }
 
   ngOnInit() {
@@ -62,23 +62,26 @@ export class OrdersPage implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data']) {
-      this.updateData(this.data.orders);
-      this.orders = this.data.orders
-      this.delProducts = this.data.delProd
-    }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['data']) {
+  //     this.updateData(this.data.orders);
+  //     this.orders = this.data.orders
+  //     this.delProducts = this.data.delProd
+  //   }
+  // }
+
+
+  reciveData(ev: any){
+    this.updateData(ev.orders);
+    this.delProducts = ev.delProd
   }
-
-
 
 
   getUser(){
     this.userSub = this.authSrv.user$.subscribe(response => {
       if(response) {
         this.user = response
-        this.getAllOrders()
-        this.getDelProducts()
       }
     })
    }
@@ -112,30 +115,6 @@ export class OrdersPage implements OnInit, OnDestroy, OnChanges {
 
 
 
-  getAllOrders(){
-    this.cashSrv.ordersSend$.subscribe({
-      next: (orders) =>{
-        this.orders = orders
-        this.allOrders = orders
-        this.updateData(this.orders)
-        this.isLoading = false
-      },
-      error: (error) => {
-        console.log(error)
-      }
-    })
-  }
-
-  getDelProducts(){
-    this.cashSrv.delProdSend$.subscribe({
-      next:(products) => {
-        this.delProducts = products
-      },
-      error: (error) => {
-        console.log(error)
-      }
-    })
-  }
 
   searchProduct(ev: any){
     this.productSearch = ev.target.value;
@@ -245,20 +224,6 @@ resetOrders(){
   }
 
 
-  async selectDate(day: boolean){
-    if(day) {
-      const day = await this.actionSheet.openAuth(DatePickerPage)
-      this.cashSrv.getAllorders(day, undefined, undefined).subscribe()
-      this.date.emit(`${formatOrderDateOne(day)}`)
-    } else {
-      const stDate = await this.actionSheet.openPayment(DatePickerPage, 'ALEGE ZIUA DE ÎNCEPUT')
-      if(stDate){
-        const enDate = await this.actionSheet.openPayment(DatePickerPage, 'ALEGE ZIUA DE SFÂRȘIT')
-        this.cashSrv.getAllorders(undefined, stDate, enDate).subscribe()
-        this.date.emit(`${formatOrderDateOne(stDate)} - ${formatOrderDateOne(enDate)}`)
-      }
-    }
-  }
 
 
   formatDate(date: any){

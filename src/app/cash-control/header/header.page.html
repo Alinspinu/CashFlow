@@ -1,0 +1,23 @@
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
+</ion-menu-button>
+
+
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar cash">
+    <ion-title slot="start">{{title}}</ion-title>
+    <span class="date" slot="end">{{date}}</span>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="openDate()">
+        <ion-icon size="large" src="../../../assets/icon/shedule.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+<div class="buttons-container">
+    <div class="button animated-border" *ngFor="let user of users; let i =index;" [ngClass]="{'animate selected-button': user.show, 'removing': !user.show && activeTabIndex !== i}" (click)="userOrders(user, i)">
+      <span class="value">{{user.name}}</span>
+    </div>
+</div>
+</ion-header>

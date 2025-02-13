@@ -1,17 +1,18 @@
-<ion-menu-button *ngIf="!menuOpen">
-  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+<ion-menu-button class="tool" [class.hidden]="isHidden">
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
 </ion-menu-button>
 
-<ion-header class="ion-no-border" >
 
-</ion-header>
   <ion-header class="ion-no-border" *ngIf="shedule">
-    <ion-toolbar class="ion-no-border">
-      <ion-title class="ion-text-center">{{editPeriod(shedule.period)}}</ion-title>
-      <ion-button fill="ghost" color="medium" slot="end" (click)="selectShedule()">
-        <ion-icon src="../../../assets/icon/shedule.svg"></ion-icon>
-      </ion-button>
+    <ion-toolbar class="ion-no-border title" [class.hidden]="isHidden">
+      <ion-title slot="end">{{editPeriod(shedule.period)}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button id="shed" fill="outline" color="medium" (click)="selectShedule()">
+          <ion-icon src="../../../assets/icon/shedule.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
+
     <ion-toolbar class="ion-no-border header">
       <ion-row>
         <ion-col size="2"  class="ion-no-padding padding">
@@ -29,7 +30,7 @@
     </ion-toolbar>
   </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" scrollEvents="true">
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col *ngIf="shedule && users" class="padding">

@@ -1,11 +1,9 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '../auth/auth-guard';
-import { ReportsPage } from './reports.page';
 
 export const routes: Routes = [
   {
     path: '',
-    component: ReportsPage,
     children: [
       {
         path: 'cash',
@@ -36,7 +34,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/reports/cash',
+    redirectTo: '/reports/inventary',
     pathMatch: 'full',
   },
 

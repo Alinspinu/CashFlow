@@ -25,8 +25,8 @@ export class AddClientDiscountPage implements OnInit {
   categoriesSearch: string = ''
   discountsCats: any[] = []
   discountsToSave: any[] = []
-  generalDiscount!: number
-  cashBackProcent: number = 5
+  generalDiscount: number = 0
+  cashBackProcent: number = 0
 
   setDiscountForAll: boolean = false
 
@@ -122,12 +122,12 @@ export class AddClientDiscountPage implements OnInit {
   }
   getData(){
     const data = this.navPar.get('options');
-    console.log(data)
     if(data && data.user){
       this.discountsCats = data.data.discount.category
       this.generalDiscount = data.data.discount.general
       this.cashBackProcent = data.data.cashBackProcent
     }
+    console.log(data)
     if(data && !data.user) {
       this.setDiscountForAll = true
       this.discountsCats = data.data
@@ -146,8 +146,12 @@ export class AddClientDiscountPage implements OnInit {
     this.addDiscSrv.searchCat(search, this.user.locatie).subscribe((response:any) => {
       if(response) {
         this.categories = response
+        if(search === ''){
+          this.categories = []
+        }
       }
     })
+
   }
 
   deleteDiscount(index: number){
@@ -183,29 +187,17 @@ export class AddClientDiscountPage implements OnInit {
         updateOn: 'change',
       }),
     });
-    if(this.generalDiscount){
-      this.form.get('generalDiscount')?.setValue(this.generalDiscount);
-    }
-    if(this.cashBackProcent){
-      this.form.get('cashBackProcent')?.setValue(this.cashBackProcent);
-    }
+    this.form.get('generalDiscount')?.setValue(this.generalDiscount);
+    this.form.get('cashBackProcent')?.setValue(this.cashBackProcent);
   }
 
   onSubmit(){
-    if(this.deletedDiscounts.length) {
-      this.deletedDiscounts.forEach(el => el.precent = 0)
-      const dataToSend = {
-        category: this.deletedDiscounts
-      }
-      this.modalCtrl.dismiss(dataToSend)
-    } else {
       const dataToSend = {
         general: +this.form.value.generalDiscount,
         category: this.discountsCats,
         cashBackProcent: this.form.value.cashBackProcent,
       }
       this.modalCtrl.dismiss(dataToSend)
-    }
   }
 
   close(){

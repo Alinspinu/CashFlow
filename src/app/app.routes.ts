@@ -65,11 +65,18 @@ const routes: Routes = [
   },
   {
     path: 'sales',
-    loadComponent: () => import('./cash-control/sales/sales.page').then( m => m.SalesPage)
+    loadComponent: () => import('./cash-control/sales/sales.page').then( m => m.SalesPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'orders',
+    loadComponent: () => import('./cash-control/orders/orders.page').then( m => m.OrdersPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'products',
-    loadComponent: () => import('./cash-control/products/products.page').then( m => m.ProductsPage)
+    loadComponent: () => import('./cash-control/products/products.page').then( m => m.ProductsPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'add-product',
@@ -82,8 +89,8 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'cloudinary-picker',
-    loadComponent: () => import('./shared/cloudinary-picker/cloudinary-picker.page').then( m => m.CloudinaryPickerPage)
+    path: 'header',
+    loadComponent: () => import('./cash-control/header/header.page').then( m => m.HeaderPage)
   },
 
 

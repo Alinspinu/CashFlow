@@ -438,7 +438,7 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
         map((res) => {
           this.disableOrderButton = false;
           if (out && res) {
-            this.router.navigateByUrl('/tabs/tables');
+            this.router.navigateByUrl('/tables');
           }
           return !!res; // Convert the response to a boolean
         })
@@ -458,7 +458,7 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
             map((res) => {
               this.disableOrderButton = false;
               if (out && res) {
-                this.router.navigateByUrl('/tabs/tables');
+                this.router.navigateByUrl('/tables');
               }
               return !!res; // Convert the response to a boolean
             })
@@ -495,7 +495,7 @@ async payment(){
                   if(response && response.bill.status === 'done'){
                     this.billData.billToshow = emptyBill()
                     this.client = null
-                    this.router.navigateByUrl("/tabs/tables")
+                    this.router.navigateByUrl("/tables")
                     this.disableOrderButton = false;
                     // this.tableSrv.saveBillToCloud(response.bill)
                     showToast(this.toastCtrl, response.message, 3000)

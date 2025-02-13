@@ -41,6 +41,9 @@ pontSub!: Subscription
 period: string = '1-30'
 periodMark: boolean = false
 
+isHidden: boolean = false
+lastY: number = 0;
+
   constructor(
     private pontSrv: PontajService,
     private usersSrv: UsersService,
@@ -60,6 +63,21 @@ periodMark: boolean = false
       if(this.pontSub){
         this.pontSub.unsubscribe()
       }
+  }
+
+
+  onScroll(event: any) {
+    const currentY = event.detail.scrollTop;
+
+    if (currentY > this.lastY && currentY > 20) {
+      // Scrolling down, hide content
+      this.isHidden = true;
+    } else if(currentY === 0){
+      // Scrolling up, show content
+      this.isHidden = false;
+    }
+
+    this.lastY = currentY;
   }
 
   getUsers(){

@@ -1,4 +1,6 @@
-
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
+</ion-menu-button>
 
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border header-toolbar">
@@ -82,13 +84,13 @@
     <span class="price">{{ing.ings.length ? calcProductIngredientPrice(ing.ings) : roundInHtml(ing.price + (ing.price * ing.tva / 100))}} Lei</span>
     <span class="qty">{{roundInHtml(ing.qty)}}</span>
     <span class="comp"></span>
-    <ion-button fill="ghost" color="medium" class="inv" (click)="inventary(i)">
+    <ion-button fill="clear" color="medium" class="inv" (click)="inventary(i)">
       <ion-icon  src="../../assets/icon/tools.svg"></ion-icon>
     </ion-button>
     <ion-button fill="clear" color="medium" class="in" (click)="uploadLog(ing._id)">
       <ion-icon src="../../../assets/icon/plant.svg"></ion-icon>
     </ion-button>
-    <ion-button class="action" fill="ghost" color="medium" (click)="ingEdit(ing)">
+    <ion-button class="action" fill="clear" color="medium" (click)="ingEdit(ing)">
       <ion-icon src="../../../assets/icon/eye-outline.svg"></ion-icon>
     </ion-button>
   </div>

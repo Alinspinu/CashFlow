@@ -1,11 +1,9 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '../auth/auth-guard';
-import { OfficePage } from '../office/office.page';
 
 export const routes: Routes = [
   {
     path: '',
-    component: OfficePage,
     children: [
       {
         path: 'products',
@@ -44,35 +42,6 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'e-factura',
-        loadComponent: () => import('./e-factura/e-factura.page').then( m => m.EFacturaPage),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'imp',
-        loadComponent: () => import('./imp/imp.page').then( m => m.ImpPage),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'add-product',
-        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'add-suplier/:value',
-        loadComponent: () => import('../office/CRUD/suplier/suplier.page').then( m => m.SuplierPage),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'add-product/:id',
-        loadComponent: () => import('../office/CRUD/product/product.page').then( m => m.ProductPage),
-        canActivate: [AuthGuard]
-      },
-      // {
-      //   path: 'ingredients',
-      //   loadComponent: () => import('./e-factura/ingredients/ingredients.page').then( m => m.IngredientsPage)
-      // },
-      {
         path: '',
         redirectTo: '/office/products',
         pathMatch: 'full',
@@ -84,10 +53,7 @@ export const routes: Routes = [
     redirectTo: '/office/products',
     pathMatch: 'full',
   },
-  {
-    path: 'add-imp',
-    loadComponent: () => import('./imp/add-imp/add-imp.page').then( m => m.AddImpPage)
-  },
+
 
 
 

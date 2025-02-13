@@ -1,80 +1,87 @@
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
+</ion-menu-button>
+
 <div *ngIf="isLoading" class="spinner-content">
   <app-spinner class="spinner"></app-spinner>
 </div>
 
+
 <ion-header class="ion-no-border" *ngIf="inventary">
-  <ion-toolbar class="ion-no-border">
-    <ion-button mode="ios" (click)="exportInv()" slot="end" color="medium">
-      <span class="but">Export XCEL</span>
-     </ion-button>
-        <ion-button mode="ios" (click)="updateIngsQty()" slot="end" color="medium" [disabled]="inventary.updated">
-         <span class="but">{{inventary.updated ? 'Stoc actualizat' : 'Actualizează stocul'}}</span>
+  <ion-toolbar class="ion-no-border header-toolbar cash">
+      <ion-title slot="start">Inventar</ion-title>
+      <ion-title slot="end">{{inventary.date}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="exportInv()">
+          <ion-icon size="large" src="../../../assets/icon/exports.svg"></ion-icon>
         </ion-button>
-        <ion-button mode="ios" (click)="selectInventary()" slot="end" color="medium">
-         <span class="but">{{inventary.date}}</span>
+        <ion-button fill="outline" (click)="updateIngsQty()" [disabled]="inventary.updated">
+          <ion-icon size="large" src="../../../assets/icon/update.svg"></ion-icon>
         </ion-button>
-        <ion-button mode="ios" (click)="selectInventaries()" slot="end" color="medium">
-         <span class="but">Compară</span>
+        <ion-button fill="outline" (click)="selectInventary()">
+          <ion-icon size="large" src="../../../assets/icon/time.svg"></ion-icon>
         </ion-button>
-  </ion-toolbar>
-  <ion-toolbar class="ion-no-border" *ngIf="mode ===  'inventary'">
-    <ion-row style="margin-top: 1rem">
-      <ion-col>
-        <div class="title-wrapper" >
-          <div class="title dif">DIFERENȚE</div>
-          <div class="title">{{roundInHtml(diferenceTotal)}} Lei</div>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-lg="6.4" offset-lg="2">
-        <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event, false)" #searchbar [disabled]="isLoading" class="searchbar">
+        <ion-button fill="outline" (click)="selectInventaries()">
+          <ion-icon size="large" src="../../../assets/icon/compare-horizontal.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  <ion-toolbar>
+      <div class="searchbar-wrapper">
+        <ion-searchbar mode="md" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient" [animated]="true" class="ion-no-padding" (ionInput)="searchIngredient($event)" #searchbar [disabled]="isLoading" class="searchbar">
         </ion-searchbar>
-      </ion-col>
-      <ion-col size="0.8" *ngIf="screenWidth > 500">
-          <ion-select placeholder="Gestiune" (ionChange)="onSelectGestiune($event, false)">
+        <div class="select-wrapper">
+          <ion-select mode="md"  placeholder="Gestiune" color="medium" (ionChange)="onSelectGestiune($event)">
             <ion-select-option  class="font" value="">Toate</ion-select-option>
             <ion-select-option  class="font"*ngFor="let gest of gestiuni" [value]="gest">{{gest | capitalize}}</ion-select-option>
           </ion-select>
-      </ion-col>
-      <ion-col size="0.8" *ngIf="screenWidth > 500">
-          <ion-select placeholder="Departament" (ionChange)="onSelectDep($event, false)">
+        </div>
+        <div class="select-wrapper">
+          <ion-select mode="md"  placeholder="Departament" color="medium" (ionChange)="onSelectDep($event)">
             <ion-select-option class="font" value="">Toate</ion-select-option>
             <ion-select-option  class="font"*ngFor="let type of ingDep" [value]="type">{{type | capitalize}}</ion-select-option>
           </ion-select>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-lg="8" offset-lg="2">
-        <div  class="ing-wrapper header">
-          <span class="name">Nume ingredient</span>
-          <span class="gest">Gestiune</span>
-          <span class="dep">Departament</span>
-          <span class="scriptic">Scriptic</span>
-          <span class="faptic">Faptic</span>
-          <span class="dif">Diferenta (um)</span>
-          <span class="dif-value">Diferenta (lei)</span>
         </div>
-      </ion-col>
-    </ion-row>
+      </div>
+  </ion-toolbar>
+  <ion-toolbar>
+    <div class="ing-wrapper header" *ngIf="mode ===  'inventary'">
+      <span class="name">Nume</span>
+      <span class="gest">Gestiune</span>
+      <span class="dep">Departament</span>
+      <span class="scriptic">Scriptic</span>
+      <span class="faptic">Faptic</span>
+      <span class="dif">Diferență</span>
+      <span class="dif-value">Valoare</span>
+    </div>
+    <div  class="ing-wrapper header" *ngIf="mode === 'compare' && compareTable">
+      <span class="name">Nume</span>
+      <span class="first">{{formatDate(compareTable.dateFirst)}}</span>
+      <span class="upload">Intrări</span>
+      <span class="second">{{formatDate(compareTable.dateSecond)}}</span>
+      <span class="scriptic">Scriptic</span>
+      <span class="sales">Vânzări</span>
+      <span class="depr">Deprecieri</span>
+      <span class="dif">Diferenșă</span>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading && mode ===  'inventary'">
-  <ion-grid>
-    <ion-row>
-      <ion-col size-lg="8" offset-lg="2" *ngIf="inventary">
-          <ion-row>
-            <ion-col>
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col *ngIf="inventary" class="ion-no-padding">
+          <ion-row class="ion-no-padding">
+            <ion-col class="ion-no-padding">
               <div *ngFor="let ing of ingredients; let i = index" >
-                <div class="ing-wrapper input" *ngIf="ing.ing">
-                  <span class="name">{{ing.name}} /<span class="um">{{ing.ing.um}}</span></span>
+                <div class="ing-wrapper input" *ngIf="ing.ing" [ngClass]="{'odd' : i % 2 !== 0}">
+                  <span class="name">{{ing.name}}</span>
                   <span class="gest">{{ing.gestiune}}</span>
                   <span class="dep">{{ing.dep}}</span>
-                  <span class="scriptic">{{roundInHtml(ing.scriptic)}}</span>
-                  <span class="faptic">{{ing.faptic}}</span>
-                  <span class="dif">{{roundInHtml(ing.faptic - ing.scriptic)}}</span>
-                  <span class="dif-value">{{roundInHtml((ing.faptic - ing.scriptic) * ing.ing.price)}}</span>
+                  <span class="scriptic">{{roundInHtml(ing.scriptic)}} {{ing.ing.um}}</span>
+                  <span class="faptic">{{ing.faptic}} {{ing.ing.um}}</span>
+                  <span class="dif">{{roundInHtml(ing.faptic - ing.scriptic)}} {{ing.ing.um}}</span>
+                  <span class="dif-value">{{roundInHtml((ing.faptic - ing.scriptic) * ing.ing.price)}} Lei</span>
                 </div>
               </div>
             </ion-col>
@@ -85,64 +92,24 @@
 </ion-content>
 
 
-  <ion-toolbar class="ion-no-border" *ngIf="mode === 'compare' && compareTable">
-    <ion-row style="margin-top: 1rem">
-    </ion-row>
-    <ion-row>
-      <ion-col size-lg="6.4" offset-lg="2">
-        <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient"  (ionInput)="searchIngredient($event, true)" #searchbar [disabled]="isLoading" class="searchbar">
-        </ion-searchbar>
-      </ion-col>
-      <ion-col size="0.8" *ngIf="screenWidth > 500">
-          <ion-select placeholder="Gestiune" (ionChange)="onSelectGestiune($event, true)">
-            <ion-select-option  class="font" value="">Toate</ion-select-option>
-            <ion-select-option  class="font"*ngFor="let gest of gestiuni" [value]="gest">{{gest | capitalize}}</ion-select-option>
-          </ion-select>
-      </ion-col>
-      <ion-col size="0.8" *ngIf="screenWidth > 500">
-          <ion-select placeholder="Departament" (ionChange)="onSelectDep($event, true)">
-            <ion-select-option class="font" value="">Toate</ion-select-option>
-            <ion-select-option  class="font"*ngFor="let type of ingDep" [value]="type">{{type | capitalize}}</ion-select-option>
-          </ion-select>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-lg="10" offset-lg="1">
-        <div  class="ing-wrapper header">
-          <span class="name">Nume ingredient</span>
-          <span class="first">{{formatDate(compareTable.dateFirst)}}</span>
-          <span class="upload">Intrari</span>
-          <span class="second">{{formatDate(compareTable.dateSecond)}}</span>
-          <span class="scriptic">Valoare scriptica</span>
-          <span class="sales">Valoare din vanzari</span>
-          <span class="depr">Deprecieri</span>
-          <span class="dif">Diferenta</span>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
 
 
 <ion-content [fullscreen]="true" *ngIf="!isLoading && mode === 'compare'">
-  <ion-grid>
-    <ion-row>
-      <ion-col size-lg="10" offset-lg="1" *ngIf="inventary && compareTable">
-          <ion-row>
-            <ion-col>
-              <div *ngFor="let ing of ingsComp; let i = index" >
-                <div class="ing-wrapper input">
-                  <span class="name">{{ing.name}} /<span class="um">{{ing.um}}</span></span>
-                  <span class="first">{{roundInHtml(ing.first)}}</span>
-                  <span class="upload" (click)="showlog(ing.upload.entries, ing.name, ing.um, ing._id)">{{roundInHtml(ing.upload.value)}}</span>
-                  <span class="second">{{roundInHtml(ing.second)}}</span>
-                  <span class="scriptic">{{roundInHtml(ing.first+ing.upload.value - ing.second)}}</span>
-                  <span class="sales">{{roundInHtml(ing.saleUnload)}}</span>
-                  <span class="depr">{{roundInHtml(ing.depVal)}}</span>
-                  <span class="dif" >{{roundInHtml(ing.saleUnload + ing.depVal - (ing.first+ing.upload.value - ing.second))}}</span>
-                </div>
-              </div>
-            </ion-col>
-          </ion-row>
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col *ngIf="inventary && compareTable" class="ion-no-padding">
+        <div *ngFor="let ing of ingsComp; let i = index" >
+          <div class="ing-wrapper input" [ngClass]="{'odd' : i % 2 !== 0}">
+            <span class="name">{{ing.name}}</span>
+            <span class="first">{{roundInHtml(ing.first)}} {{ing.um}}</span>
+            <span class="upload bck" (click)="showlog(ing.upload.entries, ing.name, ing.um, ing._id)">{{roundInHtml(ing.upload.value)}} {{ing.um}}</span>
+            <span class="second">{{roundInHtml(ing.second)}} {{ing.um}}</span>
+            <span class="scriptic">{{roundInHtml(ing.first+ing.upload.value - ing.second)}} {{ing.um}}</span>
+            <span class="sales">{{roundInHtml(ing.saleUnload)}} {{ing.um}}</span>
+            <span class="depr">{{roundInHtml(ing.depVal)}} {{ing.um}}</span>
+            <span class="dif" >{{roundInHtml(ing.saleUnload + ing.depVal - (ing.first+ing.upload.value - ing.second))}} {{ing.um}}</span>
+          </div>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

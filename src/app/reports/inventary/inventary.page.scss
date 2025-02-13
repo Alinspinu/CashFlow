@@ -1,45 +1,21 @@
-// ion-content{
-//   height: 150vh;
-// }
 
-ion-content, ion-toolbar{
-  --background: var(--ion-color-tertiary) !important;
+
+
+ion-content, ion-toolbar, ion-header{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color);
 }
 
 
-ion-searchbar{
-  // margin-bottom: 1.2rem;
-  font-family: NoirProReg !important;
+ion-searchbar, ion-button, ion-select{
+  font-family: RoseMed !important;
 }
 
-ion-button{
-  font-family: NoirProSemi !important;
-  // color: var(--ion-color-medium) !important;
+ion-title[slot="end"]{
+  margin-top: 24px;
+  font-size: 18px !important;
 }
 
-.title-wrapper{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  .title{
-    font-family: NoirProSemi !important;
-    text-align: center;
-    background-color: var(--ion-color-medium);
-    color: var(--ion-color-light);
-    padding: 8px;
-    font-size: 18px;
-    margin: 8px 0 24px 0;
-  }
-  .dif{
-    font-size: 22px;
-    background-color: transparent !important;
-    color: var(--ion-color-medium) !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-}
 
 .spinner-content{
   height: 100vh;
@@ -50,51 +26,72 @@ ion-button{
 }
 
 .header{
-  padding-left: 12px;
-  font-family: NoirProSemi !important;
+  font-family: RoseReg !important;
+  font-size: 20px;
+  padding: 8px 0;
+  border-bottom: 1.5px solid var(--grey);
 }
 
 
-
-.title{
+.searchbar-wrapper{
+  margin: 8px 28px;
+  width: 96%;
   display: flex;
-  flex-direction: column;
-  text-align: center;
-  font-family: NoirProReg !important;
+  align-items: center;
+   ion-searchbar{
+    --box-shadow: none !important;
+     flex: 60%;
+     --background: rgba(var(--ion-color-medium-rgb), 0.2);
+    padding: 0 !important;
+   }
+   .select-wrapper{
+    flex: 20%;
+    margin-left: 8px;
+    padding-left: 6px;
+    height: 46px;
+    overflow: hidden;
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+   }
+   .select-wrapper:hover{
+    cursor: pointer;
+    border: 1.5px solid var(--ion-color-medium);
+   }
 }
+
 
  .input{
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: var(--ion-color-light-tint);
   color: var(--ion-color-medium);
-  border-radius: 8px;
-  margin: 0.5rem 0 0 0;
-  font-family: NoirProReg !important;
-  padding-left: 12px;
-  height: 50px;
+  font-family: RoseLight !important;
+  // border-bottom: 1px solid var(--grey);
   font-size: 16px;
 }
 
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05);
+}
+
+.input:hover{
+  font-family: RoseMed !important;
+  font-family: 17px;
+  background-color:rgba(var(--ion-color-medium-rgb), 0.2);
+  // color: var(--ion-);
+}
+
 .ing-wrapper{
-  width: 100%;
+  margin: 0 28px;
+  width: 96%;
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: default;
     .name{
-      flex: 30%;
-      text-align:left;
-      font-family: NoirProSemi !important;
-      .um{
-        margin-left: 4px;
-        font-family: NoirProReg !important;
-        font-size: 14px;
-      }
+      padding-left: 8px;
+      flex: 20%;
     }
     .dep,.gest{
+      padding: 8px 0;
       flex: 10%;
-      text-align: left;
     }
     .faptic{
       flex: 10%;
@@ -109,40 +106,33 @@ ion-button{
       text-align: right;
       padding-right: 18px;
     }
-    .first, .upload, .second, .scriptic, .sales, .depr{
+    .upload, .scriptic, .sales, .depr{
       flex: 10%;
       text-align: center;
     }
+    .first, .second{
+      text-align: center;
+      flex: 15%;
+    }
     .upload{
       cursor: pointer;
-      background-color: var(--ion-color-tertiary);
-      padding: 8px;
     }
  }
 
-
-
-
-
- @media (max-width: 500px) {
-  .name{
-    font-size: 12px;
-  }
-  .um{
-    font-size: 10px !important;
-  }
-  .scriptic{
-    font-size: 12px;
-  }
-  .faptic{
-    font-size: 12px;
-  }
-  .dif{
-    font-size: 12px;
-  }
-  .dif-value{
-    font-size: 12px;
-  }
+ .bck{
+  width: fit-content;
+  padding: 8px 0;
+  border: 1px solid var(--grey);
+  border-radius: 4px;
+  margin-top: 1px;
  }
+
+ .bck:hover{
+  border-color: var(--ion-color-medium);
+  border-radius: 8px;
+  font-family: RoseSemi !important;
+ }
+
+
 
 

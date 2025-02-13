@@ -84,10 +84,10 @@ ion-searchbar{
         border: 1.5px solid var(--grey);
         border-radius: 6px;
         .name{
-          flex: 80%;
+          flex: 75%;
         }
         .disc{
-          flex: 10%;
+          flex: 15%;
         }
         ion-button{
           flex: 10%;
@@ -105,21 +105,20 @@ ion-searchbar{
 .ing-info-wrapper {
   margin-left: 20px;
   .main-cat{
-    font-weight: 400;
     font-size: 13px;
-    color: rgb(255, 196, 181);
+    color: rgb(255, 128, 97);
   }
 }
 
 
 .ing-name{
   cursor: pointer;
-  --background: var(--ion-color-light);
-  border-radius: 8px;
-  margin: 4px;
-  span{
-    color: var(--ion-color-medium);
-  }
+  background-color: var(--light-grey);
+  color: var(--dark);
+  border-radius: 4px;
+  margin: 3px 26px;
+  padding: 8px;
+  width: 89%;
 }
 
 .custon-input{

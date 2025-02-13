@@ -1,33 +1,50 @@
 <ion-app>
   <ion-menu contentId="main-content" type="reveal"  menuId="start" *ngIf="user">
     <ion-content>
-      <ion-button fill="ghost" (click)="closeMenu()">
-        <ion-icon src="../assets/icon//chevron-double-left.svg" size="large"></ion-icon>
-      </ion-button>
       <ion-list id="inbox-list">
         <ion-list-header>True Fine Coffee</ion-list-header>
         <ion-note>{{user.email}}</ion-note>
 
-          <ion-menu-toggle auto-hide="true" *ngFor="let p of appPages; let i = index">
+          <ion-menu-toggle auto-hide="true" *ngFor="let p of firstPages; let i = index">
            <ion-item routerDirection="root"
            [routerLink]="[p.url]"
            lines="none"
            detail="false"
-           routerLinkActive="selected"
-           *ngIf="p.title === 'Vanzare' ||
-           user.employee.access === 4 ||
-           p.title === 'Log Out' ||
-           p.title === 'Casă'
-           "
+           (click)="selectPage(p)"
+           [ngClass]="{'selected': p.show}" class="item"
            >
             <ion-icon aria-hidden="true" slot="start" [src]="p.icon"></ion-icon>
             <ion-label>{{ p.title }}</ion-label>
-            <!-- <ion-badge slot="end" color="danger" *ngIf="p.title === 'Notificări' && notificationNumber > 0">{{notificationNumber}}</ion-badge>
-            <ion-badge slot="end" color="danger" *ngIf="p.title === 'Rezervări' && reservationNumber > 0">{{reservationNumber}}</ion-badge> -->
           </ion-item>
         </ion-menu-toggle>
+
+          <div class="main" *ngFor="let p of subMenuPages">
+            <ion-item lines="none" detail="false" (click)="toggleSubMenu(p)" [ngClass]="{'selected': p.show}" class="item" *ngIf="p.title === 'Casă' || user.employee.access > 3">
+             <ion-icon aria-hidden="true" slot="start" src='../assets/icon/office-worker.svg'></ion-icon>
+             <ion-label>{{p.title}}</ion-label>
+           </ion-item>
+           <div *ngIf="p.show" class="submenu">
+            <ion-item *ngFor="let s of p.pages" [ngClass]="{'selected': s.show}" (click)="selectPage(s, p)">
+              <ion-icon aria-hidden="true" slot="start" [src]="s.icon"></ion-icon>
+              <ion-label>{{ s.name }}</ion-label>
+            </ion-item>
+          </div>
+          </div>
+       <ion-menu-toggle auto-hide="true" *ngFor="let p of secondPages; let i = index">
+        <ion-item routerDirection="root"
+        [routerLink]="[p.url]"
+        lines="none"
+        detail="false"
+        (click)="selectPage(p)"
+        [ngClass]="{'selected': p.show}" class="item"
+        >
+         <ion-icon aria-hidden="true" slot="start" [src]="p.icon"></ion-icon>
+         <ion-label>{{ p.title }}</ion-label>
+       </ion-item>
+     </ion-menu-toggle>
       </ion-list>
     </ion-content>
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>
+

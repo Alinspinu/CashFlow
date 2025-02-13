@@ -1,14 +1,22 @@
-<ion-menu-button *ngIf="!menuOpen">
-  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+<ion-menu-button class="tool" [class.hidden]="isHidden">
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
 </ion-menu-button>
 
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border ion-no-padding" style="height: 50px !important;">
+  <ion-toolbar class="ion-no-border title" [class.hidden]="isHidden">
+    <ion-title slot="end">{{pontaj.month}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button id="shed" fill="outline" color="medium" (click)="selectPontaj()">
+        <ion-icon src="../../../assets/icon/shedule.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <!-- <ion-toolbar class="ion-no-border ion-no-padding" style="height: 50px !important;">
     <ion-title class="ion-text-center">{{pontaj.month}}</ion-title>
          <ion-button fill="ghost" color="medium" (click)="selectPontaj()" slot="end">
           <ion-icon src="assets/icon/time.svg"></ion-icon>
         </ion-button>
-  </ion-toolbar>
+  </ion-toolbar> -->
   <ion-grid class="ion-no-padding">
     <ion-row *ngIf="pontaj && users">
       <ion-col size="1" class="ion-no-padding padding">
@@ -53,7 +61,8 @@
     </ion-row>
   </ion-grid>
 </ion-header>
-<ion-content [fullscreen]="true">
+
+<ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" scrollEvents="true">
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col *ngIf="pontaj && users">

@@ -226,6 +226,7 @@ export class ActionSheetService {
                typeof UserContentPage |
                typeof AddClientDiscountPage |
                typeof AddEmployeeDataPage |
+               typeof UploadLogPage |
                typeof ProductIngredientPage |
                typeof NirPage,
     options: any,
@@ -267,11 +268,9 @@ export class ActionSheetService {
         name: 'discount',
         type: 'number',
         placeholder: 'Ex. 10 pentru 10%',
-        cssClass: 'custom-input',
 
       },
     ],
-      cssClass: 'discountAlert'
     });
     await alert.present();
     const result = await alert.onDidDismiss();

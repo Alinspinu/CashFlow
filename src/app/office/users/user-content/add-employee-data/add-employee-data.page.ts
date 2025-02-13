@@ -161,9 +161,6 @@ export class AddEmployeeDataPage implements OnInit {
             }
           }
        }
-       console.log(this.birthDate)
-       console.log(this.startDate)
-       console.log(this.endDate)
 }
 
 formatedDate(date: string){

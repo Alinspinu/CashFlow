@@ -1,24 +1,23 @@
+ion-toolbar, ion-content, ion-list, ion-header, ion-item{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
 .header{
   font-family: RoseReg !important;
   display: flex;
   align-items: center;
   padding: 14px 18px;
-  margin: 0 8px;
+  margin: 0;
   font-size: 18px;
   justify-content: space-between;
-  border-top: 0.6px solid var(--grey);
   border-bottom: 1.5px solid var(--grey);
 }
 
-.fixed-toolbar {
-  position: sticky; /* Keeps it fixed inside ion-content */
-  top: 0; /* Sticks to the top */
-  z-index: 10; /* Ensures it is above other content */
-}
 
 .card-toolbar{
-  width: 95%;
-  margin-left: 28px;
+  margin: 0 28px;
+  width: 96%;
 }
 
 
@@ -46,8 +45,8 @@
 
 .order-container{
   font-family: RoseReg !important;
-  width: 92%;
-  margin-left: 44px;
+  margin: 0 28px;
+  width: 96%;
   padding: 12px 18px;
   border-bottom: 0.5px solid var(--grey);
   display: flex;
@@ -78,10 +77,15 @@
   }
 }
 
+.order-container:hover{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05) !important;;
+}
+
 
 ion-card{
   cursor: pointer;
-  width: 100%;
+  margin: 6px 0 !important;
+  width: 98%;
   box-shadow: none !important;
   border-radius: 0 !important;
   ion-card-title, ion-card-subtitle, p{

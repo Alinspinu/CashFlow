@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, MenuController, ToastController } from '@ionic/angular';
 import { formatedDateToShow, getUserFromLocalStorage, round } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { Router } from '@angular/router';
@@ -86,15 +86,18 @@ export class ProductsPage implements OnInit {
   totalRecipe: number = 0;
   recipeSurplus: number = 0
 
+  menuOpen: boolean = true
 
   constructor(
    private reportsSrv: ReportsService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private router: Router,
+    @Inject(MenuController) private menuCtrl: MenuController,
     private toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
+    this.menuChange()
     this.getuser()
   }
 
@@ -112,6 +115,18 @@ export class ProductsPage implements OnInit {
       this.router.navigateByUrl('/auth')
     }
   })
+}
+
+private async menuChange(){
+  const menu = await this.menuCtrl.get('start');
+  if (menu) {
+    menu.addEventListener('ionDidClose', () => {
+      this.menuOpen = false
+    });
+    menu.addEventListener('ionDidOpen', () => {
+         this.menuOpen = true
+    });
+  }
 }
 
 

@@ -1,0 +1,56 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">Cheltuieli</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+      <div class="method-container">
+        <div class="method odd" style="cursor:pointer;" (click)="showEntries(report.rent, 'Chirie')">
+          <span class="label">Chirie</span>
+          <span class="sum">{{report.rent.total}} Lei</span>
+        </div>
+        <div class="method" style="cursor:pointer;" (click)="showEntries(report.utilities, 'Utiliăți')">
+          <span class="label">Utilitati</span>
+          <span class="sum">{{report.utilities.total}} Lei</span>
+        </div>
+        <div class="method odd" style="cursor:pointer;" (click)="showEntries(report.serviceValue, 'Servicii')">
+          <span class="label">Servicii</span>
+          <span class="sum">{{report.serviceValue.total}} Lei</span>
+        </div>
+        <div class="method" style="cursor:pointer;" (click)="showEntries(report.marketingValue, 'Marketing')">
+          <span class="label">Marketing</span>
+          <span class="sum">{{report.marketingValue.total}} Lei</span>
+        </div>
+        <div class="method odd" style="cursor:pointer;" (click)="showEntries(report.inventarySpendings, 'Obiecte de inventar')">
+          <span class="label">Obiecte de inventar</span>
+          <span class="sum">{{report.inventarySpendings.total}} Lei</span>
+        </div>
+        <div class="method" style="cursor:pointer;" (click)="showEntries(report.supliesValue, 'Consumabile')">
+          <span class="label">Consumabile</span>
+          <span class="sum">{{report.supliesValue.total}} Lei</span>
+        </div>
+        <div class="method odd" style="cursor:pointer;" (click)="showEntries(report.gasValue, 'Benzină')">
+          <span class="label">Benzină</span>
+          <span class="sum">{{report.gasValue.total}} Lei</span>
+        </div>
+        <div class="method" style="cursor:pointer;" (click)="showEntries(report.constructionsValue, 'Construcții')">
+          <span class="label">Construcții</span>
+          <span class="sum">{{report.constructionsValue.total}} Lei</span>
+        </div>
+        <div class="method odd" (click)="showEntry(report.diverse.entry, 'Diverse')">
+          <span class="label">Diverse</span>
+          <span class="sum">{{report.diverse.total}} Lei</span>
+        </div>
+        <!-- <div class="method">
+          <span class="label font">Total</span>
+          <span class="sum font">{{totalSpendings}} Lei</span>
+        </div> -->
+      </div>
+</ion-content>

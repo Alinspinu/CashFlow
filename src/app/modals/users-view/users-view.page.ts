@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavParams, ModalController } from '@ionic/angular';
 import { roundOne } from '../../shared/utils/functions';
+import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 
 
  interface user {
@@ -23,7 +24,7 @@ import { roundOne } from '../../shared/utils/functions';
   templateUrl: './users-view.page.html',
   styleUrls: ['./users-view.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe]
 })
 export class UsersViewPage implements OnInit {
 

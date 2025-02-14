@@ -9,7 +9,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border header-toolbar">
     <ion-title slot="start">Situație financiară</ion-title>
-    <!-- <ion-title slot="end"></ion-title> -->
+    <ion-title slot="end" *ngIf="report">{{report.period}}</ion-title>
     <ion-buttons slot="end">
       <ion-button fill="outline" (click)="createReport()" [disabled]="reports.length === 0">
         <ion-icon size="large" src="../../../assets/icon/create-outline.svg"></ion-icon>
@@ -17,12 +17,98 @@
       <ion-button fill="outline" (click)="selectDate()" [disabled]="reports.length === 0">
         <ion-icon size="large" src="../../../assets/icon/time.svg"></ion-icon>
       </ion-button>
+      <ion-button fill="outline" (click)="saveReport()" [disabled]="!report || report._id">
+        <ion-icon size="large" src="../../../assets/icon/save-outline.svg"></ion-icon>
+      </ion-button>
+      <ion-button fill="outline" (click)="deleteReport(report)" [disabled]="!report || !report._id">
+        <ion-icon size="large" src="../../../assets/icon/trash-outline.svg"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 
+
+
 <ion-content [fullscreen]="true" *ngIf="!isLoading && showRep">
+    <section  class="section">
+      <ion-row>
+        <ion-col size="4">
+          <div class="section-label">
+            <span class="label-title">Situație generală</span>
+            <span class="label-sub-title">Situație genrala a afacerii pe perioada selectată.</span>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <div class="container">
+            <div class="head">
+              <span class="label">Încasări</span>
+              <span class="value">{{productioReport.totals.iesiri}} Lei</span>
+            </div>
+            <div class="field">
+              <span class="label" (click)="openDetails('ings')">Valoare materii prime</span>
+              <ion-radio-group class="radio" [(ngModel)]="ingredientsValue">
+                <ion-radio value="stoc" labelPlacement="end" color="medium">Stoc</ion-radio>
+                <ion-radio value="recipes" labelPlacement="end" color="medium">Rețete</ion-radio>
+              </ion-radio-group>
+              <div class="add-inv ion-activatable" (click)="addInventaries()">
+                <ion-icon src="../../../assets/icon/add-outline.svg"></ion-icon>
+                <span>Inventare</span>
+                <ion-ripple-effect></ion-ripple-effect>
+              </div>
+              <span class="value">{{
+                ingredientsValue === 'stoc' ?
+                roundInHtml(productioReport.totals.firstInv + productioReport.totals.intrari - productioReport.totals.secondInv) :
+                report.ingsValue
+                 }} Lei</span>
+            </div>
+            <div class="field">
+              <span class="label" (click)="openDetails('employee')">Valoare angajați</span>
+              <span class="value">{{roundInHtml(report.workValue.tax + report.workValue.total)}} Lei</span>
+            </div>
+            <div class="field">
+              <span class="label" (click)="openDetails('spendings')">Valoare cheltuieli</span>
+              <span class="value">{{roundInHtml(totalSpendings + totalRentAndStuff)}} Lei</span>
+            </div>
+            <div class="field">
+              <span class="label" (click)="openDetails('imp')">Valoare deprecieri</span>
+              <span class="value">{{ ingredientsValue === 'stoc' ? 0 : report.impairment.total}} Lei</span>
+            </div>
+            <div class="foot">
+              <span class="label">Profit</span>
+              <span class="value">
+                {{
+                  ingredientsValue === 'stoc' ?
+                  roundInHtml(
+                  productioReport.totals.dif -
+                  (report.workValue.tax +
+                  report.workValue.total +
+                  totalRentAndStuff +
+                  totalSpendings -
+                  report.impairment.total)) :
+
+                  roundInHtml(
+                    productioReport.totals.iesiri -
+                    (report.ingsValue +
+                    report.workValue.tax +
+                    report.workValue.total +
+                    totalRentAndStuff +
+                    totalSpendings))
+                }} Lei
+              </span>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </section>
+</ion-content>
+
+
+
+
+
+
+<!-- <ion-content [fullscreen]="true" *ngIf="!isLoading && showRep">
   <ion-grid>
       <ion-row>
         <ion-col>
@@ -251,5 +337,5 @@
 
   </ion-grid>
 
-</ion-content>
+</ion-content> -->
 

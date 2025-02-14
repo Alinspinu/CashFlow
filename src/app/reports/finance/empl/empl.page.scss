@@ -1,0 +1,85 @@
+ion-header, ion-content{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+
+.method-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  .method, .header{
+    width: 96%;
+    margin: 0 28px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    padding: 8px;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--ion-color-medium);
+    .bonus {
+      cursor: pointer;
+      flex: 15%;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .section{
+      cursor: pointer;
+      flex: 25%;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .net{
+      cursor: pointer;
+      flex: 18%;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .tax{
+      cursor: pointer;
+      flex: 18%;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .brut{
+      flex: 18%;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .pers{
+      flex: 5%;
+      font-size: 16px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .bonus:hover,.tax:hover,.net:hover,.brut:hover{
+      font-family: RoseMed !important;
+    }
+    }
+
+    .method{
+      font-size: 20px !important;
+      font-family: RoseLight !important;
+    }
+    .header{
+      font-family: RoseMed !important;
+      font-size: 24px !important;
+    }
+    .method:hover{
+      background-color: rgba(var(--ion-color-medium-rgb), 0.1);
+    }
+}
+
+
+.foot{
+  border-top: 1.2px solid var(--grey);
+}
+.top{
+  border-bottom: 1.2px solid (var(--grey))
+}
+
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05);
+}

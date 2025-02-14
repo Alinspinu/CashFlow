@@ -15,6 +15,7 @@ import { formatedDateToShow, round } from 'src/app/shared/utils/functions';
 export class EntryViewPage implements OnInit {
   entries!: any[]
   total: number = 0
+  title: string  = ''
 
 ingMode: boolean = false
 
@@ -28,14 +29,14 @@ ingEntries!: any[]
 
 
   ngOnInit() {
-  const sub = this.navPar.get('sub')
   const data =  this.navPar.get('options')
-  if(sub){
+  if(data.sub){
     this.ingMode = true
     this.ingEntries = data.entries
   } else {
     this.entries = data.entries
   }
+  this.title = data.title
   this.total = data.total
   }
 

@@ -23,7 +23,8 @@ export class DepViewPage implements OnInit {
 
 
   ngOnInit() {
-   this.products =  this.navPar.get('options')
+ const prod =  this.navPar.get('options')
+   this.products = prod.sort((a: any, b: any) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
    console.log(this.products)
   }
 

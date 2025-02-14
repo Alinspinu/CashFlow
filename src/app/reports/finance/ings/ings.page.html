@@ -1,0 +1,71 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Situație Valorică Materii Prime</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="method-container">
+            <div class="header">
+              <span class="label"></span>
+              <span class="inv">In Inv</span>
+              <span class="intrari">Intrari</span>
+              <span class="iesiri">Iesiri</span>
+              <span class="inv">Out Inv</span>
+              <span class="dif">Diferența</span>
+            </div>
+
+            <div class="method">
+              <span class="label">Productie Bucatarie</span>
+              <span class="inv">{{roundInHtml(productioReport.intrari.inv.prodBuc)}} Lei</span>
+              <span class="intrari">{{productioReport.intrari.buc.prod}} Lei</span>
+              <span class="iesiri">{{roundInHtml(productioReport.iesiri.buc.prod)}} Lei</span>
+              <span class="inv">{{roundInHtml(productioReport.iesiri.inv.prodBuc)}} Lei</span>
+              <span class="dif">{{productioReport.dif.prodBuc}} Lei</span>
+            </div>
+            <div class="method odd">
+              <span class="label">Marfa Bucatarie</span>
+              <span class="inv">{{roundInHtml(productioReport.intrari.inv.marfaBuc)}} Lei</span>
+              <span class="intrari">{{roundInHtml(productioReport.intrari.buc.marfa)}} Lei</span>
+              <span class="iesiri">{{roundInHtml(productioReport.iesiri.buc.marfa)}} Lei</span>
+              <span class="inv">{{roundInHtml(productioReport.iesiri.inv.marfaBuc)}} Lei</span>
+              <span class="dif">{{productioReport.dif.marfaBuc}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="label">Productie Bar</span>
+              <span class="inv">{{roundInHtml(productioReport.intrari.inv.prodBar)}} Lei</span>
+              <span class="intrari">{{productioReport.intrari.bar.prod}} Lei</span>
+              <span class="iesiri">{{roundInHtml(productioReport.iesiri.bar.prod)}} Lei</span>
+              <span class="inv">{{roundInHtml(productioReport.iesiri.inv.prodBar)}} Lei</span>
+              <span class="dif">{{productioReport.dif.prodBar}} Lei</span>
+            </div>
+            <div class="method odd">
+              <span class="label">Marfa Bar</span>
+              <span class="inv">{{roundInHtml(productioReport.intrari.inv.marfaBar)}} Lei</span>
+              <span class="intrari">{{productioReport.intrari.bar.marfa}} Lei</span>
+              <span class="iesiri">{{roundInHtml(productioReport.iesiri.bar.marfa)}} Lei</span>
+              <span class="inv">{{roundInHtml(productioReport.iesiri.inv.marfaBar)}} Lei</span>
+              <span class="dif">{{productioReport.dif.marfaBar}} Lei</span>
+            </div>
+            <div class="method">
+              <span class="font label">TOTAL</span>
+              <span class="inv font">{{productioReport.totals.firstInv}} Lei</span>
+              <span class="intrari font">{{productioReport.totals.intrari}} Lei</span>
+              <span class="iesiri font">{{productioReport.totals.iesiri}} lei</span>
+              <span class="inv font">{{productioReport.totals.secondInv}} lei</span>
+              <span class="dif font">{{productioReport.totals.dif}} Lei</span>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</ion-content>

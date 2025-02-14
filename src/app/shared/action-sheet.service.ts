@@ -54,6 +54,11 @@ import { AddImpPage } from '../office/imp/add-imp/add-imp.page';
 import { UserContentPage } from '../office/users/user-content/user-content.page';
 import { AddEmployeeDataPage } from '../office/users/user-content/add-employee-data/add-employee-data.page';
 import { AddClientDiscountPage } from '../office/users/user-content/add-client-discount/add-client-discount.page';
+import { IngsPage } from '../reports/finance/ings/ings.page';
+import { EmplPage } from '../reports/finance/empl/empl.page';
+import { SpendPage } from '../reports/finance/spend/spend.page';
+
+
 
 
 
@@ -228,6 +233,12 @@ export class ActionSheetService {
                typeof AddEmployeeDataPage |
                typeof UploadLogPage |
                typeof ProductIngredientPage |
+               typeof IngsPage |
+               typeof SpendPage |
+               typeof EmplPage |
+               typeof EntryViewPage |
+               typeof UsersViewPage |
+               typeof DepViewPage |
                typeof NirPage,
     options: any,
     clas: string

@@ -1,0 +1,58 @@
+ion-header, ion-content{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+.method-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 5%;
+  border-radius: 6px 6px 0 0;
+  width: 100%;
+  font-family: RoseReg !important;
+  .method, .header{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+    color: white;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--ion-color-medium);
+    .label{
+      flex: 30%;
+      font-size: 18px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .intrari{
+      flex: 17%;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .iesiri{
+      flex: 17%;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .dif{
+      flex: 17%;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+    .inv{
+      flex: 17%;
+      font-size: 20px;
+      margin-right: 4px;
+      text-align: start;
+    }
+  }
+}
+
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.07);
+}

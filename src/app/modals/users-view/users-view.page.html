@@ -1,37 +1,24 @@
 
-<ion-header>
-  <ion-toolbar>
-    <ion-button size="medium" color="medium" (click)="close()" slot="start">
-     <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
-    </ion-button>
-    <ion-title class="ion-text-center">Total {{total}} Lei</ion-title>
-   </ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">{{mode | capitalize}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-<ion-grid>
-  <ion-row>
-    <ion-col>
-      <ion-item lines="none" class="header" color="transparent">
-        <span class="nr"></span>
-        <span class="data">Nume</span>
-        <span class="discount">Ore</span>
-        <span class="total">Total</span>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-<ion-row>
-  <ion-col *ngIf="users && users.length">
-    <ion-item lines="none" color="medium" class="input" *ngFor="let user of users; let i = index;" (click)="showUser(user)">
+    <div class="input" *ngFor="let user of users; let i = index;" (click)="showUser(user)" [ngClass]="{'odd': i % 2 !== 0}">
       <span class="nr">{{i+1}}.</span>
       <span class="data">{{user.name}}</span>
-      <span class="discount"> {{user.hours}}</span>
+      <span class="discount" *ngIf="mode !== 'bonus'"> {{user.hours}} (ore)</span>
       <span class="total" *ngIf="mode === 'income'">{{roundInHtml(user.bonus + user.totalIncome)}} Lei</span>
       <span class="total" *ngIf="mode === 'tax'">{{roundInHtml(user.taxValue)}} Lei</span>
       <span class="total" *ngIf="mode === 'bonus'">{{roundInHtml(user.bonus)}} Lei</span>
       <span class="total" *ngIf="mode === 'brut'">{{roundInHtml(user.bonus + user.totalIncome + user.taxValue)}} Lei</span>
-    </ion-item>
-  </ion-col>
-</ion-row>
-</ion-grid>
+    </div>
+
 </ion-content>

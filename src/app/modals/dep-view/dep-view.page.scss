@@ -1,71 +1,52 @@
-ion-content, ion-toolbar{
-  --background: var(--ion-color-tertiary) !important;
+ion-header, ion-content, ion-toolbar{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
 }
 
 
-ion-botton, ion-title, span, ion-item, ion-input{
-  font-family: NoirProReg !important;
-}
-
-.input{
+.input, .header{
   cursor: pointer;
-  height: 70px;
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: var(--ion-color-light);
-  border-radius: 8px;
-  margin: 0.4rem 0 0.4rem 0.2rem;
-  font-family: NoirProLight !important;
   display: flex;
   flex-direction: row;
-  span{
-    margin: 10px 5px 10px 5px;
-  }
+  font-size: 16px;
+  margin: 0 24px;
+  padding: 6px;
   .nr{
-    flex: 2%
+    flex: 8%
   }
-  .data{
-    flex: 48%;
+  .name{
+    flex: 52%;
   }
-  .discount{
+  .qty{
     flex: 15%;
-    // margin-left: 50px;
-    text-align: center;
   }
   .total{
-    flex: 45%;
-    font-family: NoirProSemi !important;
+    flex: 25%;
     text-align: end;
   }
 
 }
+
 
 
 .header{
-  height: 40px;
-  border-radius: 8px;
-  margin: 0.4rem 0 0 0.2rem;
-  font-family: NoirProLight !important;
-  display: flex;
-  flex-direction: row;
-  span{
-    margin: 10px 5px 10px 5px;
+  font-family: RoseMed !important;
+  font-size: 18px;
+  border-bottom: 1.2px solid var(--grey)
+}
+
+.input{
+  font-family: RoseLight !important;
+}
+
+
+.input:hover{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.1);
+  .nr, .name,  .qty, .total{
+    font-family: RoseReg !important;
   }
-  .nr{
-    flex: 2%
-  }
-  .data{
-    flex: 48%;
-  }
-  .discount{
-    flex: 15%;
-    // margin-left: 50px;
-    text-align: center;
-  }
-  .total{
-    flex: 45%;
-    font-family: NoirProSemi !important;
-    text-align: end;
-  }
+}
+
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05);
 }

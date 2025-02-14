@@ -5,11 +5,14 @@ export class Report {
     public cashIn: number,
     public cashInNoVat: number,
     public vatValue: number,
+    public day: string,
+    public endDay: string,
     public ingsValue: number,
     public rentValue: number,
     public locatie: string,
     public index: number,
     public salePoint: string,
+    public reports: string[],
     public supliesValue: {
       total: number,
       entries: reportEntry[]

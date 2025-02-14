@@ -1,13 +1,12 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, MenuController} from '@ionic/angular';
+import { IonicModule, MenuController, ToastController} from '@ionic/angular';
 import { formatedDateToShow, getUserFromLocalStorage, round } from '../../shared/utils/functions';
 import { ActionSheetService } from '../../shared/action-sheet.service';
 import { DatePickerPage } from '../../modals/date-picker/date-picker.page';
 import { ReportsService } from '../reports.service';
 import User from '../../auth/user.model';
-import { Router } from '@angular/router';
 import { Report, reportUsers } from '../../models/report.model';
 import { UsersViewPage } from '../../modals/users-view/users-view.page';
 import { DepViewPage } from '../../modals/dep-view/dep-view.page';
@@ -18,6 +17,11 @@ import { SelectInvPage } from '../inventary/select-inv/select-inv.page';
 import { Inventary, productionReport } from 'src/app/models/inventary.model';
 import { emptyInv, emptyProductionReport, emptyReportUsers } from 'src/app/models/empty-models';
 import { sortUsers, updateReportValues } from './finance.engine';
+import { environment } from 'src/environments/environment';
+import { showToast } from 'src/app/shared/utils/toast-controller';
+import { IngsPage } from './ings/ings.page';
+import { EmplPage } from './empl/empl.page';
+import { SpendPage } from './spend/spend.page';
 
 
 
@@ -59,16 +63,18 @@ export class FinancePage implements OnInit {
   reportUsers: reportUsers = emptyReportUsers()
   productioReport: productionReport = emptyProductionReport()
 
-
+  ingredientsValue: string = 'recipes'
 
   constructor(
    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
    @Inject(MenuController) private menuCtrl: MenuController,
    private repSrv: ReportsService,
+   private toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
     this.menuChange()
+    this.getLastReport()
     this.getRepDates()
     this.getAllReports()
     this.getuser()
@@ -88,8 +94,52 @@ export class FinancePage implements OnInit {
 }
 
 
-  toggleImpairments(){
 
+  saveReport(){
+      if(this.report){
+        this.report.salePoint = environment.POINT
+        this.repSrv.saveReport(this.report).subscribe({
+          next: (response) => {
+            this.report = response.report
+            this.updateRaport(this.report)
+            showToast(this.toastCtrl, response.message, 3000)
+          },
+          error: (error) => {
+            console.log(error)
+            showToast(this.toastCtrl, error.message, 4000)
+          }
+        })
+      }
+  }
+
+  getLastReport(){
+    this.repSrv.getLastReport().subscribe({
+      next: (response) => {
+        if(response){
+          this.report = response
+          this.updateRaport(this.report)
+        }
+      },
+      error: (error) => {
+        console.log(error)
+        showToast(this.toastCtrl, error.message, 4000)
+      }
+    })
+  }
+
+  async deleteReport(report: any){
+    const message = `Ești sigur că vrei să ștergi raportul din ${report.period}?`
+    const title = `ȘTERGE RAPORT`
+    const response = await this.actionSheet.deleteAlert(message, title)
+    if(response){
+      this.repSrv.deleteReport(report._id).subscribe(response => {
+        if(response){
+        const index = this.reports.findIndex(rep => rep._id === report._id)
+        this.reports.splice(index, 1)
+        showToast(this.toastCtrl, response.message, 200)
+        }
+      })
+    }
   }
 
   getRepDates(){
@@ -110,7 +160,6 @@ export class FinancePage implements OnInit {
     this.repSrv.getReports().subscribe(response => {
       if(response){
         this.reports = response.reverse()
-        console.log(this.reports)
       }
     })
   }
@@ -125,37 +174,46 @@ export class FinancePage implements OnInit {
 }
 
 
+async openDetails(details: string){
+  if(details === 'ings') await this.actionSheet.openAdd(IngsPage, this.productioReport, 'medium-one')
+  if(details === 'imp') await this.actionSheet.openAdd(DepViewPage, this.report.impairment.products, 'small-two')
+  if(details === 'employee') await this.actionSheet.openAdd(EmplPage, this.reportUsers, 'medium-two')
+  if(details === 'spendings') await this.actionSheet.openAdd(SpendPage, {report: this.report, totalSpendings: this.totalSpendings + this.totalRentAndStuff}, 'small')
+}
+
+
 getReport(start: string, end: string){
   this.isLoading = true
   this.repSrv.getReport(start, end).subscribe(response => {
     if(response){
-      console.log(response)
       this.report = response
-      this.reportUsers = sortUsers(this.report)
-      this.productioReport = updateReportValues(this.report, emptyInv(), emptyInv())
-      this.isLoading = false
-      this.showRep = true
-      const tipsObj = this.report.paymentMethods.find(p => p.name === "Bacsis" )
-      if(tipsObj){
-        this.tips = tipsObj.value
-      }
-      this.totalSpendings = round(
-        this.report.supliesValue.total +
-        this.report.impairment.total +
-        this.report.constructionsValue.total +
-        this.report.gasValue.total +
-        this.report.inventarySpendings.total +
-        this.report.diverse.total
-      )
-      this.totalRentAndStuff = round(
-        this.report.marketingValue.total +
-        this.report.rent.total +
-        this.report.utilities.total +
-        this.report.serviceValue.total
-      )
-
+      this.updateRaport(this.report)
     }
   })
+}
+
+updateRaport(report: Report){
+  this.reportUsers = sortUsers(report)
+  this.productioReport = updateReportValues(report, emptyInv(), emptyInv())
+  this.isLoading = false
+  this.showRep = true
+  const tipsObj = report.paymentMethods.find(p => p.name === "Bacsis" )
+  if(tipsObj){
+    this.tips = tipsObj.value
+  }
+  this.totalSpendings = round(
+    report.supliesValue.total +
+    report.constructionsValue.total +
+    report.gasValue.total +
+    report.inventarySpendings.total +
+    report.diverse.total
+  )
+  this.totalRentAndStuff = round(
+    report.marketingValue.total +
+    report.rent.total +
+    report.utilities.total +
+    report.serviceValue.total
+  )
 }
 
 
@@ -230,6 +288,10 @@ async addInventaries(){
 }
 
 
+
+formatDate(date: string){
+  return formatedDateToShow(date).split('ora')[0]
+}
 
 
 }

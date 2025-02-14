@@ -1,46 +1,42 @@
-<ion-content>
-  <ion-toolbar class="ion-no-border">
-    <ion-button size="large" color="medium" (click)="close()" slot="start">
-     <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
-    </ion-button>
-    <div class="title-wrapper">
-      <div class="title">Total {{total}} Lei</div>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar class="ion-no-border head">
+    <div class="header">
+      <span class="nr">Nr</span>
+      <span class="name" *ngIf="ingMode">Nume</span>
+      <span class="data">Data</span>
+      <span class="suplier" *ngIf="ingMode">Furnizor / Document</span>
+      <span class="desc" *ngIf="!ingMode">Descriere</span>
+      <span class="qty" *ngIf="ingMode">Cantitate</span>
+      <span class="total">Valoare</span>
     </div>
-   </ion-toolbar>
-<ion-grid *ngIf="!ingMode">
-  <ion-row>
-    <ion-col>
-      <div class="header">
-        <span class="nr">Index</span>
-        <span class="data">Data</span>
-        <span class="discount">Descriere</span>
-        <span class="total">Valoare</span>
-      </div>
-    </ion-col>
-  </ion-row>
-<ion-row>
-  <ion-col *ngIf="entries && entries.length">
-    <div class="input" *ngFor="let entry of entries;">
-      <span class="nr">{{entry.index}}.</span>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div *ngIf=" !ingMode && entries && entries.length">
+    <div class="input" *ngFor="let entry of entries; let i = index" [ngClass]="{'odd': i % 2 !== 0}">
+      <span class="nr">#{{i+1}}.</span>
       <span class="data">{{formateDate(entry.date)}}</span>
-      <span class="discount"> {{entry.reason}}</span>
+      <span class="desc"> {{entry.reason}}</span>
       <span class="total">{{entry.value}} Lei</span>
     </div>
-  </ion-col>
-</ion-row>
-</ion-grid>
-<ion-grid *ngIf="ingMode">
-
-<ion-row>
-  <ion-col *ngIf="ingEntries && ingEntries.length">
-    <div class="input" *ngFor="let entry of ingEntries;">
-      <span class="name">{{entry.name}}.</span>
+  </div>
+  <div *ngIf=" ingMode && ingEntries && ingEntries.length">
+    <div class="input" *ngFor="let entry of ingEntries; let i = index" [ngClass]="{'odd': i % 2 !== 0}">
+      <span class="nr">#{{i+1}}.</span>
+      <span class="name">{{entry.name}}</span>
       <span class="data">{{formateDate(entry.date)}}</span>
-      <span class="discount"> {{entry.suplier}}</span>
+      <span class="suplier"> {{entry.suplier}}</span>
       <span class="qty"> {{entry.qty}} buc</span>
       <span class="total">{{roundH(entry.price)}} Lei</span>
     </div>
-  </ion-col>
-</ion-row>
-</ion-grid>
+  </div>
 </ion-content>

@@ -1,0 +1,46 @@
+ion-header, ion-content{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+
+.method-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  padding: 24px;
+  .method{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    padding: 6px;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--ion-color-medium);
+    font-family: RoseLight !important;
+    .sum{
+      font-size: 22px;
+      flex: 50%;
+      text-align: end;
+    }
+    .label{
+      flex: 50%;
+
+      font-size: 18px;
+      margin-right: 4px;
+      text-align: start;
+    }
+
+  }
+}
+.method:hover{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.1);
+  .label, .sum{
+    font-family: RoseReg !important;
+  }
+}
+
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05);
+}

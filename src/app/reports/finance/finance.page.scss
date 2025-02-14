@@ -11,6 +11,11 @@ span, ion-title{
   font-family: RoseReg !important;
 }
 
+ion-title[slot='end']{
+  margin-top: 12px;
+  font-size: 18px;
+}
+
 .spinner-content{
   height: 100vh;
   display: flex;
@@ -20,6 +25,100 @@ span, ion-title{
   background-color: var(--background-color) !important;
 }
 
+
+.container{
+  display: flex;
+  flex-direction: column;
+  .field{
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    .radio{
+      margin-left: 12px;
+      ion-radio{
+        font-family: RoseLight !important;
+        margin-left: 12px;
+      }
+    }
+    .add-inv{
+      cursor: pointer;
+      margin-left: 16px;
+      display: flex;
+      padding: 4px;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--grey);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      span{
+        margin-left: 8px;
+        font-family: RoseLight !important;
+      }
+    }
+    .add-inv:hover{
+      border: 1.2px solid var(--ion-color-medium);
+      span{
+        font-family: RoseReg !important;
+      }
+    }
+
+    .label{
+      cursor: pointer;
+      font-family: RoseLight !important;
+      font-size: 20px;
+    }
+    .value{
+      margin-left: auto;
+      font-size: 20px;
+    }
+  }
+  .field:hover{
+    background-color: rgba(var(--ion-color-medium-rgb), 0.1);
+    .label{
+      font-family: RoseReg !important;
+    }
+  }
+}
+.head, .foot{
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  span{
+    font-family: RoseMed !important;
+    font-size: 26px !important;
+  }
+  .value{
+    margin-left: auto;
+  }
+}
+.head{
+  border-bottom: 1.5px solid var(--grey);
+}
+.foot{
+  border-top: 1.5px solid var(--grey);
+}
+
+.section{
+  margin: 0 36px;
+  padding: 12px 0 6px 0;
+  border-bottom: solid 1px var(--grey);
+  .section-label{
+    padding-top: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .label-title{
+      font-size: 24px;
+    }
+    .label-sub-title{
+      font-size: 14px;
+      color: var(--grey)
+    }
+  }
+}
 
 .grid-date{
   display: flex;

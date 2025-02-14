@@ -1,29 +1,33 @@
-<ion-content>
-  <ion-toolbar class="ion-no-border">
-    <ion-button size="large" color="medium" (click)="close()">
-     <ion-icon src="../../../assets/icon/close-outline.svg" class="icon"></ion-icon>
-    </ion-button>
-   </ion-toolbar>
-<ion-grid>
-  <ion-row>
-    <ion-col>
-      <div class="header">
-        <span class="nr">Nr</span>
-        <span class="data">Produs</span>
-        <span class="discount">Qty</span>
-        <span class="total">Cost</span>
-      </div>
-    </ion-col>
-  </ion-row>
-<ion-row>
-  <ion-col *ngIf="products && products.length">
-    <div class="input" *ngFor="let prod of products; let i = index;">
-      <span class="nr">{{i+1}}.</span>
-      <span class="data">{{prod.name}}</span>
-      <span class="discount"> {{prod.qty}}</span>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">Deprecieri</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-header class="ion-no-border">
+    <div class="header">
+      <span class="nr">Nr</span>
+      <span class="name">Produs</span>
+      <span class="qty">Qty</span>
+      <span class="total">Cost</span>
+    </div>
+  </ion-header>
+  </ion-header>
+
+
+
+
+<ion-content [fullscreen]="true">
+  <div *ngIf="products && products.length">
+    <div class="input" *ngFor="let prod of products; let i = index;" [ngClass]="{'odd': i % 2 !== 0}">
+      <span class="nr">#{{i+1}}.</span>
+      <span class="name">{{prod.name}}</span>
+      <span class="qty"> {{roundInHtml(prod.qty)}}</span>
       <span class="total">{{roundInHtml(prod.qty * prod.cost)}} Lei</span>
     </div>
-  </ion-col>
-</ion-row>
-</ion-grid>
+  </div>
 </ion-content>

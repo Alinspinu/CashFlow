@@ -1,48 +1,39 @@
-ion-content, ion-toolbar{
-  --background: var(--ion-color-tertiary) !important;
+ion-header, ion-content, ion-toolbar{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
 }
 
-ion-botton, ion-title, span, ion-item, ion-input{
-  font-family: NoirProReg !important;
-}
 
-.input{
+
+
+.input, .header{
   cursor: pointer;
-  height: 70px;
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: var(--ion-color-light);
-  border-radius: 8px;
-  margin: 0.4rem 0 0.4rem 0.2rem;
-  font-family: NoirProLight !important;
+  padding: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  span{
-    margin: 10px 5px 10px 5px;
-  }
   .nr{
     flex: 5%
-  }
-  .name {
-     flex: 20%
-  }
-  .qty{
-    flex: 20%;
-    text-align: center;
   }
   .data{
     flex: 20%;
   }
-  .discount{
+  .name{
+     flex: 15%
+  }
+  .suplier{
     flex: 35%;
+  }
+  .desc{
+    flex: 65%;
+  }
+  .qty{
+    flex: 15%;
     text-align: center;
   }
   .total{
-    flex: 20%;
-    font-family: NoirProSemi !important;
+    flex: 10%;
     text-align: start;
   }
 
@@ -50,47 +41,24 @@ ion-botton, ion-title, span, ion-item, ion-input{
 
 
 .header{
-  height: 40px;
-  border-radius: 8px;
-  margin: 0.4rem 0 0 0.2rem;
-  font-family: NoirProLight !important;
-  display: flex;
-  flex-direction: row;
-  span{
-    margin: 10px 5px 10px 5px;
-  }
-  .nr{
-    flex: 5%
-  }
-  .data{
-    flex: 30%;
-  }
-  .discount{
-    flex: 35%;
-    // margin-left: 50px;
-    text-align: center;
-  }
-  .total{
-    flex: 30%;
-    font-family: NoirProSemi !important;
-    text-align: end;
-  }
+  font-family: RoseMed !important;
+  border-bottom: 1.2px solid var(--grey)
+}
+
+.input{
+  font-family: RoseLight !important;
 }
 
 
-
-.title-wrapper{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .title{
-    font-family: NoirProSemi !important;
-    text-align: center;
-    background-color: var(--ion-color-medium);
-    padding: 18px;
-    color: var(--ion-color-light);
-    font-size: 24px;
-    margin-bottom: 24px;
+.input:hover{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.1);
+  .nr, .data, .name, .suplier, .desc, .qty, .total{
+    font-family: RoseReg !important;
   }
 }
+
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05);
+}
+
+

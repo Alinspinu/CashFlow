@@ -36,6 +36,15 @@ export const routes: Routes = [
     path: '',
     redirectTo: '/reports/inventary',
     pathMatch: 'full',
+  },  {
+    path: 'empl',
+    loadComponent: () => import('./finance/empl/empl.page').then( m => m.EmplPage)
   },
+  {
+    path: 'spend',
+    loadComponent: () => import('./finance/spend/spend.page').then( m => m.SpendPage)
+  },
+
+
 
 ];

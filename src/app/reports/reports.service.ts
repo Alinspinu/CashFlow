@@ -28,7 +28,7 @@ export class ReportsService{
   return this.http.get<any>(`${environment.BASE_URL}orders/dep?start=${start}&end=${end}&loc=${environment.LOC}`)
  }
  getHavyOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string, filter: any, report: string): Observable<any>{
-  return this.http.post<any>(`${environment.BASE_URL}orders/get-havy-orders`, {start: start, end: end, loc: locatie, day: day, filter, report: report})
+  return this.http.post<any>(`${environment.BASE_URL}orders/get-havy-orders`, {start: start, end: end, loc: locatie, day: day, filter, report: report, point: environment.POINT})
  }
 
  printProducts(products: string, start: string | undefined, end: string | undefined){
@@ -63,6 +63,14 @@ export class ReportsService{
     .set('end', end)
     .set('loc', environment.LOC)
   return this.http.delete<{message: string}>(`${environment.BASE_URL}report/all`, {params})
+ }
+
+ saveReport(report: Report){
+  return this.http.post<{message: string, report: Report}>(`${environment.BASE_URL}report`, {report: report})
+ }
+
+ getLastReport(){
+  return this.http.get<Report>(`${environment.BASE_URL}report/last?loc=${environment.LOC}&point=${environment.POINT}`)
  }
 
  getReportsDate(){

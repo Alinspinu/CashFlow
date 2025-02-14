@@ -1,0 +1,40 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">Situație Angajați</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="method-container">
+    <div class="header top">
+      <span class="section"></span>
+      <span class="pers"></span>
+      <span class="bonus light">Bonus</span>
+      <span class="net light">Venit net</span>
+      <span class="tax light">Taxe</span>
+      <span class="brut light">Venit brut</span>
+    </div>
+
+    <div class="method" *ngFor="let section of reportUsers.section; let i = index" [ngClass]="{'odd': i % 2 !== 0}">
+      <span class="section">{{section.name}}</span>
+      <span class="pers">({{section.users.length}})</span>
+      <span class="bonus"(click)="showUsers(section.users, 'bonus', section.totalBonus)">{{section.totalBonus}} Lei</span>
+      <span class="net" (click)="showUsers(section.users, 'income', section.totalIncome)">{{section.totalIncome}} Lei</span>
+      <span class="tax" (click)="showUsers(section.users, 'tax', section.totalTax)">{{section.totalTax}} Lei</span>
+      <span class="brut" (click)="showUsers(section.users, 'brut', roundInHtml(section.totalIncome + section.totalTax + section.totalBonus))">{{roundInHtml(section.totalIncome + section.totalTax)}} Lei</span>
+    </div>
+    <div class="header foot">
+      <span class="section font">Total</span>
+      <span class="pers font">{{reportUsers.totalUsers}}</span>
+      <span class="bonus font">{{reportUsers.totalBonus}} Lei</span>
+      <span class="net font">{{reportUsers.totalIncome}} Lei</span>
+      <span class="tax font">{{reportUsers.totalTax}} Lei</span>
+      <span class="brut font">{{roundInHtml(reportUsers.totalIncome + reportUsers.totalTax + reportUsers.totalBonus)}} lei</span>
+    </div>
+  </div>
+</ion-content>

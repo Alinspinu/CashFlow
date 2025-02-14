@@ -7,6 +7,9 @@ export class Report {
     public vatValue: number,
     public ingsValue: number,
     public rentValue: number,
+    public locatie: string,
+    public index: number,
+    public salePoint: string,
     public supliesValue: {
       total: number,
       entries: reportEntry[]
@@ -120,7 +123,8 @@ export class Report {
         procent: number,
         total: number,
         user: string,
-    }[]
+    }[],
+  public _id?: string
   ){}
 }
 

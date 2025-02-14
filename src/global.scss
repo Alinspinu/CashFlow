@@ -449,6 +449,7 @@ body ion-alert.deleteAlert{
     margin: 0 28px;
     width: 96%;
     border-bottom: 1.2px solid var(--grey);
+    --background: var(--background-color) !important;
     ion-title{
       margin-left: 60px !important;
       font-family: RoseMed !important;

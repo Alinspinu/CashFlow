@@ -7,33 +7,10 @@ ion-content, ion-toolbar, ion-header{
 
 
 
-
-.header-toolbar{
-  padding: 24px 0 12px 0;
-  margin: 0 66px 0 46px;
-  border-bottom: 1.2px solid var(--grey);
-  ion-toolbar{
-    ion-title{
-      font-family: RoseMed !important;
-      font-size: 36px;
-    }
-    ion-buttons{
-      ion-button{
-        --padding-bottom: 16px;
-        --padding-end: 16px;
-        --padding-top: 16px;
-        --padding-start: 16px;
-        --border-radius: 50%;
-        --border-width: 2px;
-        margin-right: 12px;
-      }
-    }
-  }
-}
-
 .second-toolbar{
-  margin: 0 56px 0 36px;
+  margin: 0 24px;
 }
+
 
 
 .header{
@@ -50,7 +27,7 @@ ion-content, ion-toolbar, ion-header{
   display: flex;
   align-items: center;
   padding: 14px 8px;
-  margin: 0 66px 0 46px;
+   margin: 0 24px;
   font-size: 18px;
   justify-content: space-between;
   border-bottom: 1.5px solid var(--grey);
@@ -92,12 +69,12 @@ ion-content, ion-toolbar, ion-header{
 .order-container{
   cursor: pointer;
   font-family: RoseLight !important;
-  margin: 0 66px 0 46px;
+  margin: 0 24px;
   padding: 10px 8px;
-  border-bottom: 0.5px solid var(--grey);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid var(--grey);
 }
 
 
@@ -106,7 +83,7 @@ ion-content, ion-toolbar, ion-header{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0.5rem 0 0.1rem 0;
+  margin: 8px 4px;
   font-size: 22px;
   padding: 10px;
   border: 1.5px solid var(--grey);
@@ -131,9 +108,8 @@ ion-content, ion-toolbar, ion-header{
 }
 
 .order-container:hover{
-  background-color: var(--light-grey);
+  background-color: rgba(var(--ion-color-medium-rgb), 0.15);
   span{
-    color: var(--dark) !important;
     font-family: RoseReg !important;
   }
 }

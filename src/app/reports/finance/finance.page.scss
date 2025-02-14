@@ -1,16 +1,14 @@
 
 
 
-ion-content{
-  --background: var(--ion-color-tertiary) !important;
+ion-content, ion-header{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
 }
 
-ion-label, ion-title{
-  font-family: NoirProSemi !important;
-}
 
-ion-title{
-  font-size: 20px;
+span, ion-title{
+  font-family: RoseReg !important;
 }
 
 .spinner-content{
@@ -19,7 +17,7 @@ ion-title{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--ion-color-tertiary) !important;
+  background-color: var(--background-color) !important;
 }
 
 
@@ -50,6 +48,7 @@ ion-title{
   width: 100%;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 5px rgba(0, 0, 0, 0.15);
   background-color: var(--ion-color-light);
+  font-family: RoseReg !important;
   .method, .header{
     cursor: pointer;
     display: flex;
@@ -60,19 +59,16 @@ ion-title{
     align-items: center;
     color: var(--ion-color-medium);
     .proc{
-      font-family: NoirProReg !important;
       font-size: 16px;
       flex: 20%;
       text-align: center;
     }
     .sum{
-      font-family: NoirProSemi !important;
       font-size: 22px;
       flex: 50%;
       text-align: end;
     }
     .label{
-      font-family: NoirProReg !important;
       flex: 50%;
       font-size: 18px;
       margin-right: 4px;
@@ -80,28 +76,24 @@ ion-title{
     }
     .intrari{
       flex: 20%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
     }
     .iesiri{
       flex: 20%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
     }
     .dif{
       flex: 18%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
     }
     .inv{
       flex: 16%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
@@ -109,7 +101,6 @@ ion-title{
     .bonus {
       cursor: pointer;
       flex: 15%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
@@ -117,7 +108,6 @@ ion-title{
     .section{
       cursor: pointer;
       flex: 18%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
@@ -125,7 +115,6 @@ ion-title{
     .net{
       cursor: pointer;
       flex: 20%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
@@ -133,21 +122,18 @@ ion-title{
     .tax{
       cursor: pointer;
       flex: 20%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
     }
     .brut{
       flex: 20%;
-      font-family: NoirProReg !important;
       font-size: 20px;
       margin-right: 4px;
       text-align: start;
     }
     .pers{
       flex: 5%;
-      font-family: NoirProReg !important;
       font-size: 16px;
       margin-right: 4px;
       text-align: start;
@@ -156,42 +142,36 @@ ion-title{
 
     .venit{
       flex: 16.5%;
-      font-family: NoirProReg !important;
       font-size: 24px;
       margin-right: 4px;
       text-align: start;
     }
     .mfs{
       flex: 16.5%;
-      font-family: NoirProReg !important;
       font-size: 24px;
       margin-right: 4px;
       text-align: center;
     }
     .mfr{
       flex: 16.5%;
-      font-family: NoirProReg !important;
       font-size: 24px;
       margin-right: 4px;
       text-align: center;
     }
     .empl{
       flex: 16.5%;
-      font-family: NoirProReg !important;
       font-size: 24px;
       margin-right: 4px;
       text-align: center;
     }
     .spend{
       flex: 16.5%;
-      font-family: NoirProReg !important;
       font-size: 24px;
       margin-right: 4px;
       text-align: center;
     }
     .prof{
       flex: 16.5%;
-      font-family: NoirProReg !important;
       font-size: 24px;
       margin-right: 4px;
       text-align: end;
@@ -205,11 +185,11 @@ ion-title{
 }
 
 .light{
-  font-family: NoirProLight !important;
+  font-family: RoseLight !important;
 }
 
 .font{
-  font-family: NoirProSemi !important;
+  font-family: RoseSemi !important;
   font-size: 25px !important;
   background-color: var(--ion-color-medium) !important;
   color: var(--ion-color-light) !important;

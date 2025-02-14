@@ -2,8 +2,7 @@
 
 
 <ion-header class="ion-no-border">
-  <div class="header-toolbar">
-    <ion-toolbar class="ion-no-border">
+    <ion-toolbar class="ion-no-border header-toolbar">
         <ion-title slot="start" *ngIf="user">{{user.name | capitalize}}</ion-title>
         <ion-buttons slot="end">
           <ion-button fill="outline" (click)="editUser()">
@@ -20,12 +19,11 @@
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
-      </div>
       <div class="second-toolbar" *ngIf="user">
       <ion-toolbar>
-        <ion-grid>
+        <ion-grid style="padding: 8px 0 !important;">
           <ion-row>
-            <ion-col size="4">
+            <ion-col size="4" class="ion-no-padding">
               <div class="party">
                 <div class="name">
                   <span class="label">E-mail:</span>
@@ -34,7 +32,7 @@
               </div>
             </ion-col>
 
-            <ion-col size="2">
+            <ion-col size="2" class="ion-no-padding">
               <div class="party">
                 <div class="name">
                   <span class="label">Telefon</span>
@@ -42,7 +40,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col>
+            <ion-col class="ion-no-padding">
               <div class="party">
                 <div class="name" *ngIf="user.orders">
                   <span class="label">Comenzi</span>
@@ -50,7 +48,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col>
+            <ion-col class="ion-no-padding">
               <div class="party">
                 <div class="name">
                   <span class="label">Cheltuit (Lei)</span>
@@ -58,7 +56,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col>
+            <ion-col class="ion-no-padding">
               <div class="party">
                 <div class="name">
                   <span class="label">Discount (Lei)</span>
@@ -66,7 +64,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col>
+            <ion-col class="ion-no-padding">
               <div class="party">
                 <div class="name">
                   <span class="label">CashBack (Lei)</span>

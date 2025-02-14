@@ -1,34 +1,31 @@
-<ion-menu-button *ngIf="!menuOpen">
-  <ion-icon src='assets/icon/chevron-double-right.svg'  size="large"></ion-icon>
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
 </ion-menu-button>
 
 <div *ngIf="isLoading" class="spinner-content">
   <app-spinner class="spinner"></app-spinner>
 </div>
-<ion-header>
-  <ion-toolbar>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Situație financiară</ion-title>
+    <!-- <ion-title slot="end"></ion-title> -->
     <ion-buttons slot="end">
-      <ion-button fill="outline" (click)="selectDate()" color="medium">
-        Alege Perioada
-        <ion-icon src="../../../assets/icon/calendar.svg" style="margin-left: 12px;"></ion-icon>
+      <ion-button fill="outline" (click)="createReport()" [disabled]="reports.length === 0">
+        <ion-icon size="large" src="../../../assets/icon/create-outline.svg"></ion-icon>
+      </ion-button>
+      <ion-button fill="outline" (click)="selectDate()" [disabled]="reports.length === 0">
+        <ion-icon size="large" src="../../../assets/icon/time.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="!isLoading && !showRep">
-  <div class="grid-date">
-    <ion-button fill="outline" mode="md" color="medium" (click)="selectDate()" [disabled]="reports.length === 0">SELECTEAZĂ PERIOADA</ion-button>
-    <!-- <ion-label color="medium" *ngIf="startDate">LA</ion-label>
-    <ion-label color="medium" *ngIf="!startDate" style="height: 13px"></ion-label>
-    <ion-button fill="outline" mode="md" color="medium" [disabled]="!startDate"> {{endDate && endDate.length ? endDate : "Raport Sfârșit"}}</ion-button> -->
-    <ion-button fill="outline" mode="md" color="medium" (click)="createReport()"[disabled]="reports.length === 0">CREAZĂ RAPOARTE</ion-button>
-  </div>
-</ion-content>
+
 <ion-content [fullscreen]="true" *ngIf="!isLoading && showRep">
   <ion-grid>
       <ion-row>
-        <ion-col size-lg="8" offset-lg="2">
+        <ion-col>
           <div class="method-container">
             <ion-toolbar>
               <ion-title class="ion-text-center"> Siuțaie valorică stocuri</ion-title>
@@ -92,7 +89,7 @@
       </ion-row>
 
       <ion-row>
-        <ion-col size-lg="8" offset-lg="2">
+        <ion-col>
           <div class="method-container">
             <ion-toolbar>
               <ion-title  class="ion-text-center"> Siuțaie defalcată angajați</ion-title>
@@ -130,7 +127,7 @@
 
 
       <ion-row>
-        <ion-col size-lg="3.9" offset-lg="2">
+        <ion-col size-lg="5.9">
           <div class="method-container">
             <ion-toolbar>
               <ion-title  class="ion-text-center">Chirie, utiliăți și servicii</ion-title>
@@ -162,7 +159,7 @@
           </div>
         </ion-col>
         <ion-col size="0.2"></ion-col>
-        <ion-col size-lg="3.9">
+        <ion-col size-lg="5.9">
           <div class="method-container">
             <ion-toolbar>
               <ion-title  class="ion-text-center">Cheltuieli diverse</ion-title>
@@ -206,7 +203,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size-lg="8" offset-lg="2">
+        <ion-col>
           <div class="method-container">
             <ion-toolbar>
               <ion-title  class="ion-text-center">General</ion-title>

@@ -1,0 +1,17 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">{{chartDay.label}}</ion-title>
+    <ion-title slot="end">Încasări {{chartDay.cashIn}} Lei</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="chart">
+    <canvas id="canvas"></canvas>
+  </div>
+</ion-content>

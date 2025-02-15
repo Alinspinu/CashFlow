@@ -57,6 +57,7 @@ import { AddClientDiscountPage } from '../office/users/user-content/add-client-d
 import { IngsPage } from '../reports/finance/ings/ings.page';
 import { EmplPage } from '../reports/finance/empl/empl.page';
 import { SpendPage } from '../reports/finance/spend/spend.page';
+import { ModalPage } from '../reports/finance/fin-chart/modal/modal.page';
 
 
 
@@ -238,6 +239,8 @@ export class ActionSheetService {
                typeof EmplPage |
                typeof EntryViewPage |
                typeof UsersViewPage |
+               typeof ModalPage |
+               typeof AddReportPage |
                typeof DepViewPage |
                typeof NirPage,
     options: any,

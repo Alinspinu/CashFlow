@@ -44,6 +44,14 @@ export const routes: Routes = [
     path: 'spend',
     loadComponent: () => import('./finance/spend/spend.page').then( m => m.SpendPage)
   },
+  {
+    path: 'fin-chart',
+    loadComponent: () => import('./finance/fin-chart/fin-chart.page').then( m => m.FinChartPage)
+  },
+  {
+    path: 'modal',
+    loadComponent: () => import('./finance/fin-chart/modal/modal.page').then( m => m.ModalPage)
+  },
 
 
 

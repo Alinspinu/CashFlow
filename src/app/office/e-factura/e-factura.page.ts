@@ -105,7 +105,6 @@ export class EFacturaPage implements OnInit, OnDestroy {
         const nulls = await this.actionSheet.openAdd(FacturaPage, this.eFactura, 'add-modal')
         if(!nulls){
           setTimeout(() => {
-            console.log('hit timeout')
             this.eService.checkInvoiceStatus(getBillIds(this.message)).subscribe()
           }, 500)
         }

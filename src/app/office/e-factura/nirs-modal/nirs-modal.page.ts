@@ -41,7 +41,6 @@ export class NirsModalPage implements OnInit {
       this.docDate = data.docDate
       this.docNumber = data.docNumber
       this.eFacturaID = data.eFacturaID
-      console.log(data)
       this.getNirs(data.id)
     }
   }

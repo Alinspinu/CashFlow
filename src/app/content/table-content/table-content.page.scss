@@ -3,19 +3,18 @@ ion-content{
 }
 
 .main-toolbar{
-  --background: rgba(var(--ion-color-tertiary-rgb), 0.5) !important;
+  --background: var(--background-color) !important;
   --padding-top:12px;
   padding: 12px;
 }
 
 .second-toolbar{
-  --background: rgba(var(--ion-color-tertiary-rgb), 0.5) !important;
+  --background: var(--background-color) !important;
   padding: 0 12px;
 }
 
 ion-footer{
-  background-color: rgba(var(--ion-color-tertiary-rgb), 0.9) !important;
-  // height: 200px;
+  background-color: var(--background-color) !important;
 
   ion-button{
     margin-top: 0.5rem;

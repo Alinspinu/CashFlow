@@ -127,7 +127,6 @@ export class AppComponent implements OnInit, OnDestroy {
       Preferences.get({key: 'authData'}).then(data  => {
         if(data.value) {
         this.user = JSON.parse(data.value)
-        console.log(this.user)
         this.cashSrv.getAllorders(undefined, undefined, undefined).subscribe()
         this.supliersService.getSupliers().subscribe()
         this.contentSub = this.contService.getData(this.user.locatie).subscribe()
@@ -165,7 +164,6 @@ export class AppComponent implements OnInit, OnDestroy {
         next: (product) => {
           const parsedProduct = JSON.parse(product)
           this.cashCtrlSrv.addDelProduct(parsedProduct)
-          console.log(parsedProduct)
         },
         error: (error) => {
           console.log(error)

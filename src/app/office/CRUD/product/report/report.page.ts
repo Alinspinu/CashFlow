@@ -44,7 +44,6 @@ export class ReportPage implements OnInit {
 dayy: boolean = false
 viewButton: boolean = false
 
-  // today: boolean = true
   thisWeek: boolean = false
   lastWeek: boolean = false
   thisMonth: boolean = false
@@ -59,8 +58,6 @@ viewButton: boolean = false
 
   ngOnInit() {
     this.saleLog = updateLog(this.product, this.today, undefined)
-    console.log(this.product)
-    console.log(this.saleLog)
     this.updateHourstData(false)
   }
 
@@ -257,55 +254,3 @@ if(this.chart){
   }
 
 }
-
-
-//   selectSegment(event: any){
-//     if(this.bar === 'today'){
-//       this.today = true
-//       this.thisWeek = false
-//       this.lastWeek = false
-//       this.thisMonth = false
-//       this.lastMonth = false
-//       this.custom = false
-//     }
-//     if(this.bar === 'thisWeek'){
-//       this.today = false
-//       this.thisWeek = true
-//       this.lastWeek = false
-//       this.thisMonth = false
-//       this.lastMonth = false
-//       this.custom = false
-//     }
-//     if(this.bar === 'lastWeek'){
-//       this.today = false
-//       this.thisWeek = false
-//       this.lastWeek = true
-//       this.thisMonth = false
-//       this.lastMonth = false
-//       this.custom = false
-//     }
-//     if(this.bar === 'thisMonth'){
-//       this.today = false
-//       this.thisWeek = false
-//       this.lastWeek = false
-//       this.thisMonth = true
-//       this.lastMonth = false
-//       this.custom = false
-//     }
-//     if(this.bar === 'lastMonth'){
-//       this.today = false
-//       this.thisWeek = false
-//       this.lastWeek = false
-//       this.thisMonth = false
-//       this.lastMonth = true
-//       this.custom = false
-//     }
-//     if(this.bar === 'custom'){
-//       this.today = false
-//       this.thisWeek = false
-//       this.lastWeek = false
-//       this.thisMonth = false
-//       this.lastMonth = true
-//       this.custom = true
-//     }
-// }

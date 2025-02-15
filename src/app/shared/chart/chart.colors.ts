@@ -2,28 +2,30 @@
 
 export function darkColors() {
   const colors: colors = {
-    green: 'rgb(28, 148, 17)',
+    green: 'rgb(98, 234, 86)',
     greenContrast: 'rgb(139, 255, 128)',
     lightGreen: 'rgb(50, 143, 0)',
+    greenRGBA: 'rgba(76, 190, 66, 0.23)',
 
     sand: 'rgba(168, 129, 23, 0.956)',
     lightSand: 'rgba(204, 172, 85, 0.956)',
     sandContrast: 'rgba(250, 217, 127, 0.956)',
 
-    orange: 'rgb(145, 86, 22)',
+    orange: 'rgb(117, 95, 23)',
     lightOrage: 'rgb(155, 117, 75)',
     orangeContrast: 'rgb(245, 168, 73)',
 
-    blue: 'rgb(0, 97, 130)',
+    blue: 'rgb(76, 193, 232)',
     lightBlue: 'rgb(90, 151, 171)',
     blueContrast: 'rgb(35, 190, 241)',
+    blueRGBA: 'rgba(62, 165, 199, 0.28)',
 
     turqoise: 'rgb(29, 168, 147)',
     lightTurqoise: 'rgb(85, 180, 165)',
     turqoiseContrast: 'rgb(51, 221, 195)',
 
     red: 'rgb(192, 108, 102)',
-    lightRed: 'rgba(201, 162, 159, 0.843',
+    lightRed: 'rgba(201, 162, 159, 0.843)',
     redContrast: 'rgb(252, 146, 138)',
 
     grey: '#c0c0c0',
@@ -38,18 +40,23 @@ export function darkColors() {
 
 export function lightColors() {
   const colors: colors = {
-    green: 'rgb(41, 181, 28)',
+    green: 'rgb(131, 255, 119)',
     greenContrast: 'rgb(11, 121, 1)',
     lightGreen: 'rgb(207, 255, 181)',
+    greenRGBA: 'rgba(88, 218, 76, 0.19)',
+
     sand: 'rgba(250, 217, 127, 0.956)',
     lightSand: 'rgba(255, 243, 208, 0.956)',
     sandContrast: 'rgba(170, 129, 18, 0.956)',
-    orange: 'rgb(245, 168, 73)',
+    orange: 'rgb(175, 117, 46)',
     lightOrage: 'rgb(255, 215, 173)',
     orangeContrast: 'rgb(122, 66, 6)',
-    blue: 'rgb(35, 190, 241)',
+
+    blue: 'rgb(73, 209, 255)',
     lightBlue: 'rgb(185, 237, 255)',
     blueContrast: 'rgb(0, 97, 130)',
+    blueRGBA: 'rgba(52, 182, 225, 0.15)',
+
     turqoise: 'rgb(51, 221, 195)',
     lightTurqoise: 'rgb(191, 255, 245)',
     turqoiseContrast: 'rgb(0, 116, 99)',
@@ -88,7 +95,10 @@ export interface colors {
   grey: string,
   lightGrey: string,
   light: string,
-  medium: string
+  medium: string,
+
+  blueRGBA: string,
+  greenRGBA: string,
 }
 
 export interface gamaTreshold {

@@ -8,20 +8,19 @@ import { DatePickerPage } from '../../modals/date-picker/date-picker.page';
 import { ReportsService } from '../reports.service';
 import User from '../../auth/user.model';
 import { Report, reportUsers } from '../../models/report.model';
-import { UsersViewPage } from '../../modals/users-view/users-view.page';
 import { DepViewPage } from '../../modals/dep-view/dep-view.page';
 import { SpinnerPage } from '../../modals/spinner/spinner.page';
 import { AddReportPage } from '../add-report/add-report.page';
-import { EntryViewPage } from '../../modals/entry-view/entry-view.page';
 import { SelectInvPage } from '../inventary/select-inv/select-inv.page';
 import { Inventary, productionReport } from 'src/app/models/inventary.model';
 import { emptyInv, emptyProductionReport, emptyReportUsers } from 'src/app/models/empty-models';
-import { sortUsers, updateReportValues } from './finance.engine';
+import { sortUsers, updateChartDays, updateReportValues } from './finance.engine';
 import { environment } from 'src/environments/environment';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { IngsPage } from './ings/ings.page';
 import { EmplPage } from './empl/empl.page';
 import { SpendPage } from './spend/spend.page';
+import { chartDay, FinChartPage } from './fin-chart/fin-chart.page';
 
 
 
@@ -30,7 +29,7 @@ import { SpendPage } from './spend/spend.page';
   templateUrl: './finance.page.html',
   styleUrls: ['./finance.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage, FinChartPage]
 })
 export class FinancePage implements OnInit {
 
@@ -44,6 +43,7 @@ export class FinancePage implements OnInit {
   reports: any[] = []
   user!: User
 
+  chartDays: chartDay[] = []
 
   report!: Report
 
@@ -118,6 +118,8 @@ export class FinancePage implements OnInit {
         if(response){
           this.report = response
           this.updateRaport(this.report)
+          this.chartDays = updateChartDays(this.report.reports, this.totalRentAndStuff+this.totalSpendings)
+          console.log(this.chartDays)
         }
       },
       error: (error) => {
@@ -152,13 +154,10 @@ export class FinancePage implements OnInit {
   }
 
 
-  suplies(sub: boolean){
-    this.sup = !sub
-  }
-
   getAllReports(){
     this.repSrv.getReports().subscribe(response => {
       if(response){
+        console.log(response)
         this.reports = response.reverse()
       }
     })
@@ -188,11 +187,14 @@ getReport(start: string, end: string){
     if(response){
       this.report = response
       this.updateRaport(this.report)
+      this.chartDays = updateChartDays(this.report.reports, this.totalRentAndStuff+this.totalSpendings)
     }
   })
 }
 
 updateRaport(report: Report){
+  this.totalSpendings = 0
+  this.totalRentAndStuff = 0
   this.reportUsers = sortUsers(report)
   this.productioReport = updateReportValues(report, emptyInv(), emptyInv())
   this.isLoading = false
@@ -219,29 +221,6 @@ updateRaport(report: Report){
 
 
 
-showUsers(users: any, mode: string, total: number){
-  const data = {
-    users,
-    mode,
-    total
-  }
-  this.actionSheet.openMobileModal(UsersViewPage, data, false)
-}
-
-
-showDep(products: any){
-  this.actionSheet.openPayment(DepViewPage, products)
-}
-
-showEntry(entry: any){
-  this.actionSheet.openPayment(EntryViewPage, {total: this.report.diverse.total, entries: entry})
-}
-
-showEntries(entry: any){
-  this.actionSheet.openModal(EntryViewPage, {total: entry.total, entries: entry.entries}, true)
-}
-
-
 roundInHtml(num: number) {
   return round(num)
 }
@@ -249,7 +228,7 @@ roundInHtml(num: number) {
 
 
 async createReport(){
-  const response = await this.actionSheet.openPayment(AddReportPage, this.reports)
+  const response = await this.actionSheet.openAdd(AddReportPage, this.reports, 'small-two')
   if(response){
     this.reports = [...this.reports, ...response]
     this.end = this.reports[this.reports.length -1].day

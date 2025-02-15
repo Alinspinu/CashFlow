@@ -2,7 +2,8 @@
 import { emptyProductionReport, emptyReportUsers } from "src/app/models/empty-models"
 import { Inventary, productionReport } from "src/app/models/inventary.model"
 import { Report, reportUser, reportUsers } from "src/app/models/report.model"
-import { round } from "src/app/shared/utils/functions"
+import { formatTitleDate, round, roundOne } from "src/app/shared/utils/functions"
+import { chartDay } from "./fin-chart/fin-chart.page"
 
 
 export function updateReportValues(report: Report, firstInv: Inventary, secondInv: Inventary):productionReport{
@@ -166,4 +167,21 @@ export function updateReportValues(report: Report, firstInv: Inventary, secondIn
       });
       console.log(reportUsers)
     return reportUsers
+  }
+
+  export function updateChartDays(reports: any[], spendings: number) {
+    let chartDays: chartDay[] = []
+    for( let rep of reports){
+      const day: chartDay = {
+        label: formatTitleDate(rep.day).split('-')[0],
+        cashIn: rep.cashIn,
+        deps: rep.impairment.total,
+        workValue: rep.workValue.total,
+        ingsValue: rep.ingsValue,
+        spendings: roundOne(spendings/reports.length),
+        profit: roundOne(rep.cashIn - rep.impairment.total - rep.workValue.total - rep.ingsValue - (spendings/reports.length))
+      }
+      chartDays.push(day)
+    }
+    return chartDays
   }

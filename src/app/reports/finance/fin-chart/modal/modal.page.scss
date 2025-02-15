@@ -1,0 +1,22 @@
+
+ion-content, ion-header{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+
+ion-title[slot='end']{
+  font-size: 18px;
+  margin-top: 36px;
+
+}
+
+.chart{
+  display: flex;
+  justify-content: end;
+}
+#canvas{
+  height: 450px !important;
+  width: 450px !important;
+  margin-right: 46px;
+}

@@ -1,20 +1,16 @@
-import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
-import { base64toBlob } from 'src/app/shared/utils/base64toBlob';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { RecipeMakerPage } from '../recipe-maker/recipe-maker.page';
 import { SubProductPage } from '../sub-product/sub-product.page';
-import {  Router } from '@angular/router';
 import { Product } from 'src/app/models/category.model';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { ProductsService } from '../../products/products.service';
 import { mainCat } from '../../products/products.engine';
 import { CategoriesPage } from '../../products/categories/categories.page';
 import { CloudinaryPickerPage } from 'src/app/shared/cloudinary-picker/cloudinary-picker.page';
-import { ContentService } from 'src/app/content/content.service';
 import { environment } from 'src/environments/environment';
 import { emptyProduct } from 'src/app/models/empty-models';
 import { ReportPage } from './report/report.page';
@@ -35,6 +31,7 @@ export class ProductPage implements OnInit {
 
   tempSubArray: any = [];
   ingredientsToSend: any = []
+  toppingsToSend: any[] = []
 
   editMode: boolean = false;
 
@@ -209,7 +206,8 @@ export class ProductPage implements OnInit {
 
 
   onTopRecive(ev: any){
-    this.product.toppings = ev
+    this.toppingsToSend = ev
+    console.log('products page', ev)
   }
 
   onIngRecive(ev: any){
@@ -318,7 +316,7 @@ export class ProductPage implements OnInit {
         recipe: this.form.value.recipe,
         locatie: environment.LOC,
         tva: +this.form.value.tva,
-        toppings: this.product.toppings,
+        toppings: this.toppingsToSend,
         ings: this.ingredientsToSend,
         subProducts: this.tempSubArray,
         image: this.product.image

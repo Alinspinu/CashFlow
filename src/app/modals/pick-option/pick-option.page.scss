@@ -1,98 +1,100 @@
 
 ion-content, ion-toolbar, ion-footer, ion-list{
-  --background: var(--ion-color-tertiary) !important;
-  background-color: var(--ion-color-tertiary) !important;
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
 }
 
 
 
 .option-row{
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
-// ion-textarea{
-//   --background: white;
-// }
-
-
-// ion-item{
-//   margin-top: 2rem;
-// }
 
 span, ion-radio, ion-textarea, ion-button, ion-checkbox, ion-label, ion-input{
-  font-family: NoirProReg !important;
+  font-family: RoseMed !important;
 }
 
 
 .input{
-  font-size: 12px;
+  font-size: 18px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  height: 70px;
-  background-color: var(--ion-color-light);
   width: 100%;
+  background-color: rgba(var(--orange-rgb), 0.3);
+  color: var(--orange-contrast1) !important;
+  border-radius: 4px;
+  padding-right: 12px;
+  margin: 6px 0;
   cursor: pointer;
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 4px;
-  margin: 0.5rem 0 0.5rem 0.5rem;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
   .topping-name{
     flex:80%
   }
 }
 
+.padd{
+  width: 100%;
+  padding: 24px;
+}
+
+.cheked{
+  background-color:  rgba(var(--orange-rgb), 0.4) !important;
+}
+
+
 .text-input{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 160px;
+  height: 140px;
   padding: 12px;
-  background-color: var(--ion-color-light);
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin: 0.5rem 0 0.5rem 0.5rem;
+  background-color: rgba(var(--orange-rgb), 0.4);
+  color: var(--orange-contrast1) !important;
+  border-radius: 6px;
+  margin: 6px 0;
   ion-textarea{
     font-size: 32px;
   }
 }
-
-
-.input:active{
-  background-color: var(--ion-color-medium-shade);
+ion-checkbox{
+  --border-color: var(--orange-contrast) !important;
+  --border-color-checked: var(--orange-contrast) !important;
+  --checkbox-background-checked:  var(--orange-contrast) !important;
+  --checkmark-color: var(--light-orange) !important;
 }
 
-.title-wrapper{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .title{
-    font-family: NoirProSemi !important;
-    text-align: center;
-    background-color: var(--ion-color-medium);
-    padding: 18px;
-    color: var(--ion-color-light);
-    font-size: 24px;
-    margin-top: 8px;
-  }
+ion-radio{
+  color: var(--orange-contrast1) !important;
+  --color: var(--orange-contrast) !important;
+  --color-checked: var(--orange-contrast) !important;
+}
+
+ion-button.footer-button{
+  --background: var(--orange-contrast) !important;
+  --color: var(--light-orange) !important;
 }
 
 
 
 .wrapper{
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 18px;
+  font-size: 16px !important;
   width: 100%;
   div{
     display: flex;
     align-items: center;
+  }
+  .buttons{
+    ion-button{
+      --background: var(--orange-contrast) !important;
+      --color: var(--light-orange) !important;
+      font-size: 26px;
+    }
     .qty{
       font-size: 18px;
       margin: 10px;

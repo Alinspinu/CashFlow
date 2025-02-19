@@ -3,67 +3,64 @@ ion-content{
 }
 
 
+
+
 .product-item{
-  padding: 14px;
-  border-radius: 2px;
-  margin: 1rem 0 0.5rem 0;
-  box-shadow:
-  0 -4px 8px rgba(0, 0, 0, 0.1),
-  0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: var(--ion-color-light);
-  height: fit-content !important;
-  font-family: NoirProSemi !important;
+  margin: 8px 0;
+  padding: 10px;
+  background-color: rgba(var(--sand-rgb), 0.1);
+  border-radius: 4px;
+  font-family: RoseReg !important;
+  font-size: 16px;
+  color: var(--orange-contrast1) !important;
   cursor: pointer;
   ion-thumbnail{
-    height: 35px;
-    width: 35px;
+    height: 45px;
+    width: 45px;
   }
   .prod-name{
     flex: 40%;
     margin-left: 18px;
-    font-size: 13px;
-    #p-name{
-      text-transform: uppercase;
 
+    #p-name{
+      font-size: 14px;
+      text-transform: uppercase;
     }
     .toppings-wrapper{
       margin-left: 10%;
       span{
-        font-weight: 400;
-        font-size: 14px;
+        font-family: RoseLight !important;
+        font-size: 13px;
       }
     }
   }
   .prod-price{
-    font-size: 16px !important;
-    flex: 10%
+    flex: 10%;
   }
-    .buttons-wrapper{
-      flex: 6%;
+  .buttons-wrapper{
+      flex: 20%;
       display: flex;
       align-items: center;
       .prod-qty{
-        font-size: 16px !important;
+        flex: 30%;
+        text-align: center;
       }
       .button{
-        box-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
+        flex: 35%;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px, solid, var(--ion-color-medium);
-        border-radius: 50%;
         user-select: none;
-        font-family: NoirProSemi !important;
-        margin: 0 8px;
-        height: 30px !important;
-        width: 30px !important;
-      }
-      .button:active{
-        background-color: #f0f0f0;
+        position: relative;
+        overflow: hidden;
+        background-color: rgba(var(--sand-rgb), 0.3);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        font-family: RoseLight !important;
+        font-size: 32px;
       }
     }
 
@@ -72,41 +69,40 @@ ion-content{
     display: flex;
     flex-direction: column;
     .prod-total{
-      font-size: 14px !important;
+      flex: 20%;
       text-align: center;
     }
     .prod-discount{
+      font-family: RoseLight !important;
       font-size: 15px;
-      font-family: NoirProReg !important;
       color: red;
-      text-align: center;
       margin-left: 18px;
+      text-align: center;
+    }
+    #trash{
+      font-size: 28px;
     }
   }
-  .prod-qty{
-    flex: 20%;
-    text-align: center;
-  }
 
-  .prod-total{
-    flex: 20%;
-    text-align: end;
-  }
-  #trash{
-    font-size: 28px;
-  }
+
+
+}
+
+.print{
+  background-color: rgba(var(--sand-rgb), 0.3);
+    box-shadow:
+  0 -1px 2px rgba(0, 0, 0, 0.1),
+  0 1px 2px rgba(0, 0, 0, 0.1);
+  border: none !important;
 }
 
 
   .buttons-container{
-    box-shadow:
-    0 -4px 8px rgba(0, 0, 0, 0.1),
-    0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background-color:  rgba(var(--orange-rgb), 0.5);
+    border-radius: 4px;
     margin-top: 12px;
     padding: 24px 18px 8px 18px;
-    background:  var(--ion-color-light);
-    font-family: NoirProSemi !important;
+    font-family: RoseMed!important;
     .bill-total-row{
       .value{
         text-align: end;

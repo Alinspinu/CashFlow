@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule} from '@ionic/angular';
 import { CashControlService } from './cash-control.service';
 import { Subscription } from 'rxjs';
-import { formatOrderDateOne, getUserFromLocalStorage} from '../shared/utils/functions';
+import { formatOrderDateOne} from '../shared/utils/functions';
 import { Bill, deletetBillProduct } from '../models/table.model';
 import { emptyBill, emptyDeletetBillProduct } from '../models/empty-models';
 

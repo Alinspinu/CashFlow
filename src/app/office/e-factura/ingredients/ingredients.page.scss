@@ -8,7 +8,8 @@ ion-content, ion-toolbar, ion-header{
 }
 
 ion-searchbar{
-  --background: var(--grey);
+  --background: rgba(var(--ion-color-medium-rgb), 0.2);
+  --box-shadow: 0 !important;
 }
 
 ion-item{

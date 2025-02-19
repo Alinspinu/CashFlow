@@ -34,21 +34,19 @@
     <div class="content-container header" *ngIf="displayIngs.length && !impPage">
       <span class="name">Nume</span>
       <span class="gestiune">Gestiune</span>
-      <span class="cant" style="margin-right: 15px;">Cantitate</span>
+      <span class="cant">Cantitate</span>
       <span class="price">Valoare</span>
-      <div class="sep"></div>
+      <span class="trash"></span>
     </div>
     <div  *ngFor="let ing of displayIngs; let i = index" class="content-container input2">
       <span class="index">{{i+1}}.</span>
       <span class="name">{{ing.ing.name}}</span>
       <span class="gestiune">{{ing.ing.gestiune}}</span>
       <span class="cant">{{ing.qty + ' '+ ing.ing.um}} Lei</span>
-      <span class="price">{{round((ing.ing.price + (ing.ing.price * ing.ing.tva / 100)) * ing.qty)}} Lei</span>
-      <ion-buttons slot="end">
-        <ion-button color="medium" fill="clear" class="trash" (click)="deleteIng(i)">
-          <ion-icon src="../../../../assets/icon/trash-outline.svg"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+      <span class="price">{{round(ing.ing.tvaPrice * ing.qty)}} Lei</span>
+      <ion-button color="medium" fill="clear" class="trash" (click)="deleteIng(i)">
+        <ion-icon src="../../../../assets/icon/trash-outline.svg"></ion-icon>
+      </ion-button>
     </div>
     <div *ngIf="displayIngs.length" class="total-wrapper">
       <span class="total">{{impPage ? 'Total fișă' : 'Total rețetă'}}</span>
@@ -63,25 +61,24 @@
     <h3 class="ion-text-center subtitle"  *ngIf="toppings.length">Toppings</h3>
 
     <div class="content-container header"  *ngIf="toppings.length">
+      <span class="index"></span>
       <span class="name">Nume</span>
       <span class="gestiune">Gestiune</span>
-      <span class="cant">Cantitate</span>
+      <span class="cant">Qty</span>
       <span class="val">Valoare</span>
       <span class="price">Vanzare</span>
-      <div class="sep"></div>
+      <span class="trash"></span>
     </div>
     <div  *ngFor="let top of toppings; let i = index;" class="content-container input1">
       <span class="index">{{i+1}}.</span>
       <span class="name">{{top.name}}</span>
-      <span class="gestiune">{{top.ing.gestiune}}</span>
+      <span class="gestiune">{{top.gestiune}}</span>
       <span class="cant">{{top.qty + ' '+ top.um}}</span>
       <span class="val"> {{round(top.ingPrice * top.qty)}} Lei</span>
       <span class="price">{{top.price}} Lei</span>
-      <ion-buttons slot="end">
         <ion-button color="medium" fill="clear" class="trash" (click)="deleteTop(i)">
           <ion-icon src="../../../../assets/icon/trash-outline.svg"></ion-icon>
         </ion-button>
-      </ion-buttons>
     </div>
 
 

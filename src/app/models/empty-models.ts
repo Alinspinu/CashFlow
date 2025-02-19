@@ -172,7 +172,7 @@ export function emptyInv(){
 
 export function emptyBill(){
    const emptyBill: Bill = {
-    _id: '',
+    _id: 'new',
     soketId: '',
     production: true,
     index: 0,

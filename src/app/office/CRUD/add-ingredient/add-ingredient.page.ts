@@ -156,6 +156,7 @@ saveIng(){
       this.ingredientService.deleteIngredient(this.ing._id).pipe(take(1)).subscribe(response => {
         if(response){
           showToast(this.toastCtrl, response.message, 3000)
+          this.modalCtr.dismiss(null)
         }
       })
     }
@@ -230,7 +231,7 @@ getGest(){
   this.ingredientService.getGestiune().subscribe({
     next: (response) => {
       this.gest = response
-    }, 
+    },
     error: (error) => {
       console.log(error)
     }

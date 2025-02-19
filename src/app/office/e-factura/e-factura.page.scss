@@ -11,31 +11,9 @@ ion-content, ion-toolbar, ion-header{
 
 
 
-  .header-toolbar{
-    padding: 24px 0 12px 0;
-    margin-left: 48px;
-    width: 92%;
-    border-bottom: 1.2px solid var(--grey);
-    font-family: RoseMed !important;
-    ion-title{
-      font-size: 36px;
-    }
-    ion-buttons{
-      ion-button{
-        --padding-bottom: 14px;
-        --padding-end: 14px;
-        --padding-top: 14px;
-        --padding-start: 14px;
-        --border-radius: 50%;
-        --border-width: 1px;
-        margin-right: 12px;
-      }
-    }
-  }
-
   ion-searchbar{
     --box-shadow: none !important;
-    --background: var(--grey);
+    --background: rgba(var(--ion-color-medium-rgb), 0.1);
     width: 93%;
     margin: 12px 36px;
   }
@@ -48,7 +26,7 @@ ion-content, ion-toolbar, ion-header{
     padding: 14px 18px;
     margin: 0 24px;
     font-size: 18px;
-    border-bottom: 1.5px solid var(--grey);
+    border-bottom: 1.2px solid rgba(var(--ion-color-medium-rgb), 0.6);
     font-family: RoseMed !important;
   }
 
@@ -57,11 +35,10 @@ ion-content, ion-toolbar, ion-header{
     width: 96%;
     font-family: RoseReg !important;
     display: flex;
-    padding: 8px 18px;
+    padding: 10px 18px;
     margin: 0 24px;
     align-items: center;
     font-size: 16px;
-    border-bottom: 1.5px solid var(--grey);
     font-family: RoseLight !important;
   }
 
@@ -86,7 +63,7 @@ ion-content, ion-toolbar, ion-header{
   }
 
   .input:hover{
-    background-color: var(--grey);
+    background-color:rgba(var(--ion-color-medium-rgb), 0.15);
     span{
       font-family: RoseMed !important;
       color: var(--ion-color-medium) !important;
@@ -95,6 +72,10 @@ ion-content, ion-toolbar, ion-header{
     ion-icon{
       font-size: 22px !important;
     }
+  }
+
+  .odd{
+    background-color: rgba(var(--ion-color-medium-rgb), 0.05);
   }
 
 

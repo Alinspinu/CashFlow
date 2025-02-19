@@ -19,7 +19,6 @@ ion-title, ion-searchbar, ion-button, .tot{
     ion-searchbar{
       flex: 40%;
       --background: rgba(var(--ion-color-medium-rgb), 0.1) !important;
-      --color: var(--dark);
       --box-shadow: none;
     }
     ion-button{
@@ -63,7 +62,7 @@ ion-title, ion-searchbar, ion-button, .tot{
   padding: 14px 18px;
   font-size: 18px;
   justify-content: space-between;
-  border-bottom: 1.5px solid var(--grey);
+  border-bottom: 1.5px solid rgba(var(--ion-color-medium-rgb), 0.6);
   font-family: RoseMed !important;
   ion-icon{
     font-size: 12px;
@@ -118,7 +117,7 @@ ion-title, ion-searchbar, ion-button, .tot{
   margin: 0 28px;
   width: 96%;
   padding: 0 0 0 18px;
-  border-bottom: 0.5px solid var(--grey);
+  // border-bottom: 0.5px solid var(--grey);
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -156,7 +155,7 @@ ion-title, ion-searchbar, ion-button, .tot{
 
 .nir-container:hover{
   cursor: pointer;
-  background-color: rgba(var(--ion-color-medium-rgb), 0.05) !important;
+  background-color: rgba(var(--ion-color-medium-rgb), 0.12) !important;
   span{
     font-size: 16px !important;
     font-family: RoseMed !important;
@@ -175,4 +174,9 @@ ion-title, ion-searchbar, ion-button, .tot{
   color: var(--ion-color-success);
 }
 
+
+
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05);
+}
 

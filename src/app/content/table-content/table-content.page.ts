@@ -7,24 +7,24 @@ import { ContentService } from '../content.service';
 import { Category, Product } from '../../models/category.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast} from 'src/app/shared/utils/toast-controller';
-import { Bill, BillProduct, deletetBillProduct, Ing, Table, Topping } from 'src/app/models/table.model';
+import { Bill, BillProduct, deletetBillProduct, Table } from 'src/app/models/table.model';
 import { TablesService } from 'src/app/tables/tables.service';
 import { map, Observable, of, Subscription, switchMap, BehaviorSubject } from 'rxjs';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentPage } from 'src/app/modals/payment/payment.page';
-import { CustomerCheckPage } from 'src/app/modals/customer-check/customer-check.page';
+import { CustomerCheckPage } from 'src/app/content/table-content/customer-check/customer-check.page';
 import { CashbackPage } from 'src/app/modals/cashback/cashback.page';
 import { AuthService } from 'src/app/auth/auth.service';
 import User from 'src/app/auth/user.model';
 import { emptyBill, emptyDeletetBillProduct, emptyTable } from 'src/app/models/empty-models';
 import { round } from 'src/app/shared/utils/functions';
 import { TipsPage } from 'src/app/modals/tips/tips.page';
-import { AddProductDiscountPage } from 'src/app/modals/add-product-discount/add-product-discount.page';
 import { WebRTCService } from '../webRTC.service';
 import { MeniuPage} from './meniu/meniu.page';
 import { BillPage } from './bill/bill.page';
 import { emptyBillProduct } from '../../models/empty-models';
 import { ScreenSizeService } from 'src/app/shared/screen-size.service';
+import { AddProductDiscountPage } from './add-product-discount/add-product-discount.page';
 
 
 interface billData{
@@ -158,7 +158,6 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getData();
     this.getBill();
     this.getScreenSize()
-    console.log(this.client)
   }
 
   ngOnDestroy(): void {
@@ -401,15 +400,15 @@ async inviteUserToTip(invite: string){
 
 
 async addTips(){
-  const tipsValue = await this.actionSheet.openPayment(TipsPage, 'uninvite')
-  if(tipsValue || tipsValue === 0){
+  const tipsValue = await this.actionSheet.numberAlert('Bacșiș', 'Adauă Bacșiș', 'val', 'Bacșiș', 'tips')
+  if(tipsValue || +tipsValue === 0){
     if(this.billData.billToshow.tips > 0){
       this.billData.billToshow.total =   this.billData.billToshow.total - this.billData.billToshow.tips
-      this.billData.billToshow.tips = tipsValue
-      this.billData.billToshow.total  =   this.billData.billToshow.total  + tipsValue
+      this.billData.billToshow.tips = +tipsValue
+      this.billData.billToshow.total  =   this.billData.billToshow.total  + +tipsValue
     } else {
-      this.billData.billToshow.tips = tipsValue
-      this.billData.billToshow.total =   this.billData.billToshow.total  + tipsValue
+      this.billData.billToshow.tips = +tipsValue
+      this.billData.billToshow.total =   this.billData.billToshow.total  + +tipsValue
   }
 
 }
@@ -489,7 +488,6 @@ async payment(){
               this.disableOrderButton = true;
               this.billData.billToshow.payment = paymentInfo
               this.billData.billToshow.cif = paymentInfo.cif;
-              // console.log(this.billData.billToshow)
               this.tabSub = this.tableSrv.sendBillToPrint(this.billData.billToshow).subscribe({
                 next: (response => {
                   if(response && response.bill.status === 'done'){
@@ -497,7 +495,6 @@ async payment(){
                     this.client = null
                     this.router.navigateByUrl("/tables")
                     this.disableOrderButton = false;
-                    // this.tableSrv.saveBillToCloud(response.bill)
                     showToast(this.toastCtrl, response.message, 3000)
                   }
                 }),
@@ -516,7 +513,7 @@ async payment(){
 
 async addCustomer(clientMode: boolean){
     if(clientMode){
-      const clientInfo = await this.actionSheet.openPayment(CustomerCheckPage, '')
+      const clientInfo = await this.actionSheet.openAdd(CustomerCheckPage, '', 'medium')
       if(clientInfo && clientInfo.message === "client"){
         this.client = clientInfo.data
         this.clientMode = false
@@ -548,7 +545,6 @@ async addCustomer(clientMode: boolean){
         this.billData.billToshow._id.length ? this.billId = this.billData.billToshow._id : this.billId = 'new';
       }
       this.billDataSubject.next(this.billData)
-      // this.discountValue = 0
       this.client = null
       this.disableOrderButton = true
       const response = await this.tableSrv.redCustomer(this.tableNumber, this.billIndex, this.billId, this.user.employee, this.user.locatie)
@@ -747,6 +743,7 @@ async useCashBack(mode: boolean){
     } else {
       this.tableSrv.removeBill(this.tableNumber, this.billIndex)
       this.billData.billProducts = []
+      this.showOrder(+this.table.bills.length-1)
       this.billDataSubject.next(this.billData)
 
     }
@@ -837,47 +834,3 @@ roundInHtml(num: number){
 
 
 
-
-
-
-
-
-
-// incommingOrders(){
-//  this.tableSub = this.tableSrv.getOrderMessage(this.user.locatie, this.user._id).subscribe(response => {
-//     if(response){
-//       const data = JSON.parse(response.data)
-//       if(data.message === 'New Order'){
-//         this.order = data.doc
-//         if (!this.audio.isCurrentlyPlaying()) {
-//           this.audio.play();
-//         }
-//         this.onlineOrder = true
-//         this.colorToggleInterval = setInterval(() => {
-//           this.dynamicColorChange = !this.dynamicColorChange;
-//         }, 500);
-//       }
-//     }
-//    })
-//   }
-
-  // stopDynamicHeader() {
-  //   clearInterval(this.colorToggleInterval);
-  //   this.dynamicColorChange = false;
-  // }
-
-  // async acceptOrder(){
-  //   // this.audio.stop()
-  //   this.onlineOrder = false
-  //   this.stopDynamicHeader()
-  //   const result = await this.actionSheet.openPayment(OrderAppViewPage, this.order)
-  //   if(result){
-  //     const time = +result * 60 * 1000
-  //     this.tableSub = this.tableSrv.setOrderTime(this.order._id, time).subscribe(response => {
-  //       console.log(response)
-  //     })
-  //   }
-  // }
-
-
-// ***********************INCOMMING ORDERS*********************

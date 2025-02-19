@@ -46,6 +46,16 @@ export function getProducts(orders: Bill[]){
           existingProduct.quantity += clonedProduct.quantity
           existingProduct.total = round(existingProduct.total + (clonedProduct.quantity * +clonedProduct.price))
           existingProduct.discount = round(existingProduct.discount+ clonedProduct.discount)
+          if(clonedProduct.toppings.length){
+            for(let topping of clonedProduct.toppings){
+              const existingTopping = existingProduct.toppings.find(t => t.name === topping.name)
+              if(existingTopping){
+                existingTopping.qty = round(existingTopping.qty + topping.qty)
+              } else {
+                existingProduct.toppings.push(topping)
+              }
+            }
+          }
         } else {
           clonedProduct.total = round(clonedProduct.quantity * +clonedProduct.price)
           products.push(clonedProduct)
@@ -59,6 +69,16 @@ export function getProducts(orders: Bill[]){
           existingProduct.quantity += clonedProduct.quantity
           existingProduct.total = round(existingProduct.total + (clonedProduct.quantity * +clonedProduct.price))
           existingProduct.discount = round(existingProduct.discount+ clonedProduct.discount)
+          if(clonedProduct.toppings.length){
+            for(let topping of clonedProduct.toppings){
+              const existingTopping = existingProduct.toppings.find(t => t.name === topping.name)
+              if(existingTopping){
+                existingTopping.qty = round(existingTopping.qty + topping.qty)
+              } else {
+                existingProduct.toppings.push(topping)
+              }
+            }
+          }
           openSection.productsCount += clonedProduct.quantity
           openSection.total = round(openSection.total + (+clonedProduct.price * clonedProduct.quantity))
         } else {
@@ -80,7 +100,6 @@ export function getProducts(orders: Bill[]){
       product.section = getSection(product)
     }
     if(!product.section){
-     console.log(product)
     }
 
     const clonedProduct = JSON.parse(JSON.stringify(product)) as BillProduct;
@@ -104,7 +123,6 @@ export function getProducts(orders: Bill[]){
   }
   section.push(openSection)
   section.sort((a,b) => b.total - a.total)
-  console.log(section)
   products.sort((a,b) => b.quantity - a.quantity )
   return {products: products, sections: section, openProducts: openProducts}
 }

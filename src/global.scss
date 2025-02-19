@@ -39,13 +39,14 @@
 
 
   --sand: #{$sand-light};
-  --light-sand: #{$light-sand-light};
+  --sand-rgb: #{$sand-light-rgb};
   --sand-contrast: #{$sand-contrast-light};
 
   --orange: #{$orange-light};
   --light-orange: #{$light-orange-light};
   --orange-contrast: #{$orange-contrast-light};
-  --orange-shade: #{$orange-shade-light};
+  --orange-contrast1: #{$orange-contrast-light1};
+  --orange-rgb: #{$orange-light-rgb};
 
   --yellow: #{$yellow-light};
   --yellow-shade: #{$yellow-shade-light};
@@ -59,12 +60,12 @@
   --turqoise: #{$turqoise-light};
   --light-turqoise: #{$light-turqoise-light};
   --turqoise-contrast: #{$turqoise-contrast-light};
-  --turqoise-shade: #{$turqoise-shade-light};
+  --turqoise-rgb: #{$turqoise-light-rgb};
 
   --red: #{$red-light};
   --light-red: #{$light-red-light};
   --red-contrast: #{$red-contrast-light};
-  --red-shade: #{$red-shade-light};
+  --red-rgb: #{$red-light-rgb};
 
   --menu-background: #{$menu-background-light};
 
@@ -78,6 +79,42 @@
 
   --white: #{$white};
   --dark: #{$dark};
+
+
+  --barista:#{$barista-light};
+  --barista-rgb:#{$barista-light-rgb};
+
+  --aj-barista: #{$aj-barista-light};
+  --aj-barista-rgb: #{$aj-barista-light-rgb};
+
+  --casier: #{$casier-light};
+  --casier-rgb: #{$casier-light-rgb};
+
+  --ospatar: #{$ospatar-light};
+  --ospatar-rgb: #{$ospatar-light-rgb};
+
+  --bucatar:#{$bucatar-light};
+  --bucatar-rgb:#{$bucatar-light-rgb};
+
+  --aj-bucatar:#{$aj-bucatar-light};
+  --aj-bucatar-rgb:#{$aj-bucatar-light-rgb};
+
+  --days: #{$days-light};
+  --days-rgb: #{$days-light-rgb};
+
+  --tes: #{$tes-light};
+  --tes-rgb: #{$tes-light-rgb};
+
+  --liber:#{$liber-light};
+  --liber-rgb:#{$liber-light-rgb};
+
+  --concediu:#{$concediu-light};
+  --concediu-rgb:#{$concediu-light-rgb};
+
+  --medical:#{$medical-light};
+  --medical-rgb:#{$medical-light-rgb};
+
+
 }
 
 // Dark Theme
@@ -85,19 +122,21 @@
   --green: #{$green-dark};
   --green-shade: #{$green-shade-dark};
   --green-contrast: #{$green-contrast-dark};
+
   --light-green: #{$light-green-dark};
   --light-green-contrast: #{$light-green-contrast-dark};
   --light-green-shade: #{$light-green-shade};
 
 
   --sand: #{$sand-dark};
-  --light-sand: #{$light-sand-dark};
+  --sand-rgb: #{$sand-dark-rgb};
   --sand-contrast: #{$sand-contrast-dark};
 
   --orange: #{$orange-dark};
   --light-orange: #{$light-orange-dark};
   --orange-contrast: #{$orange-contrast-dark};
-  --orange-shade: #{$orange-shade-dark};
+  --orange-contrast1: #{$orange-contrast-dark1};
+  --orange-rgb: #{$orange-dark-rgb};
 
   --yellow: #{$yellow-dark};
   --yellow-shade: #{$yellow-shade-dark};
@@ -111,12 +150,12 @@
   --turqoise: #{$turqoise-dark};
   --light-turqoise: #{$light-turqoise-dark};
   --turqoise-contrast: #{$turqoise-contrast-dark};
-  --turqoise-shade: #{$turqoise-shade-dark};
+  --turqoise-rgb: #{$turqoise-dark-rgb};
 
   --red: #{$red-dark};
   --light-red: #{$light-red-dark};
   --red-contrast: #{$red-contrast-dark};
-  --red-shade: #{$red-shade-dark};
+  --red-rgb: #{$red-dark-rgb};
 
   --grey: #{$grey-dark};
   --light-grey: #{$light-grey-dark};
@@ -129,6 +168,42 @@
 
   --white: #{$white};
   --dark: #{$dark};
+
+
+
+
+  --barista:#{$barista-dark};
+  --barista-rgb:#{$barista-dark-rgb};
+
+  --aj-barista: #{$aj-barista-dark};
+  --aj-barista-rgb: #{$aj-barista-dark-rgb};
+
+  --casier: #{$casier-dark};
+  --casier-rgb: #{$casier-dark-rgb};
+
+  --ospatar: #{$ospatar-dark};
+  --ospatar-rgb: #{$ospatar-dark-rgb};
+
+  --bucatar:#{$bucatar-dark};
+  --bucatar-rgb:#{$bucatar-dark-rgb};
+
+  --aj-bucatar:#{$aj-bucatar-dark};
+  --aj-bucatar-rgb:#{$aj-bucatar-dark-rgb};
+
+  --days: #{$days-dark};
+  --days-rgb: #{$days-dark-rgb};
+
+  --tes: #{$tes-dark};
+  --tes-rgb: #{$tes-dark-rgb};
+
+  --liber:#{$liber-dark};
+  --liber-rgb:#{$liber-dark-rgb};
+
+  --concediu:#{$concediu-dark};
+  --concediu-rgb:#{$concediu-dark-rgb};
+
+  --medical:#{$medical-dark};
+  --medical-rgb:#{$medical-dark-rgb};
 }
 
 
@@ -294,7 +369,7 @@ body ion-alert.deleteAlert{
 }
 
 .crud-modal{
-  --width: 80%;
+  --width: 50%;
   --height: 95vh;
   --min-heigth: none;
   --max-width: none;
@@ -437,6 +512,13 @@ body ion-alert.deleteAlert{
     }
   }
 
+  body ion-alert.tips {
+    .alert-input{
+      font-size: 28px !important;
+    }
+  }
+
+
   ion-date-time{
     ion-buttons{
       ion-button{
@@ -465,6 +547,10 @@ body ion-alert.deleteAlert{
     --width: 100% !important;
   }
   }
+
+
+
+
 
 
  body ion-toolbar.header-toolbar{
@@ -523,11 +609,12 @@ body ion-alert.deleteAlert{
       --padding-top: 12px !important;
       --padding-start: 12px !important;
       --border-radius: 50% !important;
-      --border-width: 2px !important;
+      --border-width: 1px !important;
       margin-right: 12px !important;
-      --border-color: var(--ion-color-medium);
+      --border-color: var(--orange-contrast1);
+      --background: rgba(var(--orange-rgb), 0.2) !important;
       ion-icon{
-        color: var(--ion-color-medium);
+        color:  var(--orange-contrast1) !important;
       }
     }
   }
@@ -538,6 +625,8 @@ body ion-alert.deleteAlert{
   }
 
   body ion-toolbar.small{
+    width: 100% !important;
+    margin: 0 !important;
     padding: 0 !important;
     ion-buttons{
       ion-button{
@@ -573,6 +662,9 @@ body ion-alert.deleteAlert{
     left: 12px;
     width: 45px !important;
     height: 45px !important;
+    ion-icon{
+      color: var(--orange-contrast1) !important;
+    }
   }
 
   ion-toggle.toggle-checked::part(track) {
@@ -582,6 +674,120 @@ body ion-alert.deleteAlert{
 
   ion-toggle.toggle-checked::part(handle) {
     background: var(--orange)
+  }
+
+
+  .default-spinner{
+    font-family: RoseLight !important;
+    font-size: 22px;
+    --background: var(--background-color) !important;
+    --spinner-color: var(--orange-contrast1) !important;
+    --backdrop-opacity: 0.3 !important;
+    .loading-spinner{
+      font-family: 60px !important;
+      ion-spinner{
+          height: 50px !important;
+          width: 50px !important;
+      }
+      // height: 100px !important;
+    }
+  }
+
+
+
+
+
+
+  ion-buttons.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f0f0f0;
+    ion-button{
+      text-transform: uppercase !important;
+      --background: rgba(var(--sand-rgb), 0.2) !important;
+      --padding-start: 16px;
+      --border-radius: 6px !important;
+      --padding-end: 16px;
+      --padding-top: 16px;
+      --padding-bottom: 16px;
+      --background: transparent;
+      font-size: 13px !important;
+      ion-label{
+        font-family: RoseReg !important;
+        font-size: 13px !important;
+        color: var(--orange-contrast1);
+      }
+      ion-icon{
+        font-size: 24px;
+        color: var(--orange-contrast1);
+      }
+    }
+  }
+
+
+  ion-buttons.horizontal-scroll ion-button.add-button{
+    --background: transparent !important;
+    --border-width: 1px;
+    --border-color: var(--orange-contrast1);
+    margin: 0 12px 0 12px;
+    ion-icon{
+      color: var(--orange-contrast1) !important;
+    }
+    ion-label{
+      font-family: RoseReg !important;
+      color: var(--orange-contrast1) !important;
+    }
+  }
+
+  ion-buttons.horizontal-scroll ion-button.active-button {
+    --background: var(--orange-contrast) !important;
+    ion-label{
+      color: var(--light-sand) !important;
+    }
+    ion-icon{
+      color: var(--light-sand) !important;
+    }
+  }
+
+  ion-buttons.horizontal-scroll ion-button ion-item{
+    --background: rgba(var(--sand-rgb), 0.2) !important;
+    ion-input{
+    color: var(--sand-contrast) !important;
+    }
+  }
+
+
+  ion-toolbar.tool{
+    padding: 24px 0 12px 0;
+    margin-top: 12px;
+    --background: var(--background-color) !important;
+  ion-title{
+    margin: 24px 0 0 40%;
+    font-family: RoseMed !important;
+    color: var(--orange-contrast1) !important;
+    font-size: 24px;
+  }
+  ion-buttons[slot='start']{
+    ion-button{
+      --background: rgba(var(--sand-rgb), 0.1) !important;
+      --padding-bottom: 16px !important;
+      --padding-end: 16px !important;
+      --padding-top: 16px !important;
+      --padding-start: 16px !important;
+      --border-radius: 50% !important;
+      --border-width: 0.5px !important;
+      margin-right: 12px !important;
+      --border-color: var(--orange-contrast1) !important;
+      ion-icon{
+        color: var(--orange-contrast1);
+      }
+    }
+    ion-button:active{
+      --background: rgba(var(--sand-rgb), 0.2) !important;
+    }
+  }
   }
 
 

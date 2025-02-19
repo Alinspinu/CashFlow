@@ -2,7 +2,7 @@
 
 
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border header-toolbar">
+  <ion-toolbar class="ion-no-border toolbar">
     <ion-title slot="start">{{title}}</ion-title>
     <ion-buttons slot="end">
       <ion-button fill="outline" (click)="deleteIng()">
@@ -97,93 +97,3 @@
     </ion-footer>
 
 
-
-<!-- <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-
-    <div class="title-wrapper">
-      <div class="title">{{title}}</div>
-    </div>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-<ion-grid>
-  <ion-row class="ion-padding">
-    <ion-col>
-      <form [formGroup]="ingredientForm">
-        <div class="input">
-          <ion-input  mode="ios" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
-        </div>
-        <div class="input">
-          <ion-input  mode="ios" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
-        </div>
-        <div class="input">
-            <ion-select label="Cotă TVA %" placeholder="%" formControlName="tva">
-              <ion-select-option value="19">19%</ion-select-option>
-              <ion-select-option value="9">9%</ion-select-option>
-              <ion-select-option value="5">5%</ion-select-option>
-              <ion-select-option value="0">0%</ion-select-option>
-            </ion-select>
-        </div>
-      <div class="input">
-        <ion-select label="Gestiune" placeholder="Gestiune" formControlName="gestiune">
-          <ion-select-option value="magazie">Magazie</ion-select-option>
-          <ion-select-option value="bucatarie">Bucătărie</ion-select-option>
-          <ion-select-option value="bar">Bar</ion-select-option>
-        </ion-select>
-      </div>
-      <div class="input">
-        <ion-select label="Departament" placeholder="Departament" formControlName="dep">
-          <ion-select-option value="materie">Materie Primă</ion-select-option>
-          <ion-select-option value="marfa">Marfă</ion-select-option>
-          <ion-select-option value="consumabil">Consumabile</ion-select-option>
-          <ion-select-option value="servicii">Servicii</ion-select-option>
-          <ion-select-option value="marketing">Marketing</ion-select-option>
-          <ion-select-option value="ob-inventar">Obiecte inventar</ion-select-option>
-          <ion-select-option value="amenajari">Amenajări</ion-select-option>
-          <ion-select-option value="combustibil">Combustibil</ion-select-option>
-          <ion-select-option value="utilitati">Utilități</ion-select-option>
-          <ion-select-option value="chirie">Chirie</ion-select-option>
-        </ion-select>
-    </div>
-    <div class="input">
-      <ion-select label="Punct de lucru" placeholder="Alege punctul de lucru" formControlName="salePoint">
-        <ion-select-option *ngFor="let point of salePoints" [value]="point._id">{{point.name}}</ion-select-option>
-      </ion-select>
-      <ion-button  color="medium" (click)="addSailPoint()" style="margin-left: 24px;">
-        <ion-icon src="../../../../assets/icon/add-circle.svg"></ion-icon>
-      </ion-button>
-  </div>
-    <div class="input">
-      <ion-input  mode="ios" type="number" label="Preț fară TVA" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
-    </div>
-    <div class="input">
-      <ion-input  mode="ios" type="number" label="Cantitate Actuală" labelPlacement="floating" fill="outline" formControlName="qty" (keyup.enter)="saveIng()"></ion-input>
-    </div>
-    <div class="input">
-      <ion-input  mode="ios" type="number" label="Cantitate Inventar" labelPlacement="floating" fill="outline" formControlName="invQty"></ion-input>
-    </div>
-
-  </form>
-    </ion-col>
-  </ion-row>
-</ion-grid>
-</ion-content>
-
-<ion-footer class="ion-no-border">
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-button (click)="cancel()" expand="block" color="light" size="large">
-          Renunță
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button size="large" expand="block" (click)="saveIng()" [disabled]="!ingredientForm.valid" color="medium">
-          Save Ingredient
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-footer> -->

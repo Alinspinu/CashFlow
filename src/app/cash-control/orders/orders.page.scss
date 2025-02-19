@@ -179,7 +179,7 @@ ion-card{
   }
 }
 #open-card{
-  --background: var(--light-sand);
+  --background: rgba(var(--sand-rgb), 0.3);
   ion-card-content{
     ion-icon{
       background-color: var(--sand);

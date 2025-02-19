@@ -79,116 +79,65 @@ ion-title{
 
 
 .barista{
-  background-color: var(--blue);
-  color: var(--white);
+  background-color: rgba(var(--barista-rgb), 0.7);
 }
 .aj-barista{
-  background-color: var(--light-blue);
-  color: var(--text-color);
+  background-color: rgba(var(--aj-barista-rgb), 0.7);
 }
 .casier{
-  background-color: var(--red);
-  color: var(--text-color);
+  background-color:rgba(var(--casier-rgb), 0.7);
 }
 .ospatar{
-  background-color: var(--yellow);
-  color: var(--text-color);
+  background-color:rgba(var(--ospatar-rgb), 0.7);
 }
 .bucatar{
-  background-color: var(--green);
-  color: var(--white)
+  background-color:rgba(var(--bucatar-rgb), 0.7);
 }
 .aj-bucatar{
-  background-color: var(--light-green);
-  color: var(--dark);
+  background-color: rgba(var(--aj-bucatar-rgb), 0.7);
 }
 
 .liber{
-  background-color: var(--grey) !important;
-  color: var(--text-color)
+  background-color: rgba(var(--liber-rgb), 0.4);
 }
 .tes{
-  background-color: var(--orange);
-  color: var(--text-color)
+  background-color: rgba(var(--tes-rgb), 0.7);
 }
 .days{
-  background-color: var(--dark-blue);
+  background-color: var(--days);
   color: var(--white);
 }
 .con{
-  background-color:var(--dark-blue);
-  color: var(--white);
+  background-color:var(--concediu);
 }
 .med{
-  background-color: var(--red);
-  color: var(--white);
+  background-color: var(--medical);
 }
 
 .on-barista{
-  background-color: var(--blue-shade);
-  color: var(--white);
+  background-color: var(--barista);
 }
 .on-casier{
-  background-color: var(--red-shade);
-  color: var(--text-color);
+  background-color: var(--casier);
 }
 .on-aj-barista{
-  background-color: var(--light-blue-shade);
-  color: var(--text-color);
+  background-color: var(--aj-barista);
 }
 .on-ospatar{
-  background-color: var(--yellow-shade);
-  color: var(--text-color);
+  background-color: var(--ospatar);
 }
 
 .on-bucatar{
-  background-color: var(--green-shade);
-  color: var(--white)ș
+  background-color: var(--bucatar);
 }
 .on-aj-bucatar{
-  background-color: var(--light-green-shade);
-  color: var(--dark);
+  background-color: var(--aj-bucatar);
+}
+.on-tes{
+  background-color: var(--tes);
 }
 
 
-// .barista{
-//   background-color: rgb(61, 158, 190);
-// }
-// .aj-barista{
-//   background-color: rgb(129, 196, 218);
-// }
-// .casier{
-//   background-color: rgb(225, 115, 109);
-// }
-// .ospatar{
-//   background-color: rgb(225, 177, 109);
-// }
-// .bucatar{
-//   background-color: rgb(116, 169, 107);
-// }
-// .aj-bucatar{
-//   background-color: rgb(155, 182, 150);
-// }
-// .days{
-//   background-color: rgb(19, 82, 116);
-//   color: white;
-// }
-// .liber{
-//   background-color: rgb(98, 91, 91) !important;
-//   color: white !important;
-// }
-// .tes{
-//   background-color: rgb(212, 104, 27);
-//   color: white;
-// }
-// .con{
-//   background-color: rgb(19, 82, 116);
-//   color: white;
-// }
-// .med{
-//   background-color: rgb(232, 41, 41);
-//   color: white;
-// }
 
 
 

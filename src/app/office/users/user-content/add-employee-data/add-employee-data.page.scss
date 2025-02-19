@@ -9,28 +9,6 @@ ion-input, ion-select, .font, span, ion-textarea{
 
 
 
-.header-toolbar{
-  padding: 24px 0 12px 0;
-  margin: 0 66px 0 46px;
-  border-bottom: 1.2px solid var(--grey);
-  ion-toolbar{
-    ion-title{
-      font-family: RoseMed !important;
-      font-size: 36px;
-    }
-    ion-buttons{
-      ion-button{
-        --padding-bottom: 16px;
-        --padding-end: 16px;
-        --padding-top: 16px;
-        --padding-start: 16px;
-        --border-radius: 50%;
-        --border-width: 2px;
-        margin-right: 12px;
-      }
-    }
-  }
-}
 
 
 

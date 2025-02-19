@@ -36,21 +36,6 @@ export const routes: Routes = [
     path: '',
     redirectTo: '/reports/inventary',
     pathMatch: 'full',
-  },  {
-    path: 'empl',
-    loadComponent: () => import('./finance/empl/empl.page').then( m => m.EmplPage)
-  },
-  {
-    path: 'spend',
-    loadComponent: () => import('./finance/spend/spend.page').then( m => m.SpendPage)
-  },
-  {
-    path: 'fin-chart',
-    loadComponent: () => import('./finance/fin-chart/fin-chart.page').then( m => m.FinChartPage)
-  },
-  {
-    path: 'modal',
-    loadComponent: () => import('./finance/fin-chart/modal/modal.page').then( m => m.ModalPage)
   },
 
 

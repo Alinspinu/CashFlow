@@ -80,14 +80,14 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['top']) {
       if(changes['top'].currentValue !== undefined){
-        this.toppings = changes['top'].currentValue
-        this.toppSend.emit(this.toppings)
+        this.toppings = this.editToppings(changes['top'].currentValue)
+        // this.toppSend.emit(this.toppings)
       }
     }
     if (changes['ings']) {
       if(changes['ings'].currentValue !== undefined) {
-        this.displayIngs = changes['ings'].currentValue
-        this.ingsSend.emit(this.displayIngs)
+        this.displayIngs = this.editIngs(changes['ings'].currentValue)
+        // this.ingsSend.emit(this.displayIngs)
         this.calcrRecipeTotal(this.displayIngs)
       }
     }
@@ -112,6 +112,48 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         this.getIngredients()
       }
     })
+  }
+
+  editToppings(toppings: any[]){
+    const top = toppings.map(t => {
+      let price = 0
+      if(t.ing.productIngredient){
+        const ings = t.ing.ings
+        for(let ing of ings){
+          price = this.round(price + (ing.qty * ing.ing.tvaPrice))
+        }
+      } else {
+        price = t.ing.tvaPrice
+      }
+      const tp = {
+        name: t.name,
+        price: t.price,
+        ingPrice: price,
+        qty: t.qty,
+        gestiune: t.ing.gestiune,
+        um: t.ing.um,
+        ing: t.ing._id
+
+      }
+      return tp
+    })
+    return top
+  }
+
+  editIngs(ings: any[]){
+    const igs = ings.map(i => {
+      let price = 0
+      if(i.ing.productIngredient){
+        for(let ig of i.ing.ings){
+          price = this.round(price + (ig.qty * ig.ing.tvaPrice))
+        }
+      } else {
+        price = i.ing.tvaPrice
+      }
+      i.ing.tvaPrice = price
+      return i
+    })
+    return igs
   }
 
 
@@ -189,6 +231,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     this.ingSrv.ingredientsSend$.subscribe(response => {
       if(response){
         this.dbIngs = response
+        console.log('recipe maker ings', this.dbIngs.length)
         this.isLoading = false
       }
     })
@@ -209,6 +252,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
       this.ingredients = []
     }
     } else {
+
       this.search.emit(searchQuery)
     }
   }
@@ -237,9 +281,10 @@ export class RecipeMakerPage implements OnInit, OnChanges {
         const topping = {
           name: ing.name,
           qty: data.qty,
+          gestiune: ing.gestiune,
           um: ing.um,
           price: data.price,
-          ingPrice: ing.price * data.qty,
+          ingPrice: ing.tvaPrice * data.qty,
           ing: ing._id,
         }
         this.toppings.push(topping)

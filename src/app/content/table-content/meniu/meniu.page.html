@@ -11,7 +11,7 @@
         </ion-col>
     </ion-row>
      <ion-row *ngIf="data.showCats">
-        <ion-col [size]="catCol" *ngFor="let cat of categoriesToShow; let i = index" class="ion-no-padding">
+        <ion-col [size]="catCol" *ngFor="let cat of categoriesToShow; let i = index">
           <ion-card (click)="showProducts(i, cat.mainCat)" class="cat-card">
             <img alt="category image" [src]="cat.image.path" />
             <ion-card-subtitle class="small-title">{{cat.name}}</ion-card-subtitle>
@@ -19,7 +19,7 @@
         </ion-col>
       </ion-row>
       <ion-row *ngIf="data.showProd">
-        <ion-col [size]="catCol" *ngFor="let product of productsToShow" class="ion-no-padding">
+        <ion-col [size]="catCol" *ngFor="let product of productsToShow">
           <ion-card (click)="addToBill(product)" class="prod-card">
               <img alt="image" class="prod-img" [src]="product.image.length ? modifyImageURL(product.image[0].path) : 'https://res.cloudinary.com/dhetxk68c/image/upload/v1692369756/True/no_image_patrat_pt8iod.png'" />
             <ion-card-subtitle class="product-title">{{product.name}}</ion-card-subtitle>

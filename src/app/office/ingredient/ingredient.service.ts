@@ -7,6 +7,7 @@ import { Dep, Gestiune, InvIngredient } from "src/app/models/nir.model";
 import { IndexDbService } from "src/app/shared/indexDb.service";
 import {environment} from '../../../environments/environment'
 import { Ingredient } from '../../models/category.model';
+import { round } from "src/app/shared/utils/functions";
 
 
 @Injectable({providedIn: 'root'})
@@ -32,6 +33,16 @@ export class IngredientService{
   getIng(id: string): InvIngredient | null{
       const index =  this.ingredients.findIndex(i => i._id === id)
       if(index !== -1) {
+        let ing = this.ingredients[index]
+          let price = 0
+          if(ing.productIngredient){
+            for(let ig of ing.ings){
+              price = round(price + (ig.qty * ig.ing.tvaPrice))
+            }
+          } else {
+            price = ing.tvaPrice
+          }
+          this.ingredients[index].tvaPrice = price
         return this.ingredients[index]
       } else{
         return null
@@ -42,9 +53,12 @@ export class IngredientService{
     return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: environment.LOC})
             .pipe(tap(response => {
               if(response){
+                console.log('saved ing', response.ing)
+                console.log('service ingredients before push',this.ingredients.length)
                 this.ingredients.push(response.ing)
                 const stringIngs = JSON.stringify(this.ingredients)
                 this.dbService.addOrUpdateIngredient({id: 1, ings: stringIngs}).subscribe()
+                console.log('service ingredients',this.ingredients.length)
                 this.ingredientsState.next([...this.ingredients])
                 }
             }))

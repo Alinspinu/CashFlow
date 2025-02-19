@@ -16,18 +16,19 @@ ion-content{
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgba(var(--sand-rgb), 0.4);
     .main-img{
       font-size: 74px;
-      height: 160px;
+      height: 120px;
       padding: 28px;
     }
   }
   ion-title{
-    font-family: NoirProSemi !important;
-    background-color: black;
+    font-family: RoseSemi !important;
+    background-color: var(--orange-contrast);
     text-transform: uppercase;
     text-align: center;
-    color: white;
+    color: var(--light-orange);
     font-size: 28px;
     padding: 10px;
   }
@@ -35,28 +36,29 @@ ion-content{
 }
 
 .cat-card{
-  background-color: rgb(86, 79, 75);
+  background-color: var(--orange-contrast);
+  width: 100% !important;
   .small-title{
-    font-family: NoirProSemi !important;
+    font-family: RoseSemi!important;
     text-transform: uppercase;
     text-align: center;
     font-size: 14px;
     padding: 8px;
-    color: white;
+    color: var(--light-orange);
   }
 
 }
 
 .prod-card{
-  background-color: rgb(86, 79, 75);
+  background-color: var(--orange-contrast);
+  width: 100% !important;
 .product-title{
-  font-family: NoirProSemi !important;
+  font-family: RoseSemi !important;
     text-transform: uppercase;
     text-align: center;
     font-size: 14px;
     padding: 8px;
-    color: var(--ion-color-dark);
-    color: white;
+    color: var(--light-orange);
   }
 }
 
@@ -75,13 +77,14 @@ ion-content{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--ion-color-danger);
-    color: var(--ion-color-light);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    background-color: rgba(var(--sand-rgb), 0.9);
+    color: var(--text-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     height: 35px;
     width: 35px;
-    font-size: 16px;
+    font-size: 15px;
+    font-family: RoseReg !important;
     text-align: center;
     margin-left: auto;
   }
@@ -104,9 +107,8 @@ ion-content{
     }
 
     .cat-card{
-     width: 100% !important;
       .small-title{
-        font-size: 14px !important;
+        font-size: 12px !important;
         padding: 10px !important;
         padding-right: 8px !important;
       }
@@ -114,11 +116,11 @@ ion-content{
     }
 
     .prod-card{
-      width: 100% !important;
        .product-title{
-        font-size: 14px;
+        font-size: 12px;
         padding-right: 8px !important;
         padding-right: 8px !important;
+
       }
     }
 

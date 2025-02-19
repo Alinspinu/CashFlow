@@ -38,13 +38,13 @@
           <ion-col size="2" class="padding">
             <div class="square"
             [ngClass]="{
-              'barista' : user.employee.position === 'Barista',
-              'aj-barista' : user.employee.position === 'Ajutor barman',
-              'casier' : user.employee.position === 'Casier',
-              'ospatar' : user.employee.position === 'Ospatar',
-              'bucatar' : user.employee.position === 'Bucatar',
-              'aj-bucatar' : user.employee.position === 'Ajutor bucatar',
-              'tes' : user.employee.position === 'Supervizor' || user.employee.position === 'Asistent Manager'
+              'on-barista' : user.employee.position === 'Barista',
+              'on-aj-barista' : user.employee.position === 'Ajutor barman',
+              'on-casier' : user.employee.position === 'Casier',
+              'on-ospatar' : user.employee.position === 'Ospatar',
+              'on-bucatar' : user.employee.position === 'Bucatar',
+              'on-aj-bucatar' : user.employee.position === 'Ajutor bucatar',
+              'on-tes' : user.employee.position === 'Supervizor' || user.employee.position === 'Asistent Manager'
             }">
               <span class="name">{{user.employee.fullName}}</span>
               <span class="position">({{user.employee.position}})</span>

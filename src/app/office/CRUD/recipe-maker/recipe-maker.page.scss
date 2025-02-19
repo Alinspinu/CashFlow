@@ -7,9 +7,9 @@
 
 .header{
   font-family: RoseMed !important;
-  font-size: 17px !important;
-  padding-left: 24px;
-  margin: 24px 0;
+  font-size: 14px !important;
+  padding: 0 8px;
+  margin: 12px 0;
 }
 
 
@@ -30,11 +30,11 @@
 .input1, .input2{
   display: flex;
   align-items: center;
-  border-radius: 8px;
   height: 40px;
+  border-radius: 8px;
   border: 1.2px solid var(--grey);
-  margin: 0.2rem 0 0.5rem 0.5rem;
-  padding-left: 12px!important;
+  padding: 4px 8px;
+  margin: 4px 0;
 }
 
 ion-title, ion-select, ion-input, ion-button, h3, ion-searchbar{
@@ -133,39 +133,40 @@ span{
   flex-direction: row;
   font-size: 12px;
   .index{
-    margin-left: 0.6rem;
     flex: 3%;
   }
   .name{
     flex: 27%;
   };
   .cant{
-    flex: 22%;
-    text-align: center;
-  };
-  .gestiune{
     flex: 20%;
     text-align: center;
   };
+  .gestiune{
+    flex: 15%;
+    text-align: center;
+  };
   .price{
-    flex: 18%;
+    flex: 15%;
     text-align: end;
   };
   .total{
-    margin-left: 0.6rem;
     flex: 40%;
   };
   .total-price{
     text-align: end;
   };
   .val{
+    text-align: center;
+    flex: 10%;
+  }
+  .trash{
     flex: 10%;
   }
 }
 
 ion-searchbar{
   --background: rgba(var(--ion-color-medium-rgb), 0.1) !important;
-  color: var(--dark);
   padding: 6px !important;
   font-size: 12px;
   --box-shadow: none !important;

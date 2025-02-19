@@ -39,17 +39,16 @@ export class AppComponent implements OnInit, OnDestroy {
   public cashControlPages = [
     {name: 'Încasări', url: '/sales', icon: '../../assets/icon/cash-register.svg', show: false},
     {name: 'Comenzi', url: '/orders', icon: '../../assets/icon/document.svg', show: false},
-    {name: 'Produse', url: '/products', icon: '../../assets/icon/foood.svg', show: false},
   ]
 
   public reportsPages = [
     {name: 'Inventar', url: '/reports/inventary', icon: '../../assets/icon/cash-register.svg', show: false},
     {name: 'Situație financiară', url: '/reports/finance', icon: '../../assets/icon/document.svg', show: false},
-    {name: 'Produse', url: '/reports/products', icon: '../../assets/icon/foood.svg', show: false},
+    {name: 'Produse', url: '/reports/products', icon: '../assets/icon/fast-food-outline.svg', show: false},
   ]
 
   public officePages = [
-    {name: 'Produse', url: '/office/products', icon: '../../assets/icon/fast-food-outline.svg', show: false},
+    {name: 'Produse', url: '/office/products', icon: '../assets/icon/fast-food-outline.svg', show: false},
     {name: 'Materii Prime', url: '/office/ingredient',icon: '../../assets/icon/plant.svg', show: false},
     {name: 'Documente', url: '/office/nirs', icon: '../../assets/icon/document.svg', show: false},
     {name: 'Registru de Casă', url: '/office/cash-register', icon: '../../assets/icon/business.svg', show: false},

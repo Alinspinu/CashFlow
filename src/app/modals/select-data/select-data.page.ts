@@ -28,6 +28,7 @@ export class SelectDataPage implements OnInit {
   dataa: string[] = []
   userss: any[] = []
 
+
   constructor(
     private navParams: NavParams,
     private modalCtrl: ModalController,
@@ -48,6 +49,7 @@ export class SelectDataPage implements OnInit {
 
   getData(){
    this.mode = this.navParams.get('mode')
+   console.log(this.mode)
    if(this.mode === 'bonus'){
    const names = this.navParams.get('options')
     names.forEach((name: any) => {
@@ -58,12 +60,14 @@ export class SelectDataPage implements OnInit {
       this.users.push(user)
     })
     this.userss = this.users
+    this.title = 'Utilizatori'
    } else {
     this.dataa = this.navParams.get('options')
     this.data = this.dataa
    }
    if(this.mode === 'supliers'){
       this.showAdd = true
+      this.title = 'Furnizori'
    }
 
   }

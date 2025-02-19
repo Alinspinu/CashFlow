@@ -1,0 +1,121 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+      <ion-title slot="start">Client</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="add()">
+          <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="dismissModal()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+
+
+<ion-content [fullscreen]="true">
+
+    <section class="section">
+      <ion-row>
+        <ion-col size="4">
+          <div class="section-label">
+            <span class="label-title">Client</span>
+            <span class="label-sub-title">Scanează codul sau introdu adresa de E-mail.</span>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <div class="inputs-wrapper">
+            <form [formGroup]="searchCustomerForm">
+              <div class="input-wrapper">
+                <ion-item lines="none" class="input">
+                  <ion-input type="text" label="Card code" labelPlacement="floating" placeholder="Scanează cardul" formControlName="customerId"></ion-input>
+                  <ion-buttons slot="end">
+                    <ion-button (click)="scanQr('client')" color="medium">
+                      <ion-icon slot="start" src="assets/icon/photography.svg"></ion-icon>
+                    </ion-button>
+                  </ion-buttons>
+                </ion-item>
+                <ion-button (click)="searchCustomer('card')">
+                  <ion-icon src="../../../assets/icon/search-outline.svg"></ion-icon>
+                </ion-button>
+              </div>
+              <div class="input-wrapper">
+              <ion-item lines="none" class="input">
+                <ion-input type="email" label="Email" labelPlacement="floating" placeholder="Ex. example@example.com" formControlName="email"></ion-input>
+              </ion-item>
+              <ion-button (click)="searchCustomer('email')">
+                <ion-icon src="../../../assets/icon/search-outline.svg"></ion-icon>
+              </ion-button>
+              </div>
+            </form>
+          </div>
+        </ion-col>
+      </ion-row>
+    </section>
+
+    <section class="section">
+      <ion-row>
+        <ion-col size="4">
+          <div class="section-label">
+            <span class="label-title">Voucher</span>
+            <span class="label-sub-title">Scanează codul Voucherului.</span>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <div class="inputs-wrapper">
+            <form [formGroup]="checkForm">
+              <div class="input-wrapper">
+                    <ion-item lines="none" class="input">
+                      <ion-input type="text" label="Cod Voucher" labelPlacement="floating" placeholder="Scanează Voucherul" formControlName="code"></ion-input>
+                      <ion-buttons slot="end">
+                        <ion-button (click)="scanQr('voucher')" color="medium">
+                          <ion-icon slot="start" src="assets/icon/photography.svg"></ion-icon>
+                        </ion-button>
+                      </ion-buttons>
+                    </ion-item>
+                    <ion-button (click)="checkVoucher()">
+                      <ion-icon src="../../../assets/icon/search-outline.svg"></ion-icon>
+                    </ion-button>
+                  </div>
+            </form>
+          </div>
+        </ion-col>
+      </ion-row>
+    </section>
+
+    <section class="section response" *ngIf="response">
+      <ion-row>
+        <ion-col size="4">
+          <div class="section-label">
+            <span class="label-title">{{response.title | capitalize}}</span>
+            <span class="label-sub-title"[innerHTML]="response.message"></span>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <div class="inputs-wrapper" *ngFor="let info of response.info">
+              <div class="info">
+                <span class="label">{{info.label}}: </span>
+                <span class="value">{{info.value | capitalize}}</span>
+              </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </section>
+
+  </ion-content>
+
+  <ion-footer mode="ios" [translucent]="true" class="ion-no-border" *ngIf="response  && (response.title === 'Valid' ||  response.title === 'valid')">
+    <ion-toolbar>
+      <ion-button mode='md' class="footer-button" slot="end"  size="large" (click)=" response.client ? addCustomerToBill() : useVoucher()">
+         <ion-label slot="start" size="large" >{{response.client ? "Adaugă" : "Foloșește"}}</ion-label>
+         <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+       </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+
+
+
+
+

@@ -1,6 +1,6 @@
 
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border header-toolbar">
+  <ion-toolbar class="ion-no-border toolbar">
       <ion-title slot="start">Facturi Primite</ion-title>
       <ion-buttons slot="end">
         <ion-button fill="outline" (click)="selectDays()">
@@ -31,7 +31,7 @@
 
 
 <ion-content [fullscreen]="true">
-    <div class="input" *ngFor="let msg of messages; let i = index" (click)="showInvoice(msg.id)">
+    <div class="input" *ngFor="let msg of messages; let i = index" (click)="showInvoice(msg.id)" [ngClass]="{'odd': i % 2 !== 0}">
       <span class="nr">#{{i+1}}</span>
       <span class="id">#{{msg.id}}</span>
       <span class="suplier">{{msg.detalii}}</span>

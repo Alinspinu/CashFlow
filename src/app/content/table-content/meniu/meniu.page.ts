@@ -2,7 +2,6 @@ import { Component, Inject, Input, OnInit, Output, EventEmitter, OnDestroy } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { SpinnerPage } from '../../../modals/spinner/spinner.page';
 import { Subscription } from 'rxjs';
 import { Category, Product } from '../../../models/category.model';
 import { BillProduct, Ing, Topping, Bill, Table } from '../../../models/table.model';
@@ -24,7 +23,7 @@ interface data{
   templateUrl: './meniu.page.html',
   styleUrls: ['./meniu.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class MeniuPage implements OnInit, OnDestroy {
 
@@ -84,10 +83,12 @@ export class MeniuPage implements OnInit, OnDestroy {
 
   getScreenSize(){
     this.screenSub = this.screenSizeService.screenSize$.subscribe(screen => {
+      console.log(screen)
       if(screen === 'Tablet'){
         this.mainCatCol = 12
-        this.catCol = 6
-      } else if( screen === 'TabletWide'){
+        this.catCol = 5.5
+      }
+      if( screen === 'TabletWide'){
         this.mainCatCol = 6
         this.catCol = 3
       }

@@ -93,10 +93,13 @@ export class AddIngPage implements OnInit, OnDestroy {
     this.showAdd = false
     const ing = await this.actionSrv.openAdd(AddIngredientPage, [], 'add-modal')
     if(ing){
-      this.nirSrv.saveIng(ing).subscribe(response => {
-       this.ingSrv.addIngredinet(response.ing)
-       this.modalCtrl.dismiss(null)
-       showToast(this.toastCtrl, response.message, 4000)
+      this.ingSrv.addIngredinet(ing).subscribe({
+        next: (response) => {
+          this.selectIngredient(response.ing)
+          showToast(this.toastCtrl, response.message, 4000)
+        }, error: (error) => {
+          console.log(error)
+        }
       })
     }
    }
@@ -159,7 +162,9 @@ export class AddIngPage implements OnInit, OnDestroy {
       this.ingredientForm.get('tva')?.setValue(this.ingredient.tva.toString())
       this.ingredientForm.get('sellPrice')?.setValue(this.ingredient.sellPrice)
       this.ingId = ingredient._id
-      this.qtyInput.setFocus()
+      setTimeout(() => {
+        this.qtyInput.setFocus()
+      }, 300)
     }
   }
 

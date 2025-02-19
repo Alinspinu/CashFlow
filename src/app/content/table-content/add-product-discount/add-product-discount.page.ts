@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { ProductsService } from 'src/app/office/products/products.service';
 import { Subscription } from 'rxjs';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-add-product-discount',
@@ -20,7 +19,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AddProductDiscountPage implements OnInit {
 
-  @ViewChild('searchbar', {static: false}) searchbar!: IonSearchbar
+@ViewChild('searchbar', {static: false}) searchbar!: IonSearchbar
 
 productSearch: string = ''
 products: any [] = []
@@ -107,11 +106,8 @@ proDbSub!: Subscription
 
   searchProduct(ev: any){
     const input = ev.detail.value
-    // console.log(input)
     this.products = this.dbProducts.filter(product => product.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
-    if(input === ''){
-     this.products = [...this.dbProducts]
-    }
+    if(input === '') this.products = []
    }
 
   onSubmit(){

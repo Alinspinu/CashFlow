@@ -1,21 +1,10 @@
 
-ion-content, ion-toolbar, ion-header{
+ion-content, ion-header{
   --background: var(--background-color) !important;
-  background-color: var(--background-color) !important;;
-  font-family: RoseMed !important;
+  background-color: var(--background-color) !important;
+  font-family: RoseReg !important;
 }
 
-
-
-
-.mode{
-  margin-left: 40px;
-  font-family: NoirProMed !important;
-  font-size: 22px;
-  height: 40px;
-  // --color: white;
-  --background: var(--ion-color-primary) ;
-}
 
 .container{
   display: flex;
@@ -23,8 +12,6 @@ ion-content, ion-toolbar, ion-header{
   height: 100vh;
   background-size: cover;
 }
-
-
 
 
 .back-button{

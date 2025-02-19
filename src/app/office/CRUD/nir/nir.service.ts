@@ -133,7 +133,4 @@ export class NirService{
     return this.http.get<{nir: Nir}>(`${environment.BASE_URL}nir/nir?id=${id}`)
   }
 
-  saveIng(ing: any){
-    return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: environment.LOC})
-  }
 }

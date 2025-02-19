@@ -9,7 +9,7 @@ ion-title, span, ion-item, ion-input, ion-searchbar, ion-chekbox, ion-radio, ion
 
 
 ion-searchbar{
-  --background: var(--grey);
+  --background: rgba(var(--ion-color-medium-rgb), 0.1);
   --box-shadow: none !important;
 }
 

@@ -1,0 +1,69 @@
+ion-toolbar, ion-content, ion-footer{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+
+ion-button, ion-item, ion-input, ion-title, span{
+  font-family: RoseMed !important;
+}
+
+.section{
+  margin: 0 36px;
+  padding: 12px 0 24px 0;
+  border-bottom: solid 1px var(--grey);
+  .section-label{
+    padding-top: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .label-title{
+      margin-top: 24px;
+      font-size: 24px;
+    }
+    .label-sub-title{
+      font-size: 14px;
+      color: var(--grey)
+    }
+  }
+
+  .inputs-wrapper{
+      padding: 12px 0 0 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center !important;
+      .input-wrapper{
+        width: 100%;
+        display: flex;
+        ion-button{
+          margin-left: 8px;
+          --box-shadow: 0 !important;
+          --border-radius: 6px !important;
+          --background: rgba(var(--sand-rgb), 0.4);
+          --padding-start: 22px;
+          --padding-end: 22px;
+        }
+      }
+      .input{
+        --background: transparent !important;
+        border: 1px solid var(--orange-contrast1) !important;
+        border-radius: 6px;
+        padding: 12px 0;
+        margin: 4px 0 4px 12px;
+        min-width: 80%;
+      }
+  }
+}
+
+
+.footer-button{
+  --box-shadow: 0 !important;
+  --background: rgba(var(--orange-rgb), 0.8);
+  --padding-start: 72px;
+  --padding-end: 72px;
+    margin: 34px;
+    ion-label{
+      color: var(--text-color);
+    }
+}

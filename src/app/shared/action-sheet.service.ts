@@ -9,7 +9,7 @@ import { CategoryPage } from '../office/CRUD/category/category.page';
 import { AuthPage } from '../auth/auth.page';
 import { RegisterPage } from '../auth/register/register.page';
 import { PaymentPage } from '../modals/payment/payment.page';
-import { CustomerCheckPage } from '../modals/customer-check/customer-check.page';
+import { CustomerCheckPage } from '../content/table-content/customer-check/customer-check.page';
 import { CashbackPage } from '../modals/cashback/cashback.page';
 import { DiscountPage } from '../modals/discount/discount.page';
 import { OrderViewPage } from '../reports/cash/order-view/order-view.page';
@@ -20,7 +20,6 @@ import { AddEntryPage } from '../modals/add-entry/add-entry.page';
 import { OrdersViewPage } from '../reports/cash/orders-view/orders-view.page';
 import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { TipsPage } from '../modals/tips/tips.page';
-import { AddProductDiscountPage } from '../modals/add-product-discount/add-product-discount.page';
 import { DelProdViewPage } from '../reports/cash/del-prod-view/del-prod-view.page';
 import { ScanQrPage } from '../modals/scan-qr/scan-qr.page';
 import { AddToInventaryPage } from '../modals/add-to-inventary/add-to-inventary.page';
@@ -58,6 +57,8 @@ import { IngsPage } from '../reports/finance/ings/ings.page';
 import { EmplPage } from '../reports/finance/empl/empl.page';
 import { SpendPage } from '../reports/finance/spend/spend.page';
 import { ModalPage } from '../reports/finance/fin-chart/modal/modal.page';
+import { AddCustomerPage } from '../content/table-content/customer-check/add-customer/add-customer.page';
+import { AddProductDiscountPage } from '../content/table-content/add-product-discount/add-product-discount.page';
 
 
 
@@ -139,7 +140,6 @@ export class ActionSheetService {
 
   async openPayment(
     component: typeof PaymentPage |
-               typeof CustomerCheckPage |
                typeof CashbackPage |
                typeof DiscountPage |
                typeof AddEmployeeDataPage |
@@ -242,6 +242,8 @@ export class ActionSheetService {
                typeof ModalPage |
                typeof AddReportPage |
                typeof DepViewPage |
+               typeof AddCustomerPage |
+               typeof CustomerCheckPage |
                typeof NirPage,
     options: any,
     clas: string
@@ -911,6 +913,10 @@ async detailsAlert(){
       header: title,
       message: message,
       buttons: [
+        {
+          text: 'Renunță',
+          role: 'cancel',
+        },
         {
           text: 'ADAUGĂ',
           role: 'confirm',

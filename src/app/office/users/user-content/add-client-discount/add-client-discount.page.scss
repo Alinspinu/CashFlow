@@ -8,36 +8,11 @@ ion-input, ion-searchbar, span{
 }
 
 
-
-.header-toolbar{
-  padding: 24px 0 12px 0;
-  margin: 0 66px 0 46px;
-  border-bottom: 1.2px solid var(--grey);
-  ion-toolbar{
-    ion-title{
-      font-family: RoseMed !important;
-      font-size: 36px;
-    }
-    ion-buttons{
-      ion-button{
-        --padding-bottom: 16px;
-        --padding-end: 16px;
-        --padding-top: 16px;
-        --padding-start: 16px;
-        --border-radius: 50%;
-        --border-width: 2px;
-        margin-right: 12px;
-      }
-    }
-  }
-}
-
 ion-searchbar{
   margin: 0 22px;
   width: 90%;
-  box-shadow: none;
-  --background: var(--light-grey);
-  color: var(--dark);
+  --box-shadow: none !important;
+  --background: rgba(var(--ion-color-medium-rgb), 0.1);
 }
 
 
@@ -113,8 +88,7 @@ ion-searchbar{
 
 .ing-name{
   cursor: pointer;
-  background-color: var(--light-grey);
-  color: var(--dark);
+  background-color: rgba(var(--ion-color-medium-rgb), 0.1);
   border-radius: 4px;
   margin: 3px 26px;
   padding: 8px;

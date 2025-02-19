@@ -1,5 +1,13 @@
 
 <ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="close()">
+        <ion-icon size="large" src="../../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
     <ion-toolbar class="ion-no-border">
       <ion-searchbar mode="md"  [placeholder]="searchPlaceholder"  (ionInput)="searchData($event)" #searchbar>
       </ion-searchbar>
@@ -32,10 +40,6 @@
 
 <ion-footer mode="ios" [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-button mode='md' class="footer-buttons" size="large" slot="start" fill="outline" (click)="close()" color="medium">
-      <ion-label slot="start" size="large">Închide</ion-label>
-      <ion-icon slot="end" src="../../../../assets/icon/close-outline.svg" color="medium"></ion-icon>
-    </ion-button>
     <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large" (click)="onSubmit()">
        <ion-label slot="start" size="large" >Adaugă</ion-label>
        <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>

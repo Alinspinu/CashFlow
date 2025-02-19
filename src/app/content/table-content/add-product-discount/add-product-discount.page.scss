@@ -1,0 +1,90 @@
+ion-content, ion-toolbar, ion-header{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+ion-searchbar, span, ion-item, ion-label, ion-button, ion-title{
+  font-family: RoseMed !important;
+}
+
+ion-searchbar{
+  margin-top: 24px;
+  --box-shadow: 0 !important;
+  --background: rgba(var(--ion-color-medium-rgb), 0.2) !important;
+}
+
+.search-tool{
+  width: 92%;
+  margin: 0 36px;
+}
+
+.product-container{
+  margin: 0 36px;
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  .product{
+    flex: 30%;
+    padding: 12px;
+    margin: 4px;
+    border: 0.7px solid var(--orange-contrast1);
+    border-radius:4px;
+    background-color: rgba(var(--orange-rgb), 0.1);
+    cursor: pointer;
+    .name{
+      color: var(--orange-contrast1);
+      font-size: 16px;
+    }
+  }
+}
+
+
+.section{
+  margin: 0 36px;
+  padding: 12px 0 24px 0;
+  border-bottom: solid 1px var(--grey);
+  .section-label{
+    padding-top: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .label-title{
+      font-size: 24px;
+    }
+    .label-sub-title{
+      font-size: 14px;
+      color: var(--grey)
+    }
+  }
+}
+
+
+.input{
+  margin: 8px 0;
+  border-radius: 8px;
+  --background: rgba(var(--sand-rgb), 0.2) !important;
+  ion-label{
+    color: var(--orange-contrast1) !important;
+  }
+}
+
+ion-buttons ion-button{
+  color: var(--orange-contrast1) !important;
+}
+
+
+
+
+
+.footer-button{
+  --box-shadow: 0 !important;
+  --background: rgba(var(--orange-rgb), 0.9);
+  --padding-start: 72px;
+  --padding-end: 72px;
+    margin: 34px;
+    ion-label, ion-icon{
+      color: var(--text-color) !important;
+    }
+}
+

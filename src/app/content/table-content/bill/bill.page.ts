@@ -241,69 +241,73 @@ export class BillPage implements OnInit, OnDestroy {
 
 
   async openDeleteAlert(qty: number, index: number, ings: any, product: BillProduct){
-    let numberArr: string [] = []
-    let delProd: deletetBillProduct  = emptyDeletetBillProduct()
-    for(let i=1; i<=qty; i++){
-      numberArr.push(i.toString())
-    }
-    const result = await this.actionSheet.deleteBillProduct(numberArr)
-    if(result){
-      const buc = parseFloat(result.qty);
-      const title = "MOTIVUL ȘTERGERII"
-      const message = "Alege motivul pentru care vrei să stergi produsul!"
-      const label = "Scrie motivul"
-      let admin = ''
-      let reason = ''
-      const response = await this.actionSheet.reasonAlert(title, message, label);
-        if(response) {
-          reason = response
-          if(response === 'protocol'){
-            const res = await this.actionSheet.protocolAlert()
-            if(res){
-             admin = res
-            } else {
-              return showToast(this.toastCtrl, 'Trebuie să alegi un responsabil!', 3000)
-            }
-          }
-          if(response === 'altele'){
-            const res = await this.actionSheet.detailsAlert()
-            if(res){
-              reason = res
-            } else {
-              return showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
-            }
-          }
-          for(let i=0; i<buc; i++){
-            this.tableSrv.redOneProg(this.billData.tableNumber, index, this.billData.billIndex)
-            // this.disableBrakeButton()
-          }
-          delProd.billProduct = product
-          delProd.reason = reason;
-          delProd.admin = admin
-          delProd.employee = this.user.employee
-          delProd.locatie = this.user.locatie
-          delProd.billProduct.quantity = buc
-          delProd.billProduct.total = buc * delProd.billProduct.price
-          result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
-         this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
-            if(!result.upload){
-              const operation = {name: reason, details: product.name}
-              if(product.toppings.length){
-               this.tableSub = this.tableSrv.unloadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
+    if(product.sentToPrint){
+      for(let i=0; i<product.quantity; i++){
+        this.tableSrv.redOneProg(this.billData.tableNumber, index, this.billData.billIndex)
+      }
+    } else {
+      let numberArr: string [] = []
+      let delProd: deletetBillProduct  = emptyDeletetBillProduct()
+      for(let i=1; i<=qty; i++){
+        numberArr.push(i.toString())
+      }
+      const result = await this.actionSheet.deleteBillProduct(numberArr)
+      if(result){
+        const buc = parseFloat(result.qty);
+        const title = "MOTIVUL ȘTERGERII"
+        const message = "Alege motivul pentru care vrei să stergi produsul!"
+        const label = "Scrie motivul"
+        let admin = ''
+        let reason = ''
+        const response = await this.actionSheet.reasonAlert(title, message, label);
+          if(response) {
+            reason = response
+            if(response === 'protocol'){
+              const res = await this.actionSheet.protocolAlert()
+              if(res){
+               admin = res
+              } else {
+                return showToast(this.toastCtrl, 'Trebuie să alegi un responsabil!', 3000)
               }
-              this.tableSub = this.tableSrv.unloadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
-                if(response) {
-                  showToast(this.toastCtrl, response.message, 4000)
-                }
-              })
             }
-          })
+            if(response === 'altele'){
+              const res = await this.actionSheet.detailsAlert()
+              if(res){
+                reason = res
+              } else {
+                return showToast(this.toastCtrl, 'Trebuie să dai un motiv pentri care vrei să ștergi produsul!', 3000)
+              }
+            }
+            for(let i=0; i<buc; i++){
+              this.tableSrv.redOneProg(this.billData.tableNumber, index, this.billData.billIndex)
+            }
+            delProd.billProduct = product
+            delProd.reason = reason;
+            delProd.admin = admin
+            delProd.employee = this.user.employee
+            delProd.locatie = this.user.locatie
+            delProd.billProduct.quantity = buc
+            delProd.billProduct.total = buc * delProd.billProduct.price
+            result.upload ? delProd.inv = 'in' : delProd.inv = 'out'
+           this.tableSub = this.tableSrv.registerDeletetProduct(delProd).subscribe(response=> {
+              if(!result.upload){
+                const operation = {name: reason, details: product.name}
+                if(product.toppings.length){
+                 this.tableSub = this.tableSrv.unloadIngs(product.toppings, buc, operation, this.user.locatie).subscribe()
+                }
+                this.tableSub = this.tableSrv.unloadIngs(ings, buc, operation, this.user.locatie).subscribe(response => {
+                  if(response) {
+                    showToast(this.toastCtrl, response.message, 4000)
+                  }
+                })
+              }
+            })
+          }
 
+       this.sendOrderSub = this.sendOrder(false, false).subscribe()
       } else {
         showToast(this.toastCtrl, 'Trebuie să dai un motiv pentru care vrei să ștergi produsul!', 3000)
       }
-     this.sendOrderSub = this.sendOrder(false, false).subscribe()
-
     }
   }
 

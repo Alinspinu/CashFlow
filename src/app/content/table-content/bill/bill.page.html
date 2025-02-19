@@ -10,7 +10,7 @@
         </ion-row>
         <ion-row class="bill-content-row">
           <ion-col size="12">
-            <div class="product-item" lines="none"  *ngFor="let product of billData.billProducts; let i = index" [ngClass]="{'grey': !product.sentToPrint}">
+            <div class="product-item" lines="none"  *ngFor="let product of billData.billProducts; let i = index" [ngClass]="{'print': !product.sentToPrint}">
               <ion-thumbnail slot="start" (click)="openComments(product, i)">
                 <img alt="image" [src]="modifyImageURL(product.imgPath)"/>
               </ion-thumbnail>
@@ -31,9 +31,15 @@
                 <span class="prod-price">{{product.price}} Lei</span>
 
                 <div class="buttons-wrapper">
-                 <div class="button"  (click)="redProd(i)" *ngIf="product.sentToPrint">-</div>
+                 <div class="button ion-activatable"  (click)="redProd(i)" *ngIf="product.sentToPrint">
+                  -
+                  <ion-ripple-effect></ion-ripple-effect>
+                </div>
                  <span class="prod-qty">{{product.quantity}}</span>
-                 <div class="button"  (click)="addProd(i)" *ngIf="product.sentToPrint">+</div>
+                 <div class="button ion-activatable"  (click)="addProd(i)" *ngIf="product.sentToPrint">
+                  +
+                  <ion-ripple-effect></ion-ripple-effect>
+                </div>
                 </div>
 
                 <div class="price-wrapper">
@@ -43,7 +49,7 @@
                 <!-- <ion-button size="medium" fill="ghost" (click)="addDisc(i)" [disabled]="product.discount > 0">
                   <ion-icon src="../../../../assets/icon/discount.svg"></ion-icon>
                 </ion-button> -->
-                <ion-buttons slot="end" *ngIf="!product.sentToPrint">
+                <ion-buttons slot="end">
                   <ion-button size="large" (click)="openDeleteAlert(product.quantity, i, product.ings, product)">
                     <ion-icon src="../../../assets/icon/sterge comanda.svg" id="trash"></ion-icon>
                   </ion-button>

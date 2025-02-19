@@ -36,43 +36,39 @@ ion-title{
 
 
 .barista{
-  background-color: rgb(61, 158, 190);
+  background-color: var(--barista);
 }
 .aj-barista{
-  background-color: rgb(129, 196, 218);
+  background-color: var(--aj-barista);
 }
 .casier{
-  background-color: rgb(225, 115, 109);
+  background-color: var(--casier);
 }
 .ospatar{
-  background-color: rgb(225, 177, 109);
+  background-color: var(--ospatar);
 }
 .bucatar{
-  background-color: rgb(116, 169, 107);
+  background-color: var(--bucatar);
 }
 .aj-bucatar{
-  background-color: rgb(155, 182, 150);
+  background-color: var(--aj-bucatar);
 }
 .days{
-  background-color: rgb(19, 82, 116);
-  color: white;
+  background-color: var(--days);
+  color: var(--white);
 }
 .tes{
-  background-color: rgb(0, 50, 77);
-  color: white;
+  background-color: var(--tes);
 }
 
 .liber{
-  background-color: rgb(98, 91, 91) !important;
-  color: white !important;
+  background-color: rgba(var(--liber-rgb), 0.4);
 }
 .con{
-  background-color: rgb(19, 82, 116);
-  color: white;
+  background-color: var(--concediu);
 }
 .med{
-  background-color: rgb(232, 41, 41);
-  color: white;
+  background-color: var(--medical);
 }
 
 .pointer{
@@ -119,7 +115,7 @@ ion-title{
   justify-content: space-evenly;
   font-size: 16px;
   text-align: center;
-  background-color: rgb(9, 46, 66);
+  background-color: var(--days);
   color: white;
   .day{
     font-size: 8px!important;
@@ -127,45 +123,4 @@ ion-title{
 }
 
 
-@media (prefers-color-scheme: dark) {
-  .barista {
-    background-color: rgb(30, 79, 95); /* Darkened version of rgb(61, 158, 190) */
-  }
-  .aj-barista {
-    background-color: rgb(64, 98, 109); /* Darkened version of rgb(129, 196, 218) */
-  }
-  .casier {
-    background-color: rgb(112, 57, 54); /* Darkened version of rgb(225, 115, 109) */
-  }
-  .ospatar {
-    background-color: rgb(122, 88, 54); /* Darkened version of rgb(225, 177, 109) */
-  }
-  .bucatar {
-    background-color: rgb(58, 84, 54); /* Darkened version of rgb(116, 169, 107) */
-  }
-  .aj-bucatar {
-    background-color: rgb(77, 91, 75); /* Darkened version of rgb(155, 182, 150) */
-  }
-  .days {
-    background-color: rgb(10, 41, 58); /* Darkened version of rgb(19, 82, 116) */
-    color: white;
-  }
-  .liber {
-    background-color: rgb(49, 46, 46) !important; /* Darkened version of rgb(98, 91, 91) */
-    color: white !important;
-  }
-  .tes {
-    background-color: rgb(106, 52, 13); /* Darkened version of rgb(212, 104, 27) */
-    color: white;
-  }
-  .con{
-    background-color: rgb(10, 41, 58);
-    color: white;
-  }
-  .med{
-    background-color: rgb(67, 15, 15);
-    color: white;
-  }
 
-
-}

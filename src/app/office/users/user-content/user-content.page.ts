@@ -109,6 +109,7 @@ deleteUser(){
   this.userSrv.deleteUser(this.user._id).subscribe(response => {
     if(response){
       showToast(this.toastCtrl, response.message, 3000)
+      this.modalCtrl.dismiss(null)
     }
   })
 }

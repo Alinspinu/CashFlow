@@ -15,25 +15,6 @@ ion-label, ion-input, span, ion-select{
   font-size: 20px !important;
 }
 
-.header-toolbar{
-  padding: 24px 0 12px 0;
-  border-bottom: 1.2px solid var(--grey);
-  font-family: RoseMed !important;
-  ion-title{
-    font-size: 28px;
-  }
-  ion-buttons{
-    ion-button{
-      --padding-bottom: 16px;
-      --padding-end: 16px;
-      --padding-top: 16px;
-      --padding-start: 16px;
-      --border-radius: 50%;
-      --border-width: 2px;
-      margin-right: 12px;
-    }
-  }
-}
 
 span{
   width: 200px;
@@ -42,7 +23,8 @@ span{
 .input{
   cursor: pointer;
   min-height: 70px;
-  border: 1.5px solid var(--grey);
+  border: 1.5px solid rgba(var(--ion-color-medium-rgb), 0.6);
+  border-radius: 4px ;
   margin: 1rem 0 0.1rem 0.2rem;
   padding-left: 24px;
 }

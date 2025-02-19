@@ -110,7 +110,7 @@ export class CashRegisterPage implements OnInit {
   }
 
   async addEntry(){
-    const data = await this.actionSheet.openAdd(AddEntryPage, 'register', 'small')
+    const data = await this.actionSheet.openAdd(AddEntryPage, 'register', 'small-two')
     if(data && data.day){
       const dayIndex = this.documents.findIndex(el => el.date === data.day.date)
       this.documents[dayIndex] = data.day

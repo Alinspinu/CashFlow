@@ -10,9 +10,8 @@ ion-title, ion-select, ion-input, ion-button, ion-radio, ion-searchbar, ion-text
 }
 
 ion-searchbar{
-  --background: var(--light-grey);
+  --background: rgba(var(--ion-color-medium-rgb), 0.1);
   --box-shadow: none !important;
-  color: var(--dark) !important;
 
 }
 .searchbar{

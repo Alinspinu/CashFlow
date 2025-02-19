@@ -1,0 +1,74 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+      <ion-title slot="start">{{title}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+
+
+<ion-content [fullscreen]="true">
+  <section class="section" *ngIf="!voucher">
+    <ion-row>
+      <ion-col size="4">
+        <div class="section-label">
+          <span class="label-title">General</span>
+          <span class="label-sub-title">Adaugă adresa e email, telefon, nume si codul cardului.</span>
+        </div>
+      </ion-col>
+      <ion-col size="8">
+        <form [formGroup]="addCustomerForm">
+          <div class="inputs-wrapper">
+            <ion-item lines="none" class="input" >
+              <ion-input type="text" label="Nume" labelPlacement="floating" placeholder="Nume, Prenume" formControlName="name"></ion-input>
+            </ion-item>
+            <ion-item lines="none" class="input">
+              <ion-input type="email" label="Email" labelPlacement="floating" placeholder="Ex. example@example.com" formControlName="email"></ion-input>
+            </ion-item>
+            <ion-item lines="none" class="input">
+              <ion-input type="text" label="Card Code" labelPlacement="floating" placeholder=" Ex. 000000123" formControlName="cardCode"></ion-input>
+            </ion-item>
+          </div>
+        </form>
+      </ion-col>
+    </ion-row>
+  </section>
+
+  <section class="section" *ngIf="voucher">
+    <ion-row>
+      <ion-col size="4">
+        <div class="section-label">
+          <span class="label-title">General</span>
+          <span class="label-sub-title">Scanează voucherul și adaugă valoarea.</span>
+        </div>
+      </ion-col>
+      <ion-col size="8">
+        <form [formGroup]="voucherForm">
+          <div class="inputs-wrapper">
+              <ion-item lines="none" class="input">
+                <ion-input type="text" label="Cod Voucher" labelPlacement="floating" placeholder="Scanează Voucherul" formControlName="code"></ion-input>
+              </ion-item>
+              <ion-item lines="none" class="input">
+                <ion-input type="number" label="Valoare" labelPlacement="floating" placeholder="Introdu Valoarea Voucherului" formControlName="value"></ion-input>
+              </ion-item>
+            </div>
+          </form>
+      </ion-col>
+    </ion-row>
+  </section>
+</ion-content>
+
+
+<ion-footer mode="ios" [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-button mode='md' class="footer-button" slot="end"  size="large" (click)="voucher ? addVoucher() : addClient()">
+       <ion-label slot="start" size="large" >{{voucher ? "Adaugă Voucher" : "Salvează Client"}}</ion-label>
+       <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+     </ion-button>
+  </ion-toolbar>
+</ion-footer>

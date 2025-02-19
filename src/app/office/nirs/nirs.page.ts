@@ -175,7 +175,7 @@ async eFactura(){
 
 
 async selectSuplier(){
-  const suplierName = await this.actionSheetService.openSelect(SelectDataPage, this.supliersToSend, 'data')
+  const suplierName = await this.actionSheetService.openSelect(SelectDataPage, this.supliersToSend, 'supliers')
   if(suplierName === 'TOȚI FURNIZORII'){
      this.nirSrv.getNirs().subscribe()
    }

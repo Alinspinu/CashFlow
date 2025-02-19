@@ -72,12 +72,13 @@ export class ShedulePage implements OnInit, OnDestroy {
     this.usersSrv.usersSend$.subscribe(response => {
       if(response) {
         const employees = response.filter(user => user.employee.active === true)
-        this.users = employees
+        const banUsers = ['Aprovizionare', 'Manager', 'Asociat', 'Administrator', '-', 'Curatenie', 'Project Manager']
+        this.users = employees.filter(u => !banUsers.includes(u.employee.position))
        const sortedUsers = this.users.sort((a, b):any => {
-          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Bucatar: 7, 'Ajutor bucatar': 8, Aprovizionare: 9, 'Asistent Manager': 6 ,Manager: 10, Asociat: 11, Administrator: 12 };
+          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Bucatar: 7, 'Ajutor bucatar': 8, Aprovizionare: 9, 'Asistent Manager': 6 };
           return rolesOrder[a.employee.position] - rolesOrder[b.employee.position];
         });
-        this.users = sortedUsers.slice(0,-5)
+        this.users = sortedUsers
     }
   })
 }
@@ -178,7 +179,7 @@ async addOnShedule(day: any, empl: User){
       this.shedSrv.deleteEntry(empl._id, day.day, `${this.months[monthNumber]} - ${year}`, day.date).subscribe()
       this.shedSrv.deleteUserWorkEntry(empl._id, dayDate.setHours(0,0,0,0)).subscribe()
     } else {
-      const positions = ['Barista', 'Ajutor barman', 'Casier', 'Ospatar', 'Bucatar', 'Ajutor bucatar', 'Supervizor']
+      const positions = ['Barista', 'Ajutor barman', 'Casier', 'Ospatar', 'Bucatar', 'Ajutor bucatar', 'Supervizor', 'Asistent Manager']
       const choise = await this.actSrv.entryAlert(positions,'radio','Poziție', 'Alege poziția', '', `${empl.employee.position}`)
       if(choise){
         const user = {

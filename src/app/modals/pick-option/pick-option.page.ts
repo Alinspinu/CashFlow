@@ -48,6 +48,7 @@ export class PickOptionPage implements OnInit {
 
   getOptions(){
     this.options = this.navPar.get('options');
+    console.log(this.options)
     const index = this.options.findIndex(el => el.name === 'fake')
     if(index !== -1){
       this.options.splice(index, 1)

@@ -72,8 +72,8 @@
 </div>
 </ion-content>
 
-<ion-footer>
-  <ion-grid>
+<ion-footer class="ion-no-border">
+    <ion-grid>
     <ion-row>
 
       <ion-col size="3">
@@ -102,14 +102,17 @@
       </ion-col>
       <ion-col size="6">
         <div class="tot-wrapper">
-          <div class="close" (click)="close()">
+          <div class="close ion-activatable"  (click)="close()">
             <span>Renunță</span>
+            <ion-ripple-effect></ion-ripple-effect>
           </div>
-          <div class="merge" (click)="merge()">
+          <div class="merge ion-activatable" (click)="merge()">
             <span>Asociază</span>
+            <ion-ripple-effect></ion-ripple-effect>
           </div>
-          <div class="tot" (click)="createNewNir()">
+          <div class="tot ion-activatable" (click)="createNewNir()">
             <span>Crează NIR</span>
+            <ion-ripple-effect></ion-ripple-effect>
           </div>
         </div>
       </ion-col>

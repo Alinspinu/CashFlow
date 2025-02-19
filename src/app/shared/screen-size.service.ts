@@ -29,7 +29,7 @@ export class ScreenSizeService {
     } else if (width < 1300) {
       return 'TabletWide';     // Desktop
     } else {
-      return 'Web';  
+      return 'Web';
     }
   }
 

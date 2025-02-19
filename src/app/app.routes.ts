@@ -74,11 +74,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'products',
-    loadComponent: () => import('./cash-control/products/products.page').then( m => m.ProductsPage),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'add-product',
     loadComponent: () => import('./office/CRUD/product/product.page').then( m => m.ProductPage),
     canActivate: [AuthGuard]
@@ -91,6 +86,10 @@ const routes: Routes = [
   {
     path: 'header',
     loadComponent: () => import('./cash-control/header/header.page').then( m => m.HeaderPage)
+  },
+  {
+    path: 'add-customer',
+    loadComponent: () => import('./content/table-content/customer-check/add-customer/add-customer.page').then( m => m.AddCustomerPage)
   },
 
 

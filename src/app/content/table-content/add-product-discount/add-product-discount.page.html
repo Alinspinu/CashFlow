@@ -1,0 +1,60 @@
+
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+      <ion-title slot="start">Reduceri</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar class="search-tool">
+      <ion-searchbar mode="md" [(ngModel)]="productSearch"  placeholder="Adaugă produs..."  (ionInput)="searchProduct($event)" #searchbar>
+      </ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content [fullscreen]="true" class="auth-wrapper">
+    <div  class="product-container">
+      <div class="product" *ngFor="let product of products; let i = index" (click)="selectProduct(product)">
+        <span class="name">{{product.name}}</span>
+      </div>
+    </div>
+
+    <section class="section" *ngIf="discountsProd.length">
+      <ion-row>
+        <ion-col size="3">
+          <div class="section-label">
+            <span class="label-title">Produse</span>
+            <span class="label-sub-title">Produse aflate la discount.</span>
+          </div>
+        </ion-col>
+        <ion-col size="9">
+        <ion-item *ngFor="let discount of discountsProd; let i = index" lines="none" class="input">
+          <ion-label>{{discount.name}}</ion-label>
+          <ion-buttons slot="end">
+              <ion-button (click)="deleteDiscount(i)">
+                <ion-icon src="'../../../../../assets/icon/trash-outline.svg"></ion-icon>
+              </ion-button>
+          </ion-buttons>
+          <ion-label slot="end">{{discount.precent}} %</ion-label>
+        </ion-item>
+        </ion-col>
+      </ion-row>
+    </section>
+  </ion-content>
+
+
+  <ion-footer mode="ios" [translucent]="true" class="ion-no-border">
+    <ion-toolbar>
+      <ion-button mode='md' class="footer-button" slot="end"  size="large" [disabled]="!discountsProd.length" (click)="onSubmit()" >
+         <ion-label slot="start" size="large" >Salvează</ion-label>
+         <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg"></ion-icon>
+       </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+
+

@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border header-toolbar">
     <ion-title slot="start">Adaugă Ingredient</ion-title>
@@ -30,29 +24,23 @@
         [impPage]="true"
         >
         </app-recipe-maker>
-        <form [formGroup]="ingredientForm">
+        <form [formGroup]="ingredientForm" *ngIf="ingredient">
           <div class="row" style="margin-top: 36px;">
             <ion-input mode="md" type="text" label="Nume" labelPlacement="floating" fill="outline" formControlName="name" required></ion-input>
             <ion-input  mode="md" type="text" label="UM" labelPlacement="floating" fill="outline" formControlName="um"></ion-input>
-
-
             <div class="add-input">
               <ion-input mode="md" [type]="qtyInputType" label="Cantitate" labelPlacement="floating" formControlName="qty" #qtyInput (keydown)="onQtyTab($event)" (keyup.enter)="qtyInputType === 'text' ? evalQty() : null" ></ion-input>
               <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="qtyCalcColor" (click)="switchCalcMode('qty')"></ion-icon>
             </div>
-
           </div>
-
           <div class="row">
             <ion-input  mode="md" type="number" label="Pret/UM/Fara TVA" labelPlacement="floating" fill="outline" formControlName="price"></ion-input>
-
             <ion-select mode="md" fill="outline" label="Cotă TVA %" placeholder="%" formControlName="tva">
               <ion-select-option value="19">19%</ion-select-option>
               <ion-select-option value="9">9%</ion-select-option>
               <ion-select-option value="5">5%</ion-select-option>
               <ion-select-option value="0">0%</ion-select-option>
             </ion-select>
-
             <div class="add-input">
               <ion-input  mode="md" [type]="valInputType" label="Valoare" labelPlacement="floating"  formControlName="value" (keydown)="onValTab($event)" (keyup.enter)="valInputType === 'text' ? evalValue() : null"></ion-input>
               <ion-icon src="../../../../assets/icon/calc.svg" class="calculator" [color]="valCalcColor" (click)="switchCalcMode('value')"></ion-icon>

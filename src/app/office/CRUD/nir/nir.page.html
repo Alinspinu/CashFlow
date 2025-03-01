@@ -6,6 +6,9 @@
     <ion-toolbar class="ion-no-border header-toolbar" [ngClass]="{ 'hidden-header': isHidden }">
         <ion-title slot="start">{{suplier ? suplier.name : 'Adaugă Document'}}</ion-title>
         <ion-buttons slot="end">
+          <ion-button fill="outline"  class="round" (click)="deleteNir(nir._id)" [disabled]="nir._id.length < 12">
+            <ion-icon size="large" src="../../../assets/icon/trash-outline.svg"></ion-icon>
+          </ion-button>
           <ion-button fill="outline"  class="round" (click)="printNir()" [disabled]="nir._id.length < 12">
             <ion-icon size="large" src="../../../assets/icon/print-outline.svg"></ion-icon>
           </ion-button>

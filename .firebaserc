@@ -1,7 +1,7 @@
 {
   "projects": {
     "default": "cash-flow-8a7f4",
-    "true": "cash-flow-8a7f4",
+    "true": "flow-api-394209",
     "test": "cash-test-6f218",
     "tru": "cash-flow-8a7f4",
     "treu": "cash-flow-8a7f4",
@@ -14,13 +14,15 @@
     "est": "cash-test-6f218",
     "caf": "cash-flow-8a7f4",
     "waiters": "cash-flow-waiters",
-    "wai": "cash-flow-waiters",
+    "wai": "cash-flow-8a7f4",
     "cash": "cash-flow-8a7f4",
     "flow": "cash-flow-8a7f4",
     "fir": "cash-flow-8a7f4",
     "firebase deploy": "cash-flow-8a7f4",
     "f": "cash-flow-8a7f4",
-    "dd": "cash-flow-8a7f4"
+    "dd": "cash-flow-8a7f4",
+    "fire": "cash-flow-8a7f4",
+    "cas": "cash-flow-8a7f4"
   },
   "targets": {},
   "etags": {}

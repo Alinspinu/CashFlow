@@ -220,9 +220,13 @@ async paySelectedNirs(){
     if(response){
       const suplier = this.supliers.find(s => s.name === this.selectedNirs[0].suplier.name)
       if(suplier){
-        const message = `Plata facturi: ${this.selectedDocsNumber.join(', ')} de la Slayer Cup`
-        const data = {records: suplier.records, title: `Alege intrarea din registru pentru valoarea de ${calcTotalDocs(this.selectedNirs).total} Lei`, nir: [], message}
-        await this.updatedocStatuNirPayment(data, true, this.selectedNirs)
+        this.supliersService.getSuplier(suplier._id).subscribe({
+          next: async (sup) => {
+            const message = `Plata facturi: ${this.selectedDocsNumber.join(', ')} de la Slayer Cup`
+            const data = {records: sup.records, title: `Alege intrarea din registru pentru valoarea de ${calcTotalDocs(this.selectedNirs).total} Lei`, nir: [], message, supId: suplier._id}
+            await this.updatedocStatuNirPayment(data, true, this.selectedNirs)
+          }
+        })
       }
     }
   } else{
@@ -234,44 +238,38 @@ async paySelectedNirs(){
 async payNir(nir: Nir, index: number){
   const suplier = this.supliers.find(s => s.name === nir.suplier.name)
   if(suplier){
-    if(nir.payd){
-      const response = await this.actionSheetService.deleteAlert(`Ești sigur că vrei să marchezi documentul numărul - ${nir.nrDoc}, cu valoarea de ${nir.totalDoc}, ca neplătit?`, 'Anulează Plata!')
-      if(response){
-        const data = {records: suplier.records, title: `Deselectează intrarea cu valoarea de ${nir.totalDoc} Lei`, nir: [], message: ''}
-        await this.updatedocStatuNirPayment(data, false,  [nir])
+    this.supliersService.getSuplier(suplier._id).subscribe({
+      next: async (sup) => {
+        if(nir.payd){
+          const response = await this.actionSheetService.deleteAlert(`Ești sigur că vrei să marchezi documentul numărul - ${nir.nrDoc}, cu valoarea de ${nir.totalDoc}, ca neplătit?`, 'Anulează Plata!')
+          if(response){
+            const data = {records: sup.records, title: `Deselectează intrarea cu valoarea de ${nir.totalDoc} Lei`, nir: [], message: '', sold: sup.sold, supId: sup._id}
+            await this.updatedocStatuNirPayment(data, false,  [nir])
+          }
+        } else {
+          const response = await this.actionSheetService.deleteAlert(`Vrei să asociezi plata documentului cu o plata deja existentă?`, 'Asociază plata')
+          if(response){
+            const message =  `Plata factura: ${nir.nrDoc} de la Slayer Cup`
+            const data = {records: sup.records, title: `Alege intrarea din registru pentru valoarea de ${nir.totalDoc} Lei`, nir: [], message, sold: sup.sold, supId: sup._id}
+            await this.updatedocStatuNirPayment(data, true,  [nir])
+          }
+        }
+      },
+      error: (error) => {
+        console.log(error)
       }
-    } else {
-      const response = await this.actionSheetService.deleteAlert(`Vrei să asociezi plata documentului cu o plata deja existentă?`, 'Asociază plata')
-      if(response){
-        const message =  `Plata factura: ${nir.nrDoc} de la Slayer Cup`
-        const data = {records: suplier.records, title: `Alege intrarea din registru pentru valoarea de ${nir.totalDoc} Lei`, nir: [], message}
-        await this.updatedocStatuNirPayment(data, true,  [nir])
-      }
-    }
+    })
   }
 }
 
-async updatedocStatuNirPayment( data:{records: Record[], title: string, nir: Nir[], message: string}, payment: boolean, nir: Nir[]){
+async updatedocStatuNirPayment( data:{records: Record[], title: string, nir: Nir[], message: string, supId: string}, payment: boolean, nir: Nir[]){
   data.nir = nir
-  const response = await this.actionSheetService.openSelect(RecordPage, data, '')
+  const response = await this.actionSheetService.openAdd(RecordPage, data, 'small')
   if(response){
-    const records = response.records
+    const record = response.record
     this.nirSrv.updateDocPaymentStatus(payment, response.nir, response.type).subscribe({
       next: (response) => {
-        this.nirSrv.updateSuplierRecords(nir[0].suplier._id, records).subscribe({
-          next: (response) => {
-            const supInd = this.supliers.findIndex(s => s._id === response.suplier._id)
-            if(supInd !== -1){
-              this.supliers[supInd] = response.suplier
-            }
-            this.calcTotalDue()
-            showToast(this.toastCtrl, 'Nirul și furnizorul au fost actualizati!', 2000)
-          },
-          error: (error) =>{
-            showToast(this.toastCtrl, error.message, 3000)
-            console.log(error)
-          }
-        })
+        showToast(this.toastCtrl, 'Nirul și furnizorul au fost actualizati!', 2000)
       },
       error: (error) => {
         showToast(this.toastCtrl, error.message, 3000)
@@ -306,6 +304,7 @@ searchNir(ev: any){
   getSupliers(){
    this.supliersSub =  this.supliersService.supliersSend$.subscribe(response => {
       if(response){
+        this.supliersToSend = []
         this.supliers = response.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         this.supliers.forEach(suplier => {
           this.supliersToSend.push(suplier.name)

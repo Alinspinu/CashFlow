@@ -115,8 +115,7 @@ reprintBill(bill: string){
 }
 
 printNefiscal(bill: string){
-  const headers = this.auth.apiAuth()
-  return this.http.post<{message: string}>(`${environment.SAVE_URL}pay/print-unreg`, {bill: bill}, {headers})
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-unreg`, {bill: bill})
 }
 
 removeProductDiscount(data: any){

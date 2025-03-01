@@ -1,9 +1,6 @@
 
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
-    <ion-buttons slot="start">
-      <ion-button (click)="cancel()">Cancel</ion-button>
-    </ion-buttons>
     <div class="title-wrapper">
       <div class="title">Adauga Intrare</div>
     </div>
@@ -18,18 +15,22 @@
         <div class="input date" (click)="openDateModal()" *ngIf="hide.date">
           <ion-label slot="start">{{date ? formatDate(date) :'Alege ziua'}}</ion-label>
         </div>
+        <div class="input" *ngIf="hide.typeOf">
+          <ion-input mode="ios" type="text" fill="outline" label="Tip de corecție" labelPlacement="floating" formControlName="typeOf"></ion-input>
+        </div>
         <div class="input" *ngIf="hide.document">
           <ion-select aria-label="entry" label="Document" labelPlacement="floating" formControlName="document">
             <ion-select-option *ngFor="let doc of documents" [value]='doc'>{{doc}}</ion-select-option>
           </ion-select>
         </div>
+
           <div class="input" *ngIf="hide.docNr">
             <ion-input mode="ios" type="text" fill="outline" label="Număr Document" labelPlacement="floating" formControlName="docNr"></ion-input>
           </div>
           <div class="input" *ngIf="hide.desc">
             <ion-input mode="ios" type="text" fill="outline" label="Descriere" labelPlacement="floating" placeholder="Ex. Plata .. ch nr.." formControlName="description"></ion-input>
           </div>
-        
+
           <div class="input" *ngIf="hide.amount">
             <ion-input mode="ios" type="number" fill="outline" label="Sumă" labelPlacement="floating" placeholder="Lei" formControlName="price"></ion-input>
           </div>
@@ -38,9 +39,15 @@
   </form>
 </ion-content>
 
-<ion-footer>
-  <ion-button (click)="confirm()" type="submit" [disabled]="!form.valid" [strong]="true" expand="block" size="large">ADAUGĂ INTRARE
-  </ion-button>
+<ion-footer class="ion-no-border">
+  <ion-row>
+    <ion-col>
+      <ion-button (click)="cancel()" expand="block" size="large" fill="outline" color="medium">Cancel</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button (click)="confirm()" type="submit" [disabled]="!form.valid" [strong]="true" expand="block" size="large" color="medium">ADAUGĂ INTRARE</ion-button>
+    </ion-col>
+  </ion-row>
 </ion-footer>
 
 

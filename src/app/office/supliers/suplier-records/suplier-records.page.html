@@ -1,0 +1,119 @@
+
+
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar" *ngIf="suplier">
+      <ion-title slot="start">Fisă ~~ {{suplier.name}} ~~</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="addRecord()">
+          <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar class="ion-no-border secod-header">
+      <div class="header">
+          <span class="data">Data</span>
+          <span class="type">Tip</span>
+          <span class="doc">Document</span>
+          <span class="number">Serie/Număr</span>
+          <span class="credit">Credit</span>
+          <span class="debit">Debit</span>
+          <span class="sold">Sold</span>
+          <ion-buttons>
+            <ion-button>
+              <ion-icon  size="large"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </div>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <ion-content [fullscreen]="true" *ngIf="suplier" #content>
+    <div *ngFor="let record of suplier.records; let i = index">
+      <div class="input record-wrapper" [ngClass]="{'odd': record.typeOf === 'iesire'}">
+        <span class="data">{{formateDate(record.date)}}</span>
+        <span class="type">{{record.typeOf}}</span>
+        <span class="doc">{{record.document.typeOf}}</span>
+        <span class="number">{{record.document.docId}}</span>
+        <span class="credit">{{record.typeOf === 'intrare' ? round(record.document.amount) : 0}}</span>
+        <span class="debit">{{record.typeOf === 'iesire' ? round(record.document.amount) : 0}}</span>
+        <span class="sold">{{round(record.sold)}}</span>
+        <ion-buttons>
+          <ion-button (click)="deleteRecord(record._id, record.document.amount, i)">
+            <ion-icon src="../../../../assets/icon/sterge comanda.svg" color="medium" size="large"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+    </div>
+
+  </ion-content>
+
+  <ion-footer class="ion-no-border">
+    <div class="totals">
+      <span class="label">TOTALURI</span>
+      <span class="credit">{{round(in)}}</span>
+      <span class="debit">{{round(out)}}</span>
+      <span class="sold">{{round(suplier.sold)}}</span>
+      <ion-buttons>
+        <ion-button>
+          <ion-icon  size="large"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+  </ion-footer>
+
+<!-- <ion-content [fullscreen]="true" *ngIf="suplier">
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <div class="sold-wrapper">
+        <span class="title">SOLD</span>
+        <span class="sum">{{round(in) - round(out)}}</span>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size-lg="4" offset-lg="2">
+      <ion-title class="ion-text-center">INTRĂRI</ion-title>
+      <div class="title-wrapper in">
+        <span class="title">INTRĂRI</span>
+        <span class="sum">{{round(in)}} Lei</span>
+      </div>
+       <div *ngFor="let record of suplier.records">
+         <div class="input record-wrapper" *ngIf="record.typeOf === 'intrare'">
+           <span class="date">{{formateDate(record.date)}}</span>
+           <span class="doc-type">{{record.document.typeOf}}</span>
+           <span class="doc-number">{{record.document.docId}}</span>
+           <span class="amount">{{round(record.document.amount)}} Lei</span>
+         </div>
+       </div>
+    </ion-col>
+    <ion-col size-lg="4">
+      <div class="title-wrapper">
+        <span class="title">IEȘIRI</span>
+        <ion-button fill="ghost" (click)="addRecord()">
+          <ion-icon size="large" src="../../../../assets/icon/add-circle.svg"></ion-icon>
+        </ion-button>
+        <span class="sum">{{round(out)}} Lei</span>
+      </div>
+      <div *ngFor="let record of suplier.records; let i = index">
+        <div class="input record-wrapper" *ngIf="record.typeOf === 'iesire'">
+          <span class="date">{{formateDate(record.date)}}</span>
+          <span class="doc-type">{{record.document.typeOf}}</span>
+          <span class="doc-number">{{record.document.docId}}</span>
+          <span class="amount">{{record.document.amount}} Lei</span>
+          <ion-buttons>
+            <ion-button (click)="deleteRecord(record.document.docId, record.document.amount, i)">
+              <ion-icon src="../../../../assets/icon/sterge comanda.svg" color="medium" size="large"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content> -->

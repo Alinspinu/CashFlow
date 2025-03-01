@@ -103,8 +103,8 @@ export class NirsService{
         }))
   }
 
-  updateSuplierRecords(id: string, records: Record[]){
-    return this.http.put<{message: string, suplier: Suplier}>(`${environment.BASE_URL}suplier/add-record`, {id, records})
+  updateSuplierRecords(id: string, record: Record){
+    return this.http.put<{message: string, suplier: Suplier}>(`${environment.BASE_URL}suplier/add-record`, {id, record})
   }
 
   saveNir(nir: Nir){

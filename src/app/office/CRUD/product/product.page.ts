@@ -176,7 +176,6 @@ export class ProductPage implements OnInit {
     this.privateCats = JSON.parse(JSON.stringify(this.mainCats))
     if(data.product){
       this.product = data.product
-      console.log(this.product)
       this.productCategory = this.product.category._id
       this.productMainCat = this.product.mainCat
       this.selectProductCats(this.product)
@@ -316,8 +315,8 @@ export class ProductPage implements OnInit {
         recipe: this.form.value.recipe,
         locatie: environment.LOC,
         tva: +this.form.value.tva,
-        toppings: this.toppingsToSend,
-        ings: this.ingredientsToSend,
+        toppings: this.toppingsToSend.length ? this.toppingsToSend : this.product.toppings,
+        ings: this.ingredientsToSend.length ? this.ingredientsToSend : this.product.ings.map(i => ({ qty: i.qty, ing: i.ing._id})),
         subProducts: this.tempSubArray,
         image: this.product.image
       }

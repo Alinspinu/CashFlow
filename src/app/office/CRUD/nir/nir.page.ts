@@ -361,6 +361,18 @@ async getNirToEdit(){
     this.modalCtrl.dismiss(null)
     }
 
+    async deleteNir(id: string){
+      const result = await this.actionSheet.deleteAlert('Esti sigur că vrei să ștergi documentul?', "ȘTERGE NIR")
+      if(result){
+        this.nirsService.deleteNir(id).subscribe(response => {
+          if(response){
+            this.modalCtrl.dismiss(null)
+            showToast(this.toastCtrl, response.message, 2000)
+          }
+        })
+      }
+    }
+
     printNir() {
       this.nirsService.printNir(this.nir._id).subscribe(response => {
         const blob = new Blob([response], { type: 'application/pdf' });

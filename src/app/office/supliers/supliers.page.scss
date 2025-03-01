@@ -1,28 +1,46 @@
 
-ion-content, ion-toolbar{
-  --background:var(--ion-color-tertiary) !important;
+ion-content, ion-toolbar, ion-header{
+  --background:var(--background-color) !important;
+  background-color:var(--background-color) !important;
 }
 
-.font{
-  font-family: NoirProSemi !important;
+
+
+ion-searchbar{
+  font-family: RoseReg !important;
+  padding: 0 !important;
+  --background: rgba(var(--ion-color-medium-rgb), 0.15);
+  --box-shadow: none !important;
+  margin-bottom: 12px;
 }
+
+
+.secod-header{
+  padding-top: 12px;
+  margin: 0 28px;
+  width: 96%;
+  border-bottom: 1px solid rgba(var(--ion-color-medium-rgb), 0.6);
+}
+
+
 .suplier{
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding-left: 24px;
   div{
     display: flex;
-    flex-direction: row;
+    align-items: center;
     width: 100%;
+    font-size: 14px;
     .index{
-      flex: 2%;
+      text-align: center;
+      flex: 3%;
     }
     .name{
-      flex: 20%;
+      flex: 27%;
     }
     .address{
-      text-align: left;
+      padding-left: 8px;
       font-size: 13px;
       flex: 30%
     }
@@ -31,85 +49,42 @@ ion-content, ion-toolbar{
       flex: 10%;
     }
     .account{
-      text-align: left;
+      text-align: center;
+      font-size: 14px;
       flex: 20%;
     }
     .sold{
-      text-align: left;
       flex: 10%;
     }
   }
 }
 
+
+.font{
+  font-family: RoseMed !important;
+  font-size: 16px !important;
+}
+
 .input{
-  height: 50px;
-  width: 100%;
-  box-shadow:
-  0 -2px 4px rgba(0, 0, 0, 0.1),
-  0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: var(--ion-color-light);
-  color: var(--ion-color-medium);
-  margin: 0.5rem 0 0.1rem 0.2rem;
-  font-family: NoirProReg !important;
+  min-height: 50px;
+  width: 97%;
+  border-radius: 2px;
+  color: var(--text-color);
+  margin: 0 18px;
+  div{
+    font-family: RoseLight !important;
+  }
 }
 
 .input:hover{
-  --background: var(--ion-color-medium-shade);
+  background-color: rgba(var(--ion-color-medium-rgb), 0.1);
+  div{
+    font-family: RoseReg !important;
+  }
 }
 
 
-ion-item[slot="fixed"]{
-  top: 6%;
-  width: 100%;
-  opacity: 60%;
-  font-family: NoirProReg !important;
-  span{
-    font-size: 18px !important;
-    }
-  .index{
-    margin-left: 8px !important;
-  }
-  .address{
-    text-align: center !important;
-  }
-
-  // --backgound: transparent;
+.odd{
+  background-color: rgba(var(--ion-color-medium-rgb), 0.05);
 }
 
-@media(max-width: 500px){
-  .index{
-    flex: 10%;
-    font-size: 12px !important;
-    text-align: left !important;
-  }
-  .name{
-    flex: 60% !important;
-    font-size: 12px !important;
-  }
-  .sold{
-    text-align: left !important;
-    flex: 30% !important;
-  }
-  .address{
-    display: none;
-  }
-  .vat{
-   display: none;
-  }
-  .account{
-    display: none;
-  }
-  ion-buttons{
-    display: none;
-  }
-
-  ion-item[slot="fixed"]{
-    top: 10%;
-    .index{
-      display: none;
-    }
-    // --backgound: transparent;
-  }
-
-}

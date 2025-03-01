@@ -38,7 +38,7 @@ export const routes: Routes = [
       },
       {
         path: 'suplier/:id',
-        loadComponent: () => import('./supliers/suplier/suplier.page').then( m => m.SuplierPage),
+        loadComponent: () => import('./supliers/suplier-records/suplier-records.page').then( m => m.SuplierRecordsPage),
         canActivate: [AuthGuard]
       },
       {

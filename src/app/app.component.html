@@ -19,15 +19,17 @@
         </ion-menu-toggle>
 
           <div class="main" *ngFor="let p of subMenuPages">
-            <ion-item lines="none" detail="false" (click)="toggleSubMenu(p)" [ngClass]="{'selected': p.show}" class="item" *ngIf="p.title === 'Casă' || user.employee.access > 3">
+            <ion-item lines="none" detail="false" (click)="toggleSubMenu(p)" [ngClass]="{'selected': p.show}" class="item" *ngIf="p.title === 'Casă'|| p.title === 'Office' || user.employee.access > 3">
              <ion-icon aria-hidden="true" slot="start" [src]='p.icon'></ion-icon>
              <ion-label>{{p.title}}</ion-label>
            </ion-item>
            <div *ngIf="p.show" class="submenu">
-            <ion-item *ngFor="let s of p.pages" lines="none" [ngClass]="{'selected': s.show}" (click)="selectPage(s, p)">
-              <ion-icon aria-hidden="true" slot="start" [src]="s.icon"></ion-icon>
-              <ion-label>{{ s.name }}</ion-label>
-            </ion-item>
+            <div *ngFor="let s of p.pages">
+              <ion-item  lines="none" [ngClass]="{'selected': s.show}" (click)="selectPage(s, p)" *ngIf="s.name === 'Produse'|| s.name === 'Încasări' || s.name === 'Comenzi' || user.employee.access > 3">
+                <ion-icon aria-hidden="true" slot="start" [src]="s.icon"></ion-icon>
+                <ion-label>{{ s.name }}</ion-label>
+              </ion-item>
+            </div>
           </div>
           </div>
        <ion-menu-toggle auto-hide="true" *ngFor="let p of secondPages; let i = index">

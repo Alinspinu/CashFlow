@@ -81,13 +81,13 @@ export class RecipeMakerPage implements OnInit, OnChanges {
     if (changes['top']) {
       if(changes['top'].currentValue !== undefined){
         this.toppings = this.editToppings(changes['top'].currentValue)
-        // this.toppSend.emit(this.toppings)
+
       }
     }
     if (changes['ings']) {
       if(changes['ings'].currentValue !== undefined) {
         this.displayIngs = this.editIngs(changes['ings'].currentValue)
-        // this.ingsSend.emit(this.displayIngs)
+
         this.calcrRecipeTotal(this.displayIngs)
       }
     }

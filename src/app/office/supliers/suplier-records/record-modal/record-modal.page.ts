@@ -1,10 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, ModalController, NavParams } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { formatedDateToShow } from '../../../../shared/utils/functions';
 import { ActionSheetService } from '../../../../shared/action-sheet.service';
 import { DatePickerPage } from '../../../../modals/date-picker/date-picker.page';
+import { SupliersService } from '../../supliers.service';
+import { showToast } from 'src/app/shared/utils/toast-controller';
 
 @Component({
   selector: 'app-record-modal',
@@ -19,6 +21,8 @@ export class RecordModalPage implements OnInit {
   date!:any
   total: number = 0
 
+  suplierId!: string
+
   documents: string[] = [
     'bon fiscal',
     'chitanta',
@@ -31,12 +35,14 @@ export class RecordModalPage implements OnInit {
     docNr: boolean,
     desc: boolean,
     amount: boolean,
+    typeOf: boolean
   } = {
     date: false,
     document: false,
     docNr: false,
     desc: false,
     amount: false,
+    typeOf: false
   }
 
 
@@ -45,13 +51,16 @@ export class RecordModalPage implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private navParams: NavParams,
-    @Inject(ActionSheetService) private actionSheet: ActionSheetService
+    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
+    private supliersService: SupliersService,
+    private toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
     const data = this.navParams.get('options')
     if(data){
-      this.total = data.amount
+      this.total = data.amount ? data.amount : 0
+      this.suplierId = data.suplier
     }
     this.setForm()
     this.startEntryFlow()
@@ -74,6 +83,10 @@ export class RecordModalPage implements OnInit {
       description: new FormControl(null, {
         updateOn: 'change',
       }),
+      typeOf: new FormControl(null, {
+        validators: [Validators.required],
+        updateOn: 'change',
+      }),
 
     });
   }
@@ -89,18 +102,25 @@ export class RecordModalPage implements OnInit {
   confirm(){
     if(this.form.valid && this.date){
       const record = {
-        typeOf: 'iesire',
+        typeOf: this.form.value.typeOf,
         date: this.date,
         description: this.form.value.description,
         document: {
           typeOf: this.form.value.document,
           docId: this.form.value.docNr,
-          amount: this.form.value.price,
+          amount: +this.form.value.price,
         },
       }
-
-      this.modalCtrl.dismiss(record)
-  }
+      this.supliersService.addRecord(record, this.suplierId).subscribe({
+        next: (response) => {
+          showToast(this.toastCtrl, response.message, 2000)
+          this.modalCtrl.dismiss(record)
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
+    }
   }
 
 
@@ -113,6 +133,17 @@ export class RecordModalPage implements OnInit {
     if(date){
       this.hide.date = true
       this.date = date
+      if(this.total > 0){
+        this.form.get('typeOf')?.setValue('iesire')
+        this.hide.typeOf = true
+      } else{
+        const tip = await this.actionSheet.entryAlert(['Credit', 'Debit'], 'radio', 'Tip de corecție', 'Alege o opțiune', '', '')
+        if(tip){
+          let value = tip === 'Credit' ? 'intrare' : 'iesire'
+          this.hide.typeOf = true
+          this.form.get('typeOf')?.setValue(value)
+        }
+      }
       const document = await this.actionSheet.entryAlert(this.documents, 'radio', 'Tip de Document', 'Alege o opțiune', '', '')
       if(document) {
         this.hide.document = true
@@ -134,7 +165,7 @@ export class RecordModalPage implements OnInit {
                     this.hide.desc = true
                     this.form.get('description')?.setValue(description)
                   }
-  
+
                 }
               }
             }

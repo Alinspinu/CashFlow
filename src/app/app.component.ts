@@ -51,6 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
     {name: 'Produse', url: '/office/products', icon: '../assets/icon/fast-food-outline.svg', show: false},
     {name: 'Materii Prime', url: '/office/ingredient',icon: '../../assets/icon/plant.svg', show: false},
     {name: 'Documente', url: '/office/nirs', icon: '../../assets/icon/document.svg', show: false},
+    {name: 'Furnizori', url: '/office/supliers', icon: '../../assets/icon/supliers.svg', show: false},
     {name: 'Registru de Casă', url: '/office/cash-register', icon: '../../assets/icon/business.svg', show: false},
     {name: 'Program', url: '/shedule', icon: '../assets/icon/shedule.svg', show: false  },
     {name: 'Pontaj', url: '/pontaj', icon: '../assets/icon/time.svg', show: false  },

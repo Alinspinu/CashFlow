@@ -24,9 +24,11 @@ export class Record{
       asociat: boolean,
       docRecords: {docNumber: string, docTotal: number}[]
     },
+    public sold: number,
     public descriptipn: string,
     public nir: string[],
     public date: string,
+    public _id?: string
 
   ){}
 }

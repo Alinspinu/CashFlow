@@ -1,9 +1,6 @@
 
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
-      <ion-button (click)="close()" slot="start" color="medium">
-        <ion-icon src="../../../assets/icon/arrow-back-outline.svg" color="light" style="font-size: 32px;"></ion-icon>
-      </ion-button>
       <div class="title-wrapper">
         <div class="title">{{title}}</div>
       </div>
@@ -16,7 +13,7 @@
 <ion-content [fullscreen]="true" class="auth-wrapper" *ngIf="records.length">
   <ion-grid>
     <ion-row>
-      <ion-col size="12">
+      <ion-col>
         <div class="input" [ngClass]="{'selected': record.document.asociat}" *ngFor="let record of records; let i = index" (click)="selectRecord(record, i)">
           <span class="date">{{formatDate(record.date)}}</span>
           <span class="type">{{record.document.typeOf}}</span>
@@ -37,10 +34,24 @@
   </ion-content>
 
 
-  <ion-footer class="ion-no-border">
-    <ion-button color="medium" (click)="onSubmit()" size="large" expand="block" style="font-family: NoirProSemi !important;">Alege</ion-button>
+  <ion-footer class="ion-no-border" *ngIf="records.length">
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="close()"  color="medium" size="large" expand="block" fill="outline">Renunță</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="medium" (click)="onSubmit()" size="large" expand="block">Alege</ion-button>
+      </ion-col>
+    </ion-row>
   </ion-footer>
 
   <ion-footer class="ion-no-border" *ngIf="!records.length">
-    <ion-button color="medium" (click)="online()" size="large" expand="block" style="font-family: NoirProSemi !important;">Adaugă Intrare</ion-button>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="close()"  size="large" expand="block" color="medium" fill="outline">Renunță</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="medium" (click)="online()" size="large" expand="block">Adaugă Intrare</ion-button>
+      </ion-col>
+    </ion-row>
   </ion-footer>

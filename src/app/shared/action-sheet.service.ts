@@ -31,7 +31,7 @@ import { DepViewPage } from '../modals/dep-view/dep-view.page';
 import { PaymentsPage } from '../office/pontaj/payments/payments.page';
 import { HoursPage } from '../office/pontaj/hours/hours.page';
 import { SelectInvPage } from '../reports/inventary/select-inv/select-inv.page';
-import { RecordModalPage } from '../office/supliers/suplier/record-modal/record-modal.page';
+import { RecordModalPage } from '../office/supliers/suplier-records/record-modal/record-modal.page';
 import { SelectDataPage } from '../modals/select-data/select-data.page';
 import { AddReportPage } from '../reports/add-report/add-report.page';
 import { EntryViewPage } from '../modals/entry-view/entry-view.page';
@@ -59,6 +59,7 @@ import { SpendPage } from '../reports/finance/spend/spend.page';
 import { ModalPage } from '../reports/finance/fin-chart/modal/modal.page';
 import { AddCustomerPage } from '../content/table-content/customer-check/add-customer/add-customer.page';
 import { AddProductDiscountPage } from '../content/table-content/add-product-discount/add-product-discount.page';
+import { SuplierRecordsPage } from '../office/supliers/suplier-records/suplier-records.page';
 
 
 
@@ -244,6 +245,9 @@ export class ActionSheetService {
                typeof DepViewPage |
                typeof AddCustomerPage |
                typeof CustomerCheckPage |
+               typeof RecordPage |
+               typeof  SuplierRecordsPage |
+               typeof  RecordModalPage |
                typeof NirPage,
     options: any,
     clas: string

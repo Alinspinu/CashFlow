@@ -5,7 +5,7 @@ import { IonicModule, ModalController, NavParams, ToastController } from '@ionic
 import { formatedDateToShow, getUserFromLocalStorage, round, sortByDate } from 'src/app/shared/utils/functions';
 import { Record } from 'src/app/models/suplier.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
-import { RecordModalPage } from '../../supliers/suplier/record-modal/record-modal.page';
+import { RecordModalPage } from '../../supliers/suplier-records/record-modal/record-modal.page';
 import { environment } from 'src/environments/environment';
 import { CashRegisterService } from '../../cash-register/cash-register.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
@@ -26,13 +26,16 @@ export class RecordPage implements OnInit {
 
   records: Record[] = []
   allRecords: Record[] = []
+  record!: Record
 
   nir: Nir[] = []
+  sold: number = 0
 
   type: string = ''
   title: string = ''
 
   userId: string = ''
+  suplierId!: string
 
   paymentMessage: string = ''
 
@@ -62,21 +65,23 @@ export class RecordPage implements OnInit {
 
 getData(){
   const data = this.navParams.get('options')
-  this.allRecords = data.records
+  this.sold = data.sold
+  this.suplierId = data.supId
+  this.allRecords = JSON.parse(JSON.stringify(data.records))
   this.nir = data.nir
   this.paymentMessage = data.message
   const total = calcTotalDocs(this.nir).total
-  this.records = this.allRecords.filter(r => r.typeOf === 'iesire' && r.document.amount < total + 2 && r.document.amount > total -2).reverse()
+  this.records = data.records.filter((r:any) => r.typeOf === 'iesire' && r.document.amount < total + 2 && r.document.amount > total -2).reverse()
   this.title = this.records.length ? data.title : `Nu sunt inregistrări!`
 }
 
 
 onSubmit(){
-  this.modalCtrl.dismiss({records: this.allRecords, type: this.type, nir: calcTotalDocs(this.nir).nirsId})
+  this.modalCtrl.dismiss({record: this.record, type: this.type, nir: calcTotalDocs(this.nir).nirsId})
 }
 
 selectRecord(record: Record, ind: number){
-  let selected = record.document.asociat 
+  let selected = record.document.asociat
   if(selected){
     record.document.asociat  = false
   } else {
@@ -90,14 +95,21 @@ selectRecord(record: Record, ind: number){
 
 
 async online(){
-  const data = {amount: calcTotalDocs(this.nir).total}
-  const record = await this.actService.openPayment(RecordModalPage, data)
+  const data = {amount: calcTotalDocs(this.nir).total, suplier: this.suplierId}
+  const record = await this.actService.openAdd(RecordModalPage, data, 'small-two')
   if(record){
     record.document.asociat = false
     record.document.docRecords = []
     record.nir = calcTotalDocs(this.nir).nirsId
+    record.sold = round(this.sold - record.document.amount)
+    this.record = record
     this.records.push(record)
     this.allRecords.push(record)
+    for(let rec of this.allRecords){
+      if(rec.document.amount === record.document.amount){
+        console.log(rec)
+      }
+    }
     if(record.document.typeOf !== 'banca'){
       const entry = {
         tip: 'expense',

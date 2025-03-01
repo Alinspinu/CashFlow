@@ -1,0 +1,40 @@
+
+ion-content, ion-toolbar, ion-footer{
+  --background: var(--background-color)!important;
+  background-color: var(--background-color) !important;
+}
+
+  div, ion-select, ion-input, span ion-title{
+  font-family: RoseReg !important;
+}
+
+ion-button{
+  font-family: RoseMed !important;
+}
+
+ion-label, ion-input, span, ion-select{
+  font-size: 20px !important;
+}
+
+
+span{
+  width: 200px;
+}
+
+.input{
+  cursor: pointer;
+  min-height: 70px;
+  border: 1.5px solid rgba(var(--ion-color-medium-rgb), 0.6);
+  border-radius: 4px ;
+  margin: 1rem 0 0.1rem 0.2rem;
+  padding-left: 24px;
+}
+
+.input:hover{
+  --background: rgb(242, 242, 242);
+}
+
+.date{
+  display: flex;
+  align-items: center;
+}

@@ -156,6 +156,7 @@ export class ImpSheet{
     public ings: {qty: number, ing: any}[],
     public user: any,
     public locatie: string,
+    public salePoint: string,
     public _id?: string,
   ){}
 }

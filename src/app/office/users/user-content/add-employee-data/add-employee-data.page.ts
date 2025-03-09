@@ -5,6 +5,8 @@ import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { formatedDateToShow, round } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
+import { SalePoint } from 'src/app/models/sale-point';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-employee-data',
@@ -130,7 +132,8 @@ export class AddEmployeeDataPage implements OnInit {
         fix: this.form.value.fix
       },
       workLog: this.data.workLog,
-      payments: this.data.payments
+      payments: this.data.payments,
+      salePoint: environment.POINT,
 
     }
     if(!this.startDate){

@@ -2,14 +2,12 @@ ion-toolbar, ion-content, ion-list, ion-header, ion-item{
   --background: var(--background-color) !important;
   background-color: var(--background-color) !important;
 }
-
 ion-searchbar{
   padding: 8px 0 !important;
   font-family: RoseReg !important;
   --box-shadow: none !important;
   --background: rgba(var(--ion-color-medium-rgb), 0.1);
 }
-
 .header{
   font-family: RoseReg !important;
   display: flex;
@@ -20,14 +18,10 @@ ion-searchbar{
   justify-content: space-between;
   border-bottom: 1.5px solid rgba(var(--ion-color-medium-rgb), 0.6);
 }
-
-
 .card-toolbar{
   margin: 0 28px;
   width: 96%;
 }
-
-
 .header, .order-container{
     .id{
       flex: 5%;
@@ -57,7 +51,6 @@ ion-searchbar{
       flex: 10%;
     }
 }
-
 .order-container{
   font-family: RoseReg !important;
   margin: 0 28px;
@@ -91,12 +84,9 @@ ion-searchbar{
     }
   }
 }
-
 .order-container:hover{
   background-color: rgba(var(--ion-color-medium-rgb), 0.05) !important;;
 }
-
-
 ion-card{
   cursor: pointer;
   margin: 6px 0 !important;
@@ -128,9 +118,9 @@ ion-card{
     ion-note{
       font-family: RoseMed !important;
       font-size: 12px;
-      color: var(--grey)
+      color: rgba(var(--ion-color-medium-rgb), 0.6);
     }
-    p{
+     p{
       font-family: RoseMed;
       display: inline;
       margin-right: 4px;
@@ -139,8 +129,16 @@ ion-card{
     }
   }
 }
-
-
+.labels-container{
+  display: flex;
+  flex-direction: column;
+  .count-label p{
+    color: var(--orange-contrast) !important;
+  }
+  .profit-label p{
+    font-size: 16px;
+  }
+}
 #turq{
   --background: var(--light-turqoise);
   ion-card-content{
@@ -191,76 +189,6 @@ ion-card{
   }
 }
 
-
-
-.date-wrapper{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding-left: 12px;
-  ion-searchbar{
-    flex: 65%;
-    font-family: RoseReg !important;
-    --box-shadow: none !important;
-    --background: var(--light-grey);
-    color: var(--dark);
-  }
-  .buttons-wrapper{
-    flex: 35%;
-    display: flex;
-    justify-content: end;
-    ion-button{
-      margin-right: 6px;
-      font-family: "RoseMed" !important;
-      --border-width: 1.2px !important;
-      --padding-start: 28px !important;
-      --padding-end: 28px !important;
-      ion-label{
-        font-size: 16px;
-      }
-      ion-icon{
-        font-size: 14px;
-      }
-    }
-  }
-
-}
-
-
-
-
-
-.chart-hour-wrapper{
-  margin-top: 24px;
-  width: 100%;
-  height: 300px;
-  display: flex;
-  .chart{
-    width: 600px;
-    canvas{
-      width: 300px;
-    }
-  }
-}
-
-
-@media(max-width: 1024px){
-  .row-wrapper{
-    display: flex;
-    flex-direction: column;
-    .chart-wrapper{
-      width: 88%;
-      margin: 24px 48px 0 48px;
-    }
-    .report-wrapper{
-      width: 92%;
-      margin: 0 24px 0 42px;
-    }
-
-  }
-}
 
 
 

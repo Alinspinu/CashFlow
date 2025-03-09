@@ -17,7 +17,6 @@ export class WebRTCService {
   private delProduct = new Subject<any>();
 
   constructor() {
-    // this.socket = io('https://live669-0bac3349fa62.herokuapp.com');
     this.socket = io('https://socket.flowmanager.ro');
 
     this.socket.on('productAdded', (data: any) => {
@@ -116,31 +115,3 @@ export class WebRTCService {
 }
 
 
-
-  // printOrder(doc: string): Observable<any> {
-  //   return new Observable(observer => {
-  //     this.socket.emit('printOrder', doc);
-  //     this.socket.on('orderProcessed', (response:any) => {
-  //       observer.next(response);
-  //       observer.complete();
-  //     });
-
-  //     this.socket.on('connect_error', (error: any) => {
-  //       observer.error(error);
-  //     });
-  //   });
-  // }
-
-  // printBill(doc: string): Observable<any> {
-  //   return new Observable(observer => {
-  //     this.socket.emit('printBill', doc);
-  //     this.socket.on('billProcessed', (response:any) => {
-  //       observer.next(response);
-  //       observer.complete();
-  //     });
-
-  //     this.socket.on('connect_error', (error: any) => {
-  //       observer.error(error);
-  //     });
-  //   });
-  // }

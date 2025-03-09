@@ -1,0 +1,40 @@
+
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
+</ion-menu-button>
+
+<ion-header class="ion-no-border" >
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Situație țigări</ion-title>
+    <ion-title slot="end">{{formatDate(sheet.date)}}</ion-title>
+    <ion-button fill="outline" slot="end" mode="ios" color="medium" (click)="saveInv()" [disabled]="!sheet.valid">
+      <ion-label slot="end">Salvează</ion-label>
+      <ion-icon slot="start" src="../../../assets/icon/checkmark-outline.svg"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+  <ion-toolbar class="ion-no-border">
+        <div class="header">
+          <span class="id">Nr</span>
+          <span class="product">Denumire Produs</span>
+          <span class="first">Stoc lăsat</span>
+          <span class="found">Stoc găsit</span>
+          <span class="sale">Vănzare</span>
+          <span class="second">Final</span>
+          <span class="status">Status</span>
+        </div>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content [fullscreen]="true">
+  <div class="product-container" *ngFor="let product of sheet.products; let i = index" [ngClass]="{'odd' : i % 2 !== 0}">
+    <span class="id">#{{i+1}}</span>
+    <span class="product">{{product.name}}</span>
+    <span class="first">{{product.first}}</span>
+    <span class="found" (click)="modifyFound(product)">{{product.found}}</span>
+    <span class="sale">{{product.sale}}</span>
+    <span class="second" (click)="modifyFinal(product)">{{product.second}}</span>
+    <ion-icon class="status" size="large" [src]="product.valid ? '../../../assets/icon/success.svg' : '../../../assets/icon/not.svg'" [color]="product.valid ? 'success' : 'danger'"></ion-icon>
+  </div>
+</ion-content>

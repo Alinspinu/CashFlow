@@ -66,6 +66,7 @@ export class ReportsService{
  }
 
  saveReport(report: Report){
+  console.log(report)
   return this.http.post<{message: string, report: Report}>(`${environment.BASE_URL}report`, {report: report})
  }
 

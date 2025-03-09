@@ -66,7 +66,8 @@ export class Bill{
     public createdAt: any,
     public updatedAt: string,
     public locatie: string,
-    public pending: boolean
+    public pending: boolean,
+    public salePoint: string
   ){}
 }
 

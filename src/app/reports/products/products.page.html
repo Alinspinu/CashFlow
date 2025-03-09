@@ -25,8 +25,17 @@
             <ion-card-content>
               <ion-card-title>{{section.total}} Lei</ion-card-title>
               <ion-icon src="../../assets/icon/cash-back.svg" class="card-icon"></ion-icon>
-              <p>{{section.productsCount}}</p>
-              <ion-note>Buc</ion-note>
+              <div class="labels-container">
+                <div class="profit-label">
+                  <p>{{roundInH(section.total - section.production)}} Lei</p>
+                  <ion-note>Profit</ion-note>
+                </div>
+                <div class="count-label">
+                  <p>{{section.productsCount}}</p>
+                  <ion-note>Buc</ion-note>
+                </div>
+              </div>
+
             </ion-card-content>
           </ion-card>
         </ion-col>

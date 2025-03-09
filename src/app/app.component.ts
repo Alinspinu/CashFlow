@@ -39,6 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public cashControlPages = [
     {name: 'Încasări', url: '/sales', icon: '../../assets/icon/cash-register.svg', show: false},
     {name: 'Comenzi', url: '/orders', icon: '../../assets/icon/document.svg', show: false},
+    {name: 'Țigări', url: '/cigaretes', icon: '../../assets/icon/smoking.svg', show: false},
   ]
 
   public reportsPages = [

@@ -102,3 +102,24 @@ export class productionReport{
     }
   ){}
 }
+
+
+export class cigarsInv{
+  constructor(
+    public date: Date,
+    public products: {
+      name: string,
+      first: number,
+      found: number,
+      second: number,
+      sale: number,
+      valid: boolean,
+      ing: string,
+    }[],
+    public valid: boolean,
+    public locatie: string,
+    public salePoint: string,
+    public user: any,
+    public id?: string,
+  ){}
+}

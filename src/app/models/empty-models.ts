@@ -5,7 +5,7 @@ import { Category, Product, SubProduct } from "./category.model";
 import { Dep, Gestiune, ImpSheet, InvIngredient, messageEFactura, Nir, NirIngredient } from './nir.model';
 import { Shedule, Pontaj } from './shedule.model';
 import { environment } from '../../environments/environment';
-import { Inventary, line, productionReport } from "./inventary.model";
+import { cigarsInv, Inventary, line, productionReport } from "./inventary.model";
 import { reportUsers } from "./report.model";
 import { Suplier } from "./suplier.model";
 import { SalePoint } from "./sale-point";
@@ -193,6 +193,7 @@ export function emptyBill(){
     onlineOrder: false,
     pending: true,
     out: false,
+    salePoint: environment.POINT,
     payment: {
       card: 0,
       cash: 0,
@@ -471,7 +472,19 @@ export function emptySheet(){
     ings: [],
     user: undefined,
     locatie: environment.LOC,
+    salePoint: environment.POINT,
+  }
+  return sheet
+}
 
+export function emptyCigaretsInv(){
+  const sheet: cigarsInv = {
+    date: new Date(),
+    products: [],
+    valid: false,
+    user: '',
+    locatie: environment.LOC,
+    salePoint: environment.POINT
   }
   return sheet
 }

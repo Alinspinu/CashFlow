@@ -79,6 +79,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'cigaretes',
+    loadComponent: () => import('./cash-control/cigaretes/cigaretes.page').then( m => m.CigaretesPage),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '',
     redirectTo: '/tables',
     pathMatch: 'full',
@@ -91,6 +96,7 @@ const routes: Routes = [
     path: 'add-customer',
     loadComponent: () => import('./content/table-content/customer-check/add-customer/add-customer.page').then( m => m.AddCustomerPage)
   },
+
 
 
 ];

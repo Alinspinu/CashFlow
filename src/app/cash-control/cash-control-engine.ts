@@ -36,7 +36,7 @@ export function getProducts(orders: Bill[]){
   let products: BillProduct[] = []
   let section: section[] = []
   let openProducts: BillProduct[] = []
-  let openSection: section = {name: 'Deschise', productsCount: 0, total: 0, class: 'sand'}
+  let openSection: section = {name: 'Deschise', productsCount: 0, production: 0, total: 0, class: 'sand'}
   for( let order of orders) {
     if(order.status === 'done'){
       for( let product of order.products){
@@ -112,6 +112,7 @@ export function getProducts(orders: Bill[]){
         name:  clonedProduct.section,
         total: +clonedProduct.total,
         productsCount: clonedProduct.quantity,
+        production: 0,
         class: clonedProduct.section === 'buc' ? 'green' :
         clonedProduct.section === 'tea' ? 'red' :
         clonedProduct.section === 'coffee' ? 'orange' :
@@ -158,6 +159,9 @@ export function getProducts(orders: Bill[]){
         total: userTotal,
       }
   }
+
+
+
 
 
 
@@ -329,6 +333,7 @@ export function getProducts(orders: Bill[]){
 export interface section{
     name: string,
     productsCount: number,
+    production: number,
     total: number,
     class: string
 }

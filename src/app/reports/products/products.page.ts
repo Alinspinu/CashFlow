@@ -48,6 +48,8 @@ export class ProductsPage implements OnInit{
     this.sections = parsedData.sections
     this.openProducts = parsedData.openProducts
     this.headeLabel = 'Încasat'
+    this.calcSectionProduction()
+    console.log(this.sections)
   }
 
 
@@ -66,24 +68,52 @@ selectProducts(section: string){
     this.products = this.allProducts.filter(p => p.section === section)
     this.headeLabel = 'Încasat'
   }
+}
 
+calcSectionProduction(){
+  this.allProducts.forEach(p => {
+    this.sections.forEach(s => {
+      if(p.section === s.name){
+       s.production += this.production(p.toppings, p.ings, p.quantity)
+       if(typeof p.quantity !== 'number'){
+        console.log(p)
+       }
+      }
+    })
+  })
 }
 
 
 production(toppings: any[], ings: any[], qty: number){
   const igs = ings.map(i => {
-    const ing = {
-      qty: i.qty,
-      ing: this.ingredientsService.getIng(i.ing)
-    }
-    return ing
+    if(typeof i.qty === 'number'){
+      const ing = {
+        qty: i.qty,
+        ing: this.ingredientsService.getIng(i.ing)
+      }
+      return ing
+     } else{
+      const ing = {
+        qty: 1,
+        ing: this.ingredientsService.getIng(i.ing)
+      }
+      return ing
+     }
   })
   const topp = toppings.map(t => {
-    const topping = {
-      qty: t.qty,
-      ing: this.ingredientsService.getIng(t.ing)
-    }
-    return topping
+    if(typeof t.qty === 'number'){
+      const topping = {
+        qty: t.qty,
+        ing: this.ingredientsService.getIng(t.ing)
+      }
+      return topping
+     } else {
+      const topping = {
+        qty: 1,
+        ing: this.ingredientsService.getIng(t.ing)
+      }
+      return topping
+     }
   })
  return this.calcProductionValue(topp, igs, qty)
 }
@@ -94,9 +124,13 @@ calcProductionValue(toppings: any[], ings: any[], qty: number ){
   let total = 0
   let toppingsTotal = 0
   for(let ing of ings){
+    if(typeof ing.ing.tvaPrice !== 'number'){
+      console.log(ing)
+     }
     total = round(total + (ing.qty * ing.ing.tvaPrice * qty))
   }
   for(let ing of toppings){
+
     toppingsTotal = round(toppingsTotal + (ing.qty * ing.ing.tvaPrice))
   }
   return round(total + toppingsTotal - this.vegyDif(toppings, ings))

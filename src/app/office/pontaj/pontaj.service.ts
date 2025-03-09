@@ -46,7 +46,7 @@ export class PontajService{
   }
 
   addPont(month: number, year: number){
-    return this.http.post<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}`, {month, year, loc: environment.LOC})
+    return this.http.post<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}`, {month, year, loc: environment.LOC, salePoint: environment.POINT})
   }
 
   deletePont(id: string){

@@ -5,6 +5,7 @@ import { Bill, deletetBillProduct } from "../models/table.model";
 import { AuthService } from '../auth/auth.service';
 import { BehaviorSubject, Observable, of, tap } from "rxjs";
 import { emptyBill, emptyDeletetBillProduct } from "../models/empty-models";
+import { cigarsInv } from "../models/inventary.model";
 
 @Injectable({providedIn: 'root'})
 
@@ -132,6 +133,14 @@ printReport(report: any){
 
 saveEntry(entry: any){
   return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
+}
+
+saveCigInv(sheet: cigarsInv){
+  return this.http.post<{first: cigarsInv, second: cigarsInv, message: string}>(`${environment.BASE_URL}ing/smoke`, {sheet: sheet})
+}
+
+getLastCigInv(){
+  return this.http.get<cigarsInv[]>(`${environment.BASE_URL}ing/smoke?loc=${environment.LOC}&point=${environment.POINT}`)
 }
 
 }

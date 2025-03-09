@@ -490,6 +490,7 @@ export class AddEntryPage implements OnInit, OnDestroy {
         typeOf: this.form.value.typeOf,
         suplier: this.form.value.suplier,
         user: this.usersId.length ? this.usersId : [this.form.value.user],
+        salePoint: environment.POINT,
         document: {
           tip: this.form.value.document ? this.form.value.document : 'Fara',
           number: this.form.value.docNr

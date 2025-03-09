@@ -52,7 +52,7 @@ addEntry(user: any, day: any, month: string, dayValue: number){
 }
 
 addShedule(){
-  return this.http.post<Shedule>(`${environment.BASE_URL}shedule`, {loc: environment.LOC})
+  return this.http.post<Shedule>(`${environment.BASE_URL}shedule`, {loc: environment.LOC, salePoint: environment.POINT})
 }
 
 selectShedule(shedule: Shedule){

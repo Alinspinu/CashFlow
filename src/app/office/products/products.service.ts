@@ -71,7 +71,6 @@ export class ProductsService{
   saveProduct(product: any){
     return this.http.post<{message: string, product: any}>(`${environment.BASE_URL}product/prod-add?loc=${environment.LOC}`, {data: product})
     .pipe(tap(response => {
-      console.log(response)
       if(response && response.product){
         const newProduct = response.product
         this.products.push(newProduct)
@@ -110,6 +109,11 @@ export class ProductsService{
 
  printEcel(filter : any) {
   return this.http.post(`${environment.BASE_URL}print/products-recipes`, {filter}, {responseType: 'blob'})
+ }
+
+ getCigarets(){
+  const products = this.products.filter(p => p.name === 'TEREA' || p.name === 'DELIA' || p.name === 'HEETS')
+  return products
  }
 
 }

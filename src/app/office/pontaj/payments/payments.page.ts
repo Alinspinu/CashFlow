@@ -30,17 +30,12 @@ interface data{
 
 export class PaymentsPage implements OnInit {
 
-  avans: log[] = [];
-  saleBonus: log[] = [];
-  bonus: log[] = [];
-  salary: log[] = [];
+  logs: log[] = []
   userName!: string
   userID!: string
 
-  avansTot: number = 0
-  saleBonusTot: number = 0
-  bonusTot: number = 0
-  salaryTot: number = 0
+  total: number = 0
+
 
 
   constructor(
@@ -52,54 +47,28 @@ export class PaymentsPage implements OnInit {
 
   ngOnInit() {
     const data: data = this.navPar.get('options')
+    console.log(data.logs)
     if(data && data.logs){
       this.userName = data.name
       this.userID = data.userID
-      for(let log of data.logs){
-        if(log.tip === 'Avans'){
-          this.avans.push(log)
-          this.avansTot += log.amount
-        }
-        if(log.tip === 'Bonus vanzari'){
-          this.saleBonus.push(log)
-          this.saleBonusTot += log.amount
-        }
-        if(log.tip === 'Salariu'){
-          this.salary.push(log)
-          this.salaryTot += log.amount
-        }
-        if(log.tip === 'Bonus excelenta'){
-          this.bonus.push(log)
-          this.bonusTot += log.amount
-        }
-      }
+      this.logs = data.logs
+      this.total = this.logs.reduce((sum, log) => sum + log.amount, 0);
     }
   }
 
-  deleteLog(payID: string, userID: string, tip: string){
+
+  close(){
+    this.modalCtrl.dismiss(null)
+  }
+
+
+  deleteLog(payID: string, userID: string){
     this.pontajService.deletePayLog(payID, userID).subscribe({
       next: (response) => {
         showToast(this.toastCtrl, response.message, 3000)
-        if(tip === 'Avans'){
-          const index =  this.avans.findIndex(l => l._id === payID)
-          this.avans.splice(index, 1)
-          this.avansTot -= this.avans[index].amount
-        }
-        if(tip ==='Bonus vanzari'){
-          const index =  this.saleBonus.findIndex(l => l._id === payID)
-          this.saleBonus.splice(index, 1)
-          this.saleBonusTot -= this.saleBonus[index].amount
-        }
-        if(tip === 'Salariu'){
-          const index =  this.salary.findIndex(l => l._id === payID)
-          this.salary.splice(index, 1)
-          this.salaryTot -= this.salary[index].amount
-        }
-        if(tip === 'Bonus excelenta'){
-          const index =  this.bonus.findIndex(l => l._id === payID)
-          this.bonus.splice(index, 1)
-          this.bonusTot -= this.bonus[index].amount
-        }
+        const index =  this.logs.findIndex(l => l._id === payID)
+        this.total -= this.logs[index].amount
+        this.logs.splice(index, 1)
       },
       error: (error) => {
         showToast(this.toastCtrl, error.message, 4000)

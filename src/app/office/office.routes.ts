@@ -53,6 +53,10 @@ export const routes: Routes = [
     redirectTo: '/office/products',
     pathMatch: 'full',
   },
+  {
+    path: 'new',
+    loadComponent: () => import('./users/new/new.page').then( m => m.NewPage)
+  },
 
 
 

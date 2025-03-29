@@ -11,20 +11,10 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <!-- <ion-toolbar class="ion-no-border ion-no-padding" style="height: 50px !important;">
-    <ion-title class="ion-text-center">{{pontaj.month}}</ion-title>
-         <ion-button fill="ghost" color="medium" (click)="selectPontaj()" slot="end">
-          <ion-icon src="assets/icon/time.svg"></ion-icon>
-        </ion-button>
-  </ion-toolbar> -->
   <ion-grid class="ion-no-padding">
     <ion-row *ngIf="pontaj && users">
       <ion-col size="1" class="ion-no-padding padding">
         <div class="square days">Nume Angajat</div>
-
-        <!-- <ion-item lines="none" class="date-wrapper pointer" color="primary" (click)="selectPontaj()">
-          <span class="date">{{pontaj.month}}</span>
-        </ion-item> -->
       </ion-col>
       <ion-col size="0.4" class="ion-no-padding padding">
         <div class="square days">Baza</div>
@@ -51,7 +41,10 @@
         <div class="square days">lei/h</div>
       </ion-col>
       <ion-col size="0.3" class="ion-no-padding padding">
-        <div class="square days">Ora</div>
+        <div class="square days pointer" (click)="selectHourPeriod()">
+          <span>Ore</span>
+          <span>{{hourPeriod}}</span>
+        </div>
       </ion-col>
       <ion-col *ngFor="let day of pontaj.days" class="ion-no-padding padding">
         <div class="square days">
@@ -177,7 +170,7 @@
             }">
             {{roundInHtml(user.employee.salary.inHeand / user.employee.salary.norm)}}</div>
           </ion-col>
-          <ion-col size="0.3" (click)="hours(user.employee.workLog, user.employee.fullName, user.employee.payments)" style="cursor: pointer;" class="ion-no-padding padding">
+          <ion-col size="0.3" class="ion-no-padding padding">
             <div class="square"
             [ngClass]="{
               'barista' : user.employee.position === 'Barista',

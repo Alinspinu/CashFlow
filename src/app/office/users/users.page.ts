@@ -1,11 +1,13 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, MenuController } from '@ionic/angular';
+import { IonicModule, MenuController, ToastController } from '@ionic/angular';
 import { UsersService } from './users.service';
 import User from 'src/app/auth/user.model';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { UserContentPage } from './user-content/user-content.page';
+import { NewPage } from './new/new.page';
+import { showToast } from 'src/app/shared/utils/toast-controller';
 
 
 @Component({
@@ -30,7 +32,8 @@ export class UsersPage implements OnInit, OnDestroy {
   constructor(
     private usersSrv: UsersService,
     @Inject(ActionSheetService) private actionSheetService: ActionSheetService,
-    @Inject(MenuController) private menuCtrl: MenuController
+    @Inject(MenuController) private menuCtrl: MenuController,
+    private toastCtrl: ToastController,
       ) {}
 
     ngOnDestroy() {
@@ -53,8 +56,17 @@ export class UsersPage implements OnInit, OnDestroy {
       }
     }
 
-    addUser(){
-
+   async addUser(){
+      const data = await this.actionSheetService.openAdd(NewPage, 'register', 'small-two')
+      this.usersSrv.addUser(data).subscribe({
+        next: (response) => {
+          showToast(this.toastCtrl, response.message, 2000)
+          console.log(response.user)
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
     }
 
 

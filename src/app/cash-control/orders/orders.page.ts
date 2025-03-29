@@ -13,6 +13,8 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { DelProdViewPage } from 'src/app/reports/cash/del-prod-view/del-prod-view.page';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { HeaderPage } from '../header/header.page';
+import { Preferences } from '@capacitor/preferences';
+import { ConfigService } from 'src/app/config/config.service';
 
 @Component({
   selector: 'app-orders',
@@ -24,25 +26,26 @@ import { HeaderPage } from '../header/header.page';
 export class OrdersPage implements OnInit, OnDestroy {
 
   productSearch!: string
+  orders: Bill[] = []
+  allOrders: Bill[] = []
 
+  isLoading: boolean = true
 
-    orders: Bill[] = []
-    allOrders: Bill[] = []
+  delProducts: deletetBillProduct[] = []
 
-    isLoading: boolean = true
+  ordersDone: Bill[] = []
+  ordersOpen: Bill[] = []
+  discountOrders: Bill[] = []
+  onlineOrders: Bill[] = []
 
-    delProducts: deletetBillProduct[] = []
+  user!: any
+  users: {name: string, id: string, show: boolean}[] = []
 
-    ordersDone: Bill[] = []
-    ordersOpen: Bill[] = []
-    discountOrders: Bill[] = []
-    onlineOrders: Bill[] = []
+  userSub!: Subscription
+  menuOpen: boolean = false
 
-    user!: any
-    users: {name: string, id: string, show: boolean}[] = []
-
-    userSub!: Subscription
-    menuOpen: boolean = false
+    printServers: any = []
+    mainServer!: any
 
   constructor(
         private cashSrv: CashControlService,
@@ -50,10 +53,12 @@ export class OrdersPage implements OnInit, OnDestroy {
         private authSrv: AuthService,
         @Inject(ActionSheetService) private actionSheet: ActionSheetService,
         @Inject(MenuController) private menuCtrl: MenuController,
+        private configSrv: ConfigService,
   ) { }
 
   ngOnInit() {
     this.getUser()
+    this.getPrintServerFlromLocal()
   }
 
   ngOnDestroy(): void {
@@ -62,14 +67,32 @@ export class OrdersPage implements OnInit, OnDestroy {
     }
   }
 
+  async getPrintServerFlromLocal(){
+    const { value } = await Preferences.get({key: 'mainServer'})
+    if(value){
+     const server = JSON.parse(value)
+     this.mainServer = server
+    } else {
+     this.configSrv.getPrintServers().subscribe({
+       next: async (response) => {
+         this.printServers = response.servers
+         const data = this.printServers.map((s: any) => s.name)
+         const server = await this.actionSheet.entryAlert(data, 'radio', 'Server de bonuri', 'Alege serverul de bonuri!', '', '')
+         if(server){
+           const choice = this.printServers.find((s:any) => s.name === server)
+           if(choice){
+             this.mainServer = choice
+             await Preferences.set({key: 'mainServer', value: JSON.stringify(choice)})
+           }
+         }
+       },
+       error: (error) => {
+         console.log(error)
+       }
+     })
+    }
+   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['data']) {
-  //     this.updateData(this.data.orders);
-  //     this.orders = this.data.orders
-  //     this.delProducts = this.data.delProd
-  //   }
-  // }
 
 
   reciveData(ev: any){
@@ -179,7 +202,7 @@ resetOrders(){
     }
      if(result && result.message === "fiscal") {
         this.isLoading = true
-        this.cashSrv.reprintBill(result.order).subscribe(response => {
+        this.cashSrv.reprintBill(result.order, this.mainServer).subscribe(response => {
           if(response) {
             this.isLoading = false
             showToast(this.toastCtrl, response.message, 3000)
@@ -198,7 +221,7 @@ resetOrders(){
      if(result && result.message === "nefiscal"){
       const order = JSON.stringify(result.order)
       this.isLoading = true
-      this.cashSrv.printNefiscal(order).subscribe(response => {
+      this.cashSrv.printNefiscal(order, this.mainServer).subscribe(response => {
         if(response) {
           this.isLoading = false
           showToast(this.toastCtrl, response.message, 3000)

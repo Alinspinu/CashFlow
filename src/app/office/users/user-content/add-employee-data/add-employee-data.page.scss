@@ -35,7 +35,7 @@ ion-input, ion-select, .font, span, ion-textarea{
       padding: 12px 0 0 12px;
       display: flex;
       align-items: center;
-      justify-content: start;
+      justify-content: flex-start;
 
       .input, .date-input{
         margin: 4px 0 4px 12px;
@@ -56,6 +56,10 @@ ion-input, ion-select, .font, span, ion-textarea{
         border-radius: 6px;
         min-width: 46%;
         max-width: 46%;
+      }
+      .custom-date-input{
+        min-width: 30%;
+        max-width: 30%;
       }
       .custom-input{
         min-width: 46%;

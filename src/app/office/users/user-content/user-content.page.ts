@@ -105,13 +105,16 @@ async editUser(){
   }
 }
 
-deleteUser(){
-  this.userSrv.deleteUser(this.user._id).subscribe(response => {
-    if(response){
-      showToast(this.toastCtrl, response.message, 3000)
-      this.modalCtrl.dismiss(null)
-    }
-  })
+async deleteUser(){
+ const response = await this.actSrv.deleteAlert(`Ești sigur ca vrei să ștergi utilizatorul ${this.user.name}?`, 'Șterge Utilizatorul!')
+ if(response) {
+   this.userSrv.deleteUser(this.user._id).subscribe(response => {
+     if(response){
+       showToast(this.toastCtrl, response.message, 3000)
+       this.modalCtrl.dismiss(null)
+     }
+   })
+ }
 }
 
 }

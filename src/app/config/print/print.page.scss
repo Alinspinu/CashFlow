@@ -1,0 +1,28 @@
+ion-content, ion-header, ion-toolbar{
+  --background: var(--background-color) !important;
+  background-color: var(--background-color) !important;
+}
+
+#button{
+  --border-radius: 50px !important;
+  ion-label{
+    font-family: RoseMed;
+    font-size: 18px;
+  }
+}
+
+.server-container{
+display: flex;
+  .server{
+    margin: 12px;
+    padding: 12px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: RoseMed !important;
+    font-size: 18px;
+    border: 1px solid var(--text-color);
+    border-radius: 8px;
+  }
+}

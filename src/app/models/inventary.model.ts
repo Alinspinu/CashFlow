@@ -113,6 +113,7 @@ export class cigarsInv{
       found: number,
       second: number,
       sale: number,
+      in: number,
       valid: boolean,
       ing: string,
     }[],

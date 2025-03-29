@@ -329,7 +329,9 @@ export class BillPage implements OnInit, OnDestroy {
           this.billData.billIndex,
           this.user.employee,
           this.billData.billToshow.inOrOut,
-          outside
+          outside,
+          undefined,
+          undefined
         ).pipe(
           map((res) => {
             // this.disableOrderButton = false;
@@ -349,7 +351,9 @@ export class BillPage implements OnInit, OnDestroy {
               this.billData.billIndex,
               this.user.employee,
               this.billData.billToshow.inOrOut,
-              outside
+              outside,
+              undefined,
+              undefined
             ).pipe(
               map((res) => {
                 // this.disableOrderButton = false;

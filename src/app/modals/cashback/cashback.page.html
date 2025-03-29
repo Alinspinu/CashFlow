@@ -1,44 +1,35 @@
-<ion-header  class='ion-no-border'>
-  <ion-toolbar *ngIf="data" class='ion-no-border'>
-    <div class="title-wrapper">
-      <div class="title">Cash Back: {{data.cashBack}} Lei</div>
-    </div>
-    <div class="title-wrapper">
-      <div class="title">Notă: {{data.total}} Lei</div>
-    </div>
-    <!-- <ion-title class="ion-text-center">Cash Back disponibil: {{data.cashBack}} Lei</ion-title>
-    <ion-title class="ion-text-center">Valoare Notă: {{data.total}} Lei</ion-title> -->
-  </ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+      <ion-title slot="start">CASHBACK</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="dismiss()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
-<ion-grid>
-  <ion-row>
-    <ion-col>
+    <div class="sub-header">
+      <div class="line">
+        <span class="label">Notă de plată</span>
+        <span class="value">{{data.total}} Lei</span>
+      </div>
+      <div class="line">
+        <span class="label">Cashback client</span>
+        <span class="value">{{data.cashBack}} Lei</span>
+      </div>
+    </div>
+    <div class="input">
+      <ion-input type="number" label="Valoare" labelPlacement="floating" fill="outline" placeholder="00" [(ngModel)]="cashBackValue"></ion-input>
+      <ion-button size="large" expand="block" (click)="maxim()">MAXIM</ion-button>
+    </div>
 
-        <!-- <form [formGroup]="cashBackForm"> -->
-        <div class="input">
-          <ion-input type="number" label="Valoare" labelPlacement="floating" placeholder="00" [(ngModel)]="cashBackValue"></ion-input>
-        </div>
-        <!-- </form> -->
-    </ion-col>
-  </ion-row>
-
-</ion-grid>
 </ion-content>
 
 <ion-footer class='ion-no-border'>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-      <ion-button size="large" expand="block" color="light"(click)="dismiss()">RENUNȚĂ</ion-button>
-    </ion-col>
-    <ion-col>
-      <ion-button size="large" expand="block" color="tertiary"(click)="maxim()">MAXIM</ion-button>
-    </ion-col>
-      <ion-col>
-        <ion-button size="large" expand="block" color="medium" (click)="useCashBack()">FOLOSEȘTE</ion-button>
-        </ion-col>
-    </ion-row>
-  </ion-grid>
+
+  <ion-button size="large" expand="block" (click)="useCashBack()">FOLOSEȘTE</ion-button>
+
 </ion-footer>

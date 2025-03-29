@@ -5,10 +5,8 @@ import  {jwtDecode } from 'jwt-decode'
 import { Preferences } from "@capacitor/preferences";
 import {environment} from "../../environments/environment"
 import User from "./user.model";
-import { emptyUser } from "../models/empty-models";
 import { IndexDbService } from "../shared/indexDb.service";
-import { Bill } from '../models/table.model';
-import { Category } from '../models/category.model';
+
 
 
 

@@ -105,11 +105,17 @@
               </div>
             </div>
           <div class="inputs-wrapper">
-            <div  class="date-input" (click)="openDateModal('birth')">
+            <div  class="date-input custom-date-input" (click)="openDateModal('birth')">
               <span>{{birthDate ? 'Dată nașterii - ' + formatedDate(birthDate) : "Alege data nașterii"}}</span>
             </div>
-              <div  class="input custom-input">
+              <div  class="input">
                 <ion-select label="Stare" mode="md" placeholder="Level" fill="outline"  formControlName="status">
+                  <ion-select-option class="font" [value]="true">Activ</ion-select-option>
+                  <ion-select-option class="font" [value]="false">Inactiv</ion-select-option>
+                </ion-select>
+              </div>
+              <div  class="input">
+                <ion-select label="Contract" mode="md" placeholder="Level" fill="outline"  formControlName="contract">
                   <ion-select-option class="font" [value]="true">Activ</ion-select-option>
                   <ion-select-option class="font" [value]="false">Inactiv</ion-select-option>
                 </ion-select>

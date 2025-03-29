@@ -1,32 +1,22 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-    <div class="title-wrapper">
-      <span class="title">Adaugă Bacsis</span>
-    </div>
-  </ion-toolbar>
+  <ion-toolbar class="ion-no-border toolbar">
+      <ion-title slot="start">Bacșis</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="dismissModal()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-<ion-grid>
-  <ion-row class="input-row">
-    <ion-col>
-      <ion-item lines="none" class="input">
-        <ion-input type="number" label='Bacsis' labelPlacement="floating" placeholder="00"  [(ngModel)]="tipsValue"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+
+      <div class="input">
+        <ion-input mode="md" type="number" label='Bacsis' fill="outline" labelPlacement="floating" placeholder="00"  [(ngModel)]="tipsValue"></ion-input>
+      </div>
+
 </ion-content>
 
 <ion-footer class="ion-no-border">
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-      <ion-button size="large" expand="block" color="light" (click)="close()" style="height: 100px;">RENUNȚĂ</ion-button>
-    </ion-col>
-      <ion-col>
-        <ion-button size="large" expand="block" color="medium"(click)="addTips()" [disabled]="!tipsValue && tipsValue !== 0" style="height: 100px;">ADAUGĂ BACSIS</ion-button>
-        </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-button  expand="block" size="large" (click)="addTips()" [disabled]="!tipsValue && tipsValue !== 0">ADAUGĂ BACSIS</ion-button>
 </ion-footer>

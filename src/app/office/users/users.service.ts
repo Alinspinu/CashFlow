@@ -91,4 +91,9 @@ export class UsersService{
           }))
   }
 
+
+
+  addUser(user: any){
+    return this.http.post<{message: string, user: any}>(`${environment.BASE_URL}users/customer`, user)
+  }
 }

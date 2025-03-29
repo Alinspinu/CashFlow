@@ -1,80 +1,35 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-    <div class="title-wrapper">
-      <div class="title">{{userName}} -- {{avansTot + salaryTot}} Lei</div>
-    </div>
+  <ion-toolbar class="ion-no-border toolbar">
+      <ion-title slot="start">Plăți -- {{userName}} --</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+      <div class="header">
+        <span class="nr">Nr</span>
+        <span class="date">Data</span>
+        <span class="type">Tip</span>
+        <span class="value">Valoare</span>
+        <span class="action">Action</span>
+      </div>
   </ion-toolbar>
 </ion-header>
 
+
+
 <ion-content [fullscreen]="true">
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngIf="saleBonus.length">
-        <ion-title class="ion-text-center">Bonus vanzari</ion-title>
-        <div class="box" *ngFor="let log of saleBonus">
-          <span class="date">{{formatDateInHtml(log.date)}}</span>
-          <span> {{log.amount}} lei</span>
-          <ion-button fill="outline" color="medium" (click)="deleteLog(log._id, userID,log.tip)">
-            <ion-icon src="../../../../assets/icon/trash-outline.svg" ></ion-icon>
-          </ion-button>
-        </div>
-      </ion-col>
-      <ion-col *ngIf="bonus.length">
-        <ion-title class="ion-text-center">Bonus excelență</ion-title>
-        <div class="box" *ngFor="let log of bonus">
-          <span class="date">{{formatDateInHtml(log.date)}}</span>
-          <span> {{log.amount}} lei</span>
-          <ion-button fill="outline" color="medium" (click)="deleteLog(log._id, userID,log.tip)">
-            <ion-icon src="../../../../assets/icon/trash-outline.svg" ></ion-icon>
-          </ion-button>
-        </div>
-      </ion-col>
-      <ion-col *ngIf="avans.length">
-        <ion-title class="ion-text-center">Avans</ion-title>
-        <div class="box" *ngFor="let log of avans">
-          <span class="date">{{formatDateInHtml(log.date)}}</span>
-          <span> {{log.amount}} lei</span>
-          <ion-button fill="outline" color="medium" (click)="deleteLog(log._id, userID,log.tip)">
-            <ion-icon src="../../../../assets/icon/trash-outline.svg" ></ion-icon>
-          </ion-button>
-        </div>
-      </ion-col>
-      <ion-col *ngIf="salary.length">
-        <ion-title class="ion-text-center">Salariu</ion-title>
-        <div class="box" *ngFor="let log of salary">
-          <span class="date">{{formatDateInHtml(log.date)}}</span>
-          <span> {{log.amount}} lei</span>
-          <ion-button fill="outline" color="medium" (click)="deleteLog(log._id, userID,log.tip)">
-            <ion-icon src="../../../../assets/icon/trash-outline.svg" ></ion-icon>
-          </ion-button>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col *ngIf="saleBonus.length">
-        <div class="box total">
-          <span>Total Bonus </span>
-          <span> {{saleBonusTot}} lei</span>
-        </div>
-      </ion-col>
-      <ion-col *ngIf="bonus.length">
-        <div class="box total">
-          <span>Total Bonus</span>
-          <span> {{bonusTot}} lei</span>
-        </div>
-      </ion-col>
-      <ion-col *ngIf="avans.length">
-        <div class="box total">
-          <span>Total Avans</span>
-          <span> {{avansTot}} lei</span>
-        </div>
-      </ion-col>
-      <ion-col *ngIf="salary.length">
-        <div class="box total">
-          <span>Total Salariu</span>
-          <span> {{salaryTot}} lei</span>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="input" *ngFor="let log of logs; let i = index" [ngClass]="{'odd': i % 2 !== 0}">
+    <span class="nr">#{{i+1}}</span>
+    <span class="date">{{formatDateInHtml(log.date)}}</span>
+    <span class="type">{{log.tip}}</span>
+    <span class="value">{{log.amount}} Lei</span>
+    <ion-icon class="action" src="../../../../assets/icon/trash-outline.svg" (click)="deleteLog(log._id, userID)"></ion-icon>
+  </div>
+  <div class="total-wrapper">
+    <span class="label">Total încasat</span>
+    <span class="value">{{total}} Lei</span>
+  </div>
 </ion-content>

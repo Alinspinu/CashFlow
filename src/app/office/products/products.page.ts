@@ -247,9 +247,9 @@ searchIngProduct(ev: any){
             this.activateMainCat()
           }
           if(index > 0) {
-
             this.dbProducts = value.filter(p => p.category)
             this.products = this.dbProducts
+            this.mainCats = getMaincat(this.products, this.isDarkMode)
             this.updateProductsBySelectedCategory()
             if(this.productIngSearch.length) this.searchIngProduct('')
             if(this.productSearch.length)this.searchProduct('')

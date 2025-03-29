@@ -9,7 +9,6 @@ ion-content, ion-toolbar, ion-footer, ion-radio-group{
   }
 
   .message-wrapper{
-    // height: 80vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,6 +21,30 @@ ion-content, ion-toolbar, ion-footer, ion-radio-group{
         padding: 36px;
         font-size: 24px;
     }
+  }
+
+  .line{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+    margin: 8px 24px;
+    padding: 12px 0;
+    .label{
+      flex: 25%;
+      font-size: 18px;
+      font-family: RoseReg !important;
+    }
+    .value{
+      flex: 75%;
+      text-align: end;
+      font-size: 20px;
+      font-family: RoseMed;
+    }
+  }
+  .small{
+    text-align: start !important;
+    font-size: 14px !important;
+    font-family: RoseReg !important;
   }
 
 

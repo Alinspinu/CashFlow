@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController, ToastController } from '@ionic/angular';
+import { IonicModule, MenuController, ModalController, ToastController } from '@ionic/angular';
 import { ConfigService } from './config.service';
 import { AuthService } from '../auth/auth.service';
 import { showToast } from '../shared/utils/toast-controller';
@@ -17,6 +17,8 @@ export class ConfigPage implements OnInit {
 
   locatie!: any;
   locId!: any;
+
+  menuOpen: boolean = false
 
 
   show: {
@@ -34,10 +36,12 @@ export class ConfigPage implements OnInit {
     private configSrv: ConfigService,
     private auth: AuthService,
     private toastCtrl: ToastController,
+    private menuCtrl: MenuController,
   ) { }
 
   ngOnInit() {
     this.getUser()
+    this.menuChange()
 
   }
 
@@ -50,21 +54,22 @@ export class ConfigPage implements OnInit {
     })
   }
 
+  private async menuChange(){
+    const menu = await this.menuCtrl.get('start');
+    if (menu) {
+      menu.addEventListener('ionDidClose', () => {
+        this.menuOpen = false
+      });
+      menu.addEventListener('ionDidOpen', () => {
+           this.menuOpen = true
+      });
+    }
+  }
+
 
   getLoc(){
     if(this.locId){
-      this.configSrv.fetchLocatie(this.locId).subscribe(response => {
-        this.locatie = response
-        if(this.locatie.gmail && this.locatie.gmail.email.length) {
-          this.emailValue = this.locatie.gmail.email
-        }
-        if(this.locatie.pos && this.locatie.pos.vivaWalletLocal.ip){
-          this.ipValue = this.locatie.pos.vivaWalletLocal.ip
-        }
-        if(this.locatie.pos && this.locatie.pos.vivaWalletLocal.port){
-          this.portValue = this.locatie.pos.vivaWalletLocal.port
-        }
-      })
+
     }
   }
 
@@ -74,7 +79,7 @@ export class ConfigPage implements OnInit {
 
   saveData(){
     if(this.ipValue.length && this.portValue.length){
-      this.configSrv.savePosData(this.ipValue, this.portValue, this.locId).subscribe(response => {
+      this.configSrv.savePosData(this.ipValue, this.portValue).subscribe(response => {
         showToast(this.toastCtrl, response.message, 2000)
         this.ipValue = ''
         this.portValue = ''
@@ -88,7 +93,7 @@ export class ConfigPage implements OnInit {
     const gmailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
     if(gmailRegex.test(this.emailValue)){
       if(this.appKey.length){
-        this.configSrv.saveServiceMail(this.emailValue,this.appKey, this.locId).subscribe(response => {
+        this.configSrv.saveServiceMail(this.emailValue,this.appKey).subscribe(response => {
           if(response) {
               showToast(this.toastCtrl, response.message, 2000)
               this.emailValue = ''

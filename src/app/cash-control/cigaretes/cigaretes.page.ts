@@ -67,10 +67,11 @@ export class CigaretesPage implements OnInit {
   }
 
   async modifyFinal(p: any){
+    let productIn = p.in ? p.in : 0
     const value = await  this.actionService.numberAlert('Modifică cantitatea', `Scrie căte pachete de ${p.name} au rămas in stoc!`, 'val', 'Cantitate')
     if(value){
       p.second = +value
-      if(p.second === p.found-p.sale){
+      if(p.second === p.found-p.sale + productIn){
         p.valid = true
       } else {
         p.valid = false
@@ -81,6 +82,13 @@ export class CigaretesPage implements OnInit {
       } else {
         this.sheet.valid = true
       }
+    }
+  }
+
+  async modifyIn(p: any) {
+    const value = await  this.actionService.numberAlert('Adaugă intrări', `Scrie căte pachete de ${p.name} au intrat!`, 'val', 'Cantitate')
+    if(value){
+      p.in = +value
     }
   }
 
@@ -118,6 +126,7 @@ export class CigaretesPage implements OnInit {
     for(let product of products){
       for(let sub of product.subProducts){
         const ing = sub.ings[0].ing
+        console.log(ing)
         const sheetProduct = this.sheet.products.find(p => p.ing === ing._id);
         if(!sheetProduct){
           const product = {
@@ -126,6 +135,7 @@ export class CigaretesPage implements OnInit {
             found: ing.qty,
             second: 0,
             sale: 0,
+            in: 0,
             valid: false,
             ing: ing._id
           }
@@ -133,7 +143,7 @@ export class CigaretesPage implements OnInit {
         }
       }
     }
-    this.sheet.products.sort((a, b) => b.name.localeCompare(a.name))
+    // this.sheet.products.sort((a, b) => b.name.localeCompare(a.name))
   }
 
   saveInv(){

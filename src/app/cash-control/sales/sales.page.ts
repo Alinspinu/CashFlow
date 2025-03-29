@@ -11,8 +11,6 @@ import { ChartPage } from 'src/app/shared/chart/chart.page';
 import { colors, darkColors, darkGama, gamaTreshold, lightColors, lightGama } from 'src/app/shared/chart/chart.colors';
 import { calcCashIn, calcHours, emptyToatals, hour, PaymentDetail, setZeroDiscount, showPayment} from '../cash-control-engine';
 import { Bill } from 'src/app/models/table.model';
-import { formatOrderDateOne } from 'src/app/shared/utils/functions';
-import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { Preferences } from '@capacitor/preferences';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { CashInOutPage } from 'src/app/modals/cash-in-out/cash-in-out.page';
@@ -20,6 +18,7 @@ import { Subscription } from 'rxjs';
 import { ContentService } from 'src/app/content/content.service';
 import { Category } from 'src/app/models/category.model';
 import { HeaderPage } from '../header/header.page';
+import { ConfigService } from 'src/app/config/config.service';
 
 
 
@@ -49,6 +48,9 @@ export class SalesPage implements OnInit, OnDestroy {
 
   serviceSum: number = 0
 
+  printServers: any = []
+  mainServer!: any
+
   private chart!: Chart;
 
   @Input() access: number = 1
@@ -67,12 +69,14 @@ export class SalesPage implements OnInit, OnDestroy {
     private cashService: CashControlService,
     private toastCtrl: ToastController,
     private contSrv: ContentService,
+    private configSrv: ConfigService,
     @Inject(ActionSheetService) private actSrv: ActionSheetService,
   ) { }
 
   ngOnInit() {
     this.getData()
     this.getServiceSum()
+   this.getPrintServerFlromLocal()
   }
 
   ngOnDestroy(): void {
@@ -87,10 +91,40 @@ export class SalesPage implements OnInit, OnDestroy {
 
 
 
+async getPrintServerFlromLocal(){
+   const { value } = await Preferences.get({key: 'mainServer'})
+   if(value){
+    const server = JSON.parse(value)
+    this.mainServer = server
+   } else {
+    this.configSrv.getPrintServers().subscribe({
+      next: async (response) => {
+        this.printServers = response.servers
+        const data = this.printServers.map((s: any) => s.name)
+        const server = await this.actSrv.entryAlert(data, 'radio', 'Server de bonuri', 'Alege serverul de bonuri!', '', '')
+        if(server){
+          const choice = this.printServers.find((s:any) => s.name === server)
+          if(choice){
+            this.mainServer = choice
+            await Preferences.set({key: 'mainServer', value: JSON.stringify(choice)})
+          }
+        }
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+
+   }
+  }
+
+
+
+
 
   reciveData(ev: any){
     this.orders = ev.orders.filter((o: any) => o.status === 'done')
-    this.openOrders = ev.orders.filter((o: any) => o.status === 'open' && o.masa !== 90)
+    this.openOrders = ev.orders.filter((o: any) => o.status === 'open' && o.masa !== 89)
     this.totals = calcCashIn(this.orders)
     this.hours = calcHours(this.orders, this.totals.total)
     this.updateHourstData()
@@ -127,7 +161,7 @@ async inAndOut(value: string){
  }
 
  handleInAndOut(data: any){
-  this.cashService.cashInAndOut(data).subscribe(response => {
+  this.cashService.cashInAndOut(data, this.mainServer).subscribe(response => {
     if(response){
       if(data.mode === 'in'){
         this.serviceSum = data.sum
@@ -181,7 +215,7 @@ reports(value: string){
 
     }
   })
-  this.cashService.raport(value).subscribe(response => {
+  this.cashService.raport(value, this.mainServer).subscribe(response => {
     if(response){
       if(value === 'z'){
         Preferences.remove({key: 'payments'})

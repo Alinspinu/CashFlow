@@ -25,6 +25,8 @@ import { BillPage } from './bill/bill.page';
 import { emptyBillProduct } from '../../models/empty-models';
 import { ScreenSizeService } from 'src/app/shared/screen-size.service';
 import { AddProductDiscountPage } from './add-product-discount/add-product-discount.page';
+import { Preferences } from "@capacitor/preferences";
+import { ConfigService } from 'src/app/config/config.service';
 
 
 interface billData{
@@ -98,6 +100,8 @@ export class TableContentPage implements OnInit, OnDestroy {
   screenSub!: Subscription
   user!: User;
 
+
+
   comment: string = ''
 
   outside: boolean = false
@@ -110,6 +114,9 @@ export class TableContentPage implements OnInit, OnDestroy {
   sendCol: number = 2.5
   billCol: number = 2.5
 
+  printServers: any = []
+  mainServer!: any
+  secondaryServer!: any
 
   data: {
     mainCats: any,
@@ -149,15 +156,21 @@ export class TableContentPage implements OnInit, OnDestroy {
     private router: Router,
     private webRTC: WebRTCService,
     private screenSizeService: ScreenSizeService,
+    private configSrv: ConfigService,
     ) { }
 
 
   ngOnInit() {
+    this.getServers()
+    this.getSecondaryServer()
     this.getUser();
     this.getTableNumber();
     this.getData();
     this.getBill();
     this.getScreenSize()
+    setTimeout(() => {
+      this.getPrintServerFlromLocal()
+    }, 3000)
   }
 
   ngOnDestroy(): void {
@@ -177,6 +190,71 @@ export class TableContentPage implements OnInit, OnDestroy {
       this.screenSub.unsubscribe()
     }
   }
+
+getServers(){
+  this.configSrv.getPrintServers().subscribe({
+    next: (response) => {
+      this.printServers = response.servers
+      console.log(this.printServers)
+    },
+    error: (error) => {
+      console.log(error)
+    }
+  })
+}
+
+async setOutServer(){
+  if(this.secondaryServer){
+    const response = await this.actionSheet.deleteAlert('Ești sigur că vrei să deactivezi serverul de pe terasa?', 'Dezactivează serverul de pe terasă')
+    if(response){
+      await Preferences.remove({key: 'secondaryServer'})
+      this.secondaryServer = null
+      this.sendCol = 2.5
+      this.billCol = 2.5
+    }
+  } else {
+    const data = this.printServers.map((s: any) => s.name)
+    const server = await this.actionSheet.entryAlert(data, 'radio', 'Server secundar', 'Alege serverul secundar de bonuri!', '', '')
+    if(server){
+      const choice = this.printServers.find((s:any) => s.name === server)
+      if(choice){
+        const choice = this.printServers.find((s:any) => s.name === server)
+        this.secondaryServer = choice
+        await Preferences.set({key: 'secondaryServer', value: JSON.stringify(choice)})
+        this.sendCol = 1.5
+        this.billCol = 2
+      }
+    }
+  }
+}
+
+async getSecondaryServer(){
+  const {value} = await Preferences.get({key: 'secondaryServer'})
+  if(value){
+    this.secondaryServer = JSON.parse(value)
+    this.sendCol = 1.5
+    this.billCol = 2
+  }
+}
+
+
+async getPrintServerFlromLocal(){
+ const { value } = await Preferences.get({key: 'mainServer'})
+ if(value){
+  const server = JSON.parse(value)
+  this.mainServer = server
+ } else {
+  const data = this.printServers.map((s: any) => s.name)
+  const server = await this.actionSheet.entryAlert(data, 'radio', 'Server de bonuri', 'Alege serverul de bonuri!', '', '')
+  if(server){
+    const choice = this.printServers.find((s:any) => s.name === server)
+    if(choice){
+      this.mainServer = choice
+      await Preferences.set({key: 'mainServer', value: JSON.stringify(choice)})
+    }
+  }
+ }
+}
 
 //***************************NG-ON-INIT************************** */
 
@@ -238,6 +316,7 @@ export class TableContentPage implements OnInit, OnDestroy {
         })
         this.billData.table = this.table
         this.billData.table.bills = bills
+        console.log(this.billData.table.bills)
         this.disableMergeButton()
         this.disableDeleteOrderButton()
       }
@@ -381,7 +460,7 @@ export class TableContentPage implements OnInit, OnDestroy {
 //***********************************BUTTONS LOGIC************************** */
 
 async inviteUserToTip(invite: string){
-  const tipsValue = await this.actionSheet.openPayment(TipsPage, invite)
+  const tipsValue = await this.actionSheet.openAdd(TipsPage, invite, 'small-one')
   // this.invite === 'invite' ? this.invite = 'uninvite' : this.invite = 'invite'
   if(tipsValue || tipsValue === 0){
     if(this.billData.billToshow.tips > 0){
@@ -416,7 +495,7 @@ async addTips(){
 
 
 sendOrder(out: boolean, outside: boolean): Observable<boolean> {
-  if (this.billData.billToshow) {
+  if (this.billData.billToshow && this.mainServer) {
     this.billData.billToshow.out = outside
     this.disableOrderButton = true;
     this.billData.billToshow._id.length
@@ -432,7 +511,9 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
         this.billIndex,
         this.user.employee,
         this.billData.billToshow.inOrOut,
-        outside
+        outside,
+        this.mainServer,
+        this.secondaryServer
       ).pipe(
         map((res) => {
           this.disableOrderButton = false;
@@ -452,7 +533,9 @@ sendOrder(out: boolean, outside: boolean): Observable<boolean> {
             this.billIndex,
             this.user.employee,
             this.billData.billToshow.inOrOut,
-            outside
+            outside,
+            this.mainServer,
+            this.secondaryServer
           ).pipe(
             map((res) => {
               this.disableOrderButton = false;
@@ -488,7 +571,7 @@ async payment(){
               this.disableOrderButton = true;
               this.billData.billToshow.payment = paymentInfo
               this.billData.billToshow.cif = paymentInfo.cif;
-              this.tabSub = this.tableSrv.sendBillToPrint(this.billData.billToshow).subscribe({
+              this.tabSub = this.tableSrv.sendBillToPrint(this.billData.billToshow, this.mainServer).subscribe({
                 next: (response => {
                   if(response && response.bill.status === 'done'){
                     this.billData.billToshow = emptyBill()
@@ -643,7 +726,7 @@ async addDiscount(){
 async useCashBack(mode: boolean){
   if(mode){
     const data = { cashBack: this.client.cashBack, total: this.billData.billToshow.total}
-    const cashBackValue = await this.actionSheet.openPayment(CashbackPage, data)
+    const cashBackValue = await this.actionSheet.openAdd(CashbackPage, data, 'small-two')
     if(cashBackValue){
       this.workCashBack = cashBackValue
       this.billData.billToshow.cashBack = cashBackValue;

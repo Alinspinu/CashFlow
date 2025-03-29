@@ -32,7 +32,10 @@ export class RecordPage implements OnInit {
   sold: number = 0
 
   type: string = ''
+  total!: number;
+  date!: string;
   title: string = ''
+
 
   userId: string = ''
   suplierId!: string
@@ -72,6 +75,8 @@ getData(){
   this.paymentMessage = data.message
   const total = calcTotalDocs(this.nir).total
   this.records = data.records.filter((r:any) => r.typeOf === 'iesire' && r.document.amount < total + 2 && r.document.amount > total -2).reverse()
+  this.date = data.date;
+  this.total = data.total;
   this.title = this.records.length ? data.title : `Nu sunt inregistrări!`
 }
 

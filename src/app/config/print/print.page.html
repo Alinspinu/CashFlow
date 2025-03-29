@@ -1,0 +1,35 @@
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
+</ion-menu-button>
+
+
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Setări server de print</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" id="button" (click)="addServer()" [disabled]="!salePoints.length">
+        <ion-icon src="../../../../assets/icon/add-outline.svg " color="medium" slot="start" size="large"></ion-icon>
+        <ion-label slot="end">Adaugă</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+<ion-grid>
+  <ion-row>
+    <ion-col size-lg="6" offset-lg="3">
+      <div class="server-container">
+        <div class="server" *ngFor="let server of servers">
+          <span class="name">{{server.name}}</span>
+          <span class="point">{{getSalePoint(server.salePoint)}}</span>
+          <span class="status">{{server.status ? 'Activ' : 'Inactiv'}}</span>
+          <span class="key">{{server.key}}</span>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>

@@ -84,6 +84,22 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'email',
+    loadComponent: () => import('./config/email/email.page').then( m => m.EmailPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'viva',
+    loadComponent: () => import('./config/viva/viva.page').then( m => m.VivaPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'print',
+    loadComponent: () => import('./config/print/print.page').then( m => m.PrintPage),
+    canActivate: [AuthGuard]
+  },
+
+  {
     path: '',
     redirectTo: '/tables',
     pathMatch: 'full',
@@ -96,6 +112,11 @@ const routes: Routes = [
     path: 'add-customer',
     loadComponent: () => import('./content/table-content/customer-check/add-customer/add-customer.page').then( m => m.AddCustomerPage)
   },
+  {
+    path: 'print-modal',
+    loadComponent: () => import('./config/print/print-modal/print-modal.page').then( m => m.PrintModalPage)
+  },
+
 
 
 

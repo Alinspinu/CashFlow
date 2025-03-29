@@ -60,6 +60,8 @@ import { ModalPage } from '../reports/finance/fin-chart/modal/modal.page';
 import { AddCustomerPage } from '../content/table-content/customer-check/add-customer/add-customer.page';
 import { AddProductDiscountPage } from '../content/table-content/add-product-discount/add-product-discount.page';
 import { SuplierRecordsPage } from '../office/supliers/suplier-records/suplier-records.page';
+import { PrintModalPage } from '../config/print/print-modal/print-modal.page';
+import { NewPage } from '../office/users/new/new.page';
 
 
 
@@ -248,7 +250,11 @@ export class ActionSheetService {
                typeof RecordPage |
                typeof  SuplierRecordsPage |
                typeof  RecordModalPage |
-               typeof NirPage,
+               typeof  PrintModalPage |
+               typeof  NewPage |
+               typeof  TipsPage |
+               typeof  CashbackPage |
+               typeof  NirPage,
     options: any,
     clas: string
   ) {

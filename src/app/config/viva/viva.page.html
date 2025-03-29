@@ -1,0 +1,31 @@
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
+</ion-menu-button>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Setări Viva Wallet</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" class="view">
+  <div class="email-container">
+    <ion-grid  class="email">
+      <ion-row>
+        <ion-col>
+          <ion-item lines="none" class="input">
+            <ion-input type="text" label="Adresă IP" placeholder="Ex.. 192.168.100.9" labelPlacement="floating" [(ngModel)]="ipValue"></ion-input>
+          </ion-item>
+          <ion-note class="note">Alege adresa de email ce va fi folosită la trimiterea email-urilor catre utilizatori!</ion-note>
+          <ion-item lines="none" class="input">
+            <ion-input type="text" label="PORT" placeholder="Ex.. 9564" labelPlacement="floating" [(ngModel)]="portValue"></ion-input>
+          </ion-item>
+          <div class="button-wrapper">
+              <ion-button  size="large" fill="ghost" expand="block" (click)="saveData()">Salvează</ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

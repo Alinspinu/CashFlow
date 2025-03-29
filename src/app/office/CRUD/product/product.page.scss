@@ -17,11 +17,38 @@ ion-toggle{
   font-size: 15px;
 }
 
-// ion-footer ion-toolbar {
-//   --background: transparent !important; 
-//   background-color: transparent !important;
+.nutrition-title  {
+  font-family: RoseReg !important;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
 
-// }
+.ingredient-wrapper{
+  font-family: RoseLight !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content:left;
+  font-size: 13px;
+}
+
+.allergens{
+  margin-top: 24px;
+  width: 70%;
+  ion-input{
+    --border-width: 1.5px;
+    font-size: 14px;
+    height: 10px !important;
+}
+}
+
+.box{
+  width: 6px;
+  height: 6px;
+  border-radius:50%;
+  background-color: rgba(197, 140, 83, 0.5);
+  margin-right: 8px;
+}
 
 .header-buttons{
   --border-width: 1px !important;
@@ -69,7 +96,7 @@ ion-toggle{
       padding: 12px 0 0 12px;
       display: flex;
       align-items: center;
-      justify-content: start;
+      justify-content: flex-start;
 
       .input, .toggle-input{
         margin: 4px 0 4px 12px;

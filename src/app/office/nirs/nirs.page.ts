@@ -223,7 +223,7 @@ async paySelectedNirs(){
         this.supliersService.getSuplier(suplier._id).subscribe({
           next: async (sup) => {
             const message = `Plata facturi: ${this.selectedDocsNumber.join(', ')} de la Slayer Cup`
-            const data = {records: sup.records, title: `Alege intrarea din registru pentru valoarea de ${calcTotalDocs(this.selectedNirs).total} Lei`, nir: [], message, supId: suplier._id}
+            const data = {records: sup.records, total: calcTotalDocs(this.selectedNirs).total, date: this.selectedNirs.map(n => formatedDateToShow(n.documentDate).split('ora')[0]).join(', '),  nir: [], message, supId: suplier._id}
             await this.updatedocStatuNirPayment(data, true, this.selectedNirs)
           }
         })
@@ -243,14 +243,14 @@ async payNir(nir: Nir, index: number){
         if(nir.payd){
           const response = await this.actionSheetService.deleteAlert(`Ești sigur că vrei să marchezi documentul numărul - ${nir.nrDoc}, cu valoarea de ${nir.totalDoc}, ca neplătit?`, 'Anulează Plata!')
           if(response){
-            const data = {records: sup.records, title: `Deselectează intrarea cu valoarea de ${nir.totalDoc} Lei`, nir: [], message: '', sold: sup.sold, supId: sup._id}
+            const data = {records: sup.records, total: nir.totalDoc, date: formatedDateToShow(nir.documentDate).split('ora')[0], nir: [], message: '', sold: sup.sold, supId: sup._id}
             await this.updatedocStatuNirPayment(data, false,  [nir])
           }
         } else {
           const response = await this.actionSheetService.deleteAlert(`Vrei să asociezi plata documentului cu o plata deja existentă?`, 'Asociază plata')
           if(response){
             const message =  `Plata factura: ${nir.nrDoc} de la Slayer Cup`
-            const data = {records: sup.records, title: `Alege intrarea din registru pentru valoarea de ${nir.totalDoc} Lei`, nir: [], message, sold: sup.sold, supId: sup._id}
+            const data = {records: sup.records, total: nir.totalDoc, date: formatedDateToShow(nir.documentDate).split('ora')[0], nir: [], message, sold: sup.sold, supId: sup._id}
             await this.updatedocStatuNirPayment(data, true,  [nir])
           }
         }
@@ -262,9 +262,9 @@ async payNir(nir: Nir, index: number){
   }
 }
 
-async updatedocStatuNirPayment( data:{records: Record[], title: string, nir: Nir[], message: string, supId: string}, payment: boolean, nir: Nir[]){
+async updatedocStatuNirPayment( data:{records: Record[], total: number, date: string, nir: Nir[], message: string, supId: string}, payment: boolean, nir: Nir[]){
   data.nir = nir
-  const response = await this.actionSheetService.openAdd(RecordPage, data, 'small')
+  const response = await this.actionSheetService.openAdd(RecordPage, data, 'medium-two')
   if(response){
     const record = response.record
     this.nirSrv.updateDocPaymentStatus(payment, response.nir, response.type).subscribe({

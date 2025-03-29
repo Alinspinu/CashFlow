@@ -37,4 +37,8 @@ export class PaymentService{
     return this.http.get<{ip: string, port: string}>(`${environment.BASE_URL}auth/loc?id=${environment.LOC}`)
   }
 
+
+  printNefiscal(bill: string, mainServer: any){
+    return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-unreg`, {bill: bill, mainServer: mainServer})
+  }
 }

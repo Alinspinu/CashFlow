@@ -112,8 +112,12 @@ export class ProductsService{
  }
 
  getCigarets(){
-  const products = this.products.filter(p => p.name === 'TEREA' || p.name === 'DELIA' || p.name === 'HEETS')
+  const products = this.products.filter(p => p.name === 'TEREA' || p.name === 'DELIA' || p.name === 'HEETS' || p.name ==='Veev Ultra' || p.name === 'ZYN')
   return products
+ }
+
+ getNutritonalValues(request: string){
+  return this.http.post<{message: string}>(`${environment.BASE_URL}gbt/nutrition`, {request: request})
  }
 
 }

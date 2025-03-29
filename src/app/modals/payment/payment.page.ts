@@ -6,6 +6,7 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { IonInput } from '@ionic/angular/standalone';
 import { PaymentService } from './payment.service';
 import { Bill } from 'src/app/models/table.model';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-payment',
@@ -21,7 +22,7 @@ export class PaymentPage implements OnInit {
   total!: number
   tempTotal!: number
   order!: Bill
-  button: string = 'ÎNCASEAZĂ'
+  button: string = 'FISCAL'
   disableCancelButton: boolean = false
   disablePayButtons: boolean = false
   disableOnline: boolean = false
@@ -31,6 +32,8 @@ export class PaymentPage implements OnInit {
   cancelV2: boolean = false
   ip!: string
   port!: string
+
+
 
 
   constructor(
@@ -63,6 +66,7 @@ export class PaymentPage implements OnInit {
     })
   }
 
+
   setUpForm(){
     this.paymentForm = new FormGroup({
       cash: new FormControl(null, {
@@ -89,6 +93,22 @@ export class PaymentPage implements OnInit {
       this.paymentForm.get('online')?.disable()
     }
 
+  }
+
+  async printNefiscal(){
+    const { value } = await Preferences.get({key: 'mainServer'})
+    if(value){
+     const server = JSON.parse(value)
+      this.paySrv.printNefiscal(JSON.stringify(this.order), server).subscribe({
+        next: (response) => {
+          showToast(this.toastCtrl, response.message, 2000)
+          this.modalCtrl.dismiss(null)
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
+    }
   }
 
 

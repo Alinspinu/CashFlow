@@ -41,6 +41,8 @@ pontSub!: Subscription
 period: string = '1-30'
 periodMark: boolean = false
 
+hourPeriod: string = '1-30'
+
 isHidden: boolean = false
 lastY: number = 0;
 
@@ -68,12 +70,9 @@ lastY: number = 0;
 
   onScroll(event: any) {
     const currentY = event.detail.scrollTop;
-
     if (currentY > this.lastY && currentY > 20) {
-      // Scrolling down, hide content
       this.isHidden = true;
     } else if(currentY === 0){
-      // Scrolling up, show content
       this.isHidden = false;
     }
 
@@ -109,23 +108,22 @@ lastY: number = 0;
 
 
 openPayments(payments: any, userName: string, userID: string){
-  console.log(payments)
   const monthPayments = payments.filter((pay: any) => {
     return pay.workMonth === this.monthIndex
   })
   this.actSrv.openModal(PaymentsPage, {name: userName, logs: monthPayments, userID}, false)
 }
 
-hours(workLog: any, name: string, payments: any) {
-  const docToFilter = workLog.filter((doc: any) => {
-    const docDate = new Date(doc.checkIn);
-    return docDate.getMonth() === this.monthIndex
-  })
-  const monthPayments = payments.filter((pay: any) => {
-    return pay.workMonth === this.monthIndex
-  })
-  this.actSrv.openModal(HoursPage, {logs: docToFilter, name: name, payments: monthPayments}, false)
-}
+// hours(workLog: any, name: string, payments: any) {
+//   const docToFilter = workLog.filter((doc: any) => {
+//     const docDate = new Date(doc.checkIn);
+//     return docDate.getMonth() === this.monthIndex
+//   })
+//   const monthPayments = payments.filter((pay: any) => {
+//     return pay.workMonth === this.monthIndex
+//   })
+//   this.actSrv.openModal(HoursPage, {logs: docToFilter, name: name, payments: monthPayments}, false)
+// }
 
 
 async paySalary(user: any){
@@ -152,7 +150,8 @@ async paySalary(user: any){
     this.pontSub = this.pontSrv.pontajSend$.subscribe(response => {
         if(response) {
           this.pontaj = response
-          this.period = `1 - ${this.pontaj.days.length}`
+          this.period = `1-${this.pontaj.days.length}`
+          this.hourPeriod = `1-${this.pontaj.days.length}`
           this.periodMark = false
           const month = this.pontaj.month.split(' - ')[0]
           this.monthIndex = this.monhs.findIndex(obj => obj === month)
@@ -172,14 +171,23 @@ async paySalary(user: any){
 
 
   calcTotalsHours(workLog: any[]){
-    const date = new Date().getDate()
     const docToFilter = workLog.filter(doc => {
       const docDate = new Date(doc.checkIn);
       return docDate.getUTCMonth() === this.monthIndex
     })
     const documentsInTargetMonth = docToFilter.filter(doc => {
       const docDate = new Date(doc.checkIn);
-      return docDate.getUTCMonth() === this.monthIndex;
+      if(this.hourPeriod === `1-${this.pontaj.days.length}`){
+        return docDate.getUTCMonth() === this.monthIndex;
+      }
+      else if(this.hourPeriod === `1-15`){
+        return docDate.getUTCMonth() === this.monthIndex && docDate.getDate() <= 15
+      }
+       else if(this.hourPeriod === `15-${this.pontaj.days.length}`){
+        return docDate.getUTCMonth() === this.monthIndex && docDate.getDate() > 15
+      } else {
+        return
+      }
     });
     let hours = 0
     documentsInTargetMonth.forEach(log => {
@@ -192,11 +200,23 @@ async paySalary(user: any){
 
   }
 
+  selectHourPeriod(){
+    if(this.hourPeriod === `1-${this.pontaj.days.length}`){
+      this.hourPeriod = '1-15'
+    }
+    else if(this.hourPeriod === `1-15`){
+      this.hourPeriod = `15-${this.pontaj.days.length}`
+    }
+    else if(this.hourPeriod === `15-${this.pontaj.days.length}`){
+        this.hourPeriod = `1-${this.pontaj.days.length}`
+    }
+  }
+
 
   selectPeriod(){
     if(this.periodMark){
       this.periodMark = false;
-      this.period = `1 - ${this.pontaj.days.length}`
+      this.period = `1-${this.pontaj.days.length}`
       this.calcTotalStalary()
     } else {
       this.periodMark = true;
@@ -238,7 +258,6 @@ async paySalary(user: any){
 
   calcPayments(paymentLog: any[]){
     const documentsInTargetMonth = paymentLog.filter(doc => {
-      // const docDate = new Date(doc.date);
       return doc.workMonth === this.monthIndex;
     });
     let payments = 0
@@ -250,8 +269,6 @@ async paySalary(user: any){
 
   calcBonus(paymentLog: any[]){
     const documentsInTargetMonth = paymentLog.filter(doc => {
-      // const docDate = new Date(doc.date);
-      // return docDate.getUTCMonth() === this.monthIndex;
       return doc.workMonth === this.monthIndex;
     });
     let payments = 0
@@ -296,14 +313,6 @@ calcTesTotal(){
   this.totalTesDay = roundOne(total / this.pontaj.days.length)
 }
 
-  // getPosition(users: any[], userId: string){
-  //   const user = users.find(usr => usr.employee === userId)
-  //   if(user) {
-  //     return user.position
-  //   } else {
-  //     return '0'
-  //   }
-  // }
 
   getPosition(users: any[], userId: string){
     const user = users.find(usr => usr.employee === userId)

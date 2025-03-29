@@ -29,7 +29,7 @@ export class TipsPage implements OnInit {
   }
 
 
-  close(){
+  dismissModal(){
     this.modalCtrl.dismiss(null)
   }
 

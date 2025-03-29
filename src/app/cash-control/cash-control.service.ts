@@ -35,18 +35,16 @@ export class CashControlService{
     }
 
 
-raport(value: string){
-  const headers = this.auth.apiAuth()
-  return this.http.get<{message: string}>(`${environment.SAVE_URL}pay/reports?value=${value}`)
+raport(value: string, mainServer: any){
+  return this.http.get<{message: string}>(`${environment.BASE_URL}pay/reports?value=${value}&serverId=${mainServer._id}`)
 }
 
 saveInventary(){
   return this.http.get<{message: string}>(`${environment.SAVE_URL}ing/save-inventary?loc=${environment.LOC}`)
 }
 
-cashInAndOut(data: any){
-  const headers = this.auth.apiAuth()
-  return this.http.post<{message: string}>(`${environment.SAVE_URL}pay/in-and-out`, {data: data}, {headers})
+cashInAndOut(data: any, mainServer: any){
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/in-and-out`, {data: data, mainServer: mainServer})
 }
 
 getUserOrders(userId: string, name: string) {
@@ -110,13 +108,12 @@ changePaymnetMethod(bill: Bill){
   return this.http.post<{message: string}>(`${environment.BASE_URL}pay/change-payment-method`, {bill: bill})
 }
 
-reprintBill(bill: string){
-  const headers = this.auth.apiAuth()
-  return this.http.post<{message: string}>(`${environment.SAVE_URL}pay/print-bill`, {bill: bill}, {headers})
+reprintBill(bill: string, mainServer: any){
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill, mode: true, mainServer: mainServer})
 }
 
-printNefiscal(bill: string){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-unreg`, {bill: bill})
+printNefiscal(bill: string, mainServer: any){
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-unreg`, {bill: bill, mainServer: mainServer})
 }
 
 removeProductDiscount(data: any){
@@ -128,7 +125,7 @@ createInvoice(orderId: string, userId: string, clientId: string, locId: string){
 }
 
 printReport(report: any){
-  return this.http.post<{message: string}>(`${environment.SAVE_URL}print/report`, {report: report})
+  return this.http.post<{message: string}>(`${environment.BASE_URL}print/report`, {report: report})
 }
 
 saveEntry(entry: any){

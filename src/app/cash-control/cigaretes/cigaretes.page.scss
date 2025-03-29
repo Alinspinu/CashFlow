@@ -34,7 +34,7 @@ ion-title[slot='end']{
     padding: 8px 0;
   }
     .id{
-      flex: 2cm;
+      flex: 2%;
     }
     .product{
       text-align: start;
@@ -42,19 +42,24 @@ ion-title[slot='end']{
     }
     .first{
       text-align: center;
-      flex: 15%
+      flex: 12%
     }
     .found{
       text-align: center;
-      flex: 15%;
+      flex: 12%;
+    }
+    .in{
+      text-align: center;
+      flex: 12%;
+      margin-left: 4px;
     }
     .sale{
       text-align: center;
-      flex: 15%;
+      flex: 12%;
     }
     .second{
       text-align: center;
-      flex: 15%;
+      flex: 12%;
     }
     .status{
       text-align: center;
@@ -62,7 +67,7 @@ ion-title[slot='end']{
     }
 }
 
-.product-container .found, .product-container .second{
+.product-container .found, .product-container .second, .product-container .in{
   border: 0.8px solid rgba(var(--ion-color-medium-rgb), 0.8);
   border-radius: 4px;
   cursor: pointer;

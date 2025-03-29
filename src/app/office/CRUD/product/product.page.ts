@@ -14,6 +14,7 @@ import { CloudinaryPickerPage } from 'src/app/shared/cloudinary-picker/cloudinar
 import { environment } from 'src/environments/environment';
 import { emptyProduct } from 'src/app/models/empty-models';
 import { ReportPage } from './report/report.page';
+import { round } from '../../../../../../../UnusedApps/SocialApp/front/frontSocial/src/app/shared/utils/functions';
 
 
 @Component({
@@ -73,6 +74,36 @@ export class ProductPage implements OnInit {
   }
 
 
+
+
+  getNutritionValues(){
+    const query = this.product.ings.map(i => {
+      if(!i.ing.productIngredient){
+        const name = i.ing.name
+        const qty = i.qty
+        const um = i.ing.um
+        return `${name} ${qty} ${um},`
+      } else {
+        const ings = i.ing.ings.map(ing => {
+          const name = ing.ing.name
+          const qty = round(ing.qty * i.qty)
+          const um = ing.ing.um
+          return `${name} ${qty} ${um}`
+        })
+        return ings.toString()
+      }
+    })
+    this.prodsSrv.getNutritonalValues(query.join(' ')).subscribe({
+      next: (response) => {
+      const values = JSON.parse(response.message)
+      this.product.nutrition = values.nutrition
+      this.form.get('allergens')?.setValue(values.allergens.toString().replace(/,/g, ', '))
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
 
 
 
@@ -153,6 +184,9 @@ export class ProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required]
       }),
+      allergens: new FormControl(null, {
+        updateOn: 'change',
+      }),
       tva: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required]
@@ -194,6 +228,7 @@ export class ProductPage implements OnInit {
       this.form.get('printer')?.setValue(this.product.printer)
       this.form.get('recipe')?.setValue(this.product.recipe ? this.product.recipe : '-' )
       this.form.get('cat')?.setValue(this.product.category._id)
+      this.form.get('allergens')?.setValue(this.product.allergens.map(a => a.name + ','))
     }
   }
 
@@ -315,10 +350,12 @@ export class ProductPage implements OnInit {
         recipe: this.form.value.recipe,
         locatie: environment.LOC,
         tva: +this.form.value.tva,
+        nutrition: this.product.nutrition,
         toppings: this.toppingsToSend.length ? this.toppingsToSend : this.product.toppings,
         ings: this.ingredientsToSend.length ? this.ingredientsToSend : this.product.ings.map(i => ({ qty: i.qty, ing: i.ing._id})),
         subProducts: this.tempSubArray,
-        image: this.product.image
+        image: this.product.image,
+        allergens: this.form.value.allergens.split(',').map((a: string) => ({name: a.split(',')[0].trim()}))
       }
       if(this.editMode) {
         newProduct._id = this.product._id

@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable} from "@angular/core";
 import { BehaviorSubject, Observable, of, switchMap, take, tap, firstValueFrom} from "rxjs";
 import { Preferences } from "@capacitor/preferences"
@@ -88,8 +88,7 @@ updateOrder(bill: Bill){
         table.bills.push(bill)
         this.tableState.next([...this.tables])
       }
-    }
-
+  }
 }
 
 async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee: any, locatie: string){
@@ -114,7 +113,7 @@ async mergeBills(masa: number, data: {billIndex: number, id: string}[], employee
     mergedBills.total = total;
     table.bills.push(mergedBills);
     let newIndex = bills.findIndex(obj => obj.name === 'UNITE')
-    const response = await firstValueFrom(this.saveOrder(masa, 'new', newIndex, employee, '', false))
+    const response = await firstValueFrom(this.saveOrder(masa, 'new', newIndex, employee, '', false, undefined, undefined))
     if(response) {
       return true
     } else {
@@ -130,7 +129,7 @@ async manageSplitBills(tableIndex: number, billIndex: number, employee: any, old
   if(old){
   }
   bill._id.length ? bill._id = bill._id : bill._id = 'new'
-  const response = await firstValueFrom(this.saveOrder(tableIndex, bill._id, billIndex, employee, '', false))
+  const response = await firstValueFrom(this.saveOrder(tableIndex, bill._id, billIndex, employee, '', false, undefined, undefined))
   if(response) {
     return true
   } else {
@@ -332,7 +331,7 @@ addCustomer(customer: any, masa: number, billIndex: number){
     if(table.bills.length){
       bill = table.bills[billIndex]
       bill.clientInfo = emptyBill().clientInfo
-      const response = await firstValueFrom(this.saveOrder(masa, billId, billIndex, employee, '', false))
+      const response = await firstValueFrom(this.saveOrder(masa, billId, billIndex, employee, '', false, undefined, undefined))
       if(response) {
         return true
       } else {
@@ -412,9 +411,10 @@ deleteTable(tableId: string, index: number){
   billIndex: number,
   employee: any,
   inOrOut: string,
-  outside: boolean
+  outside: boolean,
+  mainServer: any,
+  secondaryServer: any = undefined
   ){
-
   const table = this.tables[tableIndex-1];
   let bill: Bill = this.tables[tableIndex-1].bills[billIndex];
   bill.out = outside
@@ -431,12 +431,12 @@ deleteTable(tableId: string, index: number){
   bill.onlineOrder = false
   bill.pending = true
   bill.prepStatus = 'open'
-  // this.printOrder(bill)
   const billToSend = JSON.stringify(bill);
-  return this.http.post<{bill: Bill, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend, mode: true})
+  return this.http.post<{bill: Bill, masa: any}>(`${environment.BASE_URL}orders/bill?index=${tableIndex}&billId=${billId}`,  {bill: billToSend, mode: true, mainServer: mainServer, secondaryServer: secondaryServer ? secondaryServer.key : undefined})
       .pipe(take(1),
         switchMap(res => {
         this.tables[tableIndex-1].bills[billIndex] = res.bill
+        console.log(res.bill)
         this.tableState.next([...this.tables]);
         const tables = JSON.stringify(this.tables);
         Preferences.set({key: 'tables', value: tables});
@@ -456,15 +456,14 @@ saveBillToCloud(bill: Bill){
 }
 
 
-sendBillToPrint(bill: Bill){
+sendBillToPrint(bill: Bill, mainServer: any){
   // this.sendBillToPrintLocal(bill)
-  return this.http.post<{message: string, bill: Bill}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill, mode: true})
+  return this.http.post<{message: string, bill: Bill}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill, mode: true, mainServer: mainServer})
 }
 
 sendBillToPrintLocal(bill: Bill){
   return this.http.post<{message: string, bill: Bill}>(`${this.baseUrl}pay/print-bill`, {bill: bill}).subscribe()
 }
-
 
 uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
   return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation})

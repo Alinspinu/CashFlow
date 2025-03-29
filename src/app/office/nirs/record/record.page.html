@@ -1,8 +1,27 @@
 
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+      <ion-title slot="start">Asociază</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="online()">
+          <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border">
-      <div class="title-wrapper">
-        <div class="title">{{title}}</div>
+      <div class="line">
+        <div class="label">{{date.length > 18 ? 'Valoare Documente' : 'Valoare Document'}}</div>
+        <div class="value">{{total}} Lei</div>
+      </div>
+      <div class="line">
+        <div class="label">{{date.length > 18 ? 'Dată Documente' : 'Dată Document'}}</div>
+        <div class="value" [ngClass]="{'small': date.length > 18}">{{date}}</div>
       </div>
       <div class="title-wrapper" *ngIf="paymentMessage.length">
         <div class="title">{{paymentMessage}}</div>
@@ -37,9 +56,6 @@
   <ion-footer class="ion-no-border" *ngIf="records.length">
     <ion-row>
       <ion-col>
-        <ion-button (click)="close()"  color="medium" size="large" expand="block" fill="outline">Renunță</ion-button>
-      </ion-col>
-      <ion-col>
         <ion-button color="medium" (click)="onSubmit()" size="large" expand="block">Alege</ion-button>
       </ion-col>
     </ion-row>
@@ -47,9 +63,6 @@
 
   <ion-footer class="ion-no-border" *ngIf="!records.length">
     <ion-row>
-      <ion-col>
-        <ion-button (click)="close()"  size="large" expand="block" color="medium" fill="outline">Renunță</ion-button>
-      </ion-col>
       <ion-col>
         <ion-button color="medium" (click)="online()" size="large" expand="block">Adaugă Intrare</ion-button>
       </ion-col>

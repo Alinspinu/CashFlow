@@ -77,6 +77,9 @@ export class AddEmployeeDataPage implements OnInit {
       fix: new FormControl(null, {
         updateOn: 'change',
       }),
+      contract: new FormControl(null, {
+        updateOn: 'change',
+      }),
       norm: new FormControl(null, {
         updateOn: 'change',
       }),
@@ -92,6 +95,7 @@ export class AddEmployeeDataPage implements OnInit {
       this.form.get('address')?.setValue(this.data.address);
       this.form.get('position')?.setValue(this.data.position);
       this.form.get('zodie')?.setValue(this.data.zodie ? this.data.zodie : '');
+      this.form.get('contract')?.setValue(this.data.contract ? this.data.contract : false);
       if(this.data.access){
         this.form.get('access')?.setValue(this.data.access.toString());
       }
@@ -122,6 +126,7 @@ export class AddEmployeeDataPage implements OnInit {
       position: this.form.value.position,
       zodie: this.form.value.zodie,
       access: +this.form.value.access,
+      contract: this.form.value.contract,
       salary: {
         inHeand: this.form.value.salary,
         onPaper: {

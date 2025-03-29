@@ -13,7 +13,7 @@ ion-title[slot='end']{
 
 .chart{
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 #canvas{
   height: 450px !important;

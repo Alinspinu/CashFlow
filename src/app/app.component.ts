@@ -31,8 +31,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ];
 
   public secondPages = [
-
-    { title: 'Setări', url: '/config', icon: '../assets/icon/settings.svg', show: false  },
     { title: 'Log Out', url: '/auth', icon: '../assets/icon/log-out-outline.svg', show: false  }
   ]
 
@@ -59,11 +57,20 @@ export class AppComponent implements OnInit, OnDestroy {
     {name: 'Utilizatori',  url: '/office/users', icon: '../../assets/icon/man.svg', show: false},
   ];
 
+
+  public configPages = [
+    { name: 'Email', url: '/email', icon: '../assets/icon/email.svg', show: false},
+    { name: 'Viva', url: '/viva', icon: '../assets/icon/euro.svg', show: false},
+    { name: 'Print', url: '/print', icon: '../assets/icon/print-outline.svg', show: false},
+  ]
+
   public subMenuPages = [
     { title: 'Casă', url: '/cash-control', icon: '../assets/icon/home-outline.svg', show: false, pages: this.cashControlPages},
     { title: 'Office', url: '/office', icon: '../assets/icon/office-worker.svg', show: false, pages: this.officePages },
     { title: 'Rapoarte', url: '/reports', icon: '../assets/icon/line.svg', show: false, pages: this.reportsPages },
+    { title: 'Setări', url: '/config', icon: '../assets/icon/settings.svg', show: false, pages: this.configPages  },
   ]
+
 
   private contentSub!: Subscription;
   officeMenu = false;
@@ -114,6 +121,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.reportsPages.forEach(p => p.show = false)
       this.subMenuPages.forEach(p => p.show = false)
       this.secondPages.forEach(p => p.show = false)
+      this.configPages.forEach(p => p.show = false)
       this.firstPages.forEach(p => p.show = false)
       this.officePages.forEach(p => p.show = false)
     }

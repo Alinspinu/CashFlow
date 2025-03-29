@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">Adaugă Client</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="cancel()">
+        <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form">
+    <ion-row>
+      <ion-col size-s>
+        <div class="input" *ngIf="hide.name">
+          <ion-input mode="ios" type="text" fill="outline" label="Nume" labelPlacement="floating" formControlName="name"></ion-input>
+        </div>
+        <div class="input" *ngIf="hide.email">
+          <ion-input mode="ios" type="text" fill="outline" label="E-mail" labelPlacement="floating" placeholder="Ex. Plata .. ch nr.." formControlName="email"></ion-input>
+        </div>
+        <div class="input" *ngIf="hide.tel">
+          <ion-input mode="ios" type="text" fill="outline" label="Telefon" labelPlacement="floating"  formControlName="tel"></ion-input>
+        </div>
+        <div class="input" *ngIf="hide.disc">
+          <ion-input mode="ios" type="text" fill="outline" label="Discount %" labelPlacement="floating"  formControlName="disc"></ion-input>
+        </div>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-button (click)="confirm()" type="submit" fill="outline" color="medium" [disabled]="!form.valid" [strong]="true" expand="block" size="large">SALVEAZĂ CLIENT
+  </ion-button>
+</ion-footer>
+

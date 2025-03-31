@@ -41,12 +41,12 @@ export class IngredientService{
     const  headers: HttpHeaders = new HttpHeaders({
       'bypass-tunnel-reminder': 'true'
     });
-    this.dbService.getData('data', 1).subscribe((data: any) => {
-      if(data){
-        this.ingredients = [...JSON.parse(data.ings)]
-        this.ingredientsState.next([...this.ingredients])
-      }
-    })
+    // this.dbService.getData('data', 1).subscribe((data: any) => {
+    //   if(data){
+    //     this.ingredients = [...JSON.parse(data.ings)]
+    //     this.ingredientsState.next([...this.ingredients])
+    //   }
+    // })
     return this.http.post<InvIngredient[]>(`${this.url}ing/search-ingredients`, {loc: loc}, {headers})
         .pipe(tap(response => {
           this.ingredients = response

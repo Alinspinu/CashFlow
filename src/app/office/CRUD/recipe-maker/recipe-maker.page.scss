@@ -81,7 +81,21 @@ ion-searchbar{
     margin-left: 8px;
   }
 }
+.name{
+  font-weight: 500;
+  font-size: 18px;
+}
 
+
+.ing-name{
+  cursor: pointer;
+  --background: var(--ion-color-light);
+  border-radius: 8px;
+  margin: 4px;
+  span{
+    color: var(--ion-color-medium);
+  }
+}
 
 .select{
   width: 700px !important;
@@ -93,10 +107,7 @@ ion-searchbar{
   padding-right: 12px!important;
 }
 
-.name{
-  font-weight: 500;
-  font-size: 18px;
-}
+
 
 .ionicon{
   height: 25px;
@@ -108,15 +119,7 @@ ion-searchbar{
   margin-right: 9%;
 }
 
-.ing-name{
-  cursor: pointer;
-  --background: var(--ion-color-light);
-  border-radius: 8px;
-  margin: 4px;
-  span{
-    color: var(--ion-color-medium);
-  }
-}
+
 
 .prod-ing{
   --background: var(--ion-color-danger)

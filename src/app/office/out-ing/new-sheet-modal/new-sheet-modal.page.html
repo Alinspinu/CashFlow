@@ -1,0 +1,38 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="ion-no-border">
+    <ion-title slot="start"*ngIf="date">{{formatDate(date)}}</ion-title>
+    <ion-title>Adauga fișă de ieșiri nouă</ion-title>
+    <ion-button slot="end" fill="clear" (click)="close()">
+      <ion-icon src="../../../../assets/icon/close-outline.svg" color="medium" size="large"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item lines="none" color="tertiary">
+    <ion-searchbar mode="ios" [(ngModel)]="ingredientSearch"  placeholder="Caută Ingredient..."  (ionInput)="searchIngredient($event)" #searchbar (keyup.enter)="setIng()"[disabled]="isLoading">
+    </ion-searchbar>
+  </ion-item>
+  <ion-item *ngFor="let ing of ingredients; let i = index" class="ing-name" (click)="selectIngredient(ing)" [ngClass]="{'prod-ing': ing.productIngredient}">
+    <div>
+      <span class="name">{{ing.name}}</span>
+      <div class="ing-info-wrapper">
+        <span class="ing-info">Gestiune:</span>
+        <span class="ing-info-gest">{{ing.gestiune}}</span>
+        <span class="ing-info-stoc">{{"Stoc: " + ing.qty + ' ' + ing.um}}</span>
+      </div>
+    </div>
+  </ion-item>
+
+  <div class="content-container input" *ngFor="let ing of ingredientsToShow; let i = index;">
+    <span class="index">{{i+1}}</span>
+    <span class="name">{{ing.name}}</span>
+    <span class="gest">{{ing.gestiune}}</span>
+    <span class="qty">{{ing.qty}} / {{ing.um}}</span>
+  </div>
+</ion-content>
+
+
+<ion-footer class="ion-no-border">
+  <ion-button expand="block" size="large" color="medium" (click)="saveSheet()">Salvează fișa</ion-button>
+</ion-footer>

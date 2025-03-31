@@ -21,6 +21,11 @@
       <ion-label>NIR</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button tab="out-ing" href="/office/out-ing" *ngIf="user && user.employee.access > 2">
+      <ion-icon aria-hidden="true" src="../../assets/icon/document.svg"></ion-icon>
+      <ion-label>Descarcă</ion-label>
+    </ion-tab-button>
+
     <ion-tab-button tab="supliers" href="/office/supliers" *ngIf="user && user.employee.access > 2">
       <ion-icon aria-hidden="true" src="../../assets/icon/document.svg"></ion-icon>
       <ion-label>Furnizori</ion-label>

@@ -36,6 +36,7 @@ import { AddReportPage } from '../reports/add-report/add-report.page';
 import { DepViewPage } from '../modals/dep-view/dep-view.page';
 import { UsersViewPage } from '../modals/users-view/users-view.page';
 import { SelectDataPage } from '../modals/select-data/select-data.page';
+import { NewSheetModalPage } from '../office/out-ing/new-sheet-modal/new-sheet-modal.page';
 
 
 
@@ -62,6 +63,7 @@ export class ActionSheetService {
                typeof TogglePontPage |
                typeof AddEmployeeDataPage |
                typeof AddToInventaryPage |
+               typeof NewSheetModalPage |
                typeof ProductIngredientPage,
     options: any,
     sub: boolean

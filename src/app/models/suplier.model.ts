@@ -1,6 +1,5 @@
 export class Suplier{
   constructor(
-    public _id: string,
     public bussinessName: string,
     public name: string,
     public vatNumber: string,
@@ -10,7 +9,9 @@ export class Suplier{
     public VAT: boolean,
     public address: string,
     public sold: number,
-    public records: Record[]
+    public locatie: string,
+    public records: Record[],
+    public _id: string,
   ){}
 }
 

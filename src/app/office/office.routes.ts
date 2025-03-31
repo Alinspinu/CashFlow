@@ -59,6 +59,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'out-ing',
+        loadComponent: () => import('./out-ing/out-ing.page').then( m => m.OutIngPage),
+        canActivate: [AuthGuard]
+      },
+      {
         path: '',
         redirectTo: '/tabs/office/products',
         pathMatch: 'full',
@@ -82,6 +87,11 @@ export const routes: Routes = [
     path: 'add-ing',
     loadComponent: () => import('./CRUD/nir/add-ing/add-ing.page').then( m => m.AddIngPage)
   },
+  {
+    path: 'new-sheet-modal',
+    loadComponent: () => import('./out-ing/new-sheet-modal/new-sheet-modal.page').then( m => m.NewSheetModalPage)
+  },
+
 
 
 

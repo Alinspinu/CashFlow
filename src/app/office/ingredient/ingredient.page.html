@@ -80,7 +80,7 @@
 
 <div>
   <ion-row *ngFor="let ing of ingredients; let i= index;">
-    <ion-col *ngIf="ing.name.length > 1">
+    <ion-col *ngIf="ing.name && ing.name.length > 1">
       <div class="content-container product input">
         <span class="nr" *ngIf="screenWidth > 500">{{i+1}}.</span>
         <span class="name">{{ing.name}}</span>

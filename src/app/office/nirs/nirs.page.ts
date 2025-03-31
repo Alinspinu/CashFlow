@@ -16,7 +16,7 @@ import { SpinnerPage } from 'src/app/modals/spinner/spinner.page';
   templateUrl: './nirs.page.html',
   styleUrls: ['./nirs.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, DatePickerPage, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
 })
 export class NirsPage implements OnInit {
 

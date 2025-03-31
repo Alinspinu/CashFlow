@@ -13,6 +13,7 @@ import User from 'src/app/auth/user.model';
 import { Preferences } from '@capacitor/preferences';
 import { InvIngredient } from 'src/app/models/nir.model';
 import { IngredientService } from '../../ingredient/ingredient.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -40,12 +41,13 @@ export class RecipeMakerPage implements OnInit, OnChanges {
   form!: FormGroup
   ingredients: any[]  = [];
   ingredientSearch!:any ;
+  ingredientsToSend: any[] = []
 
   productIngredientMode: boolean = false;
   toppings: any = [];
 
   displayIngs: any[] = [];
-  ingredientsToSend: any[] = []
+
 
   productIngName: string = '';
   productIngUm: string = '';
@@ -62,7 +64,6 @@ export class RecipeMakerPage implements OnInit, OnChanges {
 
 
   constructor(
-    private navParams: NavParams,
     @Inject(ProductService) private prodSrv: ProductService,
     @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private recipeService: RecipeMakerService,
@@ -125,7 +126,7 @@ export class RecipeMakerPage implements OnInit, OnChanges {
       }
       this.productIngQty = '1'
       this.recipeTotal = +prodIng.price
-      this.recipeService.saveIng(prodIng, this.user.locatie).subscribe(response => {
+      this.recipeService.saveIng(prodIng, environment.LOC).subscribe(response => {
         if(response){
           showToast(this.toastCtrl, response.message, 3000, '')
           this.displayIngs = [];

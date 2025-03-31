@@ -19,24 +19,16 @@ export class SuplierService{
 
 
   getSuplierInfo(cif: string){
-    const  headers: HttpHeaders = new HttpHeaders({
-      'bypass-tunnel-reminder': 'true'
-    });
-   return this.http.get<any>(`${environment.SUPLIER_APY_URL}?key=${environment.SUPLIER_APY_KEY}&cui=${cif}`, {headers})
+
+   return this.http.get<any>(`${environment.SUPLIER_APY_URL}?key=${environment.SUPLIER_APY_KEY}&cui=${cif}`)
   }
 
   saveSuplier(suplier: Suplier, mode: any, loc: string){
-    const  headers: HttpHeaders = new HttpHeaders({
-      'bypass-tunnel-reminder': 'true'
-    });
-    return this.http.post<{message: string, id: string}>(`${this.url}suplier/save-suplier?mode=${mode}`, {suplier: suplier, loc: loc}, {headers})
+    return this.http.post<{message: string, id: string}>(`${this.url}suplier/save-suplier?mode=${mode}`, {suplier: suplier})
   }
 
   saveAdmin(user: any, second: any){
-    const  headers: HttpHeaders = new HttpHeaders({
-      'bypass-tunnel-reminder': 'true'
-    });
-    return this.http.post<{message: string}>(`${this.url}auth/register-employee`, {user: user, second: second}, {headers})
+    return this.http.post<{message: string}>(`${this.url}auth/register-employee`, {user: user, second: second})
   }
 
 }

@@ -418,6 +418,8 @@ export class BillPage implements OnInit, OnDestroy {
 
 
 
+
+
 async addDiscount(){
   let dataToSend: any = []
   this.allCats.forEach(cat => {

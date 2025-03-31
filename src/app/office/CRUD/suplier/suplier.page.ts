@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { getUserFromLocalStorage } from 'src/app/shared/utils/functions';
 import User from 'src/app/auth/user.model';
 import { NirService } from '../nir/nir.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-suplier',
@@ -226,6 +227,7 @@ export class SuplierPage implements OnInit {
         register: this.suplierForm.value.register,
         address: this.suplierForm.value.address,
         bank: this.suplierForm.value.bank ? this.suplierForm.value.bank : '',
+        locatie: environment.LOC,
         account: this.suplierForm.value.account ? this.suplierForm.value.account : '',
         VAT: this.suplierForm.value.VAT === 'yes'? true : false,
         sold: 0,

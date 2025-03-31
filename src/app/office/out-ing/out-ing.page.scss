@@ -1,0 +1,72 @@
+
+
+ion-header, ion-content, ion-toolbar{
+  --background: var(--ion-color-tertiary);
+  --background-color: var(--ion-color-tertiary);
+}
+
+ion-label, ion-title, span{
+  font-family: NoirProReg !important;
+}
+
+
+.input{
+  display: flex;
+  align-items: center;
+  box-shadow:
+  0 -2px 4px rgba(0, 0, 0, 0.1),
+  0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  height: 50px;
+  background-color: var(--ion-color-light);
+  margin: 1rem 0 0.5rem 0.5rem;
+  padding-left: 12px!important;
+  cursor: pointer;
+  .index{
+    flex: 5%;
+  }
+  .date{
+    flex: 85%;
+    text-align: center;
+  }
+  ion-button{
+    flex: 10%;
+    ion-icon{
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+.input:hover{
+  background-color: var(--ion-color-medium);
+  color: var(--ion-color-light);
+  ion-button ion-icon{
+    color: var(--ion-color-light);
+  }
+}
+
+
+.content-container{
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+  width: 70%;
+  background-color: var(--ion-color-light);
+  .index{
+    margin-left: 0.6rem;
+    flex: 10%;
+  };
+  .name{
+    margin-left: 0.6rem;
+    flex: 50%;
+  };
+  .gest{
+    flex: 20%;
+    text-align: center;
+  };
+  .qty{
+    flex: 20%;
+    text-align: center;
+  };
+
+}

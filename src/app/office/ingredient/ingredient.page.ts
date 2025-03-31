@@ -47,7 +47,7 @@ export class IngredientPage implements OnInit, OnDestroy {
   dep: string = ""
   toppings!: any;
   productIngredients!: any;
-  gestiuni: string[] = ["bar", "bucatarie", "magazie"]
+  gestiuni: string[] = ["bar", "bucatarie", "magazie", "online"]
   ingTypes: string[] = ["simplu", "compus"]
   ingDep: string[] = ["materie", "marfa", "consumabil", "servicii", "ob-inventar", "amenajari", "combustibil", "utilitati", "chirie", 'marketing']
   isLoading: boolean = true
@@ -219,6 +219,7 @@ updateProductIng(){
     }
     if(!this.selectDate){
       let data = {date: this.inventaryDate, ing: this.ingredients[this.ind]}
+      console.log(data)
       const ingToUpdate = await this.actionSh.openModal(AddToInventaryPage, data, false)
       if(ingToUpdate){
         this.ingSrv.updateIngredientInventary(ingToUpdate).subscribe(async response => {

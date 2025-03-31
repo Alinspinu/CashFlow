@@ -26,6 +26,8 @@ export const environment = {
 
   // BASE_URL: 'http://localhost:8080/',
   BASE_URL: 'https://cafetish.flowmanager.ro/',
+  // BASE_URL: 'https://cafetish-server.ew.r.appspot.com/',
+
 
   SAVE_URL: 'http://localhost:8080/',
 

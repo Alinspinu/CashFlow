@@ -14,7 +14,7 @@ import { CloudinaryPickerPage } from 'src/app/shared/cloudinary-picker/cloudinar
 import { environment } from 'src/environments/environment';
 import { emptyProduct } from 'src/app/models/empty-models';
 import { ReportPage } from './report/report.page';
-import { round } from '../../../../../../../UnusedApps/SocialApp/front/frontSocial/src/app/shared/utils/functions';
+import { round } from 'src/app/shared/utils/functions';
 
 
 @Component({

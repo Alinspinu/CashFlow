@@ -115,7 +115,15 @@ const routes: Routes = [
   {
     path: 'print-modal',
     loadComponent: () => import('./config/print/print-modal/print-modal.page').then( m => m.PrintModalPage)
+  },  {
+    path: 'invs',
+    loadComponent: () => import('./cash-control/cigaretes/invs/invs.page').then( m => m.InvsPage)
   },
+  {
+    path: 'inv',
+    loadComponent: () => import('./cash-control/cigaretes/invs/inv/inv.page').then( m => m.InvPage)
+  },
+
 
 
 

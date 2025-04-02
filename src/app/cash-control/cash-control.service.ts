@@ -136,8 +136,9 @@ saveCigInv(sheet: cigarsInv){
   return this.http.post<{first: cigarsInv, second: cigarsInv, message: string}>(`${environment.BASE_URL}ing/smoke`, {sheet: sheet})
 }
 
-getLastCigInv(){
-  return this.http.get<cigarsInv[]>(`${environment.BASE_URL}ing/smoke?loc=${environment.LOC}&point=${environment.POINT}`)
+getLastCigInv(mode: string){
+  return this.http.get<cigarsInv[]>(`${environment.BASE_URL}ing/smoke?loc=${environment.LOC}&point=${environment.POINT}&mode=${mode}`)
 }
+
 
 }

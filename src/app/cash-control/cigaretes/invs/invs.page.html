@@ -1,0 +1,34 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border toolbar">
+      <ion-title slot="start">Situații Țigări</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" (click)="close()">
+          <ion-icon size="large" src="../../../assets/icon/close-outline.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-toolbar>
+        <div class="header">
+          <span class="nr">Nr</span>
+          <span class="date">Data Document</span>
+          <span class="dif">Diferente</span>
+          <span class="user">User</span>
+          <ion-icon class="valid">Satus</ion-icon>
+        </div>
+      </ion-toolbar>
+    </ion-toolbar>
+  </ion-header>
+
+
+<ion-content [fullscreen]="true">
+    <div class="input" *ngFor="let inv of invs; let i = index" (click)="showInvs(inv)" [ngClass]="{'odd': i % 2 !== 0}">
+      <span class="nr">#{{i+1}}</span>
+      <span class="date">{{formatDate(inv.date)}}</span>
+      <span class="dif">0</span>
+      <span class="user">{{inv.user}}</span>
+      <ion-icon class="valid" [src]="inv.valid ? '../../../assets/icon/success.svg': '../../../assets/icon/not.svg'" [color]=" inv.valid ? 'success' :'danger'"></ion-icon>
+    </div>
+
+</ion-content>

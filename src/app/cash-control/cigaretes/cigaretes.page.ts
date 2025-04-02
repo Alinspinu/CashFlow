@@ -11,6 +11,7 @@ import { CashControlService } from '../cash-control.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { Bill } from 'src/app/models/table.model';
+import { InvsPage } from './invs/invs.page';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class CigaretesPage implements OnInit {
   ngOnInit() {
     this.menuChange()
     setTimeout(() => {
-      this.getInvs()
+      this.getLastInvs()
     }, 800)
   }
 
@@ -126,7 +127,6 @@ export class CigaretesPage implements OnInit {
     for(let product of products){
       for(let sub of product.subProducts){
         const ing = sub.ings[0].ing
-        console.log(ing)
         const sheetProduct = this.sheet.products.find(p => p.ing === ing._id);
         if(!sheetProduct){
           const product = {
@@ -160,9 +160,8 @@ export class CigaretesPage implements OnInit {
     })
   }
 
-  getInvs(){
-
-    this.cashService.getLastCigInv().subscribe({
+  getLastInvs(){
+    this.cashService.getLastCigInv('last').subscribe({
       next: (response) => {
         const last = response.find(s => s.valid)
         const first = response.find(s => !s.valid)
@@ -174,6 +173,12 @@ export class CigaretesPage implements OnInit {
         if(last) this.lastSheet = last
       }
     })
+  }
+
+
+
+  async showInvs(){
+    const resp = await this.actionService.openAdd(InvsPage, '', 'medium-two')
   }
 
   formatDate(date: any) {

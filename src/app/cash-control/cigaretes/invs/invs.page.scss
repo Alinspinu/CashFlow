@@ -1,0 +1,73 @@
+
+
+ion-content, ion-toolbar, ion-header{
+    --background: var(--background-color) !important;
+    background-color: var(--background-color) !important;
+  }
+
+    ion-title, ion-button, ion-searchbar{
+    font-family: RoseMed !important;
+  }
+
+
+
+
+  .header{
+    width: 96%;
+    font-family: RoseReg !important;
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    margin: 0 24px;
+    font-size: 18px;
+    border-bottom: 1.2px solid rgba(var(--ion-color-medium-rgb), 0.6);
+    font-family: RoseMed !important;
+  }
+
+  .input{
+    cursor: pointer;
+    width: 96%;
+    font-family: RoseReg !important;
+    display: flex;
+    padding: 10px 18px;
+    margin: 0 24px;
+    align-items: center;
+    font-size: 16px;
+    font-family: RoseLight !important;
+  }
+
+
+  .header, .input{
+      .nr{
+        flex: 5%;
+      }
+      .dif{
+        flex: 20%;
+      }
+      .date{
+        flex: 30%;
+      }
+      .user{
+        flex: 35%
+      }
+      .valid{
+        text-align: center;
+        flex: 10%
+      }
+  }
+
+  .input:hover{
+    background-color:rgba(var(--ion-color-medium-rgb), 0.15);
+    span{
+      font-family: RoseMed !important;
+      color: var(--ion-color-medium) !important;
+      font-size: 17px !important;
+    }
+    ion-icon{
+      font-size: 22px !important;
+    }
+  }
+
+  .odd{
+    background-color: rgba(var(--ion-color-medium-rgb), 0.05);
+  }

@@ -62,6 +62,8 @@ import { AddProductDiscountPage } from '../content/table-content/add-product-dis
 import { SuplierRecordsPage } from '../office/supliers/suplier-records/suplier-records.page';
 import { PrintModalPage } from '../config/print/print-modal/print-modal.page';
 import { NewPage } from '../office/users/new/new.page';
+import { InvsPage } from '../cash-control/cigaretes/invs/invs.page';
+import { InvPage } from '../cash-control/cigaretes/invs/inv/inv.page';
 
 
 
@@ -254,6 +256,8 @@ export class ActionSheetService {
                typeof  NewPage |
                typeof  TipsPage |
                typeof  CashbackPage |
+               typeof  InvsPage |
+               typeof  InvPage |
                typeof  NirPage,
     options: any,
     clas: string

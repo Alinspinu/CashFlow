@@ -228,7 +228,7 @@ export class ProductPage implements OnInit {
       this.form.get('printer')?.setValue(this.product.printer)
       this.form.get('recipe')?.setValue(this.product.recipe ? this.product.recipe : '-' )
       this.form.get('cat')?.setValue(this.product.category._id)
-      this.form.get('allergens')?.setValue(this.product.allergens.map(a => a.name + ','))
+      this.form.get('allergens')?.setValue(this.product.allergens.map(a => a.name + ', ').toString())
     }
   }
 
@@ -290,17 +290,19 @@ export class ProductPage implements OnInit {
     const data = await this.actSheet.openAdd(SubProductPage, subToEdit, 'add-modal')
     if(data && data.sub){
       const subProduct = data.sub
+      console.log(subProduct)
         this.prodsSrv.editSubProduct(subProduct).subscribe({
           next: (response) => {
+            console.log(response)
             const index = this.product.subProducts.findIndex((s:any) => {
               if(s._id){
-                return s._id === response.subProduct._id
+                return s._id === response.subProd._id
               } else {
                 return -1
               }
             })
             if(index !== -1){
-              this.product.subProducts[index] = response.subProduct
+              this.product.subProducts[index] = response.subProd
               showToast(this.toastCtrl, response.message, 3000)
             }
           },
@@ -335,6 +337,7 @@ export class ProductPage implements OnInit {
 
   async saveProduct(){
     if(this.form.valid && this.productCategory && this.productMainCat){
+      console.log( this.form.value.allergens)
       const newProduct: any = {
         name: this.form.value.name,
         price: +this.form.value.price,
@@ -355,7 +358,7 @@ export class ProductPage implements OnInit {
         ings: this.ingredientsToSend.length ? this.ingredientsToSend : this.product.ings.map(i => ({ qty: i.qty, ing: i.ing._id})),
         subProducts: this.tempSubArray,
         image: this.product.image,
-        allergens: this.form.value.allergens.split(',').map((a: string) => ({name: a.split(',')[0].trim()}))
+        allergens: this.form.value.allergens.split(', ').map((a: string) => ({name: a.trim()}))
       }
       if(this.editMode) {
         newProduct._id = this.product._id

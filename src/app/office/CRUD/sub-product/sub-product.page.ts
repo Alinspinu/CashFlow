@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActionSheetController, IonicModule, ModalController, NavParams} from '@ionic/angular';
+import { IonicModule, ModalController, NavParams} from '@ionic/angular';
 import { RecipeMakerPage } from '../recipe-maker/recipe-maker.page';
 import { SubProduct } from 'src/app/models/category.model';
 import { emptySubProduct } from 'src/app/models/empty-models';
 import { ProductsService } from '../../products/products.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
+import { round } from 'src/app/shared/utils/functions';
 
 @Component({
   selector: 'app-sub-product',
@@ -76,7 +77,10 @@ export class SubProductPage implements OnInit {
       }),
       printOut: new FormControl(null, {
         updateOn: 'change',
-      })
+      }),
+      allergens: new FormControl(null, {
+        updateOn: 'change',
+      }),
   })
   this.getSubToEdit()
   }
@@ -99,7 +103,6 @@ export class SubProductPage implements OnInit {
    const data =  this.navParmas.get('options')
    if(data){
     this.sub = data     
-    console.log(this.sub)
     this.editMode = true
     this.toppings = this.sub.toppings
     this.ingredients = this.sub.ings;
@@ -111,8 +114,38 @@ export class SubProductPage implements OnInit {
     this.form.get('tva')?.setValue(this.sub.tva.toString())
     this.form.get('description')?.setValue(this.sub.description)
     this.form.get('recipe')?.setValue(this.sub.recipe ? this.sub.recipe : '-')
+    this.form.get('allergens')?.setValue(this.sub.allergens.map(a => a.name + ', '))
    }
   }
+
+    getNutritionValues(){
+      const query = this.sub.ings.map(i => {
+        if(!i.ing.productIngredient){
+          const name = i.ing.name
+          const qty = i.qty
+          const um = i.ing.um
+          return `${name} ${qty} ${um},`
+        } else {
+          const ings = i.ing.ings.map(ing => {
+            const name = ing.ing.name
+            const qty = round(ing.qty * i.qty)
+            const um = ing.ing.um
+            return `${name} ${qty} ${um}`
+          })
+          return ings.toString()
+        }
+      })
+      this.prodsSrv.getNutritonalValues(query.join(' ')).subscribe({
+        next: (response) => {
+        const values = JSON.parse(response.message)
+        this.sub.nutrition = values.nutrition
+        this.form.get('allergens')?.setValue(values.allergens.toString().replace(/,/g, ', '))
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
+    }
 
 
   close(){
@@ -131,6 +164,7 @@ export class SubProductPage implements OnInit {
       this.sub.ings =  this.ingredients
       this.sub.toppings = this.toppings
       this.sub.recipe = this.form.value.recipe
+      this.sub.allergens = this.form.value.allergens.split(', ').map((a: string) => ({name: a.trim()}))
       this.modalCtrl.dismiss({sub: this.sub})
     }
   }

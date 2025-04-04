@@ -294,6 +294,15 @@ export function emptySubProduct(){
        printOut: false,
        ings:[],
        saleLog: [],
+       nutrition: {
+        energy:{kJ: 0, kcal: 0},
+        fat: {all: 0, satAcids: 0},
+        carbs: {all: 0, sugar: 0},
+        salts: 0,
+        protein: 0,
+      },
+      additives: [],
+      allergens: [],
   }
   return sub
 }

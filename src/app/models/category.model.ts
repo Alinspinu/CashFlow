@@ -85,6 +85,15 @@ export class SubProduct{
     public printOut: boolean,
     public ings: {qty: number, ing:InvIngredient}[],
     public saleLog: saleLog[],
+    public allergens: {name: string, _id: string}[],
+    public additives: {name: string, _id: string}[],
+    public nutrition: {
+      energy: {kJ: number, kcal: number},
+      fat: {all: number, satAcids: number},
+      carbs: {all: number, sugar: number},
+      salts: number,
+      protein: number,
+    },
   public _id?: string,
   ){};
 };

@@ -103,7 +103,7 @@ export class ProductsService{
   }
 
   editSubProduct(subProduct: any){
-    return this.http.put<{message: string, subProduct: any}>(`${environment.BASE_URL}sub/sub-product`, {sub: subProduct})
+    return this.http.put<{message: string, subProd: any}>(`${environment.BASE_URL}sub/sub-product`, {sub: subProduct})
   }
 
 

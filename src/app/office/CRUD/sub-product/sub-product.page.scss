@@ -4,7 +4,7 @@ ion-content, ion-toolbar, ion-footer{
 }
 
 
-  span, ion-input, ion-select, ion-searchbar{
+  span, ion-input, ion-select, ion-searchbar, ion-button, ion-segment{
   font-family: RoseMed !important;
 }
 
@@ -76,6 +76,37 @@ ion-textarea{
     margin-right: 12px;
     height: 180px;
   }
+}
+
+.nutrition-title  {
+  font-family: RoseReg !important;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.ingredient-wrapper{
+  font-family: RoseLight !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content:left;
+  font-size: 13px;
+}
+.box{
+  width: 6px;
+  height: 6px;
+  border-radius:50%;
+  background-color: rgba(197, 140, 83, 0.5);
+  margin-right: 8px;
+}
+.allergens{
+  margin-top: 24px;
+  width: 70%;
+  ion-input{
+    --border-width: 1.5px;
+    font-size: 14px;
+    height: 10px !important;
+}
 }
 
 

@@ -52,6 +52,7 @@ export class Product {
   public paring: Product[],
   public showSub: boolean,
   public discount: number,
+  public section: string,
   ){};
 };
 

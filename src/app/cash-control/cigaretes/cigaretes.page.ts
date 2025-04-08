@@ -64,6 +64,12 @@ export class CigaretesPage implements OnInit {
     const value = await  this.actionService.numberAlert('Modifică cantitatea', `Scrie căte pachete de ${p.name} ai găsit!`, 'val', 'Cantitate')
     if(value){
       p.found = +value
+      this.cashService.updateFound(this.sheet).subscribe({
+        next: (response) => {
+          this.sheet = response.sheet
+          showToast(this.toastCtrl, response.message, 2000)
+        }
+      })
     }
   }
 
@@ -171,6 +177,8 @@ export class CigaretesPage implements OnInit {
           this.getSales()
         }
         if(last) this.lastSheet = last
+        console.log(this.lastSheet.date)
+        console.log(this.sheet.date)
       }
     })
   }

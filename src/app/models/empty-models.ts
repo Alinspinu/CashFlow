@@ -273,6 +273,7 @@ export function emptyProduct(){
     printer: 'main',
     showSub: false,
     discount: 0,
+    section: '',
   }
   return emptyProduct
 }

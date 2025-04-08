@@ -140,5 +140,9 @@ getLastCigInv(mode: string){
   return this.http.get<cigarsInv[]>(`${environment.BASE_URL}ing/smoke?loc=${environment.LOC}&point=${environment.POINT}&mode=${mode}`)
 }
 
+updateFound(sheet: cigarsInv){
+  return this.http.put<{message: string, sheet: cigarsInv}>(`${environment.BASE_URL}ing/smoke`, {sheet: sheet})
+}
+
 
 }

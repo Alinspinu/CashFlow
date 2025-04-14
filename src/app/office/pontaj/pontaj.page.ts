@@ -86,7 +86,7 @@ lastY: number = 0;
         this.users = employees
         const filtredUsers = this.users.filter(user => {
           const position = user.employee.position
-          const positions = ['Asociat', 'Administrator','Project Manager']
+          const positions = ['Asociat', 'Administrator']
           if( user.employee.active === true && !positions.includes(position)){
             return user
           } else {
@@ -94,10 +94,10 @@ lastY: number = 0;
           }
         })
        const sortedUsers = filtredUsers.sort((a, b):any => {
-          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Curatenie: 6, Bucatar: 7, 'Ajutor bucatar': 8, Aprovizionare: 9, 'Asistent Manager': 10 ,Manager: 11 };
+          const rolesOrder: any = { Barista: 1, 'Ajutor barman': 2, Casier: 3, Supervizor: 4, Ospatar: 5, ospatar: 5, Curatenie: 6, Bucatar: 7, 'Ajutor bucatar': 8, Aprovizionare: 9, 'Asistent Manager': 10 ,Manager: 11, 'Director Financiar': 12 };
           return rolesOrder[a.employee.position] - rolesOrder[b.employee.position];
         });
-        this.users = sortedUsers.slice(0,-2)
+        this.users = sortedUsers.slice(0,-1)
         this.getPontaj()
 
     }

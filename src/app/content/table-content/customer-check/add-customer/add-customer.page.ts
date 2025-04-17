@@ -5,6 +5,7 @@ import { IonicModule, ModalController, ToastController, NavParams } from '@ionic
 import { CustomerCheckService } from '../customer-check.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { Customer } from '../customer-check.page';
+import { WebRTCService } from 'src/app/content/webRTC.service';
 
 @Component({
   selector: 'app-add-customer',
@@ -22,10 +23,15 @@ export class AddCustomerPage implements OnInit {
 
     title:string = 'Adaugă client nou'
 
+    serverKey!: string
+
+    connectionOpen: boolean = false
+
     customer!: Customer
 
   constructor(
     @Inject(CustomerCheckService) private customerSrv: CustomerCheckService,
+    @Inject(WebRTCService) private socketService: WebRTCService,
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
     private navParams: NavParams,
@@ -35,16 +41,50 @@ export class AddCustomerPage implements OnInit {
     this.setUpVoucherForm()
     this.setUpAddForm()
     this.getMode()
+    this.connectToReader()
+    this.getCardData()
   }
 
 
   getMode(){
-    const mode = this.navParams.get('options')
-    if(mode){
+    const data = this.navParams.get('options')
+    if(data && data.mode){
       this.voucher = true
       this.title = 'Adaugă voucher'
     }
+    if(data && data.key){
+      this.serverKey = data.key
+    }
   }
+
+
+
+ 
+   connectToReader(){
+     if(this.serverKey){
+       const data = {
+         serverKey: this.serverKey,
+         action: 'connect',
+       }
+       this.socketService.connectToReader(JSON.stringify(data))
+     }
+   }
+ 
+   getCardData(){
+     this.socketService.getCardData().subscribe({
+       next: (response) => {
+         const data = JSON.parse(response)
+         if(data.serverKey === this.serverKey && data.action === 'connection-open') this.connectionOpen = true
+ 
+         if(data.serverKey === this.serverKey && data.action === 'card-read'){
+           this.addCustomerForm.get('cardCode')?.setValue(data.id)
+         }
+       },
+       error: (error) => {
+ 
+       }
+     })
+   }
 
   close(){
     this.modalCtrl.dismiss(null)

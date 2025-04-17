@@ -15,6 +15,7 @@ export class WebRTCService {
   private getUpdatadOrder = new Subject<any>();
   private getTableBillId = new Subject<any>();
   private delProduct = new Subject<any>();
+  private readCard = new Subject<any>();
 
   constructor() {
     this.socket = io('https://socket.flowmanager.ro');
@@ -43,6 +44,9 @@ export class WebRTCService {
     this.socket.on('delProduct', (data: any) => {
       this.delProduct.next(data)
     })
+    this.socket.on('readCard', (data: any) => {
+      this.readCard.next(data)
+    })
   }
 
   printOrder(doc: string) {
@@ -51,6 +55,10 @@ export class WebRTCService {
 
   printBill(doc: string) {
     // this.socket.emit('printBill', doc);
+  }
+
+  connectToReader(doc: string){
+    this.socket.emit('readCard', doc)
   }
 
 
@@ -77,6 +85,9 @@ export class WebRTCService {
   }
 
 
+  getCardData(){
+    return this.readCard.asObservable()
+  }
 
   getDelProduct(){
     return this.delProduct.asObservable()

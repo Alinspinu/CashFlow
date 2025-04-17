@@ -1,6 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="ion-no-border toolbar">
       <ion-title slot="start">Client</ion-title>
+      <span *ngIf="connectionOpen">Cititorul NFC este connectat!</span>
+      <span *ngIf="!connectionOpen" style="color: red;">Cititorul NFC  NU este connectat!</span>
       <ion-buttons slot="end">
         <ion-button fill="outline" (click)="add()">
           <ion-icon size="large" src="../../../assets/icon/add-outline.svg"></ion-icon>

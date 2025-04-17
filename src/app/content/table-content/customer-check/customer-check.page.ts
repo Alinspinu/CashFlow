@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { IonicModule, LoadingController, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { CustomerCheckService } from './customer-check.service';
 import { showLoading, showToast } from 'src/app/shared/utils/toast-controller';
 import User from 'src/app/auth/user.model';
@@ -11,6 +11,7 @@ import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { ScanQrPage } from '../../../modals/scan-qr/scan-qr.page';
 import { AddCustomerPage } from './add-customer/add-customer.page';
+import { WebRTCService } from '../../webRTC.service';
 
  export interface Customer{
   userId: string
@@ -39,6 +40,8 @@ export class CustomerCheckPage implements OnInit {
 
   checkForm!: FormGroup
 
+  connectionOpen: boolean = false
+
   voucher!: any
   checkMode: boolean = true
 
@@ -53,18 +56,25 @@ export class CustomerCheckPage implements OnInit {
 
   response: any = undefined
 
+  serverKey!: string 
+
   constructor(
    @Inject(CustomerCheckService) private customerSrv: CustomerCheckService,
+   @Inject(WebRTCService) private socketService: WebRTCService,
    @Inject(ActionSheetService) private actSrv: ActionSheetService,
+   private navParams: NavParams,
    private loadingCtrl: LoadingController,
    private toastCtrl: ToastController,
    private modalCtrl: ModalController,
   ) { }
 
   ngOnInit() {
+    this.getMainServer()
     this.getUser()
     this.setUpSearchForm()
     this.setUpCheckForm()
+    this.connectToReader()
+    this.getCardData()
   }
 
   dismissModal(){
@@ -75,6 +85,36 @@ export class CustomerCheckPage implements OnInit {
     Preferences.get({key:'authData'}).then(data => {
       if(data.value){
         this.user = JSON.parse(data.value)
+      }
+    })
+  }
+
+  getMainServer(){
+   this.serverKey = this.navParams.get('options')
+  }
+
+  connectToReader(){
+    if(this.serverKey){
+      const data = {
+        serverKey: this.serverKey,
+        action: 'connect',
+      }
+      this.socketService.connectToReader(JSON.stringify(data))
+    }
+  }
+
+  getCardData(){
+    this.socketService.getCardData().subscribe({
+      next: (response) => {
+        const data = JSON.parse(response)
+        if(data.serverKey === this.serverKey && data.action === 'connection-open') this.connectionOpen = true
+
+        if(data.serverKey === this.serverKey && data.action === 'card-read'){
+          this.searchCustomerForm.get('customerId')?.setValue(data.id)
+        }
+      },
+      error: (error) => {
+
       }
     })
   }
@@ -116,6 +156,7 @@ searchCustomer(mode: string){
     this.customerSrv.searchCustomer(customerId, mode).subscribe(response => {
       if(response.message === "All good"){
         this.customer = response.customer
+        console.log(this.customer)
         this.loadingCtrl.dismiss()
         this.response = {
           title: 'Valid',
@@ -245,13 +286,13 @@ useVoucher(){
 async add(){
   const choise = await this.actSrv.entryAlert(['Client', 'Voucher'], 'radio', 'Alege', 'Adaugă un client nou sau crează un voucher.', '', '')
   if(choise && choise === 'Client'){
-    const customer = await this.actSrv.openAdd(AddCustomerPage, false, 'medium-one') as Customer
+    const customer = await this.actSrv.openAdd(AddCustomerPage, {mode: false, key: this.serverKey}, 'medium-one') as Customer
     if(customer){
       this.modalCtrl.dismiss({data: customer, message: 'client'})
     }
   }
   if(choise && choise  === 'Voucher'){
-    const voucher = await this.actSrv.openAdd(AddCustomerPage, true, 'medium-one')
+    const voucher = await this.actSrv.openAdd(AddCustomerPage, {mode: true, key: this.serverKey}, 'medium-one')
     if(voucher){
       this.modalCtrl.dismiss({data: voucher, message: 'voucher'})
     }

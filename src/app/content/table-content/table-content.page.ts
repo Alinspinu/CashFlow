@@ -596,7 +596,7 @@ async payment(){
 
 async addCustomer(clientMode: boolean){
     if(clientMode){
-      const clientInfo = await this.actionSheet.openAdd(CustomerCheckPage, '', 'medium')
+      const clientInfo = await this.actionSheet.openAdd(CustomerCheckPage, this.mainServer.key, 'medium')
       if(clientInfo && clientInfo.message === "client"){
         this.client = clientInfo.data
         this.clientMode = false

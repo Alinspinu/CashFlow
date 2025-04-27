@@ -114,6 +114,9 @@
   --medical:#{$medical-light};
   --medical-rgb:#{$medical-light-rgb};
 
+  --manager:#{$manager-light};
+  --manager-rgb:#{$manager-light-rgb};
+
 
 }
 
@@ -204,6 +207,9 @@
 
   --medical:#{$medical-dark};
   --medical-rgb:#{$medical-dark-rgb};
+  
+  --manager:#{$manager-dark};
+  --manager-rgb:#{$manager-dark-rgb};
 }
 
 

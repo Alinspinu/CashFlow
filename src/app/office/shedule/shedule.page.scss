@@ -114,6 +114,14 @@ ion-title{
   background-color: var(--medical);
 }
 
+.manager{
+  background-color: rgba(var(--manager-rgb), .7);
+}
+
+.on-manager{
+  background-color: var(--manager);
+}
+
 .on-barista{
   background-color: var(--barista);
 }

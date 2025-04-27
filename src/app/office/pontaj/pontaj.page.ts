@@ -262,7 +262,7 @@ async paySalary(user: any){
     });
     let payments = 0
     documentsInTargetMonth.forEach(log => {
-        payments += log.amount
+       if(log.tip !== 'Concediu') payments += log.amount
     })
     return round(payments)
   }

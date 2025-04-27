@@ -109,7 +109,7 @@ changePaymnetMethod(bill: Bill){
 }
 
 reprintBill(bill: string, mainServer: any){
-  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill, mode: true, mainServer: mainServer})
+  return this.http.post<{message: string}>(`${environment.BASE_URL}pay/reprint-fiscal`, {bill: bill, mode: true, mainServer: mainServer})
 }
 
 printNefiscal(bill: string, mainServer: any){

@@ -27,20 +27,20 @@ export class SheduleService{
 
 
 
-getLastShedule(){
-  return this.http.get<Shedule>(`${environment.BASE_URL}shedule?loc=${environment.LOC}&shedule=last`)
+getLastShedule(point: string){
+  return this.http.get<Shedule>(`${environment.BASE_URL}shedule?loc=${environment.LOC}&shedule=last&point=${point}`)
       .pipe(tap(response => {
         this.shedule = response
         this.sheduleState.next(this.shedule)
   }))
 }
 
-getAllShedules(){
-  return this.http.get<Shedule[]>(`${environment.BASE_URL}shedule?loc=${environment.LOC}&shedule=all`)
+getAllShedules(point: string){
+  return this.http.get<Shedule[]>(`${environment.BASE_URL}shedule?loc=${environment.LOC}&shedule=all&point=${point}`)
 }
 
-addEntry(user: any, day: any, month: string, dayValue: number){
-    return this.http.put<Shedule>(`${environment.BASE_URL}shedule`, {sheduleId: this.shedule._id, day, user, month, dayValue, loc: environment.LOC})
+addEntry(user: any, day: any, month: string, dayValue: number, point: string){
+    return this.http.put<Shedule>(`${environment.BASE_URL}shedule`, {sheduleId: this.shedule._id, day, user, month, dayValue, loc: environment.LOC, point: point})
     .pipe(tap(response => {
       if(response){
         this.shedule = response
@@ -49,18 +49,17 @@ addEntry(user: any, day: any, month: string, dayValue: number){
     }))
 }
 
-addShedule(){
-  return this.http.post<Shedule>(`${environment.BASE_URL}shedule`, {loc: environment.LOC, salePoint: environment.POINT})
+addShedule(point: string){
+  return this.http.post<Shedule>(`${environment.BASE_URL}shedule`, {loc: environment.LOC, salePoint: point})
 }
 
 selectShedule(shedule: Shedule){
   this.shedule = shedule
-  console.log(this.shedule)
   this.sheduleState.next(this.shedule)
 }
 
-deleteEntry(userId: any, day: string, month: string, dateStr: string){
-  return this.http.delete<Shedule>(`${environment.BASE_URL}shedule?sheduleId=${this.shedule._id}&userId=${userId}&day=${day}&month=${month}&dateStr=${dateStr}&loc=${environment.LOC}`)
+deleteEntry(userId: any, day: string, month: string, dateStr: string, point: string){
+  return this.http.delete<Shedule>(`${environment.BASE_URL}shedule?sheduleId=${this.shedule._id}&userId=${userId}&day=${day}&month=${month}&dateStr=${dateStr}&loc=${environment.LOC}&point=${point}`)
   .pipe(tap(response => {
     if(response){
       this.shedule = response

@@ -10,6 +10,7 @@ import { formatedDateToShow, formatPeriod, round } from '../../shared/utils/func
 import { ActionSheetService } from '../../shared/action-sheet.service';
 import { Subscription } from 'rxjs';
 import { TogglePage } from './toggle/toggle.page';
+import { SalePointService } from '../sale-point/sale-point.service';
 
 @Component({
   selector: 'app-shedule',
@@ -23,25 +24,34 @@ export class ShedulePage implements OnInit, OnDestroy {
   menuOpen: boolean = false
   users: any[]  = []
   shedule!: Shedule
-  sheduleSub!: Subscription
-  period: string = ''
+  sheduleSub!: Subscription;
+  pointSub!: Subscription;
+  period: string = '';
   months: string[] = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
 
   isHidden: boolean = false
   lastY: number = 0;
 
+  pointId: string = ''
+
   constructor(
+    @Inject(ActionSheetService) private actSrv: ActionSheetService,
     private usersSrv: UsersService,
     private shedSrv: SheduleService,
     private menuCtrl: MenuController,
-    @Inject(ActionSheetService) private actSrv: ActionSheetService,
+    private pointService: SalePointService,
   ) { }
 
   ngOnDestroy(): void {
       if(this.sheduleSub){
         this.sheduleSub.unsubscribe()
       }
+      if(this.pointSub){
+        this.pointSub.unsubscribe()
+      }
   }
+
+
 
   open(){
     console.log('open')
@@ -50,9 +60,21 @@ export class ShedulePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.menuChange()
     this.getUsers()
-    this.shedSrv.getLastShedule().subscribe()
+    this.getPointId()
     this.getLastShedule()
   }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id){
+          this.shedSrv.getLastShedule(p._id).subscribe()
+          this.pointId = p._id
+        }
+      }
+    }) 
+  }
+
 
   onScroll(event: any) {
     const currentY = event.detail.scrollTop;
@@ -84,7 +106,7 @@ export class ShedulePage implements OnInit, OnDestroy {
 }
 
 async selectShedule(){
-  const shedule = await this.actSrv.openModal(TogglePage, '', false)
+  const shedule = await this.actSrv.openModal(TogglePage, this.pointId, false)
   if(shedule){
     this.shedSrv.selectShedule(shedule)
   }
@@ -94,7 +116,6 @@ async selectShedule(){
 getLastShedule(){
   this.sheduleSub = this.shedSrv.sheduleSend$.subscribe(response => {
     this.shedule = response
-    console.log(this.shedule)
   })
 }
 
@@ -176,7 +197,7 @@ async addOnShedule(day: any, empl: User){
     }
 
     if(choise === 'LiBER'){
-      this.shedSrv.deleteEntry(empl._id, day.day, `${this.months[monthNumber]} - ${year}`, day.date).subscribe()
+      this.shedSrv.deleteEntry(empl._id, day.day, `${this.months[monthNumber]} - ${year}`, day.date, this.pointId).subscribe()
       this.shedSrv.deleteUserWorkEntry(empl._id, dayDate.setHours(0,0,0,0)).subscribe()
     } else {
       const positions = ['Barista', 'Ajutor barman', 'Casier', 'Ospatar', 'Bucatar', 'Manager', 'Ajutor bucatar', 'Supervizor', 'Asistent Manager']
@@ -202,10 +223,11 @@ async addOnShedule(day: any, empl: User){
           position: choise,
           earnd: workValue,
           concediu: con,
-          medical: med
+          medical: med,
+          salePoint: this.pointId
         }
         this.shedSrv.updateUserWorkLog(empl._id, userWorkLog).subscribe()
-        this.shedSrv.addEntry(user, day, `${this.months[monthNumber]} - ${year}`, workValue).subscribe()
+        this.shedSrv.addEntry(user, day, `${this.months[monthNumber]} - ${year}`, workValue, this.pointId).subscribe()
       }
     }
 

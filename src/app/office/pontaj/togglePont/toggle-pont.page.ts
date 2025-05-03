@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController, ToastController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { Pontaj } from '../../../models/shedule.model';
 import { PontajService } from '../pontaj.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
@@ -17,15 +17,20 @@ export class TogglePontPage implements OnInit {
 
   pontaj: Pontaj[] = []
   isLoading: boolean = false
+  pointId!: string 
 
   constructor(
     private modalCtrl: ModalController,
     private pontSrv: PontajService,
     private toastCtrl: ToastController,
+    private navParams: NavParams,
   ) { }
 
   ngOnInit() {
-    this.getPont()
+    this.pointId = this.navParams.get('options')
+    if(this.pointId){
+      this.getPont()
+    }
   }
 
   choisePont(shedule: Pontaj){
@@ -33,7 +38,7 @@ export class TogglePontPage implements OnInit {
   }
 
   getPont(){
-    this.pontSrv.getAllPont().subscribe(response => {
+    this.pontSrv.getAllPont(this.pointId).subscribe(response => {
       this.pontaj = response
       this.pontaj.sort( (a, b) => {
         const dateA = new Date(a.days[0].date).getTime()
@@ -51,7 +56,7 @@ export class TogglePontPage implements OnInit {
       year += 1
     }
     this.isLoading = true
-    this.pontSrv.addPont(month, year).subscribe(response => {
+    this.pontSrv.addPont(month, year, this.pointId).subscribe(response => {
       if(response){
         this.pontaj.push(response)
         this.isLoading = false

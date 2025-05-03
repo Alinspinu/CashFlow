@@ -3,16 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, MenuController } from '@ionic/angular';
 import { PontajService } from './pontaj.service';
-import { Pontaj } from '../../models/shedule.model';
-
 import { UsersService } from '../users/users.service';
+import { SalePointService } from '../sale-point/sale-point.service';
+import { ActionSheetService } from '../../shared/action-sheet.service';
 import { environment } from 'src/environments/environment';
 import { round, roundOne } from '../../shared/utils/functions';
-import { ActionSheetService } from '../../shared/action-sheet.service';
+import { Pontaj } from '../../models/shedule.model';
 import { TogglePontPage } from './togglePont/toggle-pont.page';
 import { Subscription } from 'rxjs';
 import { PaymentsPage } from './payments/payments.page';
-import { HoursPage } from './hours/hours.page';
 import User from '../../auth/user.model';
 
 @Component({
@@ -36,7 +35,10 @@ totalPayd: number = 0
 totalBonus: number = 0
 totalTesDay: number = 0
 totalTes: number = 0
+year!: number
+
 pontSub!: Subscription
+pointSub!: Subscription
 
 period: string = '1-30'
 periodMark: boolean = false
@@ -46,25 +48,40 @@ hourPeriod: string = '1-30'
 isHidden: boolean = false
 lastY: number = 0;
 
+pointId: string = ''
+
   constructor(
+    @Inject(ActionSheetService) private actSrv: ActionSheetService,
     private pontSrv: PontajService,
     private usersSrv: UsersService,
     private menuCtrl: MenuController,
-    @Inject(ActionSheetService) private actSrv: ActionSheetService,
+    private pointService: SalePointService,
   ) { }
 
   ngOnInit() {
     this.menuChange()
-    this.pontSrv.getLastPontaj().subscribe(res => {
-      this.pontaj = res
-    })
-    this.getUsers()
+    this.getPointId()
   }
 
   ngOnDestroy(): void {
       if(this.pontSub){
         this.pontSub.unsubscribe()
       }
+      if(this.pointSub){
+        this.pointSub.unsubscribe()
+      }
+  }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id){
+          this.pontSrv.getLastPontaj(p._id).subscribe()
+          this.pointId = p._id
+          this.getUsers()
+        }
+      }
+    })
   }
 
 
@@ -136,12 +153,12 @@ async paySalary(user: any){
     locatie: environment.LOC,
     typeOf: 'Salariu',
     user: [user._id],
-    month: this.monthIndex
+    month: this.monthIndex,
+    salePoint: this.pointId,
   }
   const response = await this.actSrv.deleteAlert(`Plătește salariul lui ${user.employee.fullName} pentru luna ${this.pontaj.month.split('-')[0]}`, `${total} Lei`)
   if(response){
-    this.pontSrv.paySalary(entry).subscribe((res: any) => {
-    })
+    this.pontSrv.paySalary(entry).subscribe()
   }
 }
 
@@ -153,7 +170,9 @@ async paySalary(user: any){
           this.period = `1-${this.pontaj.days.length}`
           this.hourPeriod = `1-${this.pontaj.days.length}`
           this.periodMark = false
-          const month = this.pontaj.month.split(' - ')[0]
+          const date = this.pontaj.month.split(' - ')
+          const month = date[0]
+          this.year = +date[1]
           this.monthIndex = this.monhs.findIndex(obj => obj === month)
           this.calcTotalStalary()
           this.calcTesTotal()
@@ -162,7 +181,7 @@ async paySalary(user: any){
   }
 
  async selectPontaj(){
-    const pontaj = await this.actSrv.openModal(TogglePontPage, '', false)
+    const pontaj = await this.actSrv.openModal(TogglePontPage, this.pointId, false)
     if(pontaj){
       this.pontSrv.selectPontaj(pontaj)
     }
@@ -178,13 +197,13 @@ async paySalary(user: any){
     const documentsInTargetMonth = docToFilter.filter(doc => {
       const docDate = new Date(doc.checkIn);
       if(this.hourPeriod === `1-${this.pontaj.days.length}`){
-        return docDate.getUTCMonth() === this.monthIndex;
+        return docDate.getUTCMonth() === this.monthIndex && docDate.getFullYear() === this.year;
       }
       else if(this.hourPeriod === `1-15`){
-        return docDate.getUTCMonth() === this.monthIndex && docDate.getDate() <= 15
+        return docDate.getUTCMonth() === this.monthIndex && docDate.getDate() <= 15 && docDate.getFullYear() === this.year;
       }
        else if(this.hourPeriod === `15-${this.pontaj.days.length}`){
-        return docDate.getUTCMonth() === this.monthIndex && docDate.getDate() > 15
+        return docDate.getUTCMonth() === this.monthIndex && docDate.getDate() > 15 && docDate.getFullYear() === this.year;
       } else {
         return
       }
@@ -243,9 +262,9 @@ async paySalary(user: any){
       const documentsInTargetMonth = docToFilter.filter((doc: any) => {
         const docDate = new Date(doc.checkIn);
         if(!this.periodMark){
-          return docDate.getUTCMonth() === this.monthIndex;
+          return docDate.getUTCMonth() === this.monthIndex && docDate.getFullYear() === this.year;
         } else {
-          return docDate.getDate() <= 15
+          return docDate.getDate() <= 15 && docDate.getFullYear() === this.year;
         }
       });
 
@@ -257,8 +276,10 @@ async paySalary(user: any){
   }
 
   calcPayments(paymentLog: any[]){
+   
     const documentsInTargetMonth = paymentLog.filter(doc => {
-      return doc.workMonth === this.monthIndex;
+      const docDate = new Date(doc.date);
+      return doc.workMonth === this.monthIndex && docDate.getFullYear() === this.year;
     });
     let payments = 0
     documentsInTargetMonth.forEach(log => {
@@ -269,7 +290,8 @@ async paySalary(user: any){
 
   calcBonus(paymentLog: any[]){
     const documentsInTargetMonth = paymentLog.filter(doc => {
-      return doc.workMonth === this.monthIndex;
+      const docDate = new Date(doc.date);
+      return doc.workMonth === this.monthIndex && docDate.getFullYear() === this.year;
     });
     let payments = 0
     documentsInTargetMonth.forEach(log => {

@@ -2,7 +2,7 @@
   <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
 </ion-menu-button>
 
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" *ngIf="pontaj">
   <ion-toolbar class="ion-no-border title" [class.hidden]="isHidden">
     <ion-title slot="end">{{pontaj.month}}</ion-title>
     <ion-buttons slot="end">

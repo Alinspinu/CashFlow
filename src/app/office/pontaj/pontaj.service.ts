@@ -25,28 +25,28 @@ export class PontajService{
   }
 
 
-  getLastPontaj(){
-    return this.http.get<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}&pont=last`)
+  getLastPontaj(point: string){
+    return this.http.get<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}&pont=last&point=${point}`)
           .pipe(tap(response => {
             this.pontaj = response
             this.pontajState.next(this.pontaj)
       }))
   }
 
-  getAllPont(){
-    return this.http.get<Pontaj[]>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}&pont=all`)
+  getAllPont(point: string){
+    return this.http.get<Pontaj[]>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}&pont=all&point=${point}`)
   }
 
-  getPontByMonth(month: string){
-    return this.http.get<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}&month=${month}`)
+  getPontByMonth(month: string, point: string){
+    return this.http.get<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}&month=${month}&point=${point}`)
   }
 
   paySalary(entry: any){
     return this.http.post(`${environment.BASE_URL}register/add-entry`, entry)
   }
 
-  addPont(month: number, year: number){
-    return this.http.post<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}`, {month, year, loc: environment.LOC, salePoint: environment.POINT})
+  addPont(month: number, year: number, point: string){
+    return this.http.post<Pontaj>(`${environment.BASE_URL}shedule/pontaj?loc=${environment.LOC}`, {month, year, loc: environment.LOC, salePoint: point})
   }
 
   deletePont(id: string){

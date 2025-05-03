@@ -8,6 +8,7 @@ import { emptySubProduct } from 'src/app/models/empty-models';
 import { ProductsService } from '../../products/products.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { round } from 'src/app/shared/utils/functions';
+import { SalePointService } from '../../sale-point/sale-point.service';
 
 @Component({
   selector: 'app-sub-product',
@@ -32,15 +33,27 @@ export class SubProductPage implements OnInit {
 
   isTva: boolean = true;
 
+  pointId!: string
+
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private modalCtrl: ModalController,
+    private pointService: SalePointService,
     private navParmas: NavParams,
     private prodsSrv: ProductsService,
   ) { }
 
   ngOnInit() {
     this.setupForm()
+    this.getPointId()
+  }
+
+  getPointId(){
+    this.pointService.pointSend$.subscribe({
+      next: (point) => {
+        if(point._id) this.pointId = point._id
+      }
+    })
   }
 
 
@@ -164,6 +177,7 @@ export class SubProductPage implements OnInit {
       this.sub.ings =  this.ingredients
       this.sub.toppings = this.toppings
       this.sub.recipe = this.form.value.recipe
+      this.sub.salePoint = this.pointId
       this.sub.allergens = this.form.value.allergens.split(', ').map((a: string) => ({name: a.trim()}))
       this.modalCtrl.dismiss({sub: this.sub})
     }

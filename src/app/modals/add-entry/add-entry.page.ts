@@ -8,11 +8,11 @@ import { environment } from 'src/environments/environment';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { DatePickerPage } from '../date-picker/date-picker.page';
 import { formatedDateToShow } from 'src/app/shared/utils/functions';
-import { NirService } from '../../office/CRUD/nir/nir.service';
 import { UsersService } from '../../office/users/users.service';
 import { SelectDataPage } from '../select-data/select-data.page';
 import { Subscription } from 'rxjs';
 import { SupliersService } from 'src/app/office/supliers/supliers.service';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
 
 
 @Component({
@@ -37,6 +37,8 @@ export class AddEntryPage implements OnInit, OnDestroy {
   description: string = ''
 
   suplierSub!: Subscription
+
+  pointId: string = ''
 
   usersToShow!: any
 
@@ -102,10 +104,8 @@ export class AddEntryPage implements OnInit, OnDestroy {
 
   constructor(
     private modalCtrl: ModalController,
-    private http: HttpClient,
-    private navPar: NavParams,
     private toastCtrl: ToastController,
-    private nirSrv: NirService,
+    private pointService: SalePointService,
     private supliersService: SupliersService,
     private usersSrv: UsersService,
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
@@ -113,8 +113,8 @@ export class AddEntryPage implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-  this.mode = this.navPar.get('options')
    this.setForm()
+   this.getPointId()
    this.getSupliers()
    this.getUsers()
    if(this.mode === 'register'){
@@ -127,6 +127,14 @@ export class AddEntryPage implements OnInit, OnDestroy {
       if(this.suplierSub){
         this.suplierSub.unsubscribe()
       }
+  }
+
+  getPointId(){
+    this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id) this.pointId = p._id
+      }
+    })
   }
 
 
@@ -490,20 +498,14 @@ export class AddEntryPage implements OnInit, OnDestroy {
         typeOf: this.form.value.typeOf,
         suplier: this.form.value.suplier,
         user: this.usersId.length ? this.usersId : [this.form.value.user],
-        salePoint: environment.POINT,
+        salePoint: this.pointId,
         document: {
           tip: this.form.value.document ? this.form.value.document : 'Fara',
           number: this.form.value.docNr
         },
         month: this.months.findIndex(m => m === this.form.value.month)
       }
-      if(this.mode === 'register'){
-        this.http.post(`${environment.BASE_URL}register/add-entry`, entry).subscribe(response => {
-          this.modalCtrl.dismiss({day: response, entry: entry})
-        })
-      } else {
-        this.modalCtrl.dismiss({entry: entry})
-      }
+      this.modalCtrl.dismiss({entry: entry})
     }
 
   }

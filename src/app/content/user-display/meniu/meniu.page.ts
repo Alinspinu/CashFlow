@@ -9,6 +9,7 @@ import { WebRTCService } from '../../webRTC.service';
 import { Bill } from 'src/app/models/table.model';
 import { emptyBillProduct } from '../../../models/empty-models';
 import { environment } from 'src/environments/environment';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
 
 
 @Component({
@@ -44,6 +45,8 @@ export class MeniuPage implements OnInit {
   products!: any
   sortMain: string[] = ['food', 'coffee', 'bar', 'shop']
 
+  pointId: string = ''
+
   bill!: Bill
 
   cats:any = [
@@ -74,12 +77,24 @@ export class MeniuPage implements OnInit {
   constructor(
     private contentService: ContentService,
     private webRTC: WebRTCService,
+    private pointService: SalePointService,
   ) { }
 
   ngOnInit() {
-    this.contentService.getData(environment.LOC).subscribe()
+    this.getPointId()
     this.getCategories()
     this.getBill()
+  }
+
+  getPointId(){
+    this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id) {
+          this.pointId = p._id
+          this.contentService.getData(p._id).subscribe()
+        }
+      }
+    })
   }
 
 

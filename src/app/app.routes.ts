@@ -123,6 +123,10 @@ const routes: Routes = [
     path: 'inv',
     loadComponent: () => import('./cash-control/cigaretes/invs/inv/inv.page').then( m => m.InvPage)
   },
+  {
+    path: 'point',
+    loadComponent: () => import('./config/point/point.page').then( m => m.PointPage)
+  },
 
 
 

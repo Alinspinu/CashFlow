@@ -1,0 +1,37 @@
+<ion-menu-button>
+  <ion-icon [src]=" menuOpen ? '../../../assets/icon/chevron-double-left.svg' : 'assets/icon/chevron-double-right.svg'"  size="large"></ion-icon>
+</ion-menu-button>
+
+
+
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border header-toolbar">
+    <ion-title slot="start">Alege punct de lucru</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" id="button" (click)="addSalePoint()">
+        <ion-icon src="../../../../assets/icon/add-outline.svg " color="medium" slot="start" size="large"></ion-icon>
+        <ion-label slot="end">Adaugă</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="header">
+    <span class="id">Nr</span>
+    <span class="name">Denumire</span>
+    <span class="address">Adresa</span>
+    <span class="status">Status</span>
+    <span class="action">Actiune</span>
+  </div>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <div class="point-container" *ngFor="let point of points; let i = index">
+    <span class="id">#{{i+1}}</span>
+    <span class="name">{{point.name}}</span>
+    <span class="address">{{point.address}}</span>
+    <ion-icon class="status" [src]="point.status ? '../../../assets/icon/success.svg': '../../../assets/icon/not.svg'" [color]="point.status ? 'success' : 'danger'"></ion-icon>
+    <ion-button fill="clear" class="action" (click)="action(point)">
+      <ion-icon color="medium" src="../../../assets/icon/create-outline.svg"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>

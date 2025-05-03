@@ -3,7 +3,7 @@ import User from "src/app/auth/user.model";
 import { Bill, BillProduct, deletetBillProduct, Table } from "src/app/models/table.model";
 import { Category, Product, SubProduct } from "./category.model";
 import { Dep, Gestiune, ImpSheet, InvIngredient, messageEFactura, Nir, NirIngredient } from './nir.model';
-import { Shedule, Pontaj } from './shedule.model';
+import { Shedule, Pontaj, Day } from './shedule.model';
 import { environment } from '../../environments/environment';
 import { cigarsInv, Inventary, line, productionReport } from "./inventary.model";
 import { reportUsers } from "./report.model";
@@ -153,7 +153,7 @@ export function  emptyBillProduct(){
 
 
  export function emptyTable(){
-  const emptyTable: Table = {_id: '', bills: [], index: 0, name: ''}
+  const emptyTable: Table = {_id: '', bills: [], index: 0, name: '', salePoint: ''}
   return emptyTable
 }
 
@@ -193,7 +193,7 @@ export function emptyBill(){
     onlineOrder: false,
     pending: true,
     out: false,
-    salePoint: environment.POINT,
+    salePoint: '',
     payment: {
       card: 0,
       cash: 0,
@@ -274,6 +274,7 @@ export function emptyProduct(){
     showSub: false,
     discount: 0,
     section: '',
+    salePoint: '',
   }
   return emptyProduct
 }
@@ -304,6 +305,7 @@ export function emptySubProduct(){
       },
       additives: [],
       allergens: [],
+      salePoint: '',
   }
   return sub
 }
@@ -315,7 +317,8 @@ export function emptyCategory(){
     product: [],
     locatie: environment.LOC,
     image: {path: '', filename:''},
-    order: 0
+    order: 0,
+    salePoint: '',
   }
   return emptyCategory
 }
@@ -366,6 +369,7 @@ export function emptyNir(){
     valTva: 0,
     valVanzare: 0,
     discount: [],
+    salePoint: '',
   }
   return nir
 }
@@ -422,6 +426,7 @@ export function emptyReportUsers(){
   return users
 }
 
+
 export function emptyIng(){
   const emptyIng: InvIngredient = {
    _id: '',
@@ -439,7 +444,7 @@ export function emptyIng(){
    gestiune: '',
    locatie: environment.LOC,
    ings: [],
-   salePoint: environment.POINT,
+   salePoint: '',
    productIngredient: false,
    inventary: [],
    uploadLog: [],

@@ -30,7 +30,6 @@ export class SheduleService{
 getLastShedule(){
   return this.http.get<Shedule>(`${environment.BASE_URL}shedule?loc=${environment.LOC}&shedule=last`)
       .pipe(tap(response => {
-        console.log(response)
         this.shedule = response
         this.sheduleState.next(this.shedule)
   }))
@@ -45,7 +44,6 @@ addEntry(user: any, day: any, month: string, dayValue: number){
     .pipe(tap(response => {
       if(response){
         this.shedule = response
-        console.log('add entry', this.shedule)
         this.sheduleState.next(this.shedule)
       }
     }))

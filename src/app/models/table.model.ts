@@ -5,7 +5,8 @@ export class Table{
     public name: string,
     public _id: string,
     public index: number,
-    public bills: Bill[]
+    public bills: Bill[],
+    public salePoint: string,
   ){}
 }
 

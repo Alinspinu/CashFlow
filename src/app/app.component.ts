@@ -14,6 +14,9 @@ import { EService } from './office/e-factura/e-factura.service';
 import { ProductsService } from './office/products/products.service';
 import { NirsService } from './office/nirs/nirs.service';
 import { IngredientService } from './office/ingredient/ingredient.service';
+import { SalePointService } from './office/sale-point/sale-point.service';
+import { SalePoint } from './models/sale-point';
+import { CashRegisterService } from './office/cash-register/cash-register.service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +27,7 @@ import { IngredientService } from './office/ingredient/ingredient.service';
 export class AppComponent implements OnInit, OnDestroy {
 
   user!: User
+  pointName: string = ''
 
 
   public firstPages = [
@@ -62,6 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { name: 'Email', url: '/email', icon: '../assets/icon/email.svg', show: false},
     { name: 'Viva', url: '/viva', icon: '../assets/icon/euro.svg', show: false},
     { name: 'Print', url: '/print', icon: '../assets/icon/print-outline.svg', show: false},
+    { name: 'Sale Point', url: '/point', icon: '../assets/icon/print-outline.svg', show: false},
   ]
 
   public subMenuPages = [
@@ -84,13 +89,14 @@ export class AppComponent implements OnInit, OnDestroy {
     private supliersService: SupliersService,
     private webRTC: WebRTCService,
     private userSrv: UsersService,
-    private cashCtrlSrv: CashControlService,
     private productsSrv: ProductsService,
     private nirsSrv: NirsService,
     private ingSrv: IngredientService,
     private cashSrv: CashControlService,
     @Inject(MenuController) private menuCtrl: MenuController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private pointService: SalePointService,
+    private cashRegService: CashRegisterService,
     ) {}
 
 
@@ -133,22 +139,52 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     getUser(){
+      this.pointService.getUnAuthPoints().subscribe({
+        next: (res) => {
+          this.getPointFromLocal(res[0])
+          this.getPoint()
+        }
+      })
       Preferences.get({key: 'authData'}).then(data  => {
         if(data.value) {
         this.user = JSON.parse(data.value)
         this.cashSrv.getAllorders(undefined, undefined, undefined).subscribe()
         this.supliersService.getSupliers().subscribe()
-        this.contentSub = this.contService.getData(this.user.locatie).subscribe()
         this.tablesService.getTables(this.user.locatie, this.user._id)
         this.userSrv.getUsers().subscribe()
         this.eSerice.getMessages(5).subscribe()
-        this.productsSrv.getProducts().subscribe()
-        this.nirsSrv.getNirs().subscribe()
-        this.ingSrv.getAllIngredients().subscribe()
         this.userSrv.getUsers().subscribe()
         this.getUpdatedOrder()
         this.removeLive()
         this.getDelProduct()
+     
+        }
+      })
+    } 
+
+
+    async getPointFromLocal(p: SalePoint){
+      const data = await Preferences.get({key: 'point'})
+      if(data && data.value){
+        const point = JSON.parse(data.value)
+          this.pointService.actvatePoint(point)
+      } else {
+          this.pointService.actvatePoint(p) 
+      }
+    }
+
+    getPoint(){
+      this.pointService.pointSend$.subscribe({
+        next: (p) => {
+          this.pointName = p.name
+          if(p._id){
+            this.ingSrv.getAllIngredients(p._id).subscribe()
+            this.nirsSrv.getNirs(p._id).subscribe()
+            this.contentSub = this.contService.getData(p._id).subscribe()
+            this.productsSrv.getProducts(p._id).subscribe()
+            this.cashRegService.getDocuments(p._id).subscribe()
+          }
+        
         }
       })
     }
@@ -162,7 +198,7 @@ export class AppComponent implements OnInit, OnDestroy {
           const parsedOrder = JSON.parse(order)
           setTimeout(() => {
             this.tablesService.updateOrder(parsedOrder)
-            this.cashCtrlSrv.addUpdateOrders(parsedOrder)
+            // this.cashCtrlSrv.addUpdateOrders(parsedOrder)
           }, 800)
         }
       })
@@ -172,7 +208,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.webRTC.getDelProduct().subscribe({
         next: (product) => {
           const parsedProduct = JSON.parse(product)
-          this.cashCtrlSrv.addDelProduct(parsedProduct)
+          this.cashSrv.addDelProduct(parsedProduct)
         },
         error: (error) => {
           console.log(error)
@@ -210,6 +246,12 @@ export class AppComponent implements OnInit, OnDestroy {
         if(this.contentSub){
           this.contentSub.unsubscribe()
         }
+    }
+
+
+
+    setSalePoint(){
+
     }
 
 

@@ -5,6 +5,7 @@ import { Nir, InvIngredient, NirIngredient } from '../../../models/nir.model';
 import { BehaviorSubject, Observable, take, tap } from "rxjs";
 import { emptyNir } from "src/app/models/empty-models";
 import { round, round4 } from "src/app/shared/utils/functions";
+import { SalePointService } from "../../sale-point/sale-point.service";
 
 
 
@@ -21,10 +22,13 @@ export class NirService{
   public nirSend$!: Observable<Nir>;
   nir: Nir = emptyNir();
 
+  pointId: string = ''
+
   private tempIngs: {first: boolean, ings : string}  = {first: true, ings: ''}
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+
   ){
     this.nirState = new BehaviorSubject<Nir>(emptyNir());
     this.nirSend$ =  this.nirState.asObservable();

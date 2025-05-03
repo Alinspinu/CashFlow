@@ -29,7 +29,7 @@ export class ProductsService{
   }
 
 
-  getProducts(){
+  getProducts(point: string){
     this.dbService.getData('data', 2).subscribe((response: any) => {
       if(response){
         this.products = [...JSON.parse(response.products)]
@@ -37,7 +37,7 @@ export class ProductsService{
         this.productsState.next([...this.products])
       }
     })
-    return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products`, {loc: environment.LOC})
+    return this.http.post<Product[]>(`${environment.BASE_URL}product/get-products`, {loc: environment.LOC, point: point})
           .pipe(tap(response => {
             if(response){
               this.products = response

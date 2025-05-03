@@ -65,8 +65,8 @@ export class IngredientService{
      }
 
 
-  getIngredient(page: number){
-    return this.http.get<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {params: { page: page.toString(), loc: environment.LOC }},)
+  getIngredient(page: number, point: string){
+    return this.http.get<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients`, {params: { page: page.toString(), loc: environment.LOC, point: point }},)
   }
 
   getIngsFromLocal(){
@@ -79,13 +79,13 @@ export class IngredientService{
   }
 
 
-  getAllIngredients(): Observable<any[]> {
+  getAllIngredients(point: string): Observable<any[]> {
     this.getIngsFromLocal()
     const allItems: any[] = [];
     let currentPage = 1;
 
     const fetchNextPage = (): Observable<any> => {
-      return this.getIngredient(currentPage);
+      return this.getIngredient(currentPage, point);
     };
 
     return new Observable((observer) => {
@@ -183,8 +183,8 @@ export class IngredientService{
       }))
   }
 
-getIngsConsumabils(){
-  return this.http.get<InvIngredient[]>(`${environment.BASE_URL}ing/get-consumabil?loc=${environment.LOC}`)
+getIngsConsumabils(point: string){
+  return this.http.get<InvIngredient[]>(`${environment.BASE_URL}ing/get-consumabil?loc=${environment.LOC}&point=${point}`)
 }
 
 saveInventary(){
@@ -233,5 +233,4 @@ deleteDep(id: string){
   return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/dep?id=${id}`)
 }
 
-
-}
+} 

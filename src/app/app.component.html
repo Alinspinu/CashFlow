@@ -3,6 +3,7 @@
     <ion-content>
       <ion-list id="inbox-list">
         <ion-list-header>True Fine Coffee</ion-list-header>
+        <ion-note style="margin-bottom: 5px !important; color: red">{{pointName}}</ion-note> <br>
         <ion-note>{{user.email}}</ion-note>
 
           <ion-menu-toggle auto-hide="true" *ngFor="let p of firstPages; let i = index">

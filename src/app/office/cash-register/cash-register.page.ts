@@ -35,16 +35,20 @@ export class CashRegisterPage implements OnInit {
   user!: User
   menuOpen: boolean = false
 
+  pointId: string = ''
+
+
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
-     @Inject(MenuController) private menuCtrl: MenuController,
+    @Inject(MenuController) private menuCtrl: MenuController,
     private cashRegService: CashRegisterService,
     private toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
-    this.menuChange()
     this.loadDocuments()
+    this.menuChange()
+  
   }
 
 
@@ -75,7 +79,6 @@ export class CashRegisterPage implements OnInit {
     let total = 0
     for(let entry of day.entry){
       if(entry.tip === 'income'){
-        console.log(entry.amount)
         total += entry.amount
       }
     }
@@ -88,8 +91,8 @@ export class CashRegisterPage implements OnInit {
     } else {
       this.cashRegService.deleteDay(day._id).subscribe({
         next: (message) => {
-          const index = this.documents.findIndex(d => d._id === day._id)
-          if(index !== -1) this.documents.splice(index, 1)
+          // const index = this.documents.findIndex(d => d._id === day._id)
+          // if(index !== -1) this.documents.splice(index, 1)
           showToast(this.toastCtrl, message.message, 3000)
         },
         error: (error) => {
@@ -111,16 +114,15 @@ export class CashRegisterPage implements OnInit {
 
   async addEntry(){
     const data = await this.actionSheet.openAdd(AddEntryPage, 'register', 'small-two')
-    if(data && data.day){
-      const dayIndex = this.documents.findIndex(el => el.date === data.day.date)
-      this.documents[dayIndex] = data.day
+    if(data && data.entry){
+      this.cashRegService.addEntry(data.entry).subscribe()
     }
   }
 
 
 loadDocuments() {
-  this.cashRegService.getDocuments(this.page).subscribe((response) => {
-    this.documents = [...this.documents, ...response.documents];
+  this.cashRegService.entriesSend$.subscribe((response) => {
+    this.documents = response
     setTimeout(() => {
      this.content.scrollToBottom(600)
     }, 300);
@@ -131,7 +133,7 @@ loadDocuments() {
 
 export(){
   if(this.startDate && this.endDate){
-    this.cashRegService.exportRegister(this.startDate, this.endDate, this.user.locatie).subscribe(response => {
+    this.cashRegService.exportRegister(this.startDate, this.endDate, this.pointId).subscribe(response => {
       const url = window.URL.createObjectURL(response);
       const a = document.createElement('a');
       a.href = url;
@@ -167,10 +169,8 @@ formatDate(inputDate: string): string {
 async deleteEntry(id: string, index: number, dayIndex: number){
   const response = await this.actionSheet.deleteAlert('Ești sigur că vrei să ștergi intrarea?', "Șterge intrarea")
   if(response){
-    const dateToCompare = new Date().setUTCHours(0,0,0,0)
     const day = this.documents[dayIndex];
-    const dayDate = new Date(day.date).setUTCHours(0,0,0,0)
-      this.cashRegService.deleteEntry(id).subscribe(response => {
+      this.cashRegService.deleteEntry(id, index, dayIndex).subscribe(response => {
         showToast(this.toastCtrl, response.message, 3000);
         const entry = day.entry[index];
         day.cashOut = day.cashOut - entry.amount

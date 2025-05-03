@@ -30,14 +30,15 @@ export class ContentService{
 
 
 
-    getData(locatie: string){
+    getData(point: string){
       this.dbService.getData('data', 3).subscribe((data: any) => {
         if(data){
           this.category = [...JSON.parse(data.ings)]
           this.categoryState.next([...this.category])
         }
       })
-      return this.http.get<Category[]>(`${environment.BASE_URL}cat/get-cats?loc=${locatie}`).pipe(take(1), tap(res => {
+      return this.http.get<Category[]>(`${environment.BASE_URL}cat/get-cats?loc=${environment.LOC}&point=${point}`).pipe(take(1), tap(res => {
+        console.log(res)
         this.category = this.sortData(res)
         this.categoryState.next([...this.category]);
         const stringCats = JSON.stringify(this.category)

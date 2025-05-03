@@ -357,7 +357,6 @@ getTables(locatie: string, id: string){
   this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
     if(response){
       this.tables = response
-      console.log('get table service',this.tables[0])
       const stringTable = JSON.stringify(this.tables)
       Preferences.set({key: 'tables', value: stringTable})
       this.tableState.next([...this.tables])
@@ -422,6 +421,7 @@ deleteTable(tableId: string, index: number){
   bill.masaRest = table._id;
   bill.production = true;
   bill.inOrOut = inOrOut
+  bill.salePoint = table.salePoint
   if(bill.employee){
     bill.employee.user.length ? bill.employee = bill.employee : bill.employee = employee
   } else {

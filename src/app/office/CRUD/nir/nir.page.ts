@@ -17,6 +17,7 @@ import { AddIngPage } from './add-ing/add-ing.page';
 import { Subscription } from 'rxjs';
 import { DiscountPage } from 'src/app/modals/discount/discount.page';
 import { SupliersService } from '../../supliers/supliers.service';
+import { SalePointService } from '../../sale-point/sale-point.service';
 
 
 @Component({
@@ -49,8 +50,11 @@ export class NirPage implements OnInit, OnDestroy {
   editMode: boolean = false
   mergeMode: boolean = false
 
+  pointId: string = ''
+
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
+    private pointService: SalePointService,
     private nirsService: NirsService,
     private nirService: NirService,
     private supliersService: SupliersService,
@@ -64,6 +68,7 @@ export class NirPage implements OnInit, OnDestroy {
     this.getSupliers()
     this.getNirToEdit()
     this.getNir()
+    this.getPointId()
   }
 
   ngOnDestroy(): void {
@@ -81,6 +86,13 @@ export class NirPage implements OnInit, OnDestroy {
     })
   }
 
+  getPointId(){
+    this.pointService.pointSend$.subscribe({
+      next: (point) => {
+        if(point._id) this.pointId = point._id
+      }
+    })
+  }
 
 
 
@@ -278,6 +290,7 @@ async getNirToEdit(){
           const parsedNir = JSON.parse(nir.value) as Nir
           const eFacturaNirTotal = parsedNir.totalDoc
           this.nir = parsedNir
+          this.nir.salePoint = this.pointId
           this.nirService.setNir(this.nir)
           this.nirService.clacTotals()
           const diference = round(this.nir.totalDoc - eFacturaNirTotal)
@@ -314,6 +327,7 @@ async getNirToEdit(){
                this.nir.nrDoc = this.nirForm.value.nrDoc
                this.nir.suplier._id = this.suplier._id
                this.nir.document = this.nirForm.value.document
+               this.nir.salePoint = this.pointId
                this.nirsService.saveNir(this.nir).subscribe(response => {
                  this.nirService.setNir(emptyNir())
                  showToast(this.toastCtrl, "Nirul a fost editat cu success, stocul a fost actualizat!", 2000)
@@ -330,6 +344,7 @@ async getNirToEdit(){
                  this.nir.nrDoc = this.nirForm.value.nrDoc
                  this.nir.suplier._id = this.suplier._id
                  this.nir.document = this.nirForm.value.document
+                 this.nir.salePoint = this.pointId
                  this.nirsService.saveNir(this.nir).subscribe(response=> {
                    this.nirService.setNir(emptyNir())
                    showToast(this.toastCtrl, response.message, 2000)
@@ -347,6 +362,7 @@ async getNirToEdit(){
              this.nir.nrDoc = this.nirForm.value.nrDoc
              this.nir.suplier._id = this.suplier._id
              this.nir.document = this.nirForm.value.document
+             this.nir.salePoint = this.pointId
              this.nirsService.saveNir(this.nir).subscribe(response=> {
                this.nirService.setNir(emptyNir())
                showToast(this.toastCtrl, response.message, 2000)

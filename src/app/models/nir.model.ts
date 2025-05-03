@@ -20,6 +20,7 @@ export class Nir{
     public eFacturaId: string,
     public valVanzare: number,
     public discount: {tva: number, value: number, procent: number}[],
+    public salePoint: string,
     public index?: number,
   ){}
 }

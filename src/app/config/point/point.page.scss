@@ -1,0 +1,57 @@
+ion-content, ion-header, ion-toolbar{
+    --background: var(--background-color) !important;
+    background-color: var(--background-color) !important;
+  }
+  
+  #button{
+    --border-radius: 50px !important;
+    ion-label{
+      font-family: RoseMed;
+      font-size: 18px;
+    }
+  }
+
+
+  .header{
+    width: 96%;
+    font-family: RoseReg !important;
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    margin: 0 24px;
+    font-size: 18px;
+    justify-content: space-between;
+    border-bottom: 1.5px solid var(--grey);
+  }
+
+  .point-container{
+    font-family: RoseReg !important;
+    width: 96%;
+    margin-left: 24px;
+    padding: 12px 18px;
+    border-bottom: 0.5px solid var(--grey);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+
+.header, .point-container{
+    .id{
+      flex: 4%;
+    }
+    .name{
+      flex: 30%;
+    }
+    .address{
+      flex: 36%
+    }
+    .status{
+      text-align: center;
+      flex: 10%;
+    }
+    .action{
+        text-align: center;
+        flex: 10%;
+    }
+}

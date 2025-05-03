@@ -29,7 +29,6 @@ user!: User
 dbProducts: any [] = []
 
 prodSub!: Subscription
-proDbSub!: Subscription
 
   constructor(
     @Inject(ActionSheetService) private actioSrv: ActionSheetService,
@@ -44,7 +43,6 @@ proDbSub!: Subscription
     this.getUser()
     this.getProducts()
     this.getData()
-    this.getProductsFromDb()
     setTimeout(() => {
       this.searchbar.setFocus()
     }, 400)
@@ -59,9 +57,6 @@ proDbSub!: Subscription
     }
   }
 
-  getProductsFromDb(){
-   this.prodSub = this.productService.getProducts().subscribe()
-  }
 
 
   async selectProduct(prod: any){

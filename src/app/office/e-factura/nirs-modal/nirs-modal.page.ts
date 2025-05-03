@@ -46,7 +46,7 @@ export class NirsModalPage implements OnInit {
   }
 
   getNirs(id: string){
-    this.nirService.getnirsBySuplier(id).subscribe({
+    this.nirService.getNirsBySuplierEF(id).subscribe({
       next: (response) => {
         this.suplierNirs = response
       },

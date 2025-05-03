@@ -15,6 +15,7 @@ import { environment } from 'src/environments/environment';
 import { emptyProduct } from 'src/app/models/empty-models';
 import { ReportPage } from './report/report.page';
 import { round } from 'src/app/shared/utils/functions';
+import { SalePointService } from '../../sale-point/sale-point.service';
 
 
 @Component({
@@ -48,6 +49,8 @@ export class ProductPage implements OnInit {
   hideIng: boolean = false
   isTva: boolean = true
 
+  pointId: string = ''
+
 
   general: boolean = true
   recipe: boolean = false
@@ -63,6 +66,7 @@ export class ProductPage implements OnInit {
   constructor(
     @Inject(ActionSheetService) private actSheet: ActionSheetService,
     @Inject(ProductsService) private prodsSrv: ProductsService,
+    private pointService: SalePointService,
     private navParam: NavParams,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -71,9 +75,16 @@ export class ProductPage implements OnInit {
   ngOnInit() {
     this.setupForm()
     this.setTvaValidators()
+    this.getPointId()
   }
 
-
+ getPointId(){
+  this.pointService.pointSend$.subscribe({
+    next: (p) => {
+     if(p._id) this.pointId = p._id
+    }
+  })
+ }
 
 
   getNutritionValues(){
@@ -337,7 +348,6 @@ export class ProductPage implements OnInit {
 
   async saveProduct(){
     if(this.form.valid && this.productCategory && this.productMainCat){
-      console.log( this.form.value.allergens)
       const newProduct: any = {
         name: this.form.value.name,
         price: +this.form.value.price,
@@ -358,7 +368,8 @@ export class ProductPage implements OnInit {
         ings: this.ingredientsToSend.length ? this.ingredientsToSend : this.product.ings.map(i => ({ qty: i.qty, ing: i.ing._id})),
         subProducts: this.tempSubArray,
         image: this.product.image,
-        allergens: this.form.value.allergens.split(', ').map((a: string) => ({name: a.trim()}))
+        allergens: this.form.value.allergens.split(', ').map((a: string) => ({name: a.trim()})),
+        salePoint: this.pointId
       }
       if(this.editMode) {
         newProduct._id = this.product._id

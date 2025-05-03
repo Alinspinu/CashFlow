@@ -5,6 +5,7 @@ import { Nir } from "src/app/models/nir.model";
 import { Record, Suplier } from "src/app/models/suplier.model";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 import { emptyNir } from "src/app/models/empty-models";
+import { SalePointService } from "../sale-point/sale-point.service";
 
 
 
@@ -19,25 +20,28 @@ export class NirsService{
   public nirsSend$!: Observable<Nir[]>;
   nirs: Nir[] = [emptyNir()];
 
+
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
   ){
     this.nirsState = new BehaviorSubject<Nir[]>([emptyNir()]);
     this.nirsSend$ =  this.nirsState.asObservable();
   }
+
+  getNirs(pointId: string){
+    return this.http.post<Nir[]>(`${environment.BASE_URL}nir/get-nirs`, {loc: environment.LOC, point: pointId})
+        .pipe(tap(nirs => {
+          this.nirs = nirs
+          this.nirsState.next([...this.nirs])
+        }))
+  }
+
 
 
   printNir(id: string){
     return this.http.get(`${environment.BASE_URL}nir/print-nir?id=${id}`, { responseType: 'arraybuffer' })
   }
 
-  getNirs(){
-    return this.http.post<Nir[]>(`${environment.BASE_URL}nir/get-nirs`, {loc: environment.LOC})
-        .pipe(tap(nirs => {
-          this.nirs = nirs
-          this.nirsState.next([...this.nirs])
-        }))
-  }
 
   deleteNirs(ids: string[]){
     return this.http.put<{message: string}>(`${environment.BASE_URL}nir/delete-nirs`, {ids: ids})
@@ -61,8 +65,8 @@ export class NirsService{
     return this.http.post(`${environment.BASE_URL}nir/export-xcel`, {startDate: startDate, endDate: endDate, loc: loc}, { responseType: 'blob',})
   }
 
-  getNirsByDate(startDate: any, endDate: any, loc: string){
-    return this.http.post<Nir[]>(`${environment.BASE_URL}nir/get-nirs-by-date`, {startDate, endDate, loc})
+  getNirsByDate(startDate: any, endDate: any, loc: string, pointId: string){
+    return this.http.post<Nir[]>(`${environment.BASE_URL}nir/get-nirs-by-date`, {startDate, endDate, loc, point: pointId})
             .pipe(tap(nirs => {
               this.nirs = nirs
               this.nirsState.next([...this.nirs])
@@ -70,8 +74,8 @@ export class NirsService{
   }
 
 
-  getnirsBySuplier(id: string){
-    return this.http.get<Nir[]>(`${environment.BASE_URL}nir/get-nirs?id=${id}`)
+  getnirsBySuplier(id: string, pointId: string){
+    return this.http.get<Nir[]>(`${environment.BASE_URL}nir/get-nirs?id=${id}&point=${pointId}`)
         .pipe(tap(nirs => {
           this.nirs = nirs
           this.nirsState.next([...this.nirs])
@@ -119,5 +123,10 @@ export class NirsService{
 
   updateNirsBySuplier(id: string){
     return this.http.post<Nir[]>(`${environment.BASE_URL}nir/update`, {id: id})
+  }
+
+
+  getNirsBySuplierEF(id: string){
+    return this.http.get<Nir[]>(`${environment.BASE_URL}nir/get-nirs?id=${id}`)
   }
 }

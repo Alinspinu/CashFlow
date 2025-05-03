@@ -46,7 +46,6 @@ export class EFacturaPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.ingService.getAllIngredients().subscribe()
     this.getIngredients()
     this.getMessage(5)
   }

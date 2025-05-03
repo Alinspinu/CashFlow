@@ -1,34 +1,38 @@
 
 <ion-header class="ion-no-border">
-  <ion-toolbar class="ion-no-border">
-    <div class="title-wrapper">
-      <div class="title">ADAUGĂ PUNCT DE LUCRU</div>
-    </div>
-      <ion-button (click)="cancel()" slot="end" color="medium" size="large">
-        Închide
+  <ion-toolbar class="ion-no-border toolbar">
+    <ion-title slot="start">{{editMode ? 'Editează' : 'Adaugă'}} punct de lucru</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="cancel()">
+        <ion-icon src="../../../../assets/icon/close-outline.svg" color="medium" size="large"></ion-icon>
       </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="content-container">
   <ion-grid>
     <ion-row class="ion-padding">
-      <ion-col size-lg="4" offset-lg="4">
-        <div class="input">
-          <ion-input  mode="ios" type="text" [(ngModel)]="name"  fill="outline" placeholder="Nume punct de lucru"></ion-input>
-        </div>
-        <div class="input">
-          <ion-textarea  mode="ios" [(ngModel)]="address"  fill="outline" placeholder="Adresa punct de lucru"></ion-textarea>
-        </div>
+      <ion-col size-lg="6" offset-lg="3">
+
+          <ion-input  mode="md" label="Nume" labelPlacement="floating"  type="text" [(ngModel)]="name"  fill="outline" placeholder="Nume punct de lucru"></ion-input>
+  
+          <ion-textarea  mode="md" label="Adresa" labelPlacement="floating"  [(ngModel)]="address"  fill="outline" placeholder="Adresa punct de lucru"></ion-textarea>
+  
       </ion-col>
     </ion-row>
   </ion-grid>
   </div>
 </ion-content>
 
-<ion-footer class="ion-no-border">
-  <ion-button size="large" expand="block" (click)="saveSalePoint()" color="medium">
-    Salvează punct de lucru
-  </ion-button>
+
+<ion-footer mode="ios" [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="footer-toolbar">
+    <ion-button mode='md' class="footer-button" slot="end" fill="outline" color="medium" size="large"  (click)="saveSalePoint()" >
+      <ion-label slot="start" size="large" >{{editMode ? "Editează" : "Salvează"}}</ion-label>
+      <ion-icon slot="end" src="../../../../assets/icon/checkmark-outline.svg" color='medium' ></ion-icon>
+    </ion-button>
+  </ion-toolbar>
 </ion-footer>

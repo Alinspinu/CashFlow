@@ -21,6 +21,7 @@ import { EService } from '../e-factura/e-factura.service';
 import { Subscription } from 'rxjs';
 import { SupliersService } from '../supliers/supliers.service';
 import { MenuController } from '@ionic/angular';
+import { SalePointService } from '../sale-point/sale-point.service';
 
 @Component({
   selector: 'app-nirs',
@@ -67,6 +68,8 @@ export class NirsPage implements OnInit, OnDestroy {
 
   menuOpen: boolean = false
 
+  pointId: string = ''
+
 
   constructor(
     public nirSrv: NirsService,
@@ -77,13 +80,17 @@ export class NirsPage implements OnInit, OnDestroy {
     private supliersService: SupliersService,
     public router: Router,
     private eService: EService,
+    private pointService: SalePointService,
   ) { }
 
   ngOnInit() {
+    this.getPointId()
     this.menuChange()
-    this.getNirs()
-    this.getSupliers()
-    this.getInvoicesStatus()
+    setTimeout(() => {
+      this.getNirs()
+      this.getSupliers()
+      this.getInvoicesStatus()
+    }, 500)
   }
 
 
@@ -91,6 +98,15 @@ export class NirsPage implements OnInit, OnDestroy {
     if(this.eFacturaSub) this.eFacturaSub.unsubscribe()
     if(this.supliersSub) this.supliersSub.unsubscribe()
     if(this.nirsSub) this.nirsSub.unsubscribe()
+  }
+
+
+  getPointId(){
+    this.pointService.pointSend$.subscribe({
+      next: (point) => {
+        if(point._id) this.pointId = point._id
+      }
+    })
   }
 
   getInvoicesStatus(){
@@ -177,12 +193,12 @@ async eFactura(){
 async selectSuplier(){
   const suplierName = await this.actionSheetService.openSelect(SelectDataPage, this.supliersToSend, 'supliers')
   if(suplierName === 'TOȚI FURNIZORII'){
-     this.nirSrv.getNirs().subscribe()
+     this.nirSrv.getNirs(this.pointId).subscribe()
    }
   if(suplierName && suplierName !== 'TOȚI FURNIZORII'){
     const suplier = this.supliers.find((suplier: any) => suplier.name === suplierName)
     if(suplier){
-      this.nirSrv.getnirsBySuplier(suplier._id).subscribe({
+      this.nirSrv.getnirsBySuplier(suplier._id, this.pointId).subscribe({
         next: (response) => {
           this.calcTotalDue()
         },
@@ -342,14 +358,14 @@ searchNir(ev: any){
           const res = await this.actionSheetService.openAuth(DatePickerPage)
           if(res){
             this.endDate = res
-              this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe()
+              this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie, this.pointId).subscribe()
            }
          }
       } else {
         const res = await this.actionSheetService.openAuth(DatePickerPage)
         if(res && this.startDate){
           this.endDate = res
-            this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie).subscribe()
+            this.nirSrv.getNirsByDate(this.startDate, this.endDate, this.user.locatie, this.pointId).subscribe()
          } else {
           showToast(this.toastCtrl, 'Trebuie să alegi întâi data de început!', 2000)
          }

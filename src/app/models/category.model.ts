@@ -8,6 +8,7 @@ export class Category{
     public mainCat: string,
     public locatie: string,
     public product: Product[],
+    public salePoint: string,
     public image: {path: string, filename: string},
     public _id?: string,
   ){};
@@ -53,6 +54,7 @@ export class Product {
   public showSub: boolean,
   public discount: number,
   public section: string,
+  public salePoint: string,
   ){};
 };
 
@@ -95,7 +97,8 @@ export class SubProduct{
       salts: number,
       protein: number,
     },
-  public _id?: string,
+    public salePoint: string,
+    public _id?: string,
   ){};
 };
 

@@ -54,7 +54,10 @@ export class AddIngPage implements OnInit, OnDestroy {
   inputType: string = 'number'
   totalInputType: string = 'number'
 
+  pointsSub!: Subscription
+
   constructor(
+    @Inject(ActionSheetService) private actionSrv: ActionSheetService,
     private ingSrv: IngredientService,
     private toastCtrl: ToastController,
     private nirSrv: NirService,
@@ -62,7 +65,6 @@ export class AddIngPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private navParams: NavParams,
     private salePointService: SalePointService,
-    @Inject(ActionSheetService) private actionSrv: ActionSheetService
   ) { }
 
 
@@ -70,6 +72,7 @@ export class AddIngPage implements OnInit, OnDestroy {
       if(this.ingSub){
         this.ingSub.unsubscribe()
       }
+      if(this.pointsSub) this.pointsSub.unsubscribe()
   }
 
 
@@ -169,7 +172,7 @@ export class AddIngPage implements OnInit, OnDestroy {
   }
 
   getSalePoints(){
-    this.salePointService.pointsSend$.subscribe({
+   this.pointsSub = this.salePointService.pointsSend$.subscribe({
       next: (points) => {
         this.salePoints = points
         this.setupIngForm()

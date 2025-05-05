@@ -20,28 +20,28 @@ export class InventaryService{
     ){
     }
 
-    getInventary(id: string){
-      return this.http.get<Inventary>(`${environment.BASE_URL}ing/get-inventary?inventaryId=${id}&loc=${environment.LOC}`)
+    getInventary(id: string, point: string){
+      return this.http.get<Inventary>(`${environment.BASE_URL}ing/get-inventary?inventaryId=${id}&loc=${environment.LOC}&point=${point}`)
     }
 
-    getAllInventary(id: string){
-      return this.http.get<Inventary[]>(`${environment.BASE_URL}ing/get-inventary?inventaryId=${id}&loc=${environment.LOC}`)
+    getAllInventary(id: string, point: string){
+      return this.http.get<Inventary[]>(`${environment.BASE_URL}ing/get-inventary?inventaryId=${id}&loc=${environment.LOC}&point=${point}`)
     }
 
-    saveOrUpdateInventary(date: string){
-      return this.http.post<{message: string, inv: Inventary}>(`${environment.BASE_URL}ing/save-inv`, {date: date, loc: environment.LOC})
+    saveOrUpdateInventary(date: string, point: string){
+      return this.http.post<{message: string, inv: Inventary}>(`${environment.BASE_URL}ing/save-inv`, {date: date, loc: environment.LOC, point: point})
     }
 
-    updateIngQty(id: string){
-      return this.http.post<{message: string, inv: Inventary}>(`${environment.BASE_URL}ing/update-ingredient-quantity`, {inventaryId: id})
+    updateIngQty(id: string, point: string){
+      return this.http.post<{message: string, inv: Inventary}>(`${environment.BASE_URL}ing/update-ingredient-quantity`, {inventaryId: id, point: point})
     }
 
     exportInv(inventaryId: string){
       return this.http.get(`${environment.BASE_URL}print/inventary?id=${inventaryId} `, {responseType: 'blob'})
     }
 
-    compareInventary(start: string, end: string){
-      return this.http.post<{compareInv: CompareInv}>(`${environment.BASE_URL}ing/compare-inv`, {start, end, loc: environment.LOC})
+    compareInventary(start: string, end: string, point: string){
+      return this.http.post<{compareInv: CompareInv}>(`${environment.BASE_URL}ing/compare-inv`, {start, end, loc: environment.LOC, point: point})
     }
 
     deleteLog(logID: string, ingID: string){

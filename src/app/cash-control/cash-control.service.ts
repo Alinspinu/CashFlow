@@ -39,9 +39,9 @@ raport(value: string, mainServer: any){
   return this.http.get<{message: string}>(`${environment.BASE_URL}pay/reports?value=${value}&serverId=${mainServer._id}`)
 }
 
-saveInventary(){
-  return this.http.get<{message: string}>(`${environment.SAVE_URL}ing/save-inventary?loc=${environment.LOC}`)
-}
+// saveInventary(){
+//   return this.http.get<{message: string}>(`${environment.SAVE_URL}ing/save-inventary?loc=${environment.LOC}`)
+// }
 
 cashInAndOut(data: any, mainServer: any){
   return this.http.post<{message: string}>(`${environment.BASE_URL}pay/in-and-out`, {data: data, mainServer: mainServer})
@@ -72,8 +72,8 @@ getUserOrders(userId: string, name: string) {
   return {orders: ord, delprod: prod};
 }
 
-getAllorders(day: string |undefined, start: string | undefined, end: string | undefined){
-  return this.http.post<{orders: Bill[], delProducts: deletetBillProduct[]}>(`${environment.BASE_URL}orders/get-orders`, {loc: environment.LOC, day: day, start: start, end: end})
+getAllorders(day: string |undefined, start: string | undefined, end: string | undefined, point: string){
+  return this.http.post<{orders: Bill[], delProducts: deletetBillProduct[]}>(`${environment.BASE_URL}orders/get-orders`, {loc: environment.LOC, day: day, start: start, end: end, point: point})
     .pipe(tap(response => {
       this.orders = response.orders
       this.delPrd =response.delProducts
@@ -82,16 +82,16 @@ getAllorders(day: string |undefined, start: string | undefined, end: string | un
     }))
 }
 
-addUpdateOrders(order: Bill){
-  const index = this.orders.findIndex(o => o._id === order._id)
-  if(index !== -1){
-    this.orders[index] = order
-    this.ordersState.next([...this.orders])
-  } else {
-    this.orders.push(order)
-    this.ordersState.next([...this.orders])
-  }
-}
+// addUpdateOrders(order: Bill){
+//   const index = this.orders.findIndex(o => o._id === order._id)
+//   if(index !== -1){
+//     this.orders[index] = order
+//     this.ordersState.next([...this.orders])
+//   } else {
+//     this.orders.push(order)
+//     this.ordersState.next([...this.orders])
+//   }
+// }
 
 addDelProduct(product: deletetBillProduct){
   const index = this.delPrd.findIndex(p => p._id === product._id)
@@ -136,8 +136,8 @@ saveCigInv(sheet: cigarsInv){
   return this.http.post<{first: cigarsInv, second: cigarsInv, message: string}>(`${environment.BASE_URL}ing/smoke`, {sheet: sheet})
 }
 
-getLastCigInv(mode: string){
-  return this.http.get<cigarsInv[]>(`${environment.BASE_URL}ing/smoke?loc=${environment.LOC}&point=${environment.POINT}&mode=${mode}`)
+getLastCigInv(mode: string, point: string){
+  return this.http.get<cigarsInv[]>(`${environment.BASE_URL}ing/smoke?loc=${environment.LOC}&point=${point}&mode=${mode}`)
 }
 
 updateFound(sheet: cigarsInv){

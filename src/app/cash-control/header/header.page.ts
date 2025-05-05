@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, MenuController } from '@ionic/angular';
@@ -7,6 +7,8 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { formatOrderDateOne } from 'src/app/shared/utils/functions';
 import { Bill, deletetBillProduct } from 'src/app/models/table.model';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -15,12 +17,15 @@ import { Bill, deletetBillProduct } from 'src/app/models/table.model';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class HeaderPage implements OnInit {
+export class HeaderPage implements OnInit, OnDestroy {
 
   date: string = formatOrderDateOne(new Date())
   menuOpen: boolean = false
 
   activeTabIndex: number = 0
+  pointId!: string
+
+  pointSub!: Subscription;
 
   users: {name: string, id: string, show: boolean}[] = []
 
@@ -28,14 +33,33 @@ export class HeaderPage implements OnInit {
   @Input() title: string = ''
 
   constructor(
-        private cashService: CashControlService,
-        @Inject(ActionSheetService) private actSrv: ActionSheetService,
-        @Inject(MenuController) private menuCtrl: MenuController
+    @Inject(ActionSheetService) private actSrv: ActionSheetService,
+    @Inject(MenuController) private menuCtrl: MenuController,
+    private pointService: SalePointService,
+    private cashService: CashControlService,
   ) { }
+
+
+  ngOnDestroy(): void {
+    if(this.pointSub){
+      this.pointSub.unsubscribe()
+    }
+  }
 
   ngOnInit() {
     this.menuChange()
+    this.getPointId()
     this.getOrders()
+  }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id) {
+          this.pointId = p._id
+        }
+      }
+    })
   }
 
 
@@ -51,13 +75,13 @@ export class HeaderPage implements OnInit {
   async selectDate(day: boolean){
     if(day) {
       const day = await this.actSrv.openAuth(DatePickerPage)
-      this.cashService.getAllorders(day, undefined, undefined).subscribe()
+      this.cashService.getAllorders(day, undefined, undefined, this.pointId).subscribe()
       this.date = formatOrderDateOne(day)
     } else {
       const stDate = await this.actSrv.openPayment(DatePickerPage, 'ALEGE ZIUA DE ÎNCEPUT')
       if(stDate){
         const enDate = await this.actSrv.openPayment(DatePickerPage, 'ALEGE ZIUA DE SFÂRȘIT')
-        this.cashService.getAllorders(undefined, stDate, enDate).subscribe()
+        this.cashService.getAllorders(undefined, stDate, enDate, this.pointId).subscribe()
          this.date = `${formatOrderDateOne(stDate)} - ${formatOrderDateOne(enDate)}`
       }
     }

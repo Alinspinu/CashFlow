@@ -16,8 +16,8 @@ export class ImpService{
 
 
 
-    getSheets(){
-      return this.http.get<ImpSheet[]>(`${environment.BASE_URL}nir/sheet?loc=${environment.LOC}`)
+    getSheets(point: string){
+      return this.http.get<ImpSheet[]>(`${environment.BASE_URL}nir/sheet?loc=${environment.LOC}&point=${point}`)
     }
 
     saveSheet(sheet: ImpSheet){

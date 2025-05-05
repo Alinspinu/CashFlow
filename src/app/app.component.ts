@@ -17,6 +17,7 @@ import { IngredientService } from './office/ingredient/ingredient.service';
 import { SalePointService } from './office/sale-point/sale-point.service';
 import { SalePoint } from './models/sale-point';
 import { CashRegisterService } from './office/cash-register/cash-register.service';
+import { ConfigService } from './config/config.service';
 
 @Component({
   selector: 'app-root',
@@ -81,8 +82,11 @@ export class AppComponent implements OnInit, OnDestroy {
   officeMenu = false;
   reportsMenu = false;
 
+  pointSub!: Subscription
+
 
   constructor(
+    @Inject(MenuController) private menuCtrl: MenuController,
     private contService: ContentService,
     private tablesService: TablesService,
     private eSerice: EService,
@@ -93,10 +97,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private nirsSrv: NirsService,
     private ingSrv: IngredientService,
     private cashSrv: CashControlService,
-    @Inject(MenuController) private menuCtrl: MenuController,
     private navCtrl: NavController,
     private pointService: SalePointService,
     private cashRegService: CashRegisterService,
+    private configService: ConfigService,
     ) {}
 
 
@@ -148,9 +152,7 @@ export class AppComponent implements OnInit, OnDestroy {
       Preferences.get({key: 'authData'}).then(data  => {
         if(data.value) {
         this.user = JSON.parse(data.value)
-        this.cashSrv.getAllorders(undefined, undefined, undefined).subscribe()
         this.supliersService.getSupliers().subscribe()
-        this.tablesService.getTables(this.user.locatie, this.user._id)
         this.userSrv.getUsers().subscribe()
         this.eSerice.getMessages(5).subscribe()
         this.userSrv.getUsers().subscribe()
@@ -174,23 +176,23 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     getPoint(){
-      this.pointService.pointSend$.subscribe({
+      this.pointSub = this.pointService.pointSend$.subscribe({
         next: (p) => {
           this.pointName = p.name
           if(p._id){
+            this.configService.getPrintServerss(p._id).subscribe()
+            this.cashSrv.getAllorders(undefined, undefined, undefined, p._id).subscribe()
             this.ingSrv.getAllIngredients(p._id).subscribe()
             this.nirsSrv.getNirs(p._id).subscribe()
             this.contentSub = this.contService.getData(p._id).subscribe()
             this.productsSrv.getProducts(p._id).subscribe()
             this.cashRegService.getDocuments(p._id).subscribe()
+            this.tablesService.getTables(p._id)
           }
         
         }
       })
     }
-
-
-
 
     getUpdatedOrder(){
       this.webRTC.getUpdatedOrderObservable().subscribe(order => {
@@ -198,7 +200,6 @@ export class AppComponent implements OnInit, OnDestroy {
           const parsedOrder = JSON.parse(order)
           setTimeout(() => {
             this.tablesService.updateOrder(parsedOrder)
-            // this.cashCtrlSrv.addUpdateOrders(parsedOrder)
           }, 800)
         }
       })
@@ -246,13 +247,9 @@ export class AppComponent implements OnInit, OnDestroy {
         if(this.contentSub){
           this.contentSub.unsubscribe()
         }
+        if(this.pointSub) this.pointSub.unsubscribe()
     }
 
-
-
-    setSalePoint(){
-
-    }
 
 
 

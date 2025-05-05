@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
@@ -13,6 +13,8 @@ import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { SelectDataPage } from 'src/app/modals/select-data/select-data.page';
 import { emptySheet } from 'src/app/models/empty-models';
 import { formatedDateToShow } from 'src/app/shared/utils/functions';
+import { Subscription } from 'rxjs';
+import { SalePointService } from '../../sale-point/sale-point.service';
 
 @Component({
   selector: 'app-add-imp',
@@ -21,7 +23,7 @@ import { formatedDateToShow } from 'src/app/shared/utils/functions';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, RecipeMakerPage]
 })
-export class AddImpPage implements OnInit {
+export class AddImpPage implements OnInit, OnDestroy {
 
   editMode: boolean = false
   sheet: ImpSheet = emptySheet()
@@ -35,20 +37,41 @@ export class AddImpPage implements OnInit {
 
   usersNames: string[] = []
 
+  userSub!: Subscription
+  pointSub!: Subscription
+
 
 
   constructor(
+    @Inject(ActionSheetService) private actionSheetService: ActionSheetService,
     private navParams: NavParams,
     private modalCtrl: ModalController,
     private impSrv: ImpService,
     private toastCtrl: ToastController,
     private usersSrv: UsersService,
-    @Inject(ActionSheetService) private actionSheetService: ActionSheetService
+    private pointService: SalePointService,
   ) { }
 
   ngOnInit() {
+    this.getPointId()
     this.getSheet()
     this.getUsers()
+  }
+
+  ngOnDestroy(): void {
+    if(this.userSub) this.userSub.unsubscribe()
+    if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id){
+          this.sheet.salePoint = p._id
+        }
+      }
+    })
   }
 
   getSheet(){
@@ -65,7 +88,6 @@ export class AddImpPage implements OnInit {
 
   onIngRecive(ev: any){
     this.sheet.ings = ev
-    console.log(this.sheet.ings)
   }
 
 
@@ -104,7 +126,7 @@ export class AddImpPage implements OnInit {
   }
 
   getUsers(){
-    this.usersSrv.usersSend$.subscribe({
+   this.userSub = this.usersSrv.usersSend$.subscribe({
       next: (users) => {
         this.users = users.filter(u => u.employee?.active === true)
         this.usersNames = this.users.map(u => u.employee.fullName)

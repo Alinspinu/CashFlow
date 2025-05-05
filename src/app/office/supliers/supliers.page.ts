@@ -5,12 +5,10 @@ import { IonicModule, MenuController, ToastController } from '@ionic/angular';
 import { SupliersService } from './supliers.service';
 import { Suplier } from 'src/app/models/suplier.model';
 import { formatedDateToShow, round } from '../../shared/utils/functions';
-import { Router } from '@angular/router';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { ActionSheetService } from '../../shared/action-sheet.service';
 import { SuplierPage } from '../CRUD/suplier/suplier.page';
 import { SuplierRecordsPage } from './suplier-records/suplier-records.page';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-supliers',
@@ -29,10 +27,8 @@ export class SupliersPage implements OnInit {
 
   constructor(
     private suplierSrv: SupliersService,
-    private router: Router,
     private menuCtrl: MenuController,
     private toastCtrl: ToastController,
-    private http: HttpClient,
     @Inject(ActionSheetService) private actionSht: ActionSheetService
   ) { }
 

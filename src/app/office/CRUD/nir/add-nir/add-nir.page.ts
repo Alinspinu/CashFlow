@@ -69,9 +69,9 @@ export class AddNirPage implements OnInit {
   nirId!: string
 
   constructor(
+    @Inject(ActionSheetService) private actionSht: ActionSheetService,
     private nirSrv: NirService,
     private nirsSrv: NirsService,
-    @Inject(ActionSheetService) private actionSht: ActionSheetService,
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
     private supliersService: SupliersService,

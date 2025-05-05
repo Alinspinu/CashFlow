@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -11,6 +11,7 @@ import { showToast } from 'src/app/shared/utils/toast-controller';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { PrintModalPage } from './print-modal/print-modal.page';
 import { RandomService } from 'src/app/shared/random.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-print',
@@ -19,12 +20,16 @@ import { RandomService } from 'src/app/shared/random.service';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class PrintPage implements OnInit {
+export class PrintPage implements OnInit, OnDestroy {
 
   menuOpen: boolean = false
   servers: any[] = []
   name!: string
   salePoint!: SalePoint
+
+  pointsSub!: Subscription
+  pointSub!: Subscription
+  pointId!: string
 
   salePoints: SalePoint[] = []
 
@@ -39,28 +44,32 @@ export class PrintPage implements OnInit {
 
   ngOnInit() {
     this.menuChange()
-    this.getSalePoints()
     this.getServers()
+    this.getSalePoint()
   }
 
-  getSalePoints(){
-    this.salePointSrv.getPoints().subscribe({
-      next: (points) => {
-        this.salePoints = points
-        console.log(points)
-      },
-      error: (error) => {
-        console.log(error)
+  ngOnDestroy(): void {
+    if(this.pointSub) this.pointSub.unsubscribe()
+      if(this.pointsSub) this.pointsSub.unsubscribe()
+  }
+
+
+
+  getSalePoint(){
+   this.pointSub = this.salePointSrv.pointSend$.subscribe({
+    next: (p) => {
+      if(p._id){
+        this.pointId = p._id
       }
-    })
+    }
+   })
   }
 
 
   getServers(){
-    this.configSrv.getPrintServers().subscribe({
+    this.configSrv.serversSend$.subscribe({
       next: (response) => {
-        this.servers = response.servers
-        console.log(this.servers)
+        this.servers = response
       },
       error: (error) => {
         console.log(error)
@@ -68,23 +77,17 @@ export class PrintPage implements OnInit {
     })
   }
 
-getSalePoint(id: string){
-  return this.salePoints.find(s => s._id === id)?.name
-}
 
     async addServer(){
       const points = this.salePoints.map(s => s.name)
-      console.log(points)
       const data = await this.actionSheetService.openAdd(PrintModalPage, points, 'small-two')
-      console.log(data)
       if(data){
         const server = {
           locatie: environment.LOC,
-          salePoint: this.salePoints.find(s => s.name === data.salePoint)?._id,
+          salePoint: this.pointId,
           name: data.name,
           key: this.randomSrv.generateRandomHexString(3)
         }
-        console.log(server)
         this.configSrv.savePrintServer(server).subscribe({
           next: (response) => {
             showToast(this.toastCtrl, response.message, 2000)

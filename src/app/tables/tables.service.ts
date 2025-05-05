@@ -346,7 +346,7 @@ addCustomer(customer: any, masa: number, billIndex: number){
 //**********************HTTP REQ******************* */
 
 
-getTables(locatie: string, id: string){
+getTables(point: string){
   Preferences.get({key: 'tables'}).then(response =>{
     if(response && response.value){
       const parsedTables = JSON.parse(response.value)
@@ -354,7 +354,7 @@ getTables(locatie: string, id: string){
       this.tableState.next([...this.tables])
     }
   })
-  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${locatie}&user=${id}`).subscribe(response => {
+  this.http.get<Table[]>(`${environment.BASE_URL}table/get-tables?loc=${environment.LOC}&point=${point}`).subscribe(response => {
     if(response){
       this.tables = response
       const stringTable = JSON.stringify(this.tables)
@@ -364,8 +364,8 @@ getTables(locatie: string, id: string){
   })
 }
 
-addTable(name: string, locatie: string){
-  return this.http.post<{message: string, table: Table}>(`${environment.BASE_URL}table?loc=${locatie}`, {name: name})
+addTable(name: string, point: string){
+  return this.http.post<{message: string, table: Table}>(`${environment.BASE_URL}table?loc=${environment.LOC}&point=${point}`, {name: name})
     .pipe(take(1), tap(response => {
     if(response){
       this.tables.push(response.table)
@@ -436,7 +436,6 @@ deleteTable(tableId: string, index: number){
       .pipe(take(1),
         switchMap(res => {
         this.tables[tableIndex-1].bills[billIndex] = res.bill
-        console.log(res.bill)
         this.tableState.next([...this.tables]);
         const tables = JSON.stringify(this.tables);
         Preferences.set({key: 'tables', value: tables});
@@ -446,24 +445,12 @@ deleteTable(tableId: string, index: number){
 };
 
 
-printOrder(billToSend: any){
-  return this.http.post(`${this.baseUrl}orders/bill`,  {bill: billToSend}).subscribe()
-}
-
-saveBillToCloud(bill: Bill){
-  this.http.post(`${environment.BASE_URL}pay/save-bill-cloud`, {bill: bill}).subscribe(res => {
-  })
-}
 
 
 sendBillToPrint(bill: Bill, mainServer: any){
-  // this.sendBillToPrintLocal(bill)
   return this.http.post<{message: string, bill: Bill}>(`${environment.BASE_URL}pay/print-bill`, {bill: bill, mode: true, mainServer: mainServer})
 }
 
-sendBillToPrintLocal(bill: Bill){
-  return this.http.post<{message: string, bill: Bill}>(`${this.baseUrl}pay/print-bill`, {bill: bill}).subscribe()
-}
 
 uploadIngs(ings: any, quantity: number, operation: any, locatie: string){
   return this.http.post<{message: string}>(`${environment.BASE_URL}orders/upload-ings?loc=${locatie}`, {ings, quantity, operation})

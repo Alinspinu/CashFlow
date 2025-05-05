@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
@@ -8,7 +8,7 @@ import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { AddPointModalPage } from '../../sale-point/add-point-modal/add-point-modal.page';
 import { IngredientService } from '../../ingredient/ingredient.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { Dep, Gestiune } from 'src/app/models/nir.model';
 import { emptyDep, emptyGest } from 'src/app/models/empty-models';
 
@@ -19,7 +19,7 @@ import { emptyDep, emptyGest } from 'src/app/models/empty-models';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule]
 })
-export class AddIngredientPage implements OnInit {
+export class AddIngredientPage implements OnInit, OnDestroy {
 
   ingredientForm!: FormGroup
   title: string = 'Adaugă Ingredient'
@@ -31,6 +31,7 @@ export class AddIngredientPage implements OnInit {
   gest: Gestiune[] = []
 
   salePoints: SalePoint[] = []
+  pointsSub!: Subscription
 
   constructor(
     private modalCtr: ModalController,
@@ -42,16 +43,19 @@ export class AddIngredientPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.salePointService.getPoints().subscribe()
     this.getIngToedit()
     this.getDeps()
     this.getGest()
     this.getSalePoints()
   }
 
+  ngOnDestroy(): void {
+    if(this.pointsSub) this.pointsSub.unsubscribe()
+  }
+
 
   getSalePoints(){
-    this.salePointService.pointsSend$.subscribe({
+   this.pointsSub =  this.salePointService.pointsSend$.subscribe({
       next: (points) => {
         this.salePoints = points
         this.setupIngForm()

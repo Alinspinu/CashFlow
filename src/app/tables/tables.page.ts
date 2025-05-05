@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
 import { ActionSheetService } from '../shared/action-sheet.service';
@@ -15,6 +15,7 @@ import { WebRTCService } from '../content/webRTC.service';
 import { OrderAppViewPage } from '../modals/order-app-view/order-app-view.page';
 import { AudioService } from '../shared/audio.service';
 import { MenuController } from '@ionic/angular';
+import { SalePointService } from '../office/sale-point/sale-point.service';
 
 
 @Component({
@@ -54,6 +55,8 @@ export class TablesPage implements OnInit, OnDestroy {
 
   volumeSrc: string = 'assets/icon/volume-mute-outline.svg'
 
+  pointId!: string
+
   constructor(
     private router: Router,
     private tableServ: TablesService,
@@ -62,6 +65,7 @@ export class TablesPage implements OnInit, OnDestroy {
     private authSrv: AuthService,
     private webRTC: WebRTCService,
     private audioSrv: AudioService,
+    private pointService: SalePointService,
     @Inject(MenuController) private menuCtrl: MenuController
     ) {
       this.screenWidth = window.innerWidth
@@ -70,10 +74,19 @@ export class TablesPage implements OnInit, OnDestroy {
 
 
 ngOnInit(): void {
+  this.getPointId()
   this.getUser()
   this.hideBill()
   this.getIncommingOrders()
   this.menuChange()
+}
+
+getPointId(){
+  this.pointService.pointSend$.subscribe({
+    next: (p) => {
+      if(p._id) this.pointId = p._id
+    }
+  })
 }
 
 
@@ -99,13 +112,15 @@ testSound(){
 getIncommingOrders(){
   this.webRTC.getOdrerIdObservable().subscribe(async order => {
     if(order){
-      this.audioSrv.play()
       const parsedOrder = JSON.parse(order)
-      const time = await this.actionSheet.openPayment(OrderAppViewPage, parsedOrder)
-      this.tableServ.addOnlineOrder(parsedOrder)
-      if(time){
-        this.audioSrv.stop()
-        this.tableServ.setOrderTime(parsedOrder._id, +time).subscribe()
+      if(parsedOrder.salePoint === this.pointId){
+        this.audioSrv.play()
+        const time = await this.actionSheet.openPayment(OrderAppViewPage, parsedOrder)
+        this.tableServ.addOnlineOrder(parsedOrder)
+        if(time){
+          this.audioSrv.stop()
+          this.tableServ.setOrderTime(parsedOrder._id, +time).subscribe()
+        }
       }
     }
   })

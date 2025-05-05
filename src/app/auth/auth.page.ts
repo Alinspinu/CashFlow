@@ -118,7 +118,6 @@ export class AuthPage implements OnInit {
         this.router.navigateByUrl('/tables');
       } else {
         const id: any = jwtDecode(res.token);
-        this.tableSrv.getTables(res.locatie, id.userId)
         this.disableLogIn = false
         this.router.navigateByUrl(this.returnUrl);
       }

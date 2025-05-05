@@ -21,6 +21,8 @@ import { IngsPage } from './ings/ings.page';
 import { EmplPage } from './empl/empl.page';
 import { SpendPage } from './spend/spend.page';
 import { chartDay, FinChartPage } from './fin-chart/fin-chart.page';
+import { Subscription } from 'rxjs';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
 
 
 
@@ -31,7 +33,7 @@ import { chartDay, FinChartPage } from './fin-chart/fin-chart.page';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, SpinnerPage, FinChartPage]
 })
-export class FinancePage implements OnInit {
+export class FinancePage implements OnInit, OnDestroy {
 
   isLoading: boolean = false
 
@@ -65,20 +67,39 @@ export class FinancePage implements OnInit {
 
   ingredientsValue: string = 'recipes'
 
+  pointSub!: Subscription
+  pointId!: string
+
   constructor(
    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
    @Inject(MenuController) private menuCtrl: MenuController,
    private repSrv: ReportsService,
    private toastCtrl: ToastController,
+   private pointService: SalePointService
   ) { }
 
   ngOnInit() {
+    this.getPointId()
     this.menuChange()
     this.getLastReport()
     this.getRepDates()
     this.getAllReports()
     this.getuser()
+  }
 
+  ngOnDestroy(): void {
+    if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id){
+          this.pointId = p._id
+        }
+      }
+    })
   }
 
   private async menuChange(){
@@ -113,7 +134,7 @@ export class FinancePage implements OnInit {
   }
 
   getLastReport(){
-    this.repSrv.getLastReport().subscribe({
+    this.repSrv.getLastReport(this.pointId).subscribe({
       next: (response) => {
         if(response){
           this.report = response
@@ -145,7 +166,7 @@ export class FinancePage implements OnInit {
   }
 
   getRepDates(){
-    this.repSrv.getReportsDate().subscribe(response => {
+    this.repSrv.getReportsDate(this.pointId).subscribe(response => {
       if(response){
         this.start = response.start
         this.end = response.end
@@ -155,7 +176,7 @@ export class FinancePage implements OnInit {
 
 
   getAllReports(){
-    this.repSrv.getReports().subscribe(response => {
+    this.repSrv.getReports(this.pointId).subscribe(response => {
       if(response){
         console.log(response)
         this.reports = response.reverse()
@@ -183,7 +204,7 @@ async openDetails(details: string){
 
 getReport(start: string, end: string){
   this.isLoading = true
-  this.repSrv.getReport(start, end).subscribe(response => {
+  this.repSrv.getReport(start, end, this.pointId).subscribe(response => {
     if(response){
       this.report = response
       this.updateRaport(this.report)

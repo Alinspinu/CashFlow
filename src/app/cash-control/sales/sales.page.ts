@@ -19,6 +19,7 @@ import { ContentService } from 'src/app/content/content.service';
 import { Category } from 'src/app/models/category.model';
 import { HeaderPage } from '../header/header.page';
 import { ConfigService } from 'src/app/config/config.service';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
 
 
 
@@ -51,6 +52,8 @@ export class SalesPage implements OnInit, OnDestroy {
   printServers: any = []
   mainServer!: any
 
+  pointSub!: Subscription
+
   private chart!: Chart;
 
   @Input() access: number = 1
@@ -65,18 +68,19 @@ export class SalesPage implements OnInit, OnDestroy {
 
 
   constructor(
+    @Inject(ActionSheetService) private actSrv: ActionSheetService,
     private cdr: ChangeDetectorRef,
     private cashService: CashControlService,
     private toastCtrl: ToastController,
     private contSrv: ContentService,
     private configSrv: ConfigService,
-    @Inject(ActionSheetService) private actSrv: ActionSheetService,
+    private pointService: SalePointService,
   ) { }
 
   ngOnInit() {
     this.getData()
     this.getServiceSum()
-   this.getPrintServerFlromLocal()
+    this.getPointId()
   }
 
   ngOnDestroy(): void {
@@ -86,20 +90,38 @@ export class SalesPage implements OnInit, OnDestroy {
       if(this.catSubs){
         this.catSubs.unsubscribe()
       }
+      if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id) this.getPrintServerFlromLocal(p._id)
+      }
+    })
   }
 
 
 
 
-async getPrintServerFlromLocal(){
+async getPrintServerFlromLocal(p: string){
    const { value } = await Preferences.get({key: 'mainServer'})
    if(value){
-    const server = JSON.parse(value)
-    this.mainServer = server
+      const server = JSON.parse(value)
+      if(server.salePoint === p){
+        this.mainServer = server
+      } else {
+        this.getServersFromDd()
+      }
    } else {
-    this.configSrv.getPrintServers().subscribe({
+     this.getServersFromDd()
+   }
+  }
+
+  getServersFromDd(){
+    this.configSrv.serversSend$.subscribe({
       next: async (response) => {
-        this.printServers = response.servers
+        this.printServers = response
         const data = this.printServers.map((s: any) => s.name)
         const server = await this.actSrv.entryAlert(data, 'radio', 'Server de bonuri', 'Alege serverul de bonuri!', '', '')
         if(server){
@@ -114,8 +136,6 @@ async getPrintServerFlromLocal(){
         console.log(error)
       }
     })
-
-   }
   }
 
 
@@ -141,8 +161,6 @@ getData(){
       }
     })
   }
-
-
 
 
 async inAndOut(value: string){

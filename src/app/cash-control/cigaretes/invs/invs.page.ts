@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { CashControlService } from '../../cash-control.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { cigarsInv } from 'src/app/models/inventary.model';
@@ -18,15 +18,19 @@ import { InvPage } from './inv/inv.page';
 export class InvsPage implements OnInit {
 
   constructor(
-    private cashService: CashControlService,
     @Inject(ActionSheetService) private actionService: ActionSheetService,
+    private cashService: CashControlService,
     private modalCtrl: ModalController,
+    private navParams: NavParams,
   ) { }
 
   invs: cigarsInv[] = []
 
   ngOnInit() {
-    this.getInvs()
+    const pointId = this.navParams.get('options')
+    if(pointId){
+      this.getInvs(pointId)
+    }
   }
 
 
@@ -36,8 +40,8 @@ export class InvsPage implements OnInit {
   }
 
 
-  getInvs(){
-    this.cashService.getLastCigInv('all').subscribe({
+  getInvs(p: string){
+    this.cashService.getLastCigInv('all', p).subscribe({
       next: (response) => {
         this.invs = response
         let name = ''

@@ -39,6 +39,7 @@ export class AddEntryPage implements OnInit, OnDestroy {
   suplierSub!: Subscription
 
   pointId: string = ''
+  pointSub!: Subscription;
 
   usersToShow!: any
 
@@ -127,10 +128,11 @@ export class AddEntryPage implements OnInit, OnDestroy {
       if(this.suplierSub){
         this.suplierSub.unsubscribe()
       }
+      if(this.pointSub) this.pointSub.unsubscribe()
   }
 
   getPointId(){
-    this.pointService.pointSend$.subscribe({
+   this.pointSub = this.pointService.pointSend$.subscribe({
       next: (p) => {
         if(p._id) this.pointId = p._id
       }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
@@ -8,6 +8,8 @@ import { formatedDateToShow, sortByDate } from 'src/app/shared/utils/functions';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
+import { Subscription } from 'rxjs';
 
 
 
@@ -18,12 +20,15 @@ import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class AddReportPage implements OnInit {
+export class AddReportPage implements OnInit, OnDestroy {
 
   reports: any[] = []
   newReports: any[] = []
 
   isLoading: boolean = false
+
+  pointSub!: Subscription
+  pointId!: string
 
 
   filter: any = {
@@ -34,15 +39,32 @@ export class AddReportPage implements OnInit {
   }
 
   constructor(
+    @Inject(ActionSheetService) private actSheet: ActionSheetService,
     private modalCtrl: ModalController,
     private navPar: NavParams,
     private repSrv: ReportsService,
     private toastCtrl: ToastController,
-    @Inject(ActionSheetService) private actSheet: ActionSheetService
+    private pointService: SalePointService,
   ) { }
 
   ngOnInit() {
+    this.getPointId()
     this.reports = this.navPar.get('options')
+  }
+  
+
+  ngOnDestroy(): void {
+    if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id) {
+          this.pointId = p._id
+        }
+      }
+    })
   }
 
   async deleteReport(report: any){
@@ -66,7 +88,7 @@ export class AddReportPage implements OnInit {
     oldDate.setDate(oldDate.getDate() + 1)
     const date = oldDate.toISOString()
     this.isLoading = true
-    this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, this.filter, 'report').subscribe(response => {
+    this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, this.filter, 'report', this.pointId).subscribe(response => {
       if(response){
         this.reports.push(response)
         this.newReports.push(response)
@@ -83,7 +105,7 @@ export class AddReportPage implements OnInit {
       if(endDate){
         const date = new Date(startDate)
         date.setDate(date.getDate() -1)
-        this.repSrv.deleteReports(date.toISOString(), endDate).subscribe({
+        this.repSrv.deleteReports(date.toISOString(), endDate, this.pointId).subscribe({
           next: (response) => {
             showToast(this.toastCtrl, response.message, 2000)
             this.close()
@@ -101,7 +123,7 @@ export class AddReportPage implements OnInit {
     const date = await this.actSheet.openPayment(DatePickerPage, '')
     if(date){
       this.isLoading = true
-      this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, this.filter, 'report').subscribe(response => {
+      this.repSrv.getHavyOrders(date, date, undefined, environment.LOC, this.filter, 'report', this.pointId).subscribe(response => {
         if(response){
           this.reports.push(response)
           this.reports = sortByDate(this.reports, true)

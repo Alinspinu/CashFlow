@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -10,12 +10,11 @@ import { CapitalizePipe } from '../../shared/utils/capitalize.pipe'
 import { OrdersViewPage } from './orders-view/orders-view.page';
 import { DelProdViewPage } from './del-prod-view/del-prod-view.page';
 import User from 'src/app/auth/user.model';
-import { Router } from '@angular/router';
 import { ReportsService } from '../reports.service';
-import { LogoPagePage } from '../../shared/logo-page/logo-page.page';
 import { Report } from 'src/app/models/report.model';
-import { filter } from 'rxjs';
 import { SpinnerPage } from '../../modals/spinner/spinner.page';
+import { Subscription } from 'rxjs';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
 
 
  interface paymentMethod {
@@ -65,12 +64,12 @@ interface user{
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, SpinnerPage]
 })
-export class CashPage implements OnInit {
+export class CashPage implements OnInit, OnDestroy {
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private repSrv: ReportsService,
-    private router: Router,
+    private pointService: SalePointService,
   ) { }
 
 
@@ -122,8 +121,11 @@ export class CashPage implements OnInit {
   repStart!: string
   repEnd!: string
 
+  pointSub!: Subscription
+  pointId!: string
+
   ngOnInit() {
-    this.getRepDates()
+    this.getPointId()
     getUserFromLocalStorage().then(user => {
       if(user){
         this.user = user
@@ -132,8 +134,23 @@ export class CashPage implements OnInit {
     })
   }
 
+  ngOnDestroy(): void {
+    if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
+  getPointId(){
+      this.pointSub = this.pointService.pointSend$.subscribe({
+        next: (p) => {
+          if(p._id){
+            this.pointId = p._id
+            this.getRepDates()
+          }
+        }
+      })
+  }
+
   getRepDates(){
-    this.repSrv.getReportsDate().subscribe(response => {
+    this.repSrv.getReportsDate(this.pointId).subscribe(response => {
       if(response){
         this.repStart = response.start
         this.repEnd = response.end
@@ -143,7 +160,7 @@ export class CashPage implements OnInit {
 
   gerReport(start: string, end: string){
     this.isLoading = true
-    this.repSrv.getReport(start, end).subscribe(response => {
+    this.repSrv.getReport(start, end, this.pointId).subscribe(response => {
       if(response){
         this.report = response
         console.log(this.report)
@@ -177,7 +194,7 @@ export class CashPage implements OnInit {
 
 getOrders(){
   this.isLoading = true
-  this.repSrv.getOrders(this.startDate, this.endDate, this.day, this.user.locatie).subscribe(response => {
+  this.repSrv.getOrders(this.startDate, this.endDate, this.day, this.user.locatie, this.pointId).subscribe(response => {
     if(response){
       this.resetValues()
       this.bills = response.orders

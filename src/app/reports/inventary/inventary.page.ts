@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, MenuController, ToastController } from '@ionic/angular';
@@ -11,6 +11,8 @@ import { SpinnerPage } from '../../modals/spinner/spinner.page';
 import { CapitalizePipe } from '../../shared/utils/capitalize.pipe';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { UploadLogPage } from './upload-log/upload-log.page';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-inventary',
@@ -19,7 +21,7 @@ import { UploadLogPage } from './upload-log/upload-log.page';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, SpinnerPage, CapitalizePipe]
 })
-export class InventaryPage implements OnInit {
+export class InventaryPage implements OnInit, OnDestroy {
 
   inventary!: Inventary;
   ingredientSearch!: string;
@@ -30,6 +32,9 @@ export class InventaryPage implements OnInit {
   compareTable!: CompareInv
 
   diferenceTotal: number = 0
+
+  pointSub!: Subscription
+  pointId!: string
 
   isLoading: boolean = false
   allIngs!: ing[]
@@ -50,23 +55,38 @@ export class InventaryPage implements OnInit {
 
   constructor(
     private invService: InventaryService,
+    private toastCtrl: ToastController,
+    private pointService: SalePointService,
     @Inject(ActionSheetService) private actService: ActionSheetService,
-      @Inject(MenuController) private menuCtrl: MenuController,
-    private toastCtrl: ToastController
+    @Inject(MenuController) private menuCtrl: MenuController,
   ) {
     this.screenWidth = window.innerWidth
   }
 
   ngOnInit() {
+    this.getPointId()
     this.menuChange()
-    this.getLastInventary()
   }
 
-  getLastInventary(){
+  ngOnDestroy(): void {
+    if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id){
+          this.pointId = p._id
+          this.getLastInventary(this.pointId)
+        }
+      }
+    })
+  }
+
+  getLastInventary(p: string){
     this.isLoading = true
-    this.invService.getInventary('last').subscribe(inv => {
+    this.invService.getInventary('last', p).subscribe(inv => {
         if(inv){
-          console.log(inv)
           this.editInventary(inv)
         }
     })
@@ -104,7 +124,7 @@ export class InventaryPage implements OnInit {
     const response = await this.actService.deleteAlert(`Ești sigur că vrei să actualizezi stocul? Cantitățile for fi modificate după inventarul din ${this.inventary.date}.`, 'ACTUALIZARE STOC DUPĂ INVENTAR')
     if(response){
       this.isLoading = true
-       this.invService.updateIngQty(this.inventary._id).subscribe(response => {
+       this.invService.updateIngQty(this.inventary._id, this.pointId).subscribe(response => {
         if(response){
           this.inventary = response.inv
           this.isLoading = false
@@ -117,12 +137,12 @@ export class InventaryPage implements OnInit {
 
   async selectInventary(){
     if(this.screenWidth > 500){
-      const inventary = await this.actService.openPayment(SelectInvPage, '')
+      const inventary = await this.actService.openPayment(SelectInvPage, this.pointId)
       if(inventary){
         this.editInventary(inventary)
       }
     } else{
-      const inventary = await this.actService.openMobileModal(SelectInvPage, '', false)
+      const inventary = await this.actService.openMobileModal(SelectInvPage, this.pointId, false)
       if(inventary){
         this.editInventary(inventary)
       }
@@ -132,19 +152,18 @@ export class InventaryPage implements OnInit {
   async selectInventaries(){
     let start
     let end
-    const startInventary = await this.actService.openPayment(SelectInvPage, '')
+    const startInventary = await this.actService.openPayment(SelectInvPage, this.pointId)
     if(startInventary){
       start = startInventary.date
-      const secondInventary = await this.actService.openPayment(SelectInvPage, '')
+      const secondInventary = await this.actService.openPayment(SelectInvPage, this.pointId)
       if(secondInventary){
         end = secondInventary.date
       }
     }
     if(start && end){
       this.isLoading = true
-      this.invService.compareInventary(start, end).subscribe(response => {
+      this.invService.compareInventary(start, end, this.pointId).subscribe(response => {
         this.mode = 'compare'
-        console.log(response)
         this.compareTable = response.compareInv
         this.comp = true
         this.ingsComp = this.compareTable.ingredients
@@ -156,7 +175,6 @@ export class InventaryPage implements OnInit {
         })
         // this.ingsComp.sort((a, b) => a.name.localeCompare(b.name));
         this.isLoading = false
-        console.log(response)
       })
     }
   }

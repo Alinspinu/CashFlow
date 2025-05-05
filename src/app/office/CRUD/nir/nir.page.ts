@@ -51,6 +51,7 @@ export class NirPage implements OnInit, OnDestroy {
   mergeMode: boolean = false
 
   pointId: string = ''
+  pointSub!: Subscription
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
@@ -75,11 +76,12 @@ export class NirPage implements OnInit, OnDestroy {
       if(this.nirSub) {
         this.nirSub.unsubscribe()
       }
+      if(this.pointSub) this.pointSub.unsubscribe()
   }
 
 
   getNir(){
-    this.nirService.nirSend$.subscribe({
+   this.nirSub = this.nirService.nirSend$.subscribe({
       next: (nir) => {
         this.nir = nir
       }
@@ -87,7 +89,7 @@ export class NirPage implements OnInit, OnDestroy {
   }
 
   getPointId(){
-    this.pointService.pointSend$.subscribe({
+    this.pointSub = this.pointService.pointSend$.subscribe({
       next: (point) => {
         if(point._id) this.pointId = point._id
       }

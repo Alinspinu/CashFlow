@@ -69,6 +69,7 @@ export class NirsPage implements OnInit, OnDestroy {
   menuOpen: boolean = false
 
   pointId: string = ''
+  pointSub!: Subscription;
 
 
   constructor(
@@ -98,11 +99,12 @@ export class NirsPage implements OnInit, OnDestroy {
     if(this.eFacturaSub) this.eFacturaSub.unsubscribe()
     if(this.supliersSub) this.supliersSub.unsubscribe()
     if(this.nirsSub) this.nirsSub.unsubscribe()
+    if(this.pointSub) this.pointSub.unsubscribe()
   }
 
 
   getPointId(){
-    this.pointService.pointSend$.subscribe({
+  this.pointSub = this.pointService.pointSend$.subscribe({
       next: (point) => {
         if(point._id) this.pointId = point._id
       }
@@ -110,7 +112,7 @@ export class NirsPage implements OnInit, OnDestroy {
   }
 
   getInvoicesStatus(){
-    this.eService.eFacturaMessageSend$.subscribe({
+   this.eFacturaSub = this.eService.eFacturaMessageSend$.subscribe({
       next: (message) => {
         this.message = message
         this.newBills = 0

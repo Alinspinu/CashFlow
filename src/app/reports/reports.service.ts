@@ -21,14 +21,14 @@ export class ReportsService{
     ){
     }
 
- getOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string): Observable<any>{
-  return this.http.post<any>(`${environment.BASE_URL}orders/get-orders`, {start: start, end: end, loc: locatie, day: day})
+ getOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string, point: string): Observable<any>{
+  return this.http.post<any>(`${environment.BASE_URL}orders/get-orders`, {start: start, end: end, loc: locatie, day: day, point: point})
  }
- getDep(start: string | undefined, end: string | undefined): Observable<any>{
-  return this.http.get<any>(`${environment.BASE_URL}orders/dep?start=${start}&end=${end}&loc=${environment.LOC}`)
+ getDep(start: string | undefined, end: string | undefined, point: string): Observable<any>{
+  return this.http.get<any>(`${environment.BASE_URL}orders/dep?start=${start}&end=${end}&loc=${environment.LOC}&point=${point}`)
  }
- getHavyOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string, filter: any, report: string): Observable<any>{
-  return this.http.post<any>(`${environment.BASE_URL}orders/get-havy-orders`, {start: start, end: end, loc: locatie, day: day, filter, report: report, point: environment.POINT})
+ getHavyOrders(start: string | undefined, end: string | undefined, day: string | undefined, locatie: string, filter: any, report: string, point: string): Observable<any>{
+  return this.http.post<any>(`${environment.BASE_URL}orders/get-havy-orders`, {start: start, end: end, loc: locatie, day: day, filter, report: report, point: point})
  }
 
  printProducts(products: string, start: string | undefined, end: string | undefined){
@@ -41,13 +41,14 @@ export class ReportsService{
   return this.http.post(`${environment.BASE_URL}print/production`, {products: products, startDay: start, endDay: end}, {responseType: 'blob'})
  }
 
- getReport(startDate: string | undefined, endDate: string | undefined){
-  return this.http.get<any>(`${environment.BASE_URL}report?startDate=${startDate}&endDate=${endDate}&loc=${environment.LOC}`)
+ getReport(startDate: string | undefined, endDate: string | undefined, point: string){
+  return this.http.get<any>(`${environment.BASE_URL}report?startDate=${startDate}&endDate=${endDate}&loc=${environment.LOC}&point=${point}`)
  }
 
- getReports(){
+ getReports(point: string){
   const params = new HttpParams()
     .set('loc', environment.LOC)
+    .set('point', point)
   return this.http.get<any[]>(`${environment.BASE_URL}report/all`, {params})
  }
 
@@ -57,26 +58,27 @@ export class ReportsService{
   return this.http.delete<{message: string}>(`${environment.BASE_URL}report/delete`, {params})
  }
 
- deleteReports(start: string, end: string){
+ deleteReports(start: string, end: string, point: string){
   const params = new HttpParams()
     .set('start', start)
     .set('end', end)
     .set('loc', environment.LOC)
+    .set('point', point)
   return this.http.delete<{message: string}>(`${environment.BASE_URL}report/all`, {params})
  }
 
  saveReport(report: Report){
-  console.log(report)
   return this.http.post<{message: string, report: Report}>(`${environment.BASE_URL}report`, {report: report})
  }
 
- getLastReport(){
-  return this.http.get<Report>(`${environment.BASE_URL}report/last?loc=${environment.LOC}&point=${environment.POINT}`)
+ getLastReport(point: string){
+  return this.http.get<Report>(`${environment.BASE_URL}report/last?loc=${environment.LOC}&point=${point}`)
  }
 
- getReportsDate(){
+ getReportsDate(point: string){
   const params = new HttpParams()
-  .set('loc', environment.LOC)
+    .set('loc', environment.LOC)
+    .set('point', point)
   return this.http.get<{start: string, end: string}>(`${environment.BASE_URL}report/dates`, {params})
  }
 

@@ -15,6 +15,7 @@ import { DatePickerPage } from 'src/app/modals/date-picker/date-picker.page';
 import { HeaderPage } from '../header/header.page';
 import { Preferences } from '@capacitor/preferences';
 import { ConfigService } from 'src/app/config/config.service';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
 
 @Component({
   selector: 'app-orders',
@@ -44,53 +45,74 @@ export class OrdersPage implements OnInit, OnDestroy {
   userSub!: Subscription
   menuOpen: boolean = false
 
-    printServers: any = []
-    mainServer!: any
+  printServers: any = []
+  mainServer!: any
+
+  pointSub!: Subscription
 
   constructor(
-        private cashSrv: CashControlService,
-        private toastCtrl: ToastController,
-        private authSrv: AuthService,
-        @Inject(ActionSheetService) private actionSheet: ActionSheetService,
-        @Inject(MenuController) private menuCtrl: MenuController,
-        private configSrv: ConfigService,
+    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
+    private cashSrv: CashControlService,
+    private toastCtrl: ToastController,
+    private authSrv: AuthService,
+    private configSrv: ConfigService,
+    private pointService: SalePointService,
   ) { }
 
   ngOnInit() {
     this.getUser()
-    this.getPrintServerFlromLocal()
+   this.getPointId()
   }
 
   ngOnDestroy(): void {
     if(this.userSub){
       this.userSub.unsubscribe()
     }
+    if(this.pointSub) this.pointSub.unsubscribe()
   }
 
-  async getPrintServerFlromLocal(){
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id){
+          this.getPrintServerFlromLocal(p._id)
+        }
+      }
+    })
+  }
+
+  async getPrintServerFlromLocal(p: string){
     const { value } = await Preferences.get({key: 'mainServer'})
     if(value){
      const server = JSON.parse(value)
-     this.mainServer = server
+     if(server.salePoint === p){
+       this.mainServer = server
+     } else {
+      this.getServers()
+     }
     } else {
-     this.configSrv.getPrintServers().subscribe({
-       next: async (response) => {
-         this.printServers = response.servers
-         const data = this.printServers.map((s: any) => s.name)
-         const server = await this.actionSheet.entryAlert(data, 'radio', 'Server de bonuri', 'Alege serverul de bonuri!', '', '')
-         if(server){
-           const choice = this.printServers.find((s:any) => s.name === server)
-           if(choice){
-             this.mainServer = choice
-             await Preferences.set({key: 'mainServer', value: JSON.stringify(choice)})
-           }
-         }
-       },
-       error: (error) => {
-         console.log(error)
-       }
-     })
+      this.getServers()
     }
+   }
+
+   getServers(){
+    this.configSrv.serversSend$.subscribe({
+      next: async (response) => {
+        this.printServers = response
+        const data = this.printServers.map((s: any) => s.name)
+        const server = await this.actionSheet.entryAlert(data, 'radio', 'Server de bonuri', 'Alege serverul de bonuri!', '', '')
+        if(server){
+          const choice = this.printServers.find((s:any) => s.name === server)
+          if(choice){
+            this.mainServer = choice
+            await Preferences.set({key: 'mainServer', value: JSON.stringify(choice)})
+          }
+        }
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
    }
 
 

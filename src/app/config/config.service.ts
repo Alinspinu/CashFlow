@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 
 
@@ -12,9 +13,16 @@ export class ConfigService{
 
   locatie!: string
 
+  private serversState!: BehaviorSubject<any[]>;
+  public serversSend$!: Observable<any[]>;
+  servers: any[] = [];
+
   constructor(
-    private http: HttpClient,
-  ){}
+    private http: HttpClient
+  ){
+    this.serversState = new BehaviorSubject<any[]>([]);
+    this.serversSend$ =  this.serversState.asObservable();
+  }
 
 
   fetchLocatie(){
@@ -33,8 +41,12 @@ export class ConfigService{
     return this.http.post<{message: string, server: any}>(`${environment.BASE_URL}users/server`, {server: server})
   }
 
-  getPrintServers(){
-    return this.http.get<{servers: any[]}>(`${environment.BASE_URL}users/server?loc=${environment.LOC}&point=${environment.POINT}`)
+  getPrintServerss(point: string){
+    return this.http.get<{servers: any[]}>(`${environment.BASE_URL}users/server?loc=${environment.LOC}&point=${point}`)
+      .pipe(tap(response => {
+        this.servers = response.servers
+        this.serversState.next(this.servers)
+      }))
   }
 
 }

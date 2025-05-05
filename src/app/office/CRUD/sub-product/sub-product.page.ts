@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams} from '@ionic/angular';
@@ -9,6 +9,7 @@ import { ProductsService } from '../../products/products.service';
 import { ActionSheetService } from 'src/app/shared/action-sheet.service';
 import { round } from 'src/app/shared/utils/functions';
 import { SalePointService } from '../../sale-point/sale-point.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sub-product',
@@ -17,7 +18,7 @@ import { SalePointService } from '../../sale-point/sale-point.service';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, RecipeMakerPage]
 })
-export class SubProductPage implements OnInit {
+export class SubProductPage implements OnInit, OnDestroy {
 
   general: boolean = true
   recipe: boolean = false
@@ -34,6 +35,7 @@ export class SubProductPage implements OnInit {
   isTva: boolean = true;
 
   pointId!: string
+  pointSub!: Subscription;
 
   constructor(
     @Inject(ActionSheetService) private actionSheet: ActionSheetService,
@@ -48,8 +50,12 @@ export class SubProductPage implements OnInit {
     this.getPointId()
   }
 
+  ngOnDestroy(): void {
+    if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
   getPointId(){
-    this.pointService.pointSend$.subscribe({
+   this.pointSub = this.pointService.pointSend$.subscribe({
       next: (point) => {
         if(point._id) this.pointId = point._id
       }

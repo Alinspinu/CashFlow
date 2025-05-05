@@ -16,6 +16,7 @@ import { round } from 'src/app/shared/utils/functions';
 export class TipsPage implements OnInit {
 
   tipsValue!: number
+  pointId!: string
 
   constructor(
     private modalCtrl: ModalController,
@@ -41,10 +42,13 @@ export class TipsPage implements OnInit {
 
   getUserTips(){
     this.webRTC.getUserTipObservable().subscribe(response => {
-      if(response || response === 0){
-          this.tipsValue = round(response)
-        if(response === 0){
-          this.tipsValue = 0
+      const data = JSON.parse(response)
+      if(data && data.point === this.pointId){     
+        if(data.tips || data.tips === 0){
+            this.tipsValue = round(data.tips)
+          if(data.tips === 0){
+            this.tipsValue = 0
+          }
         }
       }
     })
@@ -52,9 +56,10 @@ export class TipsPage implements OnInit {
 
 
   inviteTip(){
-    const invite = this.navPar.get('options')
-    if(invite === 'invite'){
-      this.webRTC.inviteUserToTip(invite)
+    const data = this.navPar.get('options')
+    if(data && data.invite === 'invite' && data.point){
+      this.pointId = data.point
+      this.webRTC.inviteUserToTip(JSON.stringify(data))
     }
   }
 }

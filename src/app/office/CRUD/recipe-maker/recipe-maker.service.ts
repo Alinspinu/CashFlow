@@ -14,20 +14,20 @@ export class RecipeMakerService{
   ){}
 
 
-getIngredients(){
-  return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients?prod=true`, {loc: environment.LOC})
-}
-saveIng(ing: any){
-  return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: environment.LOC})
-}
+// getIngredients(point: string){
+//   return this.http.post<InvIngredient[]>(`${environment.BASE_URL}ing/search-ingredients?prod=true`, {loc: environment.LOC, point: point})
+// }
+// saveIng(ing: any){
+//   return this.http.post<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient`, {ing: ing, loc: environment.LOC})
+// }
 
-editIng(ing: any, id: string){
-  return this.http.put<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient?id=${id}`,{newIng: ing} )
-}
+// editIng(ing: any, id: string){
+//   return this.http.put<{message: string, ing: InvIngredient}>(`${environment.BASE_URL}ing/ingredient?id=${id}`,{newIng: ing} )
+// }
 
-deleteIng(id: string){
-  return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)
-}
+// deleteIng(id: string){
+//   return this.http.delete<{message: string}>(`${environment.BASE_URL}ing/ingredient?id=${id}`)
+// }
 
 // saveProductIngredient(productIngredient: ProductIngredient){
 //     return this.http.post<{message: string}>(`${environment.BASE_URL}ing/product-ing`, {productIngredient: productIngredient})

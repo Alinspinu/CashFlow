@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, ToastController } from '@ionic/angular';
@@ -9,6 +9,8 @@ import { ImpService } from './imp.service';
 import { ImpSheet } from 'src/app/models/nir.model';
 import { showToast } from 'src/app/shared/utils/toast-controller';
 import { AddImpPage } from './add-imp/add-imp.page';
+import { Subscription } from 'rxjs';
+import { SalePointService } from '../sale-point/sale-point.service';
 
 @Component({
   selector: 'app-imp',
@@ -17,7 +19,7 @@ import { AddImpPage } from './add-imp/add-imp.page';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class ImpPage implements OnInit {
+export class ImpPage implements OnInit, OnDestroy {
 
   ings: any[] = []
 
@@ -30,27 +32,43 @@ export class ImpPage implements OnInit {
 
 
   sheets: ImpSheet[] = []
+  pointSub!: Subscription
 
 
   constructor(
     @Inject(ActionSheetService) private actionSheetService: ActionSheetService,
-        private impSrv: ImpService,
-        private toastCtrl: ToastController,
-        private modalCtrl: ModalController
+    private impSrv: ImpService,
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController,
+    private pointService: SalePointService,
   ) { }
 
 
 
   ngOnInit() {
-    this.getSheets()
+this.getPointId()
+  }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id) {
+          this.getSheets(p._id)
+        }
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    if(this.pointSub) this.pointSub.unsubscribe()
   }
 
   close(){
     this.modalCtrl.dismiss(null)
   }
 
-  getSheets(){
-    this.impSrv.getSheets().subscribe({
+  getSheets(p: string){
+    this.impSrv.getSheets(p).subscribe({
       next: (sheets) => {
         this.sheets = sheets
         console.log(this.sheets)

@@ -1,14 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { WebRTCService } from '../webRTC.service';
 import { Bill} from 'src/app/models/table.model';
-import { CapitalizePipe } from 'src/app/shared/utils/capitalize.pipe';
 import { TipsPage } from './tips/tips.page';
-
 import { MeniuPage } from './meniu/meniu.page';
-import { BillPage } from './bill/bill.page';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
+import { Subscription } from 'rxjs';
 
 
 
@@ -18,29 +17,46 @@ import { BillPage } from './bill/bill.page';
   templateUrl: './user-display.page.html',
   styleUrls: ['./user-display.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CapitalizePipe, TipsPage, MeniuPage, BillPage]
+  imports: [IonicModule, CommonModule, FormsModule,  TipsPage, MeniuPage]
 })
-export class UserDisplayPage implements OnInit {
+export class UserDisplayPage implements OnInit, OnDestroy {
 
   bill!: Bill | null
   hideBill: boolean = false
+  pointSub!: Subscription;
+  pointId!: string
 
 
 
   constructor(
     private webRTC: WebRTCService,
+    private pointService: SalePointService,
 
   ) { }
 
   ngOnInit() {
+    this.getPointId()
     this.getBill()
     this.getInvite()
+  }
+
+  ngOnDestroy(): void {
+    if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id) this.pointId = p._id
+      }
+    })
   }
 
   getBill(){
     this.webRTC.getProductAddedObservable().subscribe(response => {
       if(response){
-        this.bill = JSON.parse(response)
+        const order = JSON.parse(response)
+        if(order.salePoint === this.pointId) this.bill = order
       }
       if(response === null){
         this.bill = null
@@ -51,7 +67,8 @@ export class UserDisplayPage implements OnInit {
 
   getInvite(){
     this.webRTC.getInviteToTip().subscribe(response => {
-      if(response === 'invite'){
+      const data = JSON.parse(response)
+      if(data && data.invite === 'invite' && data.point === this.pointId){
         this.hideBill = true
       } else {
         this.hideBill = false
@@ -64,7 +81,7 @@ export class UserDisplayPage implements OnInit {
       setTimeout(()=> {
         this.hideBill = false
       }, 6000)
-      this.webRTC.getUserTip(ev)
+      this.webRTC.getUserTip(JSON.stringify({tips: +ev, point: this.pointId}))
     }
   }
 

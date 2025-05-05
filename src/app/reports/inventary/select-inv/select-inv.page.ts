@@ -1,11 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController, ToastController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams, ToastController } from '@ionic/angular';
 import { InventaryService } from '../inventary.service';
 import { Inventary } from '../../../models/inventary.model';
 import { formatedDateToShow } from '../../../shared/utils/functions';
-import { LogoPagePage } from '../../../shared/logo-page/logo-page.page';
 import { ActionSheetService } from '../../../shared/action-sheet.service';
 import { DatePickerPage } from '../../../modals/date-picker/date-picker.page';
 import { showToast } from 'src/app/shared/utils/toast-controller';
@@ -16,27 +15,32 @@ import { SpinnerPage } from '../../../modals/spinner/spinner.page';
   templateUrl: './select-inv.page.html',
   styleUrls: ['./select-inv.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, LogoPagePage, SpinnerPage]
+  imports: [IonicModule, CommonModule, FormsModule, SpinnerPage]
 })
 export class SelectInvPage implements OnInit {
 
   inventaries!: Inventary[]
   isLoading: boolean = false
+  pointId!: string 
 
   constructor(
+    @Inject(ActionSheetService) private actService: ActionSheetService,
     private invService: InventaryService,
     private modalCtrl: ModalController,
-    @Inject(ActionSheetService) private actService: ActionSheetService,
-    private toast: ToastController
+    private toast: ToastController,
+    private navParams: NavParams,
   ) { }
 
   ngOnInit() {
-    this.getInventaries()
+    this.pointId = this.navParams.get('options')
+    if(this.pointId){
+      this.getInventaries()
+    }
   }
 
   getInventaries(){
     this.isLoading = true
-    this.invService.getAllInventary('all').subscribe(invs => {
+    this.invService.getAllInventary('all', this.pointId).subscribe(invs => {
       if(invs){
         this.inventaries = invs.reverse()
         this.isLoading = false
@@ -60,7 +64,7 @@ export class SelectInvPage implements OnInit {
     this.isLoading = true
     const response = await this.actService.openAuth(DatePickerPage)
     if(response){
-      this.invService.saveOrUpdateInventary(response.split('T')[0]).subscribe(response => {
+      this.invService.saveOrUpdateInventary(response.split('T')[0], this.pointId).subscribe(response => {
         if(response){
           const inventary = response.inv
           if(response.message === 'Inventarul a fost actualizat!'){

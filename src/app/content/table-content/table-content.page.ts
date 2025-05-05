@@ -27,6 +27,7 @@ import { ScreenSizeService } from 'src/app/shared/screen-size.service';
 import { AddProductDiscountPage } from './add-product-discount/add-product-discount.page';
 import { Preferences } from "@capacitor/preferences";
 import { ConfigService } from 'src/app/config/config.service';
+import { SalePointService } from 'src/app/office/sale-point/sale-point.service';
 
 
 interface billData{
@@ -98,9 +99,10 @@ export class TableContentPage implements OnInit, OnDestroy {
   userSub!: Subscription;
   tableSub!: Subscription;
   screenSub!: Subscription
+  pointSub!:Subscription;
   user!: User;
 
-
+  pointId!: string;
 
   comment: string = ''
 
@@ -147,9 +149,9 @@ export class TableContentPage implements OnInit, OnDestroy {
     billData$ = this.billDataSubject.asObservable()
 
   constructor(
+    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private route: ActivatedRoute,
     private contSrv: ContentService,
-    @Inject(ActionSheetService) private actionSheet: ActionSheetService,
     private tableSrv: TablesService,
     private toastCtrl: ToastController,
     private authSrv: AuthService,
@@ -157,10 +159,12 @@ export class TableContentPage implements OnInit, OnDestroy {
     private webRTC: WebRTCService,
     private screenSizeService: ScreenSizeService,
     private configSrv: ConfigService,
+    private pointService: SalePointService
     ) { }
 
 
   ngOnInit() {
+    this.getPointId()
     this.getServers()
     this.getSecondaryServer()
     this.getUser();
@@ -168,9 +172,6 @@ export class TableContentPage implements OnInit, OnDestroy {
     this.getData();
     this.getBill();
     this.getScreenSize()
-    setTimeout(() => {
-      this.getPrintServerFlromLocal()
-    }, 3000)
   }
 
   ngOnDestroy(): void {
@@ -189,16 +190,26 @@ export class TableContentPage implements OnInit, OnDestroy {
     if(this.screenSub){
       this.screenSub.unsubscribe()
     }
+    if(this.pointSub) this.pointSub.unsubscribe()
+  }
+
+  getPointId(){
+    this.pointSub = this.pointService.pointSend$.subscribe({
+      next: (p) => {
+        if(p._id){
+          this.pointId = p._id
+        }
+      }
+    })
   }
 
 getServers(){
-  this.configSrv.getPrintServers().subscribe({
+  this.configSrv.serversSend$.subscribe({
     next: (response) => {
-      this.printServers = response.servers
-      console.log(this.printServers)
-    },
-    error: (error) => {
-      console.log(error)
+      this.printServers = response
+      if(response.length){
+        this.getPrintServerFlromLocal()
+      }
     }
   })
 }
@@ -241,9 +252,18 @@ async getSecondaryServer(){
 async getPrintServerFlromLocal(){
  const { value } = await Preferences.get({key: 'mainServer'})
  if(value){
-  const server = JSON.parse(value)
-  this.mainServer = server
+    const server = JSON.parse(value)
+    if(server.salePoint === this.pointId){
+      this.mainServer = server
+    } else {
+      this.selectPrintServer()
+    }
  } else {
+  this.selectPrintServer()
+ }
+}
+
+async selectPrintServer(){
   const data = this.printServers.map((s: any) => s.name)
   const server = await this.actionSheet.entryAlert(data, 'radio', 'Server de bonuri', 'Alege serverul de bonuri!', '', '')
   if(server){
@@ -253,7 +273,6 @@ async getPrintServerFlromLocal(){
       await Preferences.set({key: 'mainServer', value: JSON.stringify(choice)})
     }
   }
- }
 }
 
 //***************************NG-ON-INIT************************** */
@@ -316,7 +335,6 @@ async getPrintServerFlromLocal(){
         })
         this.billData.table = this.table
         this.billData.table.bills = bills
-        console.log(this.billData.table.bills)
         this.disableMergeButton()
         this.disableDeleteOrderButton()
       }
@@ -459,9 +477,8 @@ async getPrintServerFlromLocal(){
 
 //***********************************BUTTONS LOGIC************************** */
 
-async inviteUserToTip(invite: string){
-  const tipsValue = await this.actionSheet.openAdd(TipsPage, invite, 'small-one')
-  // this.invite === 'invite' ? this.invite = 'uninvite' : this.invite = 'invite'
+async inviteUserToTip(){
+  const tipsValue = await this.actionSheet.openAdd(TipsPage, {invite: 'invite', point: this.pointId}, 'small-one')
   if(tipsValue || tipsValue === 0){
     if(this.billData.billToshow.tips > 0){
       this.billData.billToshow.total =   this.billData.billToshow.total - this.billData.billToshow.tips

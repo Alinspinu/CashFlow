@@ -487,7 +487,7 @@ export function emptySheet(){
     ings: [],
     user: undefined,
     locatie: environment.LOC,
-    salePoint: environment.POINT,
+    salePoint: '',
   }
   return sheet
 }

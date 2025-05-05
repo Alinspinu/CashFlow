@@ -8,7 +8,7 @@
   <ion-toolbar class="ion-no-border header-toolbar">
     <ion-title slot="start">Setări server de print</ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outline" id="button" (click)="addServer()" [disabled]="!salePoints.length">
+      <ion-button fill="outline" id="button" (click)="addServer()">
         <ion-icon src="../../../../assets/icon/add-outline.svg " color="medium" slot="start" size="large"></ion-icon>
         <ion-label slot="end">Adaugă</ion-label>
       </ion-button>
@@ -24,7 +24,6 @@
       <div class="server-container">
         <div class="server" *ngFor="let server of servers">
           <span class="name">{{server.name}}</span>
-          <span class="point">{{getSalePoint(server.salePoint)}}</span>
           <span class="status">{{server.status ? 'Activ' : 'Inactiv'}}</span>
           <span class="key">{{server.key}}</span>
         </div>
